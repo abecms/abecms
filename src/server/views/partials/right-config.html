@@ -1,0 +1,20 @@
+{{#if manager.home}}
+  <div class="manager-tab manager-config">
+  {{#each manager.editConfig}}
+    <div class="page-header">
+      <div class="text-uppercase">{{@root.text.config}}</div>
+    </div>
+    <form action="" id="config-{{@key}}" class="form-horizontal">
+      {{{printConfig this}}}
+      
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+          <button type="button" class="btn btn-primary" data-website="{{@key}}" data-save-config="true" data-route="/save-config" />
+            {{@root.text.save}}
+          </button>
+        </div>
+      </div>
+    </form>
+  {{/each}}
+  </div>
+{{/if}}

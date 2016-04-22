@@ -1,0 +1,30 @@
+{{#if manager.file}}
+<div class="manager-tab manager-file-config">
+
+  <div class="page-header">
+    <div class="text-uppercase">{{@root.text.template}}</div>
+  </div>
+
+  <ol class="breadcrumb">
+    {{#each manager.file.template}}
+    <li><span>{{this}}</span></li>
+    {{/each}}
+  </ol>
+
+  <div class="page-header">
+    <div class="text-uppercase">{{@root.text.revisions}}</div>
+  </div>
+  <ul class="list-group">
+  {{#each manager.file.revision}}
+    <li class="list-group-item">
+      <a href="/abe/{{this.template}}?filePath={{this.filePath}}" class="version">
+        {{@root.text.version}} {{this.version}}
+        <span class="label label-default label-{{this.publishedDate}} pull-right">
+          {{this.duration}}
+        </span>
+      </a>
+    </li>
+  {{/each}}
+  </ul>
+</div>
+{{/if}}

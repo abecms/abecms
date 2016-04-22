@@ -1,0 +1,54 @@
+.icons-action {
+  padding: 0 8px;
+
+  a {
+    width: auto;
+  }
+
+  .col-xs-6 {
+    padding: 0;
+  }
+}
+
+.form-wrapper
+{
+  .btns 
+    {
+      .btn-info {
+        color: #fff;
+        background-color: #a8dba8;
+        border-color: #a8dba8;
+      }
+      .btn-info:hover {
+      color: #fff;
+      background-color: #7BC77B;
+      border-color: #7BC77B;
+      }
+      .btn-hidden{
+        display: none;
+      }
+      .btn-default:hover, .btn-default:focus, .btn-default:active {
+      color: #fff;
+      background-color: #F95655;
+      border-color: #F95655;
+      }
+      .btn-default:active:focus {
+      color: #fff;
+      background-color: #F95655;
+      border-color: #F95655;
+      }
+      .btn-save {
+        margin-right: 4px;
+      }
+    }
+
+  .btn-info
+  {
+    background-color: #f0f0f0;
+    border-bottom: 0;
+    text-align: right;
+    width: 100%;
+    color: #8E8E8E;
+    margin-bottom: 3px;
+  }
+}

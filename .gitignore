@@ -1,0 +1,19 @@
+node_modules/*
+npm-debug.log
+tasks/node_modules/*
+tasks/json/*
+tasks/npm-debug.log
+draft/
+*.sublime-project
+*.sublime-workspace
+
+# admin compiled
+src/server/public/scripts/*-compiled.js
+src/server/public/css/styles.css
+
+# Local configs
+cli/config/*-local.js
+
+# debug
+abe-logs/*
+test/*

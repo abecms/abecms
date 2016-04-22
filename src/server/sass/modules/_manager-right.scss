@@ -1,0 +1,46 @@
+.manager-wrapper {
+
+	table.dataTable thead>tr>th{
+	  padding-right: 15px !important;
+	}
+
+	.right {
+	  padding: 0px 20px;
+	  width: 76.6666666%;
+	  height: 100%;
+	  position: relative;
+	  display: inline-block;
+	  vertical-align: top;
+	  margin-left: -4px;
+	  overflow-y: auto;
+	}
+
+	.manager-tab {
+	  display: none;
+
+	  &.visible {
+		  display: block;
+		}
+	}
+
+	.version,
+	.version:hover {
+	  text-decoration: none;
+	}
+
+	.daterow{
+	  width: 9%;
+	}
+
+	.table-responsive {
+		width: 100%;
+		
+		.glyphicon-eye-close {
+		  color: #f0ad4e;
+		}
+
+		.glyphicon-trash {
+		  color: #d9534f;
+		}
+	}
+}

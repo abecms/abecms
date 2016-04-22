@@ -1,0 +1,122 @@
+/* = toolbar
+************************************************************/
+.toolbar {
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+  position: absolute;
+  top: 0px;
+  height: 45px;
+  width: 100%;
+  background: #f0f0f0;
+
+  .btns {
+    float: left;
+    margin: 5px 0 0 5px;
+
+    button,
+    a {
+      font-size: 12px;
+      border: 0px;
+      margin: 0px;
+      display: inline-block;
+      width: inherit;
+      border-radius: 4px;
+
+      .glyphicon {
+        line-height: 0em;
+
+        &:before {
+          font-size: 0.8em;
+        }
+      }
+    }
+  }
+
+  .btn {
+    border: 1px solid #e3e3e3;
+    color: #fff;
+    font-size: 20px;
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 20px;
+    outline: none;
+
+    .loading,
+    .after {
+      display: none;
+    }
+
+    &.loading {
+      .before {
+        display: none;
+      }
+      .loading {
+        display: block;
+      }
+    }
+
+    &.done .loading {
+      display: none;
+    }
+
+    &.done .after {
+      display: block;
+    }
+  }
+}
+
+.close-engine,
+.open-engine {
+  background-color: #F3F3F3;
+  color: #8E8E8E;
+  font-size: 15px;
+  position: absolute;
+  opacity: 1;
+  top: 0;
+  z-index: 55;
+  transition: all 200ms ease-in-out;
+  transform-origin: 50% 50%;
+  line-height: 29px;
+  height: 30px;
+  padding: 0px 10px;
+  margin: 0px;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
+
+.open-engine {
+  left: 0px;
+  z-index: 5555;
+}
+
+.close-engine{
+  right: 0px;
+  margin-top: 6px;  
+}
+
+body {
+  .open-engine{
+    display: block;
+  }
+
+  &.engine-open .open-engine{
+    display: none;
+  }
+
+.btn-manager {
+    background-color: #ff7473;
+    color: #fff;
+    margin-right: 50px
+    }
+
+}
+
+button {
+  span.glyphicon{
+      font-size: 15px;
+  }
+}

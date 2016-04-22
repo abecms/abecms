@@ -1,0 +1,37 @@
+.page-create form {
+	padding: 20px;
+}
+.logout{
+	text-decoration: none;
+	position: absolute;
+	top: 15px;
+	right: 15px;
+}
+.logout:hover{
+  color: #CE2551;
+}
+.list tr td{
+	width: 30%;
+}
+
+.list tr td:first-child{
+	width: 40%;
+}
+
+.list tr td:nth-child(3){
+	width: 15%;
+}
+
+.list tr td:last-child{
+	width: 20%;
+}
+.marg-t-5 { margin-top:5px; }
+.marg-t-10 { margin-top:10px; }
+.marg-t-15 { margin-top:15px; }
+.marg-t-20 { margin-top:20px; }
+.marg-t-30 { margin-top:30px; }
+.marg-t-50 { margin-top:50px; }
+
+.text-left {
+	text-align: left !important;
+}

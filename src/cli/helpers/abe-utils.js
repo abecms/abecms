@@ -1,0 +1,439 @@
+import extend from 'extend'
+import loremIpsum from 'lorem-ipsum'
+import clc from 'cli-color'
+import fse from 'fs-extra'
+import ajaxRequest from 'ajax-request'
+import {Promise} from 'es6-promise'
+
+import {
+  config
+  ,cli
+  ,log
+  ,Sql
+  ,folderUtils
+  ,fileUtils
+  ,FileParser
+  ,fileAttr
+  ,escapeTextToRegex
+  ,getAttr
+  ,Hooks
+  ,Plugins
+} from '../'
+
+export default class Utils {
+
+  constructor() {
+    this._form = {
+      
+    }
+    this._key = []
+  }
+
+  /**
+   * Get all input from a template
+   * @return {Array} array of input form
+   */
+  get form(){
+    return this._form
+  }
+
+  /**
+   * Check if key is not is the form array
+   * @param  {[type]} key [description]
+   * @return {[type]}     [description]
+   */
+  dontHaveKey(key){
+    return typeof this._key[key] === "undefined" || this._key[key] === null
+  }
+
+  /**
+   * Add entry to abe engine form
+   * @param {String} type        textarea | text | meta | link | image | ...
+   * @param {String} key         unique ID, no space allowed
+   * @param {String} desc        input description
+   * @param {Int}    maxLength   maximum characteres allowed inside input
+   * @param {String} tab         tab name
+   * @param {String} jsonValue   
+   * @return {Void}
+   */
+  add(obj) {
+    var defaultValues = {
+        type: 'text',
+        key: '',
+        desc: '',
+        maxLength: null,
+        tab: 'default',
+        placeholder: '',
+        value: '',
+        source: null,
+        display: null,
+        reload: false,
+        order: 0,
+        required: false,
+        editable: true,
+        visible: true,
+        block: ''
+      }
+
+    obj = extend(true, defaultValues, obj)
+    obj.tab = (typeof obj.tab !== 'undefined' && obj.tab !== null && obj.tab !== '') ? obj.tab : 'default'
+
+    obj.reload = (typeof obj.reload !== 'undefined' && obj.reload !== null && obj.reload === 'true') ? true : false,
+    obj.key = obj.key.replace(/\./, '-')
+
+    if(obj.key.indexOf('[') < 0 && obj.key.indexOf('.') > -1) {
+      obj.block = obj.key.split('.')[0]
+    }
+
+    if(typeof this._form[obj.tab] === 'undefined' || this._form[obj.tab] === null) this._form[obj.tab] = {item:[]}
+
+    this._key[obj.key] = true // save key for dontHaveKey()
+    this._form[obj.tab].item.push(obj)
+  }
+
+  isBlock(str){
+    return str.indexOf('[') < 0 && str.indexOf('.') > 0
+  }
+
+  /**
+   * Test if a string don't contains string key from ABE block statement
+   * @param  {String}  str string to test
+   * @return {Boolean} true = this is not a block content
+   */
+  isSingleAbe(str, text){
+    return  !new RegExp('#each(.)+?' + getAttr(str, 'key').split('.')[0]).test(text) &&
+            str.indexOf('{{#') < 0 &&
+            str.indexOf('#each') < 0 &&
+            str.indexOf('{{/') < 0 &&
+            str.indexOf('/each') < 0 &&
+            str.indexOf('attrAbe') < 0
+  }
+
+  /**
+   * Test if a string contains string key from ABE block statement
+   * @param  {String}  str string to test
+   * @return {Boolean} true = this is a block content
+   */
+  isBlockAbe(str) {
+    return str.indexOf('abe') > -1 && getAttr(str, 'key').indexOf('.') > -1
+  }
+
+  /**
+   * Test if a string contains string key from {{#each}} block statement
+   * @param  {String}  str string to test
+   * @return {Boolean} true = this is a block content
+   */
+  isEachStatement(str) {
+    return str.indexOf('#each') > -1 || str.indexOf('/each') > -1
+  }
+
+  /**
+   * Encode / Escape && add data-abe attributs
+   * @param  {String} block
+   * @return {String} escaped string
+   */
+  encodeAbe(block){
+    var matchAbe = block.match(/>\s*\{\{abe .*\}\}/g)
+    if(matchAbe){
+      for (var i = 0; i < matchAbe.length; i++){
+        var getattr = getAttr(matchAbe[i], 'key').replace('.', '[0]-')
+        block = block.replace(
+          matchAbe[i],
+          ' data-abe-' + this.validDataAbe(getattr) + '="'  + getattr + '" >'
+        )
+      }
+    }
+    matchAbe = block.match(/( [A-Za-z0-9\-\_]+="*{{.*?}})/g)
+    if(matchAbe){
+      for (var i = 0; i < matchAbe.length; i++) {
+          if(typeof matchAbe !== 'undefined' && matchAbe !== null){
+            var getattr = getAttr(matchAbe[i], 'key').replace('.', '[0]-')
+            var matchattr = (matchAbe[i].split('=')[0]).trim()
+            block = block.replace(
+              matchAbe[i],
+              ' data-abe-attr-' + this.validDataAbe(getattr) + '="'  + matchattr + '"' +
+              ' data-abe-' + this.validDataAbe(getattr) + '="'  + getattr + '" ' + matchAbe[i]
+            )
+            .replace(/\{\{\abe.*?}\}/, '')
+          }
+        }
+    }
+    return escape(block)
+  }
+
+  /**
+   * Add some stuff like style / script before closing </body> tag
+   * @param  {String} text html page
+   * @return {String} text + some sugar stuff added on the fly
+   */
+  insertDebugtoolUtilities(text){
+    return text.replace(
+      /<\/body>/,
+        `<style>
+          body [data-abe]{ transition: box-shadow 600ms ease-in-out; box-shadow: 0; }
+          body .select-border{ border-color: #007CDE; box-shadow: 0 3px 13px #7CBAEF; }
+          body img.display-attr:before { content: attr(alt); }
+          body a.display-attr:before { content: attr(title); }
+          body .display-attr:before { position: absolute; display: block; z-index: 555; font-size: 10px; background-color: rgba(255, 255, 255, 0.75); padding: 2px 5px; color: #5D5D5D; }
+          .hidden-abe{ display: none!important; width: 0px !important; height: 0px!important; position: absolute; left: -10000px; top: -10000px; visibility: hidden;}
+        </style>
+      </body>`
+    )
+  }
+
+  validDataAbe(str){
+    return str.replace(/\[([0-9]*)\]/g, '$1')
+  }
+
+  lorem(type, v) {
+    var lorem = ''
+    if(type === 'text') {
+      lorem = loremIpsum({
+        units: 'sentences' // Generate words, sentences, or paragraphs.
+        , sentenceLowerBound: 5
+        , sentenceUpperBound: 10
+      })
+    }else if(type === 'link') {
+      lorem = 'http://www.google.com'
+    }else if(type === 'image' || type === 'file') {
+      var width = getAttr(v, 'width')
+      width = (width !== '') ? width : 300
+      var height = getAttr(v, 'height')
+      height = (height !== '') ? height : 300
+      lorem = `http://placehold.it/${height}x${width}`
+    }else if(type === 'textarea' || type === 'rich') {
+      lorem = loremIpsum({
+        units: 'paragraphs' // Generate words, sentences, or paragraphs.
+        , paragraphLowerBound: 3
+        , paragraphUpperBound: 7
+      })
+    }
+    return lorem
+  }
+
+  static escapeRegExp(str) {
+    var specials = [
+      // order matters for these
+      "-"
+      , "["
+      , "]"
+      // order doesn't matter for any of these
+      , "/"
+      , "{"
+      , "}"
+      , "("
+      , ")"
+      , "*"
+      , "+"
+      , "?"
+      , "."
+      , "\\"
+      , "^"
+      , "$"
+      , "|"
+    ]
+
+    // I choose to escape every character with '\'
+    // even though only some strictly require it when inside of []
+    , regex = RegExp('[' + specials.join('\\') + ']', 'g')
+    return str.replace(regex, "\\$&");
+  }
+
+  static addMetas(tpl, json, type, obj = {}, date = null, realType = 'draft') {
+    let meta = config.meta.name
+
+    json[meta] = extend({}, json[meta])
+    var currentDate = date || new Date()
+    var abeUrl = (type === 'publish') ? json[meta].link : fileAttr.add(json[meta].link, 'd' + currentDate.toISOString()) + ''
+
+    if(typeof json[meta].date === 'undefined' || json[meta].date === null) {
+      json[meta].date = currentDate
+    }
+    json[meta].latest = {
+      date: currentDate,
+      abeUrl: abeUrl
+    }
+    json[meta].status = realType === 'reject' ? 'draft' : realType
+    if(typeof json[meta][type] === 'undefined' || json[meta][type] === null) {
+      json[meta][type] = JSON.parse(JSON.stringify(obj))
+      json[meta][type].date = currentDate
+      json[meta][type].abeUrl = abeUrl
+    }
+    json[meta][type].latest = JSON.parse(JSON.stringify(obj))
+    json[meta][type].latest.date = currentDate
+    json[meta][type].latest.abeUrl = abeUrl
+  }
+
+  static getDataList(tplPath, text, jsonPage) {
+    var p = new Promise((resolve, reject) => {
+      var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
+          match
+
+      var sourceAttr = config.source.name
+      if(typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
+        jsonPage[sourceAttr] = {}
+      }
+
+      var promises = []
+      while (match = listReg.exec(text)) {
+
+        var pSource = new Promise((resolveSource, rejectSource) => {
+          var source = getAttr(match[0], 'source')
+          var key = getAttr(match[0], 'key')
+          var autocomplete = getAttr(match[0], 'autocomplete')
+          if(source.indexOf('{{') > -1) {
+            var matches = source.match(/({{[a-zA-Z._]+}})/g)
+            Array.prototype.forEach.call(matches, (match) => {
+              var val = match.replace('{{', '')
+              val = val.replace('}}', '')
+              val = Sql.deep_value_array(jsonPage, val)
+              source = source.replace(match, val)
+            })
+          }
+          var type = Sql.getSourceType(source)
+          switch (type) {
+            case 'request':
+              var data = Sql.getDataRequest(tplPath, match[0], jsonPage)
+              jsonPage[sourceAttr][key] = data
+
+              if(typeof jsonPage[key] !== 'undefined' && jsonPage[key] !== null) {
+                var newJsonValue = []
+                Array.prototype.forEach.call(jsonPage[key], (oldValue) => {
+                  Array.prototype.forEach.call(jsonPage[sourceAttr][key], (newValue) => {
+                    if(typeof oldValue[config.meta.name] !== 'undefined' && oldValue[config.meta.name] !== null
+                      && oldValue[config.meta.name].link === newValue[config.meta.name].link) {
+                      newJsonValue.push(newValue)
+                    }
+                  })
+                })
+                jsonPage[key] = newJsonValue
+              }
+              resolveSource()
+              break;
+            case 'value':
+              var value = Sql.getDataSource(match[0])
+
+              if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
+                try{
+                  value = JSON.parse(value)
+
+                  jsonPage[sourceAttr][key] = value
+                }catch(e){
+                  jsonPage[sourceAttr][key] = null
+                  console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
+                }
+              }
+              resolveSource()
+              break;
+            case 'url':
+              if(autocomplete !== true && autocomplete !== 'true') {
+
+                // @TODO
+                ajaxRequest(source, (err, res, body) => {
+                  if(typeof body === 'string') {
+                    var parsedBody = JSON.parse(body)
+                    if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
+                      jsonPage[sourceAttr][key] = parsedBody
+                    }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
+                      jsonPage[sourceAttr][key] = [parsedBody]
+                    }
+                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
+                    jsonPage[sourceAttr][key] = body
+                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
+                    jsonPage[sourceAttr][key] = body
+                  }
+                  resolveSource()
+                })
+              }else {
+                jsonPage[sourceAttr][key] = source
+                resolveSource()
+              }
+
+              break;
+            case 'file':
+              jsonPage[sourceAttr][key] = FileParser.getJson(fileUtils.concatPath(config.root, source))
+              resolveSource()
+              break;
+            default:
+              resolveSource()
+              break;
+          }
+        })
+        promises.push(pSource)
+      }
+
+      Promise.all(promises)
+        .then(() => {
+          resolve()
+        }).catch(function(e) {
+          console.error(e.stack)
+        })
+      // return filesRequest
+      }).catch(function(e) {
+        console.error(e.stack);
+      })
+
+    return p
+  }
+
+  static removeDataList(text) {
+    var listReg = /({{abe.*type=[\'|\"]data.*}})/g
+
+    log.delAndWrite('Util-getList', text)
+    return text.replace(listReg, '')
+  }
+
+  static replaceUnwantedChar(str) {
+    var chars = {"’": '', "'": '', '\"': '', 'Š': 'S', 'š': 's', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B', 'ß': 'Ss', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'œ': 'oe', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ý': 'y', 'þ': 'b', 'ÿ': 'y'};
+    for(var prop in chars) str = str.replace(new RegExp(prop, 'g'), chars[prop])
+    return str
+  }
+
+  static getAllAttributes(str, json) {
+    str = Hooks.instance.trigger('beforeAbeAttributes', str, json)
+
+    var defaultValues = {
+        type: 'text'
+        ,key: ''
+        ,desc: ''
+        ,maxLength: null
+        ,tab: 'default'
+        ,value: ''
+        ,source: null
+        ,autocomplete: null
+        ,display: null
+        ,reload: false
+        ,order: 0
+        ,required: false
+        ,editable: true
+        ,visible: true
+      }
+
+    var source = getAttr(str, 'source')
+    var key = getAttr(str, 'key')
+
+    var obj = {
+        type: getAttr(str, 'type')
+        ,key: key
+        ,desc: getAttr(str, 'desc')
+        ,autocomplete: getAttr(str, 'autocomplete')
+        ,maxLength: getAttr(str, 'max-length')
+        ,value: json[key]
+        ,tab: getAttr(str, 'tab')
+        ,source: (typeof source !== 'undefined' && source !== null && source !== '') ? json[config.source.name][key] : null
+        ,display: getAttr(str, 'display')
+        ,reload: getAttr(str, 'reload')
+        ,order: getAttr(str, 'order')
+        ,required: getAttr(str, 'required')
+        ,visible: getAttr(str, 'visible')
+        ,editable: getAttr(str, 'editable')
+      }
+    obj = extend(true, defaultValues, obj)
+
+    obj.editable = (typeof obj.editable === 'undefined' || obj.editable === null || obj.editable === '' || obj.editable === 'false') ? false : true
+
+    obj = Hooks.instance.trigger('afterAbeAttributes', obj, str, json)
+
+    return obj
+  }
+}

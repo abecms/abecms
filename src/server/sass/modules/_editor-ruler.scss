@@ -1,0 +1,89 @@
+body{
+  //border: 3px solid #5ABAFF;
+}
+
+body.engine-open .ruler{
+  width: 5px;
+}
+
+.ruler{
+  background-color: #f0f0f0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  -webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
+
+  &:hover{
+    background-color: #DCDADA;
+    cursor: ew-resize;
+  }
+}
+
+.no-gutter {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.ruler-over{
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 55;
+}
+
+.browser-size{
+  background: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  position: absolute;
+  padding: 6px 10px;
+  opacity: 0;
+  bottom: 0;
+  right: 15px;
+  color: #333;
+  transition: opacity 200ms ease-in-out;
+}
+
+body {
+
+  &.resizing{
+    user-select: none;
+    cursor: ew-resize;
+    //border: 3px solid #00FF95;
+
+    .ruler{
+      //background-color: #00FF95 !important;
+    }
+
+    .ruler-over{
+      display: block;
+    }
+
+    .browser-size{
+      opacity: 1;
+    }
+  }
+
+  .form-wrapper {
+    form {
+      display: none;
+    }
+  }
+
+  &.engine-open {
+    
+    .form-wrapper {
+      form {
+        display: block;
+      }
+    }
+  }
+}

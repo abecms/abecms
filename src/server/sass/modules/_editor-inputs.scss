@@ -1,0 +1,88 @@
+.input-group input[type="file"]{
+  display: inline-block;
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 333;
+  &[disabled]{
+    &:hover{
+      cursor: not-allowed;
+    }
+    ~ .percent{
+      .glyphicon-upload{
+        color: #F7F7F7;
+      }
+    }
+  }
+}
+
+.img-upload{
+  input[type="text"]{
+    
+  }
+  .percent{
+    display: inline-block;
+    width: 35px;
+    text-align: center;
+  }
+}
+
+.input-error{
+  transition: all 250ms ease-in;
+  color: #F30000;
+  font-size: 11px;
+  margin: 5px 0;
+  opacity:0;
+  &.show{
+    opacity:1;
+  }
+}
+
+.upload-wrapper{
+  display: table-cell;
+  position: relative;
+  width: 42px;
+  vertical-align: top;
+  overflow: hidden;
+  &:hover{
+    cursor: pointer;
+  }
+  .glyphicon-upload:before{
+    font-size: 20px;
+    line-height: 34px;
+  }
+}
+
+select[multiple], select[size] {
+  height: $select-size;
+}
+
+.input-group-addon {
+  &.link {
+    color: $addon-color;
+    background-color: $addon-link-bg;
+    border-color: $addon-link-border;
+  }
+
+  &.image {
+    color: $addon-color;
+    background-color: $addon-image-bg;
+    border-color: $addon-image-border;
+  }
+  
+  &.meta {
+    color: $addon-color;
+    background-color: $addon-meta-bg;
+    border-color: $addon-meta-border;
+  }
+}
+
+.wysiwyg-toolbar {
+  white-space: normal !important;
+}
+
+.rich [contenteditable]{
+  padding: 10px;
+}

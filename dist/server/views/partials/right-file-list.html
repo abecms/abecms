@@ -1,0 +1,29 @@
+{{#if manager.home}}
+<div class="manager-tab manager-files visible">
+    <div class="page-header">
+      <div class="text-uppercase">
+        {{@root.text.navigation}}
+      </div>
+    </div>
+    <div class="well well-sm">
+      <a href="#" class="btn-visit-site" data-href="/site/">
+        {{@root.text.visit_site}}
+      </a>
+    </div>
+    <table class="table table-striped table-bordered table-responsive" id="navigation-list">
+      <thead>
+        <tr>
+          {{abeImport 'right-list-head' manager.config this}}
+        </tr>
+      </thead>
+    {{#each manager.home.files}}
+      <tbody>
+        {{#each this.files}}
+          {{listPage this @index @root.text}}
+        {{/each}}
+      {{/each}}
+      </tbody>
+    </table>
+  <br />
+</div>
+{{/if}}

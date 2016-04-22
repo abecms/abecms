@@ -1,0 +1,48 @@
+html,
+body{
+  overflow: auto;
+  height: 100%;
+}
+
+html,
+.abe-body{
+  overflow: hidden;
+}
+
+.container-main,
+.container-main > .row,
+.half-view,
+.half-view > form{
+  height: 100%;
+}
+
+.half-view{
+  display: table-cell;
+  position: relative;
+  vertical-align: top;
+}
+
+.half-view form{
+  overflow: auto;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.inline{
+  display: inline-block;
+}
+
+.abe-version{
+  margin-bottom: 10px;
+  color: #949494;
+  font-size: 11px;
+  font-family: monospace;
+}
+
+.collapsing {
+  -webkit-transition-duration: 100ms;
+  -o-transition-duration: 100ms;
+  transition-duration: 100ms;
+}

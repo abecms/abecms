@@ -1,0 +1,29 @@
+
+{{#if manager.home}}
+<div class="page-header">
+  <h1><small>{{@root.text.site}}</small></h1>
+</div>
+<ul class="list-group">
+  {{#if @root.allowed.action.config}}
+  <li class="list-group-item pointer" data-config="true" data-manager-show="manager-config">
+    {{@root.text.config}}
+  </li>
+  {{/if}}
+  <li class="list-group-item pointer" data-config="true" data-manager-show="manager-files">
+    {{@root.text.navigation}}
+  </li>
+</ul>
+{{/if}}
+
+{{#if @root.allowed.action.revisions}}
+  {{#if manager.file}}
+  <div class="page-header">
+    <h1><small>{{@root.text.file}}</small></h1>
+  </div>
+  <ul class="list-group">
+    <li class="list-group-item pointer" data-config="true" data-manager-show="manager-file-config">
+      {{@root.text.revisions}}
+    </li>
+  </ul>
+  {{/if}}
+{{/if}}
