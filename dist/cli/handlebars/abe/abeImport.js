@@ -43,10 +43,10 @@ function abeImport(file, config, ctx) {
       html += _fsExtra2.default.readFileSync(checkFile, 'utf8');
     }
   });
+  html = _.Hooks.instance.trigger('afterImport', html, file, config, ctx);
+
   var template = _handlebars2.default.compile(html);
   var res = new _handlebars2.default.SafeString(template(ctx, { data: { intl: intlData } }));
-
-  res = _.Hooks.instance.trigger('afterImport', res, file, config, ctx);
 
   return res;
 }

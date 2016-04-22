@@ -35,10 +35,10 @@ export default function abeImport (file, config, ctx) {
       html += fse.readFileSync(checkFile, 'utf8')
     }
   })
+  html = Hooks.instance.trigger('afterImport', html, file, config, ctx)
+
   var template = Handlebars.compile(html)
   var res = new Handlebars.SafeString(template(ctx, {data: {intl: intlData}}))
-
-  res = Hooks.instance.trigger('afterImport', res, file, config, ctx)
 
   return res
 }
