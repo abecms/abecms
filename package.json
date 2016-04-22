@@ -1,11 +1,11 @@
 {
   "name": "abe-cli",
-  "version": "0.6.12",
+  "version": "0.6.14",
   "description": "Abe command line tool",
   "main": "src/server/app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/AdFabConnect/abe.git"
+    "url": "git://github.com/AdFabConnect/abejs.git"
   },
   "scripts": {
     "start": "node --debug --harmony ./dist/server/index.js",
