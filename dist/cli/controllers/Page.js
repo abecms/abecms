@@ -168,7 +168,7 @@ var Page = function () {
       if (!_this._onlyHTML) {
         var meta = _.config.meta.name;
         var test = dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp('\\.\\./' + meta, 'g'), meta);
-        var template = _handlebars2.default.compile(dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp('\\.\\./' + meta, 'g'), meta), { noEscape: true });
+        var template = _handlebars2.default.compile(dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp('\\.\\./' + meta, 'g'), meta));
 
         var insertCompiled = template(json, { data: { intl: intlData } }).replace(/\[\[abe(.*?)\]\]/g, '{{abe$1}}');
 
@@ -261,7 +261,7 @@ var Page = function () {
       // HOOKS afterPageJson
       json = _.Hooks.instance.trigger('afterPageJson', json);
 
-      var template = _handlebars2.default.compile(!this._onlyHTML ? util.insertDebugtoolUtilities(text) : text, { noEscape: true });
+      var template = _handlebars2.default.compile(!this._onlyHTML ? util.insertDebugtoolUtilities(text) : text);
 
       var tmp = template(json, {
         data: { intl: intlData }

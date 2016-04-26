@@ -158,7 +158,7 @@ export default class Page {
       if(!this._onlyHTML) {
         var meta = config.meta.name
         var test = dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp(`\\.\\.\/${meta}`, 'g'), meta)
-        var template = Handlebars.compile(dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp(`\\.\\.\/${meta}`, 'g'), meta), {noEscape: true})
+        var template = Handlebars.compile(dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp(`\\.\\.\/${meta}`, 'g'), meta))
 
         var insertCompiled = template(json, {data: {intl: intlData}}).replace(/\[\[abe(.*?)\]\]/g, '{{abe$1}}')
 
@@ -262,7 +262,7 @@ export default class Page {
       // HOOKS afterPageJson
       json = Hooks.instance.trigger('afterPageJson', json)
 
-      var template = Handlebars.compile((!this._onlyHTML) ? util.insertDebugtoolUtilities(text) : text, {noEscape: true})
+      var template = Handlebars.compile((!this._onlyHTML) ? util.insertDebugtoolUtilities(text) : text)
 
       var tmp = template(json, {
           data: {intl: intlData}
