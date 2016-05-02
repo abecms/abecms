@@ -1,15 +1,3 @@
-
-    <!-- btn manager -->
-    <button class='btn btn-default btn-manager'><span class="glyphicon glyphicon-tasks"></span>
-      {{@root.text.manager}}
-    </button><!-- /end btn manager -->
-    {{#if manager.file.isPublished}}
-    <!-- btn preview -->
-    <button class='btn btn-primary btn-visit-site' data-href="/site/" data-page="{{urlToSaveFile}}"><span class="glyphicon glyphicon-eye-open"></span>
-      {{@root.text.preview}}
-    </button><!-- /end btn preview -->
-    {{/if}}
-
     
     <button class='btn btn-info btn-save btn-hidden' data-action="draft">
       <span class="before">
