@@ -20,7 +20,7 @@
 
   <!-- *************** form edit *************** -->
   {{#if form}}
-    <form class="text-i18n" id="abeForm">
+    <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
       <div class="display-status">
         current status : {{@root.json.abe_meta.status}}
       </div>
