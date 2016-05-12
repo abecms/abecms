@@ -1,6 +1,6 @@
 {
   "name": "abe-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Abe command line tool",
   "main": "src/server/app.js",
   "repository": {
@@ -64,6 +64,7 @@
     "on": "^1.3.0",
     "openurl": "^1.1.0",
     "paperboy": "0.0.5",
+    "pm2": "^1.1.3",
     "portfinder": "^1.0.3",
     "prettyjson": "^1.1.3",
     "prompt": "^1.0.0",

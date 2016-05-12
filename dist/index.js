@@ -9,6 +9,8 @@ var _Builder = require('./cli/Builder');
 
 var _Builder2 = _interopRequireDefault(_Builder);
 
+var _cli = require('./cli');
+
 var _child_process = require('child_process');
 
 var _childProcessPromise = require('child-process-promise');
@@ -26,6 +28,10 @@ var _commander2 = _interopRequireDefault(_commander);
 var _package = require('../package');
 
 var _package2 = _interopRequireDefault(_package);
+
+var _pm = require('pm2');
+
+var _pm2 = _interopRequireDefault(_pm);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -75,6 +81,51 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			});
 			cp.stderr.pipe(process.stderr);
 			cp.stdout.pipe(process.stdout);
+			break;
+		case 'prod':
+			var dir = process.cwd();
+			var abeJson = require(dir + '/abe.json');
+			var processName = abeJson.processName || 'abe';
+			var processPort = abeJson.port || port;
+			_pm2.default.connect(function (err) {
+				if (err instanceof Error) throw err;
+				var start = _pm2.default.start;
+
+				_pm2.default.list(function (err, process_list) {
+					var found = false;
+
+					Array.prototype.forEach.call(process_list, function (process) {
+						if (process.name === processName) {
+							found = true;
+						}
+					});
+
+					var cb = function cb() {
+						console.log('pm2 start', processName);
+						var command = 'WEBPORT=' + webport + ' ROOT=' + dir + " " + __dirname + "/../node_modules/.bin/pm2 start ./dist/server/index.js --name='" + processName + "' --node-args='--harmony'";
+						if (processPort) command = 'PORT=' + processPort + ' ' + command;
+						process.chdir(__dirname + '/../');
+						console.log('pm2 command : ' + command);
+						var cp = (0, _child_process.exec)(command, function (err, out, code) {
+							if (err instanceof Error) throw err;
+							process.exit(code);
+						});
+						cp.stderr.pipe(process.stderr);
+						cp.stdout.pipe(process.stdout);
+					};
+
+					if (!found) {
+						cb();
+					} else {
+						console.log('pm2 stop', processName);
+						_pm2.default.delete(processName, function (err, proc) {
+							if (err) throw new Error(err);
+							console.log('pm2', processName, 'server stopped');
+							cb();
+						});
+					}
+				});
+			});
 			break;
 		case 'servepm2':
 			var dir = process.cwd();
