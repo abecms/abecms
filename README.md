@@ -12,6 +12,40 @@ We have a 1 year roadmap (estimation) with the following versions. You'll notice
 
 ###Roadmap 2016
 
+####1.1.0
+[ABE-55] - Refactoring file-utils
+
+[ABE-104] - Pouvoir afficher ou non un contenu/bloc
+
+[ABE-106] - Tache Gulp PM2
+
+[ABE-107] - Galery plugin
+
+####1.2.0
+[ABE-31] - attributs abe avec du text (voir description)
+
+[ABE-52] - hint (template maker) / hint (error / warning / info)
+
+[ABE-96] - Rendre modifiables les données de "pré-contribution" (langue, template,...)
+
+[ABE-108] - Comments plugin
+
+####1.3.0
+[ABE-6] - popin upload dans le wysiwyg
+
+[ABE-11] - Look & Feel ABE
+
+[ABE-51] - Drag and drop - autocomplete
+
+[ABE-97] - Créer les json préremplis à partir de templates HTML d'origine
+
+####1.4.0
+[ABE-1] - Rédaction de la documentation utilisateurs en anglais
+
+[ABE-2] - Rédaction de la doc dev en anglais
+
+[ABE-14] - Préparer 10 templates open source
+
 
 ## Getting started
 
