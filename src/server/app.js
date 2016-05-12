@@ -79,28 +79,32 @@ portfinder.getPort(function (err, freePort) {
     next()
   })
 
-  app.use(helmet())
-  app.use(helmet.csp({
-    directives: {
-      defaultSrc: ["'self'", ],
-      scriptSrc: ["'self'"].concat(config.csp.scriptSrc),
-      styleSrc: ["'self'", "'unsafe-inline'"].concat(config.csp.styleSrc),
-      imgSrc: ["'self'", 'data:'].concat(config.csp.imgSrc),
-      // frameSrc: ["'self'"],
-      childSrc: ["'self'"].concat(config.csp.childSrc),
-      frameAncestors: ["'self'"].concat(config.csp.frameAncestors),
-      mediaSrc: ["'self'"].concat(config.csp.mediaSrc),
-      fontSrc: ["'self'"].concat(config.csp.fontSrc),
-      connectSrc: ["'self'"].concat(config.csp.connectSrc),
-      sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
-      reportUri: '/report-violation',
-      objectSrc: [], // An empty array allows nothing through
-    },
-    reportOnly: false, // Set to true if you only want browsers to report errors, not block them
-    setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
-    disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
-    browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
-  }))
+  if(config.security === true){
+    console.log("msg")
+    app.use(helmet())
+    app.use(helmet.csp({
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"].concat(config.csp.scriptSrc),
+        styleSrc: ["'self'", "'unsafe-inline'"].concat(config.csp.styleSrc),
+        imgSrc: ["'self'", 'data:'].concat(config.csp.imgSrc),
+        // frameSrc: ["'self'"],
+        childSrc: ["'self'"].concat(config.csp.childSrc),
+        frameAncestors: ["'self'"].concat(config.csp.frameAncestors),
+        mediaSrc: ["'self'"].concat(config.csp.mediaSrc),
+        fontSrc: ["'self'"].concat(config.csp.fontSrc),
+        connectSrc: ["'self'"].concat(config.csp.connectSrc),
+        sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
+        reportUri: '/report-violation',
+        objectSrc: [], // An empty array allows nothing through
+      },
+      reportOnly: false, // Set to true if you only want browsers to report errors, not block them
+      setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
+      disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
+      browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
+    }))
+
+  }
 
   var port = (abePort !== null) ? abePort : (freePort || 3000)
   port = Hooks.instance.trigger('beforeExpress', port)
