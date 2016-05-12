@@ -167,7 +167,23 @@ var Page = function () {
       var dataBlock = eache; //.replace(/(>\s*\{\{#each (\n|.)*?\}\})/, '').replace('{{/each}}', '')
       if (!_this._onlyHTML) {
         var meta = _.config.meta.name;
+
+        var keys = dataBlock.match(new RegExp(keyArray + '.([A-Za-z0-9-_]+)', 'g'));
+        if (keys) {
+          keys.forEach(function (k) {
+            var key = k.replace(keyArray + '.', '');
+            if (typeof json[keyArray] === 'undefined' || json[keyArray] === null) {
+              json[keyArray] = [];
+              json[keyArray][0] = [];
+            }
+            if (typeof json[keyArray][key] === 'undefined' || json[keyArray][key] === null) {
+              json[keyArray][0][key] = "1";
+            }
+          });
+        }
+
         var test = dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp('\\.\\./' + meta, 'g'), meta);
+
         var template = _handlebars2.default.compile(dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp('\\.\\./' + meta, 'g'), meta));
 
         var insertCompiled = template(json, { data: { intl: intlData } }).replace(/\[\[abe(.*?)\]\]/g, '{{abe$1}}');
