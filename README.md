@@ -26,7 +26,7 @@ We have a 1 year roadmap (estimation) with the following versions. You'll notice
 
 [ABE-52] - hint (template maker) / hint (error / warning / info)
 
-[ABE-96] - Les données de "pré-contribution" (langue, template,...) doivent être saisies en même temps que le contenu contribué
+[ABE-96] - Rendre modifiables les données de "pré-contribution" (langue, template,...)
 
 [ABE-108] - Comments plugin
 
