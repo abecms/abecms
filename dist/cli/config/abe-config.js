@@ -44,6 +44,7 @@ var config = {
     fontSrc: [],
     connectSrc: []
   },
+  security: true,
   files: {
     exclude: /^[.]/,
     templates: {

@@ -27,6 +27,9 @@ function compileAbe() {
     key = key[key.length - 1];
     var hash = arguments[0].hash;
     hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]');
+    if (typeof hash.safestring !== 'undefined' && hash.safestring !== null) {
+      return new _handlebars2.default.SafeString(content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key);
+    }
     return content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key;
   }
 
@@ -36,6 +39,9 @@ function compileAbe() {
   var value = content ? content[hash.key.replace('.', '-')] : hash.key;
   if (typeof value === 'undefined' || value === null) {
     value = '';
+  }
+  if (typeof hash.safestring !== 'undefined' && hash.safestring !== null) {
+    return new _handlebars2.default.SafeString(value);
   }
   return value;
 }

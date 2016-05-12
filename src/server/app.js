@@ -80,7 +80,6 @@ portfinder.getPort(function (err, freePort) {
   })
 
   if(config.security === true){
-    console.log("msg")
     app.use(helmet())
     app.use(helmet.csp({
       directives: {
