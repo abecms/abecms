@@ -12,6 +12,11 @@ We have a 1 year roadmap (estimation) with the following versions. You'll notice
 
 ###Roadmap 2016
 
+#1.1.0
+[ABE-55] - Refactoring file-utils
+[ABE-104] - Pouvoir afficher ou non un contenu/bloc
+[ABE-106] - Tache Gulp PM2
+[ABE-107] - Galery plugin
 
 ## Getting started
 
