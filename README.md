@@ -101,9 +101,21 @@ start server with nodemon (dev)
 
 OR
 
-start server with pm2 ([pm2](https://www.npmjs.com/package/pm2) must be installed globally)
+start server with pm2
 
-```$ abe servepm2 ```
+open ./abe.json
+
+```
+{
+  "processName": "abe",
+  "port": "8000"
+}
+
+```
+> default config
+
+
+```$ abe prod ```
 
 
 ## Options
