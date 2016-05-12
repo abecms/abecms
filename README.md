@@ -2,6 +2,11 @@
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
 
+## Roadmap
+
+> Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
+
+
 ## Getting started
 
 With __npm__ : ```$ npm install -g abe-cli ```
