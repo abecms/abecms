@@ -2,6 +2,51 @@
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
 
+## Contributing
+We've bet on Abe 1 year ago, investing more than 100 000,00EUR in this project. We have decided to open source it so that our customers and you can freely use Abe to create wonderful experiences in a snap !
+
+We will maintain Abe for the next 3 years and have a dedicated 20% Full Time Equivalent developer on it. We need you to improve Abe, feel free to join us and submit PR's !
+
+## Roadmap
+We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
+
+###Roadmap 2016
+
+####1.1.0
+[ABE-55] - Refactoring file-utils
+
+[ABE-104] - Pouvoir afficher ou non un contenu/bloc
+
+[ABE-106] - Tache Gulp PM2
+
+[ABE-107] - Galery plugin
+
+####1.2.0
+[ABE-31] - attributs abe avec du text (voir description)
+
+[ABE-52] - hint (template maker) / hint (error / warning / info)
+
+[ABE-96] - Rendre modifiables les données de "pré-contribution" (langue, template,...)
+
+[ABE-108] - Comments plugin
+
+####1.3.0
+[ABE-6] - popin upload dans le wysiwyg
+
+[ABE-11] - Look & Feel ABE
+
+[ABE-51] - Drag and drop - autocomplete
+
+[ABE-97] - Créer les json préremplis à partir de templates HTML d'origine
+
+####1.4.0
+[ABE-1] - Rédaction de la documentation utilisateurs en anglais
+
+[ABE-2] - Rédaction de la doc dev en anglais
+
+[ABE-14] - Préparer 10 templates open source
+
+
 ## Getting started
 
 With __npm__ : ```$ npm install -g abe-cli ```
