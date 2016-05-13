@@ -154,14 +154,33 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			cp.stdout.pipe(process.stdout);
 			break;
 		case 'stop':
-			var cp = (0, _child_process.exec)('pm2 delete all', function (err, out, code) {
+			var dir = process.cwd();
+			var abeJson = require(dir + '/abe.json');
+			var processName = abeJson.processName || 'abe';
+			var processPort = abeJson.port || port;
+			_pm2.default.connect(function (err) {
 				if (err instanceof Error) throw err;
-				// process.stderr.write(err)
-				// process.stdout.write(out)
-				process.exit(code);
+				var start = _pm2.default.start;
+
+				_pm2.default.list(function (err, process_list) {
+					var found = false;
+
+					Array.prototype.forEach.call(process_list, function (process) {
+						if (process.name === processName) {
+							found = true;
+						}
+					});
+
+					if (found) {
+						console.log('[ pm2 ] stop ', processName);
+						_pm2.default.delete(processName, function (err, proc) {
+							if (err) throw new Error(err);
+							console.log('[ pm2 ]', processName, 'server stopped');
+							process.exit(0);
+						});
+					}
+				});
 			});
-			cp.stderr.pipe(process.stderr);
-			cp.stdout.pipe(process.stdout);
 			break;
 		default:
 			console.log("Help: use `create` or `serve` command");
