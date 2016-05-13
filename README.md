@@ -117,6 +117,10 @@ open ./abe.json
 
 ```$ abe prod ```
 
+to stop pm2 in production
+
+```$ abe stop ```
+
 
 ## Options
 
