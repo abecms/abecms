@@ -12,7 +12,8 @@ import {
 } from '../../cli'
 
 var result = {}
-var pathToLocale = fileUtils.concatPath(path.resolve('.', 'dist/server/' + config.localeFolder), config.intlData.locales)
+
+var pathToLocale = fileUtils.concatPath(__dirname, '../' + config.localeFolder, config.intlData.locales)
 var files = fse.readdirSync(pathToLocale)
 
 Array.prototype.forEach.call(files, (file) => {

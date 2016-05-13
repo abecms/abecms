@@ -101,48 +101,41 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 					});
 
 					var cb = function cb() {
-						console.log('pm2 start', processName);
-						var command = 'WEBPORT=' + webport + ' ROOT=' + dir + " " + __dirname + "/../node_modules/.bin/pm2 start ./dist/server/index.js --name='" + processName + "' --node-args='--harmony'";
-						if (processPort) command = 'PORT=' + processPort + ' ' + command;
-						process.chdir(__dirname + '/../');
-						console.log('pm2 command : ' + command);
-						var cp = (0, _child_process.exec)(command, function (err, out, code) {
+						var options = {
+							'name': processName,
+							'nodeArgs': ['--harmony'],
+							env: {
+								'WEBPORT:': webport,
+								'PORT': processPort,
+								'ROOT': dir
+							}
+						};
+						console.log('[ pm2 ] start', __dirname + '/server/index.js');
+						_pm2.default.start(__dirname + '/server/index.js', options, function (err, proc) {
 							if (err instanceof Error) throw err;
-							process.exit(code);
+
+							_pm2.default.list(function (err, list) {
+								if (err instanceof Error) throw err;
+								Array.prototype.forEach.call(list, function (item) {
+									console.log('[ pm2 ]', '{', '"pid":', item.pid + ',', '"process":', '"' + item.name + '"', '}');
+								});
+								process.exit(0);
+							});
 						});
-						cp.stderr.pipe(process.stderr);
-						cp.stdout.pipe(process.stdout);
 					};
 
 					if (!found) {
 						cb();
 					} else {
-						console.log('pm2 stop', processName);
+						console.log('[ pm2 ] stop ', processName);
 						_pm2.default.delete(processName, function (err, proc) {
 							if (err) throw new Error(err);
-							console.log('pm2', processName, 'server stopped');
+							console.log('[ pm2 ]', processName, 'server stopped');
 							cb();
 						});
 					}
 				});
 			});
-			break;
-		case 'servepm2':
-			var dir = process.cwd();
-			var command = 'WEBPORT=' + webport + ' ROOT=' + dir + " pm2 start ./dist/server/index.js --node-args='--harmony'";
-			if (interactive) command = 'OPENURL=1 ' + command;
-			if (port) command = 'PORT=' + port + ' ' + command;
-			if (pm2Name) command = command + (' --name="' + pm2Name + '"');
-			process.chdir(__dirname + '/../');
-			console.log('pm2 command : ' + command);
-			var cp = (0, _child_process.exec)(command, function (err, out, code) {
-				if (err instanceof Error) throw err;
-				// process.stderr.write(err)
-				// process.stdout.write(out)
-				process.exit(code);
-			});
-			cp.stderr.pipe(process.stderr);
-			cp.stdout.pipe(process.stdout);
 			break;
 		case 'servenodemon':
 			var dir = process.cwd();

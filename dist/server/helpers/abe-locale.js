@@ -25,7 +25,8 @@ var _cli = require('../../cli');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var result = {};
-var pathToLocale = _cli.fileUtils.concatPath(_path2.default.resolve('.', 'dist/server/' + _cli.config.localeFolder), _cli.config.intlData.locales);
+
+var pathToLocale = _cli.fileUtils.concatPath(__dirname, '../' + _cli.config.localeFolder, _cli.config.intlData.locales);
 var files = _fsExtra2.default.readdirSync(pathToLocale);
 
 Array.prototype.forEach.call(files, function (file) {
