@@ -52,14 +52,21 @@ We have a 1 year roadmap (estimation) with the following versions. You'll notice
 With __npm__ : ```$ npm install -g abe-cli ```
 
 ### For developpers
+
+#### Prerequisites
+
+Install nodejs + git
+
 With __github__ :
 
 Create a blog directory (ie. "abesite") with the default project structure (see below). It will contain your blog.
 git clone abe outside of your blog directory (not in abesite) :
 
-```$ git clone https://github.com/AdFabConnect/abe.git ```
+```$ git clone https://github.com/AdFabConnect/abejs.git ```
 
-```$ cd abe ```
+```$ cd abejs ```
+
+```$ npm i ```
 
 to launch your blog using Abe, under Linux or Mac, you have to set an Environment variable pointing to your blog :
 
