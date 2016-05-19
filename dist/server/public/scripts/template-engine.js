@@ -120,5 +120,6 @@ var engine = new Engine();
 window.abe = {
   json: engine.json,
   inputs: engine._inputs,
-  files: engine._files
+  files: engine._files,
+  blocks: engine._blocks
 };
