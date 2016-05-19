@@ -1,9 +1,8 @@
-import Color from './color-picker'
-
 export default class RichTexarea {
 
-  constructor(wrapper, color) {
+  constructor(wrapper, color, link) {
   	this.color = color
+  	this.link = link
   	this.wrapper = wrapper
   	this.textarea = wrapper.querySelector('.form-rich')
   	this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon')
@@ -27,14 +26,33 @@ export default class RichTexarea {
     })
   }
 
-  setHTML(){
+  setHTML() {
   	this.textarea.innerHTML = this.textEditor.getHTML()
   	var evt = document.createEvent("KeyboardEvent")
 	  evt.initKeyboardEvent("keyup", true, true, window, 0, 0, 0, 0, 0, "e".charCodeAt(0)) 
 	  var canceled = !this.textarea.dispatchEvent(evt)
   }
 
-  action(e){
+  _replaceSelectionWithHtml(html) {
+    var range, html;
+    if (window.getSelection && window.getSelection().getRangeAt) {
+      range = window.getSelection().getRangeAt(0);
+      range.deleteContents();
+      var div = document.createElement("div");
+      div.innerHTML = html;
+      var frag = document.createDocumentFragment(), child;
+      while ( (child = div.firstChild) ) {
+        frag.appendChild(child);
+      }
+      range.insertNode(frag);
+    } else if (document.selection && document.selection.createRange) {
+      range = document.selection.createRange();
+      html = (node.nodeType == 3) ? node.data : node.outerHTML;
+      range.pasteHTML(html);
+    }
+	}
+
+  action(e) {
   	this.el = e.target
   	if(this.el.tagName.toLowerCase() === 'span') this.el = this.el.parentNode
 
@@ -44,14 +62,26 @@ export default class RichTexarea {
 		if(typeof this.popup !== 'undefined' && this.popup !== null){
 			switch(this.popup){
 				case 'color':
-				console.log('this.color', this.color)
 					var off = this.color.onColor((color) => {
-				  	this.textEditor[this.action](color)
-						this.setHTML()
+						if(color !== null) {
+					  	this.textEditor[this.action](color)
+							this.setHTML()
+						}
 						off()
 					})
 					this.color.show(this.el)
-				break;
+				break
+				case 'link':
+					var html = this.textEditor.getHTML()
+					this._replaceSelectionWithHtml(`<a href="[LINK]">${window.getSelection().toString()}</a>`)
+					var off = this.link.onLink((link) => {
+						if(link !== null) this.textEditor.setHTML(this.textEditor.getHTML().replace('[LINK]', link))
+						else this.textEditor.setHTML(html)
+						this.setHTML()
+						off()
+					})
+					this.link.show(this.el)
+				break
 			}
 		}
 		else{

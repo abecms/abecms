@@ -32,6 +32,10 @@ var _colorPicker = require('../utils/color-picker');
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
+var _linkPicker = require('../utils/link-picker');
+
+var _linkPicker2 = _interopRequireDefault(_linkPicker);
+
 var _nanoajax = require('nanoajax');
 
 var _nanoajax2 = _interopRequireDefault(_nanoajax);
@@ -54,7 +58,8 @@ var EditorInputs = function () {
 
     this._ajax = _nanoajax2.default.ajax;
     this._json = _EditorJson2.default.instance;
-    this.color = new _colorPicker2.default(document.querySelector('.wysiwyg-popup'));
+    this.color = new _colorPicker2.default(document.querySelector('.wysiwyg-popup.color'));
+    this.link = new _linkPicker2.default(document.querySelector('.wysiwyg-popup.link'));
     this.onBlur = (0, _on2.default)(this);
     this.onReload = (0, _on2.default)(this);
     this.onDisableInput = (0, _on2.default)(this);
@@ -107,7 +112,7 @@ var EditorInputs = function () {
       var richs = document.querySelectorAll('.rich');
       if (typeof richs !== 'undefined' && richs !== null) {
         Array.prototype.forEach.call(richs, function (rich) {
-          new _richTexarea2.default(rich, _this2.color);
+          new _richTexarea2.default(rich, _this2.color, _this2.link);
         });
       }
 

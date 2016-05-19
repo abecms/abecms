@@ -14,6 +14,10 @@ var _colorPicker = require('../utils/color-picker');
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
+var _linkPicker = require('../utils/link-picker');
+
+var _linkPicker2 = _interopRequireDefault(_linkPicker);
+
 var _richTexarea = require('../utils/rich-texarea');
 
 var _richTexarea2 = _interopRequireDefault(_richTexarea);
@@ -43,7 +47,8 @@ var EditorBlock = function () {
     _classCallCheck(this, EditorBlock);
 
     this._json = _EditorJson2.default.instance;
-    this.color = new _colorPicker2.default(document.querySelector('.wysiwyg-popup'));
+    this.color = new _colorPicker2.default(document.querySelector('.wysiwyg-popup.color'));
+    this.link = new _linkPicker2.default(document.querySelector('.wysiwyg-popup.link'));
 
     this._removeblock = [].slice.call(document.querySelectorAll('.list-group[data-block]'));
     this._handleClickRemoveBlock = this._clickRemoveBlock.bind(this);
@@ -345,7 +350,7 @@ var EditorBlock = function () {
         });
         var newRichs = [].slice.call(newBlock.querySelectorAll('.rich'));
         Array.prototype.forEach.call(newRichs, function (newRich) {
-          new _richTexarea2.default(newRich, _this2.color);
+          new _richTexarea2.default(newRich, _this2.color, _this2.link);
         });
       }
 

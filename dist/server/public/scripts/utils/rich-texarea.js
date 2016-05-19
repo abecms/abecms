@@ -6,21 +6,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _colorPicker = require('./color-picker');
-
-var _colorPicker2 = _interopRequireDefault(_colorPicker);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var RichTexarea = function () {
-	function RichTexarea(wrapper, color) {
+	function RichTexarea(wrapper, color, link) {
 		var _this = this;
 
 		_classCallCheck(this, RichTexarea);
 
 		this.color = color;
+		this.link = link;
 		this.wrapper = wrapper;
 		this.textarea = wrapper.querySelector('.form-rich');
 		this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon');
@@ -53,6 +48,27 @@ var RichTexarea = function () {
 			var canceled = !this.textarea.dispatchEvent(evt);
 		}
 	}, {
+		key: '_replaceSelectionWithHtml',
+		value: function _replaceSelectionWithHtml(html) {
+			var range, html;
+			if (window.getSelection && window.getSelection().getRangeAt) {
+				range = window.getSelection().getRangeAt(0);
+				range.deleteContents();
+				var div = document.createElement("div");
+				div.innerHTML = html;
+				var frag = document.createDocumentFragment(),
+				    child;
+				while (child = div.firstChild) {
+					frag.appendChild(child);
+				}
+				range.insertNode(frag);
+			} else if (document.selection && document.selection.createRange) {
+				range = document.selection.createRange();
+				html = node.nodeType == 3 ? node.data : node.outerHTML;
+				range.pasteHTML(html);
+			}
+		}
+	}, {
 		key: 'action',
 		value: function action(e) {
 			var _this2 = this;
@@ -66,13 +82,24 @@ var RichTexarea = function () {
 			if (typeof this.popup !== 'undefined' && this.popup !== null) {
 				switch (this.popup) {
 					case 'color':
-						console.log('this.color', this.color);
 						var off = this.color.onColor(function (color) {
-							_this2.textEditor[_this2.action](color);
-							_this2.setHTML();
+							if (color !== null) {
+								_this2.textEditor[_this2.action](color);
+								_this2.setHTML();
+							}
 							off();
 						});
 						this.color.show(this.el);
+						break;
+					case 'link':
+						var html = this.textEditor.getHTML();
+						this._replaceSelectionWithHtml('<a href="[LINK]">' + window.getSelection().toString() + '</a>');
+						var off = this.link.onLink(function (link) {
+							if (link !== null) _this2.textEditor.setHTML(_this2.textEditor.getHTML().replace('[LINK]', link));else _this2.textEditor.setHTML(html);
+							_this2.setHTML();
+							off();
+						});
+						this.link.show(this.el);
 						break;
 				}
 			} else {
