@@ -278,6 +278,7 @@ export default class Page {
       var tmp = template(json, {
           data: {intl: intlData}
       })
+      if(this._onlyHTML) tmp = Hooks.instance.trigger('afterPageSaveCompile', tmp, json)
 
       log.delAndWrite('Index-new-page', 'result', text, json, tmp)
       this.html = tmp
