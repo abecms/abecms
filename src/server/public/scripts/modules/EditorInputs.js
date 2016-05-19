@@ -5,6 +5,7 @@ import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
 import RichText from '../utils/rich-texarea'
 import Color from '../utils/color-picker'
+import Link from '../utils/link-picker'
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import on from 'on'
@@ -13,7 +14,8 @@ export default class EditorInputs {
   constructor() {
     this._ajax = Nanoajax.ajax
     this._json = Json.instance
-    this.color = new Color(document.querySelector('.wysiwyg-popup'))
+    this.color = new Color(document.querySelector('.wysiwyg-popup.color'))
+    this.link = new Link(document.querySelector('.wysiwyg-popup.link'))
     this.onBlur = on(this)
     this.onReload = on(this)
     this.onDisableInput = on(this)
@@ -57,7 +59,7 @@ export default class EditorInputs {
     var richs = document.querySelectorAll('.rich')
     if(typeof richs !== 'undefined' && richs !== null){
       Array.prototype.forEach.call(richs, (rich) => {
-        new RichText(rich, this.color)
+        new RichText(rich, this.color, this.link)
       })
     }
 

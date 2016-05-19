@@ -8,4 +8,20 @@
   &.on {
 	  display: inline-block;
 	}
+
+  &.link {
+  	background: none;
+  	border: none;
+	  padding: 0;
+    margin-left: 40px;
+    margin-top: -39px;
+	  input{
+	  	padding: 5px;
+	    vertical-align: top;
+	  }
+	  button {
+	    border-radius: 0;
+	    vertical-align: top;
+	  }
+	}
 }

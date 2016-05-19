@@ -1,6 +1,7 @@
 import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import {nextSibling} from '../utils/dom'
 import Color from '../utils/color-picker'
+import Link from '../utils/link-picker'
 import RichText from '../utils/rich-texarea'
 import Json from './EditorJson'
 import EditorInputs from './EditorInputs'
@@ -10,7 +11,8 @@ import on from 'on'
 export default class EditorBlock {
   constructor() {
     this._json = Json.instance
-  	this.color = new Color(document.querySelector('.wysiwyg-popup'))
+    this.color = new Color(document.querySelector('.wysiwyg-popup.color'))
+  	this.link = new Link(document.querySelector('.wysiwyg-popup.link'))
 
     this._removeblock = [].slice.call(document.querySelectorAll('.list-group[data-block]'))
     this._handleClickRemoveBlock = this._clickRemoveBlock.bind(this)
@@ -294,7 +296,7 @@ export default class EditorBlock {
       })
       var newRichs = [].slice.call(newBlock.querySelectorAll('.rich'))
       Array.prototype.forEach.call(newRichs, (newRich) => {
-        new RichText(newRich, this.color)
+        new RichText(newRich, this.color, this.link)
       })
     }
 
