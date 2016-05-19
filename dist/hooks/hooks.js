@@ -47,6 +47,9 @@ var hooks = {
    afterSaveImage: function afterSaveImage(resp, abe) {
       return resp;
    },
+   afterPageSaveCompile: function afterPageSaveCompile(tmp, json, abe) {
+      return tmp;
+   },
 
    /***************** Manager *****************/
    beforeGetAllFilesDraft: function beforeGetAllFilesDraft(drafted, abe) {

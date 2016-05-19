@@ -42,6 +42,9 @@ var hooks = {
   afterSaveImage: (resp, abe) => {
     return resp
   },
+  afterPageSaveCompile: (tmp, json, abe) => {
+    return tmp
+  },
 
   /***************** Manager *****************/
   beforeGetAllFilesDraft: (drafted, abe) => {
