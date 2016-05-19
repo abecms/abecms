@@ -168,12 +168,14 @@ export default class Page {
           json2[keyArray] = []
           json2[keyArray].push(obj)
         }
+        var jsonOne = {}
+        jsonOne[keyArray] = [{}]
         var template = Handlebars.compile(dataBlock.replace(/{{abe(.*?)}}/g, '[[abe$1]]').replace(new RegExp(`\\.\\.\/${meta}`, 'g'), meta))
         var insertCompiled = template(json2, {data: {intl: intlData}}).replace(/\[\[abe(.*?)\]\]/g, '{{abe$1}}')
-
+        var insertCompiledEmpty = template(jsonOne, {data: {intl: intlData}}).replace(/\[\[abe(.*?)\]\]/g, '{{abe$1}}')
         var textEachWithIndex = eache.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + keyArray + '{{@index}}"')
 
-        text = text.replace(eache, textEachWithIndex + `<!-- [[${keyArray}]] ${util.encodeAbe(insertCompiled)} -->`)
+        text = text.replace(eache, textEachWithIndex + `<!-- [[${keyArray}]] ${util.encodeAbe(insertCompiledEmpty)} -->`)
       }
       while (match = pattNode.exec(eache)) {
         text = this._insertAbeEach(text, match, keyArray, pattEach.lastIndex - eache.length, util, util)
