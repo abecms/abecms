@@ -91,7 +91,6 @@ var Engine = function () {
       });
 
       this._manager.remove(function (el) {
-        console.log(_this2.table.row(el));
         _this2.table.row($(el)).remove().draw();
       });
 

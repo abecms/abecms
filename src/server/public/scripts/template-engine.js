@@ -48,7 +48,6 @@ class Engine {
     })
 
     this._manager.remove((el) => {
-      console.log(this.table.row(el))
       this.table.row($(el)).remove().draw()
     })
 

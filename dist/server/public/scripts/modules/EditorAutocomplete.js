@@ -133,15 +133,19 @@ var EditorAutocomplete = function () {
 
         this._json.data = json;
 
-        Array.prototype.forEach.call(nodeComments, function (nodeComment) {
-          var blockHtml = unescape(nodeComment.textContent.replace(/\[\[([\S\s]*?)\]\]/, '')).replace(/\[0\]-/g, '[0]-');
+        try {
+          Array.prototype.forEach.call(nodeComments, function (nodeComment) {
+            var blockHtml = unescape(nodeComment.textContent.replace(/\[\[([\S\s]*?)\]\]/, '')).replace(/\[0\]-/g, '[0]-');
 
-          // var blockHtml = unescape(blockContent.innerHTML).replace(/\[0\]-/g, '[0]-')
-          var template = _handlebars2.default.compile(blockHtml, { noEscape: true });
-          var compiled = template(_this2._json.data);
+            // var blockHtml = unescape(blockContent.innerHTML).replace(/\[0\]-/g, '[0]-')
+            var template = _handlebars2.default.compile(blockHtml, { noEscape: true });
+            var compiled = template(_this2._json.data);
 
-          nodeComment.parentNode.innerHTML = compiled + ('<!-- ' + nodeComment.textContent + ' -->');
-        });
+            nodeComment.parentNode.innerHTML = compiled + ('<!-- ' + nodeComment.textContent + ' -->');
+          });
+        } catch (e) {
+          console.log(e);
+        }
       } else if (typeof id !== 'undefined' && id !== null) {
         if (this._currentInput.getAttribute('visible') === true) {
           var nodes = _EditorUtils2.default.getNode(attr);

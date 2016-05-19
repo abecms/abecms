@@ -9,15 +9,15 @@ var clc = require('cli-color');
 // ROOT=/path/to/my/abesite node src/tasks/nodemon.js
 
 nodemon({
-  script: './src/server/app.js',
+  script: __dirname + '/../../src/server/app.js',
   options: {
-    exec: './node_modules/.bin/babel-node --presets es2015'
+    exec: __dirname + '/../../node_modules/.bin/babel-node --presets es2015'
   },
   nodeArgs: ['--debug'],
   restartable: 'rs',
   colours: true,
   execMap: {
-    js: './node_modules/.bin/babel-node --presets es2015'
+    js: __dirname + '/../../node_modules/.bin/babel-node --presets es2015'
   },
   env: {
     'NODE_ENV': 'development'

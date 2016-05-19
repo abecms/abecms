@@ -165,11 +165,15 @@ var EditorUtils = function () {
           if (typeof option !== 'undefined' && option !== null) {
             val = option.value;
             if (typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
-              var template = _handlebars2.default.compile(dataAbeAttrEscaped, { noEscape: true });
-              var json = {};
-              json[key] = val;
-              var compiled = template(json);
-              node.setAttribute(dataAbeAttr, compiled);
+              try {
+                var template = _handlebars2.default.compile(dataAbeAttrEscaped, { noEscape: true });
+                var json = {};
+                json[key] = val;
+                var compiled = template(json);
+                node.setAttribute(dataAbeAttr, compiled);
+              } catch (e) {
+                console.log(e);
+              }
             } else {
               node.innerHTML = val;
             }
