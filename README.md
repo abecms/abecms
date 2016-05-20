@@ -57,6 +57,8 @@ With __npm__ : ```$ npm install -g abe-cli ```
 
 Install nodejs + git
 
+Under windows : Please use Git Bash
+
 With __github__ :
 
 Create a blog directory (ie. "abesite") with the default project structure (see below). It will contain your blog.
@@ -71,10 +73,6 @@ git clone abe outside of your blog directory (not in abesite) :
 to launch your blog using Abe, under Linux or Mac, you have to set an Environment variable pointing to your blog :
 
 ```$ ROOT=/my_path_to_the_blog npm run startdev ```
-
-Under windows :
-
-```$ set ROOT=/my_path_to_the_blog&&npm run startdev ```
 
 Other environment variables are available (like PORT for defining a listening port for ABE and WEBPORT for your blog port)
 
