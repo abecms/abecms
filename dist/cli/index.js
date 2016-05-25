@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.serveSite = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.Util = exports.Handlebars = exports.fileAttr = undefined;
+exports.compileAbe = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.serveSite = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.Util = exports.Handlebars = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -24,6 +24,10 @@ var _handlebars = require('handlebars');
 var _handlebars2 = _interopRequireDefault(_handlebars);
 
 var _regexHelper = require('./helpers/regex-helper');
+
+var _slugify = require('./helpers/slugify');
+
+var _slugify2 = _interopRequireDefault(_slugify);
 
 var _abeTemplate = require('./helpers/abe-template');
 
@@ -86,6 +90,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.fileAttr = _fileAttr2.default;
 exports.Handlebars = _handlebars2.default;
 exports.Util = _abeUtils2.default;
+exports.slugify = _slugify2.default;
+exports.cleanSlug = _slugify.cleanSlug;
 exports.FileParser = _fileParser2.default;
 exports.folderUtils = _folderUtils2.default;
 exports.fileUtils = _fileUtils2.default;

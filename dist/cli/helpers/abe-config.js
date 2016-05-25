@@ -26,7 +26,7 @@ var result = (0, _extend2.default)(true, _config.abeConfig, _config.abeConfigLoc
 result.root = result.root.replace(/\/$/, "");
 
 var loadLocalConfig = function loadLocalConfig(result) {
-	var website = result.root;
+	var website = result.root.replace(/\/$/, '');
 	try {
 		var stat = _fsExtra2.default.statSync(website);
 		if (stat && stat.isDirectory()) {
@@ -38,7 +38,7 @@ var loadLocalConfig = function loadLocalConfig(result) {
 				}
 			} catch (e) {
 				_.log.error('abe-config', website + '/abe.json', '\n' + e);
-				console.log(_cliColor2.default.red('Error abe-config ' + website + '/abe.json'), '\n' + e);
+				console.log(_cliColor2.default.red('Error abe-config ' + website + '/abe.json'));
 			}
 		}
 	} catch (e) {}

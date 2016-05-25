@@ -73,6 +73,9 @@ router.get('/abe/*', function (req, res, next) {
 
   var templatePath = _cli.fileUtils.getTemplatePath(req.params[0]);
   var filePath = _cli.fileUtils.getFilePath(req.query.filePath);
+
+  filePath = (0, _cli.cleanSlug)(filePath);
+
   var obj;
   var tplUrl;
   var isHome = true;
@@ -206,7 +209,8 @@ router.get('/abe/*', function (req, res, next) {
 
 function page(req, res, next) {
   var templatePath = _cli.fileUtils.getTemplatePath(req.params[0]);
-  var filePath = _cli.fileUtils.getFilePath(req.query.filePath);
+  var filePath = (0, _cli.cleanSlug)(req.query.filePath);
+  filePath = _cli.fileUtils.getFilePath(filePath);
   var html = req.query.html ? true : false;
   var json = null;
   if (typeof req.body.json !== 'undefined' && req.body.json !== null) {
@@ -295,8 +299,9 @@ router.post('/publish', function (req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
+  var filePath = (0, _cli.cleanSlug)(req.body.filePath);
   var p = new Promise(function (resolve, reject) {
-    (0, _cli.save)(_cli.fileUtils.getFilePath(req.body.filePath), req.body.tplPath, req.body.json, '', 'draft', null, 'publish').then(function () {
+    (0, _cli.save)(_cli.fileUtils.getFilePath(filePath), req.body.tplPath, req.body.json, '', 'draft', null, 'publish').then(function () {
       resolve();
     }).catch(function (e) {
       console.error(e.stack);
@@ -400,7 +405,7 @@ router.get('/unpublish', function (req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = req.query.filePath;
+  var filePath = (0, _cli.cleanSlug)(req.body.filePath);
   var dirPath = _cli.FileParser.unpublishFile(filePath);
 
   var result = {
@@ -415,7 +420,7 @@ router.get('/delete', function (req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = req.query.filePath;
+  var filePath = (0, _cli.cleanSlug)(req.body.filePath);
   var dirPath = _cli.FileParser.deleteFile(filePath);
 
   var result = {
