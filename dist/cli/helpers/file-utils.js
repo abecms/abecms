@@ -229,6 +229,11 @@ var FileUtils = function () {
 	}, {
 		key: 'getTemplatePath',
 		value: function getTemplatePath(path) {
+			if (path.indexOf('.') === -1) {
+				// no extension add one
+				path = path + '.' + _.config.files.templates.extension;
+			}
+
 			var res = null;
 			if (typeof path !== 'undefined' && path !== null && path !== '') {
 				res = path.replace(_.config.root);
