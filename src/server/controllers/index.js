@@ -24,7 +24,8 @@ import {
   Hooks,
   Plugins,
   serveSite,
-  Handlebars
+  Handlebars,
+  cleanSlug
 } from '../../cli'
 
 import {editor} from './editor'
@@ -53,6 +54,9 @@ router.get('/abe/*', function(req, res, next) {
 
   var templatePath = fileUtils.getTemplatePath(req.params[0])
   var filePath = fileUtils.getFilePath(req.query.filePath)
+
+  filePath = cleanSlug(filePath)
+
   var obj
   var tplUrl
   var isHome = true
@@ -188,7 +192,8 @@ router.get('/abe/*', function(req, res, next) {
 
 function page(req, res, next) {
   var templatePath = fileUtils.getTemplatePath(req.params[0])
-  var filePath = fileUtils.getFilePath(req.query.filePath)
+  var filePath = cleanSlug(req.query.filePath)
+  filePath = fileUtils.getFilePath(filePath)
   var html = (req.query.html) ? true : false
   var json = null
   if(typeof req.body.json !== 'undefined' && req.body.json !== null) {
@@ -279,9 +284,10 @@ router.post('/publish', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
+  var filePath = cleanSlug(req.body.filePath)
   var p = new Promise((resolve, reject) => {
     save(
-      fileUtils.getFilePath(req.body.filePath),
+      fileUtils.getFilePath(filePath),
       req.body.tplPath,
       req.body.json,
       '',
@@ -426,7 +432,7 @@ router.get('/unpublish', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = req.query.filePath
+  var filePath = cleanSlug(req.body.filePath)
   var dirPath = FileParser.unpublishFile(filePath)
 
   var result = {
@@ -441,7 +447,7 @@ router.get('/delete', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = req.query.filePath
+  var filePath = cleanSlug(req.body.filePath)
   var dirPath = FileParser.deleteFile(filePath)
 
   var result = {

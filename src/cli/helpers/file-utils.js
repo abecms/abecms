@@ -168,6 +168,10 @@ export default class FileUtils {
 
   /* TODO: refactor this method as Facade method to a method adding a fragment in a path */
   static getTemplatePath(path) {
+		if (path.indexOf('.') === -1) { // no extension add one
+			path = `${path}.${config.files.templates.extension}`
+		}
+
   	var res = null
   	if(typeof path !== 'undefined' && path !== null && path !== '') {
   		res = path.replace(config.root)
