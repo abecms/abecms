@@ -251,6 +251,8 @@ var Sql = function () {
           var fromPath = '';
           if (from === '*' || from === '/') {
             fromPath = _.fileUtils.concatPath(_.config.root, data);
+          } else if (from === './') {
+            fromPath = _.fileUtils.concatPath(_.config.root, data, tplPath);
           } else if (from.indexOf('/') === 0) {
             fromPath = _.fileUtils.concatPath(_.config.root, data, from);
           } else if (from.indexOf('/') !== 0) {
