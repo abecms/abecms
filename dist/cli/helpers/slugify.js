@@ -9,6 +9,7 @@ var _cli = require('../../cli');
 
 function cleanSlug(str) {
 
+  if (typeof str === 'undefined' || str === null) return null;
   if (str.indexOf('.') === -1) {
     // no extension add one
     str = str + '.' + _cli.config.files.templates.extension;

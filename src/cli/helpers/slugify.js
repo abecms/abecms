@@ -4,6 +4,7 @@ import {
 
 function cleanSlug(str) {
 
+  if (typeof str === 'undefined' || str === null) return null;
   if (str.indexOf('.') === -1) { // no extension add one
     str = `${str}.${config.files.templates.extension}`
   }
