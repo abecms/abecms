@@ -26,6 +26,8 @@ import {
 
 import Handlebars from 'handlebars'
 import {getAttr, getEnclosingTags, escapeTextToRegex} from './helpers/regex-helper'
+import slugify from './helpers/slugify'
+import {cleanSlug} from './helpers/slugify'
 import {getTemplate} from './helpers/abe-template'
 import folderUtils from './helpers/folder-utils'
 import FileParser from './helpers/file-parser'
@@ -46,6 +48,8 @@ export {
 	fileAttr
 	,Handlebars
 	,Util
+	,slugify
+	,cleanSlug
 	,FileParser
 	,folderUtils
 	,fileUtils

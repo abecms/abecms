@@ -12,7 +12,7 @@ var result = extend(true, abeConfig, abeConfigLocal)
 result.root = result.root.replace(/\/$/, "")
 
 var loadLocalConfig = (result) => {
-	var website = result.root
+	var website = result.root.replace(/\/$/, '')
   try{
 		var stat = fse.statSync(website)
 		if (stat && stat.isDirectory()) {
@@ -24,7 +24,7 @@ var loadLocalConfig = (result) => {
 		    }
 			}catch(e) {
 				log.error('abe-config', `${website}/abe.json`, `\n${e}`)
-				console.log(clc.red(`Error abe-config ${website}/abe.json`),  `\n${e}`)
+				console.log(clc.red(`Error abe-config ${website}/abe.json`))
 			}
     }
 	}catch(e){}

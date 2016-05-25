@@ -17,6 +17,7 @@ import {
   ,getTemplate
   ,Hooks
   ,Plugins
+  ,cleanSlug
 } from '../'
 
 export function checkRequired(text, json) {
@@ -55,6 +56,8 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft') {
+  url = cleanSlug(url)
+
   var p = new Promise((resolve, reject) => {
     if(type === 'reject'){
       url = Hooks.instance.trigger('beforeReject', url)
