@@ -154,7 +154,7 @@ var EditorInputs = function () {
         node.classList.remove('display-attr');
       });
 
-      this.onBlur._fire();
+      this.onBlur._fire(nodes, e.target);
     }
 
     /**

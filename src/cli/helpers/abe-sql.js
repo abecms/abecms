@@ -225,6 +225,8 @@ export default class Sql {
         var fromPath = ''
         if(from === '*' || from === '/') {
           fromPath = fileUtils.concatPath(config.root, data)
+        }else if(from === './') {
+          fromPath = fileUtils.concatPath(config.root, data, tplPath)
         }else if(from.indexOf('/') === 0) {
           fromPath = fileUtils.concatPath(config.root, data, from)
         }else if(from.indexOf('/') !== 0) {
