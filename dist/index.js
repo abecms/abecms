@@ -64,7 +64,15 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			});
 			break;
 		case 'create':
-			if (userArgs[1]) create.init(userArgs[1]);else console.error("Error: no project path specified");
+			var dir = userArgs[1];
+			if (process.env.ROOT) {
+				dir = process.env.ROOT + userArgs[1];
+			}
+			if (typeof dir !== 'undefined' && dir !== null) {
+				create.init(dir);
+			} else {
+				console.error("Error: no project path specified");
+			}
 			break;
 		case 'serve':
 			var dir = process.cwd();

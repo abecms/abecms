@@ -14,6 +14,12 @@ var _mkdirp = require('mkdirp');
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
+var _es6Promise = require('es6-promise');
+
+var _slugify = require('./helpers/slugify');
+
+var _slugify2 = _interopRequireDefault(_slugify);
+
 var _ = require('./');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -28,19 +34,32 @@ var Create = function () {
 	_createClass(Create, [{
 		key: 'init',
 		value: function init(path) {
-			this.addFolder(path);
-			process.chdir(path);
-			this.addFolder(_.config.publish.url);
-			this.addFolder(_.config.templates.url);
-			this.addFolder(_.config.structure.url);
-			this.addFolder(_.config.reference.url);
-			this.addFolder(_.config.data.url);
-			this.addFolder(_.config.draft.url);
+			var _this = this;
+
+			path = path.split('/');
+			path[path.length - 1] = (0, _slugify2.default)(path[path.length - 1]);
+			path = path.join('/');
+			this.addFolder(path).then(function () {
+				process.chdir(path);
+				_this.addFolder(_.config.publish.url);
+				_this.addFolder(_.config.templates.url);
+				_this.addFolder(_.config.structure.url);
+				_this.addFolder(_.config.reference.url);
+				_this.addFolder(_.config.data.url);
+				_this.addFolder(_.config.draft.url);
+			}).catch(function (e) {
+				console.error(e.stack);
+			});
 		}
 	}, {
 		key: 'addFolder',
 		value: function addFolder(folder) {
-			(0, _mkdirp2.default)(folder);
+			var p = new _es6Promise.Promise(function (resolve, reject) {
+				(0, _mkdirp2.default)(folder);
+				resolve();
+			});
+
+			return p;
 		}
 	}]);
 
