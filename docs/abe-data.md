@@ -84,7 +84,7 @@ references/titles.json
 ```
 
 ```html
-{{abe type='data' key='title' desc='Pick a title' source='references/titles.json' display="title" editabl="true"}}
+{{abe type='data' key='title' desc='Pick a title' source='reference/titles.json' display="title" editable="true"}}
 ```
 
 > http webservice
@@ -92,7 +92,7 @@ references/titles.json
 Same as inline json file but with __http__ request
 
 ```html
-{{abe type='data' key='title' desc='Pick a title' source='http://mywebsite.url/titles/webservice' display="title" editabl="true"}}
+{{abe type='data' key='title' desc='Pick a title' source='http://mywebsite.url/titles/webservice' display="title" editable="true"}}
 ```
 
 ##Sql like request
