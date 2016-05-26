@@ -216,18 +216,22 @@ var EditorAutocomplete = function () {
           sources = [sources];
         }
         Array.prototype.forEach.call(sources, function (source) {
-          var sourceVal = _this3._deep_value_array(source, display).toLowerCase();
-          if (sourceVal.indexOf(val) > -1) {
-            var div = document.createElement('div');
-            div.addEventListener('mousedown', _this3._handleSelectValue);
-            div.setAttribute('data-value', JSON.stringify(source));
-            div.setAttribute('data-display', display);
-            if (first) {
-              div.classList.add('selected');
+          var sourceVal = _this3._deep_value_array(source, display);
+
+          if (typeof sourceVal !== 'undefined' && sourceVal !== null) {
+            sourceVal = sourceVal.toLowerCase();
+            if (sourceVal.indexOf(val) > -1) {
+              var div = document.createElement('div');
+              div.addEventListener('mousedown', _this3._handleSelectValue);
+              div.setAttribute('data-value', JSON.stringify(source));
+              div.setAttribute('data-display', display);
+              if (first) {
+                div.classList.add('selected');
+              }
+              first = false;
+              div.innerHTML = sourceVal.replace(val, '<span class="select">' + val + '</span>');
+              _this3._divWrapper.appendChild(div);
             }
-            first = false;
-            div.innerHTML = sourceVal.replace(val, '<span class="select">' + val + '</span>');
-            _this3._divWrapper.appendChild(div);
           }
         });
       }
