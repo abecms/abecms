@@ -1,5 +1,10 @@
 import Handlebars from 'handlebars'
 import abeEngine from './abeEngine'
+import xss from 'xss'
+
+import {
+  config
+} from '../../'
 
 /**
  * Abe handlebar helper, that retrieve text to add to handlebars templating engine
@@ -13,10 +18,15 @@ export default function compileAbe(){
     key = key[key.length - 1]
     var hash = arguments[0].hash
     hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]')
-    if(typeof hash.type !== 'undefined' && hash.type !== null){
-      return new Handlebars.SafeString((content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key)
+    var value = ((content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key)
+    if(typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich'){
+      var testXSS = xss(value.replace(/&quot;/g, '"'), {
+        "whiteList": config.htmlWhiteList,
+        stripIgnoreTag: true
+      })
+      return new Handlebars.SafeString(testXSS)
     }
-    return (content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key
+    return value
   }
 
   var key = arguments[0].hash['key'].replace('.', '-')
@@ -26,9 +36,13 @@ export default function compileAbe(){
   if(typeof value === 'undefined' || value === null) {
     value = ''
   }
-  console.log(hash.type)
-  if(typeof hash.type !== 'undefined' && hash.type !== null){
-    return new Handlebars.SafeString(value)
+  
+  if(typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich'){
+    var testXSS = xss(value.replace(/&quot;/g, '"'), {
+      "whiteList": config.htmlWhiteList,
+      stripIgnoreTag: true
+    })
+    return new Handlebars.SafeString(testXSS)
   }
   return value
 }
