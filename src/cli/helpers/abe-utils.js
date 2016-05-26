@@ -4,6 +4,8 @@ import clc from 'cli-color'
 import fse from 'fs-extra'
 import ajaxRequest from 'ajax-request'
 import {Promise} from 'es6-promise'
+import http from 'http' 
+import https from 'https'
 
 import {
   config
@@ -287,6 +289,9 @@ export default class Utils {
               var val = match.replace('{{', '')
               val = val.replace('}}', '')
               val = Sql.deep_value_array(jsonPage, val)
+              if(typeof val === 'undefined' || val === null) {
+                val = ''
+              }
               source = source.replace(match, val)
             })
           }
@@ -327,23 +332,71 @@ export default class Utils {
               break;
             case 'url':
               if(autocomplete !== true && autocomplete !== 'true') {
+                var host = source
+                host = host.split('/')
+                var httpUse = http
+                var defaultPort = 80
+                if(host[0] === 'https:') {
+                  httpUse = https
+                  defaultPort = 443
+                }
+                host = host[2].split(':')
 
-                // @TODO
-                ajaxRequest(source, (err, res, body) => {
-                  if(typeof body === 'string') {
-                    var parsedBody = JSON.parse(body)
-                    if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
-                      jsonPage[sourceAttr][key] = parsedBody
-                    }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
-                      jsonPage[sourceAttr][key] = [parsedBody]
-                    }
-                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
-                    jsonPage[sourceAttr][key] = body
-                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
-                    jsonPage[sourceAttr][key] = body
+                var path = source.split('//')
+                if(typeof path[1] !== 'undefined' && path[1] !== null) {
+                  path = path[1].split('/')
+                  path.shift()
+                  path = '/' + path.join('/')
+                }else {
+                  path = '/'
+                }
+                var options = {
+                  hostname: host[0],
+                  port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
+                  path: path,
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': 0
                   }
-                  resolveSource()
-                })
+                }
+
+                var body = ''
+
+                var localReq = httpUse.request(options, (localRes) => {
+                  localRes.setEncoding('utf8');
+                  localRes.on('data', (chunk) => {
+                    body = chunk;
+                  });
+                  localRes.on('end', () => {
+                    try {
+                      if(typeof body === 'string') {
+                        var parsedBody = JSON.parse(body)
+                        if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
+                          jsonPage[sourceAttr][key] = parsedBody
+                        }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
+                          jsonPage[sourceAttr][key] = [parsedBody]
+                        }
+                      }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
+                        jsonPage[sourceAttr][key] = body
+                      }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
+                        jsonPage[sourceAttr][key] = body
+                      }
+                    } catch(e) {
+                      console.log(clc.red(`Error ${source} is not a valid JSON`),  `\n${e}`)
+                    }
+                    resolveSource()
+                  })
+                });
+
+                localReq.on('error', (e) => {
+                  console.log(e)
+                });
+
+                // write data to request body
+                localReq.write('');
+                localReq.end();
+                
               }else {
                 jsonPage[sourceAttr][key] = source
                 resolveSource()

@@ -42,6 +42,8 @@ if(process.env.ROOT) config.set({root: process.env.ROOT.replace(/\/$/, '') + '/'
 if(process.env.PORT) abePort = process.env.PORT
 config.set({webport: process.env.WEBPORT ? process.env.WEBPORT : 8081})
 
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var html = exphbs.create({
   extname: '.' + config.files.templates.extension,
   helpers: {
@@ -73,6 +75,9 @@ portfinder.getPort(function (err, freePort) {
   }
 
   var app = express(opts)
+
+  app.use(bodyParser.json({limit: '1gb'}))
+  app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }));
 
   app.use(function (req, res, next) {
     res.locals.nonce = uuid.v4()
