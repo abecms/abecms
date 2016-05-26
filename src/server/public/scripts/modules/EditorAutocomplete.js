@@ -168,18 +168,22 @@ export default class EditorAutocomplete {
         sources = [sources]
       }
       Array.prototype.forEach.call(sources, (source) => {
-        var sourceVal = this._deep_value_array(source, display).toLowerCase()
-        if(sourceVal.indexOf(val) > -1) {
-          var div = document.createElement('div')
-          div.addEventListener('mousedown', this._handleSelectValue)
-          div.setAttribute('data-value', JSON.stringify(source))
-          div.setAttribute('data-display', display)
-          if(first) {
-            div.classList.add('selected')
+        var sourceVal = this._deep_value_array(source, display)
+        if(typeof sourceVal !== 'undefined' && sourceVal !== null) {
+          sourceVal = sourceVal.toLowerCase()
+          if(sourceVal.indexOf(val) > -1) {
+            var div = document.createElement('div')
+            div.addEventListener('mousedown', this._handleSelectValue)
+            div.setAttribute('data-value', JSON.stringify(source))
+            div.setAttribute('data-display', display)
+            if(first) {
+              div.classList.add('selected')
+            }
+            first = false
+            div.innerHTML = sourceVal.replace(val, `<span class="select">${val}</span>`)
+            this._divWrapper.appendChild(div)
           }
-          first = false
-          div.innerHTML = sourceVal.replace(val, `<span class="select">${val}</span>`)
-          this._divWrapper.appendChild(div)
+          
         }
       })
     }
