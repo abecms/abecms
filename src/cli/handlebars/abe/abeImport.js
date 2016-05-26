@@ -14,8 +14,8 @@ export default function abeImport (file, config, ctx) {
   var config = JSON.parse(config)
   let intlData = config.intlData
   var defaultPartials = `${__dirname.replace(/\/$/,"")}/${config.defaultPartials.replace(/\/$/,"")}`
-  var partials = (config.partials !== '') ? `${config.root.replace(/\/$/,"")}/${config.partials.replace(/\/$/,"")}` : defaultPartials
-  var pathToPartial = `${partials}/${file}.html`
+  var custom = (config.custom !== '') ? `${config.root.replace(/\/$/,"")}/${config.custom.replace(/\/$/,"")}` : defaultPartials
+  var pathToPartial = `${custom}/${file}.html`
   try{
     var stat = fse.statSync(pathToPartial)
   }

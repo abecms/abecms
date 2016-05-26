@@ -36,7 +36,7 @@ class Plugins {
         }
 
         // has partials
-        var plugPartials = fileUtils.concatPath(plugin.path, config.partials)
+        var plugPartials = fileUtils.concatPath(plugin.path, config.pluginsPartials)
         if(folderUtils.isFolder(plugPartials)) {
           plugin.partials = plugPartials
         }else {

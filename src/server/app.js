@@ -128,6 +128,12 @@ portfinder.getPort(function (err, freePort) {
     }
   }
 
+  if(config.custom !== '') {
+    if (fileUtils.isFile(fileUtils.concatPath(config.root, config.custom))) {
+      app.use(express.static(fileUtils.concatPath(config.root, config.custom)))
+    }
+  }
+
   var pluginsPartials = Plugins.instance.getPartials()
   Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
     app.use(express.static(pluginPartials))

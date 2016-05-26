@@ -147,6 +147,12 @@ _portfinder2.default.getPort(function (err, freePort) {
     }
   }
 
+  if (_cli.config.custom !== '') {
+    if (_cli.fileUtils.isFile(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.custom))) {
+      app.use(_express2.default.static(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.custom)));
+    }
+  }
+
   var pluginsPartials = _cli.Plugins.instance.getPartials();
   Array.prototype.forEach.call(pluginsPartials, function (pluginPartials) {
     app.use(_express2.default.static(pluginPartials));

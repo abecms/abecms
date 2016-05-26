@@ -88,7 +88,9 @@ var config = {
   sessionSecret: 'ThIsIsAbE',
   abeEngine: '../views/template-engine',
   defaultPartials: '../../../server/views/partials',
-  partials: 'partials',
+  pluginsPartials: 'partials',
+  partials: 'templates/partials',
+  custom: 'custom',
   siteUrl: false,
   sitePort: false
 };

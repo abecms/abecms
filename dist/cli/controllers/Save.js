@@ -175,7 +175,7 @@ function saveJson(url, json) {
 
   var eachRecursive = function eachRecursive(obj) {
     for (var k in obj) {
-      if (_typeof(obj[k]) == "object" && obj[k] !== null) eachRecursive(obj[k]);else obj[k] = (0, _xss2.default)(obj[k].toString().replace(/&quot;/g, '"'), { "whiteList": _.config.htmlWhiteList });
+      if (_typeof(obj[k]) === "object" && obj[k] !== null) eachRecursive(obj[k]);else if (typeof obj[k] !== "undefined" && obj[k] !== null) obj[k] = (0, _xss2.default)(obj[k].toString().replace(/&quot;/g, '"'), { "whiteList": _.config.htmlWhiteList });
     }
   };
 
