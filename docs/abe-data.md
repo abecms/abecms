@@ -58,7 +58,7 @@ If you want to use more than inline json data, the source attributes can use man
 > Inline json
 
 ```html
-{{abe type='data' key='title' desc='Pick a title' source='[{"title":"My article"},{"title":"My website"},{"title":"My blog"}]' display="title" editabl="true"}}
+{{abe type='data' key='titles' desc='Pick a title' source='[{"title":"My article"},{"title":"My website"},{"title":"My blog"}]' display="title" editable="true"}}
 ```
 
 this will __display__ (*because editable is true*) an input select with __3 choices__ (*"My article", "My website", "My blog" are values of title choosed with diplay parameter*)
@@ -94,6 +94,28 @@ Same as inline json file but with __http__ request
 ```html
 {{abe type='data' key='title' desc='Pick a title' source='http://mywebsite.url/titles/webservice' display="title" editable="true"}}
 ```
+
+> if you descide to use autocomplete="true"
+> 
+> http request will be made from the browser
+> 
+> Exemple: **http://mywebsite.url/titles/webservice/ + my_auto_complete_word_**
+>
+> if not http request is made from the server to show the result inside select multiple html tag
+> Exemple: **http://mywebsite.url/titles/webservice/**
+
+> How to add a variable after /webservice/ from server side request ?
+> 
+> create a placeholder
+> **{{abe type='text' key='my_variable' desc='some variable' tab='default' visible="false"}}**
+> 
+> don't forget attribute visible="false"
+> 
+> then you can use the variable inside the url
+> 
+> Exemple : **{{abe type='data' key='test' source='http://localhost:8000/plugin/service/json/{{my_variable}}' display="title" editable='true' desc='test'}}**
+> 
+> Warning **my_variable** will be empty on first load the user will need to save at least once with the variable filled
 
 ##Sql like request
 
