@@ -45,6 +45,20 @@ var config = {
     connectSrc: []
   },
   security: true,
+  htmlWhiteList: {
+    "blockquote": ["style"],
+    "span": ["style"],
+    "font": ["style", "color"],
+    "div": ["style"],
+    "sup": ["style"],
+    "sub": ["style"],
+    "ul": ["style"],
+    "li": ["style"],
+    "p": ["style"],
+    "i": ["style"],
+    "u": ["style"],
+    "a": ["style", "href"]
+  },
   files: {
     exclude: /^[.]/,
     templates: {
