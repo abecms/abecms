@@ -155,7 +155,14 @@ export function saveJson(url, json) {
     delete json.abe_source
   }
 
-  json = JSON.parse(xss(JSON.stringify(json).replace(/[a-zA-Z0-9-]*?=\\[\"\'].*?[\"\']/g, '')))
+  var eachRecursive = function (obj) {
+    for (var k in obj) {
+      if (typeof obj[k] == "object" && obj[k] !== null) eachRecursive(obj[k])
+      else obj[k] = xss(obj[k].toString().replace(/&quot;/g, '"'), { "whiteList": config.htmlWhiteList })
+    }
+  }
+
+  eachRecursive(json)
 
   fse.writeJsonSync(url, json, {
     space: 2,

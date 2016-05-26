@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 exports.checkRequired = checkRequired;
 exports.save = save;
 exports.saveJson = saveJson;
@@ -170,7 +173,13 @@ function saveJson(url, json) {
     delete json.abe_source;
   }
 
-  json = JSON.parse((0, _xss2.default)(JSON.stringify(json).replace(/[a-zA-Z0-9-]*?=\\[\"\'].*?[\"\']/g, '')));
+  var eachRecursive = function eachRecursive(obj) {
+    for (var k in obj) {
+      if (_typeof(obj[k]) == "object" && obj[k] !== null) eachRecursive(obj[k]);else obj[k] = (0, _xss2.default)(obj[k].toString().replace(/&quot;/g, '"'), { "whiteList": _.config.htmlWhiteList });
+    }
+  };
+
+  eachRecursive(json);
 
   _fsExtra2.default.writeJsonSync(url, json, {
     space: 2,
