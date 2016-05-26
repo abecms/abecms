@@ -57,7 +57,8 @@ var config = {
     "p": ["style"],
     "i": ["style"],
     "u": ["style"],
-    "a": ["style", "href"]
+    "a": ["style", "href"],
+    "br": []
   },
   files: {
     exclude: /^[.]/,
