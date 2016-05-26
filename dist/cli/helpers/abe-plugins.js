@@ -49,7 +49,7 @@ var Plugins = function () {
         }
 
         // has partials
-        var plugPartials = _.fileUtils.concatPath(plugin.path, _.config.partials);
+        var plugPartials = _.fileUtils.concatPath(plugin.path, _.config.pluginsPartials);
         if (_.folderUtils.isFolder(plugPartials)) {
           plugin.partials = plugPartials;
         } else {
