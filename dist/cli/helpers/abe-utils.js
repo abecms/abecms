@@ -30,6 +30,14 @@ var _ajaxRequest2 = _interopRequireDefault(_ajaxRequest);
 
 var _es6Promise = require('es6-promise');
 
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -298,6 +306,9 @@ var Utils = function () {
                 var val = match.replace('{{', '');
                 val = val.replace('}}', '');
                 val = _.Sql.deep_value_array(jsonPage, val);
+                if (typeof val === 'undefined' || val === null) {
+                  val = '';
+                }
                 source = source.replace(match, val);
               });
             }
@@ -337,23 +348,70 @@ var Utils = function () {
                 break;
               case 'url':
                 if (autocomplete !== true && autocomplete !== 'true') {
+                  var host = source;
+                  host = host.split('/');
+                  var httpUse = _http2.default;
+                  var defaultPort = 80;
+                  if (host[0] === 'https:') {
+                    httpUse = _https2.default;
+                    defaultPort = 443;
+                  }
+                  host = host[2].split(':');
 
-                  // @TODO
-                  (0, _ajaxRequest2.default)(source, function (err, res, body) {
-                    if (typeof body === 'string') {
-                      var parsedBody = JSON.parse(body);
-                      if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
-                        jsonPage[sourceAttr][key] = parsedBody;
-                      } else if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
-                        jsonPage[sourceAttr][key] = [parsedBody];
-                      }
-                    } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
-                      jsonPage[sourceAttr][key] = body;
-                    } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
-                      jsonPage[sourceAttr][key] = body;
+                  var path = source.split('//');
+                  if (typeof path[1] !== 'undefined' && path[1] !== null) {
+                    path = path[1].split('/');
+                    path.shift();
+                    path = '/' + path.join('/');
+                  } else {
+                    path = '/';
+                  }
+                  var options = {
+                    hostname: host[0],
+                    port: typeof host[1] !== 'undefined' && host[1] !== null ? host[1] : defaultPort,
+                    path: path,
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                      'Content-Length': 0
                     }
-                    resolveSource();
+                  };
+
+                  var body = '';
+
+                  var localReq = httpUse.request(options, function (localRes) {
+                    localRes.setEncoding('utf8');
+                    localRes.on('data', function (chunk) {
+                      body = chunk;
+                    });
+                    localRes.on('end', function () {
+                      try {
+                        if (typeof body === 'string') {
+                          var parsedBody = JSON.parse(body);
+                          if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
+                            jsonPage[sourceAttr][key] = parsedBody;
+                          } else if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
+                            jsonPage[sourceAttr][key] = [parsedBody];
+                          }
+                        } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
+                          jsonPage[sourceAttr][key] = body;
+                        } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
+                          jsonPage[sourceAttr][key] = body;
+                        }
+                      } catch (e) {
+                        console.log(_cliColor2.default.red('Error ' + source + ' is not a valid JSON'), '\n' + e);
+                      }
+                      resolveSource();
+                    });
                   });
+
+                  localReq.on('error', function (e) {
+                    console.log(e);
+                  });
+
+                  // write data to request body
+                  localReq.write('');
+                  localReq.end();
                 } else {
                   jsonPage[sourceAttr][key] = source;
                   resolveSource();

@@ -62,6 +62,8 @@ if (process.env.ROOT) _cli.config.set({ root: process.env.ROOT.replace(/\/$/, ''
 if (process.env.PORT) abePort = process.env.PORT;
 _cli.config.set({ webport: process.env.WEBPORT ? process.env.WEBPORT : 8081 });
 
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var html = _expressSecureHandlebars2.default.create({
   extname: '.' + _cli.config.files.templates.extension,
   helpers: {
@@ -93,6 +95,9 @@ _portfinder2.default.getPort(function (err, freePort) {
   }
 
   var app = (0, _express2.default)(opts);
+
+  app.use(_bodyParser2.default.json({ limit: '1gb' }));
+  app.use(_bodyParser2.default.urlencoded({ limit: '1gb', extended: true, parameterLimit: 10000 }));
 
   app.use(function (req, res, next) {
     res.locals.nonce = _nodeUuid2.default.v4();
