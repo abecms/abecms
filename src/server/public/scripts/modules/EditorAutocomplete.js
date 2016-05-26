@@ -169,6 +169,7 @@ export default class EditorAutocomplete {
       }
       Array.prototype.forEach.call(sources, (source) => {
         var sourceVal = this._deep_value_array(source, display)
+        
         if(typeof sourceVal !== 'undefined' && sourceVal !== null) {
           sourceVal = sourceVal.toLowerCase()
           if(sourceVal.indexOf(val) > -1) {

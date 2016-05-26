@@ -289,6 +289,9 @@ export default class Utils {
               var val = match.replace('{{', '')
               val = val.replace('}}', '')
               val = Sql.deep_value_array(jsonPage, val)
+              if(typeof val === 'undefined' || val === null) {
+                val = ''
+              }
               source = source.replace(match, val)
             })
           }
@@ -329,7 +332,6 @@ export default class Utils {
               break;
             case 'url':
               if(autocomplete !== true && autocomplete !== 'true') {
-
                 var host = source
                 host = host.split('/')
                 var httpUse = http
