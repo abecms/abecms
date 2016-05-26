@@ -13,6 +13,12 @@ var _abeEngine = require('./abeEngine');
 
 var _abeEngine2 = _interopRequireDefault(_abeEngine);
 
+var _xss = require('xss');
+
+var _xss2 = _interopRequireDefault(_xss);
+
+var _ = require('../../');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -27,10 +33,15 @@ function compileAbe() {
     key = key[key.length - 1];
     var hash = arguments[0].hash;
     hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]');
-    if (typeof hash.type !== 'undefined' && hash.type !== null) {
-      return new _handlebars2.default.SafeString(content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key);
+    var value = content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key;
+    if (typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich') {
+      var testXSS = (0, _xss2.default)(value.replace(/&quot;/g, '"'), {
+        "whiteList": _.config.htmlWhiteList,
+        stripIgnoreTag: true
+      });
+      return new _handlebars2.default.SafeString(testXSS);
     }
-    return content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key;
+    return value;
   }
 
   var key = arguments[0].hash['key'].replace('.', '-');
@@ -40,9 +51,13 @@ function compileAbe() {
   if (typeof value === 'undefined' || value === null) {
     value = '';
   }
-  console.log(hash.type);
-  if (typeof hash.type !== 'undefined' && hash.type !== null) {
-    return new _handlebars2.default.SafeString(value);
+
+  if (typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich') {
+    var testXSS = (0, _xss2.default)(value.replace(/&quot;/g, '"'), {
+      "whiteList": _.config.htmlWhiteList,
+      stripIgnoreTag: true
+    });
+    return new _handlebars2.default.SafeString(testXSS);
   }
   return value;
 }
