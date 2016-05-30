@@ -50,10 +50,16 @@ var config = {
     "ul": ["style"],
     "li": ["style"],
     "p": ["style"],
+    "b": ["style"],
+    "strong": ["style"],
     "i": ["style"],
     "u": ["style"],
     "a": ["style", "href"],
-    "br": []
+    "br": [],
+    "h1": ["style"],
+    "h2": ["style"],
+    "h3": ["style"],
+    "h4": ["style"]
   },
   files: {
     exclude: /^[.]/,
