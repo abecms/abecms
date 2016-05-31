@@ -285,15 +285,17 @@ export default class Utils {
           var autocomplete = getAttr(match[0], 'autocomplete')
           if(source.indexOf('{{') > -1) {
             var matches = source.match(/({{[a-zA-Z._]+}})/g)
-            Array.prototype.forEach.call(matches, (match) => {
-              var val = match.replace('{{', '')
-              val = val.replace('}}', '')
-              val = Sql.deep_value_array(jsonPage, val)
-              if(typeof val === 'undefined' || val === null) {
-                val = ''
-              }
-              source = source.replace(match, val)
-            })
+            if(matches !== null) {
+              Array.prototype.forEach.call(matches, (match) => {
+                var val = match.replace('{{', '')
+                val = val.replace('}}', '')
+                val = Sql.deep_value_array(jsonPage, val)
+                if(typeof val === 'undefined' || val === null) {
+                  val = ''
+                }
+                source = source.replace(match, val)
+              })
+            }
           }
           var type = Sql.getSourceType(source)
           switch (type) {
