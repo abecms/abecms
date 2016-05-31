@@ -75,5 +75,6 @@ window.abe = {
   json: engine.json,
   inputs: engine._inputs,
   files: engine._files,
-  blocks: engine._blocks
+  blocks: engine._blocks,
+  autocomplete: engine._autocomplete
 }
