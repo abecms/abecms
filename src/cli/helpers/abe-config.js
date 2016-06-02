@@ -10,6 +10,7 @@ import {
 
 var result = extend(true, abeConfig, abeConfigLocal)
 result.root = result.root.replace(/\/$/, "")
+var hintAbeJson = false
 
 var loadLocalConfig = (result) => {
 	var website = result.root.replace(/\/$/, '')
@@ -24,7 +25,14 @@ var loadLocalConfig = (result) => {
 		    }
 			}catch(e) {
 				// log.error('abe-config', `${website}/abe.json`, `\n${e}`)
-				console.log(clc.green(`[ Hint ] create abe.json to config`))
+				if (!hintAbeJson) {
+					hintAbeJson = true
+					console.log(
+						clc.green(`[ Hint ]`),
+						'create abe.json to config',
+						clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
+					)
+				}
 			}
     }
 	}catch(e){}
