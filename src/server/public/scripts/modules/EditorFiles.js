@@ -64,11 +64,18 @@ export default class EditorFiles {
       }
       var input = parentTarget.querySelector('input.image-input')
       input.value = resp.filePath
+      input.focus()
+      input.blur()
+      // window.inpt = input
+
       var nodes = IframeNode('#page-template', '[data-abe-' + input.id + ']')
       Array.prototype.forEach.call(nodes, (node) => {
         EditorUtils.formToHtml(node, input)
       })
       this.onUpload._fire(target)
+      setTimeout(function () {
+        percent.innerHTML = percentHtml
+      }, 1000)
     }
     percent.textContent = '0%'
     xhr.send(formData)
