@@ -85,7 +85,8 @@ var FileParser = function () {
 						var date = fileData.d ? fileData.d : '0000-00-00T00:00:00.000Z';
 						var status = fileData.s ? dirName.replace(_.config.root, '').replace(/^\//, '').split('/')[0] : 'published';
 						var cleanFilePath = _.fileUtils.cleanFilePath(path);
-						var fileDate = (0, _moment2.default)(date);
+
+						var fileDate = fileDate = (0, _moment2.default)(date);
 						var duration = _moment2.default.duration((0, _moment2.default)(fileDate).diff(new Date())).humanize(true);
 
 						var filePath = path.replace(_.config.root, '');

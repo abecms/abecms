@@ -262,7 +262,7 @@ var Utils = function () {
 
       json[meta] = (0, _extend2.default)({}, json[meta]);
       var currentDate = date || new Date();
-      var abeUrl = type === 'publish' ? json[meta].link : _.fileAttr.add(json[meta].link, 'd' + currentDate.toISOString()) + '';
+      var abeUrl = type === 'publish' ? json[meta].link : _.fileAttr.add(json[meta].link, 'd' + (0, _.dateSlug)(currentDate.toISOString())) + '';
 
       if (typeof json[meta].date === 'undefined' || json[meta].date === null) {
         json[meta].date = currentDate;

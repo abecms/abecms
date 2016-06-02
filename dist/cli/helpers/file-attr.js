@@ -51,7 +51,7 @@ var Attr = function () {
       var rex = new RegExp(captureAttr + this.getExtention() + ')');
       if (rex.test(this.str)) {
         var arrAttr = this.str.match(rex)[0].replace('-abe-', '');
-        this.val = { 's': arrAttr[0], 'd': arrAttr.slice(1) };
+        this.val = { 's': arrAttr[0], 'd': (0, _.dateUnslug)(arrAttr.slice(1), this.str) };
       }
       return this.val;
     }
