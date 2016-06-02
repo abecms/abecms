@@ -13,6 +13,8 @@ import {
   ,fileAttr
   ,cli
   ,log
+  ,dateSlug
+  ,dateUnslug
   ,Page
   ,getTemplate
   ,Hooks
@@ -90,7 +92,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
     let meta = config.meta.name
     json[meta] = extend(json[meta], ext)
-    var date = fileAttr.get(path.jsonPath).d
+    var date = dateUnslug(fileAttr.get(path.jsonPath).d, url)
     if(typeof date === 'undefined' || date === null || date === '') {
       date = new Date()
     }else {
@@ -192,7 +194,7 @@ export function dateIso(tplUrl, type = null) {
   
   switch(type) {
     case 'draft':
-      newDateISO = (new Date().toISOString())
+      newDateISO = dateSlug((new Date().toISOString()))
       dateISO = 'd' + newDateISO
       break;
     case 'publish':
@@ -200,7 +202,7 @@ export function dateIso(tplUrl, type = null) {
       saveFile = tplUrl.publish.path
       break;
     default:
-      newDateISO = (new Date().toISOString())
+      newDateISO = dateSlug((new Date().toISOString()))
       dateISO = type[0] + newDateISO
       break;
   }

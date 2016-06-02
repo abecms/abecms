@@ -16,6 +16,8 @@ import {
   ,fileUtils
   ,FileParser
   ,fileAttr
+  ,dateSlug
+  ,dateUnslug
   ,escapeTextToRegex
   ,getAttr
   ,Hooks
@@ -246,7 +248,7 @@ export default class Utils {
 
     json[meta] = extend({}, json[meta])
     var currentDate = date || new Date()
-    var abeUrl = (type === 'publish') ? json[meta].link : fileAttr.add(json[meta].link, 'd' + currentDate.toISOString()) + ''
+    var abeUrl = (type === 'publish') ? json[meta].link : fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
 
     if(typeof json[meta].date === 'undefined' || json[meta].date === null) {
       json[meta].date = currentDate

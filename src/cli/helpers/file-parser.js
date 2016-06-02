@@ -58,7 +58,8 @@ export default class FileParser {
 		    	var date = fileData.d ? fileData.d : '0000-00-00T00:00:00.000Z'
 		    	var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
 		    	var cleanFilePath = fileUtils.cleanFilePath(path)
-		    	var fileDate = moment(date)
+
+		    	var fileDate = fileDate = moment(date)
 		    	var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
 
 		    	var filePath = path.replace(config.root, '')
