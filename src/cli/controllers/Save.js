@@ -92,7 +92,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
     let meta = config.meta.name
     json[meta] = extend(json[meta], ext)
-    var date = dateUnslug(fileAttr.get(path.jsonPath).d, url)
+    var date = fileAttr.get(path.jsonPath).d
     if(typeof date === 'undefined' || date === null || date === '') {
       date = new Date()
     }else {
