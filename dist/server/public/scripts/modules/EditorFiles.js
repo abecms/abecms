@@ -104,11 +104,18 @@ var EditorFiles = function () {
         }
         var input = parentTarget.querySelector('input.image-input');
         input.value = resp.filePath;
+        input.focus();
+        input.blur();
+        // window.inpt = input
+
         var nodes = (0, _iframe.IframeNode)('#page-template', '[data-abe-' + input.id + ']');
         Array.prototype.forEach.call(nodes, function (node) {
           _EditorUtils2.default.formToHtml(node, input);
         });
         _this2.onUpload._fire(target);
+        setTimeout(function () {
+          percent.innerHTML = percentHtml;
+        }, 1000);
       };
       percent.textContent = '0%';
       xhr.send(formData);
