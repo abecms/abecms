@@ -23,8 +23,8 @@ var loadLocalConfig = (result) => {
 		      var result = extend(true, result, json)
 		    }
 			}catch(e) {
-				log.error('abe-config', `${website}/abe.json`, `\n${e}`)
-				console.log(clc.red(`Error abe-config ${website}/abe.json`))
+				// log.error('abe-config', `${website}/abe.json`, `\n${e}`)
+				console.log(clc.green(`[ Hint ] create abe.json to config`))
 			}
     }
 	}catch(e){}
