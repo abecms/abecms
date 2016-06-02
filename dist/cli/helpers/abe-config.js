@@ -24,6 +24,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var result = (0, _extend2.default)(true, _config.abeConfig, _config.abeConfigLocal);
 result.root = result.root.replace(/\/$/, "");
+var hintAbeJson = false;
 
 var loadLocalConfig = function loadLocalConfig(result) {
 	var website = result.root.replace(/\/$/, '');
@@ -37,8 +38,11 @@ var loadLocalConfig = function loadLocalConfig(result) {
 					var result = (0, _extend2.default)(true, result, json);
 				}
 			} catch (e) {
-				_.log.error('abe-config', website + '/abe.json', '\n' + e);
-				console.log(_cliColor2.default.red('Error abe-config ' + website + '/abe.json'));
+				// log.error('abe-config', `${website}/abe.json`, `\n${e}`)
+				if (!hintAbeJson) {
+					hintAbeJson = true;
+					console.log(_cliColor2.default.green('[ Hint ]'), 'create abe.json to config', _cliColor2.default.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md'));
+				}
 			}
 		}
 	} catch (e) {}
