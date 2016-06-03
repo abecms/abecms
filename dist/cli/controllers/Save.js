@@ -109,7 +109,7 @@ function save(url, tplPath) {
 
     var meta = _.config.meta.name;
     json[meta] = (0, _extend2.default)(json[meta], ext);
-    var date = (0, _.dateUnslug)(_.fileAttr.get(path.jsonPath).d, url);
+    var date = _.fileAttr.get(path.jsonPath).d;
     if (typeof date === 'undefined' || date === null || date === '') {
       date = new Date();
     } else {
