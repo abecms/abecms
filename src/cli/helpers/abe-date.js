@@ -6,8 +6,6 @@ export function dateSlug(date) {
 
 export function dateUnslug(date, file) {
 	if (date.indexOf(':') > -1 || date.indexOf('-') > -1 || date.indexOf('.') > -1) {
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('file', file)
 		console.log(clc.green(`[ WARNING ] you have old file architecture`), file)
 		return date
 	}
