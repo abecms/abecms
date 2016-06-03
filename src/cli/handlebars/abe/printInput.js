@@ -156,6 +156,9 @@ export default function printInput () {
                 <a class="wysiwyg-toolbar-icon" href="#" title="Add link" data-action="insertLink" data-popup="link" data-param="">
                   <span class="glyphicon glyphicon-link"></span>
                 </a>
+                <a class="wysiwyg-toolbar-icon" href="#" title="Code style" data-action="code" data-param="">
+                  <span class="glyphicon glyphicon-console"></span>
+                </a>
               </div>
               <textarea class="${inputClass} form-rich"
                         ${commonParams}
