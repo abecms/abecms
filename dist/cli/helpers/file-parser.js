@@ -357,7 +357,8 @@ var FileParser = function () {
 							var move = _.fileUtils.concatPath(dest, basePath);
 
 							if (entry.type2 === 'missing' || entry.state === 'distinct') {
-								_fsExtra2.default.copy(original, move, function (e) {});
+								_fsExtra2.default.removeSync(move);
+								var cp = _fsExtra2.default.copySync(original, move);
 							}
 						}
 					}

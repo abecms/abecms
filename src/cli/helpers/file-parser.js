@@ -315,7 +315,8 @@ export default class FileParser {
 			      var move = fileUtils.concatPath(dest, basePath)
 
 				    if(entry.type2 === 'missing' || entry.state === 'distinct') {
-				    	fse.copy(original, move, function (e) {})
+				    	fse.removeSync(move)
+							var cp = fse.copySync(original, move)
 				    }
 			    }
 		    }
