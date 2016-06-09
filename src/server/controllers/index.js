@@ -15,11 +15,13 @@ import {
   Util,
   FileParser,
   fileUtils,
+  folderUtils,
   config,
   cli,
   log,
   Page,
   Locales,
+  abeProcess,
   getTemplate,
   Hooks,
   Plugins,
@@ -280,6 +282,12 @@ router.get('/page/*', function(req, res, next) {
   page(req, res, next)
 })
 
+
+router.get('/publish-all/*', function(req, res, next){
+  abeProcess('publish-all', [`FILEPATH=${req.query.filePath}`])
+  res.send('ok')
+})
+
 router.post('/publish', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return;
@@ -332,8 +340,6 @@ router.post('/publish', function(req, res, next){
     console.error(e.stack)
   })
 })
-
-
 
 router.post('/reject', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
