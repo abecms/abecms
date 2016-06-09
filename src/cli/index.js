@@ -38,6 +38,7 @@ import config from './helpers/abe-config'
 import cli from './helpers/cli-utils'
 import log from './helpers/abe-logs'
 import Sql from './helpers/abe-sql'
+import abeProcess from './helpers/abe-process'
 import Page from './controllers/Page'
 import {save, checkRequired} from './controllers/Save'
 import serveSite from './controllers/ServeSite'
@@ -60,6 +61,7 @@ export {
 	,testObj
 	,Create
 	,Sql
+	,abeProcess
 	,translate
 	,printBlock
 	,notEmpty

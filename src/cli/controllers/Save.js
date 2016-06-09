@@ -57,7 +57,7 @@ export function checkRequired(text, json) {
   return Math.round((requiredValue > 0) ? complete * 100 / requiredValue : 100)
 }
 
-export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft') {
+export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
   url = cleanSlug(url)
 
   var p = new Promise((resolve, reject) => {
@@ -76,6 +76,9 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       path.htmlPath = fileUtils.concatPath(config.root, previousSave.htmlPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
     }
 
+    if (tplPath.indexOf('.') > -1) {
+      tplPath = fileUtils.removeExtension(tplPath)
+    }
     var tpl = tplPath.replace(config.root, '')
     var fullTpl = fileUtils.concatPath(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
 
@@ -93,6 +96,10 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     let meta = config.meta.name
     json[meta] = extend(json[meta], ext)
     var date = fileAttr.get(path.jsonPath).d
+
+    if (publishAll) {
+      date = json[meta].publish.date
+    }
     if(typeof date === 'undefined' || date === null || date === '') {
       date = new Date()
     }else {
