@@ -8,6 +8,10 @@ var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
+var _mkdirp = require('mkdirp');
+
+var _mkdirp2 = _interopRequireDefault(_mkdirp);
+
 var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -40,7 +44,7 @@ var route = function route(req, res, next) {
   } else {
     var path = _cli.fileUtils.concatPath(_cli.config.root, 'logs');
     if (!_cli.folderUtils.isFolder(path)) {
-      mkdirp.sync(path);
+      _mkdirp2.default.sync(path);
     }
     var files = _cli.FileParser.read(path, path, 'files', true, /\.log/, 99);
     html += '<a href="/abe/delete-logs">Go to delete logs</a>';
