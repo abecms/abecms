@@ -295,6 +295,11 @@ router.get('/page/*', function (req, res, next) {
   page(req, res, next);
 });
 
+router.get('/publish-all/*', function (req, res, next) {
+  (0, _cli.abeProcess)('publish-all', ['FILEPATH=' + req.query.filePath]);
+  res.send('ok');
+});
+
 router.post('/publish', function (req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
   if (typeof res._header !== 'undefined' && res._header !== null) return;
