@@ -160,6 +160,10 @@ function save(url, tplPath) {
 
       _.FileParser.copySiteAssets();
 
+      if (!publishAll && type === 'publish') {
+        (0, _.abeProcess)('publish-all', ['FILEPATH=' + json.abe_meta.link]);
+      }
+
       resolve({
         json: obj.json.content,
         jsonPath: obj.json.path,
@@ -193,7 +197,6 @@ function saveJson(url, json) {
     space: 2,
     encoding: 'utf-8'
   });
-  _.log.delAndWrite('Index-saveJson', 'Success result writing file : ' + url, json);
 }
 
 function saveHtml(url, html) {
@@ -203,7 +206,6 @@ function saveHtml(url, html) {
   }
 
   _fsExtra2.default.writeFileSync(url, html);
-  _.log.delAndWrite('Index-saveHtml', 'Success result writing file : ' + url, html);
 }
 
 function dateIso(tplUrl) {

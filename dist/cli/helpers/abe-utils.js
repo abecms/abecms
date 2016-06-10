@@ -449,7 +449,6 @@ var Utils = function () {
     value: function removeDataList(text) {
       var listReg = /({{abe.*type=[\'|\"]data.*}})/g;
 
-      _.log.delAndWrite('Util-getList', text);
       return text.replace(listReg, '');
     }
   }, {

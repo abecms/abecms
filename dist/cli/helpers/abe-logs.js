@@ -119,26 +119,27 @@ var Logs = function () {
 			var type = Logs.getType.apply(this, arguments);
 			var msg = '[ ERROR ' + type + ' ]\n' + Logs.text.apply(this, arguments);
 			console.log(_cliColor2.default.red(msg));
-			Logs.writeFile(_.config.log.path + '/ERROR-' + Logs.getType.apply(this, arguments) + '.log', msg, 'a+');
+			var path = _.fileUtils.concatPath(_.config.root, '/logs/ERROR-' + Logs.getType.apply(this, arguments) + '.log');
+			Logs.writeFile(path, msg, 'a+');
 		}
 	}, {
 		key: 'write',
 		value: function write() {
-			Logs.writeFile(_.config.log.path + '/' + Logs.getType.apply(this, arguments) + '.log', Logs.text.apply(this, arguments), 'a+');
+			var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
+			Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+');
 		}
 	}, {
 		key: 'delAndWrite',
 		value: function delAndWrite() {
-			Logs.writeFile(_.config.log.path + '/' + Logs.getType.apply(this, arguments) + '.log', Logs.text.apply(this, arguments), 'w');
+			var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
+			Logs.writeFile(path, Logs.text.apply(this, arguments), 'w');
 		}
 	}, {
 		key: 'writeFile',
 		value: function writeFile(file, data, flag) {
-			if (_.config.log.allowed.test(file) && _.config.log.active) {
-				data = new Date().toString() + ' ' + data;
-				_mkdirp2.default.sync(Logs.removeLast(file));
-				_fs2.default.writeFileSync(file, data, { encoding: 'utf8', flag: flag });
-			}
+			data = new Date().toString() + ' --- ' + data;
+			_mkdirp2.default.sync(Logs.removeLast(file));
+			_fs2.default.writeFileSync(file, data, { encoding: 'utf8', flag: flag });
 		}
 	}]);
 

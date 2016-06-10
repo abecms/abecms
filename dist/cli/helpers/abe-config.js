@@ -38,7 +38,6 @@ var loadLocalConfig = function loadLocalConfig(result) {
 					var result = (0, _extend2.default)(true, result, json);
 				}
 			} catch (e) {
-				// log.error('abe-config', `${website}/abe.json`, `\n${e}`)
 				if (!hintAbeJson) {
 					hintAbeJson = true;
 					console.log(_cliColor2.default.green('[ Hint ]'), 'create abe.json to config', _cliColor2.default.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md'));
