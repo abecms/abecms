@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.serveSite = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.Util = exports.Handlebars = exports.fileAttr = undefined;
+exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.serveSite = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.Util = exports.Handlebars = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -65,6 +65,10 @@ var _abeSql = require('./helpers/abe-sql');
 
 var _abeSql2 = _interopRequireDefault(_abeSql);
 
+var _abeProcess = require('./helpers/abe-process');
+
+var _abeProcess2 = _interopRequireDefault(_abeProcess);
+
 var _Page = require('./controllers/Page');
 
 var _Page2 = _interopRequireDefault(_Page);
@@ -103,6 +107,7 @@ exports.math = _index.math;
 exports.testObj = _index.testObj;
 exports.Create = _Create2.default;
 exports.Sql = _abeSql2.default;
+exports.abeProcess = _abeProcess2.default;
 exports.translate = _index.translate;
 exports.printBlock = _index.printBlock;
 exports.notEmpty = _index.notEmpty;

@@ -64,7 +64,9 @@ var config = {
     "h1": ["style"],
     "h2": ["style"],
     "h3": ["style"],
-    "h4": ["style"]
+    "h4": ["style"],
+    "pre": ["style"],
+    "code": ["style"]
   },
   files: {
     exclude: /^[.]/,
