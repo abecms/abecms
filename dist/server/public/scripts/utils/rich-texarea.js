@@ -102,6 +102,10 @@ var RichTexarea = function () {
 						this.link.show(this.el);
 						break;
 				}
+			} else if (this.action === 'code') {
+				this._replaceSelectionWithHtml('<pre><code>' + window.getSelection().toString() + '</code></pre>');
+				this.textEditor.setHTML(this.textEditor.getHTML());
+				this.setHTML();
 			} else {
 				this.textEditor[this.action](this.param);
 				this.setHTML();

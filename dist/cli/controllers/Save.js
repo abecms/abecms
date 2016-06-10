@@ -74,6 +74,7 @@ function save(url, tplPath) {
   var type = arguments.length <= 4 || arguments[4] === undefined ? '' : arguments[4];
   var previousSave = arguments.length <= 5 || arguments[5] === undefined ? null : arguments[5];
   var realType = arguments.length <= 6 || arguments[6] === undefined ? 'draft' : arguments[6];
+  var publishAll = arguments.length <= 7 || arguments[7] === undefined ? false : arguments[7];
 
   url = (0, _.cleanSlug)(url);
 
@@ -93,6 +94,9 @@ function save(url, tplPath) {
       path.htmlPath = _.fileUtils.concatPath(_.config.root, previousSave.htmlPath.replace(_.config.root, '')).replace(/-abe-d/, '-abe-' + realType[0]);
     }
 
+    if (tplPath.indexOf('.') > -1) {
+      tplPath = _.fileUtils.removeExtension(tplPath);
+    }
     var tpl = tplPath.replace(_.config.root, '');
     var fullTpl = _.fileUtils.concatPath(_.config.root, _.config.templates.url, tpl) + '.' + _.config.files.templates.extension;
 
@@ -110,6 +114,10 @@ function save(url, tplPath) {
     var meta = _.config.meta.name;
     json[meta] = (0, _extend2.default)(json[meta], ext);
     var date = _.fileAttr.get(path.jsonPath).d;
+
+    if (publishAll) {
+      date = json[meta].publish.date;
+    }
     if (typeof date === 'undefined' || date === null || date === '') {
       date = new Date();
     } else {

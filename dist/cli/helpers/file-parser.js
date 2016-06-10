@@ -173,7 +173,7 @@ var FileParser = function () {
 			if (!_.folderUtils.isFolder(path)) {
 				_mkdirp2.default.sync(path);
 			}
-			var files = FileParser.getFiles(path, true, 10, new RegExp('.' + _.config.files.templates.extension));
+			var files = FileParser.getFiles(path, true, 20, new RegExp('.' + _.config.files.templates.extension));
 
 			var result = [];
 
