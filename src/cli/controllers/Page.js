@@ -280,7 +280,6 @@ export default class Page {
       })
       if(this._onlyHTML) tmp = Hooks.instance.trigger('afterPageSaveCompile', tmp, json)
 
-      log.delAndWrite('Index-new-page', 'result', text, json, tmp)
       this.html = tmp
     }
   }

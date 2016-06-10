@@ -196,8 +196,6 @@ export default class FileParser {
 	    result.templates = result.templates.concat(FileParser.getFiles(fileUtils.concatPath(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
     }
 
-	  log.delAndWrite('Index-getProjetFiles', result)
-
 	  return result
 	}
 

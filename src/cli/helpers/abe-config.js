@@ -24,7 +24,6 @@ var loadLocalConfig = (result) => {
 		      var result = extend(true, result, json)
 		    }
 			}catch(e) {
-				// log.error('abe-config', `${website}/abe.json`, `\n${e}`)
 				if (!hintAbeJson) {
 					hintAbeJson = true
 					console.log(

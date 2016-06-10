@@ -436,7 +436,6 @@ export default class Utils {
   static removeDataList(text) {
     var listReg = /({{abe.*type=[\'|\"]data.*}})/g
 
-    log.delAndWrite('Util-getList', text)
     return text.replace(listReg, '')
   }
 
