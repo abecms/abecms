@@ -448,6 +448,9 @@ router.get('/logs*', function(req, res, next){
     html += "\n" + '</body>' + "\n" + '</html>'
   }else {
     var path = fileUtils.concatPath(config.root, 'logs')
+    if (!folderUtils.isFolder(path)) {
+      mkdirp.sync(path)
+    }
     var files = FileParser.read(path, path, 'files', true, /\.log/, 99)
     html += '<a href="/delete-logs">Go to delete logs</a>'
     html += '<br /><br /><div>Choose to see logs files</div>'
