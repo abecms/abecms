@@ -5,7 +5,7 @@ import mkdirp from 'mkdirp'
 import fs from 'fs'
 import clc from 'cli-color'
 
-import {config, cli} from '../'
+import {config, cli, fileUtils} from '../'
 
 export default class Logs {
 
@@ -81,22 +81,24 @@ export default class Logs {
 		var type = Logs.getType.apply(this, arguments)
 		var msg = `[ ERROR ${type} ]\n` + Logs.text.apply(this, arguments)
 		console.log(clc.red(msg))
-		Logs.writeFile(config.log.path + '/ERROR-' + Logs.getType.apply(this, arguments) + '.log', msg, 'a+')
+		var path = fileUtils.concatPath(config.root, '/logs/ERROR-' + Logs.getType.apply(this, arguments) + '.log')
+		Logs.writeFile(path, msg, 'a+')
 	}
 
 	static write() {
-		Logs.writeFile(config.log.path + '/' + Logs.getType.apply(this, arguments) + '.log', Logs.text.apply(this, arguments), 'a+')
+		var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
+		Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+')
 	}
 
 	static delAndWrite() {
-		Logs.writeFile(config.log.path + '/' + Logs.getType.apply(this, arguments) + '.log', Logs.text.apply(this, arguments), 'w')
+		var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
+		Logs.writeFile(path, Logs.text.apply(this, arguments), 'w')
 	}
 
 	static writeFile(file, data, flag) {
-		if(config.log.allowed.test(file) && config.log.active) {
-			data = new Date().toString() + ' ' + data
-			mkdirp.sync(Logs.removeLast(file))
-			fs.writeFileSync(file, data, {encoding: 'utf8', flag: flag})
-		}
+		// data = "<br /><strong style='color: #388E3C; text-transform: uppercase; "+commonStyle+"'>" + new Date().toString() + '</strong> <span style="color: white; "+commonStyle+"">' + data + '</span>'
+		data = new Date().toString() + ' --- ' + data
+		mkdirp.sync(Logs.removeLast(file))
+		fs.writeFileSync(file, data, {encoding: 'utf8', flag: flag})
 	}
 }

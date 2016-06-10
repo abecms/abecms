@@ -177,7 +177,6 @@ export function saveJson(url, json) {
     space: 2,
     encoding: 'utf-8'
   })
-  log.delAndWrite('Index-saveJson', `Success result writing file : ${url}`, json)
 }
 
 export function saveHtml(url, html) {
@@ -187,7 +186,6 @@ export function saveHtml(url, html) {
   }
   
   fse.writeFileSync(url, html)
-  log.delAndWrite('Index-saveHtml', `Success result writing file : ${url}`, html)
 }
 
 export function dateIso(tplUrl, type = null) {

@@ -6,6 +6,7 @@ import {
   ,fileUtils
   ,folderUtils
   ,save
+  ,log
 } from '../../cli'
 
 var pConfig = {}
@@ -18,6 +19,10 @@ Array.prototype.forEach.call(process.argv, (item) => {
 
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
+
+  log.write('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+  log.write('publish-all', 'start process publish')
+  var dateStart = new Date()
 
   var type = null
   var folder = null
@@ -49,6 +54,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
 
     // save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false)
 
+    log.write('publish-all', 'started by : ' + pub.path .replace(config.root, ''))
     var p = new Promise((resolve, reject) => {
       save(
         pub.path,
@@ -68,9 +74,12 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     promises.push(p)
   })
 
+  log.write('publish-all', 'total ' + promises.length)
 
   Promise.all(promises)
     .then(() => {
+      dateStart = (new Date().getTime() - dateStart.getTime()) / 1000
+      log.write('publish-all', 'publish process finised in ' + dateStart + 'sec')
       process.exit(0)
     }).catch(function(e) {
       console.error(e.stack)
