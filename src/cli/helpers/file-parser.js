@@ -139,7 +139,7 @@ export default class FileParser {
 	  if(!folderUtils.isFolder(path)) {
 	    mkdirp.sync(path)
 	  }
-	  var files = FileParser.getFiles(path, true, 10, new RegExp(`.${config.files.templates.extension}`))
+	  var files = FileParser.getFiles(path, true, 20, new RegExp(`.${config.files.templates.extension}`))
 
 	  var result = []
 
