@@ -68,7 +68,7 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
 
     Promise.all(promises).then(function () {
       dateStart = (new Date().getTime() - dateStart.getTime()) / 1000;
-      _cli.log.write('publish-all', 'publish process finised in ' + dateStart + 'sec');
+      _cli.log.write('publish-all', 'publish process finished in ' + dateStart + 'sec');
       process.exit(0);
     }).catch(function (e) {
       _cli.log.write('publish-all', '[ ERROR ]' + e.stack);
