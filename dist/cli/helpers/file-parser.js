@@ -235,8 +235,6 @@ var FileParser = function () {
 				result.templates = result.templates.concat(FileParser.getFiles(_.fileUtils.concatPath(site.path, templates), true, 10, new RegExp('.' + _.config.files.templates.extension)));
 			}
 
-			_.log.delAndWrite('Index-getProjetFiles', result);
-
 			return result;
 		}
 	}, {

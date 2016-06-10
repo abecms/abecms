@@ -279,7 +279,6 @@ var Page = function () {
       });
       if (this._onlyHTML) tmp = _.Hooks.instance.trigger('afterPageSaveCompile', tmp, json);
 
-      _.log.delAndWrite('Index-new-page', 'result', text, json, tmp);
       this.html = tmp;
     }
   }
