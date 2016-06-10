@@ -96,7 +96,6 @@ export default class Logs {
 	}
 
 	static writeFile(file, data, flag) {
-		// data = "<br /><strong style='color: #388E3C; text-transform: uppercase; "+commonStyle+"'>" + new Date().toString() + '</strong> <span style="color: white; "+commonStyle+"">' + data + '</span>'
 		data = new Date().toString() + ' --- ' + data
 		mkdirp.sync(Logs.removeLast(file))
 		fs.writeFileSync(file, data, {encoding: 'utf8', flag: flag})

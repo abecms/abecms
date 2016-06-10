@@ -6,6 +6,7 @@ import {Promise} from 'es6-promise'
 
 import {
   Util
+  ,abeProcess
   ,FileParser
   ,getAttr
   ,config
@@ -142,6 +143,10 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           obj = Hooks.instance.trigger('afterSave', obj)
           
           FileParser.copySiteAssets()
+
+          if(!publishAll && type === 'publish') {
+            abeProcess('publish-all', [`FILEPATH=${json.abe_meta.link}`])
+          }
 
           resolve({
             json: obj.json.content,
