@@ -21,4 +21,4 @@ abe.log.write('test', 'my test')
 
 Navigate into logs
 
-> Go to http://localhost:8000/logs
+> Go to http://localhost:8000/abe/logs
