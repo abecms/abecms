@@ -52,12 +52,13 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
 
       // save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false)
 
-      _cli.log.write('publish-all', 'update > ' + pub.path.replace(_cli.config.root, ''));
       var p = new Promise(function (resolve, reject) {
         (0, _cli.save)(pub.path, json.abe_meta.template, json, '', 'publish', null, 'publish', true).then(function () {
+          _cli.log.write('publish-all', 'successfully update > ' + pub.path.replace(_cli.config.root, ''));
           resolve();
         }).catch(function (e) {
           _cli.log.write('publish-all', e);
+          resolve();
         });
       });
       promises.push(p);
@@ -70,8 +71,8 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
       _cli.log.write('publish-all', 'publish process finised in ' + dateStart + 'sec');
       process.exit(0);
     }).catch(function (e) {
+      _cli.log.write('publish-all', '[ ERROR ]' + e.stack);
       console.error(e.stack);
-      _cli.log.write('publish-all', e);
     });
   } catch (e) {
     // statements

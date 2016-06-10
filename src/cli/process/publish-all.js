@@ -60,7 +60,6 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
 
       // save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false)
 
-      log.write('publish-all', 'update > ' + pub.path .replace(config.root, ''))
       var p = new Promise((resolve, reject) => {
         save(
           pub.path,
@@ -72,9 +71,11 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
           'publish',
           true)
           .then(() => {
+            log.write('publish-all', 'successfully update > ' + pub.path .replace(config.root, ''))
             resolve()
           }).catch(function(e) {
             log.write('publish-all', e)
+            resolve()
           })
       })
       promises.push(p)
@@ -88,8 +89,8 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
         log.write('publish-all', 'publish process finised in ' + dateStart + 'sec')
         process.exit(0)
       }).catch(function(e) {
+        log.write('publish-all', '[ ERROR ]' + e.stack)
         console.error(e.stack)
-        log.write('publish-all', e)
       })
   } catch(e) {
     // statements
