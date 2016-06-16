@@ -2,7 +2,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">{{@root.text.new_file}}</div>
       <div class="panel-body">
-        <form class="form-horizontal form-create" method="get" action="">
+        <form class="form-horizontal form-create" method="get" action="" data-form-abe-create="true">
           
           {{abeImport 'create-form-folder' manager.config this}}
           {{abeImport 'create-form-template' manager.config this}}

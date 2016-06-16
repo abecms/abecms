@@ -5,36 +5,39 @@ import TemplateSelect from './TemplateSelect'
 
 export default class FormCreate {
   constructor() {
-  	// constantes variables
-    this._filePath = ''
-  	this._ajax = Nanoajax.ajax
+    this._form = document.querySelector('[data-form-abe-create="true"]')
+    if(typeof this._form !== 'undefined' && this._form !== null) {
+    	// constantes variables
+      this._filePath = ''
+    	this._ajax = Nanoajax.ajax
 
-  	// constantes variables DOM elements
-  	this._form = document.querySelector('.form-create')
-    this._templateName = this._form.querySelector('[data-type-template-abe]')
-    this._tplName = this._form.querySelector('[name=tplName]')
-		this._submitBtn = this._form.querySelector('button[type=submit]')
-    this._inputs = [].slice.call(this._form.querySelectorAll('input[type=text]'))
-    this._selects = [].slice.call(this._form.querySelectorAll('select[id*="level-"]'))
+    	// constantes variables DOM elements
+    	this._form = document.querySelector('.form-create')
+      this._templateName = this._form.querySelector('[data-type-template-abe]')
+      this._tplName = this._form.querySelector('[name=tplName]')
+  		this._submitBtn = this._form.querySelector('button[type=submit]')
+      this._inputs = [].slice.call(this._form.querySelectorAll('input[type=text]'))
+      this._selects = [].slice.call(this._form.querySelectorAll('select[id*="level-"]'))
 
-    // constantes methodes
-    this._handlePathChange = this._pathChange.bind(this)
-    this._handleCanCreate = this._canCreate.bind(this)
-    this._handleSubmit = this._submit.bind(this)
+      // constantes methodes
+      this._handlePathChange = this._pathChange.bind(this)
+      this._handleCanCreate = this._canCreate.bind(this)
+      this._handleSubmit = this._submit.bind(this)
 
-    // manager update btn
-    this._btnCreate = document.querySelector('[date-abe-create]')
-    this._btnUpdate = document.querySelector('[date-abe-update]')
-    this._btnDuplicate = document.querySelector('[date-abe-duplicate]')
-    this._handleBtnDuplicateManagerClick = this._btnDuplicateManagerClick.bind(this)
-    this._handleBtnUpdateManagerClick = this._btnUpdateManagerClick.bind(this)
-    this._handleBtnCreateManagerClick = this._btnCreateManagerClick.bind(this)
+      // manager update btn
+      this._btnCreate = document.querySelector('[date-abe-create]')
+      this._btnUpdate = document.querySelector('[date-abe-update]')
+      this._btnDuplicate = document.querySelector('[date-abe-duplicate]')
+      this._handleBtnDuplicateManagerClick = this._btnDuplicateManagerClick.bind(this)
+      this._handleBtnUpdateManagerClick = this._btnUpdateManagerClick.bind(this)
+      this._handleBtnCreateManagerClick = this._btnCreateManagerClick.bind(this)
 
-    // init modules
-    new FolderSelect()
-    new TemplateSelect()
+      // init modules
+      new FolderSelect()
+      new TemplateSelect()
 
-    this._bindEvents()
+      this._bindEvents() 
+    }
   }
 
   _bindEvents() {
