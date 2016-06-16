@@ -279,9 +279,10 @@ export function editor(fileName, tplUrl, fake) {
         }
 
         if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-          var link = json.abe_meta.link.split('/')
-          link = link.pop()
+          var links = json.abe_meta.link.split('/')
+          var link = links.pop()
           json.abe_meta.cleanName = fileUtils.removeExtension(link)
+          json.abe_meta.cleanFilename = fileUtils.removeExtension(links.join('/'))
         }
 
         // HOOKS beforeEditorFormBlocks

@@ -45,9 +45,12 @@ var Json = function () {
   _createClass(Json, [{
     key: 'save',
     value: function save() {
+      var type = arguments.length <= 0 || arguments[0] === undefined ? 'draft' : arguments[0];
+
       var _this = this;
 
-      var type = arguments.length <= 0 || arguments[0] === undefined ? 'draft' : arguments[0];
+      var tplPath = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      var filePath = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
 
       this.saving._fire({ type: type });
       var p = new _es6Promise.Promise(function (resolve, reject) {
@@ -64,8 +67,8 @@ var Json = function () {
         }
 
         var toSave = _qs2.default.stringify({
-          tplPath: CONFIG.TPLPATH,
-          filePath: CONFIG.FILEPATH,
+          tplPath: tplPath ? tplPath : CONFIG.TPLPATH,
+          filePath: filePath ? filePath : CONFIG.FILEPATH,
           json: jsonSave
         });
 

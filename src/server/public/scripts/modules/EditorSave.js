@@ -90,15 +90,8 @@ export default class EditorSave {
     })
   }
 
-  /**
-   * Listen form submit and save page template 
-   * @return {void}
-   */
-  _formSubmit(target) {
-    this._abeForm.addEventListener('submit', (e) => {
-      e.preventDefault()
-
-      var target = document.querySelector(`[data-action="${this._saveType}"]`)
+  savePage(type, tplName = null, filePath = null) {
+      var target = document.querySelector(`[data-action="${type}"]`)
       this.serializeForm()
       target.classList.add('loading')
       target.setAttribute('disabled', 'disabled');
@@ -142,6 +135,16 @@ export default class EditorSave {
         }).catch(function(e) {
           console.error(e.stack)
         })
+  }
+
+  /**
+   * Listen form submit and save page template 
+   * @return {void}
+   */
+  _formSubmit(target) {
+    this._abeForm.addEventListener('submit', (e) => {
+      e.preventDefault()
+      this.savePage(this._saveType)
     })
   }
 

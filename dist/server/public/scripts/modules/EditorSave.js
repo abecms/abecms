@@ -119,6 +119,55 @@ var EditorSave = function () {
         }
       });
     }
+  }, {
+    key: 'savePage',
+    value: function savePage(type) {
+      var tplName = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      var filePath = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+      var target = document.querySelector('[data-action="' + type + '"]');
+      this.serializeForm();
+      target.classList.add('loading');
+      target.setAttribute('disabled', 'disabled');
+
+      this._json.save(this._saveType).then(function (result) {
+        target.classList.add('done');
+        // this._populateFromJson(this._json.data)
+        if (result.success === 1) {
+          CONFIG.TPLNAME = result.json.abe_meta.latest.abeUrl;
+          if (CONFIG.TPLNAME[0] === '/') CONFIG.TPLNAME = CONFIG.TPLNAME.slice(1);
+        }
+
+        var tplNameParam = '?tplName=';
+        var filePathParam = '&filePath=';
+
+        var getParams = window.location.search.slice(1).split('&');
+        getParams.forEach(function (getParam) {
+          var param = getParam.split('=');
+          if (param[0] === 'tplName') {
+            tplNameParam += param[1];
+          }
+          if (param[0] === 'filePath') {
+            if (param[1].indexOf('-abe-') > -1) {
+              filePathParam += CONFIG.TPLNAME;
+            } else {
+              filePathParam += param[1];
+            }
+          }
+        });
+        var ext = filePathParam.split('.');
+        ext = ext[ext.length - 1];
+        filePathParam = filePathParam.replace(new RegExp('-abe-(.+?)(?=\.' + ext + ')'), '');
+        var reloadUrl = top.location.protocol + '//' + window.location.host + window.location.pathname + tplNameParam + filePathParam;
+
+        target.classList.remove('loading');
+        target.classList.remove('done');
+        target.removeAttribute('disabled');
+        if (result.success === 1) window.location.href = reloadUrl;
+      }).catch(function (e) {
+        console.error(e.stack);
+      });
+    }
 
     /**
      * Listen form submit and save page template 
@@ -132,49 +181,7 @@ var EditorSave = function () {
 
       this._abeForm.addEventListener('submit', function (e) {
         e.preventDefault();
-
-        var target = document.querySelector('[data-action="' + _this3._saveType + '"]');
-        _this3.serializeForm();
-        target.classList.add('loading');
-        target.setAttribute('disabled', 'disabled');
-
-        _this3._json.save(_this3._saveType).then(function (result) {
-          target.classList.add('done');
-          // this._populateFromJson(this._json.data)
-          if (result.success === 1) {
-            CONFIG.TPLNAME = result.json.abe_meta.latest.abeUrl;
-            if (CONFIG.TPLNAME[0] === '/') CONFIG.TPLNAME = CONFIG.TPLNAME.slice(1);
-          }
-
-          var tplNameParam = '?tplName=';
-          var filePathParam = '&filePath=';
-
-          var getParams = window.location.search.slice(1).split('&');
-          getParams.forEach(function (getParam) {
-            var param = getParam.split('=');
-            if (param[0] === 'tplName') {
-              tplNameParam += param[1];
-            }
-            if (param[0] === 'filePath') {
-              if (param[1].indexOf('-abe-') > -1) {
-                filePathParam += CONFIG.TPLNAME;
-              } else {
-                filePathParam += param[1];
-              }
-            }
-          });
-          var ext = filePathParam.split('.');
-          ext = ext[ext.length - 1];
-          filePathParam = filePathParam.replace(new RegExp('-abe-(.+?)(?=\.' + ext + ')'), '');
-          var reloadUrl = top.location.protocol + '//' + window.location.host + window.location.pathname + tplNameParam + filePathParam;
-
-          target.classList.remove('loading');
-          target.classList.remove('done');
-          target.removeAttribute('disabled');
-          if (result.success === 1) window.location.href = reloadUrl;
-        }).catch(function (e) {
-          console.error(e.stack);
-        });
+        _this3.savePage(_this3._saveType);
       });
     }
   }, {
