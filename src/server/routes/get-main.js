@@ -51,6 +51,7 @@ var route = function(req, res, next) {
 
   var templatePath = fileUtils.getTemplatePath(req.params[0])
   var filePath = fileUtils.getFilePath(req.query.filePath)
+  var debugJson = (req.query.debugJson && req.query.debugJson == 'true' ) ? true : false
 
   filePath = cleanSlug(filePath)
 
@@ -161,7 +162,12 @@ var route = function(req, res, next) {
     }
     var EditorVariables = Hooks.instance.trigger('afterVariables', EditorVariables)
 
-    res.render(config.abeEngine, EditorVariables)
+    if (debugJson) {
+      res.set('Content-Type', 'application/json')
+      res.send(JSON.stringify(_json))
+    }else {
+      res.render(config.abeEngine, EditorVariables)
+    }
   }).catch((e) => {
     console.log('error', e)
   })

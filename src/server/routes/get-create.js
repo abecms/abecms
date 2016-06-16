@@ -13,9 +13,14 @@ import {
 var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
+  log.write('create', '********************************************')
+  log.write('create', 'selectTemplate: ' + req.query.selectTemplate)
+  log.write('create', 'filePath: ' + req.query.filePath)
+  log.write('create', 'tplName: ' + req.query.tplName)
   var p = abeCreate(req.query.selectTemplate, req.query.filePath, req.query.tplName, req)
 
   p.then((resSave) => {
+    log.write('create', 'success')
   	var result = {
       success: 1,
       json: resSave
