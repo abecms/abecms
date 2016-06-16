@@ -81,6 +81,7 @@ var FileParser = function () {
 					if (_.fileUtils.isValidFile(level[i])) {
 						var extension = /(\.[\s\S]*)/.exec(level[i])[0];
 						var cleanName = _.fileAttr.delete(level[i]);
+						var cleanNameNoExt = _.fileUtils.removeExtension(cleanName);
 						var fileData = _.fileAttr.get(level[i]);
 						var date = fileData.d ? fileData.d : '0000-00-00T00:00:00.000Z';
 						var status = fileData.s ? dirName.replace(_.config.root, '').replace(/^\//, '').split('/')[0] : 'published';
@@ -104,6 +105,7 @@ var FileParser = function () {
 							duration: duration,
 							status: status,
 							cleanName: cleanName,
+							cleanNameNoExt: cleanNameNoExt,
 							cleanFilePath: cleanFilePath,
 							filePath: filePath,
 							'type': 'file',

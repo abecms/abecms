@@ -116,8 +116,10 @@ var FileUtils = function () {
 	}, {
 		key: 'removeExtension',
 		value: function removeExtension(path) {
-
-			return path.substring(0, path.lastIndexOf('.'));
+			if (path.lastIndexOf('.') > -1) {
+				return path.substring(0, path.lastIndexOf('.'));
+			}
+			return path;
 		}
 
 		/**

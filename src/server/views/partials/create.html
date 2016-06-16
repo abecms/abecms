@@ -3,40 +3,21 @@
       <div class="panel-heading">{{@root.text.new_file}}</div>
       <div class="panel-body">
         <form class="form-horizontal form-create" method="get" action="">
-
-          {{&folders manager.list.structure 1}}
-
-          <div class="form-group">
-            <label for="selectTemplate" class="col-sm-5 control-label">{{@root.text.template}}</label>
-            <div class="col-sm-7">
-              <select class="form-control" id="selectTemplate" data-type-template-abe="true">
-                <option></option>
-                {{#each manager.list.templates}}
-                <option value="{{cleanPath}}" clean-value="{{website}}">{{cleanPath}}</option>
-                {{/each}}
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="tplName" class="col-sm-5 control-label">{{@root.text.name}}</label>
-            <div class="col-sm-7">
-              <input class="form-control" type="text" name="tplName" id="tplName" placeholder="{{@root.text.file}}.{{config.files.templates.extension}}" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="fakeContent" class="col-sm-5 text-left control-label text-left">
-              {{@root.text.Lorem_ipsum}}
-            </label>
-            <div class="col-sm-7">
-              <input type="checkbox" name="fakeContent" id="fakeContent" value="true" />
-            </div>
-          </div>
+          
+          {{abeImport 'create-form-folder' manager.config this}}
+          {{abeImport 'create-form-template' manager.config this}}
+          {{abeImport 'create-form-tplname' manager.config this}}
+          {{abeImport 'create-form-addons' manager.config this}}
 
           <div class="">
             <div class="">
-              <button type="submit" class="btn btn-primary" disabled="disabled">{{@root.text.create}}</button>
+              <button type="submit" class="btn btn-primary" date-abe-create="true">{{@root.text.create}}</button>
+              {{#unless isHome}}
+              <br /><br />
+              <button type="submit" class="btn btn-primary" date-abe-update="true">update</button>
+              <br /><br />
+              <button type="submit" class="btn btn-primary" date-abe-duplicate="true">duplicate</button>
+              {{/unless}}
             </div>
           </div>
 

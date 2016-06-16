@@ -1,0 +1,5 @@
+{{#if isHome}}
+  {{&folders manager.list.structure 1 null}}
+{{else}}
+  {{&folders manager.list.structure 1 @root.json.abe_meta.link}}
+{{/if}}
