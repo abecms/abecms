@@ -9,43 +9,26 @@ var _cli = require('../../cli');
 var route = function route(req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
 
-  var p = new Promise(function (resolve, reject) {
+  if (typeof req.query.oldFilePath !== 'undefined' && req.query.oldFilePath !== null) {
+    var url = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.draft.url, req.query.oldFilePath);
 
-    var templatePath = _cli.fileUtils.getTemplatePath(req.query.selectTemplate);
-    var filePath = _cli.fileUtils.getFilePath(_cli.fileUtils.concatPath(req.query.filePath, req.query.tplName));
-
-    filePath = (0, _cli.cleanSlug)(filePath);
-
-    if (templatePath !== null && filePath !== null) {
-      var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-      if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-        var json = {};
-        var tpl = templatePath;
-        var text = (0, _cli.getTemplate)(tpl);
-        text = _cli.Util.removeDataList(text);
-        var resHook = _cli.Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text);
-        filePath = resHook.filePath;
-        json = resHook.json;
-        text = resHook.text;
-        (0, _cli.save)(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft').then(function (resSave) {
-          filePath = resSave.htmlPath;
-          tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-          resolve(resSave.json);
-        }).catch(function (e) {
-          reject();
-          console.error(e.stack);
-        });
-      } else {
-        var json = _cli.FileParser.getJson(tplUrl.json.path);
-        resolve(json);
+    if (!_cli.fileAttr.test(url)) {
+      var folderFilePath = url.split('/');
+      folderFilePath.pop();
+      folderFilePath = _cli.fileUtils.pathWithRoot(folderFilePath.join('/'));
+      var files = _cli.FileParser.getFiles(folderFilePath, true, 2);
+      var latest = _cli.fileAttr.filterLatestVersion(_cli.fileAttr.getFilesRevision(files, url), 'draft');
+      if (latest.length) {
+        url = latest[0].path;
       }
-    } else {
-      reject();
     }
-  }).catch(function (e) {
-    console.error(e.stack);
-    reject();
-  });
+
+    var tplUrl = _cli.FileParser.getFileDataFromUrl(url);
+    var json = _cli.FileParser.getJson(tplUrl.json.path);
+    delete json.abe_meta;
+  }
+
+  var p = (0, _cli.abeCreate)(req.query.selectTemplate, req.query.filePath, req.query.tplName, req, json);
 
   p.then(function (resSave) {
     var result = {
