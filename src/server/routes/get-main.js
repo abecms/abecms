@@ -80,57 +80,34 @@ var route = function(req, res, next) {
       tplUrl = FileParser.getFileDataFromUrl(filePath)
       var fakeContent = (req.query.fakeContent) ? true : false
 
-      var p2 = new Promise((resolve2, reject2) => {
-        if(!fileUtils.isFile(tplUrl.json.path)) {
-          var json = {}
-          var tpl = templatePath
-          var text = getTemplate(tpl)
-          text = Util.removeDataList(text)
-          var resHook = Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
-          filePath = resHook.filePath
-          json = resHook.json
-          text = resHook.text
-          save(filePath, req.params[0], json, text, 'draft', null, 'draft')
-            .then((resSave) => {
-                filePath = resSave.htmlPath
-                tplUrl = FileParser.getFileDataFromUrl(filePath)
-                resolve2()
-              }).catch(function(e) {
-                console.error(e.stack)
-              })
-        }else {
-          resolve2()
-        }
-      })
+      if(!fileUtils.isFile(tplUrl.json.path)) {
+        res.redirect("/abe/");
+        return;
+      }
 
-      p2.then(() => {
+      editor(templatePath, tplUrl, fakeContent)
+        .then((res) => {
+          obj = res
 
-        editor(templatePath, tplUrl, fakeContent)
-          .then((res) => {
-            obj = res
+          FileParser.getAssetsFolder()
+          FileParser.getAssets() 
 
-            FileParser.getAssetsFolder()
-            FileParser.getAssets() 
+          var revisionFilePath = FileParser.changePathEnv(filePath, config.draft.url)
+          var dirPath = fileUtils.removeLast(revisionFilePath)
+          var allDraft = FileParser.getFiles(dirPath, true, 99, new RegExp("\\." + config.files.templates.extension))
 
-            var revisionFilePath = FileParser.changePathEnv(filePath, config.draft.url)
-            var dirPath = fileUtils.removeLast(revisionFilePath)
-            var allDraft = FileParser.getFiles(dirPath, true, 99, new RegExp("\\." + config.files.templates.extension))
-
-            allDraft = FileParser.getMetas(allDraft, 'draft')
-            var breadcrumb = req.params[0].split('/')
-            manager.file = {
-              revision: fileAttr.getFilesRevision(allDraft, fileAttr.delete(revisionFilePath))
-              ,template: breadcrumb
-              ,path: (req.query.filePath) ? fileUtils.cleanTplName(req.query.filePath) : ''
-            }
-            if(manager.file.revision.length > 0){
-              var publishPath = fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
-              manager.file.isPublished = fileUtils.isFile(publishPath)
-            }
-            resolve()
-          }).catch(function(e) {
-            console.error(e.stack)
-          })
+          allDraft = FileParser.getMetas(allDraft, 'draft')
+          var breadcrumb = req.params[0].split('/')
+          manager.file = {
+            revision: fileAttr.getFilesRevision(allDraft, fileAttr.delete(revisionFilePath))
+            ,template: breadcrumb
+            ,path: (req.query.filePath) ? fileUtils.cleanTplName(req.query.filePath) : ''
+          }
+          if(manager.file.revision.length > 0){
+            var publishPath = fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
+            manager.file.isPublished = fileUtils.isFile(publishPath)
+          }
+          resolve()
         }).catch(function(e) {
           console.error(e.stack)
         })
@@ -160,6 +137,7 @@ var route = function(req, res, next) {
     var _filePath = (req.query.filePath) ? req.query.filePath : false
 
     var EditorVariables = {
+      isHome: isHome,
       abeUrl: '/abe/',
       test: JSON.stringify(locale),
       text: locale,
