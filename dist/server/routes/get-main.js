@@ -66,6 +66,7 @@ var route = function route(req, res, next) {
 
   var templatePath = _cli.fileUtils.getTemplatePath(req.params[0]);
   var filePath = _cli.fileUtils.getFilePath(req.query.filePath);
+  var debugJson = req.query.debugJson && req.query.debugJson == 'true' ? true : false;
 
   filePath = (0, _cli.cleanSlug)(filePath);
 
@@ -175,7 +176,12 @@ var route = function route(req, res, next) {
     };
     var EditorVariables = _cli.Hooks.instance.trigger('afterVariables', EditorVariables);
 
-    res.render(_cli.config.abeEngine, EditorVariables);
+    if (debugJson) {
+      res.set('Content-Type', 'application/json');
+      res.send(JSON.stringify(_json));
+    } else {
+      res.render(_cli.config.abeEngine, EditorVariables);
+    }
   }).catch(function (e) {
     console.log('error', e);
   });
