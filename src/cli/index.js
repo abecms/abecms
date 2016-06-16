@@ -37,6 +37,7 @@ import fileUtils from './helpers/file-utils'
 import config from './helpers/abe-config'
 import cli from './helpers/cli-utils'
 import log from './helpers/abe-logs'
+import abeCreate from './helpers/abe-create'
 import Sql from './helpers/abe-sql'
 import abeProcess from './helpers/abe-process'
 import Page from './controllers/Page'
@@ -50,6 +51,7 @@ export {
 	fileAttr
 	,Handlebars
 	,Util
+	,abeCreate
 	,slugify
 	,cleanSlug
 	,FileParser

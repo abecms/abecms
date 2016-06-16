@@ -272,6 +272,18 @@ export function editor(fileName, tplUrl, fake) {
         arrayBlock = []
         each(text, json)
 
+        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          var tpl = json.abe_meta.template.split('/')
+          tpl = tpl.pop()
+          json.abe_meta.cleanTemplate = fileUtils.removeExtension(tpl)
+        }
+
+        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          var link = json.abe_meta.link.split('/')
+          link = link.pop()
+          json.abe_meta.cleanName = fileUtils.removeExtension(link)
+        }
+
         // HOOKS beforeEditorFormBlocks
         json = Hooks.instance.trigger('beforeEditorFormBlocks', json)
 

@@ -8,7 +8,9 @@ import * as abe from '../../cli'
 import xss from 'xss'
 import pkg from '../../../package'
 import {
-  getLogs
+  getCreate
+  ,getDuplicate
+  ,getLogs
   ,getDeleteLogs
   ,getMain
   ,getPage
@@ -54,6 +56,8 @@ Hooks.instance.trigger('beforeAddRoute', router)
 
 router.get('/abe/logs*', getLogs)
 router.get('/abe/delete-logs*', getDeleteLogs)
+router.get('/abe/create*', getCreate)
+router.get('/abe/duplicate*', getDuplicate)
 router.get('/abe*', getMain)
 router.post('/page/*', postPage)
 router.get('/page/*', getPage)

@@ -1,0 +1,11 @@
+
+<div class="form-group">
+  <label for="tplName" class="col-sm-5 control-label">{{@root.text.name}}</label>
+  <div class="col-sm-7">
+    {{#if isHome}}
+    <input class="form-control" type="text" name="tplName" id="tplName" placeholder="{{@root.text.file}}.{{config.files.templates.extension}}" />
+    {{else}}
+    <input class="form-control" type="text" name="tplName" value="{{json.abe_meta.cleanName}}" id="tplName" placeholder="{{@root.text.file}}.{{config.files.templates.extension}}" />
+    {{/if}}
+  </div>
+</div>
