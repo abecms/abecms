@@ -40,7 +40,7 @@ import log from './helpers/abe-logs'
 import Sql from './helpers/abe-sql'
 import abeProcess from './helpers/abe-process'
 import Page from './controllers/Page'
-import {save, checkRequired} from './controllers/Save'
+import {save, checkRequired, saveJson} from './controllers/Save'
 import serveSite from './controllers/ServeSite'
 import Hooks from './helpers/abe-hooks'
 import Plugins from './helpers/abe-plugins'
@@ -90,6 +90,7 @@ export {
 	,Plugins
 	,Locales
 	,checkRequired
+	,saveJson
 	,dateSlug
 	,dateUnslug
 }
