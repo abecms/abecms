@@ -32,7 +32,6 @@ var FormCreate = function () {
 
     this._form = document.querySelector('[data-form-abe-create="true"]');
     if (typeof this._form !== 'undefined' && this._form !== null) {
-      alert('test');
       // constantes variables
       this._filePath = '';
       this._ajax = _nanoajax2.default.ajax;

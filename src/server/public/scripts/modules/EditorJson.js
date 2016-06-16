@@ -27,7 +27,7 @@ export default class Json {
     return this[singleton]
   }
 
-  save(type = 'draft') {
+  save(type = 'draft', tplPath = null, filePath = null) {
     this.saving._fire({type: type})
     var p = new Promise((resolve, reject) => {
       if(!this.canSave){
@@ -43,8 +43,8 @@ export default class Json {
       }
 
       var toSave = qs.stringify({
-        tplPath: CONFIG.TPLPATH,
-        filePath: CONFIG.FILEPATH,
+        tplPath: (tplPath) ? tplPath : CONFIG.TPLPATH,
+        filePath: (filePath) ? filePath : CONFIG.FILEPATH,
         json: jsonSave
       })
 

@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 var _cli = require('../../cli');
 
 var create = function create(template, path, name, req) {
+  var forceJson = arguments.length <= 4 || arguments[4] === undefined ? {} : arguments[4];
+
   var p = new Promise(function (resolve, reject) {
 
     var templatePath = _cli.fileUtils.getTemplatePath(template);
@@ -17,7 +19,7 @@ var create = function create(template, path, name, req) {
     if (templatePath !== null && filePath !== null) {
       var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
       if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-        var json = {};
+        var json = forceJson ? forceJson : {};
         var tpl = templatePath;
         var text = (0, _cli.getTemplate)(tpl);
         text = _cli.Util.removeDataList(text);
@@ -25,6 +27,7 @@ var create = function create(template, path, name, req) {
         filePath = resHook.filePath;
         json = resHook.json;
         text = resHook.text;
+
         (0, _cli.save)(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft').then(function (resSave) {
           filePath = resSave.htmlPath;
           tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);

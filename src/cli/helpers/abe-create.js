@@ -8,7 +8,7 @@ import {
   Hooks
 } from '../../cli'
 
-var create = function(template, path, name, req) {
+var create = function(template, path, name, req, forceJson = {}) {
   var p = new Promise((resolve, reject) => {
 
       var templatePath = fileUtils.getTemplatePath(template)
@@ -19,7 +19,7 @@ var create = function(template, path, name, req) {
       if(templatePath !== null && filePath !== null) {
         var tplUrl = FileParser.getFileDataFromUrl(filePath)
         if(!fileUtils.isFile(tplUrl.json.path)) {
-          var json = {}
+          var json = (forceJson) ? forceJson : {}
           var tpl = templatePath
           var text = getTemplate(tpl)
           text = Util.removeDataList(text)
@@ -27,6 +27,7 @@ var create = function(template, path, name, req) {
           filePath = resHook.filePath
           json = resHook.json
           text = resHook.text
+
           save(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft')
             .then((resSave) => {
                 filePath = resSave.htmlPath
