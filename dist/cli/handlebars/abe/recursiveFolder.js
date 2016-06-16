@@ -7,9 +7,11 @@ exports.default = recursiveFolder;
 function recursiveFolder(obj) {
   var index = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
   var dataShow = arguments.length <= 2 || arguments[2] === undefined ? '' : arguments[2];
+  var links = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+  var visible = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
 
   var classHidden = '';
-  if (index > 1) {
+  if (index > 1 && !visible) {
     classHidden = 'hidden';
   }
 
@@ -23,10 +25,18 @@ function recursiveFolder(obj) {
   var sub = '';
 
   Array.prototype.forEach.call(obj, function (o) {
-    res += '<option data-level-hide="' + (index + 2) + '" data-level-show="' + (index + 1) + '" data-show="' + o.name.replace(/\.| |\#/g, '_') + '">' + o.name + '</option>';
+    var selected = '';
+    var isVisible = false;
+    if (typeof links !== 'undefined' && links !== null && typeof links[index - 1] !== 'undefined' && links[index - 1] !== null) {
+      if (links[index - 1] === o.name) {
+        selected = 'selected="selected"';
+        isVisible = true;
+      }
+    }
+    res += '<option ' + selected + ' data-level-hide="' + (index + 2) + '" data-level-show="' + (index + 1) + '" data-show="' + o.name.replace(/\.| |\#/g, '_') + '">' + o.name + '</option>';
 
     if (typeof o.folders !== 'undefined' && o.folders !== null && o.folders.length > 0) {
-      sub += recursiveFolder(o.folders, index + 1, o.name.replace(/\.| |\#/g, '_'));
+      sub += recursiveFolder(o.folders, index + 1, o.name.replace(/\.| |\#/g, '_'), links, isVisible);
     }
   });
 

@@ -95,55 +95,33 @@ var route = function route(req, res, next) {
       tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
       var fakeContent = req.query.fakeContent ? true : false;
 
-      var p2 = new Promise(function (resolve2, reject2) {
-        if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-          var json = {};
-          var tpl = templatePath;
-          var text = (0, _cli.getTemplate)(tpl);
-          text = _cli.Util.removeDataList(text);
-          var resHook = _cli.Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text);
-          filePath = resHook.filePath;
-          json = resHook.json;
-          text = resHook.text;
-          (0, _cli.save)(filePath, req.params[0], json, text, 'draft', null, 'draft').then(function (resSave) {
-            filePath = resSave.htmlPath;
-            tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-            resolve2();
-          }).catch(function (e) {
-            console.error(e.stack);
-          });
-        } else {
-          resolve2();
+      if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
+        res.redirect("/abe/");
+        return;
+      }
+
+      (0, _editor.editor)(templatePath, tplUrl, fakeContent).then(function (res) {
+        obj = res;
+
+        _cli.FileParser.getAssetsFolder();
+        _cli.FileParser.getAssets();
+
+        var revisionFilePath = _cli.FileParser.changePathEnv(filePath, _cli.config.draft.url);
+        var dirPath = _cli.fileUtils.removeLast(revisionFilePath);
+        var allDraft = _cli.FileParser.getFiles(dirPath, true, 99, new RegExp("\\." + _cli.config.files.templates.extension));
+
+        allDraft = _cli.FileParser.getMetas(allDraft, 'draft');
+        var breadcrumb = req.params[0].split('/');
+        manager.file = {
+          revision: _cli.fileAttr.getFilesRevision(allDraft, _cli.fileAttr.delete(revisionFilePath)),
+          template: breadcrumb,
+          path: req.query.filePath ? _cli.fileUtils.cleanTplName(req.query.filePath) : ''
+        };
+        if (manager.file.revision.length > 0) {
+          var publishPath = _cli.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp('/' + _cli.config.draft.url + '/'), '/' + _cli.config.publish.url + '/'));
+          manager.file.isPublished = _cli.fileUtils.isFile(publishPath);
         }
-      });
-
-      p2.then(function () {
-
-        (0, _editor.editor)(templatePath, tplUrl, fakeContent).then(function (res) {
-          obj = res;
-
-          _cli.FileParser.getAssetsFolder();
-          _cli.FileParser.getAssets();
-
-          var revisionFilePath = _cli.FileParser.changePathEnv(filePath, _cli.config.draft.url);
-          var dirPath = _cli.fileUtils.removeLast(revisionFilePath);
-          var allDraft = _cli.FileParser.getFiles(dirPath, true, 99, new RegExp("\\." + _cli.config.files.templates.extension));
-
-          allDraft = _cli.FileParser.getMetas(allDraft, 'draft');
-          var breadcrumb = req.params[0].split('/');
-          manager.file = {
-            revision: _cli.fileAttr.getFilesRevision(allDraft, _cli.fileAttr.delete(revisionFilePath)),
-            template: breadcrumb,
-            path: req.query.filePath ? _cli.fileUtils.cleanTplName(req.query.filePath) : ''
-          };
-          if (manager.file.revision.length > 0) {
-            var publishPath = _cli.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp('/' + _cli.config.draft.url + '/'), '/' + _cli.config.publish.url + '/'));
-            manager.file.isPublished = _cli.fileUtils.isFile(publishPath);
-          }
-          resolve();
-        }).catch(function (e) {
-          console.error(e.stack);
-        });
+        resolve();
       }).catch(function (e) {
         console.error(e.stack);
       });
@@ -173,6 +151,7 @@ var route = function route(req, res, next) {
     var _filePath = req.query.filePath ? req.query.filePath : false;
 
     var EditorVariables = {
+      isHome: isHome,
       abeUrl: '/abe/',
       test: JSON.stringify(_abeLocale2.default),
       text: _abeLocale2.default,

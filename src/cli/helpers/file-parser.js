@@ -54,6 +54,7 @@ export default class FileParser {
 	    	if(fileUtils.isValidFile(level[i])) {
 		    	var extension = /(\.[\s\S]*)/.exec(level[i])[0]
 		    	var cleanName = fileAttr.delete(level[i])
+		    	var cleanNameNoExt = fileUtils.removeExtension(cleanName)
 		    	var fileData = fileAttr.get(level[i])
 		    	var date = fileData.d ? fileData.d : '0000-00-00T00:00:00.000Z'
 		    	var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
@@ -77,6 +78,7 @@ export default class FileParser {
 						duration: duration,
 						status: status,
 	      		cleanName: cleanName,
+	      		cleanNameNoExt: cleanNameNoExt,
 						cleanFilePath: cleanFilePath,
 						filePath: filePath,
 						'type': 'file',

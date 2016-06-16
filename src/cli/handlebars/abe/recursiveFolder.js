@@ -1,7 +1,6 @@
-
-export default function recursiveFolder(obj, index = 1, dataShow = '') {
+export default function recursiveFolder(obj, index = 1, dataShow = '', links = null, visible = false) {
   var classHidden = ''
-  if(index > 1) {
+  if(index > 1 && !visible) {
     classHidden = 'hidden'
   }
 
@@ -17,12 +16,21 @@ export default function recursiveFolder(obj, index = 1, dataShow = '') {
         <option data-level-hide="${index+1}"></option>`
 
   var sub = ''
-      
+
   Array.prototype.forEach.call(obj, (o) => {
-    res += `<option data-level-hide="${index+2}" data-level-show="${index+1}" data-show="${o.name.replace(/\.| |\#/g, '_')}">${o.name}</option>`
+    var selected = ''
+    var isVisible = false
+    if(typeof links !== 'undefined' && links !== null &&
+      typeof links[index - 1] !== 'undefined' && links[index - 1] !== null) {
+      if (links[index - 1] === o.name) {
+        selected = 'selected="selected"'
+        isVisible = true
+      }
+    }
+    res += `<option ${selected} data-level-hide="${index+2}" data-level-show="${index+1}" data-show="${o.name.replace(/\.| |\#/g, '_')}">${o.name}</option>`
 
     if(typeof o.folders !== 'undefined' && o.folders !== null && o.folders.length > 0) {
-      sub += recursiveFolder(o.folders, index+1, o.name.replace(/\.| |\#/g, '_'))
+      sub += recursiveFolder(o.folders, index+1, o.name.replace(/\.| |\#/g, '_'), links, isVisible)
     }
   })
 
