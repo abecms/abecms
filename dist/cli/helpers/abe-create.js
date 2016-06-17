@@ -11,11 +11,13 @@ var create = function create(template, path, name, req) {
 
   var p = new Promise(function (resolve, reject) {
 
-    var templatePath = _cli.fileUtils.getTemplatePath(template);
+    var templatePath = _cli.fileUtils.getTemplatePath(template.replace(_cli.config.root, ""));
     var filePath = _cli.fileUtils.getFilePath(_cli.fileUtils.concatPath(path, name));
 
     filePath = (0, _cli.cleanSlug)(filePath);
     _cli.log.write('create', '********************************************');
+    _cli.log.write('create', 'templatePath: ' + templatePath.replace(_cli.config.root, ''));
+    _cli.log.write('create', 'filePath: ' + filePath.replace(_cli.config.root, ''));
     _cli.log.write('create', 'cleanSlug: ' + filePath.replace(_cli.config.root, ''));
 
     if (templatePath !== null && filePath !== null) {
