@@ -31,7 +31,7 @@ var route = function(req, res, next) {
         url = latest[0].path
       }
     }
-    log.write('duplicate', 'url with date: ' + url)
+    log.write('duplicate', 'url with date: ' + url.replace(config.root, ''))
 
     var tplUrl = FileParser.getFileDataFromUrl(url)
     log.write('duplicate', 'json: ' + tplUrl.json.path.replace(config.root, ''))
