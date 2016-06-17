@@ -44,7 +44,7 @@ var create = function(template, path, name, req, forceJson = {}) {
                 resolve(resSave.json)
               }).catch(function(e) {
                 reject()
-                log.write('create', '[ ERROR ]' + e.stack)
+                log.write('create', '[ ERROR ]' + e)
                 console.error(e.stack)
               })
         }else {
@@ -57,6 +57,7 @@ var create = function(template, path, name, req, forceJson = {}) {
         reject()
       }
     }).catch(function(e) {
+      log.write('create', '[ ERROR ]' + e)
       console.error(e.stack)
       reject()
     })

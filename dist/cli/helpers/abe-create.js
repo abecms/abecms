@@ -41,7 +41,7 @@ var create = function create(template, path, name, req) {
           resolve(resSave.json);
         }).catch(function (e) {
           reject();
-          _cli.log.write('create', '[ ERROR ]' + e.stack);
+          _cli.log.write('create', '[ ERROR ]' + e);
           console.error(e.stack);
         });
       } else {
@@ -54,6 +54,7 @@ var create = function create(template, path, name, req) {
       reject();
     }
   }).catch(function (e) {
+    _cli.log.write('create', '[ ERROR ]' + e);
     console.error(e.stack);
     reject();
   });

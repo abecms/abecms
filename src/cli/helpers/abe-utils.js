@@ -247,7 +247,7 @@ export default class Utils {
     let meta = config.meta.name
 
     json[meta] = extend({}, json[meta])
-    var currentDate = date || new Date()
+    var currentDate = (typeof date !== 'undefined' && date !== null && date !== '') ? date : new Date()
     var abeUrl = (type === 'publish') ? json[meta].link : fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
 
     if(typeof json[meta].date === 'undefined' || json[meta].date === null) {
