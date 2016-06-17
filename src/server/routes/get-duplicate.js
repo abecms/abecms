@@ -34,7 +34,7 @@ var route = function(req, res, next) {
     log.write('duplicate', 'url with date: ' + url)
 
     var tplUrl = FileParser.getFileDataFromUrl(url)
-    log.write('duplicate', 'json: ' + tplUrl.json.path)
+    log.write('duplicate', 'json: ' + tplUrl.json.path.replace(config.root, ''))
     var json = FileParser.getJson(tplUrl.json.path)
     delete json.abe_meta
   }
