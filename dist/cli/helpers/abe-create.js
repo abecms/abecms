@@ -20,8 +20,9 @@ var create = function create(template, path, name, req) {
 
     if (templatePath !== null && filePath !== null) {
       var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
+      _cli.log.write('create', 'test if ' + tplUrl.json.path + ' exit');
       if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-        _cli.log.write('create', 'json found: ' + tplUrl.json.path);
+        _cli.log.write('create', 'json found');
         var json = forceJson ? forceJson : {};
         _cli.log.write('create', 'force json: ' + (forceJson ? 'true' : 'false'));
         _cli.log.write('create', JSON.stringify(forceJson));
