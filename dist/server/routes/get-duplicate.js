@@ -27,7 +27,11 @@ var route = function route(req, res, next) {
     _cli.log.write('duplicate', 'url with date: ' + url.replace(_cli.config.root, ''));
 
     var tplUrl = _cli.FileParser.getFileDataFromUrl(url);
-    _cli.log.write('duplicate', 'json: ' + tplUrl.json.path.replace(_cli.config.root, ''));
+    if (!_cli.fileUtils.isFile()) {
+      _cli.log.write('duplicate', '[ ERROR ] no json found : ' + tplUrl.json.path.replace(_cli.config.root, ''));
+    } else {
+      _cli.log.write('duplicate', 'json found: ' + tplUrl.json.path.replace(_cli.config.root, ''));
+    }
     var json = _cli.FileParser.getJson(tplUrl.json.path);
     delete json.abe_meta;
   }
@@ -37,8 +41,10 @@ var route = function route(req, res, next) {
   _cli.log.write('duplicate', 'tplName: ' + req.query.tplName);
   var p = (0, _cli.abeCreate)(req.query.selectTemplate, req.query.filePath, req.query.tplName, req, json);
 
-  p.then(function (resSave) {
+  p.then(function (resSave, jsonPath, htmlPath) {
     _cli.log.write('duplicate', 'success');
+    _cli.log.write('duplicate', 'json saved at: ' + jsonPath);
+    _cli.log.write('duplicate', 'html saved at: ' + htmlPath);
     var result = {
       success: 1,
       json: resSave

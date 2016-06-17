@@ -32,7 +32,7 @@ var create = function(template, path, name, req, forceJson = {}) {
             .then((resSave) => {
                 filePath = resSave.htmlPath
                 tplUrl = FileParser.getFileDataFromUrl(filePath)
-                resolve(resSave.json)
+                resolve(resSave.json, resSave.jsonPath, resSave.htmlPath)
               }).catch(function(e) {
                 reject()
                 console.error(e.stack)

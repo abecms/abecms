@@ -34,7 +34,11 @@ var route = function(req, res, next) {
     log.write('duplicate', 'url with date: ' + url.replace(config.root, ''))
 
     var tplUrl = FileParser.getFileDataFromUrl(url)
-    log.write('duplicate', 'json: ' + tplUrl.json.path.replace(config.root, ''))
+    if (!fileUtils.isFile()) {
+      log.write('duplicate', '[ ERROR ] no json found : ' + tplUrl.json.path.replace(config.root, ''))
+    }else {
+      log.write('duplicate', 'json found: ' + tplUrl.json.path.replace(config.root, ''))
+    }
     var json = FileParser.getJson(tplUrl.json.path)
     delete json.abe_meta
   }
@@ -44,8 +48,10 @@ var route = function(req, res, next) {
   log.write('duplicate', 'tplName: ' + req.query.tplName)
   var p = abeCreate(req.query.selectTemplate, req.query.filePath, req.query.tplName, req, json)
 
-  p.then((resSave) => {
+  p.then((resSave, jsonPath, htmlPath) => {
     log.write('duplicate', 'success')
+    log.write('duplicate', 'json saved at: ' + jsonPath)
+    log.write('duplicate', 'html saved at: ' + htmlPath)
     var result = {
       success: 1,
       json: resSave
