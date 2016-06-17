@@ -31,7 +31,7 @@ var create = function create(template, path, name, req) {
         (0, _cli.save)(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft').then(function (resSave) {
           filePath = resSave.htmlPath;
           tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-          resolve(resSave.json);
+          resolve(resSave.json, resSave.jsonPath, resSave.htmlPath);
         }).catch(function (e) {
           reject();
           console.error(e.stack);
