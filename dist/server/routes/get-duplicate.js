@@ -27,7 +27,7 @@ var route = function route(req, res, next) {
     _cli.log.write('duplicate', 'url with date: ' + url);
 
     var tplUrl = _cli.FileParser.getFileDataFromUrl(url);
-    _cli.log.write('duplicate', 'json: ' + tplUrl.json.path);
+    _cli.log.write('duplicate', 'json: ' + tplUrl.json.path.replace(_cli.config.root, ''));
     var json = _cli.FileParser.getJson(tplUrl.json.path);
     delete json.abe_meta;
   }
