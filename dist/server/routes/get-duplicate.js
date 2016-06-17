@@ -41,10 +41,8 @@ var route = function route(req, res, next) {
   _cli.log.write('duplicate', 'tplName: ' + req.query.tplName);
   var p = (0, _cli.abeCreate)(req.query.selectTemplate, req.query.filePath, req.query.tplName, req, json);
 
-  p.then(function (resSave, jsonPath, htmlPath) {
+  p.then(function (resSave) {
     _cli.log.write('duplicate', 'success');
-    _cli.log.write('duplicate', 'json saved at: ' + jsonPath);
-    _cli.log.write('duplicate', 'html saved at: ' + htmlPath);
     var result = {
       success: 1,
       json: resSave
@@ -57,6 +55,10 @@ var route = function route(req, res, next) {
     };
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result));
+  }).catch(function (e) {
+    reject();
+    _cli.log.write('duplicate', '[ ERROR ]' + e.stack);
+    console.error(e.stack);
   });
 };
 

@@ -48,10 +48,8 @@ var route = function(req, res, next) {
   log.write('duplicate', 'tplName: ' + req.query.tplName)
   var p = abeCreate(req.query.selectTemplate, req.query.filePath, req.query.tplName, req, json)
 
-  p.then((resSave, jsonPath, htmlPath) => {
+  p.then((resSave) => {
     log.write('duplicate', 'success')
-    log.write('duplicate', 'json saved at: ' + jsonPath)
-    log.write('duplicate', 'html saved at: ' + htmlPath)
     var result = {
       success: 1,
       json: resSave
@@ -65,6 +63,10 @@ var route = function(req, res, next) {
     }
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
+  }).catch(function(e) {
+    reject()
+    log.write('duplicate', '[ ERROR ]' + e.stack)
+    console.error(e.stack)
   })
 }
 
