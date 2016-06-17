@@ -5,6 +5,7 @@ import {
   cleanSlug,
   getTemplate,
   save,
+  config,
   log,
   Hooks
 } from '../../cli'
@@ -17,11 +18,11 @@ var create = function(template, path, name, req, forceJson = {}) {
 
       filePath = cleanSlug(filePath)
       log.write('create', '********************************************')
-      log.write('create', 'cleanSlug: ' + filePath)
+      log.write('create', 'cleanSlug: ' + filePath.replace(config.root, ''))
 
       if(templatePath !== null && filePath !== null) {
         var tplUrl = FileParser.getFileDataFromUrl(filePath)
-        log.write('create', 'test if ' + tplUrl.json.path + ' exit')
+        log.write('create', 'test if ' + tplUrl.json.path.replace(config.root, "") + ' exit')
         if(!fileUtils.isFile(tplUrl.json.path)) {
           log.write('create', 'json found')
           var json = (forceJson) ? forceJson : {}

@@ -271,7 +271,7 @@ var FileParser = function () {
 			};
 
 			var extension = _.config.files.templates.extension;
-			if (typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension)) {
+			if (typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension) > -1) {
 
 				var dir = _.fileUtils.removeLast(url).replace(_.config.root, '');
 				var filename = _.fileUtils.filename(url);

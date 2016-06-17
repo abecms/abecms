@@ -230,7 +230,7 @@ export default class FileParser {
   	}
 
   	let extension = config.files.templates.extension
-  	if(typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension)) {
+  	if(typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension) > -1) {
 
 	  	var dir = fileUtils.removeLast(url).replace(config.root, '')
 	  	var filename = fileUtils.filename(url)
