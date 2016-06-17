@@ -14,9 +14,10 @@ var create = function(template, path, name, req, forceJson = {}) {
   var p = new Promise((resolve, reject) => {
 
       var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ""))
-      var filePath = fileUtils.getFilePath(fileUtils.concatPath(path, name))
-
+      var filePath = fileUtils.concatPath(path, name)
       filePath = cleanSlug(filePath)
+      filePath = fileUtils.getFilePath(filePath)
+      
       log.write('create', '********************************************')
       log.write('create', 'templatePath: ' + templatePath.replace(config.root, ''))
       log.write('create', 'filePath: ' + filePath.replace(config.root, ''))
