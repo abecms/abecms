@@ -368,7 +368,10 @@ export default class Sql {
 
   static reqWhere(file, wheres, jsonPage) {
     var shouldAdd = true
-    var json = fse.readJsonSync(file.path)
+    var json = {}
+    if (fileUtils.isFile(file.path)) {
+      json = fse.readJsonSync(file.path)
+    }
     let meta = config.meta.name
 
     if(typeof json[meta] !== 'undefined' && json[meta] !== null) {
