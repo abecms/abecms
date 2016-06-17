@@ -397,7 +397,10 @@ var Sql = function () {
     key: 'reqWhere',
     value: function reqWhere(file, wheres, jsonPage) {
       var shouldAdd = true;
-      var json = _fsExtra2.default.readJsonSync(file.path);
+      var json = {};
+      if (_.fileUtils.isFile(file.path)) {
+        json = _fsExtra2.default.readJsonSync(file.path);
+      }
       var meta = _.config.meta.name;
 
       if (typeof json[meta] !== 'undefined' && json[meta] !== null) {
