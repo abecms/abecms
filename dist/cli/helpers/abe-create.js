@@ -16,11 +16,11 @@ var create = function create(template, path, name, req) {
 
     filePath = (0, _cli.cleanSlug)(filePath);
     _cli.log.write('create', '********************************************');
-    _cli.log.write('create', 'cleanSlug: ' + filePath);
+    _cli.log.write('create', 'cleanSlug: ' + filePath.replace(_cli.config.root, ''));
 
     if (templatePath !== null && filePath !== null) {
       var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-      _cli.log.write('create', 'test if ' + tplUrl.json.path + ' exit');
+      _cli.log.write('create', 'test if ' + tplUrl.json.path.replace(_cli.config.root, "") + ' exit');
       if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
         _cli.log.write('create', 'json found');
         var json = forceJson ? forceJson : {};
