@@ -261,7 +261,7 @@ var Utils = function () {
       var meta = _.config.meta.name;
 
       json[meta] = (0, _extend2.default)({}, json[meta]);
-      var currentDate = date || new Date();
+      var currentDate = typeof date !== 'undefined' && date !== null && date !== '' ? date : new Date();
       var abeUrl = type === 'publish' ? json[meta].link : _.fileAttr.add(json[meta].link, 'd' + (0, _.dateSlug)(currentDate.toISOString())) + '';
 
       if (typeof json[meta].date === 'undefined' || json[meta].date === null) {
