@@ -27,7 +27,7 @@ var route = function route(req, res, next) {
     html += '<ul>';
     Array.prototype.forEach.call(files, function (item) {
       html += '<li>';
-      html += '<a href="/delete-logs/' + _cli.fileUtils.removeExtension(item.cleanPath) + '">' + item.name + '</a><br />';
+      html += '<a href="/abe/delete-logs/' + _cli.fileUtils.removeExtension(item.cleanPath) + '">' + item.name + '</a><br />';
       html += '</li>';
     });
     html += '</ul>';
