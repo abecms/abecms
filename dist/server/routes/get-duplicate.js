@@ -24,7 +24,7 @@ var route = function route(req, res, next) {
         url = latest[0].path;
       }
     }
-    _cli.log.write('duplicate', 'url with date: ' + url);
+    _cli.log.write('duplicate', 'url with date: ' + url.replace(_cli.config.root, ''));
 
     var tplUrl = _cli.FileParser.getFileDataFromUrl(url);
     _cli.log.write('duplicate', 'json: ' + tplUrl.json.path.replace(_cli.config.root, ''));
