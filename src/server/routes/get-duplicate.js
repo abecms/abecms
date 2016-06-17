@@ -34,7 +34,7 @@ var route = function(req, res, next) {
     log.write('duplicate', 'url with date: ' + url.replace(config.root, ''))
 
     var tplUrl = FileParser.getFileDataFromUrl(url)
-    if (!fileUtils.isFile()) {
+    if (!fileUtils.isFile(tplUrl.json.path)) {
       log.write('duplicate', '[ ERROR ] no json found : ' + tplUrl.json.path.replace(config.root, ''))
     }else {
       log.write('duplicate', 'json found: ' + tplUrl.json.path.replace(config.root, ''))

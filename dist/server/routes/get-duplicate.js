@@ -27,7 +27,7 @@ var route = function route(req, res, next) {
     _cli.log.write('duplicate', 'url with date: ' + url.replace(_cli.config.root, ''));
 
     var tplUrl = _cli.FileParser.getFileDataFromUrl(url);
-    if (!_cli.fileUtils.isFile()) {
+    if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
       _cli.log.write('duplicate', '[ ERROR ] no json found : ' + tplUrl.json.path.replace(_cli.config.root, ''));
     } else {
       _cli.log.write('duplicate', 'json found: ' + tplUrl.json.path.replace(_cli.config.root, ''));
