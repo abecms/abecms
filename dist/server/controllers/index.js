@@ -62,6 +62,7 @@ router.get('/abe/logs*', _routes.getLogs);
 router.get('/abe/delete-logs*', _routes.getDeleteLogs);
 router.get('/abe/create*', _routes.getCreate);
 router.get('/abe/duplicate*', _routes.getDuplicate);
+router.get('/abe/update*', _routes.getUpdate);
 router.get('/abe*', _routes.getMain);
 router.post('/page/*', _routes.postPage);
 router.get('/page/*', _routes.getPage);

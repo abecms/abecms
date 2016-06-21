@@ -104,6 +104,15 @@ _portfinder2.default.getPort(function (err, freePort) {
     next();
   });
 
+  app.use(function (req, res, next) {
+    if (typeof req.query.logs !== 'undefined' && req.query.logs !== null && req.query.logs === 'true') {
+      _cli.config.logs = true;
+    } else if (typeof req.query.logs !== 'undefined' && req.query.logs !== null && req.query.logs === 'false') {
+      _cli.config.logs = false;
+    }
+    next();
+  });
+
   if (_cli.config.security === true) {
     app.use((0, _helmet2.default)());
     app.use(_helmet2.default.csp({

@@ -10,6 +10,7 @@ import pkg from '../../../package'
 import {
   getCreate
   ,getDuplicate
+  ,getUpdate
   ,getLogs
   ,getDeleteLogs
   ,getMain
@@ -58,6 +59,7 @@ router.get('/abe/logs*', getLogs)
 router.get('/abe/delete-logs*', getDeleteLogs)
 router.get('/abe/create*', getCreate)
 router.get('/abe/duplicate*', getDuplicate)
+router.get('/abe/update*', getUpdate)
 router.get('/abe*', getMain)
 router.post('/page/*', postPage)
 router.get('/page/*', getPage)

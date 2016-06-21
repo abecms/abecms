@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.getSite = exports.postUpload = exports.getDelete = exports.getUnpublish = exports.getSaveConfig = exports.postDraft = exports.postReject = exports.postPublish = exports.postPage = exports.getPage = exports.getDeleteLogs = exports.getLogs = exports.getDuplicate = exports.getCreate = exports.getMain = undefined;
+exports.getSite = exports.postUpload = exports.getDelete = exports.getUnpublish = exports.getSaveConfig = exports.postDraft = exports.postReject = exports.postPublish = exports.postPage = exports.getPage = exports.getDeleteLogs = exports.getLogs = exports.getUpdate = exports.getDuplicate = exports.getCreate = exports.getMain = undefined;
 
 var _getMain = require('./get-main');
 
@@ -16,6 +16,10 @@ var _getCreate2 = _interopRequireDefault(_getCreate);
 var _getDuplicate = require('./get-duplicate');
 
 var _getDuplicate2 = _interopRequireDefault(_getDuplicate);
+
+var _getUpdate = require('./get-update');
+
+var _getUpdate2 = _interopRequireDefault(_getUpdate);
 
 var _getLogs = require('./get-logs');
 
@@ -70,6 +74,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.getMain = _getMain2.default;
 exports.getCreate = _getCreate2.default;
 exports.getDuplicate = _getDuplicate2.default;
+exports.getUpdate = _getUpdate2.default;
 exports.getLogs = _getLogs2.default;
 exports.getDeleteLogs = _getDeleteLogs2.default;
 exports.getPage = _getPage2.default;

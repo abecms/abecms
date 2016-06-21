@@ -125,21 +125,27 @@ var Logs = function () {
 	}, {
 		key: 'write',
 		value: function write() {
-			var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
-			Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+');
+			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {
+				var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
+				Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+');
+			}
 		}
 	}, {
 		key: 'delAndWrite',
 		value: function delAndWrite() {
-			var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
-			Logs.writeFile(path, Logs.text.apply(this, arguments), 'w');
+			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {
+				var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
+				Logs.writeFile(path, Logs.text.apply(this, arguments), 'w');
+			}
 		}
 	}, {
 		key: 'writeFile',
 		value: function writeFile(file, data, flag) {
-			data = new Date().toString() + ' --- ' + data;
-			_mkdirp2.default.sync(Logs.removeLast(file));
-			_fs2.default.writeFileSync(file, data, { encoding: 'utf8', flag: flag });
+			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {
+				data = new Date().toString() + ' --- ' + data;
+				_mkdirp2.default.sync(Logs.removeLast(file));
+				_fs2.default.writeFileSync(file, data, { encoding: 'utf8', flag: flag });
+			}
 		}
 	}]);
 
