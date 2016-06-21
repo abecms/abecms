@@ -86,18 +86,27 @@ export default class Logs {
 	}
 
 	static write() {
-		var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
-		Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+')
+		if(typeof config.logs !== 'undefined' && config.logs !== null
+			&& config.logs === true) {
+			var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
+			Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+')
+		}
 	}
 
 	static delAndWrite() {
-		var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
-		Logs.writeFile(path, Logs.text.apply(this, arguments), 'w')
+		if(typeof config.logs !== 'undefined' && config.logs !== null
+			&& config.logs === true) {
+			var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
+			Logs.writeFile(path, Logs.text.apply(this, arguments), 'w')
+		}
 	}
 
 	static writeFile(file, data, flag) {
-		data = new Date().toString() + ' --- ' + data
-		mkdirp.sync(Logs.removeLast(file))
-		fs.writeFileSync(file, data, {encoding: 'utf8', flag: flag})
+		if(typeof config.logs !== 'undefined' && config.logs !== null
+			&& config.logs === true) {
+			data = new Date().toString() + ' --- ' + data
+			mkdirp.sync(Logs.removeLast(file))
+			fs.writeFileSync(file, data, {encoding: 'utf8', flag: flag})
+		}
 	}
 }

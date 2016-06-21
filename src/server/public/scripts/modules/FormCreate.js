@@ -121,8 +121,7 @@ export default class FormCreate {
     return path
   }
 
-  _btnDuplicateManagerClick(e) {
-    e.preventDefault()
+  _submit(type) {
     var inputs = [].slice.call(document.querySelectorAll('.form-create input'))
     inputs = inputs.concat([].slice.call(document.querySelectorAll('.form-create select')))
     var values = {}
@@ -132,7 +131,7 @@ export default class FormCreate {
     var toSave = qs.stringify(values)
     this._ajax(
         {
-          url: document.location.origin + '/abe/duplicate/?' + toSave,
+          url: document.location.origin + '/abe/' + type + '/?' + toSave,
           body: toSave,
           headers: {},
           method: 'get'
@@ -145,35 +144,20 @@ export default class FormCreate {
             alert('error')
           }
         })
+  }
+
+  _btnDuplicateManagerClick(e) {
+    e.preventDefault()
+    this._submit('duplicate')
   }
 
   _btnUpdateManagerClick(e) {
     e.preventDefault()
+    this._submit('update')
   }
 
   _btnCreateManagerClick(e) {
     e.preventDefault()
-    var inputs = [].slice.call(document.querySelectorAll('.form-create input'))
-    inputs = inputs.concat([].slice.call(document.querySelectorAll('.form-create select')))
-    var values = {}
-    Array.prototype.forEach.call(inputs, (input) => {
-      values[input.getAttribute('name')] = input.value
-    })
-    var toSave = qs.stringify(values)
-    this._ajax(
-        {
-          url: document.location.origin + '/abe/create/?' + toSave,
-          body: toSave,
-          headers: {},
-          method: 'get'
-        },
-        (code, responseText, request) => {
-          var jsonRes = JSON.parse(responseText)
-          if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== 'undefined' && jsonRes.json.abe_meta !== null) {
-            window.location.href = window.location.origin + '/abe/' + jsonRes.json.abe_meta.template + '?filePath=' + jsonRes.json.abe_meta.link
-          }else {
-            alert('error')
-          }
-        })
+    this._submit('create')
   }
 }

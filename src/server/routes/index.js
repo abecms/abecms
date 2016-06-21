@@ -1,6 +1,7 @@
 import getMain from './get-main'
 import getCreate from './get-create'
 import getDuplicate from './get-duplicate'
+import getUpdate from './get-update'
 import getLogs from './get-logs'
 import getDeleteLogs from './get-delete-logs'
 import getPage from './get-page'
@@ -18,6 +19,7 @@ export {
 	getMain
 	,getCreate
 	,getDuplicate
+	,getUpdate
 	,getLogs
 	,getDeleteLogs
 	,getPage

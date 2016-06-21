@@ -84,6 +84,17 @@ portfinder.getPort(function (err, freePort) {
     next()
   })
 
+  app.use(function (req, res, next) {
+    if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
+      && req.query.logs === 'true') {
+      config.logs = true
+    }else if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
+      && req.query.logs === 'false') {
+      config.logs = false
+    }
+    next()
+  })
+
   if(config.security === true){
     app.use(helmet())
     app.use(helmet.csp({
