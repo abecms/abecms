@@ -1,4 +1,5 @@
 import {
+  Hooks,
   fileUtils,
   FileParser,
   fileAttr,
@@ -8,12 +9,12 @@ import {
   config,
   save,
   abeCreate,
-  log,
-  Hooks
+  log
 } from '../../cli'
 
 var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = false) {
   var p = new Promise((resolve, reject) => {
+    Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, deleteFiles)
 
     if(typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
       log.write('duplicate', 'oldFilePath: ' + oldFilePath)
@@ -56,6 +57,7 @@ var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = f
         }
       })
     }
+    Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, path, name, req, deleteFiles)
 
     var pCreate = abeCreate(template, path, name, req, json)
     pCreate.then((resSave) => {

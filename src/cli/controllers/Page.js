@@ -93,7 +93,7 @@ export default class Page {
 
     // var pattNode = />({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g,
     var pattNode = /((?!"{{abe[\S\s]*?}}).{{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g,
-        pattAttr = /( [A-Za-z0-9\-\_]+="*{{.*?}})/g,
+        pattAttr = /( [A-Za-z0-9\-\_]+="*{{abe.*?}})/g,
         pattSpeAttr = /=[\'|\"]{{abe.*}}[\'|\"]/g,
         pattEach = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g,
         arrayEach = [],

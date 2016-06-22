@@ -9,8 +9,6 @@ var _cli = require('../../cli');
 var route = function route(req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
 
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
-  console.log('duplicate');
   _cli.log.write('duplicate', '********************************************');
   _cli.log.write('duplicate', 'selectTemplate: ' + req.query.selectTemplate);
   _cli.log.write('duplicate', 'filePath: ' + req.query.filePath);

@@ -288,11 +288,13 @@ export default class FileParser {
 
   static copySiteAssets(path) {
   	var publicFolders = FileParser.getAssetsFolder(path)
+  	let publish = config.publish.url
+  	var dest = fileUtils.concatPath(config.root, publish)
+  	if (!folderUtils.isFolder(dest)) {
+  		mkdirp.sync(dest)
+  	}
 
 		Array.prototype.forEach.call(publicFolders, (publicFolder) => {
-			let publish = config.publish.url
-
-			var dest = fileUtils.concatPath(config.root, publish)
 		  var res = dircompare.compareSync(publicFolder, dest, {compareSize: true})
 
 		  res.diffSet.forEach(function (entry) {

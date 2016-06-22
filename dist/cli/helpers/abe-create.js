@@ -10,6 +10,7 @@ var create = function create(template, path, name, req) {
   var forceJson = arguments.length <= 4 || arguments[4] === undefined ? {} : arguments[4];
 
   var p = new Promise(function (resolve, reject) {
+    _cli.Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson);
 
     var templatePath = _cli.fileUtils.getTemplatePath(template.replace(_cli.config.root, ""));
     var filePath = _cli.fileUtils.concatPath(path, name);
@@ -37,6 +38,7 @@ var create = function create(template, path, name, req) {
         json = resHook.json;
         text = resHook.text;
 
+        _cli.Hooks.instance.trigger('afterCreate', json, text, path, name, req, forceJson);
         (0, _cli.save)(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft').then(function (resSave) {
           _cli.log.write('create', 'success');
           filePath = resSave.htmlPath;

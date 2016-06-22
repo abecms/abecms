@@ -21,6 +21,23 @@ var hooks = {
       return router;
    },
 
+   /***************** create *****************/
+   beforeCreate: function beforeCreate(filePath, template, path, name, req, forceJson, abe) {
+      return filePath;
+   },
+   afterCreate: function afterCreate(json, text, path, name, req, forceJson, abe) {
+      return json;
+   },
+
+   /***************** duplicate *****************/
+   beforeDuplicate: function beforeDuplicate(oldFilePath, template, path, name, req, deleteFiles, abe) {
+      // if deleteFiles this is an update not a duplicate
+      return oldFilePath;
+   },
+   afterDuplicate: function afterDuplicate(json, oldFilePath, template, path, name, req, deleteFiles, abe) {
+      return json;
+   },
+
    /***************** save *****************/
    beforeFirstSave: function beforeFirstSave(filePath, req, json, text, abe) {
       return {

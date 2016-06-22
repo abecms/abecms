@@ -330,11 +330,13 @@ var FileParser = function () {
 		key: 'copySiteAssets',
 		value: function copySiteAssets(path) {
 			var publicFolders = FileParser.getAssetsFolder(path);
+			var publish = _.config.publish.url;
+			var dest = _.fileUtils.concatPath(_.config.root, publish);
+			if (!_.folderUtils.isFolder(dest)) {
+				_mkdirp2.default.sync(dest);
+			}
 
 			Array.prototype.forEach.call(publicFolders, function (publicFolder) {
-				var publish = _.config.publish.url;
-
-				var dest = _.fileUtils.concatPath(_.config.root, publish);
 				var res = _dirCompare2.default.compareSync(publicFolder, dest, { compareSize: true });
 
 				res.diffSet.forEach(function (entry) {
