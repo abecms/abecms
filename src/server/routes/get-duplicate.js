@@ -7,8 +7,6 @@ import {
 var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  console.log('duplicate')
   log.write('duplicate', '********************************************')
   log.write('duplicate', 'selectTemplate: ' + req.query.selectTemplate)
   log.write('duplicate', 'filePath: ' + req.query.filePath)

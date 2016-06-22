@@ -10,6 +10,7 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
   var deleteFiles = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
 
   var p = new Promise(function (resolve, reject) {
+    _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, deleteFiles);
 
     if (typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
       _cli.log.write('duplicate', 'oldFilePath: ' + oldFilePath);
@@ -52,6 +53,7 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
         }
       });
     }
+    _cli.Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, path, name, req, deleteFiles);
 
     var pCreate = (0, _cli.abeCreate)(template, path, name, req, json);
     pCreate.then(function (resSave) {

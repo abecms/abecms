@@ -12,6 +12,7 @@ import {
 
 var create = function(template, path, name, req, forceJson = {}) {
   var p = new Promise((resolve, reject) => {
+      Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson)
 
       var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ""))
       var filePath = fileUtils.concatPath(path, name)
@@ -39,6 +40,7 @@ var create = function(template, path, name, req, forceJson = {}) {
           json = resHook.json
           text = resHook.text
 
+          Hooks.instance.trigger('afterCreate', json, text, path, name, req, forceJson)
           save(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft')
             .then((resSave) => {
                 log.write('create', 'success')

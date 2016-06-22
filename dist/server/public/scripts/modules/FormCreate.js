@@ -159,6 +159,7 @@ var FormCreate = function () {
       path = path.slice(0, -1);
       path = path.split('/');
       path = path.join('/');
+      path = '/' + path.replace(/^\//, '');
 
       return path;
     }
