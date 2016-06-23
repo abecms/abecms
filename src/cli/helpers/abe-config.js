@@ -17,6 +17,8 @@ var loadLocalConfig = (result) => {
   try{
 		var stat = fse.statSync(website)
 		if (stat && stat.isDirectory()) {
+			console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+			console.log('website/abe.json', website + '/abe.json')
       try{
 				stat = fse.statSync(website + '/abe.json')
 				if (stat) {

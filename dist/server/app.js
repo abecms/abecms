@@ -58,6 +58,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var abePort = null;
 
+console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
+console.log('process.env.ROOT', process.env.ROOT);
+console.log('process.env.PORT', process.env.PORT);
 if (process.env.ROOT) _cli.config.set({ root: process.env.ROOT.replace(/\/$/, '') + '/' });
 if (process.env.PORT) abePort = process.env.PORT;
 _cli.config.set({ webport: process.env.WEBPORT ? process.env.WEBPORT : 8081 });
