@@ -288,7 +288,7 @@ var Sql = function () {
           return;
         }
 
-        // check from
+        // check where
         if (typeof request.where !== 'undefined' && request.where !== null) {
           shouldAdd = Sql.reqWhere(file, request.where, jsonPage);
         }

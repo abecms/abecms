@@ -12,6 +12,7 @@ import {
   ,getDuplicate
   ,getUpdate
   ,getLogs
+  ,getListUrl
   ,getDeleteLogs
   ,getMain
   ,getPage
@@ -60,7 +61,6 @@ router.get('/abe/delete-logs*', getDeleteLogs)
 router.get('/abe/create*', getCreate)
 router.get('/abe/duplicate*', getDuplicate)
 router.get('/abe/update*', getUpdate)
-router.get('/abe*', getMain)
 router.post('/page/*', postPage)
 router.get('/page/*', getPage)
 router.post('/publish', postPublish)
@@ -70,6 +70,10 @@ router.get('/save-config', getSaveConfig)
 router.get('/unpublish', getUnpublish)
 router.get('/delete', getDelete)
 router.post('/upload/*', postUpload)
+router.get('/abe/list-url*', function (req, res, next) {
+   getListUrl(router, req, res, next) 
+})
+router.get('/abe*', getMain)
 
 router.get('/', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)

@@ -447,6 +447,8 @@ var FileParser = function () {
 	}, {
 		key: 'deleteFile',
 		value: function deleteFile(filePath) {
+			filePath = _.Hooks.instance.trigger('beforeDeleteFile', filePath);
+
 			var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.draft.url, filePath));
 			var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + _.config.files.templates.extension));
 			var revisions = _.fileAttr.getFilesRevision(files, tplUrl.publish.file);
@@ -457,6 +459,7 @@ var FileParser = function () {
 			});
 
 			FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
+			tplUrl.publish.path = _.Hooks.instance.trigger('afterDeleteFile', tplUrl.publish.path, tplUrl.publish.json);
 		}
 	}, {
 		key: 'deleteFileFromName',

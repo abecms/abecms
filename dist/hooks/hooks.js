@@ -22,6 +22,14 @@ var hooks = {
    },
 
    /***************** create *****************/
+   beforeDeleteFile: function beforeDeleteFile(filePath, abe) {
+      return filePath;
+   },
+   afterDeleteFile: function afterDeleteFile(path, json, abe) {
+      return path;
+   },
+
+   /***************** create *****************/
    beforeCreate: function beforeCreate(filePath, template, path, name, req, forceJson, abe) {
       return filePath;
    },
@@ -35,6 +43,11 @@ var hooks = {
       return oldFilePath;
    },
    afterDuplicate: function afterDuplicate(json, oldFilePath, template, path, name, req, deleteFiles, abe) {
+      return json;
+   },
+
+   /***************** update *****************/
+   beforeUpdate: function beforeUpdate(json, oldFilePath, template, path, name, req, deleteFiles, abe) {
       return json;
    },
 

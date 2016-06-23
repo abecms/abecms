@@ -404,6 +404,8 @@ export default class FileParser {
   }
 
   static deleteFile(filePath) {
+  	filePath = Hooks.instance.trigger('beforeDeleteFile', filePath)
+
   	var tplUrl = FileParser.getFileDataFromUrl(fileUtils.concatPath(config.draft.url, filePath))
   	var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + config.files.templates.extension))
   	var revisions = fileAttr.getFilesRevision(files, tplUrl.publish.file)
@@ -414,6 +416,7 @@ export default class FileParser {
   	})
 
   	FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
+  	tplUrl.publish.path = Hooks.instance.trigger('afterDeleteFile', tplUrl.publish.path, tplUrl.publish.json)
   }
 
   static deleteFileFromName(filePath) {
