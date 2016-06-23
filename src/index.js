@@ -67,12 +67,17 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 		break
 		case 'serve':
 			var dir = process.cwd();
-			var command = 'WEBPORT=' + webport + ' ROOT=' + dir + ' node --harmony --debug ./dist/server/index.js';
-			if (interactive) command = 'OPENURL=1 ' + command
-			if(port) command = 'PORT=' + port + ' ' + command
+			var command = 'node --harmony --debug ./dist/server/index.js';
+			// if (interactive) command = 'OPENURL=1 ' + command
 			process.chdir(__dirname + '/../')
 			console.log('website started : ' + dir + (port ? ' on port :' + port : ''))
-			var cp = exec(command, function (err, out, code) {
+			var cp = exec(command,
+				{
+					'PORT': port,
+					'WEBPORT': webport,
+					'ROOT': dir
+				},
+				function (err, out, code) {
 				if (err instanceof Error) throw err
 			  process.stderr.write(err)
 			  process.stdout.write(out)
