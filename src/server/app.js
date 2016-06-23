@@ -38,6 +38,9 @@ import {
 
 var abePort = null
 
+console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+console.log('process.env.ROOT', process.env.ROOT)
+console.log('process.env.PORT', process.env.PORT)
 if(process.env.ROOT) config.set({root: process.env.ROOT.replace(/\/$/, '') + '/'})
 if(process.env.PORT) abePort = process.env.PORT
 config.set({webport: process.env.WEBPORT ? process.env.WEBPORT : 8081})
