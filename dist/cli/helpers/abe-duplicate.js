@@ -46,6 +46,7 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
     }
 
     if (deleteFiles) {
+      _cli.Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, deleteFiles);
       Array.prototype.forEach.call(revisions, function (revision) {
         if (typeof revision.path !== 'undefined' && revision.path !== null) {
           _cli.log.write('delete', 'file ' + revision.path.replace(_cli.config.root, ''));

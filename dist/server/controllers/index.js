@@ -63,7 +63,6 @@ router.get('/abe/delete-logs*', _routes.getDeleteLogs);
 router.get('/abe/create*', _routes.getCreate);
 router.get('/abe/duplicate*', _routes.getDuplicate);
 router.get('/abe/update*', _routes.getUpdate);
-router.get('/abe*', _routes.getMain);
 router.post('/page/*', _routes.postPage);
 router.get('/page/*', _routes.getPage);
 router.post('/publish', _routes.postPublish);
@@ -73,6 +72,10 @@ router.get('/save-config', _routes.getSaveConfig);
 router.get('/unpublish', _routes.getUnpublish);
 router.get('/delete', _routes.getDelete);
 router.post('/upload/*', _routes.postUpload);
+router.get('/abe/list-url*', function (req, res, next) {
+  (0, _routes.getListUrl)(router, req, res, next);
+});
+router.get('/abe*', _routes.getMain);
 
 router.get('/', function (req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);

@@ -50,6 +50,7 @@ var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = f
     }
 
     if (deleteFiles) {
+      Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, deleteFiles)
       Array.prototype.forEach.call(revisions, (revision) => {
         if(typeof revision.path !== 'undefined' && revision.path !== null) {
           log.write('delete', 'file ' + revision.path.replace(config.root, ''))
