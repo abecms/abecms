@@ -10,9 +10,9 @@ var route = function(req, res, next){
 
   var p = new Promise((resolve, reject) => {
     save(
-      fileUtils.getFilePath(req.body.filePath),
-      req.body.tplPath,
-      req.body.json,
+      fileUtils.getFilePath(req.query.filePath),
+      req.query.tplPath,
+      req.query.json,
       '',
       'draft',
       null,
@@ -26,9 +26,9 @@ var route = function(req, res, next){
 
   p.then((resSave) => {
     save(
-      fileUtils.getFilePath(req.body.filePath),
-      req.body.tplPath,
-      req.body.json,
+      fileUtils.getFilePath(req.query.filePath),
+      req.query.tplPath,
+      req.query.json,
       '',
       'reject',
       resSave,
