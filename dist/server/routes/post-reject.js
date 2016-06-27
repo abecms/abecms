@@ -11,7 +11,7 @@ var route = function route(req, res, next) {
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
   var p = new Promise(function (resolve, reject) {
-    (0, _cli.save)(_cli.fileUtils.getFilePath(req.body.filePath), req.body.tplPath, req.body.json, '', 'draft', null, 'reject').then(function () {
+    (0, _cli.save)(_cli.fileUtils.getFilePath(req.query.filePath), req.query.tplPath, req.query.json, '', 'draft', null, 'reject').then(function () {
       resolve();
     }).catch(function (e) {
       console.error(e.stack);
@@ -19,7 +19,7 @@ var route = function route(req, res, next) {
   });
 
   p.then(function (resSave) {
-    (0, _cli.save)(_cli.fileUtils.getFilePath(req.body.filePath), req.body.tplPath, req.body.json, '', 'reject', resSave, 'reject').then(function (resSave) {
+    (0, _cli.save)(_cli.fileUtils.getFilePath(req.query.filePath), req.query.tplPath, req.query.json, '', 'reject', resSave, 'reject').then(function (resSave) {
       if (typeof resSave.error !== 'undefined' && resSave.error !== null) {
         res.set('Content-Type', 'application/json');
         res.send(JSON.stringify({ error: resSave.error }));
