@@ -31,8 +31,6 @@ var loadLocalConfig = function loadLocalConfig(result) {
 	try {
 		var stat = _fsExtra2.default.statSync(website);
 		if (stat && stat.isDirectory()) {
-			console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
-			console.log('website/abe.json', website + '/abe.json');
 			try {
 				stat = _fsExtra2.default.statSync(website + '/abe.json');
 				if (stat) {
