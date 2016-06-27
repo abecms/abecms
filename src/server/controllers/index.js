@@ -196,11 +196,11 @@ function page(req, res, next) {
   filePath = fileUtils.getFilePath(filePath)
   var html = (req.query.html) ? true : false
   var json = null
-  if(typeof req.body.json !== 'undefined' && req.body.json !== null) {
-    if(typeof req.body.json === 'string') {
-      json = JSON.parse(req.body.json)
+  if(typeof req.query.json !== 'undefined' && req.query.json !== null) {
+    if(typeof req.query.json === 'string') {
+      json = JSON.parse(req.query.json)
     }else {
-      json = req.body.json
+      json = req.query.json
     }
   }
 
@@ -284,12 +284,12 @@ router.post('/publish', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = cleanSlug(req.body.filePath)
+  var filePath = cleanSlug(req.query.filePath)
   var p = new Promise((resolve, reject) => {
     save(
       fileUtils.getFilePath(filePath),
-      req.body.tplPath,
-      req.body.json,
+      req.query.tplPath,
+      req.query.json,
       '',
       'draft',
       null,
@@ -303,9 +303,9 @@ router.post('/publish', function(req, res, next){
 
   p.then((resSave) => {
     save(
-      fileUtils.getFilePath(req.body.filePath),
-      req.body.tplPath,
-      req.body.json,
+      fileUtils.getFilePath(req.query.filePath),
+      req.query.tplPath,
+      req.query.json,
       '',
       'publish',
       resSave,
@@ -341,9 +341,9 @@ router.post('/reject', function(req, res, next){
 
   var p = new Promise((resolve, reject) => {
     save(
-      fileUtils.getFilePath(req.body.filePath),
-      req.body.tplPath,
-      req.body.json,
+      fileUtils.getFilePath(req.query.filePath),
+      req.query.tplPath,
+      req.query.json,
       '',
       'draft',
       null,
@@ -357,9 +357,9 @@ router.post('/reject', function(req, res, next){
 
   p.then((resSave) => {
     save(
-      fileUtils.getFilePath(req.body.filePath),
-      req.body.tplPath,
-      req.body.json,
+      fileUtils.getFilePath(req.query.filePath),
+      req.query.tplPath,
+      req.query.json,
       '',
       'reject',
       resSave,
@@ -392,9 +392,9 @@ router.post('/draft', function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
   save(
-    fileUtils.getFilePath(req.body.filePath),
-    req.body.tplPath,
-    req.body.json,
+    fileUtils.getFilePath(req.query.filePath),
+    req.query.tplPath,
+    req.query.json,
     '',
     'draft',
     null,
@@ -432,7 +432,7 @@ router.get('/unpublish', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = cleanSlug(req.body.filePath)
+  var filePath = cleanSlug(req.query.filePath)
   var dirPath = FileParser.unpublishFile(filePath)
 
   var result = {
@@ -447,7 +447,7 @@ router.get('/delete', function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = cleanSlug(req.body.filePath)
+  var filePath = cleanSlug(req.query.filePath)
   var dirPath = FileParser.deleteFile(filePath)
 
   var result = {
