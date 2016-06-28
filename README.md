@@ -62,6 +62,10 @@ Install nodejs + git
 
 Please use Git Bash + python
 
+Install visual studio community edition
+
+> https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop
+
 ```shell
 npm config set msvs_version 2012 --global
 ```

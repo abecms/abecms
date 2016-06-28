@@ -10,6 +10,7 @@ import busboy from 'connect-busboy'
 import portfinder from 'portfinder'
 import clc from 'cli-color'
 import openurl from 'openurl'
+import uuid from 'node-uuid'
 
 import {
   config,
