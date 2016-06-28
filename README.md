@@ -55,26 +55,16 @@ With __npm__ : ```$ npm install -g abe-cli ```
 
 #### Prerequisites
 
+##### Unix
 Install nodejs + git
 
-Under windows : Please use Git Bash
+##### windows
 
-With __github__ :
+Please use Git Bash + python
 
-Create a blog directory (ie. "abesite") with the default project structure (see below). It will contain your blog.
-git clone abe outside of your blog directory (not in abesite) :
-
-```$ git clone https://github.com/AdFabConnect/abejs.git ```
-
-```$ cd abejs ```
-
-```$ npm i ```
-
-to launch your blog using Abe, under Linux or Mac, you have to set an Environment variable pointing to your blog :
-
-```$ ROOT=/my_path_to_the_blog npm run startdev ```
-
-Other environment variables are available (like PORT for defining a listening port for ABE and WEBPORT for your blog port)
+```shell
+npm config set msvs_version 2012 --global
+```
 
 ## Abe command line tool
 
@@ -234,3 +224,23 @@ coming soon
 ## Support / Contributing
 
 coming soon
+
+## Build from source
+
+With __github__ :
+
+Create a blog directory (ie. "abesite") with the default project structure (see below). It will contain your blog.
+git clone abe outside of your blog directory (not in abesite) :
+
+```$ git clone https://github.com/AdFabConnect/abejs.git ```
+
+```$ cd abejs ```
+
+```$ npm i ```
+
+to launch your blog using Abe, under Linux or Mac, you have to set an Environment variable pointing to your blog :
+
+```$ ROOT=/my_path_to_the_blog npm run startdev ```
+
+Other environment variables are available (like PORT for defining a listening port for ABE and WEBPORT for your blog port)
+
