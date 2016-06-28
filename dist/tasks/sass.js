@@ -22,6 +22,6 @@ var result = sass.render({
       }
     });
   } else {
-    console.log(clc.red('ERROR ' + error));
-  }
+      console.log(clc.red('ERROR ' + error));
+    }
 });
