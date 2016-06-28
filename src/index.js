@@ -70,15 +70,20 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 			if(process.env.ROOT) {
 				dir = process.env.ROOT
 			}
+			var env = {
+				'ROOT': dir,
+				'WEBPORT': webport
+			};
+			if(typeof port !== 'undefined' && port !== null) {
+				env.PORT = port
+			}
 			var command = 'node --harmony --debug ./dist/server/index.js';
 			// if (interactive) command = 'OPENURL=1 ' + command
 			process.chdir(__dirname + '/../')
 			console.log('website started : ' + dir + (port ? ' on port :' + port : ''))
 			var cp = exec(command,
 				{
-					'ROOT': dir,
-					'WEBPORT': webport,
-					'PORT': port
+					env: env
 				},
 				function (err, out, code) {
 				if (err instanceof Error) throw err
