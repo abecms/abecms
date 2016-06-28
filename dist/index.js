@@ -79,19 +79,18 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			if (process.env.ROOT) {
 				dir = process.env.ROOT;
 			}
-			var env = {
-				'ROOT': dir,
-				'WEBPORT': webport
-			};
+			var environment = process.env;
+			environment.ROOT = dir;
+			environment.WEBPORT = webport;
 			if (typeof port !== 'undefined' && port !== null) {
-				env.PORT = port;
+				environment.PORT = port;
 			}
 			var command = 'node --harmony --debug ./dist/server/index.js';
 			// if (interactive) command = 'OPENURL=1 ' + command
 			process.chdir(__dirname + '/../');
 			console.log('website started : ' + dir + (port ? ' on port :' + port : ''));
 			var cp = (0, _child_process.exec)(command, {
-				env: env
+				env: environment
 			}, function (err, out, code) {
 				if (err instanceof Error) throw err;
 				process.stderr.write(err);
