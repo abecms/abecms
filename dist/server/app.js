@@ -121,6 +121,7 @@ _portfinder2.default.getPort(function (err, freePort) {
         sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
         reportUri: '/report-violation',
         objectSrc: [] },
+      // An empty array allows nothing through
       reportOnly: false, // Set to true if you only want browsers to report errors, not block them
       setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
       disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.   
