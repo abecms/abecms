@@ -48,6 +48,10 @@ var _openurl = require('openurl');
 
 var _openurl2 = _interopRequireDefault(_openurl);
 
+var _nodeUuid = require('node-uuid');
+
+var _nodeUuid2 = _interopRequireDefault(_nodeUuid);
+
 var _cli = require('../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -96,7 +100,7 @@ _portfinder2.default.getPort(function (err, freePort) {
   app.use(_bodyParser2.default.urlencoded({ limit: '1gb', extended: true, parameterLimit: 10000 }));
 
   app.use(function (req, res, next) {
-    res.locals.nonce = uuid.v4();
+    res.locals.nonce = _nodeUuid2.default.v4();
     next();
   });
 
