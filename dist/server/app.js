@@ -48,19 +48,12 @@ var _openurl = require('openurl');
 
 var _openurl2 = _interopRequireDefault(_openurl);
 
-var _nodeUuid = require('node-uuid');
-
-var _nodeUuid2 = _interopRequireDefault(_nodeUuid);
-
 var _cli = require('../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var abePort = null;
 
-console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
-console.log('process.env.ROOT', process.env.ROOT);
-console.log('process.env.PORT', process.env.PORT);
 if (process.env.ROOT) _cli.config.set({ root: process.env.ROOT.replace(/\/$/, '') + '/' });
 if (process.env.PORT) abePort = process.env.PORT;
 _cli.config.set({ webport: process.env.WEBPORT ? process.env.WEBPORT : 8081 });
@@ -103,7 +96,7 @@ _portfinder2.default.getPort(function (err, freePort) {
   app.use(_bodyParser2.default.urlencoded({ limit: '1gb', extended: true, parameterLimit: 10000 }));
 
   app.use(function (req, res, next) {
-    res.locals.nonce = _nodeUuid2.default.v4();
+    res.locals.nonce = uuid.v4();
     next();
   });
 
@@ -133,6 +126,7 @@ _portfinder2.default.getPort(function (err, freePort) {
         sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
         reportUri: '/report-violation',
         objectSrc: [] },
+      // An empty array allows nothing through
       reportOnly: false, // Set to true if you only want browsers to report errors, not block them
       setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
       disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.   

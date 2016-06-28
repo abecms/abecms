@@ -54,6 +54,7 @@ var route = function route(req, res, next) {
       whiteList: [],
       stripIgnoreTag: true
     });
+    // stripIgnoreTagBody: ['script']
     if (testXSS !== req.query.filePath) {
       // res.status(400).send('<h1>400 Bad Request</h1>Not a valid URL format');
       res.redirect('/abe/' + req.params[0] + '?filePath=' + testXSS);
