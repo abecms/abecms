@@ -42,7 +42,6 @@
     "cli-table": "^0.3.1",
     "commander": "^2.9.0",
     "connect-busboy": "0.0.2",
-    "deepmerge": "^0.2.10",
     "dir-compare": "1.0.1",
     "es6-promise": "^3.0.2",
     "exec": "^0.2.1",
