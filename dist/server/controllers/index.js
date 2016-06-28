@@ -298,9 +298,9 @@ router.post('/publish', function (req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var filePath = (0, _cli.cleanSlug)(req.query.filePath);
+  var filePath = (0, _cli.cleanSlug)(req.body.filePath);
   var p = new Promise(function (resolve, reject) {
-    (0, _cli.save)(_cli.fileUtils.getFilePath(filePath), req.query.tplPath, req.query.json, '', 'draft', null, 'publish').then(function () {
+    (0, _cli.save)(_cli.fileUtils.getFilePath(filePath), req.body.tplPath, req.body.json, '', 'draft', null, 'publish').then(function () {
       resolve();
     }).catch(function (e) {
       console.error(e.stack);
@@ -308,7 +308,7 @@ router.post('/publish', function (req, res, next) {
   });
 
   p.then(function (resSave) {
-    (0, _cli.save)(_cli.fileUtils.getFilePath(req.query.filePath), req.query.tplPath, req.query.json, '', 'publish', resSave, 'publish').then(function (resSave) {
+    (0, _cli.save)(_cli.fileUtils.getFilePath(req.body.filePath), req.body.tplPath, req.body.json, '', 'publish', resSave, 'publish').then(function (resSave) {
       if (typeof resSave.error !== 'undefined' && resSave.error !== null) {
         res.set('Content-Type', 'application/json');
         res.send(JSON.stringify({ error: resSave.error }));
@@ -336,7 +336,7 @@ router.post('/reject', function (req, res, next) {
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
   var p = new Promise(function (resolve, reject) {
-    (0, _cli.save)(_cli.fileUtils.getFilePath(req.query.filePath), req.query.tplPath, req.query.json, '', 'draft', null, 'reject').then(function () {
+    (0, _cli.save)(_cli.fileUtils.getFilePath(req.body.filePath), req.body.tplPath, req.body.json, '', 'draft', null, 'reject').then(function () {
       resolve();
     }).catch(function (e) {
       console.error(e.stack);
@@ -344,7 +344,7 @@ router.post('/reject', function (req, res, next) {
   });
 
   p.then(function (resSave) {
-    (0, _cli.save)(_cli.fileUtils.getFilePath(req.query.filePath), req.query.tplPath, req.query.json, '', 'reject', resSave, 'reject').then(function (resSave) {
+    (0, _cli.save)(_cli.fileUtils.getFilePath(req.body.filePath), req.body.tplPath, req.body.json, '', 'reject', resSave, 'reject').then(function (resSave) {
       if (typeof resSave.error !== 'undefined' && resSave.error !== null) {
         res.set('Content-Type', 'application/json');
         res.send(JSON.stringify({ error: resSave.error }));
@@ -371,7 +371,7 @@ router.post('/draft', function (req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
-  (0, _cli.save)(_cli.fileUtils.getFilePath(req.query.filePath), req.query.tplPath, req.query.json, '', 'draft', null, 'draft').then(function (resSave) {
+  (0, _cli.save)(_cli.fileUtils.getFilePath(req.body.filePath), req.body.tplPath, req.body.json, '', 'draft', null, 'draft').then(function (resSave) {
     if (typeof resSave.error !== 'undefined' && resSave.error !== null) {
       res.set('Content-Type', 'application/json');
       res.send(JSON.stringify({ error: resSave.error }));
