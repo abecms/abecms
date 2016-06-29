@@ -59,10 +59,6 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
-  if(typeof config.publishAll === 'undefined' || config.publishAll === null || config.publishAll === false) {
-    publishAll = false;
-    log.write('publish-all', 'canno\'t start publish all script change config abe.json')
-  }
   url = cleanSlug(url)
 
   var p = new Promise((resolve, reject) => {
@@ -155,8 +151,10 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           
           FileParser.copySiteAssets()
 
-          if(!publishAll && type === 'publish') {
-            abeProcess('publish-all', [`FILEPATH=${json.abe_meta.link}`])
+          if(typeof config.publishAll !== 'undefined' && config.publishAll !== null && config.publishAll === true) {
+            if(!publishAll && type === 'publish') {
+              abeProcess('publish-all', [`FILEPATH=${json.abe_meta.link}`])
+            }
           }
 
           resolve({
