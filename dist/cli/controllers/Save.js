@@ -76,10 +76,6 @@ function save(url, tplPath) {
   var realType = arguments.length <= 6 || arguments[6] === undefined ? 'draft' : arguments[6];
   var publishAll = arguments.length <= 7 || arguments[7] === undefined ? false : arguments[7];
 
-  if (typeof _.config.publishAll === 'undefined' || _.config.publishAll === null || _.config.publishAll === false) {
-    publishAll = false;
-    _.log.write('publish-all', 'canno\'t start publish all script change config abe.json');
-  }
   url = (0, _.cleanSlug)(url);
 
   var p = new _es6Promise.Promise(function (resolve, reject) {
@@ -171,8 +167,10 @@ function save(url, tplPath) {
 
       _.FileParser.copySiteAssets();
 
-      if (!publishAll && type === 'publish') {
-        (0, _.abeProcess)('publish-all', ['FILEPATH=' + json.abe_meta.link]);
+      if (typeof _.config.publishAll !== 'undefined' && _.config.publishAll !== null && _.config.publishAll === true) {
+        if (!publishAll && type === 'publish') {
+          (0, _.abeProcess)('publish-all', ['FILEPATH=' + json.abe_meta.link]);
+        }
       }
 
       resolve({
