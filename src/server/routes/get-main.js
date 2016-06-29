@@ -52,6 +52,7 @@ var route = function(req, res, next) {
   var templatePath = fileUtils.getTemplatePath(req.params[0])
   var filePath = fileUtils.getFilePath(req.query.filePath)
   var debugJson = (req.query.debugJson && req.query.debugJson == 'true' ) ? true : false
+  var debugHtml = (req.query.debugHtml && req.query.debugHtml == 'true' ) ? true : false
 
   filePath = cleanSlug(filePath)
 
@@ -134,6 +135,7 @@ var route = function(req, res, next) {
     var _template = (filePath) ? '/page/' + req.params[0] + `?filePath=${req.query.filePath}` : false
     var _form = (obj) ? obj.form : false
     var _json = (obj) ? obj.json : false
+    var _text = (obj) ? obj.text : false
     var _file = (tplUrl) ? tplUrl.draft.file : false
     var _filePath = (req.query.filePath) ? req.query.filePath : false
 
@@ -165,6 +167,9 @@ var route = function(req, res, next) {
     if (debugJson) {
       res.set('Content-Type', 'application/json')
       res.send(JSON.stringify(_json))
+    }else if (debugHtml) {
+      res.set('Content-Type', 'text/plain')
+      res.send(_text)
     }else {
       res.render(config.abeEngine, EditorVariables)
     }

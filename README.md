@@ -59,19 +59,7 @@ With __npm__ : ```$ npm install -g abe-cli ```
 ## Windows
 
 - Git Bash
-- python (2.7.x)
-
-Setup path to python
-
-Open git bash then run
-
-```shell
-PATH=$PATH:/c/Python27/
-```
-
-Install visual studio community edition
-
-> [https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop](https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop)
+- nodejs
 
 ## Abe command line tool
 
@@ -235,6 +223,21 @@ coming soon
 ## Build from source
 
 ### Windows User
+
+- python (2.7.x)
+
+Setup path to python
+
+Open git bash then run
+
+```shell
+PATH=$PATH:/c/Python27/
+npm config set python /C/Python27/
+```
+
+Install visual studio community edition
+
+> [https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop](https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop)
 
 install windows sdk
 

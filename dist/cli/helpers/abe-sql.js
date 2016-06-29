@@ -300,6 +300,7 @@ var Sql = function () {
           var jsonValues = {};
 
           if (typeof request.columns !== 'undefined' && request.columns !== null && request.columns.length > 0 && request.columns[0] !== '*') {
+
             Array.prototype.forEach.call(request.columns, function (column) {
               if (typeof json[column] !== 'undefined' && json[column] !== null) {
                 jsonValues[column] = json[column];

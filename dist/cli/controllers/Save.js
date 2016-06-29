@@ -76,6 +76,10 @@ function save(url, tplPath) {
   var realType = arguments.length <= 6 || arguments[6] === undefined ? 'draft' : arguments[6];
   var publishAll = arguments.length <= 7 || arguments[7] === undefined ? false : arguments[7];
 
+  if (typeof _.config.publishAll === 'undefined' || _.config.publishAll === null || _.config.publishAll === false) {
+    publishAll = false;
+    _.log.write('publish-all', 'canno\'t start publish all script change config abe.json');
+  }
   url = (0, _.cleanSlug)(url);
 
   var p = new _es6Promise.Promise(function (resolve, reject) {
@@ -101,7 +105,7 @@ function save(url, tplPath) {
     var fullTpl = _.fileUtils.concatPath(_.config.root, _.config.templates.url, tpl) + '.' + _.config.files.templates.extension;
 
     if (typeof json === 'undefined' || json === null) {
-      _.FileParser.getJson(tplUrl.json.path);
+      json = _.FileParser.getJson(tplUrl.json.path);
     }
 
     var ext = {
@@ -130,6 +134,13 @@ function save(url, tplPath) {
     }
 
     _.Util.getDataList(_.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
+
+      if (publishAll) {
+        // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+        // console.log(path.jsonPath)
+        // console.log(text.split("head")[1])
+        // console.log(json.hreflangs)
+      }
 
       var obj = {
         type: type,

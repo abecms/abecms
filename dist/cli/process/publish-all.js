@@ -47,13 +47,14 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
     var promises = [];
 
     published.forEach(function (pub) {
-      var json = _cli.FileParser.getJson(_cli.FileParser.changePathEnv(pub.path, _cli.config.data.url).replace(new RegExp("\\." + _cli.config.files.templates.extension), '.json'));
+      var jsonPath = _cli.FileParser.changePathEnv(pub.path, _cli.config.data.url).replace(new RegExp("\\." + _cli.config.files.templates.extension), '.json');
+      var json = _cli.FileParser.getJson(jsonPath);
       ar_url.push(pub.path);
 
       // save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false)
 
       var p = new Promise(function (resolve, reject) {
-        (0, _cli.save)(pub.path, json.abe_meta.template, json, '', 'publish', null, 'publish', true).then(function () {
+        (0, _cli.save)(pub.path, json.abe_meta.template, null, '', 'publish', null, 'publish', true).then(function () {
           _cli.log.write('publish-all', 'successfully update > ' + pub.path.replace(_cli.config.root, ''));
           resolve();
         }).catch(function (e) {
