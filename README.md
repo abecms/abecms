@@ -73,18 +73,6 @@ Install visual studio community edition
 
 > [https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop](https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop)
 
-And windows sdk
-
-> [https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk](https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk)
-
-Tell node-sass which version of 
-Open git bash then run
-
-```shell
-# npm config set msvs_version [ VISUAL STUDIO VERSION ] --global
-npm config set msvs_version 2015 --global
-```
-
 ## Abe command line tool
 
 Create website a  ```$ abe create mysite ```
@@ -246,7 +234,21 @@ coming soon
 
 ## Build from source
 
-With __github__ :
+### Windows User
+
+install windows sdk
+
+> [https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk](https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk)
+
+Tell node-sass which version of 
+Open git bash then run
+
+```shell
+# npm config set msvs_version [ VISUAL STUDIO VERSION ] --global
+npm config set msvs_version 2015 --global
+```
+
+### Clone
 
 Create a blog directory (ie. "abesite") with the default project structure (see below). It will contain your blog.
 git clone abe outside of your blog directory (not in abesite) :
