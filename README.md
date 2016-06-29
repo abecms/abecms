@@ -26,7 +26,7 @@ New features planned :
 This version will be the last in the 1.x series.
 - Performance improvements : The overall performance of Abe has been optimized.
 
-#### 2.x
+#### 2.x planned beginning of 2017
 This major release is planned for October 2016. This version will focus on quality and stability and will be covered by Unit tests + functional tests.
 The separation between the engine, the API server and the front will be reinforced by putting each part in its own repository
 The documentation will be rewritten and included in the modules
