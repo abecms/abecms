@@ -102,6 +102,10 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			break;
 		case 'prod':
 			var dir = process.cwd();
+			if (process.env.ROOT) {
+				dir = process.env.ROOT;
+			}
+			dir = dir.replace(/\/$/, '');
 			var abeJson = require(dir + '/abe.json');
 			var processName = abeJson.processName || 'abe';
 			var processPort = abeJson.port || port;

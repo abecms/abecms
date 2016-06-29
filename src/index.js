@@ -93,8 +93,27 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 			cp.stderr.pipe(process.stderr)
 			cp.stdout.pipe(process.stdout)
 		break
+		case 'list':
+			var dir = process.cwd();
+			dir = dir.replace(/\/$/, '')
+			pm2.connect((err) => {
+				if (err instanceof Error) throw err
+
+				pm2.list(function(err, list) {
+					if (err instanceof Error) throw err
+					Array.prototype.forEach.call(list, (item) => {
+						console.log('[ pm2 ]', '{', '"pid":', item.pid + ',', '"process":', '"' + item.name + '"', '}')
+					})
+					process.exit(0);
+				});
+			})
+		break
 		case 'prod':
 			var dir = process.cwd();
+			if(process.env.ROOT) {
+				dir = process.env.ROOT
+			}
+			dir = dir.replace(/\/$/, '')
 			var abeJson = require(dir + '/abe.json')
 			var processName = abeJson.processName || 'abe'
 			var processPort = abeJson.port || port
