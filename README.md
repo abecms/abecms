@@ -10,41 +10,26 @@ We will maintain Abe for the next 3 years and have a dedicated 20% Full Time Equ
 # Roadmap
 We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
 
-##Roadmap 2016
+## Roadmap 2016
 
-####1.1.0
-[ABE-55] - Refactoring file-utils
+#### 1.7.x
+This version will be the last in the 1.x series. It is planned for mid-July
+New features planned :
+- Duplicate : It's now possible to create a new content form an existing one.
+- Routes refactoring : Each action sent to the Abe engine has its own route
+- Routes refactoring : A new route /list-url display the whole list of available routes exposed by Abe
+- Routes refactoring : publish-all is a new route triggering the republication of all already published content without modifying the modification date oif these contents. This is the first attempts to address the possibility of updating linked content when publishing a content.
+- Content metadata updatable : It's now possible to change the path, the name or the template of an existing file
+- Debugging : It's now possible to trigger logs by adding a parameter in the url
+- Performance improvements : The overall performance of Abe has been optimized.
 
-[ABE-104] - Pouvoir afficher ou non un contenu/bloc
 
-[ABE-106] - Tache Gulp PM2
-
-[ABE-107] - Galery plugin
-
-####1.2.0
-[ABE-31] - attributs abe avec du text (voir description)
-
-[ABE-52] - hint (template maker) / hint (error / warning / info)
-
-[ABE-96] - Rendre modifiables les données de "pré-contribution" (langue, template,...)
-
-[ABE-108] - Comments plugin
-
-####1.3.0
-[ABE-6] - popin upload dans le wysiwyg
-
-[ABE-11] - Look & Feel ABE
-
-[ABE-51] - Drag and drop - autocomplete
-
-[ABE-97] - Créer les json préremplis à partir de templates HTML d'origine
-
-####1.4.0
-[ABE-1] - Rédaction de la documentation utilisateurs en anglais
-
-[ABE-2] - Rédaction de la doc dev en anglais
-
-[ABE-14] - Préparer 10 templates open source
+#### 2.x
+This major release is planned for October 2016. This version will focus on quality and stability and will be covered by Unit tests + functional tests.
+The separation between the engine, the API server and the front will be reinforced by putting each part in its own repository
+The documentation will be rewritten and included in the modules
+The plugins already written will be put in their respective repository
+As a major feature, it will be possible to create a template from partials.
 
 
 # Getting started
