@@ -100,6 +100,21 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			cp.stderr.pipe(process.stderr);
 			cp.stdout.pipe(process.stdout);
 			break;
+		case 'list':
+			var dir = process.cwd();
+			dir = dir.replace(/\/$/, '');
+			_pm2.default.connect(function (err) {
+				if (err instanceof Error) throw err;
+
+				_pm2.default.list(function (err, list) {
+					if (err instanceof Error) throw err;
+					Array.prototype.forEach.call(list, function (item) {
+						console.log('[ pm2 ]', '{', '"pid":', item.pid + ',', '"process":', '"' + item.name + '"', '}');
+					});
+					process.exit(0);
+				});
+			});
+			break;
 		case 'prod':
 			var dir = process.cwd();
 			if (process.env.ROOT) {
