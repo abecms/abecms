@@ -12,8 +12,8 @@ We have a 1 year roadmap (estimation) with the following versions. You'll notice
 
 ## Roadmap 2016
 
-#### 1.7.x
-This version will be the last in the 1.x series. It is planned for mid-July
+#### 1.7.x planned for end of June
+
 New features planned :
 - Duplicate : It's now possible to create a new content form an existing one.
 - Routes refactoring : Each action sent to the Abe engine has its own route
@@ -21,8 +21,10 @@ New features planned :
 - Routes refactoring : publish-all is a new route triggering the republication of all already published content without modifying the modification date oif these contents. This is the first attempts to address the possibility of updating linked content when publishing a content.
 - Content metadata updatable : It's now possible to change the path, the name or the template of an existing file
 - Debugging : It's now possible to trigger logs by adding a parameter in the url
-- Performance improvements : The overall performance of Abe has been optimized.
 
+#### 1.8.x planned mid-july
+This version will be the last in the 1.x series.
+- Performance improvements : The overall performance of Abe has been optimized.
 
 #### 2.x
 This major release is planned for October 2016. This version will focus on quality and stability and will be covered by Unit tests + functional tests.
