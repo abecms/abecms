@@ -274,13 +274,13 @@ export default class Sql {
         var jsonValues = {}
 
         if(typeof request.columns !== 'undefined' && request.columns !== null && request.columns.length > 0 && request.columns[0] !== '*') {
+          
           Array.prototype.forEach.call(request.columns, (column) => {
             if(typeof json[column] !== 'undefined' && json[column] !== null) {
               jsonValues[column] = json[column]
             }
           })
           jsonValues[config.meta.name] = json[config.meta.name]
-
         }else {
           jsonValues = json
         }

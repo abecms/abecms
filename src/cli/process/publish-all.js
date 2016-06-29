@@ -54,17 +54,17 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var promises = []
 
     published.forEach(function (pub) {
-      var json = FileParser.getJson(
-          FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp("\\." + config.files.templates.extension), '.json'))
+      var jsonPath = FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp("\\." + config.files.templates.extension), '.json')
+      var json = FileParser.getJson(jsonPath)
       ar_url.push(pub.path)
 
       // save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false)
-
+      
       var p = new Promise((resolve, reject) => {
         save(
           pub.path,
           json.abe_meta.template,
-          json,
+          null,
           '',
           'publish',
           null,

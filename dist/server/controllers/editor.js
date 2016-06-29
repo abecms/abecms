@@ -297,6 +297,7 @@ function editor(fileName, tplUrl, fake) {
       _cli.abeEngine.instance.content = json;
 
       resolve({
+        text: text,
         form: blocks,
         json: json
       });

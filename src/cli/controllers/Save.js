@@ -59,6 +59,10 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
+  if(typeof config.publishAll === 'undefined' || config.publishAll === null || config.publishAll === false) {
+    publishAll = false;
+    log.write('publish-all', 'canno\'t start publish all script change config abe.json')
+  }
   url = cleanSlug(url)
 
   var p = new Promise((resolve, reject) => {
@@ -84,7 +88,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     var fullTpl = fileUtils.concatPath(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
 
     if(typeof json === 'undefined' || json === null) {
-      FileParser.getJson(tplUrl.json.path)
+      json = FileParser.getJson(tplUrl.json.path)
     }
 
     var ext = {
@@ -114,6 +118,13 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
     Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
         .then(() => {
+
+        if (publishAll) {
+          // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+          // console.log(path.jsonPath)
+          // console.log(text.split("head")[1])
+          // console.log(json.hreflangs)
+        }
 
           var obj = {
             type:type,

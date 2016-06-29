@@ -296,6 +296,7 @@ export function editor(fileName, tplUrl, fake) {
         abeEngine.instance.content = json
 
         resolve({
+          text: text,
           form: blocks,
           json: json
         })

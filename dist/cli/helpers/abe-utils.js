@@ -299,6 +299,9 @@ var Utils = function () {
           var pSource = new _es6Promise.Promise(function (resolveSource, rejectSource) {
             var source = (0, _.getAttr)(match[0], 'source');
             var key = (0, _.getAttr)(match[0], 'key');
+            var editable = (0, _.getAttr)(match[0], 'editable');
+            editable = typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false' ? false : true;
+
             var autocomplete = (0, _.getAttr)(match[0], 'autocomplete');
             if (source.indexOf('{{') > -1) {
               var matches = source.match(/({{[a-zA-Z._]+}})/g);
@@ -317,8 +320,12 @@ var Utils = function () {
             var type = _.Sql.getSourceType(source);
             switch (type) {
               case 'request':
+
                 var data = _.Sql.getDataRequest(tplPath, match[0], jsonPage);
                 jsonPage[sourceAttr][key] = data;
+                if (!editable) {
+                  jsonPage[key] = data;
+                }
 
                 if (typeof jsonPage[key] !== 'undefined' && jsonPage[key] !== null) {
                   var newJsonValue = [];
@@ -329,8 +336,10 @@ var Utils = function () {
                       }
                     });
                   });
+
                   jsonPage[key] = newJsonValue;
                 }
+
                 resolveSource();
                 break;
               case 'value':

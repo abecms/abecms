@@ -284,6 +284,9 @@ export default class Utils {
         var pSource = new Promise((resolveSource, rejectSource) => {
           var source = getAttr(match[0], 'source')
           var key = getAttr(match[0], 'key')
+          var editable = getAttr(match[0], 'editable')
+          editable = (typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') ? false : true
+
           var autocomplete = getAttr(match[0], 'autocomplete')
           if(source.indexOf('{{') > -1) {
             var matches = source.match(/({{[a-zA-Z._]+}})/g)
@@ -302,8 +305,12 @@ export default class Utils {
           var type = Sql.getSourceType(source)
           switch (type) {
             case 'request':
+
               var data = Sql.getDataRequest(tplPath, match[0], jsonPage)
               jsonPage[sourceAttr][key] = data
+              if (!editable) {
+                jsonPage[key] = data
+              }
 
               if(typeof jsonPage[key] !== 'undefined' && jsonPage[key] !== null) {
                 var newJsonValue = []
@@ -315,8 +322,10 @@ export default class Utils {
                     }
                   })
                 })
+
                 jsonPage[key] = newJsonValue
               }
+
               resolveSource()
               break;
             case 'value':
