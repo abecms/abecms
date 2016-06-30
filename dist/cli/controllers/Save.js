@@ -131,6 +131,18 @@ function save(url, tplPath) {
 
     _.Util.getDataList(_.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
 
+      for (var prop in json) {
+        if (_typeof(json[prop]) === 'object' && Array.isArray(json[prop]) && json[prop].length === 1) {
+          var valuesAreEmplty = true;
+          json[prop].forEach(function (element) {
+            for (var p in element) {
+              if (element[p] !== '') valuesAreEmplty = false;
+            }
+          });
+          if (valuesAreEmplty) delete json[prop];
+        }
+      }
+
       if (publishAll) {
         // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
         // console.log(path.jsonPath)
