@@ -137,13 +137,23 @@ function save(url, tplPath) {
         matchSource,
         paginated = [];
 
-    while (matchSource = listRegSource.exec(text)) {
-      var objSource = _.Util.getAllAttributes(matchSource[0], json);
-      if (typeof objSource.paginate !== 'undefined' && objSource.paginate !== null && objSource.paginate !== '') {
-        paginated.push({
-          key: objSource.key,
-          size: parseInt(objSource.paginate)
-        });
+      for (var prop in json) {
+        if (_typeof(json[prop]) === 'object' && Array.isArray(json[prop]) && json[prop].length === 1) {
+          var valuesAreEmplty = true;
+          json[prop].forEach(function (element) {
+            for (var p in element) {
+              if (element[p] !== '') valuesAreEmplty = false;
+            }
+          });
+          if (valuesAreEmplty) delete json[prop];
+        }
+      }
+
+      if (publishAll) {
+        // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+        // console.log(path.jsonPath)
+        // console.log(text.split("head")[1])
+        // console.log(json.hreflangs)
       }
     }
 
