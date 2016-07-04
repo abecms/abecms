@@ -137,6 +137,18 @@ function save(url, tplPath) {
         matchSource,
         paginated = [];
 
+    while (matchSource = listRegSource.exec(text)) {
+      var objSource = _.Util.getAllAttributes(matchSource[0], json);
+      if (typeof objSource.paginate !== 'undefined' && objSource.paginate !== null && objSource.paginate !== '') {
+        paginated.push({
+          key: objSource.key,
+          size: parseInt(objSource.paginate)
+        });
+      }
+    }
+
+    _.Util.getDataList(_.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
+
       for (var prop in json) {
         if (_typeof(json[prop]) === 'object' && Array.isArray(json[prop]) && json[prop].length === 1) {
           var valuesAreEmplty = true;
@@ -155,9 +167,7 @@ function save(url, tplPath) {
         // console.log(text.split("head")[1])
         // console.log(json.hreflangs)
       }
-    }
 
-    _.Util.getDataList(_.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
       var obj = {
         type: type,
         template: {
