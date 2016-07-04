@@ -98,7 +98,7 @@ var page = function page(req, res, next) {
       res.set('Content-Type', 'text/html');
       res.send(page.html);
     }).catch(function (e) {
-      console.error(e.stack);
+      console.error(e);
     });
   } else {
     // not 404 page if tag abe image upload into each block

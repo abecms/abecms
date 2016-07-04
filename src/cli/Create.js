@@ -32,7 +32,7 @@ export default class Create {
 				this.addFolder(config.data.url)
 				this.addFolder(config.draft.url)
 	    }).catch(function(e) {
-	      console.error(e.stack)
+	      console.error(e)
 	    })
 	}
 

@@ -301,7 +301,7 @@ export function editor(fileName, tplUrl, fake) {
           json: json
         })
       }).catch(function(e) {
-        console.error(e.stack)
+        console.error(e)
       })
   })
 

@@ -72,8 +72,8 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
       _cli.log.write('publish-all', 'publish process finished in ' + dateStart + 'sec');
       process.exit(0);
     }).catch(function (e) {
-      _cli.log.write('publish-all', '[ ERROR ]' + e.stack);
-      console.error(e.stack);
+      _cli.log.write('publish-all', '[ ERROR ]' + e);
+      console.error(e);
     });
   } catch (e) {
     // statements

@@ -29,7 +29,7 @@ class Builder {
         saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
         console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
       }).catch(function(e) {
-        console.error(e.stack)
+        console.error(e)
       })
     })
   }

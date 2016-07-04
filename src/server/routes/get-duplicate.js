@@ -29,8 +29,8 @@ var route = function(req, res, next) {
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   }).catch(function(e) {
-    log.write('duplicate', '[ ERROR ]' + e.stack)
-    console.error(e.stack)
+    log.write('duplicate', '[ ERROR ]' + e)
+    console.error(e)
     reject()
   })
 }

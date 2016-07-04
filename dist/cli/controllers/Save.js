@@ -8,6 +8,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.checkRequired = checkRequired;
 exports.save = save;
+exports.saveJsonAndHtml = saveJsonAndHtml;
 exports.saveJson = saveJson;
 exports.saveHtml = saveHtml;
 exports.dateIso = dateIso;
@@ -129,15 +130,24 @@ function save(url, tplPath) {
       text = (0, _.getTemplate)(fullTpl);
     }
 
-    _.Util.getDataList(_.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
+    /**
+     * For paginate
+     */
+    var listRegSource = /({{abe.*type=[\'|\"]data.*}})/g,
+        matchSource,
+        paginated = [];
 
-      if (publishAll) {
-        // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-        // console.log(path.jsonPath)
-        // console.log(text.split("head")[1])
-        // console.log(json.hreflangs)
+    while (matchSource = listRegSource.exec(text)) {
+      var objSource = _.Util.getAllAttributes(matchSource[0], json);
+      if (typeof objSource.paginate !== 'undefined' && objSource.paginate !== null && objSource.paginate !== '') {
+        paginated.push({
+          key: objSource.key,
+          size: parseInt(objSource.paginate)
+        });
       }
+    }
 
+    _.Util.getDataList(_.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
       var obj = {
         type: type,
         template: {
@@ -158,10 +168,17 @@ function save(url, tplPath) {
 
       text = _.Util.removeDataList(text);
 
-      var page = new _.Page(tplUrl.publish.path, text, obj.json.content, true);
+      var res = {};
 
-      saveJson(obj.json.path, obj.json.content);
-      saveHtml(obj.html.path, page.html);
+      if (paginated.length > 0) {
+        Array.prototype.forEach.call(paginated, function (page) {
+          if (typeof page.key !== 'undefined' && page.key !== null) {
+            res = saveJsonAndHtml(tplUrl.publish.path, obj.json.path, obj.html.path, obj.json.content, text, type, page.key, page.size);
+          }
+        });
+      } else {
+        res = saveJsonAndHtml(tplUrl.publish.path, obj.json.path, obj.html.path, obj.json.content, text, type);
+      }
 
       obj = _.Hooks.instance.trigger('afterSave', obj);
 
@@ -173,18 +190,101 @@ function save(url, tplPath) {
         }
       }
 
-      resolve({
-        json: obj.json.content,
-        jsonPath: obj.json.path,
-        html: page.html,
-        htmlPath: path.htmlPath
-      });
+      resolve(res);
     }).catch(function (e) {
-      console.error(e.stack);
+      console.error(e);
     });
   });
 
   return p;
+}
+
+function splitArray(ar, chunkSize) {
+  return [].concat.apply([], ar.map(function (elem, i) {
+    return i % chunkSize ? [] : [ar.slice(i, i + chunkSize)];
+  }));
+}
+
+function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginateKey, paginateSize) {
+  var page = '';
+
+  if (type === 'publish' && typeof paginateKey !== 'undefined' && paginateKey !== null) {
+    var jsonPart = splitArray(json[paginateKey], paginateSize);
+    var pageToSave = [];
+    var paginateLink = [];
+
+    for (var k = 1, length3 = jsonPart.length; k <= length3; k++) {
+      var newJson = JSON.parse(JSON.stringify(json));
+      newJson[paginateKey] = jsonPart[k - 1];
+      var current = k;
+      var prev;
+      var next;
+      if (k !== 1) {
+        prev = k - 1;
+      }
+      if (k !== length3) {
+        next = k + 1;
+      }
+
+      var paginatePath = '';
+      if (k === 1) {
+        paginatePath = hPath;
+      } else {
+        paginatePath = _.fileUtils.removeExtension(hPath) + '-' + k + '.' + _.config.files.templates.extension;
+      }
+
+      var link = paginatePath.replace(_.config.root, '');
+      link = link.replace(_.config.publish.url, '');
+
+      paginateLink.push({
+        link: link,
+        index: k
+      });
+      pageToSave.push({
+        size: paginateSize,
+        path: paginatePath,
+        current: k,
+        json: newJson
+      });
+    }
+
+    Array.prototype.forEach.call(pageToSave, function (pSave) {
+      var jsonToSave = JSON.parse(JSON.stringify(pSave.json));
+      if (typeof jsonToSave.abe_meta.paginate === 'undefined' || jsonToSave.abe_meta.paginate === null) {
+        jsonToSave.abe_meta.paginate = {};
+      }
+      jsonToSave.abe_meta.paginate[paginateKey] = {
+        size: pSave.size,
+        current: pSave.current,
+        links: paginateLink
+      };
+
+      page = new _.Page(tplPath, html, jsonToSave, true);
+      saveHtml(pSave.path, page.html);
+    });
+
+    if (typeof json.abe_meta.paginate === 'undefined' || json.abe_meta.paginate === null) {
+      json.abe_meta.paginate = {
+        links: paginateLink,
+        size: paginateSize
+      };
+    }
+  } else {
+    page = new _.Page(tplPath, html, json, true);
+
+    saveHtml(hPath, page.html);
+  }
+  saveJson(jPath, json);
+  // page = new Page(tplPath, html, json, true)
+
+  // saveHtml(hPath, page.html)
+
+  return {
+    json: json,
+    jsonPath: jPath,
+    html: page.html,
+    htmlPath: hPath
+  };
 }
 
 function saveJson(url, json) {

@@ -68,8 +68,8 @@ var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = f
     () => {
       reject()
     }).catch(function(e) {
-      log.write('duplicate', '[ ERROR ]' + e.stack)
-      console.error(e.stack)
+      log.write('duplicate', '[ ERROR ]' + e)
+      console.error(e)
       reject()
     })
   })

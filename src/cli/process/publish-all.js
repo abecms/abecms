@@ -89,8 +89,8 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
         log.write('publish-all', 'publish process finished in ' + dateStart + 'sec')
         process.exit(0)
       }).catch(function(e) {
-        log.write('publish-all', '[ ERROR ]' + e.stack)
-        console.error(e.stack)
+        log.write('publish-all', '[ ERROR ]' + e)
+        console.error(e)
       })
   } catch(e) {
     // statements

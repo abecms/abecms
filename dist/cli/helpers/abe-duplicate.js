@@ -63,8 +63,8 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
     }, function () {
       reject();
     }).catch(function (e) {
-      _cli.log.write('duplicate', '[ ERROR ]' + e.stack);
-      console.error(e.stack);
+      _cli.log.write('duplicate', '[ ERROR ]' + e);
+      console.error(e);
       reject();
     });
   });

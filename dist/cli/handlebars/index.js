@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.sourceOption = exports.sourceAutocomplete = exports.sourceAttr = exports.recursivePrintConfig = exports.recursiveFolder = exports.printInput = exports.printConfig = exports.printBlock = exports.listPage = exports.folders = exports.compileAbe = exports.abeImport = exports.abeEngine = exports.translate = exports.testObj = exports.printJson = exports.notEmpty = exports.moduloIf = exports.math = exports.ifIn = exports.ifCond = exports.cleanTab = exports.className = exports.attrAbe = undefined;
+exports.sourceOption = exports.sourceAutocomplete = exports.sourceAttr = exports.recursivePrintConfig = exports.recursiveFolder = exports.printInput = exports.printConfig = exports.printBlock = exports.listPage = exports.folders = exports.compileAbe = exports.abeImport = exports.abeEngine = exports.times = exports.translate = exports.testObj = exports.printJson = exports.notEmpty = exports.moduloIf = exports.math = exports.ifIn = exports.ifCond = exports.cleanTab = exports.className = exports.attrAbe = undefined;
 
 var _handlebars = require('handlebars');
 
@@ -65,6 +65,10 @@ var _translate = require('./utils/translate');
 
 var _translate2 = _interopRequireDefault(_translate);
 
+var _times = require('./utils/times');
+
+var _times2 = _interopRequireDefault(_times);
+
 var _abeEngine = require('./abe/abeEngine');
 
 var _abeEngine2 = _interopRequireDefault(_abeEngine);
@@ -120,12 +124,12 @@ var _sourceOption2 = _interopRequireDefault(_sourceOption);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* Register utilities */
-
-
-/* Handlebar utilities */
 _handlebars2.default.registerHelper('attrAbe', _attrAbe2.default);
 
 /* Handlebar abe */
+
+
+/* Handlebar utilities */
 
 _handlebars2.default.registerHelper('className', _className2.default);
 _handlebars2.default.registerHelper('cleanTab', _cleanTab2.default);
@@ -138,6 +142,7 @@ _handlebars2.default.registerHelper('notEmpty', _notEmpty2.default);
 _handlebars2.default.registerHelper('printJson', _printJson2.default);
 _handlebars2.default.registerHelper('testObj', _testObj2.default);
 _handlebars2.default.registerHelper('i18nAbe', _translate2.default);
+_handlebars2.default.registerHelper('times', _times2.default);
 
 /* Register abe */
 _handlebars2.default.registerHelper('abeImport', _abeImport2.default);
@@ -161,6 +166,7 @@ exports.notEmpty = _notEmpty2.default;
 exports.printJson = _printJson2.default;
 exports.testObj = _testObj2.default;
 exports.translate = _translate2.default;
+exports.times = _times2.default;
 exports.abeEngine = _abeEngine2.default;
 exports.abeImport = _abeImport2.default;
 exports.compileAbe = _compileAbe2.default;

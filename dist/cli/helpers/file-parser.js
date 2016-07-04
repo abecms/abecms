@@ -412,15 +412,17 @@ var FileParser = function () {
 
 			drafted = FileParser.getMetas(drafted, 'draft');
 			published = FileParser.getMetas(published, 'draft');
+			var truePublished = [];
 
 			published.forEach(function (pub) {
 
 				var json = FileParser.getJson(FileParser.changePathEnv(pub.path, _.config.data.url).replace(new RegExp("\\." + _.config.files.templates.extension), '.json'));
-				if (typeof json[_.config.meta.name][_.config.draft.url] !== 'undefined' && json[_.config.meta.name][_.config.draft.url] !== null) {
+				if (typeof json[_.config.meta.name] !== 'undefined' && json[_.config.meta.name] !== null && typeof json[_.config.meta.name][_.config.draft.url] !== 'undefined' && json[_.config.meta.name][_.config.draft.url] !== null) {
 					pub.filePath = json[_.config.meta.name][_.config.draft.url].latest.abeUrl;
+					truePublished.push(pub);
 				}
 			});
-			var merged = _.fileUtils.mergeFiles(drafted, published);
+			var merged = _.fileUtils.mergeFiles(drafted, truePublished);
 
 			site.files = _.Hooks.instance.trigger('afterGetAllFiles', merged);
 

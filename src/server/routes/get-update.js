@@ -29,8 +29,8 @@ var route = function(req, res, next) {
     res.send(JSON.stringify(result))
   }).catch(function(e) {
     reject()
-    log.write('update', '[ ERROR ]' + e.stack)
-    console.error(e.stack)
+    log.write('update', '[ ERROR ]' + e)
+    console.error(e)
   })
 }
 

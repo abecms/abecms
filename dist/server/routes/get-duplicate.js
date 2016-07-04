@@ -30,8 +30,8 @@ var route = function route(req, res, next) {
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result));
   }).catch(function (e) {
-    _cli.log.write('duplicate', '[ ERROR ]' + e.stack);
-    console.error(e.stack);
+    _cli.log.write('duplicate', '[ ERROR ]' + e);
+    console.error(e);
     reject();
   });
 };

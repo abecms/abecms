@@ -15,7 +15,7 @@ var route = function route(req, res, next) {
     (0, _cli.save)(_cli.fileUtils.getFilePath(filePath), req.body.tplPath, req.body.json, '', 'draft', null, 'publish').then(function () {
       resolve();
     }).catch(function (e) {
-      console.error(e.stack);
+      console.error(e);
     });
   });
 
@@ -39,7 +39,7 @@ var route = function route(req, res, next) {
       res.send(JSON.stringify(result));
     });
   }).catch(function (e) {
-    console.error(e.stack);
+    console.error(e);
   });
 };
 

@@ -30,8 +30,8 @@ var route = function route(req, res, next) {
     res.send(JSON.stringify(result));
   }).catch(function (e) {
     reject();
-    _cli.log.write('update', '[ ERROR ]' + e.stack);
-    console.error(e.stack);
+    _cli.log.write('update', '[ ERROR ]' + e);
+    console.error(e);
   });
 };
 
