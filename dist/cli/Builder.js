@@ -33,7 +33,7 @@ var Builder = function Builder(root, folder, dest, flow) {
       (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
       console.log(_.fileUtils.concatPath(root, dest + json.abe_meta.link));
     }).catch(function (e) {
-      console.error(e.stack);
+      console.error(e);
     });
   });
 };

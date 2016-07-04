@@ -444,11 +444,11 @@ var Utils = function () {
         _es6Promise.Promise.all(promises).then(function () {
           resolve();
         }).catch(function (e) {
-          console.error(e.stack);
+          console.error(e);
         });
         // return filesRequest
       }).catch(function (e) {
-        console.error(e.stack);
+        console.error(e);
       });
 
       return p;
@@ -487,6 +487,7 @@ var Utils = function () {
         order: 0,
         required: false,
         editable: true,
+        paginate: null,
         visible: true
       };
 
@@ -501,13 +502,14 @@ var Utils = function () {
         maxLength: (0, _.getAttr)(str, 'max-length'),
         value: json[key],
         tab: (0, _.getAttr)(str, 'tab'),
-        source: typeof source !== 'undefined' && source !== null && source !== '' ? json[_.config.source.name][key] : null,
+        source: typeof source !== 'undefined' && source !== null && source !== '' ? typeof json[_.config.source.name] !== 'undefined' && json[_.config.source.name] !== null && json[_.config.source.name] !== '' ? json[_.config.source.name][key] : null : null,
         display: (0, _.getAttr)(str, 'display'),
         reload: (0, _.getAttr)(str, 'reload'),
         order: (0, _.getAttr)(str, 'order'),
         required: (0, _.getAttr)(str, 'required'),
         visible: (0, _.getAttr)(str, 'visible'),
-        editable: (0, _.getAttr)(str, 'editable')
+        editable: (0, _.getAttr)(str, 'editable'),
+        paginate: (0, _.getAttr)(str, 'paginate')
       };
       obj = (0, _extend2.default)(true, defaultValues, obj);
 

@@ -125,13 +125,13 @@ var route = function route(req, res, next) {
         }
         resolve();
       }).catch(function (e) {
-        console.error(e.stack);
+        console.error(e);
       });
     } else {
       resolve();
     }
   }).catch(function (e) {
-    console.error(e.stack); // "oh, no!"
+    console.error(e); // "oh, no!"
   });
 
   p.then(function () {

@@ -133,7 +133,7 @@ export default class EditorSave {
           target.removeAttribute('disabled')
           if(result.success === 1) window.location.href = reloadUrl;
         }).catch(function(e) {
-          console.error(e.stack)
+          console.error(e)
         })
   }
 

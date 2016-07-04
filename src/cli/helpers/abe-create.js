@@ -50,7 +50,7 @@ var create = function(template, path, name, req, forceJson = {}) {
               }).catch(function(e) {
                 reject()
                 log.write('create', '[ ERROR ]' + e)
-                console.error(e.stack)
+                console.error(e)
               })
         }else {
           log.write('create', '[ INFO ] file already exist, exit')
@@ -63,7 +63,7 @@ var create = function(template, path, name, req, forceJson = {}) {
       }
     }).catch(function(e) {
       log.write('create', '[ ERROR ]' + e)
-      console.error(e.stack)
+      console.error(e)
       reject()
     })
 

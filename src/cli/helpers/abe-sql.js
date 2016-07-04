@@ -214,7 +214,7 @@ export default class Sql {
     var request = Sql.handleSqlRequest(getAttr(match, 'source')),
         limit = 0,
         res = []
-
+    
     let data = config.data.url
     var files = []
 

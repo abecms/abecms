@@ -163,7 +163,9 @@ var FileAttr = function () {
 
       if (_.fileUtils.isFile(tplUrl.publish.json)) {
         json = _.FileParser.getJson(tplUrl.publish.json);
-        publishDate = new Date(json[_.config.meta.name].latest.date);
+        if (typeof json !== 'undefined' && json !== null && typeof json[_.config.meta.name] !== 'undefined' && json[_.config.meta.name] !== null) {
+          publishDate = new Date(json[_.config.meta.name].latest.date);
+        }
       }
 
       var publishVersion = false;

@@ -432,11 +432,11 @@ export default class Utils {
         .then(() => {
           resolve()
         }).catch(function(e) {
-          console.error(e.stack)
+          console.error(e)
         })
       // return filesRequest
       }).catch(function(e) {
-        console.error(e.stack);
+        console.error(e);
       })
 
     return p
@@ -471,6 +471,7 @@ export default class Utils {
         ,order: 0
         ,required: false
         ,editable: true
+        ,paginate: null
         ,visible: true
       }
 
@@ -485,13 +486,16 @@ export default class Utils {
         ,maxLength: getAttr(str, 'max-length')
         ,value: json[key]
         ,tab: getAttr(str, 'tab')
-        ,source: (typeof source !== 'undefined' && source !== null && source !== '') ? json[config.source.name][key] : null
+        ,source: (typeof source !== 'undefined' && source !== null && source !== '')
+          ? ((typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null && json[config.source.name] !== '')
+              ? json[config.source.name][key] : null) : null
         ,display: getAttr(str, 'display')
         ,reload: getAttr(str, 'reload')
         ,order: getAttr(str, 'order')
         ,required: getAttr(str, 'required')
         ,visible: getAttr(str, 'visible')
         ,editable: getAttr(str, 'editable')
+        ,paginate: getAttr(str, 'paginate')
       }
     obj = extend(true, defaultValues, obj)
 

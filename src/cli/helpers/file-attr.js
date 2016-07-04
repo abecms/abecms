@@ -119,7 +119,10 @@ export default class FileAttr {
 
     if(fileUtils.isFile(tplUrl.publish.json)) {
       json = FileParser.getJson(tplUrl.publish.json)
-      publishDate = new Date(json[config.meta.name].latest.date)
+      if(typeof json !== 'undefined' && json !== null
+        && typeof json[config.meta.name] !== 'undefined' && json[config.meta.name] !== null) {
+        publishDate = new Date(json[config.meta.name].latest.date)
+      }
     }
 
     var publishVersion = false

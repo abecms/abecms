@@ -48,7 +48,7 @@ var Create = function () {
 				_this.addFolder(_.config.data.url);
 				_this.addFolder(_.config.draft.url);
 			}).catch(function (e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 		}
 	}, {

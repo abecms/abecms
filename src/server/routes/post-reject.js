@@ -20,7 +20,7 @@ var route = function(req, res, next){
       .then(() => {
         resolve()
       }).catch(function(e) {
-        console.error(e.stack)
+        console.error(e)
       })
   })
 
@@ -52,7 +52,7 @@ var route = function(req, res, next){
         res.send(JSON.stringify(result))
       })
   }).catch(function(e) {
-    console.error(e.stack)
+    console.error(e)
   })
 }
 

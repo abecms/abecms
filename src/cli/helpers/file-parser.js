@@ -368,6 +368,7 @@ export default class FileParser {
 
     drafted = FileParser.getMetas(drafted, 'draft')
     published = FileParser.getMetas(published, 'draft')
+    var truePublished = []
 
     published.forEach(function (pub) {
     	
@@ -375,12 +376,15 @@ export default class FileParser {
   								FileParser.changePathEnv(pub.path, config.data.url)
   													.replace(new RegExp("\\." + config.files.templates.extension), '.json')
 								  )
-    	if(typeof json[config.meta.name][config.draft.url] !== 'undefined'
+    	if(typeof json[config.meta.name] !== 'undefined'
+    		&& json[config.meta.name] !== null
+    		&& typeof json[config.meta.name][config.draft.url] !== 'undefined'
     		&& json[config.meta.name][config.draft.url] !== null) {
   			pub.filePath = json[config.meta.name][config.draft.url].latest.abeUrl
+    		truePublished.push(pub)
     	}
     })
-    var merged = fileUtils.mergeFiles(drafted, published)
+    var merged = fileUtils.mergeFiles(drafted, truePublished)
 
     site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
 

@@ -47,7 +47,7 @@ var create = function create(template, path, name, req) {
         }).catch(function (e) {
           reject();
           _cli.log.write('create', '[ ERROR ]' + e);
-          console.error(e.stack);
+          console.error(e);
         });
       } else {
         _cli.log.write('create', '[ INFO ] file already exist, exit');
@@ -60,7 +60,7 @@ var create = function create(template, path, name, req) {
     }
   }).catch(function (e) {
     _cli.log.write('create', '[ ERROR ]' + e);
-    console.error(e.stack);
+    console.error(e);
     reject();
   });
 
