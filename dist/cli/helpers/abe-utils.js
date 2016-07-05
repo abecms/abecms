@@ -300,6 +300,7 @@ var Utils = function () {
             var source = (0, _.getAttr)(match[0], 'source');
             var key = (0, _.getAttr)(match[0], 'key');
             var editable = (0, _.getAttr)(match[0], 'editable');
+            var paginate = (0, _.getAttr)(match[0], 'paginate');
             editable = typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false' ? false : true;
 
             var autocomplete = (0, _.getAttr)(match[0], 'autocomplete');
@@ -327,6 +328,32 @@ var Utils = function () {
                   jsonPage[key] = data;
                 }
 
+                if (typeof paginate !== 'undefined' && paginate !== null && paginate !== '') {
+                  paginate = parseInt(paginate);
+                  if (typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
+                    jsonPage.abe_meta.paginate = {};
+                  }
+                  if (typeof jsonPage.abe_meta.paginate[key] === 'undefined' || jsonPage.abe_meta.paginate[key] === null) {
+                    jsonPage.abe_meta.paginate[key] = {};
+                  }
+
+                  var linksSize = Math.round(data.length / paginate);
+
+                  jsonPage.abe_meta.paginate[key].size = paginate;
+                  jsonPage.abe_meta.paginate[key].current = 1;
+                  jsonPage.abe_meta.paginate[key].links = [];
+                  if (linksSize > 0) {
+                    for (var i = 0; i < linksSize; i++) {
+                      var link = jsonPage.abe_meta.link;
+                      link = _.fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + _.config.files.templates.extension;
+                      jsonPage.abe_meta.paginate[key].links.push({
+                        link: link,
+                        index: i + 1
+                      });
+                    }
+                  }
+                }
+
                 if (typeof jsonPage[key] !== 'undefined' && jsonPage[key] !== null) {
                   var newJsonValue = [];
                   Array.prototype.forEach.call(jsonPage[key], function (oldValue) {
@@ -336,8 +363,6 @@ var Utils = function () {
                       }
                     });
                   });
-
-                  jsonPage[key] = newJsonValue;
                 }
 
                 resolveSource();

@@ -373,6 +373,7 @@ export default class Page {
 
     while (match = listReg.exec(text)) {
       var type = 'text'
+      , paginate = getAttr(match[0], 'paginate')
       , editable = getAttr(match[0], 'editable')
       , key = getAttr(match[0], 'key')
       , display = getAttr(match[0], 'display')
@@ -388,6 +389,11 @@ export default class Page {
 
       if(!editable) {
         json[key] = json[source][key]
+      }
+
+      if(paginate !== '' && typeof json[key] !== 'undefined' && json[key] !== null) {
+        paginate = parseInt(paginate)
+        json[key] = json[key].slice(0, parseInt(paginate))
       }
     }
   }

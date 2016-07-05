@@ -473,7 +473,7 @@ export default class FileParser {
 				// json[config.reference.name] = references
 			}
 		}catch(e) {
-			if(displayError) console.log(clc.red(`Error loading json ${path}`),  `\n${e}`)
+			// if(displayError) console.log(clc.red(`Error loading json ${path}`),  `\n${e}`)
 		}
 
     // HOOKS afterGetJson

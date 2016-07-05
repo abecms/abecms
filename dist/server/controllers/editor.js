@@ -177,7 +177,10 @@ function addSource() {
   while (match = listReg.exec(text)) {
     var obj = _cli.Util.getAllAttributes(match[0], json);
 
-    if (obj.editable) {
+    if (obj.paginate) {
+      obj.value = obj.value.slice(0, parseInt(obj.paginate));
+      add(obj);
+    } else if (obj.editable) {
       add(obj);
     } else {
       json[obj.key] = obj.source;
@@ -264,7 +267,7 @@ function editor(fileName, tplUrl, fake) {
 
     text = (0, _cli.getTemplate)(fileName);
 
-    _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
+    _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json, true).then(function () {
       addSource();
 
       text = _cli.Util.removeDataList(text);

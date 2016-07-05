@@ -379,6 +379,7 @@ var Page = function () {
 
       while (match = listReg.exec(text)) {
         var type = 'text',
+            paginate = (0, _.getAttr)(match[0], 'paginate'),
             editable = (0, _.getAttr)(match[0], 'editable'),
             key = (0, _.getAttr)(match[0], 'key'),
             display = (0, _.getAttr)(match[0], 'display'),
@@ -394,6 +395,11 @@ var Page = function () {
 
         if (!editable) {
           json[key] = json[source][key];
+        }
+
+        if (paginate !== '' && typeof json[key] !== 'undefined' && json[key] !== null) {
+          paginate = parseInt(paginate);
+          json[key] = json[key].slice(0, parseInt(paginate));
         }
       }
     }

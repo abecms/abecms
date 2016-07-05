@@ -285,6 +285,7 @@ export default class Utils {
           var source = getAttr(match[0], 'source')
           var key = getAttr(match[0], 'key')
           var editable = getAttr(match[0], 'editable')
+          var paginate = getAttr(match[0], 'paginate')
           editable = (typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') ? false : true
 
           var autocomplete = getAttr(match[0], 'autocomplete')
@@ -312,6 +313,32 @@ export default class Utils {
                 jsonPage[key] = data
               }
 
+              if(typeof paginate !== 'undefined' && paginate !== null && paginate !== '') {
+                paginate = parseInt(paginate)
+                if(typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
+                  jsonPage.abe_meta.paginate = {}
+                }
+                if(typeof jsonPage.abe_meta.paginate[key] === 'undefined' || jsonPage.abe_meta.paginate[key] === null) {
+                  jsonPage.abe_meta.paginate[key] = {}
+                }
+
+                var linksSize = Math.round(data.length / paginate)
+
+                jsonPage.abe_meta.paginate[key].size = paginate
+                jsonPage.abe_meta.paginate[key].current = 1
+                jsonPage.abe_meta.paginate[key].links = []
+                if (linksSize > 0) {
+                  for (var i = 0; i < linksSize; i++) {
+                    var link = jsonPage.abe_meta.link
+                    link = fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + config.files.templates.extension
+                    jsonPage.abe_meta.paginate[key].links.push({
+                      link: link,
+                      index: (i + 1)
+                    })
+                  }
+                }
+              }
+
               if(typeof jsonPage[key] !== 'undefined' && jsonPage[key] !== null) {
                 var newJsonValue = []
                 Array.prototype.forEach.call(jsonPage[key], (oldValue) => {
@@ -322,8 +349,6 @@ export default class Utils {
                     }
                   })
                 })
-
-                jsonPage[key] = newJsonValue
               }
 
               resolveSource()
