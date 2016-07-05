@@ -75,11 +75,7 @@ function save(url, tplPath) {
   var previousSave = arguments.length <= 5 || arguments[5] === undefined ? null : arguments[5];
   var realType = arguments.length <= 6 || arguments[6] === undefined ? 'draft' : arguments[6];
 
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
-  console.log('before', url);
   url = (0, _.cleanSlug)(url);
-
-  console.log('after', url);
 
   var p = new _es6Promise.Promise(function (resolve, reject) {
     if (type === 'reject') {

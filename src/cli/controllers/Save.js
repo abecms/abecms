@@ -58,11 +58,7 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft') {
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  console.log('before', url)
   url = cleanSlug(url)
-
-  console.log('after', url)
 
   var p = new Promise((resolve, reject) => {
     if(type === 'reject'){
