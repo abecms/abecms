@@ -175,7 +175,10 @@ function addSource() {
   while (match = listReg.exec(text)) {
     var obj = Util.getAllAttributes(match[0], json)
 
-    if(obj.editable) {
+    if(obj.paginate) {
+      obj.value = obj.value.slice(0, parseInt(obj.paginate))
+      add(obj)
+    }else if(obj.editable) {
       add(obj)
     }else {
       json[obj.key] = obj.source
@@ -262,7 +265,7 @@ export function editor(fileName, tplUrl, fake) {
     
     text = getTemplate(fileName)
 
-    Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
+    Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json, true)
       .then(() => {
         addSource()
 

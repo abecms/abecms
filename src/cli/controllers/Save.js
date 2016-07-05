@@ -144,13 +144,6 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           }
         }
 
-        if (publishAll) {
-          // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-          // console.log(path.jsonPath)
-          // console.log(text.split("head")[1])
-          // console.log(json.hreflangs)
-        }
-
           var obj = {
             type:type,
             template:{

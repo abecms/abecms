@@ -517,9 +517,9 @@ var FileParser = function () {
 					// var references = FileParser.getReference()
 					// json[config.reference.name] = references
 				}
-			} catch (e) {
-				if (displayError) console.log(_cliColor2.default.red('Error loading json ' + path), '\n' + e);
-			}
+			} catch (e) {}
+			// if(displayError) console.log(clc.red(`Error loading json ${path}`),  `\n${e}`)
+
 
 			// HOOKS afterGetJson
 			json = _.Hooks.instance.trigger('afterGetJson', json);
