@@ -132,6 +132,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
         .then(() => {
 
+        json = Hooks.instance.trigger('afterGetDataListOnSave', json)
         for(var prop in json){
           if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
             var valuesAreEmplty = true
@@ -283,7 +284,8 @@ export function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginat
         jsonToSave.abe_meta.paginate[paginateKey].last = pSave.last
       }
 
-      page = new Page(tplPath, html, jsonToSave, true)
+      var paginateHtml = Hooks.instance.trigger('beforePaginateHtml', html, pSave.current)
+      page = new Page(tplPath, paginateHtml, jsonToSave, true)
       saveHtml(pSave.path, page.html)
     })
 

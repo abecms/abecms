@@ -149,6 +149,7 @@ function save(url, tplPath) {
 
     _.Util.getDataList(_.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
 
+      json = _.Hooks.instance.trigger('afterGetDataListOnSave', json);
       for (var prop in json) {
         if (_typeof(json[prop]) === 'object' && Array.isArray(json[prop]) && json[prop].length === 1) {
           var valuesAreEmplty = true;
@@ -298,7 +299,8 @@ function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginateKey, p
         jsonToSave.abe_meta.paginate[paginateKey].last = pSave.last;
       }
 
-      page = new _.Page(tplPath, html, jsonToSave, true);
+      var paginateHtml = _.Hooks.instance.trigger('beforePaginateHtml', html, pSave.current);
+      page = new _.Page(tplPath, paginateHtml, jsonToSave, true);
       saveHtml(pSave.path, page.html);
     });
 
