@@ -77,8 +77,6 @@ router.get('/abe/list-url*', function (req, res, next) {
 });
 router.get('/abe*', _routes.getMain);
 
-router.get('/site*', _routes.getSite);
-
 var routes = _cli.Plugins.instance.getRoutes();
 Array.prototype.forEach.call(routes, function (route) {
   if (typeof route.get !== 'undefined' && route.get !== null) {

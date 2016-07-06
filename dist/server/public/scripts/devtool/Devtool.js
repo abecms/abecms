@@ -20,18 +20,50 @@ var Devtool = exports.Devtool = function () {
     this.updateBrowserSize();
   }
 
-  // ABE devtool
-
-
   _createClass(Devtool, [{
+    key: 'getCookie',
+    value: function getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+  }, {
+    key: 'setCookie',
+    value: function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+      var expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+
+    // ABE devtool
+
+  }, {
     key: 'initDevtool',
     value: function initDevtool() {
       var _this = this;
 
+      var baseWidth = this.getCookie('editorWidth');
+      if (typeof baseWidth !== 'undefined' && baseWidth !== null && baseWidth !== '') {
+        baseWidth = baseWidth;
+        this.form.width(baseWidth);
+        this.form.attr('data-width', baseWidth);
+        this.updateBrowserSize();
+      }
       this.ruler.on('mousedown', function (e) {
         _this.body.addClass('resizing');
+        var newWidth;
         _this.body.on('mousemove', function (e) {
-          var newWidth = e.clientX / window.innerWidth * 100 + '%';
+          newWidth = e.clientX / window.innerWidth * 100 + '%';
           _this.form.width(newWidth);
           _this.form.attr('data-width', newWidth);
           _this.updateBrowserSize();
@@ -39,6 +71,7 @@ var Devtool = exports.Devtool = function () {
         _this.body.one('mouseup mouseleave', function () {
           _this.body.off('mousemove');
           _this.body.removeClass('resizing');
+          _this.setCookie('editorWidth', newWidth, 365);
         });
       });
       $(window).on('resize', function () {

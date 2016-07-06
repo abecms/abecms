@@ -49,17 +49,42 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var middleware = function middleware(req, res, next) {
-  if (req.originalUrl === '') {
-    var result = _cli.FileParser.getAllFiles();
-    var html = '<a href="/abe/">abe</abe>';
-    if (typeof result[0].files !== 'undefined' && result[0].files !== null) {
-      html = '<ul>';
-      Array.prototype.forEach.call(result[0].files, function (item) {
-        html += '<li><a href="' + item.path + '">' + item.path + '</a></li>';
-      });
+  if (req.originalUrl.indexOf('/abe/') > -1 || req.originalUrl.indexOf('/plugin/') > -1) {
+    return next();
+  }
 
-      html += '</ul>';
+  if (req.originalUrl === '' || req.originalUrl === '/' || req.originalUrl.indexOf('.') === -1) {
+    var path = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.publish.url, req.originalUrl);
+    if (!_cli.folderUtils.isFolder(path)) {
+      return next();
     }
+    var files = _cli.FileParser.getFiles(path, true, 0, /(.*?)/);
+
+    var folders = _cli.FileParser.getFolders(path, true, 0);
+    var html = '<ul>';
+    html += '<li><a href="/abe/">abe</abe></li>';
+    html += '<br />';
+    if (req.originalUrl !== '/' && req.originalUrl !== '') {
+      var parent = req.originalUrl.replace(/\/$/, '').split('/');
+      parent.pop();
+      parent = parent.join('/') + '/';
+      html += '<li><a href="' + parent + '">../</abe></li>';
+    }
+
+    if (typeof folders !== 'undefined' && folders !== null) {
+
+      Array.prototype.forEach.call(folders, function (folder) {
+        var url = folder.path.replace(_cli.config.root, '').replace(_cli.config.publish.url, '');
+        html += '<li><a href="' + url + '">/' + folder.cleanPath + '</a></li>';
+      });
+    }
+    if (typeof files !== 'undefined' && files !== null) {
+      Array.prototype.forEach.call(files, function (file) {
+        var url = file.path.replace(_cli.config.root, '').replace(_cli.config.publish.url, '');
+        html += '<li><a href="' + url + '">' + file.cleanPath + '</a></li>';
+      });
+    }
+    html += '</ul>';
 
     res.set('Content-Type', 'text/html');
     return res.send(html);

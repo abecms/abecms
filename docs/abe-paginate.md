@@ -40,19 +40,44 @@ New variables are set inside "abe_meta.paginate"
       "index": "3"
     }
   ],
-  "size": "10",
-  "current": "1"
+  "size": "9",
+  "current": "1",
+  "first": "/index.html",
+  "next": "/index-2.html",
+  "last": "/index-3.html"
 }
 ```
 
 So you can use simple handlebar to make you paging, like this
 
 ```html
-{{#each abe_meta.paginate.articles.links}}
-	<a href="{{this.link}}"
-	{{#ifCond index @root.abe_meta.paginate.articles.current}}style="color: red"{{/ifCond}}
-	>{{index}}</a>
+{{#if abe_meta.paginate.push_main.first}}
+<li>
+    <a href="{{abe_meta.paginate.push_main.first}}" class="">first</a>
+</li>
+{{/if}}
+{{#if abe_meta.paginate.push_main.prev}}
+<li>
+    <a href="{{abe_meta.paginate.push_main.prev}}" class="">prev</a>
+</li>
+{{/if}}
+{{#each abe_meta.paginate.push_main.links}}
+    <li>
+        <a href="{{this.link}}" class="{{#ifCond index @root.abe_meta.paginate.push_main.current}}[ selected class ]{{/ifCond}}">
+            {{index}}
+        </a>
+    </li>
 {{/each}}
+{{#if abe_meta.paginate.push_main.next}}
+<li>
+    <a href="{{abe_meta.paginate.push_main.next}}" class="">next</a>
+</li>
+{{/if}}
+{{#if abe_meta.paginate.push_main.last}}
+<li>
+    <a href="{{abe_meta.paginate.push_main.last}}" class="">last</a>
+</li>
+{{/if}}
 ```
 
 this will render

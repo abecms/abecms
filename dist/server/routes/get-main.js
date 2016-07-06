@@ -153,6 +153,9 @@ var route = function route(req, res, next) {
     var _text = obj ? obj.text : false;
     var _file = tplUrl ? tplUrl.draft.file : false;
     var _filePath = req.query.filePath ? req.query.filePath : false;
+    if (_filePath) {
+      _filePath = '/' + _filePath.replace(/^\/+/, '');
+    }
 
     var EditorVariables = {
       isHome: isHome,

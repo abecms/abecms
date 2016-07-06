@@ -24,7 +24,6 @@ import {
   ,getUnpublish
   ,getDelete
   ,postUpload
-  ,getSite
 } from '../routes'
 
 import {
@@ -44,7 +43,6 @@ import {
   getTemplate,
   Hooks,
   Plugins,
-  serveSite,
   Handlebars,
   cleanSlug
 } from '../../cli'
@@ -74,8 +72,6 @@ router.get('/abe/list-url*', function (req, res, next) {
    getListUrl(router, req, res, next) 
 })
 router.get('/abe*', getMain)
-
-router.get('/site*', getSite)
 
 var routes = Plugins.instance.getRoutes()
 Array.prototype.forEach.call(routes, (route) => {
