@@ -9,9 +9,9 @@
       </button><!-- /end btn manager -->
       {{#if manager.file.isPublished}}
       <!-- btn preview -->
-      <button class='btn btn-primary btn-visit-site' data-href="/site/" data-page="{{urlToSaveFile}}"><span class="glyphicon glyphicon-eye-open"></span>
+      <a class='btn btn-primary btn-visit-site' href="{{urlToSaveFile}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span>
         {{@root.text.preview}}
-      </button><!-- /end btn preview -->
+      </a><!-- /end btn preview -->
       {{/if}}
       {{abeImport 'toolbar' manager.config this}}
       {{abeImport 'toolbar-more' manager.config this}}

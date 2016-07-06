@@ -339,18 +339,31 @@ var Utils = function () {
 
                   var linksSize = Math.round(data.length / paginate);
 
-                  jsonPage.abe_meta.paginate[key].size = paginate;
-                  jsonPage.abe_meta.paginate[key].current = 1;
-                  jsonPage.abe_meta.paginate[key].links = [];
                   if (linksSize > 0) {
-                    for (var i = 0; i < linksSize; i++) {
+                    jsonPage.abe_meta.paginate[key].size = paginate;
+                    jsonPage.abe_meta.paginate[key].current = 1;
+                    jsonPage.abe_meta.paginate[key].links = [];
+
+                    if (typeof jsonPage.abe_meta.paginate[key].prev !== 'undefined' && jsonPage.abe_meta.paginate[key].prev !== null) {
+                      delete jsonPage.abe_meta.paginate[key].prev;
+                    }
+                    if (typeof jsonPage.abe_meta.paginate[key].first === 'undefined' || jsonPage.abe_meta.paginate[key].first === null) {
+                      jsonPage.abe_meta.paginate[key].first = jsonPage.abe_meta.link;
+                    }
+                    for (var i = 0; i <= linksSize; i++) {
                       var link = jsonPage.abe_meta.link;
-                      link = _.fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + _.config.files.templates.extension;
+                      if (i > 0) {
+                        link = _.fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + _.config.files.templates.extension;
+                      }
                       jsonPage.abe_meta.paginate[key].links.push({
                         link: link,
                         index: i + 1
                       });
                     }
+                    if ((typeof jsonPage.abe_meta.paginate[key].next === 'undefined' || jsonPage.abe_meta.paginate[key].next === null) && typeof jsonPage.abe_meta.paginate[key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[key].links[1] !== null && typeof jsonPage.abe_meta.paginate[key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[key].links[1].link !== null) {
+                      jsonPage.abe_meta.paginate[key].next = jsonPage.abe_meta.paginate[key].links[1].link;
+                    }
+                    jsonPage.abe_meta.paginate[key].last = jsonPage.abe_meta.paginate[key].links[jsonPage.abe_meta.paginate[key].links.length - 1].link;
                   }
                 }
 

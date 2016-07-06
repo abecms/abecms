@@ -136,7 +136,7 @@ var route = function route(req, res, next) {
   });
 
   p.then(function () {
-
+    var dateStart = new Date();
     manager.home = {
       files: _cli.FileParser.getAllFiles()
     };

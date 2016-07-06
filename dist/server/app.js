@@ -54,6 +54,8 @@ var _nodeUuid2 = _interopRequireDefault(_nodeUuid);
 
 var _cli = require('../cli');
 
+var _middlewares = require('./middlewares');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var abePort = null;
@@ -95,6 +97,10 @@ _portfinder2.default.getPort(function (err, freePort) {
   }
 
   var app = (0, _express2.default)(opts);
+
+  app.set('files', _cli.FileParser.getAllFiles());
+  app.set('config', _cli.config.getConfigByWebsite());
+  app.set('projectFiles', _cli.FileParser.getProjetFiles());
 
   app.use(_bodyParser2.default.json({ limit: '1gb' }));
   app.use(_bodyParser2.default.urlencoded({ limit: '1gb', extended: true, parameterLimit: 10000 }));
@@ -147,13 +153,16 @@ _portfinder2.default.getPort(function (err, freePort) {
 
   app.locals.layout = false;
 
+  app.use(_middlewares.middleWebsite);
   app.use(_express2.default.static(__dirname + '/public'));
+
   _cli.FileParser.copySiteAssets();
 
   var sites = _cli.FileParser.getFolders(_cli.config.root.replace(/\/$/, ""), false, 0);
 
   var publish = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.publish.url);
   app.use(_express2.default.static(publish));
+  // app.use(express.static(publish))
 
   if (_cli.config.partials !== '') {
     if (_cli.fileUtils.isFile(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.partials))) {

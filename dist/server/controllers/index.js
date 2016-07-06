@@ -77,13 +77,6 @@ router.get('/abe/list-url*', function (req, res, next) {
 });
 router.get('/abe*', _routes.getMain);
 
-router.get('/', function (req, res, next) {
-  _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
-  if (typeof res._header !== 'undefined' && res._header !== null) return;
-
-  res.redirect('/abe/');
-});
-
 router.get('/site*', _routes.getSite);
 
 var routes = _cli.Plugins.instance.getRoutes();
