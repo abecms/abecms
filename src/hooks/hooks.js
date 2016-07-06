@@ -145,6 +145,11 @@ var hooks = {
      return text
   },
 
+  /***************** Pagingate *****************/
+  beforePaginateHtml: (html, index, abe) => {
+     return html
+  },
+
   /***************** Page *****************/
   beforePageText: (text, json, Handlebars, abe) => {
      return text

@@ -150,6 +150,11 @@ var hooks = {
       return text;
    },
 
+   /***************** Pagingate *****************/
+   beforePaginateHtml: function beforePaginateHtml(html, index, abe) {
+      return html;
+   },
+
    /***************** Page *****************/
    beforePageText: function beforePageText(text, json, Handlebars, abe) {
       return text;
