@@ -43,7 +43,6 @@ import Sql from './helpers/abe-sql'
 import abeProcess from './helpers/abe-process'
 import Page from './controllers/Page'
 import {save, checkRequired, saveJson} from './controllers/Save'
-import serveSite from './controllers/ServeSite'
 import Hooks from './helpers/abe-hooks'
 import Plugins from './helpers/abe-plugins'
 import Locales from './helpers/abe-locales'
@@ -89,7 +88,6 @@ export {
 	,log
 	,Page
 	,save
-	,serveSite
 	,Hooks
 	,Plugins
 	,Locales

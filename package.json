@@ -65,7 +65,6 @@
     "node-sqlparser": "^1.0.2",
     "on": "^1.3.0",
     "openurl": "^1.1.0",
-    "paperboy": "0.0.5",
     "pm2": "^1.1.3",
     "portfinder": "^1.0.3",
     "prettyjson": "^1.1.3",

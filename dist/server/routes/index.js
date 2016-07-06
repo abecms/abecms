@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.getSite = exports.postUpload = exports.getDelete = exports.getUnpublish = exports.getSaveConfig = exports.postDraft = exports.postReject = exports.postPublish = exports.postPage = exports.getPage = exports.getDeleteLogs = exports.getLogs = exports.getUpdate = exports.getDuplicate = exports.getListUrl = exports.getCreate = exports.getMain = undefined;
+exports.postUpload = exports.getDelete = exports.getUnpublish = exports.getSaveConfig = exports.postDraft = exports.postReject = exports.postPublish = exports.postPage = exports.getPage = exports.getDeleteLogs = exports.getLogs = exports.getUpdate = exports.getDuplicate = exports.getListUrl = exports.getCreate = exports.getMain = undefined;
 
 var _getMain = require('./get-main');
 
@@ -69,10 +69,6 @@ var _postUpload = require('./post-upload');
 
 var _postUpload2 = _interopRequireDefault(_postUpload);
 
-var _getSite = require('./get-site');
-
-var _getSite2 = _interopRequireDefault(_getSite);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.getMain = _getMain2.default;
@@ -91,4 +87,3 @@ exports.getSaveConfig = _getSaveConfig2.default;
 exports.getUnpublish = _getUnpublish2.default;
 exports.getDelete = _getDelete2.default;
 exports.postUpload = _postUpload2.default;
-exports.getSite = _getSite2.default;

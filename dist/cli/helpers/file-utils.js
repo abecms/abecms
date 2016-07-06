@@ -296,7 +296,7 @@ var FileUtils = function () {
 				status: file.status,
 				filePath: file.filePath,
 				date: file.abe_meta.latest.date,
-				template: file[_.config.meta.name].template,
+				template: file[_.config.meta.name].template.replace(/^\/+/, ''),
 				cleanFilePath: cleanFilePath
 			};
 			revision[_.config.meta.name] = file[_.config.meta.name];

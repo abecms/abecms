@@ -14,7 +14,6 @@ import getSaveConfig from './get-save-config'
 import getUnpublish from './get-unpublish'
 import getDelete from './get-delete'
 import postUpload from './post-upload'
-import getSite from './get-site'
 
 export {
 	getMain
@@ -33,5 +32,4 @@ export {
 	,getUnpublish
 	,getDelete
 	,postUpload
-	,getSite
 }

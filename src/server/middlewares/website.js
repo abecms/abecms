@@ -25,7 +25,6 @@ import {
   getTemplate,
   Hooks,
   Plugins,
-  serveSite,
   Handlebars,
   cleanSlug
 } from '../../cli'
@@ -34,17 +33,43 @@ import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 var middleware = function(req, res, next) {
-  if (req.originalUrl === '') {
-    var result = FileParser.getAllFiles()
-    var html = '<a href="/abe/">abe</abe>'
-    if(typeof result[0].files !== 'undefined' && result[0].files !== null) {
-       html = '<ul>'
-      Array.prototype.forEach.call(result[0].files, (item) => {
-        html += '<li><a href="' + item.path + '">' + item.path + '</a></li>'
+  if (req.originalUrl.indexOf('/abe/') > -1 || req.originalUrl.indexOf('/plugin/') > -1) {
+    return next()
+  }
+
+  if (req.originalUrl === '' || req.originalUrl === '/' || req.originalUrl.indexOf('.') === -1) {
+    var path = fileUtils.concatPath(config.root, config.publish.url, req.originalUrl)
+    if (!folderUtils.isFolder(path)) {
+      return next()
+    }
+    var files = FileParser.getFiles(path, true, 0, /(.*?)/)
+
+    var folders = FileParser.getFolders(path, true, 0)
+    var html = '<ul>'
+    html += '<li><a href="/abe/">abe</abe></li>'
+    html += '<br />'
+    if (req.originalUrl !== '/' && req.originalUrl !== '') {
+      var parent = req.originalUrl.replace(/\/$/, '').split('/')
+      parent.pop()
+      parent = parent.join('/') + '/'
+      html += '<li><a href="' + parent + '">../</abe></li>'
+    }
+
+    if(typeof folders !== 'undefined' && folders !== null) {
+       
+      Array.prototype.forEach.call(folders, (folder) => {
+        var url = folder.path.replace(config.root, '').replace(config.publish.url, '')
+        html += '<li><a href="' + url + '">/' + folder.cleanPath + '</a></li>'
       })
 
-      html += '</ul>'
     }
+    if(typeof files !== 'undefined' && files !== null) {
+      Array.prototype.forEach.call(files, (file) => {
+        var url = file.path.replace(config.root, '').replace(config.publish.url, '')
+        html += '<li><a href="' + url + '">' + file.cleanPath + '</a></li>'
+      })
+    }
+    html += '</ul>'
     
     res.set('Content-Type', 'text/html')
     return res.send(html);

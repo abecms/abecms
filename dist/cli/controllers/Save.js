@@ -106,7 +106,7 @@ function save(url, tplPath) {
     }
 
     var ext = {
-      template: tpl,
+      template: tpl.replace(/^\/+/, ''),
       link: tplUrl.publish.link,
       complete: 0,
       type: type

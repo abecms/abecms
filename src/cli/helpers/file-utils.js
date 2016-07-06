@@ -225,7 +225,7 @@ export default class FileUtils {
   			status: file.status,
   			filePath: file.filePath,
   			date: file.abe_meta.latest.date,
-				template: file[config.meta.name].template,
+				template: file[config.meta.name].template.replace(/^\/+/, ''),
   			cleanFilePath: cleanFilePath
 		}
 		revision[config.meta.name] = file[config.meta.name]

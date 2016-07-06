@@ -25,7 +25,6 @@ import {
   getTemplate,
   Hooks,
   Plugins,
-  serveSite,
   Handlebars,
   cleanSlug
 } from '../../cli'
