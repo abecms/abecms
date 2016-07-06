@@ -13,6 +13,7 @@ import {
   ,getUpdate
   ,getLogs
   ,getListUrl
+  ,getListHooks
   ,getDeleteLogs
   ,getMain
   ,getPage
@@ -71,6 +72,7 @@ router.post('/upload/*', postUpload)
 router.get('/abe/list-url*', function (req, res, next) {
    getListUrl(router, req, res, next) 
 })
+router.get('/abe/list-hooks*', getListHooks)
 router.get('/abe*', getMain)
 
 var routes = Plugins.instance.getRoutes()
