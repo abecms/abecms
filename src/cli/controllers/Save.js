@@ -211,6 +211,10 @@ export function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginat
     var pageToSave = []
     var paginateLink = []
 
+    var currentUrl = fileUtils.removeExtension(hPath)
+    currentUrl = currentUrl.replace(config.root, '')
+    currentUrl = currentUrl.replace(config.publish.url, '')
+
     for(var k = 1, length3 = jsonPart.length; k <= length3; k++) {
       var newJson = JSON.parse(JSON.stringify(json))
       newJson[paginateKey] = jsonPart[k-1]
@@ -238,12 +242,22 @@ export function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginat
         link: link,
         index: k
       })
-      pageToSave.push({
+      var currentJson = {
         size: paginateSize,
         path: paginatePath,
         current: k,
         json: newJson
-      })
+      }
+      if (prev > 0) {
+        currentJson.prev = currentUrl + '-' + (k-1) + '.' + config.files.templates.extension
+      }
+      if (k < length3) {
+        currentJson.next = currentUrl + '-' + (next) + '.' + config.files.templates.extension
+      }
+      currentJson.first = currentUrl + '.' + config.files.templates.extension
+      currentJson.last = currentUrl + '-' + length3 + '.' + config.files.templates.extension
+
+      pageToSave.push(currentJson)
     }
 
     Array.prototype.forEach.call(pageToSave, (pSave) => {
@@ -255,6 +269,18 @@ export function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginat
         size: pSave.size,
         current: pSave.current,
         links: paginateLink
+      }
+      if(typeof (pSave.prev) !== 'undefined' && (pSave.prev) !== null) {
+        jsonToSave.abe_meta.paginate[paginateKey].prev = pSave.prev
+      }
+      if(typeof (pSave.next) !== 'undefined' && (pSave.next) !== null) {
+        jsonToSave.abe_meta.paginate[paginateKey].next = pSave.next
+      }
+      if(typeof (pSave.first) !== 'undefined' && (pSave.first) !== null) {
+        jsonToSave.abe_meta.paginate[paginateKey].first = pSave.first
+      }
+      if(typeof (pSave.last) !== 'undefined' && (pSave.last) !== null) {
+        jsonToSave.abe_meta.paginate[paginateKey].last = pSave.last
       }
 
       page = new Page(tplPath, html, jsonToSave, true)

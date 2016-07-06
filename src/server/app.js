@@ -36,6 +36,10 @@ import {
   Hooks
 } from '../cli'
 
+import {
+  middleWebsite,
+} from './middlewares'
+
 var abePort = null
 
 if(process.env.ROOT) config.set({root: process.env.ROOT.replace(/\/$/, '') + '/'})
@@ -75,6 +79,10 @@ portfinder.getPort(function (err, freePort) {
   }
 
   var app = express(opts)
+
+  app.set('files', FileParser.getAllFiles());
+  app.set('config', config.getConfigByWebsite());
+  app.set('projectFiles', FileParser.getProjetFiles());
 
   app.use(bodyParser.json({limit: '1gb'}))
   app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }));
@@ -130,13 +138,16 @@ portfinder.getPort(function (err, freePort) {
 
   app.locals.layout = false;
 
+  app.use(middleWebsite)
   app.use(express.static(__dirname + '/public'))
+
   FileParser.copySiteAssets()
 
   var sites = FileParser.getFolders(config.root.replace(/\/$/, ""), false, 0)
   
   let publish = fileUtils.concatPath(config.root, config.publish.url)
   app.use(express.static(publish))
+  // app.use(express.static(publish))
 
   if(config.partials !== '') {
     if (fileUtils.isFile(fileUtils.concatPath(config.root, config.partials))) {
