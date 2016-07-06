@@ -105,6 +105,10 @@ class Plugins {
     return args[0]
   }
 
+  getHooks() {
+    return this._plugins
+  }
+
   getPartials() {
     var partials = []
     Array.prototype.forEach.call(this._plugins, (plugin) => {
