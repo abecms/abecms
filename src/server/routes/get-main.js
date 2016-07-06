@@ -122,7 +122,7 @@ var route = function(req, res, next) {
   })
 
   p.then(() => {
-
+    var dateStart = new Date()
     manager.home = {
       files: FileParser.getAllFiles()
     }

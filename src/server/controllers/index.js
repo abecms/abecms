@@ -75,13 +75,6 @@ router.get('/abe/list-url*', function (req, res, next) {
 })
 router.get('/abe*', getMain)
 
-router.get('/', function(req, res, next){
-  Hooks.instance.trigger('beforeRoute', req, res, next)
-  if(typeof res._header !== 'undefined' && res._header !== null) return;
-
-  res.redirect('/abe/');
-})
-
 router.get('/site*', getSite)
 
 var routes = Plugins.instance.getRoutes()
