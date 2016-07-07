@@ -151,11 +151,24 @@ var hooks = {
    },
 
    /***************** Pagingate *****************/
+   afterSplittedPagination: function afterSplittedPagination(jsonPart, json, abe) {
+      return jsonPart;
+   },
+   beforePaginateEditor: function beforePaginateEditor(json, obj, abe) {
+      return json;
+   },
    beforePaginateHtml: function beforePaginateHtml(html, index, abe) {
       return html;
    },
+   beforeSavePaginate: function beforeSavePaginate(obj, abe, json) {
+      return obj;
+   },
 
    /***************** Page *****************/
+   afterAddSourcePage: function afterAddSourcePage(json, text, abe) {
+      return json;
+   },
+
    beforePageText: function beforePageText(text, json, Handlebars, abe) {
       return text;
    },

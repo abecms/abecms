@@ -123,6 +123,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       var objSource = Util.getAllAttributes(matchSource[0], json)
       if(typeof objSource.paginate !== 'undefined' && objSource.paginate !== null && objSource.paginate !== '') {
         paginated.push({
+          start: objSource.paginateStart || 0,
           key: objSource.key,
           size: parseInt(objSource.paginate)
         })
@@ -170,11 +171,11 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           if (paginated.length > 0) {
             Array.prototype.forEach.call(paginated, (page) => {
               if(typeof page.key !== 'undefined' && page.key !== null) {
-                res = saveJsonAndHtml(tplUrl.publish.path, obj.json.path, obj.html.path, obj.json.content, text, type, page.key, page.size)
+                res = saveJsonAndHtml(tplUrl.publish.path, obj, text, type, page.key, page.size)
               }
             })
           }else {
-            res = saveJsonAndHtml(tplUrl.publish.path, obj.json.path, obj.html.path, obj.json.content, text, type)
+            res = saveJsonAndHtml(tplUrl.publish.path, obj, text, type)
           }
 
           obj = Hooks.instance.trigger('afterSave', obj)
@@ -204,20 +205,22 @@ function splitArray(ar, chunkSize) {
   )
 }
 
-export function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginateKey, paginateSize) {
+export function saveJsonAndHtml(tplPath, obj, html, type, paginateKey, paginateSize) {
   var page = ''
-
   if(type === 'publish' && typeof paginateKey !== 'undefined' && paginateKey !== null) {
-    var jsonPart = splitArray(json[paginateKey], paginateSize)
+    var jsonPart = splitArray(obj.json.content[paginateKey], paginateSize)
+    jsonPart = Hooks.instance.trigger('afterSplittedPagination', jsonPart, obj.json.content)
+
+    return {}
     var pageToSave = []
     var paginateLink = []
 
-    var currentUrl = fileUtils.removeExtension(hPath)
+    var currentUrl = fileUtils.removeExtension(obj.html.path)
     currentUrl = currentUrl.replace(config.root, '')
     currentUrl = currentUrl.replace(config.publish.url, '')
 
     for(var k = 1, length3 = jsonPart.length; k <= length3; k++) {
-      var newJson = JSON.parse(JSON.stringify(json))
+      var newJson = JSON.parse(JSON.stringify(obj.json.content))
       newJson[paginateKey] = jsonPart[k-1]
       var current = k
       var prev
@@ -231,9 +234,9 @@ export function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginat
 
       var paginatePath = ''
       if (k === 1) {
-        paginatePath = hPath
+        paginatePath = obj.html.path
       }else {
-        paginatePath = fileUtils.removeExtension(hPath) + '-' + k + '.' + config.files.templates.extension
+        paginatePath = fileUtils.removeExtension(obj.html.path) + '-' + k + '.' + config.files.templates.extension
       }
 
       var link = paginatePath.replace(config.root, '')
@@ -289,27 +292,27 @@ export function saveJsonAndHtml(tplPath, jPath, hPath, json, html, type, paginat
       saveHtml(pSave.path, page.html)
     })
 
-    if(typeof json.abe_meta.paginate === 'undefined' || json.abe_meta.paginate === null) {
-        json.abe_meta.paginate = {
+    if(typeof obj.json.content.abe_meta.paginate === 'undefined' || obj.json.content.abe_meta.paginate === null) {
+        obj.json.content.abe_meta.paginate = {
           links: paginateLink,
           size: paginateSize
         }
       }
   }else {
-    page = new Page(tplPath, html, json, true)
+    page = new Page(tplPath, html, obj.json.content, true)
 
-    saveHtml(hPath, page.html)
+    saveHtml(obj.html.path, page.html)
   }
-  saveJson(jPath, json)
+  saveJson(obj.json.path, obj.json.content)
   // page = new Page(tplPath, html, json, true)
 
-  // saveHtml(hPath, page.html)
+  // saveHtml(obj.html, page.html)
 
   return {
-    json: json,
-    jsonPath: jPath,
+    json: obj.json.content,
+    jsonPath: obj.json.path,
     html: page.html,
-    htmlPath: hPath
+    htmlPath: obj.html.path
   }
 }
 
