@@ -66,6 +66,7 @@ router.get('/abe/update*', _routes.getUpdate);
 router.post('/page/*', _routes.postPage);
 router.get('/page/*', _routes.getPage);
 router.post('/publish', _routes.postPublish);
+router.get('/abe/republish', _routes.getRepublish);
 router.post('/reject', _routes.postReject);
 router.post('/draft', _routes.postDraft);
 router.get('/save-config', _routes.getSaveConfig);
@@ -75,6 +76,7 @@ router.post('/upload/*', _routes.postUpload);
 router.get('/abe/list-url*', function (req, res, next) {
   (0, _routes.getListUrl)(router, req, res, next);
 });
+router.get('/abe/list-hooks*', _routes.getListHooks);
 router.get('/abe*', _routes.getMain);
 
 var routes = _cli.Plugins.instance.getRoutes();

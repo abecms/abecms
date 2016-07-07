@@ -373,8 +373,6 @@ var Page = function () {
   }, {
     key: '_addSource',
     value: function _addSource(text, json) {
-      json = _.Hooks.instance.trigger('beforeAddSourcePage', json, text, this._onlyHTML);
-
       var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
           match,
           limit = 0;
@@ -403,8 +401,8 @@ var Page = function () {
           paginate = parseInt(paginate);
           json[key] = json[key].slice(0, parseInt(paginate));
         }
+        json = _.Hooks.instance.trigger('afterAddSourcePage', json, match[0]);
       }
-      json = _.Hooks.instance.trigger('afterAddSourcePage', json);
     }
 
     /**

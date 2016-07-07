@@ -114,6 +114,11 @@ var Plugins = function () {
       return args[0];
     }
   }, {
+    key: 'getHooks',
+    value: function getHooks() {
+      return this._plugins;
+    }
+  }, {
     key: 'getPartials',
     value: function getPartials() {
       var partials = [];

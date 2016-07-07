@@ -49,6 +49,7 @@ var EditorManager = function () {
     this._btnSaveConfig = document.querySelectorAll('[data-save-config]');
 
     // button manager
+    this._btnRepublish = document.querySelector('[data-republish]');
     this._btnCloseManager = document.querySelector('.close-manager');
     this._btnManager = document.querySelector('.btn-manager');
     this._btnVisitSite = document.querySelectorAll('.btn-visit-site');
@@ -58,6 +59,7 @@ var EditorManager = function () {
     this._btnUnpublishFile = [].slice.call(document.querySelectorAll('[data-unpublish="true"]'));
 
     // event handlers
+    this._handleBtnRepublishClick = this._btnRepublishClick.bind(this);
     this._handleBtnCloseManagerClick = this._btnCloseManagerClick.bind(this);
     this._handleBtnManagerTabClick = this._btnManagerTabClick.bind(this);
     this._handleBtnManagerClick = this._btnManagerClick.bind(this);
@@ -135,6 +137,10 @@ var EditorManager = function () {
       });
       this._btnManager.addEventListener('click', this._handleBtnManagerClick);
 
+      if (typeof this._btnRepublish !== 'undefined' && this._btnRepublish !== null) {
+        this._btnRepublish.addEventListener('click', this._handleBtnRepublishClick);
+      }
+
       if (typeof this._btnCloseManager !== 'undefined' && this._btnCloseManager !== null) {
         this._btnCloseManager.addEventListener('click', this._handleBtnCloseManagerClick);
       }
@@ -146,6 +152,17 @@ var EditorManager = function () {
       Array.prototype.forEach.call(this._btnUnpublishFile, function (unpublishFile) {
         unpublishFile.addEventListener('click', _this2._handleBtnUnpublishClick);
       });
+    }
+  }, {
+    key: '_btnRepublishClick',
+    value: function _btnRepublishClick(e) {
+      e.preventDefault();
+      this._btnRepublish.querySelector('[data-not-clicked]').className = 'hidden';
+      this._btnRepublish.querySelector('[data-clicked]').className = '';
+      this._ajax({
+        url: document.location.origin + '/abe/republish',
+        method: 'get'
+      }, function (code, responseText, request) {});
     }
   }, {
     key: '_btnCloseManagerClick',

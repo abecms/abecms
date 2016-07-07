@@ -282,15 +282,16 @@ export default class Utils {
       while (match = listReg.exec(text)) {
 
         var pSource = new Promise((resolveSource, rejectSource) => {
-          var source = getAttr(match[0], 'source')
-          var key = getAttr(match[0], 'key')
-          var editable = getAttr(match[0], 'editable')
-          var paginate = getAttr(match[0], 'paginate')
-          editable = (typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') ? false : true
+          var obj = Utils.getAllAttributes(match[0], jsonPage)
 
-          var autocomplete = getAttr(match[0], 'autocomplete')
-          if(source.indexOf('{{') > -1) {
-            var matches = source.match(/({{[a-zA-Z._]+}})/g)
+          // var source = getAttr(match[0], 'source')
+          // var key = getAttr(match[0], 'key')
+          // var editable = getAttr(match[0], 'editable')
+          // var paginate = getAttr(match[0], 'paginate')
+          // editable = (typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') ? false : true
+
+          if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
+            var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
             if(matches !== null) {
               Array.prototype.forEach.call(matches, (match) => {
                 var val = match.replace('{{', '')
@@ -299,65 +300,66 @@ export default class Utils {
                 if(typeof val === 'undefined' || val === null) {
                   val = ''
                 }
-                source = source.replace(match, val)
+                obj.sourceString = obj.sourceString.replace(match, val)
               })
             }
           }
-          var type = Sql.getSourceType(source)
+          var type = Sql.getSourceType(obj.sourceString)
           switch (type) {
             case 'request':
 
               var data = Sql.getDataRequest(tplPath, match[0], jsonPage)
-              jsonPage[sourceAttr][key] = data
-              if (!editable) {
-                jsonPage[key] = data
+              jsonPage[sourceAttr][obj.key] = data
+              if (!obj.editable) {
+                jsonPage[obj.key] = data
               }
 
-              if(typeof paginate !== 'undefined' && paginate !== null && paginate !== '') {
-                paginate = parseInt(paginate)
+              if(typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
+                obj.paginate = parseInt(obj.paginate)
                 if(typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
                   jsonPage.abe_meta.paginate = {}
                 }
-                if(typeof jsonPage.abe_meta.paginate[key] === 'undefined' || jsonPage.abe_meta.paginate[key] === null) {
-                  jsonPage.abe_meta.paginate[key] = {}
+                if(typeof jsonPage.abe_meta.paginate[obj.key] === 'undefined' || jsonPage.abe_meta.paginate[obj.key] === null) {
+                  jsonPage.abe_meta.paginate[obj.key] = {}
                 }
 
-                var linksSize = Math.round(data.length / paginate)
+                var linksSize = Math.ceil(data.length / obj.paginate)
 
                 if (linksSize > 0) {
-                  jsonPage.abe_meta.paginate[key].size = paginate
-                  jsonPage.abe_meta.paginate[key].current = 1
-                  jsonPage.abe_meta.paginate[key].links = []
+                  jsonPage.abe_meta.paginate[obj.key].size = obj.paginate
+                  jsonPage.abe_meta.paginate[obj.key].current = 1
+                  jsonPage.abe_meta.paginate[obj.key].links = []
 
-                  if(typeof jsonPage.abe_meta.paginate[key].prev !== 'undefined' && jsonPage.abe_meta.paginate[key].prev !== null) {
-                    delete jsonPage.abe_meta.paginate[key].prev
+                  if(typeof jsonPage.abe_meta.paginate[obj.key].prev !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].prev !== null) {
+                    delete jsonPage.abe_meta.paginate[obj.key].prev
                   }
-                  if(typeof jsonPage.abe_meta.paginate[key].first === 'undefined' || jsonPage.abe_meta.paginate[key].first === null) {
-                    jsonPage.abe_meta.paginate[key].first = jsonPage.abe_meta.link
+                  if(typeof jsonPage.abe_meta.paginate[obj.key].first === 'undefined' || jsonPage.abe_meta.paginate[obj.key].first === null) {
+                    jsonPage.abe_meta.paginate[obj.key].first = jsonPage.abe_meta.link
                   }
                   for (var i = 0; i <= linksSize; i++) {
                     var link = jsonPage.abe_meta.link
                     if (i > 0) {
                       link = fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + config.files.templates.extension
                     }
-                    jsonPage.abe_meta.paginate[key].links.push({
+                    jsonPage.abe_meta.paginate[obj.key].links.push({
                       link: link,
                       index: (i + 1)
                     })
                   }
-                  if((typeof jsonPage.abe_meta.paginate[key].next === 'undefined' || jsonPage.abe_meta.paginate[key].next === null)
-                    && (typeof jsonPage.abe_meta.paginate[key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[key].links[1] !== null)
-                    && (typeof jsonPage.abe_meta.paginate[key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[key].links[1].link !== null)) {
-                    jsonPage.abe_meta.paginate[key].next = jsonPage.abe_meta.paginate[key].links[1].link
+                  if((typeof jsonPage.abe_meta.paginate[obj.key].next === 'undefined' || jsonPage.abe_meta.paginate[obj.key].next === null)
+                    && (typeof jsonPage.abe_meta.paginate[obj.key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1] !== null)
+                    && (typeof jsonPage.abe_meta.paginate[obj.key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1].link !== null)) {
+                    jsonPage.abe_meta.paginate[obj.key].next = jsonPage.abe_meta.paginate[obj.key].links[1].link
                   }
-                  jsonPage.abe_meta.paginate[key].last = jsonPage.abe_meta.paginate[key].links[jsonPage.abe_meta.paginate[key].links.length-1].link
+                  jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length-1].link
                 }
+                jsonPage = Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj)
               }
 
-              if(typeof jsonPage[key] !== 'undefined' && jsonPage[key] !== null) {
+              if(typeof jsonPage[obj.key] !== 'undefined' && jsonPage[obj.key] !== null) {
                 var newJsonValue = []
-                Array.prototype.forEach.call(jsonPage[key], (oldValue) => {
-                  Array.prototype.forEach.call(jsonPage[sourceAttr][key], (newValue) => {
+                Array.prototype.forEach.call(jsonPage[obj.key], (oldValue) => {
+                  Array.prototype.forEach.call(jsonPage[sourceAttr][obj.key], (newValue) => {
                     if(typeof oldValue[config.meta.name] !== 'undefined' && oldValue[config.meta.name] !== null
                       && oldValue[config.meta.name].link === newValue[config.meta.name].link) {
                       newJsonValue.push(newValue)
@@ -375,17 +377,17 @@ export default class Utils {
                 try{
                   value = JSON.parse(value)
 
-                  jsonPage[sourceAttr][key] = value
+                  jsonPage[sourceAttr][obj.key] = value
                 }catch(e){
-                  jsonPage[sourceAttr][key] = null
+                  jsonPage[sourceAttr][obj.key] = null
                   console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
                 }
               }
               resolveSource()
               break;
             case 'url':
-              if(autocomplete !== true && autocomplete !== 'true') {
-                var host = source
+              if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
+                var host = obj.sourceString
                 host = host.split('/')
                 var httpUse = http
                 var defaultPort = 80
@@ -395,7 +397,7 @@ export default class Utils {
                 }
                 host = host[2].split(':')
 
-                var path = source.split('//')
+                var path = obj.sourceString.split('//')
                 if(typeof path[1] !== 'undefined' && path[1] !== null) {
                   path = path[1].split('/')
                   path.shift()
@@ -426,17 +428,17 @@ export default class Utils {
                       if(typeof body === 'string') {
                         var parsedBody = JSON.parse(body)
                         if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
-                          jsonPage[sourceAttr][key] = parsedBody
+                          jsonPage[sourceAttr][obj.key] = parsedBody
                         }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
-                          jsonPage[sourceAttr][key] = [parsedBody]
+                          jsonPage[sourceAttr][obj.key] = [parsedBody]
                         }
                       }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
-                        jsonPage[sourceAttr][key] = body
+                        jsonPage[sourceAttr][obj.key] = body
                       }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
-                        jsonPage[sourceAttr][key] = body
+                        jsonPage[sourceAttr][obj.key] = body
                       }
                     } catch(e) {
-                      console.log(clc.red(`Error ${source} is not a valid JSON`),  `\n${e}`)
+                      console.log(clc.red(`Error ${obj.sourceString} is not a valid JSON`),  `\n${e}`)
                     }
                     resolveSource()
                   })
@@ -451,13 +453,13 @@ export default class Utils {
                 localReq.end();
                 
               }else {
-                jsonPage[sourceAttr][key] = source
+                jsonPage[sourceAttr][obj.key] = obj.sourceString
                 resolveSource()
               }
 
               break;
             case 'file':
-              jsonPage[sourceAttr][key] = FileParser.getJson(fileUtils.concatPath(config.root, source))
+              jsonPage[sourceAttr][obj.key] = FileParser.getJson(fileUtils.concatPath(config.root, obj.sourceString))
               resolveSource()
               break;
             default:
@@ -526,6 +528,7 @@ export default class Utils {
         ,maxLength: getAttr(str, 'max-length')
         ,value: json[key]
         ,tab: getAttr(str, 'tab')
+        ,sourceString: (typeof source !== 'undefined' && source !== null && source !== '') ? source : null
         ,source: (typeof source !== 'undefined' && source !== null && source !== '')
           ? ((typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null && json[config.source.name] !== '')
               ? json[config.source.name][key] : null) : null

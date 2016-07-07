@@ -20,6 +20,7 @@ export default class EditorManager {
     this._btnSaveConfig = document.querySelectorAll('[data-save-config]')
 
     // button manager
+    this._btnRepublish = document.querySelector('[data-republish]')
     this._btnCloseManager = document.querySelector('.close-manager')
     this._btnManager = document.querySelector('.btn-manager')
     this._btnVisitSite = document.querySelectorAll('.btn-visit-site')
@@ -29,6 +30,7 @@ export default class EditorManager {
     this._btnUnpublishFile = [].slice.call(document.querySelectorAll('[data-unpublish="true"]'))
 
     // event handlers
+    this._handleBtnRepublishClick = this._btnRepublishClick.bind(this)
     this._handleBtnCloseManagerClick = this._btnCloseManagerClick.bind(this)
     this._handleBtnManagerTabClick = this._btnManagerTabClick.bind(this)
     this._handleBtnManagerClick = this._btnManagerClick.bind(this)
@@ -100,6 +102,10 @@ export default class EditorManager {
     })
     this._btnManager.addEventListener('click', this._handleBtnManagerClick)
     
+    if(typeof this._btnRepublish !== 'undefined' && this._btnRepublish !== null) {
+      this._btnRepublish.addEventListener('click', this._handleBtnRepublishClick)
+    }
+
     if(typeof this._btnCloseManager !== 'undefined' && this._btnCloseManager !== null) {
       this._btnCloseManager.addEventListener('click', this._handleBtnCloseManagerClick)
     }
@@ -111,6 +117,20 @@ export default class EditorManager {
     Array.prototype.forEach.call(this._btnUnpublishFile, (unpublishFile) => {
       unpublishFile.addEventListener('click', this._handleBtnUnpublishClick)
     })
+  }
+
+  _btnRepublishClick(e) {
+    e.preventDefault()
+    this._btnRepublish.querySelector('[data-not-clicked]').className = 'hidden'
+    this._btnRepublish.querySelector('[data-clicked]').className = ''
+      this._ajax(
+        {
+          url: document.location.origin + '/abe/republish',
+          method: 'get'
+        },
+        (code, responseText, request) => {
+          
+        })
   }
 
   _btnCloseManagerClick() {

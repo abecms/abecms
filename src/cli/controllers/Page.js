@@ -367,8 +367,6 @@ export default class Page {
   }
 
   _addSource(text, json) {
-    json = Hooks.instance.trigger('beforeAddSourcePage', json, text, this._onlyHTML)
-
     var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
         match,
         limit = 0
@@ -397,8 +395,8 @@ export default class Page {
         paginate = parseInt(paginate)
         json[key] = json[key].slice(0, parseInt(paginate))
       }
+      json = Hooks.instance.trigger('afterAddSourcePage', json, match[0])
     }
-    json = Hooks.instance.trigger('afterAddSourcePage', json)
   }
 
 

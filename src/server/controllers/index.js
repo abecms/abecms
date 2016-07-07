@@ -19,6 +19,7 @@ import {
   ,getPage
   ,postPage
   ,postPublish
+  ,getRepublish
   ,postReject
   ,postDraft
   ,getSaveConfig
@@ -63,6 +64,7 @@ router.get('/abe/update*', getUpdate)
 router.post('/page/*', postPage)
 router.get('/page/*', getPage)
 router.post('/publish', postPublish)
+router.get('/abe/republish', getRepublish)
 router.post('/reject', postReject)
 router.post('/draft', postDraft)
 router.get('/save-config', getSaveConfig)
