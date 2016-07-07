@@ -52,6 +52,7 @@ class Engine {
     })
 
     this._inputs.onReload(() => {
+      this._save.serializeForm()
       EditorReload.instance.reload()
     })
 

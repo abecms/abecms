@@ -95,6 +95,7 @@ var Engine = function () {
       });
 
       this._inputs.onReload(function () {
+        _this2._save.serializeForm();
         _EditorReload2.default.instance.reload();
       });
 
