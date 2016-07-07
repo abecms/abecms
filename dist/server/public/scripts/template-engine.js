@@ -122,5 +122,6 @@ window.abe = {
   inputs: engine._inputs,
   files: engine._files,
   blocks: engine._blocks,
-  autocomplete: engine._autocomplete
+  autocomplete: engine._autocomplete,
+  editorReload: _EditorReload2.default
 };

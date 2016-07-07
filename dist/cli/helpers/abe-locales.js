@@ -33,6 +33,11 @@ var Locales = function () {
 		}
 
 		_createClass(Locales, [{
+				key: '_reloadLocales',
+				value: function _reloadLocales() {
+						this.i18n = this._getFiles();
+				}
+		}, {
 				key: '_getFiles',
 				value: function _getFiles() {
 						var loc = {};
