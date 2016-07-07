@@ -72,8 +72,6 @@ var Reload = function () {
   }, {
     key: 'reload',
     value: function reload() {
-      var _this = this;
-
       var iframe = document.querySelector('#page-template');
       var iframeBody = (0, _iframe.IframeDocument)('#page-template').body;
       var scrollTop = iframeBody.scrollTop;
@@ -88,38 +86,30 @@ var Reload = function () {
         body: data,
         method: 'post'
       }, function (code, responseText, request) {
-        var str = responseText.replace(/<[\s\S]+(?=<head>)/, '');
-        str = str.replace(/<\/html>/, '');
-        var matches = str.match(/src=['|"]([\S\s]*?)['|"]/g);
-        if (typeof matches !== 'undefined' && matches !== null) {
-          Array.prototype.forEach.call(matches, function (match) {
-            var matchReplace = match.substring(5, match.length - 1);
-            if (matchReplace.trim() !== "") {
-              str = str.replace(matchReplace, matchReplace + '?v' + parseInt(Math.random() * 999999999999));
-            }
-          });
-        }
 
-        var domSource = document.createDocumentFragment();
-        var html = document.createElement("html");
-        html.innerHTML = str;
+        var str = responseText;
+        // str = str.replace(/<[\s\S]+(?=<head>)/, '')
+        // str = str.replace(/<\/html>/, '')
+        // var matches = str.match(/src=['|"]([\S\s]*?)['|"]/g)
+        // if(typeof matches !== 'undefined' && matches !== null) {
+        //   Array.prototype.forEach.call(matches, (match) => {
+        //     let matchReplace = match.substring(5, match.length-1)
+        //     if(matchReplace.trim() !== "") {
+        //       str = str.replace(matchReplace, `${matchReplace}?v${parseInt(Math.random() * 999999999999)}`)
+        //     }
+        //   })
+        // }
 
-        iframe.contentDocument.querySelector('html').innerHTML = str;
-        _this._nodeScriptReplace(iframe.contentDocument.querySelector('html'));
-        var scripts = iframe.contentDocument.querySelectorAll('script');
-        var loaded = 0;
-        var scriptsLength = 0;
-        Array.prototype.forEach.call(scripts, function (script) {
-          if (typeof script.src !== 'undefined' && script.src !== null && script.src !== '') {
-            scriptsLength++;
-          }
-          script.addEventListener('load', function () {
-            loaded++;
-            if (loaded === scriptsLength) {
-              (0, _iframe.IframeDocument)('#page-template').body.scrollTop = scrollTop;
-            }
-          });
-        });
+        var doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(str);
+        doc.close();
+
+        setTimeout(function () {
+          (0, _iframe.IframeDocument)('#page-template').body.scrollTop = scrollTop;
+        }, 1000);
+
+        return;
       });
     }
   }], [{

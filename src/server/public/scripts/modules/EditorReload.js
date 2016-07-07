@@ -67,38 +67,30 @@ export default class Reload {
       method: 'post'
     },
     (code, responseText, request) => {
-        var str = responseText.replace(/<[\s\S]+(?=<head>)/, '')
-        str = str.replace(/<\/html>/, '')
-        var matches = str.match(/src=['|"]([\S\s]*?)['|"]/g)
-        if(typeof matches !== 'undefined' && matches !== null) {
-          Array.prototype.forEach.call(matches, (match) => {
-            let matchReplace = match.substring(5, match.length-1)
-            if(matchReplace.trim() !== "") {
-              str = str.replace(matchReplace, `${matchReplace}?v${parseInt(Math.random() * 999999999999)}`)
-            }
-          })
-        }
 
-        var domSource = document.createDocumentFragment()
-        var html = document.createElement("html")
-        html.innerHTML = str
+        var str = responseText
+        // str = str.replace(/<[\s\S]+(?=<head>)/, '')
+        // str = str.replace(/<\/html>/, '')
+        // var matches = str.match(/src=['|"]([\S\s]*?)['|"]/g)
+        // if(typeof matches !== 'undefined' && matches !== null) {
+        //   Array.prototype.forEach.call(matches, (match) => {
+        //     let matchReplace = match.substring(5, match.length-1)
+        //     if(matchReplace.trim() !== "") {
+        //       str = str.replace(matchReplace, `${matchReplace}?v${parseInt(Math.random() * 999999999999)}`)
+        //     }
+        //   })
+        // }
 
-        iframe.contentDocument.querySelector('html').innerHTML = str
-        this._nodeScriptReplace(iframe.contentDocument.querySelector('html'))
-        var scripts = iframe.contentDocument.querySelectorAll('script')
-        var loaded = 0
-        var scriptsLength = 0
-        Array.prototype.forEach.call(scripts, (script) => {
-          if(typeof script.src !== 'undefined' && script.src !== null && script.src !== '') {
-            scriptsLength++
-          }
-          script.addEventListener('load', () => {
-            loaded++
-            if (loaded === scriptsLength) {
-              IframeDocument('#page-template').body.scrollTop = scrollTop
-            }
-          })
-        })
+        var doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(str);
+        doc.close();
+        
+        setTimeout(function () {
+          IframeDocument('#page-template').body.scrollTop = scrollTop
+        }, 1000)
+        
+        return
     })
   }
 }
