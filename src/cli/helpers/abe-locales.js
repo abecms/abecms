@@ -27,6 +27,10 @@ class Locales {
     return this[singleton]
   }
 
+  _reloadLocales() {
+  	this.i18n = this._getFiles()
+  }
+  
   _getFiles() {
   	var loc = {}
 		var website = config.root
