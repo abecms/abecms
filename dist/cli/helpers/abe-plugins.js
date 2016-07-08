@@ -73,7 +73,7 @@ var Plugins = function () {
           if (_.folderUtils.isFolder(gets)) {
             var routesGet = _.FileParser.getFiles(gets, true, 0);
             Array.prototype.forEach.call(routesGet, function (route) {
-              route.routePath = '/plugin/' + plugin.name + '/' + route.name.replace('.js', '') + '*';
+              route.routePath = '/abe/plugin/' + plugin.name + '/' + route.name.replace('.js', '') + '*';
             });
             plugin.routes.get = routesGet;
           }
@@ -82,7 +82,7 @@ var Plugins = function () {
           if (_.folderUtils.isFolder(posts)) {
             var routesPost = _.FileParser.getFiles(posts, true, 0);
             Array.prototype.forEach.call(routesPost, function (route) {
-              route.routePath = '/plugin/' + plugin.name + '/' + route.name.replace('.js', '') + '*';
+              route.routePath = '/abe/plugin/' + plugin.name + '/' + route.name.replace('.js', '') + '*';
             });
             plugin.routes.post = routesPost;
           }

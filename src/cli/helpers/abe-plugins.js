@@ -60,7 +60,7 @@ class Plugins {
           if(folderUtils.isFolder(gets)) {
             var routesGet = FileParser.getFiles(gets, true, 0)
             Array.prototype.forEach.call(routesGet, (route) => {
-              route.routePath = `/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
+              route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
             })
             plugin.routes.get = routesGet
           }
@@ -69,7 +69,7 @@ class Plugins {
           if(folderUtils.isFolder(posts)) {
             var routesPost = FileParser.getFiles(posts, true, 0)
             Array.prototype.forEach.call(routesPost, (route) => {
-              route.routePath = `/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
+              route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
             })
             plugin.routes.post = routesPost
           }

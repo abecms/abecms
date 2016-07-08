@@ -75,7 +75,6 @@ router.get('/abe/list-url*', function (req, res, next) {
    getListUrl(router, req, res, next) 
 })
 router.get('/abe/list-hooks*', getListHooks)
-router.get('/abe*', getMain)
 
 var routes = Plugins.instance.getRoutes()
 Array.prototype.forEach.call(routes, (route) => {
@@ -114,6 +113,7 @@ Array.prototype.forEach.call(routes, (route) => {
     })
   }
 })
+router.get('/abe*', getMain)
 
 Hooks.instance.trigger('afterAddRoute', router)
 

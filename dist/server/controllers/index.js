@@ -77,7 +77,6 @@ router.get('/abe/list-url*', function (req, res, next) {
   (0, _routes.getListUrl)(router, req, res, next);
 });
 router.get('/abe/list-hooks*', _routes.getListHooks);
-router.get('/abe*', _routes.getMain);
 
 var routes = _cli.Plugins.instance.getRoutes();
 Array.prototype.forEach.call(routes, function (route) {
@@ -116,6 +115,7 @@ Array.prototype.forEach.call(routes, function (route) {
     });
   }
 });
+router.get('/abe*', _routes.getMain);
 
 _cli.Hooks.instance.trigger('afterAddRoute', router);
 
