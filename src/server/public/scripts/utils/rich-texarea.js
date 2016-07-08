@@ -73,9 +73,16 @@ export default class RichTexarea {
 				break
 				case 'link':
 					var html = this.textEditor.getHTML()
-					this._replaceSelectionWithHtml(`<a href="[LINK]">${window.getSelection().toString()}</a>`)
-					var off = this.link.onLink((link) => {
-						if(link !== null) this.textEditor.setHTML(this.textEditor.getHTML().replace('[LINK]', link))
+					this._replaceSelectionWithHtml(`<a href="[LINK]" target="[TARGET]" rel="[REL]">${window.getSelection().toString()}</a>`)
+					var off = this.link.onLink((obj) => {
+						if(obj.link !== null) {
+							var html = this.textEditor.getHTML().replace('[LINK]', obj.link)
+							if(obj.target) 		html = html.replace(/\[TARGET\]/, '_blank')
+							else 							html = html.replace(/target=\"\[TARGET\]\"/, '')
+							if(obj.noFollow) 	html = html.replace(/\[REL\]/, 'nofollow')
+							else 							html = html.replace(/rel=\"\[REL\]\"/, '')
+							this.textEditor.setHTML(html)
+						}
 						else this.textEditor.setHTML(html)
 						this.setHTML()
 						off()

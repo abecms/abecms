@@ -93,9 +93,14 @@ var RichTexarea = function () {
 						break;
 					case 'link':
 						var html = this.textEditor.getHTML();
-						this._replaceSelectionWithHtml('<a href="[LINK]">' + window.getSelection().toString() + '</a>');
-						var off = this.link.onLink(function (link) {
-							if (link !== null) _this2.textEditor.setHTML(_this2.textEditor.getHTML().replace('[LINK]', link));else _this2.textEditor.setHTML(html);
+						this._replaceSelectionWithHtml('<a href="[LINK]" target="[TARGET]" rel="[REL]">' + window.getSelection().toString() + '</a>');
+						var off = this.link.onLink(function (obj) {
+							if (obj.link !== null) {
+								var html = _this2.textEditor.getHTML().replace('[LINK]', obj.link);
+								if (obj.target) html = html.replace(/\[TARGET\]/, '_blank');else html = html.replace(/target=\"\[TARGET\]\"/, '');
+								if (obj.noFollow) html = html.replace(/\[REL\]/, 'nofollow');else html = html.replace(/rel=\"\[REL\]\"/, '');
+								_this2.textEditor.setHTML(html);
+							} else _this2.textEditor.setHTML(html);
 							_this2.setHTML();
 							off();
 						});

@@ -5,6 +5,18 @@
   top: 0;
   left: 0;
 
+	.coche{
+		border: 1px solid #d3d3d3;
+    background: #efefef;
+    padding: 5px;
+		label{
+	    padding-right: 5px;
+	    input{
+	    	padding-left: 5px;
+	    }
+		}
+	}
+
   &.on {
 	  display: inline-block;
 	}
