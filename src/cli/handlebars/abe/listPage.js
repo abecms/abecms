@@ -24,9 +24,10 @@ export default function listPage(file, index, text) {
   var workflow = ''
 
   workflow += `<td>`
-  if(!file.published || (file.published && file.draft && file.published.date < file.draft.date)) {
+  if((typeof file.published !== undefined && file.published !== null && !file.published) || (file.published && file.draft && file.published.date < file.draft.date)) {
     workflow += `<a href="/abe/${file.template}?filePath=${file.path}" class="file-path">draft</a>`
   }
+
   workflow += `</td>`
   workflow += `<td align="center publish">`
 
@@ -45,7 +46,7 @@ export default function listPage(file, index, text) {
   if (this.published){
     res += `<a href="/unpublish/?filePath=${file.path}"
                title="${text.unpublish}"
-               class="icon" data-unpublish="true"data-text="${text.confirmUnpublish} {{file.path}}">
+               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.path}">
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
