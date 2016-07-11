@@ -226,6 +226,8 @@ var EditorSave = function () {
 
       if (valid) {
         this._abeFormSubmit.click();
+      } else {
+        alert('Required fields are missing');
       }
     }
 
