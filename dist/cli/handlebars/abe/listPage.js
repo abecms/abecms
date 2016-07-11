@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 exports.default = listPage;
 
 var _handlebars = require('handlebars');
@@ -35,9 +38,10 @@ function listPage(file, index, text) {
   var workflow = '';
 
   workflow += '<td>';
-  if (!file.published || file.published && file.draft && file.published.date < file.draft.date) {
+  if (_typeof(file.published) !== undefined && file.published !== null && !file.published || file.published && file.draft && file.published.date < file.draft.date) {
     workflow += '<a href="/abe/' + file.template + '?filePath=' + file.path + '" class="file-path">draft</a>';
   }
+
   workflow += '</td>';
   workflow += '<td align="center publish">';
 
@@ -52,7 +56,7 @@ function listPage(file, index, text) {
   res += '<td align="center draft">\n            <div class="row icons-action">\n              <div class="col-xs-6">';
 
   if (this.published) {
-    res += '<a href="/unpublish/?filePath=' + file.path + '"\n               title="' + text.unpublish + '"\n               class="icon" data-unpublish="true"data-text="' + text.confirmUnpublish + ' {{file.path}}">\n              <span class="glyphicon glyphicon-eye-close"></span>\n            </a>';
+    res += '<a href="/unpublish/?filePath=' + file.path + '"\n               title="' + text.unpublish + '"\n               class="icon" data-unpublish="true" data-text="' + text.confirmUnpublish + ' ' + file.path + '">\n              <span class="glyphicon glyphicon-eye-close"></span>\n            </a>';
   }
 
   res += '</div>\n          <div class="col-xs-6">';
