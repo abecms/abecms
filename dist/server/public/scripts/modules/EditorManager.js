@@ -69,6 +69,17 @@ var EditorManager = function () {
     this._handleBtnDeleteClick = this._btnDeleteClick.bind(this);
     this._handleBtnUnpublishClick = this._btnUnpublishClick.bind(this);
 
+    if (typeof top.location.hash !== 'undefined' && top.location.hash !== null && top.location.hash !== '') {
+      var currentTab = document.querySelector('[href="' + top.location.hash + '"]');
+      if (typeof currentTab !== 'undefined' && currentTab !== null) {
+        currentTab.click(); // retrieve old selected tab
+      }
+    }
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      return location.hash = $(e.target).attr('href').substr(1);
+    });
+
     this._bindEvents();
   }
 

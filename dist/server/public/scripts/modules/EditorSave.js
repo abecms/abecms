@@ -188,7 +188,45 @@ var EditorSave = function () {
     key: '_submitClick',
     value: function _submitClick(e) {
       this._saveType = e.currentTarget.getAttribute('data-action');
-      this._abeFormSubmit.click();
+      if (this._saveType !== 'draft') {
+        this._abeFormRequired();
+      } else {
+        this._abeFormSubmit.click();
+      }
+    }
+  }, {
+    key: '_abeFormRequired',
+    value: function _abeFormRequired() {
+      var formGroups = [].slice.call(document.getElementById('abeForm').querySelectorAll('.form-group'));
+      var valid = true;
+
+      Array.prototype.forEach.call(formGroups, function (formGroup) {
+        var input = formGroup.querySelector('[data-required=true]');
+        if (typeof input !== 'undefined' && input !== null) {
+          var required = input.getAttribute('data-required');
+          var autocomplete = input.getAttribute('data-autocomplete');
+          if (typeof autocomplete !== 'undefined' && autocomplete !== null && (autocomplete === 'true' || autocomplete === true)) {
+            var countValue = input.parentNode.querySelectorAll('.autocomplete-result');
+            if (countValue.length <= 0) {
+              formGroup.classList.add('has-error');
+              valid = false;
+            } else {
+              formGroup.classList.remove('has-error');
+            }
+          } else if (typeof required !== 'undefined' && required !== null && (required === 'true' || required === true)) {
+            if (input.value === '') {
+              formGroup.classList.add('has-error');
+              valid = false;
+            } else {
+              formGroup.classList.remove('has-error');
+            }
+          }
+        }
+      });
+
+      if (valid) {
+        this._abeFormSubmit.click();
+      }
     }
 
     /**

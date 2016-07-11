@@ -29,8 +29,9 @@ function printInput() {
   var params = arguments[0];
 
   params = _.Hooks.instance.trigger('beforeEditorInput', params);
+  var desc = params.desc + (params.required ? ' *' : '');
 
-  var res = '<div class="form-group">\n              <label for="' + params.key + '" \n                      ' + (params.type.indexOf('text_link') > -1 ? 'data-for-link="' + params.key + '"' : '') + ' >\n                ' + params.desc + '\n              </label>',
+  var res = '<div class="form-group">\n              <label class="control-label" for="' + params.key + '" \n                      ' + (params.type.indexOf('text_link') > -1 ? 'data-for-link="' + params.key + '"' : '') + ' >\n                ' + desc + '\n              </label>',
       disabled = '';
 
   if (typeof params.placeholder === 'undefined' || params.placeholder === null || params.placeholder === 'undefined') {

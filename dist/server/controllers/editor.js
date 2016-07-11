@@ -203,6 +203,7 @@ function orderBlock() {
   var formBlock = {};
 
   for (var tab in util.form) {
+
     var formBlockTab = {};
     for (var i = 0; i < util.form[tab].item.length; i++) {
       var blockName = util.form[tab].item[i].block === '' ? 'default_' + i : util.form[tab].item[i].block;
