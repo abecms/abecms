@@ -187,6 +187,8 @@ export default class EditorSave {
 
     if (valid) {
       this._abeFormSubmit.click()
+    }else {
+      alert('Required fields are missing')
     }
   }
 
