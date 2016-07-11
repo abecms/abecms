@@ -59,6 +59,34 @@ select[multiple], select[size] {
   height: $select-size;
 }
 
+.has-error {
+  .input-group-addon {
+    &.link {
+      border-color: #a94442;
+
+      .glyphicon {
+        color: #a94442;
+      }
+    }
+    
+    &.image {
+      border-color: #a94442;
+
+      .glyphicon {
+        color: #a94442;
+      }
+    }
+  }
+
+  .img-upload {
+    .upload-wrapper {
+      .glyphicon {
+        color: #a94442;
+      }
+    }
+  }
+}
+
 .input-group-addon {
   &.link {
     color: $addon-color;
