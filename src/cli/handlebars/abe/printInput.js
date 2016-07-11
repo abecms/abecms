@@ -11,11 +11,12 @@ export default function printInput () {
   var params = arguments[0];
 
   params = Hooks.instance.trigger('beforeEditorInput', params)
+  var desc = params.desc + ((params.required) ? ' *' : '')
 
   var res = `<div class="form-group">
-              <label for="${params.key}" 
+              <label class="control-label" for="${params.key}" 
                       ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + params.key + '"' : ''} >
-                ${params.desc}
+                ${desc}
               </label>`,
       disabled = ''
 
