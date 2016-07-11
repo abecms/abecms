@@ -188,7 +188,7 @@ var EditorSave = function () {
     key: '_submitClick',
     value: function _submitClick(e) {
       this._saveType = e.currentTarget.getAttribute('data-action');
-      if (this._saveType !== 'draft') {
+      if (this._saveType !== 'draft' && this._saveType !== 'reject') {
         this._abeFormRequired();
       } else {
         this._abeFormSubmit.click();
