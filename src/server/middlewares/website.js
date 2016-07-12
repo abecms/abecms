@@ -84,6 +84,8 @@ var middleware = function(req, res, next) {
     }else {
       return next()
     }
+
+    html = Hooks.instance.trigger('beforePreview', html, req, res, next)
     res.set('Content-Type', 'text/html')
     return res.send(html);
 

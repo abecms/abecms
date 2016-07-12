@@ -21,6 +21,11 @@ var hooks = {
       return router;
    },
 
+   /***************** preview *****************/
+   beforePreview: function beforePreview(html, req, res, next, abe) {
+      return html;
+   },
+
    /***************** create *****************/
    beforeDeleteFile: function beforeDeleteFile(filePath, abe) {
       return filePath;
@@ -78,6 +83,9 @@ var hooks = {
       return resp;
    },
    afterPageSaveCompile: function afterPageSaveCompile(tmp, json, abe) {
+      return tmp;
+   },
+   afterPageEditorCompile: function afterPageEditorCompile(tmp, json, abe) {
       return tmp;
    },
 

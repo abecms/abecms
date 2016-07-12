@@ -278,7 +278,12 @@ export default class Page {
       var tmp = template(json, {
           data: {intl: intlData}
       })
-      if(this._onlyHTML) tmp = Hooks.instance.trigger('afterPageSaveCompile', tmp, json)
+      
+      if(this._onlyHTML) {
+        tmp = Hooks.instance.trigger('afterPageSaveCompile', tmp, json)
+      }else {
+        tmp = Hooks.instance.trigger('afterPageEditorCompile', tmp, json)
+      }
 
       this.html = tmp
     }
