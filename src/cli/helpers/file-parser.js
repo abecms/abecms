@@ -7,6 +7,7 @@ import moment from 'moment'
 import {
 	cli
 	,log
+	,save
 	,folderUtils
 	,fileUtils
 	,fileAttr
@@ -403,8 +404,24 @@ export default class FileParser {
 
   static unpublishFile(filePath) {
   	var tplUrl = FileParser.getFileDataFromUrl(fileUtils.concatPath(config.publish.url, filePath))
+  	if(fileUtils.isFile(tplUrl.json.path)) {
+	  	var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)))
+	  	if(typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
+	  		delete json.abe_meta.publish
+	  	}
 
-  	FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
+			save(
+	      fileUtils.getFilePath(json.abe_meta.link),
+	      json.abe_meta.template,
+	      json,
+	      '',
+	      'reject',
+	      null,
+	      'reject')
+	      .then((resSave) => {
+	        FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
+	      })
+  	}
   }
 
   static deleteFile(filePath) {

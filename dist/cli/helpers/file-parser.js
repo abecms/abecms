@@ -443,8 +443,16 @@ var FileParser = function () {
 		key: 'unpublishFile',
 		value: function unpublishFile(filePath) {
 			var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.publish.url, filePath));
+			if (_.fileUtils.isFile(tplUrl.json.path)) {
+				var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)));
+				if (typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
+					delete json.abe_meta.publish;
+				}
 
-			FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
+				(0, _.save)(_.fileUtils.getFilePath(json.abe_meta.link), json.abe_meta.template, json, '', 'reject', null, 'reject').then(function (resSave) {
+					FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
+				});
+			}
 		}
 	}, {
 		key: 'deleteFile',

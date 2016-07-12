@@ -291,6 +291,7 @@ var FileUtils = function () {
 	}, {
 		key: 'checkMergedFile',
 		value: function checkMergedFile(file, merged) {
+
 			var cleanFilePath = file.cleanFilePath;
 			var revision = {
 				status: file.status,

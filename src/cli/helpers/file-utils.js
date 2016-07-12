@@ -220,6 +220,7 @@ export default class FileUtils {
 
   /* TODO: put this method in its right helper */
   static checkMergedFile(file, merged) {
+
   	var cleanFilePath = file.cleanFilePath
 		var revision = {
   			status: file.status,
