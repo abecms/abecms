@@ -80,11 +80,18 @@ export default class EditorManager {
         method: 'get'
       },
       (code, responseText, request) => {
+        var labels = target.parentNode.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
         var p = target.parentNode.parentNode.parentNode.parentNode.querySelector('.label-published')
+
+        Array.prototype.forEach.call(labels, (label) => {
+          label.classList.add('hidden')
+        })
         var draft = target.parentNode.parentNode.parentNode.parentNode.querySelector('.label-draft')
+        
         if(typeof draft !== 'undefined' && draft !== null) {
           draft.classList.remove('hidden')
         }
+
         if(typeof p !== 'undefined' && p !== null) p.remove()
         target.remove()
       })
