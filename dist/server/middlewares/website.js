@@ -98,6 +98,8 @@ var middleware = function middleware(req, res, next) {
     } else {
       return next();
     }
+
+    html = _cli.Hooks.instance.trigger('beforePreview', html, req, res, next);
     res.set('Content-Type', 'text/html');
     return res.send(html);
   } else {

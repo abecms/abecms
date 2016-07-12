@@ -277,7 +277,12 @@ var Page = function () {
       var tmp = template(json, {
         data: { intl: intlData }
       });
-      if (this._onlyHTML) tmp = _.Hooks.instance.trigger('afterPageSaveCompile', tmp, json);
+
+      if (this._onlyHTML) {
+        tmp = _.Hooks.instance.trigger('afterPageSaveCompile', tmp, json);
+      } else {
+        tmp = _.Hooks.instance.trigger('afterPageEditorCompile', tmp, json);
+      }
 
       this.html = tmp;
     }
