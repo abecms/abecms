@@ -433,7 +433,7 @@ var Utils = function () {
                   var localReq = httpUse.request(options, function (localRes) {
                     localRes.setEncoding('utf8');
                     localRes.on('data', function (chunk) {
-                      body = chunk;
+                      body += chunk;
                     });
                     localRes.on('end', function () {
                       try {

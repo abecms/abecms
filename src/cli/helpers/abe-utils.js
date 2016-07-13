@@ -421,7 +421,7 @@ export default class Utils {
                 var localReq = httpUse.request(options, (localRes) => {
                   localRes.setEncoding('utf8');
                   localRes.on('data', (chunk) => {
-                    body = chunk;
+                    body += chunk;
                   });
                   localRes.on('end', () => {
                     try {
