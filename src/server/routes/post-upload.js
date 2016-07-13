@@ -76,8 +76,8 @@ var route = function(req, res, next){
 
     file.on('end', function() {
       if(hasError) return
-      filePath = fileUtils.concatPath(folderFilePath, filename)
-      resp['filePath'] = fileUtils.concatPath(folderWebPath, filename)
+      filePath = fileUtils.concatPath(folderFilePath, cleanSlug(filename))
+      resp['filePath'] = fileUtils.concatPath(folderWebPath, cleanSlug(filename))
       fstream = fs.createWriteStream(filePath)
       for (var i = 0; i < file.fileRead.length; i++) {
         fstream.write(file.fileRead[i])
