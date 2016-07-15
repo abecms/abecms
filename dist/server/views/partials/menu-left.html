@@ -3,7 +3,7 @@
 <div class="page-header">
   <h1><small>{{@root.text.site}}</small></h1>
 </div>
-<ul class="list-group">
+<ul class="list-group list-group-manager">
   {{#if @root.allowed.action.config}}
   <li class="list-group-item pointer" data-config="true" data-manager-show="manager-config">
     {{@root.text.config}}
@@ -12,6 +12,7 @@
   <li class="list-group-item pointer" data-config="true" data-manager-show="manager-files">
     {{@root.text.navigation}}
   </li>
+  {{abeImport 'menu-left-addons' manager.config this}}
 </ul>
 {{/if}}
 

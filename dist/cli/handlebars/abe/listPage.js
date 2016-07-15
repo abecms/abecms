@@ -55,17 +55,15 @@ function listPage(file, index, text) {
   workflow = _.Hooks.instance.trigger('afterListPageDraft', workflow, file, index, text);
   res += workflow;
 
-  res += '<td align="center draft">\n            <div class="row icons-action">\n              <div class="col-xs-6">';
+  res += '<td align="center">\n            <div class="row icons-action">';
 
   if (this.published) {
     res += '<a href="/unpublish/?filePath=' + file.path + '"\n               title="' + text.unpublish + '"\n               class="icon" data-unpublish="true" data-text="' + text.confirmUnpublish + ' ' + file.path + '">\n              <span class="glyphicon glyphicon-eye-close"></span>\n            </a>';
   }
 
-  res += '</div>\n          <div class="col-xs-6">';
-
   res += '<a href="/delete/?filePath=' + this.path + '"\n             title="' + text.delete + '"\n             class="icon"\n             data-delete="true"\n             data-text="' + text.confirmDelete + ' ' + file.path + '">\n            <span class="glyphicon glyphicon-trash"></span>\n          </a>';
 
-  res += '</div>\n        </div>\n      </td>\n    </tr>';
+  res += '\n        </div>\n      </td>\n    </tr>';
 
   res = _.Hooks.instance.trigger('afterListPage', res, file, index, text);
   return new _handlebars2.default.SafeString(res);

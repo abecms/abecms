@@ -41,9 +41,8 @@ export default function listPage(file, index, text) {
   workflow = Hooks.instance.trigger('afterListPageDraft', workflow, file, index, text)
   res += workflow
 
-  res += `<td align="center draft">
-            <div class="row icons-action">
-              <div class="col-xs-6">`
+  res += `<td align="center">
+            <div class="row icons-action">`
   
   if (this.published){
     res += `<a href="/unpublish/?filePath=${file.path}"
@@ -52,9 +51,6 @@ export default function listPage(file, index, text) {
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
-          
-  res += `</div>
-          <div class="col-xs-6">`
       
   res += `<a href="/delete/?filePath=${this.path}"
              title="${text.delete}"
@@ -64,7 +60,7 @@ export default function listPage(file, index, text) {
             <span class="glyphicon glyphicon-trash"></span>
           </a>`
 
-  res += `</div>
+  res += `
         </div>
       </td>
     </tr>`
