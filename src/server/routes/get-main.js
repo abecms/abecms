@@ -54,8 +54,6 @@ var route = function(req, res, next) {
   var debugJsonKey = (req.query.key) ? req.query.key : false
   var debugHtml = (req.query.debugHtml && req.query.debugHtml == 'true' ) ? true : false
 
-  filePath = cleanSlug(filePath)
-
   var obj
   var tplUrl
   var isHome = true

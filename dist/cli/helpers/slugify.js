@@ -27,7 +27,7 @@ function cleanSlug(str) {
 
 function slugify(str) {
   str = _cli.fileUtils.removeExtension(str);
-  str = (0, _limax2.default)(str);
+  str = (0, _limax2.default)(str, { separateNumbers: false });
   str = str + '.' + _cli.config.files.templates.extension;
   return str.toLowerCase();
 }
