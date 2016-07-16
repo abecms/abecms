@@ -76,8 +76,11 @@ var route = function(req, res, next){
 
     file.on('end', function() {
       if(hasError) return
-      filePath = fileUtils.concatPath(folderFilePath, cleanSlug(filename))
-      resp['filePath'] = fileUtils.concatPath(folderWebPath, cleanSlug(filename))
+      var ext = filename.split('.')
+      ext = ext[ext.length - 1]
+      var cleanFileName = cleanSlug(filename).replace(`.${config.files.templates.extension}`, `.${ext}`)
+      filePath = fileUtils.concatPath(folderFilePath, cleanFileName)
+      resp['filePath'] = fileUtils.concatPath(folderWebPath, cleanFileName)
       fstream = fs.createWriteStream(filePath)
       for (var i = 0; i < file.fileRead.length; i++) {
         fstream.write(file.fileRead[i])

@@ -95,8 +95,11 @@ var route = function route(req, res, next) {
 
     file.on('end', function () {
       if (hasError) return;
-      filePath = _cli.fileUtils.concatPath(folderFilePath, (0, _cli.cleanSlug)(filename));
-      resp['filePath'] = _cli.fileUtils.concatPath(folderWebPath, (0, _cli.cleanSlug)(filename));
+      var ext = filename.split('.');
+      ext = ext[ext.length - 1];
+      var cleanFileName = (0, _cli.cleanSlug)(filename).replace('.' + _cli.config.files.templates.extension, '.' + ext);
+      filePath = _cli.fileUtils.concatPath(folderFilePath, cleanFileName);
+      resp['filePath'] = _cli.fileUtils.concatPath(folderWebPath, cleanFileName);
       fstream = _fs2.default.createWriteStream(filePath);
       for (var i = 0; i < file.fileRead.length; i++) {
         fstream.write(file.fileRead[i]);
