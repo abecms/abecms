@@ -83,7 +83,14 @@ var FileParser = function () {
 						var cleanName = _.fileAttr.delete(level[i]);
 						var cleanNameNoExt = _.fileUtils.removeExtension(cleanName);
 						var fileData = _.fileAttr.get(level[i]);
-						var date = fileData.d ? fileData.d : '0000-00-00T00:00:00.000Z';
+
+						var date;
+						if (fileData.d) {
+							date = fileData.d;
+						} else {
+							var stat = _fsExtra2.default.statSync(path);
+							date = stat.mtime;
+						}
 						var status = fileData.s ? dirName.replace(_.config.root, '').replace(/^\//, '').split('/')[0] : 'published';
 						var cleanFilePath = _.fileUtils.cleanFilePath(path);
 

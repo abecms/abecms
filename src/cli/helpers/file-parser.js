@@ -47,6 +47,7 @@ export default class FileParser {
 		var fileCurrentLevel = []
 		let assets = config.files.templates.assets
 
+
 	  // read file first
 	  for (var i = 0; i < level.length; i++) {
 	  	var path = dirName + '/' + level[i]
@@ -57,7 +58,14 @@ export default class FileParser {
 		    	var cleanName = fileAttr.delete(level[i])
 		    	var cleanNameNoExt = fileUtils.removeExtension(cleanName)
 		    	var fileData = fileAttr.get(level[i])
-		    	var date = fileData.d ? fileData.d : '0000-00-00T00:00:00.000Z'
+
+		    	var date
+		    	if (fileData.d) {
+						date = fileData.d
+		    	}else {
+						var stat = fse.statSync(path)
+						date = stat.mtime
+		    	}
 		    	var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
 		    	var cleanFilePath = fileUtils.cleanFilePath(path)
 
