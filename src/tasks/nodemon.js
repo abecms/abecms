@@ -27,6 +27,7 @@ nodemon({
     'src/cli/*',
     'src/hooks/*',
     'src/server/routes/*',
+    'src/server/helpers/*',
     'src/server/middlewares/*',
     'src/server/controllers/*',
     'src/server/app.js',

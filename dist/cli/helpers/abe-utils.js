@@ -284,6 +284,7 @@ var Utils = function () {
   }, {
     key: 'getDataList',
     value: function getDataList(tplPath, text, jsonPage) {
+
       var p = new _es6Promise.Promise(function (resolve, reject) {
         var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
             match;
@@ -295,6 +296,8 @@ var Utils = function () {
 
         var promises = [];
         while (match = listReg.exec(text)) {
+          var logTime = tplPath + "<br />" + match[0];
+          var dateStart = new Date();
 
           var pSource = new _es6Promise.Promise(function (resolveSource, rejectSource) {
             var obj = Utils.getAllAttributes(match[0], jsonPage);
@@ -379,6 +382,10 @@ var Utils = function () {
                     });
                   });
                 }
+
+                var d = (new Date().getTime() - dateStart.getTime()) / 1000;
+                _.log.write('request', type + "<br />" + logTime + "<br />Time:" + d + 'sec');
+                // log.write('request', `${type} / ${logTime} (${d}s)`)
 
                 resolveSource();
                 break;

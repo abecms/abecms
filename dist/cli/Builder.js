@@ -28,6 +28,7 @@ var Builder = function Builder(root, folder, dest, flow) {
   files.forEach(function (file) {
     var json = _fsExtra2.default.readJsonSync(file.path);
     var text = (0, _.getTemplate)(json.abe_meta.template);
+
     _.Util.getDataList(_.fileUtils.removeLast(json.abe_meta.link), text, json).then(function () {
       var page = new _.Page(json.abe_meta.link, text, json, true);
       (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);

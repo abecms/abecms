@@ -23,6 +23,7 @@ class Builder {
     files.forEach(function (file) {
       var json = fse.readJsonSync(file.path)
       var text = getTemplate(json.abe_meta.template)
+
       Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
       .then(() => {
         var page = new Page(json.abe_meta.link, text, json, true)

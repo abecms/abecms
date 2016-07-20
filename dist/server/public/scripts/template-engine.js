@@ -81,6 +81,11 @@ var Engine = function () {
   }
 
   _createClass(Engine, [{
+    key: 'loadIframe',
+    value: function loadIframe() {
+      _EditorReload2.default.instance.reload();
+    }
+  }, {
     key: '_bindEvents',
     value: function _bindEvents() {
       var _this2 = this;
@@ -126,3 +131,7 @@ window.abe = {
   autocomplete: engine._autocomplete,
   editorReload: _EditorReload2.default
 };
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  engine.loadIframe();
+});

@@ -1,14 +1,12 @@
 import EditorUtils from '../modules/EditorUtils'
 import EditorInputs from '../modules/EditorInputs'
 import {IframeNode} from '../utils/iframe'
-import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import {Promise} from 'es6-promise'
 import on from 'on'
 
 export default class EditorFiles {
   constructor() {
-    this._ajax = Nanoajax.ajax
     this._filePathEle = document.getElementById('file-path')
     this.onUpload = on(this)
     this._handleChangeFiles = this._changeFiles.bind(this)

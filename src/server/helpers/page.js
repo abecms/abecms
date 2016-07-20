@@ -38,7 +38,9 @@ var page = function (req, res, next) {
   filePath = fileUtils.getFilePath(filePath)
   var html = (req.query.html) ? true : false
   var json = null
+  var editor = false
   if(typeof req.body.json !== 'undefined' && req.body.json !== null) {
+    editor = true
     if(typeof req.body.json === 'string') {
       json = JSON.parse(req.body.json)
     }else {
@@ -78,14 +80,22 @@ var page = function (req, res, next) {
     }
     var text = getTemplate(template)
 
-    Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
-      .then(() => {
-        var page = new Page(templatePath, text, json, html)
-        res.set('Content-Type', 'text/html')
-        res.send(page.html)
-      }).catch(function(e) {
-        console.error(e)
-      })
+    if (!editor) {
+
+      Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
+        .then(() => {
+          var page = new Page(templatePath, text, json, html)
+          res.set('Content-Type', 'text/html')
+          res.send(page.html)
+        }).catch(function(e) {
+          console.error(e)
+        })
+    }else {
+      text = Util.removeDataList(text)
+      var page = new Page(templatePath, text, json, html)
+      res.set('Content-Type', 'text/html')
+      res.send(page.html)
+    }
   }else {
     // not 404 page if tag abe image upload into each block
     if(/upload%20image/g.test(req.url)) {

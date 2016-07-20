@@ -62,32 +62,25 @@ export default class Reload {
 
     this._ajax(
     {
-      url: iframe.src,
+      url: iframe.getAttribute('data-iframe-src'),
       body: data,
       method: 'post'
     },
     (code, responseText, request) => {
 
         var str = responseText
-        // str = str.replace(/<[\s\S]+(?=<head>)/, '')
-        // str = str.replace(/<\/html>/, '')
-        // var matches = str.match(/src=['|"]([\S\s]*?)['|"]/g)
-        // if(typeof matches !== 'undefined' && matches !== null) {
-        //   Array.prototype.forEach.call(matches, (match) => {
-        //     let matchReplace = match.substring(5, match.length-1)
-        //     if(matchReplace.trim() !== "") {
-        //       str = str.replace(matchReplace, `${matchReplace}?v${parseInt(Math.random() * 999999999999)}`)
-        //     }
-        //   })
-        // }
-
         var doc = iframe.contentWindow.document;
+        str = str.replace(/<\/head>/, '<base href="/" /></head>')
         doc.open();
         doc.write(str);
         doc.close();
         
         setTimeout(function () {
-          IframeDocument('#page-template').body.scrollTop = scrollTop
+          var iframeDoc = IframeDocument('#page-template')
+          if(typeof iframeDoc !== 'undefined' && iframeDoc !== null
+            && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) {
+            iframeDoc.body.scrollTop = scrollTop
+          }
         }, 1000)
         
         return

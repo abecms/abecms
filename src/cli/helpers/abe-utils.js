@@ -269,6 +269,7 @@ export default class Utils {
   }
 
   static getDataList(tplPath, text, jsonPage) {
+
     var p = new Promise((resolve, reject) => {
       var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
           match
@@ -280,6 +281,8 @@ export default class Utils {
 
       var promises = []
       while (match = listReg.exec(text)) {
+        var logTime = tplPath + "<br />" + match[0]
+        var dateStart = new Date()
 
         var pSource = new Promise((resolveSource, rejectSource) => {
           var obj = Utils.getAllAttributes(match[0], jsonPage)
@@ -367,6 +370,10 @@ export default class Utils {
                   })
                 })
               }
+
+              var d = (new Date().getTime() - dateStart.getTime()) / 1000
+              log.write('request', type + "<br />" + logTime + "<br />Time:" + d + 'sec')
+              // log.write('request', `${type} / ${logTime} (${d}s)`)
 
               resolveSource()
               break;
