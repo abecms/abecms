@@ -97,7 +97,7 @@ var EditorManager = function () {
         url: href,
         method: 'get'
       }, function (code, responseText, request) {
-        _this.remove._fire(target.parentNode.parentNode.parentNode.parentNode);
+        _this.remove._fire(target.parentNode.parentNode.parentNode);
       });
     }
   }, {
