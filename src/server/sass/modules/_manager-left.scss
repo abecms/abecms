@@ -23,6 +23,10 @@
     vertical-align: top;
     background-color: #f0f0f0;
 
+    .list-group-item a {
+      display: block;
+    }
+
     .close-manager {
       width: inherit;
     }
