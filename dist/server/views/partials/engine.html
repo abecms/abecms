@@ -7,7 +7,7 @@
       <button class='btn btn-default btn-manager'><span class="glyphicon glyphicon-tasks"></span>
         {{@root.text.manager}}
       </button><!-- /end btn manager -->
-      {{#if manager.file.isPublished}}
+      {{#ifCond @root.json.abe_meta.status 'publish'}}
       <!-- btn preview -->
       <a class='btn btn-primary btn-visit-site' href="{{urlToSaveFile}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span>
         {{@root.text.preview}}
@@ -17,7 +17,7 @@
       <a class='btn btn-primary btn-visit-site' href="/page/{{@root.json.abe_meta.template}}?filePath={{@root.json.abe_meta.link}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span>
         {{@root.text.preview}}
       </a><!-- /end btn preview -->
-      {{/if}}
+      {{/ifCond}}
       {{abeImport 'toolbar' manager.config this}}
       {{abeImport 'toolbar-more' manager.config this}}
     </div>
