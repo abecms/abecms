@@ -93,7 +93,21 @@ var Sql = function () {
     }
   }, {
     key: 'cleanRequest',
-    value: function cleanRequest(str) {
+    value: function cleanRequest(str, jsonPage) {
+
+      var matchVariable = /from ([\S\s]+){{(.*)}}/;
+      var match;
+
+      var fromJson = matchVariable.exec(str);
+      if (typeof fromJson !== 'undefined' && fromJson !== null && typeof fromJson[2] !== 'undefined' && fromJson[2] !== null) {
+        var value = Sql.deep_value_array(jsonPage, fromJson[2]);
+        if (typeof value !== 'undefined' && value !== null) {
+          str = str.replace('{{' + fromJson[2] + '}}', value);
+        } else {
+          str = str.replace('{{' + fromJson[2] + '}}', '');
+        }
+      }
+
       var from = /from ([\S\s]+)/.exec(str);
 
       var matches = from;
@@ -115,8 +129,8 @@ var Sql = function () {
     }
   }, {
     key: 'handleSqlRequest',
-    value: function handleSqlRequest(str) {
-      var request = (0, _nodeSqlparser.parse)(Sql.cleanRequest(str));
+    value: function handleSqlRequest(str, jsonPage) {
+      var request = (0, _nodeSqlparser.parse)(Sql.cleanRequest(str, jsonPage));
       var reconstructSql = '';
 
       // SQL TYPE
@@ -237,7 +251,7 @@ var Sql = function () {
   }, {
     key: 'getDataRequest',
     value: function getDataRequest(tplPath, match, jsonPage) {
-      var request = Sql.handleSqlRequest((0, _.getAttr)(match, 'source')),
+      var request = Sql.handleSqlRequest((0, _.getAttr)(match, 'source'), jsonPage),
           limit = 0,
           res = [];
 

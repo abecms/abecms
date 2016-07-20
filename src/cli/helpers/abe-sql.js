@@ -72,12 +72,28 @@ export default class Sql {
     return arr
   }
 
-  static cleanRequest(str) {
+  static cleanRequest(str, jsonPage) {
+
+    var matchVariable = /from ([\S\s]+){{(.*)}}/
+    var match
+
+    var fromJson = matchVariable.exec(str)
+    if(typeof fromJson !== 'undefined' && fromJson !== null
+      && typeof fromJson[2] !== 'undefined' && fromJson[2] !== null) {
+      var value = Sql.deep_value_array(jsonPage, fromJson[2])
+      if(typeof value !== 'undefined' && value !== null) {
+        str = str.replace('{{' + fromJson[2] + '}}', value)
+      }else {
+        str = str.replace('{{' + fromJson[2] + '}}', '')
+      }
+    }
+
     var from = /from ([\S\s]+)/.exec(str)
 
     var matches = from
     if(matches[1]) {
       var res = matches[1];
+
 
       var splitAttr = [' where ', ' order by ', ' limit ', ' WHERE ', ' ORDER BY ', ' LIMIT ']
       for(var i = 0; i < splitAttr.length; i++) {
@@ -93,8 +109,8 @@ export default class Sql {
     return str
   }
 
-  static handleSqlRequest(str) {
-    var request = parse(Sql.cleanRequest(str))
+  static handleSqlRequest(str, jsonPage) {
+    var request = parse(Sql.cleanRequest(str, jsonPage))
     var reconstructSql = ''
 
     // SQL TYPE
@@ -211,7 +227,7 @@ export default class Sql {
   }
 
   static getDataRequest(tplPath, match, jsonPage) {
-    var request = Sql.handleSqlRequest(getAttr(match, 'source')),
+    var request = Sql.handleSqlRequest(getAttr(match, 'source'), jsonPage),
         limit = 0,
         res = []
     
