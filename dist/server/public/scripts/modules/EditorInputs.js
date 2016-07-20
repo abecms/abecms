@@ -36,10 +36,6 @@ var _linkPicker = require('../utils/link-picker');
 
 var _linkPicker2 = _interopRequireDefault(_linkPicker);
 
-var _nanoajax = require('nanoajax');
-
-var _nanoajax2 = _interopRequireDefault(_nanoajax);
-
 var _qs = require('qs');
 
 var _qs2 = _interopRequireDefault(_qs);
@@ -56,7 +52,6 @@ var EditorInputs = function () {
   function EditorInputs() {
     _classCallCheck(this, EditorInputs);
 
-    this._ajax = _nanoajax2.default.ajax;
     this._json = _EditorJson2.default.instance;
     this.color = new _colorPicker2.default(document.querySelector('.wysiwyg-popup.color'));
     this.link = new _linkPicker2.default(document.querySelector('.wysiwyg-popup.link'));

@@ -40,6 +40,10 @@ class Engine {
     })
   }
 
+  loadIframe() {
+    EditorReload.instance.reload()
+  }
+
   _bindEvents() {
 
     this._blocks.onNewBlock(() => {
@@ -80,3 +84,7 @@ window.abe = {
   autocomplete: engine._autocomplete,
   editorReload: EditorReload
 }
+
+document.addEventListener("DOMContentLoaded", function(event) {
+  engine.loadIframe()
+})

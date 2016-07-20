@@ -6,13 +6,11 @@ import Handlebars from 'handlebars'
 import RichText from '../utils/rich-texarea'
 import Color from '../utils/color-picker'
 import Link from '../utils/link-picker'
-import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import on from 'on'
 
 export default class EditorInputs {
   constructor() {
-    this._ajax = Nanoajax.ajax
     this._json = Json.instance
     this.color = new Color(document.querySelector('.wysiwyg-popup.color'))
     this.link = new Link(document.querySelector('.wysiwyg-popup.link'))

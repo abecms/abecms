@@ -16,10 +16,6 @@ var _EditorInputs2 = _interopRequireDefault(_EditorInputs);
 
 var _iframe = require('../utils/iframe');
 
-var _nanoajax = require('nanoajax');
-
-var _nanoajax2 = _interopRequireDefault(_nanoajax);
-
 var _qs = require('qs');
 
 var _qs2 = _interopRequireDefault(_qs);
@@ -38,7 +34,6 @@ var EditorFiles = function () {
   function EditorFiles() {
     _classCallCheck(this, EditorFiles);
 
-    this._ajax = _nanoajax2.default.ajax;
     this._filePathEle = document.getElementById('file-path');
     this.onUpload = (0, _on2.default)(this);
     this._handleChangeFiles = this._changeFiles.bind(this);

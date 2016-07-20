@@ -16,7 +16,7 @@ var route = function route(req, res, next) {
   _cli.Hooks.instance.trigger('beforeRoute', req, res, next);
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
-  (0, _page2.default)(req, res, next);
+  (0, _page2.default)(req, res, next, true);
 };
 
 exports.default = route;

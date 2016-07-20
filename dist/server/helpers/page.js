@@ -54,7 +54,9 @@ var page = function page(req, res, next) {
   filePath = _cli.fileUtils.getFilePath(filePath);
   var html = req.query.html ? true : false;
   var json = null;
+  var editor = false;
   if (typeof req.body.json !== 'undefined' && req.body.json !== null) {
+    editor = true;
     if (typeof req.body.json === 'string') {
       json = JSON.parse(req.body.json);
     } else {
@@ -93,13 +95,21 @@ var page = function page(req, res, next) {
     }
     var text = (0, _cli.getTemplate)(template);
 
-    _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
+    if (!editor) {
+
+      _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
+        var page = new _cli.Page(templatePath, text, json, html);
+        res.set('Content-Type', 'text/html');
+        res.send(page.html);
+      }).catch(function (e) {
+        console.error(e);
+      });
+    } else {
+      text = _cli.Util.removeDataList(text);
       var page = new _cli.Page(templatePath, text, json, html);
       res.set('Content-Type', 'text/html');
       res.send(page.html);
-    }).catch(function (e) {
-      console.error(e);
-    });
+    }
   } else {
     // not 404 page if tag abe image upload into each block
     if (/upload%20image/g.test(req.url)) {
