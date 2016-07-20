@@ -201,13 +201,8 @@ var Sql = function () {
   }, {
     key: 'sortByDateDesc',
     value: function sortByDateDesc(a, b) {
-      var jsonA = _.FileParser.getJson(a.path);
-      var jsonB = _.FileParser.getJson(b.path);
-      var metaA = _.config.meta.name;
-      var metaB = _.config.meta.name;
-
-      var dateA = jsonA[metaA] ? new Date(jsonA[metaA].latest.date) : new Date();
-      var dateB = jsonB[metaB] ? new Date(jsonB[metaB].latest.date) : new Date();
+      var dateA = new Date(a.date);
+      var dateB = new Date(b.date);
       if (dateA < dateB) {
         return 1;
       } else if (dateA > dateB) {
@@ -215,15 +210,43 @@ var Sql = function () {
       }
       return 0;
     }
+
+    // static sortByDateDesc(a, b) {
+    //   var jsonA = FileParser.getJson(a.path)
+    //   var jsonB = FileParser.getJson(b.path)
+    //   let metaA = config.meta.name
+    //   let metaB = config.meta.name
+
+    //   var dateA = (jsonA[metaA]) ? new Date(jsonA[metaA].latest.date) : new Date()
+    //   var dateB = (jsonB[metaB]) ? new Date(jsonB[metaB].latest.date) : new Date()
+    //   if(dateA < dateB) {
+    //     return 1
+    //   }else if(dateA > dateB) {
+    //     return -1
+    //   }
+    //   return 0
+    // }
+
+    // static sortByDateAsc(a, b) {
+    //   // var jsonA = FileParser.getJson(a.path)
+    //   // var jsonB = FileParser.getJson(b.path)
+    //   // let metaA = config.meta.name
+    //   // let metaB = config.meta.name
+    //   var dateA = new Date(a.date)
+    //   var dateB = new Date(b.date)
+    //   if(dateA > dateB) {
+    //     return 1
+    //   }else if(dateA < dateB) {
+    //     return -1
+    //   }
+    //   return 0
+    // }
+
   }, {
     key: 'sortByDateAsc',
     value: function sortByDateAsc(a, b) {
-      var jsonA = _.FileParser.getJson(a.path);
-      var jsonB = _.FileParser.getJson(b.path);
-      var metaA = _.config.meta.name;
-      var metaB = _.config.meta.name;
-      var dateA = new Date(jsonA[metaA].latest.date);
-      var dateB = new Date(jsonB[metaB].latest.date);
+      var dateA = new Date(a.date);
+      var dateB = new Date(b.date);
       if (dateA > dateB) {
         return 1;
       } else if (dateA < dateB) {
