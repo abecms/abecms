@@ -78,7 +78,8 @@ var route = function(req, res, next){
       if(hasError) return
       var ext = filename.split('.')
       ext = ext[ext.length - 1]
-      var cleanFileName = cleanSlug(filename).replace(`.${config.files.templates.extension}`, `.${ext}`)
+      var dateID = new Date().toISOString().replace(/[-:\.]/g, '')
+      var cleanFileName = cleanSlug(filename).replace(`.${config.files.templates.extension}`, `${dateID}.${ext}`)
       filePath = fileUtils.concatPath(folderFilePath, cleanFileName)
       resp['filePath'] = fileUtils.concatPath(folderWebPath, cleanFileName)
       fstream = fs.createWriteStream(filePath)
