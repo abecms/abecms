@@ -65,7 +65,7 @@ export default class EditorManager {
         method: 'get'
       },
       (code, responseText, request) => {
-        this.remove._fire(target.parentNode.parentNode.parentNode.parentNode)
+        this.remove._fire(target.parentNode.parentNode.parentNode)
       })
   }
 
