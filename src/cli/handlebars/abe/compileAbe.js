@@ -18,7 +18,7 @@ export default function compileAbe(){
     key = key[key.length - 1]
     var hash = arguments[0].hash
     hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]')
-    var value = ((content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key).replace(/%27/, "'")
+    var value = ((content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key)
     if(typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich'){
       var testXSS = xss(value.replace(/&quot;/g, '"'), {
         "whiteList": config.htmlWhiteList,
@@ -26,13 +26,13 @@ export default function compileAbe(){
       })
       return new Handlebars.SafeString(testXSS)
     }
-    return value
+    return value.replace(/%27/, "'")
   }
 
   var key = arguments[0].hash['key'].replace('.', '-')
 
   var hash = arguments[0].hash
-  var value = ((content) ? content[hash.key.replace('.', '-')] : hash.key).replace(/%27/, "'")
+  var value = ((content) ? content[hash.key.replace('.', '-')] : hash.key)
   if(typeof value === 'undefined' || value === null) {
     value = ''
   }
@@ -44,5 +44,5 @@ export default function compileAbe(){
     })
     return new Handlebars.SafeString(testXSS)
   }
-  return value
+  return value.replace(/%27/, "'")
 }
