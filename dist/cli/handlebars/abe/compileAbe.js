@@ -47,7 +47,7 @@ function compileAbe() {
   var key = arguments[0].hash['key'].replace('.', '-');
 
   var hash = arguments[0].hash;
-  var value = content ? content[hash.key.replace('.', '-')] : hash.key;
+  var value = (content ? content[hash.key.replace('.', '-')] : hash.key).replace(/%27/, "'");
   if (typeof value === 'undefined' || value === null) {
     value = '';
   }
