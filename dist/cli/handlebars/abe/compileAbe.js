@@ -41,6 +41,9 @@ function compileAbe() {
       });
       return new _handlebars2.default.SafeString(testXSS);
     }
+    if (typeof value === 'undefined' || value === null) {
+      value = '';
+    }
     return value.replace(/%27/, "'");
   }
 
