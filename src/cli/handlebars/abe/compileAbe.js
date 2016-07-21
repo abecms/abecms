@@ -26,6 +26,9 @@ export default function compileAbe(){
       })
       return new Handlebars.SafeString(testXSS)
     }
+    if(typeof value === 'undefined' || value === null) {
+      value = ''
+    }
     return value.replace(/%27/, "'")
   }
 
