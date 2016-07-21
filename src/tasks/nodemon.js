@@ -32,11 +32,11 @@ nodemon({
     'src/server/controllers/*',
     'src/server/app.js',
     'src/server/index.js',
-    process.env.ROOT + '/plugins/*',
+    process.env.ROOT + '/plugins/**/**/*.js',
     process.env.ROOT + '/abe.json',
     process.env.ROOT + '/locales/*',
     process.env.ROOT + '/test/*',
-    process.env.ROOT + '/hooks/*'
+    process.env.ROOT + '/hooks/**/*.js'
   ],
   stdin: true,
   runOnChangeOnly: false,

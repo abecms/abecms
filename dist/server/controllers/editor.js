@@ -26,9 +26,7 @@ var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var util = new _cli.Util();
-
-function add(obj, json, text, fakeContent) {
+function add(obj, json, text, fakeContent, util) {
   var value = obj.value;
 
   if (obj.key.indexOf('[') > -1) {
@@ -92,12 +90,12 @@ function addToForm(match, text, json, fakeContent, util, arrayBlock) {
       obj.desc = obj.desc + " " + i, insertAbeEach(obj, text, json, fakeContent, util, arrayBlock);
     } else if (util.dontHaveKey(obj.key)) {
       obj.value = json[obj.key];
-      json[obj.key] = add(obj, json, text, fakeContent);
+      json[obj.key] = add(obj, json, text, fakeContent, util);
     }
   } else if (util.dontHaveKey(obj.key) && util.isSingleAbe(v, text)) {
     var realKey = obj.key.replace(/\./g, '-');
     obj.value = json[realKey];
-    json[obj.key] = add(obj, json, text, fakeContent);
+    json[obj.key] = add(obj, json, text, fakeContent, util);
   }
 }
 
@@ -162,7 +160,7 @@ function each(text, json, fakeContent, util, arrayBlock) {
 
     for (var i = 0; i < length; i++) {
       for (var j = 0; j < attrArray.length; j++) {
-        add(arrayBlock[keyArray][attrArray[j]][i], json, text, fakeContent);
+        add(arrayBlock[keyArray][attrArray[j]][i], json, text, fakeContent, util);
       }
     }
   }
@@ -178,9 +176,9 @@ function addSource(text, json, fakeContent, util, arrayBlock) {
 
     if (obj.paginate) {
       obj.value = obj.value.slice(0, parseInt(obj.paginate));
-      add(obj, json, text, fakeContent);
+      add(obj, json, text, fakeContent, util);
     } else if (obj.editable) {
-      add(obj, json, text, fakeContent);
+      add(obj, json, text, fakeContent, util);
     } else {
       json[obj.key] = obj.source;
     }
@@ -197,7 +195,7 @@ function orderByTabindex(a, b) {
   return 0;
 }
 
-function orderBlock() {
+function orderBlock(util) {
 
   var formBlock = {};
 
@@ -295,7 +293,7 @@ function editor(fileName, tplUrl, fake) {
       // HOOKS beforeEditorFormBlocks
       json = _cli.Hooks.instance.trigger('beforeEditorFormBlocks', json);
 
-      var blocks = orderBlock();
+      var blocks = orderBlock(util);
 
       // HOOKS afterEditorFormBlocks
       blocks = _cli.Hooks.instance.trigger('afterEditorFormBlocks', blocks, json);
