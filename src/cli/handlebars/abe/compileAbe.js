@@ -18,7 +18,7 @@ export default function compileAbe(){
     key = key[key.length - 1]
     var hash = arguments[0].hash
     hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]')
-    var value = ((content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key)
+    var value = ((content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key).replace(/%27/, "'")
     if(typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich'){
       var testXSS = xss(value.replace(/&quot;/g, '"'), {
         "whiteList": config.htmlWhiteList,
