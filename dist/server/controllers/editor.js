@@ -18,18 +18,17 @@ var _extend2 = _interopRequireDefault(_extend);
 
 var _es6Promise = require('es6-promise');
 
+var _cliColor = require('cli-color');
+
+var _cliColor2 = _interopRequireDefault(_cliColor);
+
 var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var util = new _cli.Util();
-var arrayBlock = [];
-var text;
-var json;
-var fakeContent = false;
-var tabIndex = 0;
 
-function add(obj) {
+function add(obj, json, text, fakeContent) {
   var value = obj.value;
 
   if (obj.key.indexOf('[') > -1) {
@@ -76,9 +75,9 @@ function add(obj) {
   return value;
 }
 
-function addToForm(match) {
-  var keyArray = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-  var i = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+function addToForm(match, text, json, fakeContent, util, arrayBlock) {
+  var keyArray = arguments.length <= 6 || arguments[6] === undefined ? null : arguments[6];
+  var i = arguments.length <= 7 || arguments[7] === undefined ? 0 : arguments[7];
 
   var v = '{{' + match + '}}',
       obj = _cli.Util.getAllAttributes(v, json);
@@ -90,28 +89,28 @@ function addToForm(match) {
       obj.keyArray = keyArray;
       obj.realKey = realKey;
       obj.key = keyArray + "[" + i + "]." + realKey;
-      obj.desc = obj.desc + " " + i, insertAbeEach(obj);
+      obj.desc = obj.desc + " " + i, insertAbeEach(obj, text, json, fakeContent, util, arrayBlock);
     } else if (util.dontHaveKey(obj.key)) {
       obj.value = json[obj.key];
-      json[obj.key] = add(obj);
+      json[obj.key] = add(obj, json, text, fakeContent);
     }
   } else if (util.dontHaveKey(obj.key) && util.isSingleAbe(v, text)) {
     var realKey = obj.key.replace(/\./g, '-');
     obj.value = json[realKey];
-    json[obj.key] = add(obj);
+    json[obj.key] = add(obj, json, text, fakeContent);
   }
 }
 
-function matchAttrAbe() {
+function matchAttrAbe(text, json, fakeContent, util, arrayBlock) {
   var patt = /abe [^{{}}]+?(?=\}})/g,
       match;
   // While regexp match HandlebarsJS template item => keepgoing
   while (match = patt.exec(text)) {
-    addToForm(match[0]);
+    addToForm(match[0], text, json, fakeContent, util, arrayBlock, null, null);
   }
 }
 
-function insertAbeEach(obj) {
+function insertAbeEach(obj, text, json, fakeContent, util, arrayBlock) {
   if (typeof arrayBlock[obj.keyArray][obj.realKey] === "undefined" || arrayBlock[obj.keyArray][obj.realKey] === null) {
     arrayBlock[obj.keyArray][obj.realKey] = [];
   }
@@ -126,7 +125,7 @@ function insertAbeEach(obj) {
   }
 }
 
-function each() {
+function each(text, json, fakeContent, util, arrayBlock) {
   var pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
   var patt = /abe [^{{}}]+?(?=\}})/g;
   var textEach, match;
@@ -145,10 +144,10 @@ function each() {
         if (json[keyArray]) {
           for (var i = 0; i < json[keyArray].length; i++) {
             var key = json[keyArray];
-            addToForm(v, keyArray, i);
+            addToForm(v, text, json, fakeContent, util, arrayBlock, keyArray, i);
           }
         } else {
-          addToForm(v, keyArray, 0);
+          addToForm(v, text, json, fakeContent, util, arrayBlock, keyArray, 0);
         }
       }
     }
@@ -163,13 +162,13 @@ function each() {
 
     for (var i = 0; i < length; i++) {
       for (var j = 0; j < attrArray.length; j++) {
-        add(arrayBlock[keyArray][attrArray[j]][i]);
+        add(arrayBlock[keyArray][attrArray[j]][i], json, text, fakeContent);
       }
     }
   }
 }
 
-function addSource() {
+function addSource(text, json, fakeContent, util, arrayBlock) {
   var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
       match,
       limit = 0;
@@ -179,9 +178,9 @@ function addSource() {
 
     if (obj.paginate) {
       obj.value = obj.value.slice(0, parseInt(obj.paginate));
-      add(obj);
+      add(obj, json, text, fakeContent);
     } else if (obj.editable) {
-      add(obj);
+      add(obj, json, text, fakeContent);
     } else {
       json[obj.key] = obj.source;
     }
@@ -257,9 +256,12 @@ function orderBlock() {
 
 function editor(fileName, tplUrl, fake) {
   var p = new _es6Promise.Promise(function (resolve, reject) {
-    tabIndex = 0;
-    fakeContent = fake;
-    util = new _cli.Util();
+    var util = new _cli.Util();
+    var arrayBlock = [];
+    var text;
+    var json;
+    var fakeContent = fake;
+    var tabIndex = 0;
 
     json = {};
     if (_cli.fileUtils.isFile(tplUrl.json.path)) {
@@ -269,13 +271,13 @@ function editor(fileName, tplUrl, fake) {
     text = (0, _cli.getTemplate)(fileName);
 
     _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json, true).then(function () {
-      addSource();
+      addSource(text, json, fakeContent, util, arrayBlock);
 
       text = _cli.Util.removeDataList(text);
 
-      matchAttrAbe(text, json);
+      matchAttrAbe(text, json, fakeContent, util, arrayBlock);
       arrayBlock = [];
-      each(text, json);
+      each(text, json, fakeContent, util, arrayBlock);
 
       if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         var tpl = json.abe_meta.template.split('/');

@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -38,6 +40,10 @@ var _package = require('../../../package');
 
 var _package2 = _interopRequireDefault(_package);
 
+var _cliColor = require('cli-color');
+
+var _cliColor2 = _interopRequireDefault(_cliColor);
+
 var _editor = require('../controllers/editor');
 
 var _abeLocale = require('../helpers/abe-locale');
@@ -49,6 +55,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var route = function route(req, res, next) {
+  // console.log('> > > > > > > > > > > > > > > > > > > > > > > > > > > > >')
+  // console.log('get-main start', clc.green(req.query.filePath))
+
   if (req.query.filePath) {
     var testXSS = (0, _xss2.default)(req.query.filePath, {
       whiteList: [],
@@ -70,71 +79,93 @@ var route = function route(req, res, next) {
   var debugJsonKey = req.query.key ? req.query.key : false;
   var debugHtml = req.query.debugHtml && req.query.debugHtml == 'true' ? true : false;
 
-  var obj;
-  var tplUrl;
   var isHome = true;
-  var manager = {};
 
   var p = new Promise(function (resolve, reject) {
 
     if (templatePath !== null && filePath !== null) {
+      var folderFilePath;
+      var files;
+      var latest;
+      var fakeContent;
 
-      isHome = false;
+      var _ret = function () {
 
-      if (!_cli.fileAttr.test(filePath)) {
-        var folderFilePath = filePath.split('/');
-        folderFilePath.pop();
-        folderFilePath = _cli.fileUtils.pathWithRoot(folderFilePath.join('/'));
-        _mkdirp2.default.sync(folderFilePath);
-        var files = _cli.FileParser.getFiles(folderFilePath, true, 2);
-        var latest = _cli.fileAttr.filterLatestVersion(_cli.fileAttr.getFilesRevision(files, filePath), 'draft');
-        if (latest.length) {
-          filePath = latest[0].path;
+        isHome = false;
+
+        if (!_cli.fileAttr.test(filePath)) {
+          folderFilePath = filePath.split('/');
+
+          folderFilePath.pop();
+          folderFilePath = _cli.fileUtils.pathWithRoot(folderFilePath.join('/'));
+          _mkdirp2.default.sync(folderFilePath);
+          files = _cli.FileParser.getFiles(folderFilePath, true, 2);
+          latest = _cli.fileAttr.filterLatestVersion(_cli.fileAttr.getFilesRevision(files, filePath), 'draft');
+
+          if (latest.length) {
+            filePath = latest[0].path;
+          }
         }
-      }
 
-      tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-      var fakeContent = req.query.fakeContent ? true : false;
+        var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
+        fakeContent = req.query.fakeContent ? true : false;
 
-      if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-        res.redirect("/abe/");
-        return;
-      }
 
-      (0, _editor.editor)(templatePath, tplUrl, fakeContent).then(function (res) {
-        obj = res;
-
-        _cli.FileParser.getAssetsFolder();
-        _cli.FileParser.getAssets();
-
-        var revisionFilePath = _cli.FileParser.changePathEnv(filePath, _cli.config.draft.url);
-        var dirPath = _cli.fileUtils.removeLast(revisionFilePath);
-        var allDraft = _cli.FileParser.getFiles(dirPath, true, 99, new RegExp("\\." + _cli.config.files.templates.extension));
-
-        allDraft = _cli.FileParser.getMetas(allDraft, 'draft');
-        var breadcrumb = req.params[0].split('/');
-        manager.file = {
-          revision: _cli.fileAttr.getFilesRevision(allDraft, _cli.fileAttr.delete(revisionFilePath)),
-          template: breadcrumb,
-          path: req.query.filePath ? _cli.fileUtils.cleanTplName(req.query.filePath) : ''
-        };
-        if (manager.file.revision.length > 0) {
-          var publishPath = _cli.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp('/' + _cli.config.draft.url + '/'), '/' + _cli.config.publish.url + '/'));
-          manager.file.isPublished = _cli.fileUtils.isFile(publishPath);
+        if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
+          res.redirect("/abe/");
+          return {
+            v: void 0
+          };
         }
-        resolve();
-      }).catch(function (e) {
-        console.error(e);
-      });
+
+        (0, _editor.editor)(templatePath, tplUrl, fakeContent).then(function (result) {
+          var manager = {};
+
+          _cli.FileParser.getAssetsFolder();
+          _cli.FileParser.getAssets();
+
+          var revisionFilePath = _cli.FileParser.changePathEnv(filePath, _cli.config.draft.url);
+          var dirPath = _cli.fileUtils.removeLast(revisionFilePath);
+          var allDraft = _cli.FileParser.getFiles(dirPath, true, 99, new RegExp("\\." + _cli.config.files.templates.extension));
+
+          allDraft = _cli.FileParser.getMetas(allDraft, 'draft');
+          var breadcrumb = req.params[0].split('/');
+          manager.file = {
+            revision: _cli.fileAttr.getFilesRevision(allDraft, _cli.fileAttr.delete(revisionFilePath)),
+            template: breadcrumb,
+            path: req.query.filePath ? _cli.fileUtils.cleanTplName(req.query.filePath) : ''
+          };
+          if (manager.file.revision.length > 0) {
+            var publishPath = _cli.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp('/' + _cli.config.draft.url + '/'), '/' + _cli.config.publish.url + '/'));
+            manager.file.isPublished = _cli.fileUtils.isFile(publishPath);
+          }
+
+          resolve({
+            obj: result,
+            manager: manager,
+            tplUrl: tplUrl
+          });
+        }).catch(function (e) {
+          console.error(e);
+        });
+      }();
+
+      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
     } else {
-      resolve();
+      resolve({
+        obj: {},
+        manager: {}
+      });
     }
   }).catch(function (e) {
     console.error(e); // "oh, no!"
   });
 
-  p.then(function () {
-    var dateStart = new Date();
+  p.then(function (result) {
+    var obj = result.obj;
+    var manager = result.manager;
+    var tplUrl = result.tplUrl;
+
     manager.home = {
       files: _cli.FileParser.getAllFiles()
     };
@@ -191,6 +222,14 @@ var route = function route(req, res, next) {
       res.set('Content-Type', 'text/plain');
       res.send(_text);
     } else {
+      var logFilePath = req.query.filePath.replace(/^\//, '');
+      var logLink = EditorVariables.json.abe_meta.link.replace(/^\//, '');
+      // if (logFilePath !== logLink) {
+      //   console.log('get-main end', EditorVariables.json.abe_meta.link + ' > should be ', clc.red(req.query.filePath))
+      // }else {
+      //   console.log('get-main end', EditorVariables.json.abe_meta.link, clc.green('OK'))
+      // }
+      // console.log('< < < < < < < < < < < < < < < < < < < < < < < < < < < < <')
       res.render(_cli.config.abeEngine, EditorVariables);
     }
   }).catch(function (e) {

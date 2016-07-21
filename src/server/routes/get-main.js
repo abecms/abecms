@@ -7,6 +7,7 @@ import extend from 'extend'
 import * as abe from '../../cli'
 import xss from 'xss'
 import pkg from '../../../package'
+import clc from 'cli-color'
 
 import {
   fileAttr,
@@ -33,6 +34,9 @@ import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 var route = function(req, res, next) {
+  // console.log('> > > > > > > > > > > > > > > > > > > > > > > > > > > > >')
+  // console.log('get-main start', clc.green(req.query.filePath))
+
   if(req.query.filePath){
     var testXSS = xss(req.query.filePath, {
       whiteList: [],
@@ -54,12 +58,9 @@ var route = function(req, res, next) {
   var debugJsonKey = (req.query.key) ? req.query.key : false
   var debugHtml = (req.query.debugHtml && req.query.debugHtml == 'true' ) ? true : false
 
-  var obj
-  var tplUrl
   var isHome = true
-  var manager = {}
 
-  var p = new Promise((resolve, reject) => {
+  let p = new Promise((resolve, reject) => {
 
     if(templatePath !== null && filePath !== null) {
 
@@ -77,7 +78,7 @@ var route = function(req, res, next) {
         }
       }
 
-      tplUrl = FileParser.getFileDataFromUrl(filePath)
+      let tplUrl = FileParser.getFileDataFromUrl(filePath)
       var fakeContent = (req.query.fakeContent) ? true : false
 
       if(!fileUtils.isFile(tplUrl.json.path)) {
@@ -86,8 +87,8 @@ var route = function(req, res, next) {
       }
 
       editor(templatePath, tplUrl, fakeContent)
-        .then((res) => {
-          obj = res
+        .then((result) => {
+          var manager = {}
 
           FileParser.getAssetsFolder()
           FileParser.getAssets() 
@@ -107,19 +108,30 @@ var route = function(req, res, next) {
             var publishPath = fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
             manager.file.isPublished = fileUtils.isFile(publishPath)
           }
-          resolve()
+
+          resolve({
+            obj: result,
+            manager: manager,
+            tplUrl: tplUrl
+          })
         }).catch(function(e) {
           console.error(e)
         })
     }else {
-      resolve()
+      resolve({
+        obj: {},
+        manager: {}
+      })
     }
   }).catch(function(e) {
     console.error(e) // "oh, no!"
   })
 
-  p.then(() => {
-    var dateStart = new Date()
+  p.then((result) => {
+    var obj = result.obj
+    var manager = result.manager
+    let tplUrl = result.tplUrl
+
     manager.home = {
       files: FileParser.getAllFiles()
     }
@@ -176,6 +188,14 @@ var route = function(req, res, next) {
       res.set('Content-Type', 'text/plain')
       res.send(_text)
     }else {
+      var logFilePath = req.query.filePath.replace(/^\//, '')
+      var logLink = EditorVariables.json.abe_meta.link.replace(/^\//, '')
+      // if (logFilePath !== logLink) {
+      //   console.log('get-main end', EditorVariables.json.abe_meta.link + ' > should be ', clc.red(req.query.filePath))
+      // }else {
+      //   console.log('get-main end', EditorVariables.json.abe_meta.link, clc.green('OK'))
+      // }
+      // console.log('< < < < < < < < < < < < < < < < < < < < < < < < < < < < <')
       res.render(config.abeEngine, EditorVariables)
     }
   }).catch((e) => {
