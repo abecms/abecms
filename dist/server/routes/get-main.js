@@ -222,8 +222,8 @@ var route = function route(req, res, next) {
       res.set('Content-Type', 'text/plain');
       res.send(_text);
     } else {
-      var logFilePath = req.query.filePath.replace(/^\//, '');
-      var logLink = EditorVariables.json.abe_meta.link.replace(/^\//, '');
+      // var logFilePath = req.query.filePath.replace(/^\//, '')
+      // var logLink = EditorVariables.json.abe_meta.link.replace(/^\//, '')
       // if (logFilePath !== logLink) {
       //   console.log('get-main end', EditorVariables.json.abe_meta.link + ' > should be ', clc.red(req.query.filePath))
       // }else {
