@@ -26,13 +26,16 @@ export default function compileAbe(){
       })
       return new Handlebars.SafeString(testXSS)
     }
-    return value
+    if(typeof value === 'undefined' || value === null) {
+      value = ''
+    }
+    return value.replace(/%27/, "'")
   }
 
   var key = arguments[0].hash['key'].replace('.', '-')
 
   var hash = arguments[0].hash
-  var value = (content) ? content[hash.key.replace('.', '-')] : hash.key
+  var value = ((content) ? content[hash.key.replace('.', '-')] : hash.key)
   if(typeof value === 'undefined' || value === null) {
     value = ''
   }
@@ -44,5 +47,5 @@ export default function compileAbe(){
     })
     return new Handlebars.SafeString(testXSS)
   }
-  return value
+  return value.replace(/%27/, "'")
 }
