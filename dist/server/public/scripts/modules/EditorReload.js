@@ -76,6 +76,7 @@ var Reload = function () {
       var iframeBody = (0, _iframe.IframeDocument)('#page-template').body;
       var scrollTop = iframeBody.scrollTop;
       var json = JSON.parse(JSON.stringify(this._json.data));
+
       delete json.abe_source;
       var data = _qs2.default.stringify({
         json: json
