@@ -133,5 +133,5 @@ window.abe = {
 };
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  engine.loadIframe();
+  if (document.querySelector('#page-template')) engine.loadIframe();
 });

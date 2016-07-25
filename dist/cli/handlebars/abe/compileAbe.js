@@ -41,7 +41,10 @@ function compileAbe() {
       });
       return new _handlebars2.default.SafeString(testXSS);
     }
-    return value;
+    if (typeof value === 'undefined' || value === null) {
+      value = '';
+    }
+    return value.replace(/%27/, "'");
   }
 
   var key = arguments[0].hash['key'].replace('.', '-');
@@ -59,5 +62,5 @@ function compileAbe() {
     });
     return new _handlebars2.default.SafeString(testXSS);
   }
-  return value;
+  return value.replace(/%27/, "'");
 }
