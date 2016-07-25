@@ -50,7 +50,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var htmlTag = document.querySelector('html');
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'));
-window.json = JSON.parse(unescape(htmlTag.getAttribute('data-json').replace(/&quot;/g, '\"')));
+// window.json = JSON.parse(unescape(htmlTag.getAttribute('data-json').replace(/&quot;/g, '\"')))
+var j = htmlTag.getAttribute('data-json');
+j = j.replace(/&quot;/g, '\"');
+j = unescape(j);
+j = j.replace(/\%27/, "\'");
+window.json = JSON.parse(j);
 window.Locales = JSON.parse(htmlTag.getAttribute('data-locales'));
 
 var Engine = function () {
