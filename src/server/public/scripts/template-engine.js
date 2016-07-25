@@ -17,7 +17,7 @@ window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
 var j = htmlTag.getAttribute('data-json')
 j = j.replace(/&quot;/g, '\"')
 j = unescape(j)
-j = j.replace(/\%27/, "\'")
+j = j.replace(/\%27/g, "\'")
 window.json = JSON.parse(j)
 window.Locales = JSON.parse(htmlTag.getAttribute('data-locales'))
 
