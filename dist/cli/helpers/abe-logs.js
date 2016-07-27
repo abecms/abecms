@@ -123,6 +123,20 @@ var Logs = function () {
 			Logs.writeFile(path, msg, 'a+');
 		}
 	}, {
+		key: 'duration',
+		value: function duration(str, time) {
+			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {
+				var path = _.fileUtils.concatPath(_.config.root, '/logs/duration.log');
+				var durationColor = '#B2FF59';
+				if (time > 5) {
+					durationColor = '#ff003b';
+				} else if (time > 1) {
+					durationColor = '#ffbc00';
+				}
+				Logs.writeFile(path, str + ' in <span style="color: ' + durationColor + ';">' + time + "</span>\n", 'a+');
+			}
+		}
+	}, {
 		key: 'write',
 		value: function write() {
 			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {

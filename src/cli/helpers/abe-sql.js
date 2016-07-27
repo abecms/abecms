@@ -73,19 +73,31 @@ export default class Sql {
   }
 
   static cleanRequest(str, jsonPage) {
-
-    var matchVariable = /from ([\S\s]+){{(.*)}}/
+    var matchFrom = /from .(.*?) /
+    var matchVariable = /{{([a-zA-Z]*)}}/
     var match
 
-    var fromJson = matchVariable.exec(str)
-    if(typeof fromJson !== 'undefined' && fromJson !== null
-      && typeof fromJson[2] !== 'undefined' && fromJson[2] !== null) {
-      var value = Sql.deep_value_array(jsonPage, fromJson[2])
-      if(typeof value !== 'undefined' && value !== null) {
-        str = str.replace('{{' + fromJson[2] + '}}', value)
-      }else {
-        str = str.replace('{{' + fromJson[2] + '}}', '')
+    var matchFromExec = matchFrom.exec(str)
+    if(typeof matchFromExec !== 'undefined' && matchFromExec !== null
+      && typeof matchFromExec[1] !== 'undefined' && matchFromExec[1] !== null) {
+
+      var fromMatch
+      var toReplace = matchFromExec[1]
+      while (fromMatch = matchVariable.exec(toReplace)) {
+        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+        console.log('fromMatch', fromMatch)
+        if(typeof fromMatch !== 'undefined' && fromMatch !== null
+          && typeof fromMatch[1] !== 'undefined' && fromMatch[1] !== null) {
+          var value = Sql.deep_value_array(jsonPage, fromMatch[1])
+          if(typeof value !== 'undefined' && value !== null) {
+            toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
+          }else {
+            toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
+          }
+        }
       }
+
+      str = str.replace(matchFromExec[1], toReplace)
     }
 
     var from = /from ([\S\s]+)/.exec(str)
@@ -93,8 +105,6 @@ export default class Sql {
     var matches = from
     if(matches[1]) {
       var res = matches[1];
-
-
       var splitAttr = [' where ', ' order by ', ' limit ', ' WHERE ', ' ORDER BY ', ' LIMIT ']
       for(var i = 0; i < splitAttr.length; i++) {
           if(res.indexOf(splitAttr[i]) > -1) {

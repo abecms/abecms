@@ -77,6 +77,8 @@ function save(url, tplPath) {
   var realType = arguments.length <= 6 || arguments[6] === undefined ? 'draft' : arguments[6];
   var publishAll = arguments.length <= 7 || arguments[7] === undefined ? false : arguments[7];
 
+  var dateStart = new Date();
+
   url = (0, _.cleanSlug)(url);
 
   var p = new _es6Promise.Promise(function (resolve, reject) {
@@ -205,6 +207,7 @@ function save(url, tplPath) {
         }
       }
 
+      _.log.duration('save: ' + url.replace(_.config.root, '') + ' (' + type + ')', (new Date().getTime() - dateStart.getTime()) / 1000);
       resolve(res);
     }).catch(function (e) {
       console.error(e);

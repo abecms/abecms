@@ -13,7 +13,6 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
     _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, deleteFiles);
 
     if (typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
-      _cli.log.write('duplicate', 'oldFilePath: ' + oldFilePath);
       var url = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.draft.url, oldFilePath);
       var revisions = [];
 
@@ -33,14 +32,8 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
         revisions = _cli.fileAttr.getFilesRevision(files, url);
       }
 
-      _cli.log.write('duplicate', 'url with date: ' + url.replace(_cli.config.root, ''));
-
       var tplUrl = _cli.FileParser.getFileDataFromUrl(url);
-      if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-        _cli.log.write('duplicate', '[ ERROR ] no json found : ' + tplUrl.json.path.replace(_cli.config.root, ''));
-      } else {
-        _cli.log.write('duplicate', 'json found: ' + tplUrl.json.path.replace(_cli.config.root, ''));
-      }
+      if (!_cli.fileUtils.isFile(tplUrl.json.path)) {} else {}
       var json = _cli.FileParser.getJson(tplUrl.json.path);
       delete json.abe_meta;
     }
@@ -49,7 +42,6 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
       _cli.Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, deleteFiles);
       Array.prototype.forEach.call(revisions, function (revision) {
         if (typeof revision.path !== 'undefined' && revision.path !== null) {
-          _cli.log.write('delete', 'file ' + revision.path.replace(_cli.config.root, ''));
           _cli.FileParser.deleteFile(revision.path);
         }
       });
@@ -58,12 +50,10 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
 
     var pCreate = (0, _cli.abeCreate)(template, path, name, req, json);
     pCreate.then(function (resSave) {
-      _cli.log.write('duplicate', 'success');
       resolve(resSave);
     }, function () {
       reject();
     }).catch(function (e) {
-      _cli.log.write('duplicate', '[ ERROR ]' + e);
       console.error(e);
       reject();
     });

@@ -59,6 +59,8 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
+  var dateStart = new Date()
+
   url = cleanSlug(url)
 
   var p = new Promise((resolve, reject) => {
@@ -188,6 +190,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
             }
           }
 
+          log.duration('save: ' + url.replace(config.root, '') + ' (' + type + ')', ((new Date().getTime() - dateStart.getTime()) / 1000))
           resolve(res)
         }).catch(function(e) {
           console.error(e)

@@ -175,6 +175,12 @@ If you want to display inside the input select the "title" value
 - if doesn't start with "/" path absolute from articles (if the template is inside blog. And blog is at the same level as articles no result can be found)
 - if start with "../" same as relative
 
+Notes: You can use variables on from like this
+
+```html
+{{abe type='data' key='articles' desc='articles' source="select * from /{{some_json_key}}/{{some_other}}" display="title" editable='true'"}}
+```
+
 ###WHERE
 
 ```html

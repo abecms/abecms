@@ -281,7 +281,7 @@ export default class Utils {
 
       var promises = []
       while (match = listReg.exec(text)) {
-        var logTime = tplPath + "<br />" + match[0]
+        var logTime = tplPath + " > " + match[0]
         var dateStart = new Date()
 
         var pSource = new Promise((resolveSource, rejectSource) => {
@@ -371,9 +371,7 @@ export default class Utils {
                 })
               }
 
-              var d = (new Date().getTime() - dateStart.getTime()) / 1000
-              log.write('request', type + "<br />" + logTime + "<br />Time:" + d + 'sec')
-              // log.write('request', `${type} / ${logTime} (${d}s)`)
+              log.duration(type + " > " + logTime, ((new Date().getTime() - dateStart.getTime()) / 1000))
 
               resolveSource()
               break;

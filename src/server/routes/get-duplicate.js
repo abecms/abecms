@@ -7,14 +7,9 @@ import {
 var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
-  log.write('duplicate', '********************************************')
-  log.write('duplicate', 'selectTemplate: ' + req.query.selectTemplate)
-  log.write('duplicate', 'filePath: ' + req.query.filePath)
-  log.write('duplicate', 'tplName: ' + req.query.tplName)
   var p = abeDuplicate(req.query.oldFilePath, req.query.selectTemplate, req.query.filePath, req.query.tplName, req)
 
   p.then((resSave) => {
-    log.write('duplicate', 'success')
     var result = {
       success: 1,
       json: resSave
@@ -29,7 +24,6 @@ var route = function(req, res, next) {
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   }).catch(function(e) {
-    log.write('duplicate', '[ ERROR ]' + e)
     console.error(e)
     reject()
   })

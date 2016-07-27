@@ -85,6 +85,20 @@ export default class Logs {
 		Logs.writeFile(path, msg, 'a+')
 	}
 
+	static duration(str, time) {
+		if(typeof config.logs !== 'undefined' && config.logs !== null
+			&& config.logs === true) {
+			var path = fileUtils.concatPath(config.root, '/logs/duration.log')
+			var durationColor = '#B2FF59'
+			if (time > 5) {
+				durationColor = '#ff003b'
+			}else if (time > 1) {
+				durationColor = '#ffbc00'
+			}
+			Logs.writeFile(path, str + ' in <span style="color: ' + durationColor + ';">' + time + "</span>\n", 'a+')
+		}
+	}
+
 	static write() {
 		if(typeof config.logs !== 'undefined' && config.logs !== null
 			&& config.logs === true) {
