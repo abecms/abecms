@@ -296,7 +296,7 @@ var Utils = function () {
 
         var promises = [];
         while (match = listReg.exec(text)) {
-          var logTime = tplPath + "<br />" + match[0];
+          var logTime = tplPath + " > " + match[0];
           var dateStart = new Date();
 
           var pSource = new _es6Promise.Promise(function (resolveSource, rejectSource) {
@@ -383,9 +383,7 @@ var Utils = function () {
                   });
                 }
 
-                var d = (new Date().getTime() - dateStart.getTime()) / 1000;
-                _.log.write('request', type + "<br />" + logTime + "<br />Time:" + d + 'sec');
-                // log.write('request', `${type} / ${logTime} (${d}s)`)
+                _.log.duration(type + " > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000);
 
                 resolveSource();
                 break;

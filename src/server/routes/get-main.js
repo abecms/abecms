@@ -34,14 +34,12 @@ import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 var route = function(req, res, next) {
-  // console.log('> > > > > > > > > > > > > > > > > > > > > > > > > > > > >')
-  // console.log('get-main start', clc.green(req.query.filePath))
+  var dateStart = new Date()
 
   if(req.query.filePath){
     var testXSS = xss(req.query.filePath, {
       whiteList: [],
-      stripIgnoreTag: true,
-      // stripIgnoreTagBody: ['script']
+      stripIgnoreTag: true
     })
     if(testXSS !== req.query.filePath){
       // res.status(400).send('<h1>400 Bad Request</h1>Not a valid URL format');
@@ -188,14 +186,7 @@ var route = function(req, res, next) {
       res.set('Content-Type', 'text/plain')
       res.send(_text)
     }else {
-      // var logFilePath = req.query.filePath.replace(/^\//, '')
-      // var logLink = EditorVariables.json.abe_meta.link.replace(/^\//, '')
-      // if (logFilePath !== logLink) {
-      //   console.log('get-main end', EditorVariables.json.abe_meta.link + ' > should be ', clc.red(req.query.filePath))
-      // }else {
-      //   console.log('get-main end', EditorVariables.json.abe_meta.link, clc.green('OK'))
-      // }
-      // console.log('< < < < < < < < < < < < < < < < < < < < < < < < < < < < <')
+      log.duration('load page: ' + _filePath, ((new Date().getTime() - dateStart.getTime()) / 1000))
       res.render(config.abeEngine, EditorVariables)
     }
   }).catch((e) => {

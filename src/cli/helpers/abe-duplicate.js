@@ -17,7 +17,6 @@ var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = f
     Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, deleteFiles)
 
     if(typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
-      log.write('duplicate', 'oldFilePath: ' + oldFilePath)
       var url = fileUtils.concatPath(config.root, config.draft.url, oldFilePath)
       var revisions = []
 
@@ -37,13 +36,10 @@ var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = f
         revisions = fileAttr.getFilesRevision(files, url)
       }
 
-      log.write('duplicate', 'url with date: ' + url.replace(config.root, ''))
 
       var tplUrl = FileParser.getFileDataFromUrl(url)
       if (!fileUtils.isFile(tplUrl.json.path)) {
-        log.write('duplicate', '[ ERROR ] no json found : ' + tplUrl.json.path.replace(config.root, ''))
       }else {
-        log.write('duplicate', 'json found: ' + tplUrl.json.path.replace(config.root, ''))
       }
       var json = FileParser.getJson(tplUrl.json.path)
       delete json.abe_meta
@@ -53,7 +49,6 @@ var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = f
       Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, deleteFiles)
       Array.prototype.forEach.call(revisions, (revision) => {
         if(typeof revision.path !== 'undefined' && revision.path !== null) {
-          log.write('delete', 'file ' + revision.path.replace(config.root, ''))
           FileParser.deleteFile(revision.path)
         }
       })
@@ -62,13 +57,11 @@ var duplicate = function(oldFilePath, template, path, name, req, deleteFiles = f
 
     var pCreate = abeCreate(template, path, name, req, json)
     pCreate.then((resSave) => {
-      log.write('duplicate', 'success')
       resolve(resSave)
     },
     () => {
       reject()
     }).catch(function(e) {
-      log.write('duplicate', '[ ERROR ]' + e)
       console.error(e)
       reject()
     })

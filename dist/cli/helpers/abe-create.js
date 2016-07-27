@@ -17,19 +17,11 @@ var create = function create(template, path, name, req) {
     filePath = (0, _cli.cleanSlug)(filePath);
     filePath = _cli.fileUtils.getFilePath(filePath);
 
-    _cli.log.write('create', '********************************************');
-    _cli.log.write('create', 'templatePath: ' + templatePath.replace(_cli.config.root, ''));
-    _cli.log.write('create', 'filePath: ' + filePath.replace(_cli.config.root, ''));
-    _cli.log.write('create', 'cleanSlug: ' + filePath.replace(_cli.config.root, ''));
-
     if (templatePath !== null && filePath !== null) {
       var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-      _cli.log.write('create', 'test if ' + tplUrl.json.path.replace(_cli.config.root, "") + ' exit');
+
       if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-        _cli.log.write('create', 'json found');
         var json = forceJson ? forceJson : {};
-        _cli.log.write('create', 'force json: ' + (forceJson ? 'true' : 'false'));
-        _cli.log.write('create', JSON.stringify(forceJson));
         var tpl = templatePath;
         var text = (0, _cli.getTemplate)(tpl);
         text = _cli.Util.removeDataList(text);
@@ -40,26 +32,21 @@ var create = function create(template, path, name, req) {
 
         _cli.Hooks.instance.trigger('afterCreate', json, text, path, name, req, forceJson);
         (0, _cli.save)(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft').then(function (resSave) {
-          _cli.log.write('create', 'success');
           filePath = resSave.htmlPath;
           tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
           resolve(resSave.json);
         }).catch(function (e) {
           reject();
-          _cli.log.write('create', '[ ERROR ]' + e);
           console.error(e);
         });
       } else {
-        _cli.log.write('create', '[ INFO ] file already exist, exit');
         var json = _cli.FileParser.getJson(tplUrl.json.path);
         resolve(json, tplUrl.json.path);
       }
     } else {
-      _cli.log.write('create', '[ ERROR ] cleantemplatePath is not defined');
       reject();
     }
   }).catch(function (e) {
-    _cli.log.write('create', '[ ERROR ]' + e);
     console.error(e);
     reject();
   });
