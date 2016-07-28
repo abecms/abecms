@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.abeCreate = exports.Util = exports.Handlebars = exports.fileAttr = undefined;
+exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.abeCreate = exports.Util = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -16,6 +16,14 @@ var _abeUtils2 = _interopRequireDefault(_abeUtils);
 var _handlebarsHelperSlugify = require('handlebars-helper-slugify');
 
 var _handlebarsHelperSlugify2 = _interopRequireDefault(_handlebarsHelperSlugify);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _fsExtra = require('fs-extra');
+
+var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
 var _index = require('./handlebars/index');
 
@@ -98,6 +106,8 @@ var _abeLocales2 = _interopRequireDefault(_abeLocales);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.fileAttr = _fileAttr2.default;
+exports.moment = _moment2.default;
+exports.fse = _fsExtra2.default;
 exports.Handlebars = _handlebars2.default;
 exports.Util = _abeUtils2.default;
 exports.abeCreate = _abeCreate2.default;
