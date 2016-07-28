@@ -1,6 +1,8 @@
 import fileAttr from './helpers/file-attr'
 import Util from './helpers/abe-utils'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
+import moment from 'moment'
+import fse from 'fs-extra'
 
 import {
 	abeImport,
@@ -49,6 +51,8 @@ import Locales from './helpers/abe-locales'
 
 export {
 	fileAttr
+	,moment
+	,fse
 	,Handlebars
 	,Util
 	,abeCreate
