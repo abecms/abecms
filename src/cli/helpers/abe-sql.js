@@ -84,8 +84,6 @@ export default class Sql {
       var fromMatch
       var toReplace = matchFromExec[1]
       while (fromMatch = matchVariable.exec(toReplace)) {
-        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-        console.log('fromMatch', fromMatch)
         if(typeof fromMatch !== 'undefined' && fromMatch !== null
           && typeof fromMatch[1] !== 'undefined' && fromMatch[1] !== null) {
           var value = Sql.deep_value_array(jsonPage, fromMatch[1])
@@ -113,6 +111,7 @@ export default class Sql {
       }
       var escapedFrom = res.replace(/\//g, '___abe___')
       escapedFrom = escapedFrom.replace(/\./g, '___abe_dot___')
+      escapedFrom = escapedFrom.replace(/-/g, '___abe_dash___')
       str = str.replace(res, escapedFrom)
     }
 
@@ -270,6 +269,7 @@ export default class Sql {
       Array.prototype.forEach.call(request.from, (from) => {
         from = from.replace(/___abe_dot___/g, '.')
         from = from.replace(/___abe___/g, '/')
+        from = from.replace(/___abe_dash___/g, '-')
         var fromPath = ''
         if(from === '*' || from === '/') {
           fromPath = fileUtils.concatPath(config.root, data)
