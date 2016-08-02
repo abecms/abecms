@@ -36,7 +36,8 @@ nodemon({
     process.env.ROOT + '/abe.json',
     process.env.ROOT + '/locales/*',
     process.env.ROOT + '/test/*',
-    process.env.ROOT + '/hooks/**/*.js'
+    process.env.ROOT + '/hooks/**/*.js',
+    process.env.ROOT + '/reference/**/*.json'
   ],
   stdin: true,
   runOnChangeOnly: false,

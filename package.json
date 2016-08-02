@@ -52,6 +52,7 @@
     "express-session": "^1.13.0",
     "extend": "^3.0.0",
     "fs-extra": "^0.30.0",
+    "git-exec": "^0.2.1",
     "handlebars": "^4.0.3",
     "handlebars-helper-slugify": "^0.3.2",
     "handlebars-intl": "^1.1.1",

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Abe, A better engine
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
@@ -254,3 +255,6 @@ to launch your blog using Abe, under Linux or Mac, you have to set an Environmen
 
 Other environment variables are available (like PORT for defining a listening port for ABE and WEBPORT for your blog port)
 
+=======
+# abe-test-plugin
+>>>>>>> e23f4a0d4369f09cb9263d29673c21dfb5331de6

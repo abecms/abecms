@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/data-debug.css">
+    <link rel="stylesheet" href="/css/wysiwyg-editor.min.css">
+    <script type="text/javascript" src="/libs/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="/libs/bootstrap.min.js"></script>
+</head>
+<body>
+  
+  <div class="user-list row col-xs-offset-1 col-xs-10">
+    <ol class="breadcrumb">
+      <li><a href="/abe/">Home</a></li>
+      <li><a href="/plugin/debugger/data" class="active">Data debugger</a></li>
+    </ol>
+
+    <div class="alert alert-danger hidden" role="alert">
+      
+    </div>
+  
+    <form method="post" action="/plugin/debugger/data">
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-folder"><span class="glyphicon glyphicon-folder-open"></span></span>
+        <input name="path" placeholder="/" value="{{path}}" class="form-control" data-path aria-describedby="basic-folder" />
+      </div>
+      <p class="help-block">Set path where the template is located (example: /fr/articles) <p class="text-warning">Not the path where the request will look for</p></p>
+
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-code"><strong>{}</strong></span>
+        <textarea name="json" placeholder='{"key":"value"}' class="form-control" data-json class="form-control" data-path aria-describedby="basic-code">{{json}}</textarea>
+      </div>
+      <p class="help-block">Add json code of the content (you can find json by adding <strong>debugJson=true</strong> to any url)</p>
+      <br />
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-select"><span class="glyphicon glyphicon-search"></span></span>
+        <input type="text" name="select" placeholder="select * from content" value='{{select}}' class="form-control" data-path aria-describedby="basic-select" />
+      </div>
+      <p class="help-block">Look at <a href="#examples">examples</a></p>
+      <br />
+      <div class="form-group">
+        <input type="submit" value="send" class="btn btn-default" />
+      </div>
+    </form>
+  
+    {{#if request}}
+    <h1>Result</h1>
+
+    <div class="well">
+      <strong>{{request}}</strong>
+    </div>
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      {{#each result}}
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{@index}}" aria-expanded="true" aria-controls="collapse{{@index}}">
+                {{abe_meta.link}} ({{abe_meta.status}})
+              </a>
+              <a href="/abe/{{abe_meta.template}}?filePath={{abe_meta.link}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
+            </h4>
+          </div>
+          <div id="collapse{{@index}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+              <pre>
+                {{printJson this}}
+              </pre>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+    </div>
+
+    {{/if}}
+
+    <table id="examples" class="table table-condensed">
+      <!-- On rows -->
+      <tr>
+        <th><h3>Exemple</h3></th>
+      </tr>
+
+      <!-- On cells (`td` or `th`) -->
+      <tr>
+        <td><samp>select <kbd>*</kbd> from <kbd>/</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select all content</td>
+      </tr>
+      <tr>
+        <td><samp>select <kbd>variable</kbd> from <kbd>folder/path</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select one variable (and abe_meta json) from one path</td>
+      </tr>
+      <tr>
+        <td><samp>select <kbd>variable</kbd> from <kbd>folder/path1, folder/path2</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select one variable (and abe_meta json) from two path</td>
+      </tr>
+      <tr>
+        <td><samp>select <kbd>variable1, variable2, variable3</kbd> from <kbd>folder/path</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select multiple variables (and abe_meta json) from one path</td>
+      </tr>
+      <tr>
+        <td><samp>select variable from folder/path where <kbd>variable=`some name`</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select where variable into content json = some name</td>
+      </tr>
+      <tr>
+        <td><samp>select variable from folder/path where <kbd>template=`template name`</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select template into abe_meta content json = template name</td>
+      </tr>
+      <tr>
+        <td><samp>select where template=`template name` <kbd>and</kbd> variable=`some name`</samp></td>
+      </tr>
+      <tr class="info">
+        <td>select where template into abe_meta content json = template name and variable = some name</td>
+      </tr>
+      <tr>
+        <td><samp>select <kbd>variable</kbd> from <kbd>/</kbd> <kbd>LIMIT 2</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select only two content</td>
+      </tr>
+      <tr>
+        <td>Json <code>{"variable": "test"}</code></td>
+      </tr>
+      <tr>
+        <td><samp>select variable from folder/path where <kbd>variable=`&#123;&#123;variable&#125;&#125;`</kbd></samp></td>
+      </tr>
+      <tr class="info">
+        <td>select where variable into content json = some variable from json where variable = "test"</td>
+      </tr>
+      <tr>
+        <td><samp>select variable from folder/path where <kbd>\`variable.some_child\`=`variable`</kbd></samp></td>
+      </tr>
+      <tr>
+        <td>Json <code>{"variable": {"some_child": "title"}}</code></td>
+      </tr>
+      <tr class="info">
+        <td>select where variable into content variable.some_child = some name</td>
+      </tr>
+      <tr>
+        <td><samp>select * from / where <kbd>`abe_meta.link` != `{{abe_meta.link}}`</kbd></samp></td>
+      </tr>
+      <tr>
+        <td>Json <code>{"abe_meta":{ "link": "/test/path/content.html"}}</code></td>
+      </tr>
+      <tr class="info">
+        <td>Remove same content as current one</td>
+      </tr>
+    </table>
+    <a href="https://github.com/AdFabConnect/abejs/blob/master/docs/abe-data.md">More info</a>
+
+    <br /><br />
+  </div>
+
+  <script type="text/javascript" src="/data-debug.js"></script>
+  
+</body>
+</html>
