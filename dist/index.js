@@ -321,7 +321,7 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			});
 			break;
 		case 'install':
-			var dir;
+			var dir = process.cwd();
 			var plugin = userArgs[1];
 			if (process.env.ROOT) {
 				dir = process.env.ROOT.replace(/\/$/, '');
@@ -352,7 +352,7 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			break;
 		case 'add':
 			// ROOT=[ PATH TO PROJECT ]/abe-test-os ./node_modules/.bin/babel-node src/index.js add [ GIT PROJECT ]
-			var dir;
+			var dir = process.cwd();
 			var plugin = userArgs[1];
 			if (process.env.ROOT) {
 				dir = process.env.ROOT.replace(/\/$/, '');
