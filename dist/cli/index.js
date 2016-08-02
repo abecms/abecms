@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.abeCreate = exports.Util = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
+exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.deep_value = exports.abeCreate = exports.Util = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -77,6 +77,10 @@ var _abeDuplicate = require('./helpers/abe-duplicate');
 
 var _abeDuplicate2 = _interopRequireDefault(_abeDuplicate);
 
+var _abeDeepVal = require('./helpers/abe-deep-val');
+
+var _abeDeepVal2 = _interopRequireDefault(_abeDeepVal);
+
 var _abeSql = require('./helpers/abe-sql');
 
 var _abeSql2 = _interopRequireDefault(_abeSql);
@@ -111,6 +115,7 @@ exports.fse = _fsExtra2.default;
 exports.Handlebars = _handlebars2.default;
 exports.Util = _abeUtils2.default;
 exports.abeCreate = _abeCreate2.default;
+exports.deep_value = _abeDeepVal2.default;
 exports.abeDuplicate = _abeDuplicate2.default;
 exports.slugify = _slugify2.default;
 exports.cleanSlug = _slugify.cleanSlug;
