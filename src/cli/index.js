@@ -41,6 +41,7 @@ import cli from './helpers/cli-utils'
 import log from './helpers/abe-logs'
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
+import deep_value from './helpers/abe-deep-val'
 import Sql from './helpers/abe-sql'
 import abeProcess from './helpers/abe-process'
 import Page from './controllers/Page'
@@ -56,6 +57,7 @@ export {
 	,Handlebars
 	,Util
 	,abeCreate
+	,deep_value
 	,abeDuplicate
 	,slugify
 	,cleanSlug
