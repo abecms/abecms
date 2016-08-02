@@ -90,17 +90,17 @@ function addPlugin(dir, plugin) {
 							console.log(clc.cyan(`no abe.json creating`), abeJson);
 						}
 
-						if(typeof json.plugins === 'undefined' || json.plugins === null) {
-							json.plugins = [plugin]
+						if(typeof json.dependencies === 'undefined' || json.dependencies === null) {
+							json.dependencies = [plugin]
 						}else {
 							var found = false
-							Array.prototype.forEach.call(json.plugins, (plugged) => {
+							Array.prototype.forEach.call(json.dependencies, (plugged) => {
 								if (plugin === plugged) {
 									found = true
 								}
 							})
 							if (!found) {
-								json.plugins.push(plugin)
+								json.dependencies.push(plugin)
 							}
 						}
 
@@ -326,8 +326,8 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 			}
 
 			var ps = []
-			if(typeof json.plugins !== 'undefined' || json.plugins !== null) {
-				Array.prototype.forEach.call(json.plugins, (plugged) => {
+			if(typeof json.dependencies !== 'undefined' || json.dependencies !== null) {
+				Array.prototype.forEach.call(json.dependencies, (plugged) => {
 					ps.push(addPlugin(dir, plugged))
 				})
 			}
