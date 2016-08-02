@@ -1,0 +1,43 @@
+.panel-title {
+	padding: 10px;
+	border-radius: 0px;
+}
+
+.panel-group .panel {
+	border-radius: 0px;
+}
+
+.panel-body {
+	padding: 0px;
+	border-radius: 0px;
+	border: 0px;
+}
+
+pre {
+	color: black;
+	text-shadow: 0 1px white;
+	font-family: Consolas, Monaco, 'Andale Mono', monospace;
+	direction: ltr;
+	text-align: left;
+	white-space: pre-wrap;
+	word-spacing: normal;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	margin: 0px;
+  background: #fbfcfd;
+  border: 0px solid #DEE2E6;
+  box-sizing: border-box;
+  overflow: auto;
+  padding: 1em;
+	line-height: 1.5em;
+  background: #333;
+  border-radius: 0px;
+	color: #ccc;
+	text-shadow: 0 1px black;
+	font-family: Consolas, Monaco, 'Andale Mono', monospace;
+	direction: ltr;
+	text-align: left;
+	white-space: pre-wrap;
+	word-spacing: normal;
+}
