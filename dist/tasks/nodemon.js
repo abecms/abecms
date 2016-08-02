@@ -23,7 +23,7 @@ nodemon({
     'NODE_ENV': 'development'
   },
   ignore: ["docs/*"],
-  watch: ['src/cli/*', 'src/hooks/*', 'src/server/routes/*', 'src/server/helpers/*', 'src/server/middlewares/*', 'src/server/controllers/*', 'src/server/app.js', 'src/server/index.js', process.env.ROOT + '/plugins/**/**/*.js', process.env.ROOT + '/abe.json', process.env.ROOT + '/locales/*', process.env.ROOT + '/test/*', process.env.ROOT + '/hooks/**/*.js'],
+  watch: ['src/cli/*', 'src/hooks/*', 'src/server/routes/*', 'src/server/helpers/*', 'src/server/middlewares/*', 'src/server/controllers/*', 'src/server/app.js', 'src/server/index.js', process.env.ROOT + '/plugins/**/**/*.js', process.env.ROOT + '/abe.json', process.env.ROOT + '/locales/*', process.env.ROOT + '/test/*', process.env.ROOT + '/hooks/**/*.js', process.env.ROOT + '/reference/**/*.json'],
   stdin: true,
   runOnChangeOnly: false,
   verbose: true,

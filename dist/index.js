@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
+var _es6Promise = require('es6-promise');
+
 var _Create = require('./cli/Create');
 
 var _Create2 = _interopRequireDefault(_Create);
@@ -13,9 +15,17 @@ var _cli = require('./cli');
 
 var _child_process = require('child_process');
 
+var _gitExec = require('git-exec');
+
+var _gitExec2 = _interopRequireDefault(_gitExec);
+
 var _childProcessPromise = require('child-process-promise');
 
 var _childProcessPromise2 = _interopRequireDefault(_childProcessPromise);
+
+var _mkdirp = require('mkdirp');
+
+var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
 var _fsExtra = require('fs-extra');
 
@@ -33,6 +43,10 @@ var _pm = require('pm2');
 
 var _pm2 = _interopRequireDefault(_pm);
 
+var _cliColor = require('cli-color');
+
+var _cliColor2 = _interopRequireDefault(_cliColor);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _commander2.default.version(_package2.default.version).option('-p, --port <port>', 'Port on which to listen to (defaults to 8000)', parseInt).option('-i, --interactive', 'open in browser').option('-N, --pname <pname>', 'pm2 server name').option('-w, --webport <webport>', 'website port').option('-f, --folder <folder>', '--folder draft|sites').option('-t, --type <type>', '--type draft|other').option('-d, --destination <destination>', '--destination folder').parse(process.argv);
@@ -43,6 +57,93 @@ var port = _commander2.default.port;
 var interactive = _commander2.default.interactive;
 var pm2Name = _commander2.default.pname;
 var webport = _commander2.default.webport || 8081;
+
+function addPlugin(dir, plugin) {
+	var p = new _es6Promise.Promise(function (resolve, reject) {
+
+		var pluginName = plugin.split('/');
+		pluginName = pluginName[pluginName.length - 1].split('.')[0];
+		var pluginDir = dir + '/plugins/' + pluginName;
+		var command = 'git clone ' + plugin + ' ' + pluginDir;
+
+		try {
+			var stat = _fsExtra2.default.statSync(pluginDir);
+			console.log(_cliColor2.default.green('remove plugin'), pluginName);
+			_fsExtra2.default.removeSync(pluginDir);
+		} catch (e) {}
+		console.log(_cliColor2.default.green('mkdir'), _cliColor2.default.green(pluginDir));
+		(0, _mkdirp2.default)(pluginDir);
+
+		_gitExec2.default.clone(plugin, pluginDir, function (repo) {
+			if (repo !== null) {
+				try {
+					console.log(_cliColor2.default.green('cd'), _cliColor2.default.green(pluginDir));
+					process.chdir(pluginDir);
+
+					console.log(_cliColor2.default.green('spawn'), _cliColor2.default.cyan('npm install'));
+					// const npmInstall = spawn('npm', ['install', pluginDir]);
+					var npmInstall = (0, _child_process.spawn)('npm', ['install']);
+
+					npmInstall.stdout.on('data', function (data) {
+						var str = data.toString(),
+						    lines = str.split(/(\r?\n)/g);
+						for (var i = 0; i < lines.length; i++) {
+							console.log(str);
+						}
+					});
+
+					npmInstall.stderr.on('data', function (data) {
+						var str = data.toString(),
+						    lines = str.split(/(\r?\n)/g);
+						for (var i = 0; i < lines.length; i++) {
+							console.log(str);
+						}
+					});
+
+					npmInstall.on('close', function (code) {
+						console.log(_cliColor2.default.cyan('child process exited with code'), code);
+
+						var json = {};
+						var abeJson = dir + '/abe.json';
+
+						try {
+							var stat = _fsExtra2.default.statSync(abeJson);
+							if (stat) {
+								json = _fsExtra2.default.readJsonSync(abeJson);
+							}
+						} catch (e) {
+							console.log(e);
+							console.log(_cliColor2.default.cyan('no abe.json creating'), abeJson);
+						}
+
+						if (typeof json.dependencies === 'undefined' || json.dependencies === null) {
+							json.dependencies = [plugin];
+						} else {
+							var found = false;
+							Array.prototype.forEach.call(json.dependencies, function (plugged) {
+								if (plugin === plugged) {
+									found = true;
+								}
+							});
+							if (!found) {
+								json.dependencies.push(plugin);
+							}
+						}
+
+						_fsExtra2.default.writeJsonSync(abeJson, json, { space: 2, encoding: 'utf-8' });
+						resolve();
+					});
+				} catch (err) {
+					console.log(_cliColor2.default.cyan('chdir'), err);
+				}
+			} else {
+				console.log(_cliColor2.default.red('clone error'));
+			}
+		});
+	});
+
+	return p;
+}
 
 if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 
@@ -218,6 +319,56 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 					}
 				});
 			});
+			break;
+		case 'install':
+			var dir;
+			var plugin = userArgs[1];
+			if (process.env.ROOT) {
+				dir = process.env.ROOT.replace(/\/$/, '');
+			}
+
+			var json = {};
+			var abeJson = dir + '/abe.json';
+
+			try {
+				var stat = _fsExtra2.default.statSync(abeJson);
+				if (stat) {
+					json = _fsExtra2.default.readJsonSync(abeJson);
+				}
+			} catch (e) {
+				console.log(_cliColor2.default.cyan('no config'), abeJson);
+			}
+
+			var ps = [];
+			if (typeof json.dependencies !== 'undefined' || json.dependencies !== null) {
+				Array.prototype.forEach.call(json.dependencies, function (plugged) {
+					ps.push(addPlugin(dir, plugged));
+				});
+			}
+
+			_es6Promise.Promise.all(ps).then(function () {
+				process.exit(0);
+			});
+			break;
+		case 'add':
+			// ROOT=[ PATH TO PROJECT ]/abe-test-os ./node_modules/.bin/babel-node src/index.js add [ GIT PROJECT ]
+			var dir;
+			var plugin = userArgs[1];
+			if (process.env.ROOT) {
+				dir = process.env.ROOT.replace(/\/$/, '');
+			}
+
+			if (typeof dir !== 'undefined' && dir !== null) {
+				if (typeof plugin !== 'undefined' && plugin !== null) {
+					addPlugin(dir, plugin).then(function () {
+						process.exit(0);
+					});
+				} else {
+					console.log(_cliColor2.default.red("Error: no project path specified"));
+				}
+			} else {
+				console.log(_cliColor2.default.red("Error: no project path specified"));
+			}
 			break;
 		default:
 			console.log("Help: use `create` or `serve` command");
