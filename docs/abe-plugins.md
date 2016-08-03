@@ -1,5 +1,35 @@
 # Abe Plugins
 
+# Add Plugin
+
+run 
+
+```shell
+abe add https://github.com/AdFabConnect/some-plugin-name.git
+```
+
+this will add a new entry inside abe.json file
+
+```json
+{
+  "dependencies": [
+    "https://github.com/AdFabConnect/some-plugin-name"
+  ]
+}
+```
+
+# Install all plugins
+
+run 
+
+```shell
+abe install
+```
+
+this will fetch all dependencies inside abe.json and clone + npm install package
+
+# Dev plugins
+
 > How to create plugins
 
 Inside website (create plugins folders) then an other (you choose the folder name)

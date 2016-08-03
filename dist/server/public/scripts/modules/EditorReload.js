@@ -87,20 +87,21 @@ var Reload = function () {
         body: data,
         method: 'post'
       }, function (code, responseText, request) {
+        if (typeof responseText !== 'undefined' && responseText !== null) {
+          var str = responseText;
+          var doc = iframe.contentWindow.document;
+          str = str.replace(/<\/head>/, '<base href="/" /></head>');
+          doc.open();
+          doc.write(str);
+          doc.close();
 
-        var str = responseText;
-        var doc = iframe.contentWindow.document;
-        str = str.replace(/<\/head>/, '<base href="/" /></head>');
-        doc.open();
-        doc.write(str);
-        doc.close();
-
-        setTimeout(function () {
-          var iframeDoc = (0, _iframe.IframeDocument)('#page-template');
-          if (typeof iframeDoc !== 'undefined' && iframeDoc !== null && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) {
-            iframeDoc.body.scrollTop = scrollTop;
-          }
-        }, 1000);
+          setTimeout(function () {
+            var iframeDoc = (0, _iframe.IframeDocument)('#page-template');
+            if (typeof iframeDoc !== 'undefined' && iframeDoc !== null && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) {
+              iframeDoc.body.scrollTop = scrollTop;
+            }
+          }, 1000);
+        }
 
         return;
       });
