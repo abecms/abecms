@@ -68,7 +68,7 @@ export default class Reload {
       method: 'post'
     },
     (code, responseText, request) => {
-
+      if(typeof responseText !== 'undefined' && responseText !== null) {
         var str = responseText
         var doc = iframe.contentWindow.document;
         str = str.replace(/<\/head>/, '<base href="/" /></head>')
@@ -83,8 +83,9 @@ export default class Reload {
             iframeDoc.body.scrollTop = scrollTop
           }
         }, 1000)
+      }
         
-        return
+      return
     })
   }
 }
