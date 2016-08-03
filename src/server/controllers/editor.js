@@ -62,7 +62,6 @@ function add(obj, json, text, fakeContent, util) {
   if(fakeContent) {
     value = util.lorem(obj.type)
   }
-
   util.add(obj)
 
   return value

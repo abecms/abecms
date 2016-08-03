@@ -2,9 +2,11 @@ import {cli} from '../'
 
 export function getAttr (str, attr) {
   // var rex = new RegExp(attr + '=["\']([^\'"]+)')
-  var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( [a-zA-Z0-9-]*?=|}})')
+  var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( +[a-zA-Z0-9-]*?=|}})')
+  // var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( [a-zA-Z0-9-]*?=|}})')
   var res = rex.exec(str)
-  return (typeof res !== null && res !== null && res.length > 1) ? res[1] : ''
+  res = (typeof res !== null && res !== null && res.length > 1) ? res[1] : ''
+  return res
 }
 
 /**
