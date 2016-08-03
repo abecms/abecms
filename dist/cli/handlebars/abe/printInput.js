@@ -42,6 +42,8 @@ function printInput() {
     params.value = '';
   }
 
+  if (typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;');
+
   var inputClass = 'form-control form-abe';
   var commonParams = 'id="' + params.key + '"\n                    data-id="' + params.key + '"\n                    value="' + params.value + '"\n                    maxlength="' + params.maxLength + '"\n                    reload="' + params.reload + '"\n                    tabIndex="' + params.order + '"\n                    data-required="' + params.required + '"\n                    data-display="' + params.display + '"\n                    data-visible="' + params.visible + '"\n                    data-autocomplete="' + params.autocomplete + '"\n                    placeholder="' + params.placeholder + '"';
 

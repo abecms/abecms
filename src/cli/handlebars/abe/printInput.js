@@ -28,6 +28,8 @@ export default function printInput () {
     params.value = ''
   }
 
+  if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
+
   var inputClass = 'form-control form-abe'
   var commonParams = `id="${params.key}"
                     data-id="${params.key}"
