@@ -335,8 +335,12 @@ var Utils = function () {
                     jsonPage[obj.key] = data;
                   }
                 } else if (obj.prefill && (typeof jsonPage[obj.key] === 'undefined' || jsonPage[obj.key] === null || jsonPage[obj.key] === '')) {
-                  if (obj.prefillQuantity) {
+                  if (obj.prefillQuantity && obj.maxLength) {
+                    jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
+                  } else if (obj.prefillQuantity) {
                     jsonPage[obj.key] = data.slice(0, obj.prefillQuantity);
+                  } else if (obj.maxLength) {
+                    jsonPage[obj.key] = data.slice(0, obj.maxLength);
                   } else {
                     jsonPage[obj.key] = data;
                   }
