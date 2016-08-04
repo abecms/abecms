@@ -320,6 +320,29 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 				});
 			});
 			break;
+		case 'publish-all':
+			var dir = process.cwd();
+			if (process.env.ROOT) {
+				dir = process.env.ROOT.replace(/\/$/, '');
+			}
+
+			// var command = `node --harmony --debug ./cli/process/publish-all.js ABE_WEBSITE=${dir}`
+			var publishAll = (0, _child_process.spawn)('node', ['--harmony', '--debug', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir]);
+
+			publishAll.stdout.on('data', function (data) {
+				console.log(_cliColor2.default.cyan('stdout'), data.toString());
+			});
+
+			publishAll.stderr.on('data', function (data) {
+				console.log(_cliColor2.default.red('stderr'), data.toString());
+			});
+
+			publishAll.on('close', function (code) {
+				console.log(_cliColor2.default.cyan('child process exited with code'), code);
+				process.exit(0);
+			});
+
+			break;
 		case 'install':
 			var dir = process.cwd();
 			var plugin = userArgs[1];
