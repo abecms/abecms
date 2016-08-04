@@ -31,6 +31,10 @@ function listPage(file, index, text) {
   res += '<tr>';
   res += '<td>' + (0, _math2.default)(index, '+', 1) + '</td>\n        <td>\n          <a href="/abe/' + file.template + '?filePath=' + file.path + '" class="file-path">\n            ' + file.path + '\n          </a>\n        </td>';
 
+  if (file.template) {
+    res += '<td align="center">\n              ' + file.template + '\n            </td>';
+  }
+
   if (file.date) {
     res += '<td align="center">\n              ' + (0, _moment2.default)(file.date).format('YYYY-MM-DD') + '\n            </td>';
   }

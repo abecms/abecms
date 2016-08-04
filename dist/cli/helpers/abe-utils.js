@@ -329,7 +329,17 @@ var Utils = function () {
                 var data = _.Sql.getDataRequest(tplPath, match[0], jsonPage);
                 jsonPage[sourceAttr][obj.key] = data;
                 if (!obj.editable) {
-                  jsonPage[obj.key] = data;
+                  if (obj.maxLength) {
+                    jsonPage[obj.key] = data.slice(0, obj.maxLength);
+                  } else {
+                    jsonPage[obj.key] = data;
+                  }
+                } else if (obj.prefill && (typeof jsonPage[obj.key] === 'undefined' || jsonPage[obj.key] === null || jsonPage[obj.key] === '')) {
+                  if (obj.maxLength) {
+                    jsonPage[obj.key] = data.slice(0, obj.maxLength);
+                  } else {
+                    jsonPage[obj.key] = data;
+                  }
                 }
 
                 if (typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
@@ -520,6 +530,7 @@ var Utils = function () {
 
       var defaultValues = {
         type: 'text',
+        prefill: false,
         key: '',
         desc: '',
         maxLength: null,
@@ -542,6 +553,7 @@ var Utils = function () {
       var obj = {
         type: (0, _.getAttr)(str, 'type'),
         key: key,
+        prefill: (0, _.getAttr)(str, 'prefill'),
         desc: (0, _.getAttr)(str, 'desc'),
         autocomplete: (0, _.getAttr)(str, 'autocomplete'),
         maxLength: (0, _.getAttr)(str, 'max-length'),
@@ -560,6 +572,7 @@ var Utils = function () {
       obj = (0, _extend2.default)(true, defaultValues, obj);
 
       obj.editable = typeof obj.editable === 'undefined' || obj.editable === null || obj.editable === '' || obj.editable === 'false' ? false : true;
+      obj.prefill = typeof obj.prefill !== 'undefined' && obj.prefill !== null && obj.prefill === 'true' ? true : false;
 
       obj = _.Hooks.instance.trigger('afterAbeAttributes', obj, str, json);
 

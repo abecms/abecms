@@ -29,6 +29,7 @@ optrionnal parameter
 - max-length = (Int)
 - display = (String)
 - reload = (Boolean)
+- prefill = (Boolean)
 - autocomplete = (Boolean)
 
 ##Use it
@@ -287,3 +288,7 @@ if the max length is set user will on be able to select N entries (*for example 
 > autocomplete="true"
 
 change the form to autocomplete 
+
+> prefill="true"
+
+will add default values (limited with max-length)
