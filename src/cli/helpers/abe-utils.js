@@ -314,7 +314,17 @@ export default class Utils {
               var data = Sql.getDataRequest(tplPath, match[0], jsonPage)
               jsonPage[sourceAttr][obj.key] = data
               if (!obj.editable) {
-                jsonPage[obj.key] = data
+                if (obj.maxLength) {
+                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
+                }else {
+                  jsonPage[obj.key] = data
+                }
+              }else if (obj.prefill && (typeof jsonPage[obj.key] === 'undefined' || jsonPage[obj.key] === null || jsonPage[obj.key] === '')) {
+                if (obj.maxLength) {
+                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
+                }else {
+                  jsonPage[obj.key] = data
+                }
               }
 
               if(typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
@@ -506,6 +516,7 @@ export default class Utils {
 
     var defaultValues = {
         type: 'text'
+        ,prefill: false
         ,key: ''
         ,desc: ''
         ,maxLength: null
@@ -528,6 +539,7 @@ export default class Utils {
     var obj = {
         type: getAttr(str, 'type')
         ,key: key
+        ,prefill: getAttr(str, 'prefill')
         ,desc: getAttr(str, 'desc')
         ,autocomplete: getAttr(str, 'autocomplete')
         ,maxLength: getAttr(str, 'max-length')
@@ -548,6 +560,7 @@ export default class Utils {
     obj = extend(true, defaultValues, obj)
 
     obj.editable = (typeof obj.editable === 'undefined' || obj.editable === null || obj.editable === '' || obj.editable === 'false') ? false : true
+    obj.prefill = (typeof obj.prefill !== 'undefined' && obj.prefill !== null && obj.prefill === 'true') ? true : false
 
     obj = Hooks.instance.trigger('afterAbeAttributes', obj, str, json)
 
