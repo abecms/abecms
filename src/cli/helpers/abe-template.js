@@ -71,7 +71,7 @@ function translate(text) {
     		var currentMatch = `{{abe ${splitedMatch}`
     		if(/({{abe.*type=[\'|\"]translate.*}})/.test(currentMatch)) {
   				var locale = getAttr(currentMatch, 'locale')
-  				var source = getAttr(currentMatch, 'source')
+          var source = getAttr(currentMatch, 'source')
 
   				if (locale.indexOf('{{') === -1) {
   					locale = `'${locale}'`
