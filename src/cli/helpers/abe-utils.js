@@ -320,8 +320,8 @@ export default class Utils {
                   jsonPage[obj.key] = data
                 }
               }else if (obj.prefill && (typeof jsonPage[obj.key] === 'undefined' || jsonPage[obj.key] === null || jsonPage[obj.key] === '')) {
-                if (obj.maxLength) {
-                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
+                if (obj.prefillQuantity) {
+                  jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
                 }else {
                   jsonPage[obj.key] = data
                 }
@@ -517,6 +517,7 @@ export default class Utils {
     var defaultValues = {
         type: 'text'
         ,prefill: false
+        ,prefillQuantity: null
         ,key: ''
         ,desc: ''
         ,maxLength: null
@@ -540,6 +541,7 @@ export default class Utils {
         type: getAttr(str, 'type')
         ,key: key
         ,prefill: getAttr(str, 'prefill')
+        ,prefillQuantity: getAttr(str, 'prefill-quantity')
         ,desc: getAttr(str, 'desc')
         ,autocomplete: getAttr(str, 'autocomplete')
         ,maxLength: getAttr(str, 'max-length')
@@ -561,6 +563,7 @@ export default class Utils {
 
     obj.editable = (typeof obj.editable === 'undefined' || obj.editable === null || obj.editable === '' || obj.editable === 'false') ? false : true
     obj.prefill = (typeof obj.prefill !== 'undefined' && obj.prefill !== null && obj.prefill === 'true') ? true : false
+    obj.prefillQuantity = (typeof obj.prefillQuantity !== 'undefined' && obj.prefillQuantity !== null && obj.prefillQuantity !== '') ? obj.prefillQuantity : false
 
     obj = Hooks.instance.trigger('afterAbeAttributes', obj, str, json)
 
