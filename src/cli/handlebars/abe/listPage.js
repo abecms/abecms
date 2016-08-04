@@ -15,6 +15,12 @@ export default function listPage(file, index, text) {
           </a>
         </td>`
   
+  if(file.template){
+    res += `<td align="center">
+              ${file.template}
+            </td>`
+  }
+  
   if(file.date){
     res += `<td align="center">
               ${moment(file.date).format('YYYY-MM-DD')}
