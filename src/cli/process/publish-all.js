@@ -17,19 +17,22 @@ Array.prototype.forEach.call(process.argv, (item) => {
   }
 })
 
-var logsPub = ""
+// var logsPub = ""
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
   try {
       
-    log.write('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    log.write('publish-all', 'start process publish')
+    // log.write('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    // log.write('publish-all', 'start process publish')
+    console.log('publish-all', 'start process publish')
     var dateStart = new Date()
 
     var type = null
     var folder = null
     if(typeof pConfig.FILEPATH !== 'undefined' && pConfig.FILEPATH !== null) {
-      log.write('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
+      // log.write('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
+      console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
       pConfig.FILEPATH = fileUtils.concatPath(config.root, config.data.url, pConfig.FILEPATH.replace(config.root))
 
       var fileJson = FileParser.getJson(
@@ -66,7 +69,8 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
         
         var p = new Promise((resolve, reject) => {
           var d = (new Date().getTime() - dateStart.getTime()) / 1000
-          logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
+          // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
+          console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath)
           save(
             pub.path,
             json.abe_meta.template,
@@ -77,12 +81,15 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
             'publish',
             true)
             .then(() => {
-              logsPub += 'successfully update > ' + pub.path .replace(config.root, '')
+              // logsPub += 'successfully update > ' + pub.path .replace(config.root, '')
+              // console.log('successfully update > ' + pub.path .replace(config.root, ''))
               resolve()
             }).catch(function(e) {
               console.log(e)
-              log.write('publish-all', e)
-              log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
+              // log.write('publish-all', e)
+              console.log('publish-all', e)
+              // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
+              console.log('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
               resolve()
             })
         })
@@ -90,22 +97,27 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
       }
     })
 
-    logsPub += 'total ' + promises.length + ' files'
+    // logsPub += 'total ' + promises.length + ' files'
+    console.log('total ' + promises.length + ' files')
 
     Promise.all(promises)
       .then(() => {
         dateStart = (new Date().getTime() - dateStart.getTime()) / 1000
-        logsPub += 'publish process finished in ' + dateStart + 'sec'
-        log.write('publish-all', logsPub)
+        // logsPub += 'publish process finished in ' + dateStart + 'sec'
+        console.log('publish process finished in ' + dateStart + 'sec')
+        // log.write('publish-all', logsPub)
+        // console.log('publish-all', logsPub)
         process.exit(0)
       }).catch(function(e) {
-        log.write('publish-all', e)
+        // log.write('publish-all', e)
+        console.log('publish-all', e)
         console.log(e)
       })
   } catch(e) {
     // statements
     console.log(e);
-    log.write('publish-all', e)
+    // log.write('publish-all', e)
+    console.log('publish-all', e)
   }
 
 }else {
