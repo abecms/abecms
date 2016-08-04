@@ -252,6 +252,28 @@ var Sql = function () {
     // }
 
   }, {
+    key: 'shuffle',
+    value: function shuffle(array) {
+      var currentIndex = array.length,
+          temporaryValue,
+          randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    }
+  }, {
     key: 'sortByDateAsc',
     value: function sortByDateAsc(a, b) {
       var dateA = new Date(a.date);
@@ -315,7 +337,9 @@ var Sql = function () {
       }
 
       if (typeof request.orderby !== 'undefined' && request.orderby !== null) {
-        if (request.orderby.column.toLowerCase() === 'date') {
+        if (request.orderby.column.toLowerCase() === 'random') {
+          Sql.shuffle(files);
+        } else if (request.orderby.column.toLowerCase() === 'date') {
           if (request.orderby.type === 'ASC') {
             files.sort(Sql.sortByDateAsc);
           } else if (request.orderby.type === 'DESC') {

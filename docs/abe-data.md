@@ -30,6 +30,7 @@ optrionnal parameter
 - display = (String)
 - reload = (Boolean)
 - prefill = (Boolean)
+- prefill-quantity = (Int)
 - autocomplete = (Boolean)
 
 ##Use it
@@ -221,6 +222,7 @@ Not working
 ORDER BY date
 - DESC
 - ASC
+- RANDOM
 
 ```html
 {{abe type='data' key='articles' desc='articles' source="select * from articles where template="article" AND title='my title' order by date DESC LIMIT 2" display="title" editable='true'"}}
@@ -291,4 +293,8 @@ change the form to autocomplete
 
 > prefill="true"
 
-will add default values (limited with max-length)
+will add default content values
+
+> prefill-quantity="10"
+
+will as many content as the value
