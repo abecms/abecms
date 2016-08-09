@@ -1,6 +1,6 @@
 {
   "name": "abe-cli",
-  "version": "1.7.91",
+  "version": "1.7.92",
   "description": "Abe command line tool",
   "main": "src/server/app.js",
   "repository": {
