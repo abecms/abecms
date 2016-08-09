@@ -58,17 +58,22 @@ export default class Json {
           method: 'post'
         },
         (code, responseText, request) => {
-          var jsonRes = JSON.parse(responseText)
-          if(typeof jsonRes.error !== 'undefined' && jsonRes.error !== null) {
-            alert(jsonRes.error)
-            return
+          try{
+            var jsonRes = JSON.parse(responseText)
+            if(typeof jsonRes.error !== 'undefined' && jsonRes.error !== null) {
+              alert(jsonRes.error)
+              return
+            }
+            if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
+              window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject
+              return
+            }
+            this.data = jsonRes.json
           }
-          if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-            window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject
-            return
+          catch(e){
+            alert('The following error happened : \n' + e + '\n if it persist, reload your web page tab.')
+            jsonRes = {}
           }
-          this.data = jsonRes.json
-          // jsonRes.success = 1
           resolve(jsonRes)
         })
     })
