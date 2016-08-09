@@ -33,7 +33,7 @@ export default function listPage(file, index, text) {
   if((typeof file.published !== undefined && file.published !== null && !file.published) || (file.published && file.draft && file.published.date < file.draft.date)) {
     workflow += `<a href="/abe/${file.template}?filePath=${file.path}" class="label label-default label-draft">draft</a>`
   }else {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.path}" class="hidden label label-default label-draft">draft</a>`
+    workflow += `<a href="/abe/${file.template}?filePath=${file.path}" class="hidden label label-default label-draft"></a>`
   }
 
   workflow += `</td>`
