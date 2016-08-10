@@ -97,15 +97,31 @@ var route = function route(req, res, next) {
       if (hasError) return;
       var ext = filename.split('.');
       ext = ext[ext.length - 1];
-      var dateID = new Date().toISOString().replace(/[-:\.]/g, '');
-      var cleanFileName = (0, _cli.cleanSlug)(filename).replace('.' + _cli.config.files.templates.extension, dateID + '.' + ext);
+      var randID = '-' + ((1 + Math.random()) * 0x100000 | 0).toString(16).substring(2);
+      var cleanFileName = (0, _cli.cleanSlug)(filename).replace('.' + _cli.config.files.templates.extension, randID + '.' + ext);
+      // var sfStat = fs.statSync(abe.fileUtils.concatPath(abe.config.root, abe.config.publish.url, path));
+
       filePath = _cli.fileUtils.concatPath(folderFilePath, cleanFileName);
-      resp['filePath'] = _cli.fileUtils.concatPath(folderWebPath, cleanFileName);
-      fstream = _fs2.default.createWriteStream(filePath);
-      for (var i = 0; i < file.fileRead.length; i++) {
-        fstream.write(file.fileRead[i]);
-      }
-      fstream.on('close', function () {});
+      var createImage = function createImage() {
+        try {
+          var sfStat = _fs2.default.statSync(filePath);
+
+          if (sfStat) {
+            var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg)/);
+            if (nb && nb[1]) filePath = filePath.replace(/_([0-9])\.(jpg|png|gif|svg)/, '_' + (parseInt(nb[1]) + 1) + '.$2');else filePath = filePath.replace(/\.(jpg|png|gif|svg)/, '_1.$1');
+            createImage();
+          }
+        } catch (e) {
+          resp['filePath'] = _cli.fileUtils.concatPath(folderWebPath, cleanFileName);
+          fstream = _fs2.default.createWriteStream(filePath);
+          for (var i = 0; i < file.fileRead.length; i++) {
+            fstream.write(file.fileRead[i]);
+          }
+          fstream.on('close', function () {});
+        }
+      };
+
+      createImage();
     });
   });
   req.busboy.on('finish', function () {
