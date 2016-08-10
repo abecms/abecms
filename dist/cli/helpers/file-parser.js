@@ -424,6 +424,7 @@ var FileParser = function () {
 			published.forEach(function (pub) {
 
 				var json = FileParser.getJson(FileParser.changePathEnv(pub.path, _.config.data.url).replace(new RegExp("\\." + _.config.files.templates.extension), '.json'));
+
 				if (typeof json[_.config.meta.name] !== 'undefined' && json[_.config.meta.name] !== null && typeof json[_.config.meta.name][_.config.draft.url] !== 'undefined' && json[_.config.meta.name][_.config.draft.url] !== null) {
 					pub.filePath = json[_.config.meta.name][_.config.draft.url].latest.abeUrl;
 					truePublished.push(pub);
