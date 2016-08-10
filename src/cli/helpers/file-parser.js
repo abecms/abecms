@@ -385,6 +385,7 @@ export default class FileParser {
   								FileParser.changePathEnv(pub.path, config.data.url)
   													.replace(new RegExp("\\." + config.files.templates.extension), '.json')
 								  )
+    	
     	if(typeof json[config.meta.name] !== 'undefined'
     		&& json[config.meta.name] !== null
     		&& typeof json[config.meta.name][config.draft.url] !== 'undefined'
