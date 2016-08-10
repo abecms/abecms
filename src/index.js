@@ -167,7 +167,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 			if (typeof port !== 'undefined' && port !== null) {
 				environment.PORT = port;
 			}
-			var command = 'node --harmony --debug ./dist/server/index.js';
+			var command = 'node --harmony ./dist/server/index.js';
 			// if (interactive) command = 'OPENURL=1 ' + command
 			process.chdir(__dirname + '/../')
 			console.log('website started : ' + dir + (port ? ' on port :' + port : ''))
