@@ -80,17 +80,21 @@ var Json = function () {
           headers: _this._headers,
           method: 'post'
         }, function (code, responseText, request) {
-          var jsonRes = JSON.parse(responseText);
-          if (typeof jsonRes.error !== 'undefined' && jsonRes.error !== null) {
-            alert(jsonRes.error);
-            return;
+          try {
+            var jsonRes = JSON.parse(responseText);
+            if (typeof jsonRes.error !== 'undefined' && jsonRes.error !== null) {
+              alert(jsonRes.error);
+              return;
+            }
+            if (typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
+              window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject;
+              return;
+            }
+            _this.data = jsonRes.json;
+          } catch (e) {
+            alert('The following error happened : \n' + e + '\n if it persist, reload your web page tab.');
+            jsonRes = {};
           }
-          if (typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-            window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject;
-            return;
-          }
-          _this.data = jsonRes.json;
-          // jsonRes.success = 1
           resolve(jsonRes);
         });
       });
