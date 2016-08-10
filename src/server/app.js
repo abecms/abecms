@@ -7,7 +7,6 @@ import bodyParser from 'body-parser'
 import exphbs from 'express-secure-handlebars'
 import path from 'path'
 import busboy from 'connect-busboy'
-import portfinder from 'portfinder'
 import clc from 'cli-color'
 import openurl from 'openurl'
 import uuid from 'node-uuid'
@@ -69,7 +68,6 @@ var html = exphbs.create({
   }
 })
 
-portfinder.getPort(function (err, freePort) {
   var opts = {}
   if (fileUtils.isFile(fileUtils.concatPath(config.root, 'cert.pem'))) {
     opts = {
@@ -129,79 +127,78 @@ portfinder.getPort(function (err, freePort) {
 
   }
 
-  var port = (abePort !== null) ? abePort : (freePort || 3000)
-  port = Hooks.instance.trigger('beforeExpress', port)
+var port = (abePort !== null) ? abePort : 3000
+port = Hooks.instance.trigger('beforeExpress', port)
 
-  app.set('views', path.join(__dirname, '/templates'))
-  app.engine('.html', html.engine)
-  app.set('view engine', '.html')
+app.set('views', path.join(__dirname, '/templates'))
+app.engine('.html', html.engine)
+app.set('view engine', '.html')
 
-  app.locals.layout = false;
+app.locals.layout = false;
 
-  app.use(middleWebsite)
-  app.use(express.static(__dirname + '/public'))
+app.use(middleWebsite)
+app.use(express.static(__dirname + '/public'))
 
-  FileParser.copySiteAssets()
+FileParser.copySiteAssets()
 
-  var sites = FileParser.getFolders(config.root.replace(/\/$/, ""), false, 0)
-  
-  let publish = fileUtils.concatPath(config.root, config.publish.url)
-  app.use(express.static(publish))
-  // app.use(express.static(publish))
+var sites = FileParser.getFolders(config.root.replace(/\/$/, ""), false, 0)
 
-  if(config.partials !== '') {
-    if (fileUtils.isFile(fileUtils.concatPath(config.root, config.partials))) {
-      app.use(express.static(fileUtils.concatPath(config.root, config.partials)))
-    }
+let publish = fileUtils.concatPath(config.root, config.publish.url)
+app.use(express.static(publish))
+// app.use(express.static(publish))
+
+if(config.partials !== '') {
+  if (fileUtils.isFile(fileUtils.concatPath(config.root, config.partials))) {
+    app.use(express.static(fileUtils.concatPath(config.root, config.partials)))
   }
+}
 
-  if(config.custom !== '') {
-    if (fileUtils.isFile(fileUtils.concatPath(config.root, config.custom))) {
-      app.use(express.static(fileUtils.concatPath(config.root, config.custom)))
-    }
+if(config.custom !== '') {
+  if (fileUtils.isFile(fileUtils.concatPath(config.root, config.custom))) {
+    app.use(express.static(fileUtils.concatPath(config.root, config.custom)))
   }
+}
 
-  var pluginsPartials = Plugins.instance.getPartials()
-  Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
-    app.use(express.static(pluginPartials))
-  })
-
-  app.use(express.static(__dirname + '/node_modules/handlebars/dist'))
-  app.use(busboy({
-    limits: {
-      fileSize: config.upload.fileSizelimit
-    }
-  }))
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({extended: true}))
-
-  // depending on the way you serve this app, cookie.secure will be set
-  // in Production, this app has to be reverse-proxified
-  app.use(session({
-      name: 'sessionId',
-      secret: config.sessionSecret,
-      resave: false,
-      saveUninitialized: true,
-      cookie: {secure: config.cookie.secure},
-      proxy: true
-  }))
-
-  Hooks.instance.trigger('afterExpress', app, express)
-
-  if (fileUtils.isFile(fileUtils.concatPath(config.root, 'cert.pem'))) {
-    var server = https.createServer(opts, app)
-    server.listen(port, function() {
-      console.log(clc.green(`\nserver running at https://localhost:${port}/`))
-      if(process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
-    })
-  }else {
-    app.listen(port, function() {
-      console.log(clc.green(`\nserver running at http://localhost:${port}/`))
-      if(process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
-    })
-  }
-
-  // important : require here so config.root is defined
-  var controllers = require('./controllers')
-  app.use(controllers.default)
+var pluginsPartials = Plugins.instance.getPartials()
+Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
+  app.use(express.static(pluginPartials))
 })
+
+app.use(express.static(__dirname + '/node_modules/handlebars/dist'))
+app.use(busboy({
+  limits: {
+    fileSize: config.upload.fileSizelimit
+  }
+}))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+
+// depending on the way you serve this app, cookie.secure will be set
+// in Production, this app has to be reverse-proxified
+app.use(session({
+    name: 'sessionId',
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: config.cookie.secure},
+    proxy: true
+}))
+
+Hooks.instance.trigger('afterExpress', app, express)
+
+if (fileUtils.isFile(fileUtils.concatPath(config.root, 'cert.pem'))) {
+  var server = https.createServer(opts, app)
+  server.listen(port, function() {
+    console.log(clc.green(`\nserver running at https://localhost:${port}/`))
+    if(process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
+  })
+}else {
+  app.listen(port, function() {
+    console.log(clc.green(`\nserver running at http://localhost:${port}/`))
+    if(process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
+  })
+}
+
+// important : require here so config.root is defined
+var controllers = require('./controllers')
+app.use(controllers.default)
