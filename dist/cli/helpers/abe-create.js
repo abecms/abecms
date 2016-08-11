@@ -8,6 +8,7 @@ var _cli = require('../../cli');
 
 var create = function create(template, path, name, req) {
   var forceJson = arguments.length <= 4 || arguments[4] === undefined ? {} : arguments[4];
+  var duplicate = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
 
   var p = new Promise(function (resolve, reject) {
     _cli.Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson);
@@ -24,6 +25,9 @@ var create = function create(template, path, name, req) {
         var json = forceJson ? forceJson : {};
         var tpl = templatePath;
         var text = (0, _cli.getTemplate)(tpl);
+        if (duplicate) {
+          json = (0, _cli.removeDuplicateAttr)(text, json);
+        }
         text = _cli.Util.removeDataList(text);
         var resHook = _cli.Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text);
         filePath = resHook.filePath;

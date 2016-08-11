@@ -7,10 +7,10 @@ Object.defineProperty(exports, "__esModule", {
 var _cli = require('../../cli');
 
 var duplicate = function duplicate(oldFilePath, template, path, name, req) {
-  var deleteFiles = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
+  var isUpdate = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
 
   var p = new Promise(function (resolve, reject) {
-    _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, deleteFiles);
+    _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, isUpdate);
 
     if (typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
       var url = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.draft.url, oldFilePath);
@@ -27,7 +27,7 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
         if (latest.length) {
           url = latest[0].path;
         }
-      } else if (deleteFiles) {
+      } else if (isUpdate) {
         files = _cli.FileParser.getFiles(folderFilePath, true, 2);
         revisions = _cli.fileAttr.getFilesRevision(files, url);
       }
@@ -38,17 +38,17 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
       delete json.abe_meta;
     }
 
-    if (deleteFiles) {
-      _cli.Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, deleteFiles);
+    if (isUpdate) {
+      _cli.Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, isUpdate);
       Array.prototype.forEach.call(revisions, function (revision) {
         if (typeof revision.path !== 'undefined' && revision.path !== null) {
           _cli.FileParser.deleteFile(revision.path);
         }
       });
     }
-    _cli.Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, path, name, req, deleteFiles);
+    _cli.Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, path, name, req, isUpdate);
 
-    var pCreate = (0, _cli.abeCreate)(template, path, name, req, json);
+    var pCreate = (0, _cli.abeCreate)(template, path, name, req, json, isUpdate ? false : true);
     pCreate.then(function (resSave) {
       resolve(resSave);
     }, function () {
