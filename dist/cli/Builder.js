@@ -43,10 +43,10 @@ var Builder = function Builder(root, folder, dest, flow) {
         var page = new _.Page(json.abe_meta.link, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
         console.log(_.fileUtils.concatPath(root, dest + json.abe_meta.link));
-        if (files[++index]) build(++index);
+        if (files[index + 1]) build(index + 1);
       }).catch(function (e) {
         console.error(e);
-        if (files[++index]) build(++index);
+        if (files[index + 1]) build(index + 1);
       });
     } else if (file.path.indexOf('.json') > -1) {
       var json = _fsExtra2.default.readJsonSync(file.path);
@@ -56,12 +56,12 @@ var Builder = function Builder(root, folder, dest, flow) {
         var page = new _.Page(json.abe_meta.link, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
         console.log(_.fileUtils.concatPath(root, dest + json.abe_meta.link));
-        if (files[++index]) build(++index);
+        if (files[index + 1]) build(index + 1);
       }).catch(function (e) {
         console.error(e);
-        if (files[++index]) build(++index);
+        if (files[index + 1]) build(index + 1);
       });
-    }
+    } else if (files[index + 1]) build(index + 1);
   };
 
   build(0);
