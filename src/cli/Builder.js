@@ -40,10 +40,10 @@ class Builder {
             var page = new Page(json.abe_meta.link, text, json, true)
             saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
             console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
-            if(files[++index]) build(++index)
+            if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
             console.error(e)
-            if(files[++index]) build(++index)
+            if(files[index + 1]) build(index + 1)
           })
       }
       else if(file.path.indexOf('.json') > -1){
@@ -55,12 +55,13 @@ class Builder {
             var page = new Page(json.abe_meta.link, text, json, true)
             saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
             console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
-            if(files[++index]) build(++index)
+            if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
             console.error(e)
-            if(files[++index]) build(++index)
+            if(files[index + 1]) build(index + 1)
           })
       }
+      else if(files[index + 1]) build(index + 1)
     }
 
     build(0)
