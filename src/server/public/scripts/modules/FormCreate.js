@@ -122,7 +122,9 @@ export default class FormCreate {
     return path
   }
 
-  _submit(type) {
+  _submit(type, btn) {
+    if(btn.classList.contains('disable')) return
+    btn.classList.add('disable')
     var inputs = [].slice.call(document.querySelectorAll('.form-create input'))
     inputs = inputs.concat([].slice.call(document.querySelectorAll('.form-create select')))
     var values = {}
@@ -143,22 +145,23 @@ export default class FormCreate {
             window.location.href = window.location.origin + '/abe/' + jsonRes.json.abe_meta.template + '?filePath=' + jsonRes.json.abe_meta.link
           }else {
             alert('error')
+            btn.classList.remove('disable')
           }
         })
   }
 
   _btnDuplicateManagerClick(e) {
     e.preventDefault()
-    this._submit('duplicate')
+    this._submit('duplicate', e.srcElement)
   }
 
   _btnUpdateManagerClick(e) {
     e.preventDefault()
-    this._submit('update')
+    this._submit('update', e.srcElement)
   }
 
   _btnCreateManagerClick(e) {
     e.preventDefault()
-    this._submit('create')
+    this._submit('create', e.srcElement)
   }
 }

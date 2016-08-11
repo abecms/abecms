@@ -26,6 +26,11 @@
     background-color: #47b8e0;
 }
 
+.btn-primary.disable{
+    background: #a5c0ca;
+    cursor: progress;
+}
+
 .btn-info:active:hover, .btn-info:active:focus {
     color: #8E8E8E;
     background-color: #E0DFDF;
