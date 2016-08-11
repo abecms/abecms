@@ -41,6 +41,7 @@ are always required for all content type
 - editable (Boolean)
 - source (String | variables)
 - autocomplete (Boolean)
+- duplicate (Boolean)
 
 ## Details 
 
@@ -61,5 +62,6 @@ display  | ```display="title"``` | List from json source display title attribute
 editable  | ```editable="false"``` | List is editable | data | true
 source  | ```source="[ data source ]"``` | List json value (http url, local url, static json, select sql like) | data | (null)
 autocomplete  | ```autocomplete="true"``` | change the list to autocomplete | data | false
+duplicate  | ```duplicate="false"``` | the field will not be duplicate when user duplicate content | all | false
 
 
