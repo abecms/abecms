@@ -165,7 +165,9 @@ var FormCreate = function () {
     }
   }, {
     key: '_submit',
-    value: function _submit(type) {
+    value: function _submit(type, btn) {
+      if (btn.classList.contains('disable')) return;
+      btn.classList.add('disable');
       var inputs = [].slice.call(document.querySelectorAll('.form-create input'));
       inputs = inputs.concat([].slice.call(document.querySelectorAll('.form-create select')));
       var values = {};
@@ -184,6 +186,7 @@ var FormCreate = function () {
           window.location.href = window.location.origin + '/abe/' + jsonRes.json.abe_meta.template + '?filePath=' + jsonRes.json.abe_meta.link;
         } else {
           alert('error');
+          btn.classList.remove('disable');
         }
       });
     }
@@ -191,19 +194,19 @@ var FormCreate = function () {
     key: '_btnDuplicateManagerClick',
     value: function _btnDuplicateManagerClick(e) {
       e.preventDefault();
-      this._submit('duplicate');
+      this._submit('duplicate', e.srcElement);
     }
   }, {
     key: '_btnUpdateManagerClick',
     value: function _btnUpdateManagerClick(e) {
       e.preventDefault();
-      this._submit('update');
+      this._submit('update', e.srcElement);
     }
   }, {
     key: '_btnCreateManagerClick',
     value: function _btnCreateManagerClick(e) {
       e.preventDefault();
-      this._submit('create');
+      this._submit('create', e.srcElement);
     }
   }]);
 
