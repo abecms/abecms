@@ -31,9 +31,9 @@ var Builder = function Builder(root, folder, dest, flow) {
     // files = FileParser.getMetas(files, 'draft')
   }
 
-  files.forEach(function (file) {
+  var build = function build(index) {
+    var file = files[index];
     if (file.path.indexOf('.' + _.config.files.templates.extension) > -1) {
-      console.log(1, file.path);
       file.path = file.path.replace(_.config.publish.url, _.config.data.url).replace('.' + _.config.files.templates.extension, '.json');
 
       var json = _fsExtra2.default.readJsonSync(file.path);
@@ -43,8 +43,10 @@ var Builder = function Builder(root, folder, dest, flow) {
         var page = new _.Page(json.abe_meta.link, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
         console.log(_.fileUtils.concatPath(root, dest + json.abe_meta.link));
+        if (files[++index]) build(++index);
       }).catch(function (e) {
         console.error(e);
+        if (files[++index]) build(++index);
       });
     } else if (file.path.indexOf('.json') > -1) {
       var json = _fsExtra2.default.readJsonSync(file.path);
@@ -54,11 +56,15 @@ var Builder = function Builder(root, folder, dest, flow) {
         var page = new _.Page(json.abe_meta.link, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
         console.log(_.fileUtils.concatPath(root, dest + json.abe_meta.link));
+        if (files[++index]) build(++index);
       }).catch(function (e) {
         console.error(e);
+        if (files[++index]) build(++index);
       });
     }
-  });
+  };
+
+  build(0);
 };
 
 if (process.env.ROOT && process.env.FOLDER && process.env.DEST) {
