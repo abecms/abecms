@@ -334,7 +334,8 @@ var Utils = function () {
                   } else {
                     jsonPage[obj.key] = data;
                   }
-                } else if (obj.prefill && (typeof jsonPage[obj.key] === 'undefined' || jsonPage[obj.key] === null || jsonPage[obj.key] === '')) {
+                } else if (obj.prefill) {
+                  // console.log("msg")
                   if (obj.prefillQuantity && obj.maxLength) {
                     jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
                   } else if (obj.prefillQuantity) {
@@ -344,6 +345,7 @@ var Utils = function () {
                   } else {
                     jsonPage[obj.key] = data;
                   }
+                  // console.log(obj.key, jsonPage[obj.key])
                 }
 
                 if (typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
