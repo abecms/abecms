@@ -39,6 +39,7 @@ import fileUtils from './helpers/file-utils'
 import config from './helpers/abe-config'
 import cli from './helpers/cli-utils'
 import log from './helpers/abe-logs'
+import removeDuplicateAttr from './helpers/abe-remove-duplicate-attr'
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
 import deep_value from './helpers/abe-deep-val'
@@ -92,6 +93,7 @@ export {
 	,cli
 	,getTemplate
 	,log
+	,removeDuplicateAttr
 	,Page
 	,save
 	,Hooks
