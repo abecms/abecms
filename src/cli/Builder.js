@@ -26,9 +26,9 @@ class Builder {
       // files = FileParser.getMetas(files, 'draft')
     }
 
-    files.forEach(function (file) {
+    var build = function (index) {
+      var file = files[index];
       if(file.path.indexOf('.' + config.files.templates.extension) > -1){
-        console.log(1, file.path)
         file.path = file.path.replace(config.publish.url, config.data.url)
                              .replace('.' + config.files.templates.extension, '.json')
         
@@ -36,28 +36,35 @@ class Builder {
         var text = getTemplate(json.abe_meta.template)
         
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
-        .then(() => {
-          var page = new Page(json.abe_meta.link, text, json, true)
-          saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
-          console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
-        }).catch(function(e) {
-          console.error(e)
-        })
+          .then(() => {
+            var page = new Page(json.abe_meta.link, text, json, true)
+            saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
+            console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
+            if(files[++index]) build(++index)
+          }).catch(function(e) {
+            console.error(e)
+            if(files[++index]) build(++index)
+          })
       }
       else if(file.path.indexOf('.json') > -1){
         var json = fse.readJsonSync(file.path)
         var text = getTemplate(json.abe_meta.template)
 
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
-        .then(() => {
-          var page = new Page(json.abe_meta.link, text, json, true)
-          saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
-          console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
-        }).catch(function(e) {
-          console.error(e)
-        })
+          .then(() => {
+            var page = new Page(json.abe_meta.link, text, json, true)
+            saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
+            console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
+            if(files[++index]) build(++index)
+          }).catch(function(e) {
+            console.error(e)
+            if(files[++index]) build(++index)
+          })
       }
-    })
+    }
+
+    build(0)
+
   }
 
 }
