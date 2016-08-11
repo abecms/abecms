@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.deep_value = exports.abeCreate = exports.Util = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
+exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.removeDuplicateAttr = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.deep_value = exports.abeCreate = exports.Util = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -68,6 +68,10 @@ var _cliUtils2 = _interopRequireDefault(_cliUtils);
 var _abeLogs = require('./helpers/abe-logs');
 
 var _abeLogs2 = _interopRequireDefault(_abeLogs);
+
+var _abeRemoveDuplicateAttr = require('./helpers/abe-remove-duplicate-attr');
+
+var _abeRemoveDuplicateAttr2 = _interopRequireDefault(_abeRemoveDuplicateAttr);
 
 var _abeCreate = require('./helpers/abe-create');
 
@@ -150,6 +154,7 @@ exports.config = _abeConfig2.default;
 exports.cli = _cliUtils2.default;
 exports.getTemplate = _abeTemplate.getTemplate;
 exports.log = _abeLogs2.default;
+exports.removeDuplicateAttr = _abeRemoveDuplicateAttr2.default;
 exports.Page = _Page2.default;
 exports.save = _Save.save;
 exports.Hooks = _abeHooks2.default;
