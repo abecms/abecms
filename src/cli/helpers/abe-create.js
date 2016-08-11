@@ -4,13 +4,14 @@ import {
   Util,
   cleanSlug,
   getTemplate,
+  removeDuplicateAttr,
   save,
   config,
   log,
   Hooks
 } from '../../cli'
 
-var create = function(template, path, name, req, forceJson = {}) {
+var create = function(template, path, name, req, forceJson = {}, duplicate = false) {
   var p = new Promise((resolve, reject) => {
       Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson)
 
@@ -26,6 +27,9 @@ var create = function(template, path, name, req, forceJson = {}) {
           var json = (forceJson) ? forceJson : {}
           var tpl = templatePath
           var text = getTemplate(tpl)
+          if (duplicate) {
+            json = removeDuplicateAttr(text, json)
+          }
           text = Util.removeDataList(text)
           var resHook = Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
           filePath = resHook.filePath
