@@ -122,6 +122,7 @@ var EditorBlock = function () {
           Array.prototype.forEach.call(child.querySelectorAll('.form-abe'), function (item) {
             item.value = '';
           });
+          delete abe.json._data[blockAttr][0];
         } else {
           var toRemove = null;
           Array.prototype.forEach.call(listGroup.querySelectorAll('[data-block]'), function (block) {
