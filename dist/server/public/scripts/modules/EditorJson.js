@@ -87,7 +87,7 @@ var Json = function () {
               return;
             }
             if (typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-              window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject;
+              location.reload();
               return;
             }
             _this.data = jsonRes.json;

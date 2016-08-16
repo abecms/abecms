@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.removeDuplicateAttr = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.deep_value = exports.abeCreate = exports.Util = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
+exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.removeDuplicateAttr = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.deep_value = exports.abeCreate = exports.Util = exports.clc = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -24,6 +24,10 @@ var _moment2 = _interopRequireDefault(_moment);
 var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
+
+var _cliColor = require('cli-color');
+
+var _cliColor2 = _interopRequireDefault(_cliColor);
 
 var _index = require('./handlebars/index');
 
@@ -117,6 +121,7 @@ exports.fileAttr = _fileAttr2.default;
 exports.moment = _moment2.default;
 exports.fse = _fsExtra2.default;
 exports.Handlebars = _handlebars2.default;
+exports.clc = _cliColor2.default;
 exports.Util = _abeUtils2.default;
 exports.abeCreate = _abeCreate2.default;
 exports.deep_value = _abeDeepVal2.default;

@@ -165,12 +165,13 @@ var EditorSave = function () {
         var ext = filePathParam.split('.');
         ext = ext[ext.length - 1];
         filePathParam = filePathParam.replace(new RegExp('-abe-(.+?)(?=\.' + ext + ')'), '');
-        var reloadUrl = top.location.protocol + '//' + window.location.host + window.location.pathname + tplNameParam + filePathParam;
+        var reloadUrl = top.location.protocol + '//' + window.location.host + window.location.pathname + tplNameParam + filePathParam + top.location.hash;
 
         target.classList.remove('loading');
         target.classList.remove('done');
         target.removeAttribute('disabled');
-        if (result.success === 1) window.location.href = reloadUrl;
+
+        if (result.success === 1) location.reload();
       }).catch(function (e) {
         console.error(e);
       });
