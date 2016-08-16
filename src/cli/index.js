@@ -3,6 +3,7 @@ import Util from './helpers/abe-utils'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 import moment from 'moment'
 import fse from 'fs-extra'
+import clc from 'cli-color'
 
 import {
 	abeImport,
@@ -56,6 +57,7 @@ export {
 	,moment
 	,fse
 	,Handlebars
+	,clc
 	,Util
 	,abeCreate
 	,deep_value
