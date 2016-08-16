@@ -19,6 +19,8 @@ export default function listPage(file, index, text) {
     res += `<td align="center">
               ${file.template}
             </td>`
+  }else {
+    res += `<td align="center"></td>`
   }
   
   if(file.date){
@@ -27,6 +29,8 @@ export default function listPage(file, index, text) {
     res += `<td align="center" data-search="${dateSearch}" data-order="${dateOrder}">
               ${dateSearch}
             </td>`
+  }else {
+    res += `<td align="center" data-search="0000-00-00" data-order="0"></td>`
   }
 
   var workflow = ''
