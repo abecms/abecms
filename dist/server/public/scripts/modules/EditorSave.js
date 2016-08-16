@@ -83,6 +83,13 @@ var EditorSave = function () {
             if (typeof _this2._json.data[obj] === 'undefined' || _this2._json.data[obj] === null) _this2._json.data[obj] = [];
             if (typeof _this2._json.data[obj][index] === 'undefined' || _this2._json.data[obj][index] === null) _this2._json.data[obj][index] = {};
             _this2._json.data[obj][index][key] = input.value;
+            var emptyObject = 0;
+            for (var prop in _this2._json.data[obj][index]) {
+              if (_this2._json.data[obj][index][prop].trim() !== '') emptyObject++;
+            }
+            if (emptyObject === 0) {
+              delete _this2._json.data[obj][index];
+            }
           } else {
             var value;
 
