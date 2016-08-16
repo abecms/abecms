@@ -53,6 +53,13 @@ export default class EditorSave {
           if(typeof this._json.data[obj] === 'undefined' || this._json.data[obj] === null) this._json.data[obj] = []
           if(typeof this._json.data[obj][index] === 'undefined' || this._json.data[obj][index] === null) this._json.data[obj][index] = {}
           this._json.data[obj][index][key] = input.value
+          var emptyObject = 0;
+          for(var prop in this._json.data[obj][index]) {
+            if(this._json.data[obj][index][prop].trim() !== '') emptyObject++
+          }
+          if(emptyObject === 0) {
+            delete this._json.data[obj][index]
+          }
         }else {
           var value
 

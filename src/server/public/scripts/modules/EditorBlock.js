@@ -77,6 +77,7 @@ export default class EditorBlock {
         Array.prototype.forEach.call(child.querySelectorAll('.form-abe'), (item) => {
           item.value = ''
         })
+        delete abe.json._data[blockAttr][0];
       }
       else{
         var toRemove = null
