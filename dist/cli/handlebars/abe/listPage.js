@@ -33,12 +33,16 @@ function listPage(file, index, text) {
 
   if (file.template) {
     res += '<td align="center">\n              ' + file.template + '\n            </td>';
+  } else {
+    res += '<td align="center"></td>';
   }
 
   if (file.date) {
     var dateSearch = (0, _moment2.default)(file.date).format('YYYY-MM-DD');
     var dateOrder = new Date(file.date).getTime();
     res += '<td align="center" data-search="' + dateSearch + '" data-order="' + dateOrder + '">\n              ' + dateSearch + '\n            </td>';
+  } else {
+    res += '<td align="center" data-search="0000-00-00" data-order="0"></td>';
   }
 
   var workflow = '';
