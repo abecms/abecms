@@ -41,7 +41,7 @@ function compileAbe() {
       });
       return new _handlebars2.default.SafeString(testXSS);
     }
-    if (typeof value === 'undefined' || value === null) {
+    if (typeof value === 'undefined' || typeof value === 'function' || value === null) {
       value = '';
     }
     return value.replace(/%27/, "'");
@@ -51,7 +51,7 @@ function compileAbe() {
 
   var hash = arguments[0].hash;
   var value = content ? content[hash.key.replace('.', '-')] : hash.key;
-  if (typeof value === 'undefined' || value === null) {
+  if (typeof value === 'undefined' || typeof value === 'function' || value === null) {
     value = '';
   }
 
