@@ -36,7 +36,9 @@ function listPage(file, index, text) {
   }
 
   if (file.date) {
-    res += '<td align="center">\n              ' + (0, _moment2.default)(file.date).format('YYYY-MM-DD') + '\n            </td>';
+    var dateSearch = (0, _moment2.default)(file.date).format('YYYY-MM-DD');
+    var dateOrder = new Date(file.date).getTime();
+    res += '<td align="center" data-search="' + dateSearch + '" data-order="' + dateOrder + '">\n              ' + dateSearch + '\n            </td>';
   }
 
   var workflow = '';

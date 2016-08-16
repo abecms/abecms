@@ -22,8 +22,10 @@ export default function listPage(file, index, text) {
   }
   
   if(file.date){
-    res += `<td align="center">
-              ${moment(file.date).format('YYYY-MM-DD')}
+    var dateSearch = moment(file.date).format('YYYY-MM-DD')
+    var dateOrder = new Date(file.date).getTime()
+    res += `<td align="center" data-search="${dateSearch}" data-order="${dateOrder}">
+              ${dateSearch}
             </td>`
   }
 

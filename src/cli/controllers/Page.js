@@ -192,7 +192,6 @@ export default class Page {
       }
     }
     Array.prototype.forEach.call(matches, (match) => {
-      text = this._abeFunc(text, match)
       if(!this._onlyHTML){
         var getattr = getAttr(match, 'key').replace(/\./g, '-')
         text = text.replace(
@@ -341,36 +340,6 @@ export default class Page {
     return text
   }
 
-  /**
-   * add handlebar {{if variable empty}} state if onlyHTML or "data-if-empty-clear" attribute
-   * 
-   * @param  {String} text      html
-   * @param  {String} key       abe
-   * @param  {String} tag       name
-   * @param  {String} match     regex string to match
-   * @param  {Boolean} onlyHTML boolean for generated html or browser
-   * @return {String}           new text with if or data attributes
-   */
-  _abeClear(text, key, tag, match) {
-    var hideTagRegex
-    var hideHtmls = getEnclosingTags(text, match, tag)
-
-    Array.prototype.forEach.call(hideHtmls, (hideHtml) => {
-      if(this._onlyHTML) {
-        hideTagRegex = escapeTextToRegex(hideHtml, 'gm')
-        text = text.replace(hideTagRegex, '{{#if ' + key + '}}' + hideHtml + '{{/if}}')
-      }else {
-        var firstTag = /(<[^\s>]+)/.exec(hideHtml)
-        firstTag = firstTag[0]
-
-        var hideHtmlWithAttr = hideHtml.replace(firstTag, firstTag + ' data-if-empty-clear="' + key + '"')
-        text = text.replace(escapeTextToRegex(hideHtml, 'g'), hideHtmlWithAttr)
-      }
-    })
-    
-    return text
-  }
-
   _addSource(text, json) {
     var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
         match,
@@ -402,42 +371,5 @@ export default class Page {
       }
       json = Hooks.instance.trigger('afterAddSourcePage', json, match[0])
     }
-  }
-
-
-  /**
-   * check if abe tag own a custom attribute
-   * 
-   * @param  {String} text      html
-   * @param  {String} tag       name
-   * @param  {String} match     regex string to match
-   * @return {String}           new text with if or data attributes
-   *
-   * for example :
-   *
-   * {{abe type="" if-empty="clear(something)"}}
-   *
-   * will call methode abeClear on this tag
-   */
-  _abeFunc(text, match) {
-    var ifEmpty = getAttr(match, 'if-empty')
-    var key = getAttr(match, 'key')
-
-    if(ifEmpty !== '') {
-      var tag = /\(([^)]+)\)/g.exec(ifEmpty)
-      var func = /([^)]+)\(/g.exec(ifEmpty)
-
-      if(typeof func[1] !== 'undefined' && func[1] !== null) {
-        switch(func[1]) {
-          case 'clear':
-            if(typeof tag[1] !== 'undefined' && tag[1] !== null) {
-              text = this._abeClear(text, key, tag[1], match)
-            }
-            break;
-        }
-      }
-    }
-
-    return text
   }
 }

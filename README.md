@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Abe, A better engine
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
@@ -257,4 +256,3 @@ Other environment variables are available (like PORT for defining a listening po
 
 =======
 # abe-test-plugin
->>>>>>> e23f4a0d4369f09cb9263d29673c21dfb5331de6

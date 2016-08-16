@@ -65,7 +65,7 @@ export default class Json {
               return
             }
             if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-              window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject
+              location.reload()
               return
             }
             this.data = jsonRes.json
