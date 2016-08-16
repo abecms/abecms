@@ -87,7 +87,12 @@ var Json = function () {
               return;
             }
             if (typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-              window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject;
+              var hash = '';
+              if (typeof top.location.hash !== 'undefined' && top.location.hash !== null) {
+                hash = '#' + top.location.hash;
+              }
+
+              window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject + hash;
               return;
             }
             _this.data = jsonRes.json;
