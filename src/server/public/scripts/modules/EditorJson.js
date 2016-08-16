@@ -65,12 +65,7 @@ export default class Json {
               return
             }
             if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-              var hash = ''
-              if(typeof top.location.hash !== 'undefined' && top.location.hash !== null) {
-                hash = '#' + top.location.hash
-              }
-
-              window.location.href = window.location.origin + window.location.pathname + '?filePath=' + jsonRes.reject + hash
+              location.reload()
               return
             }
             this.data = jsonRes.json
