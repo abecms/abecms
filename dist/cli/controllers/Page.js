@@ -201,7 +201,6 @@ var Page = function () {
       }
     }
     Array.prototype.forEach.call(matches, function (match) {
-      text = _this._abeFunc(text, match);
       if (!_this._onlyHTML) {
         var getattr = (0, _.getAttr)(match, 'key').replace(/\./g, '-');
         text = text.replace((0, _.escapeTextToRegex)(match, 'g'), ' data-abe-' + util.validDataAbe(getattr) + '="' + getattr + '" ' + match);
@@ -340,41 +339,6 @@ var Page = function () {
 
       return text;
     }
-
-    /**
-     * add handlebar {{if variable empty}} state if onlyHTML or "data-if-empty-clear" attribute
-     * 
-     * @param  {String} text      html
-     * @param  {String} key       abe
-     * @param  {String} tag       name
-     * @param  {String} match     regex string to match
-     * @param  {Boolean} onlyHTML boolean for generated html or browser
-     * @return {String}           new text with if or data attributes
-     */
-
-  }, {
-    key: '_abeClear',
-    value: function _abeClear(text, key, tag, match) {
-      var _this2 = this;
-
-      var hideTagRegex;
-      var hideHtmls = (0, _.getEnclosingTags)(text, match, tag);
-
-      Array.prototype.forEach.call(hideHtmls, function (hideHtml) {
-        if (_this2._onlyHTML) {
-          hideTagRegex = (0, _.escapeTextToRegex)(hideHtml, 'gm');
-          text = text.replace(hideTagRegex, '{{#if ' + key + '}}' + hideHtml + '{{/if}}');
-        } else {
-          var firstTag = /(<[^\s>]+)/.exec(hideHtml);
-          firstTag = firstTag[0];
-
-          var hideHtmlWithAttr = hideHtml.replace(firstTag, firstTag + ' data-if-empty-clear="' + key + '"');
-          text = text.replace((0, _.escapeTextToRegex)(hideHtml, 'g'), hideHtmlWithAttr);
-        }
-      });
-
-      return text;
-    }
   }, {
     key: '_addSource',
     value: function _addSource(text, json) {
@@ -408,45 +372,6 @@ var Page = function () {
         }
         json = _.Hooks.instance.trigger('afterAddSourcePage', json, match[0]);
       }
-    }
-
-    /**
-     * check if abe tag own a custom attribute
-     * 
-     * @param  {String} text      html
-     * @param  {String} tag       name
-     * @param  {String} match     regex string to match
-     * @return {String}           new text with if or data attributes
-     *
-     * for example :
-     *
-     * {{abe type="" if-empty="clear(something)"}}
-     *
-     * will call methode abeClear on this tag
-     */
-
-  }, {
-    key: '_abeFunc',
-    value: function _abeFunc(text, match) {
-      var ifEmpty = (0, _.getAttr)(match, 'if-empty');
-      var key = (0, _.getAttr)(match, 'key');
-
-      if (ifEmpty !== '') {
-        var tag = /\(([^)]+)\)/g.exec(ifEmpty);
-        var func = /([^)]+)\(/g.exec(ifEmpty);
-
-        if (typeof func[1] !== 'undefined' && func[1] !== null) {
-          switch (func[1]) {
-            case 'clear':
-              if (typeof tag[1] !== 'undefined' && tag[1] !== null) {
-                text = this._abeClear(text, key, tag[1], match);
-              }
-              break;
-          }
-        }
-      }
-
-      return text;
     }
   }]);
 
