@@ -46,8 +46,6 @@ export default class FileParser {
 		var level = fse.readdirSync(dirName)
 		var fileCurrentLevel = []
 		let assets = config.files.templates.assets
-
-
 	  // read file first
 	  for (var i = 0; i < level.length; i++) {
 	  	var path = dirName + '/' + level[i]
@@ -107,20 +105,19 @@ export default class FileParser {
 	  	var path = dirName + '/' + level[i]
 	  	var isFolder = folderUtils.isFolder(path)
 	  	var match = (isFolder) ? true : extensions.test(level[i])
-
 	  	if(!fileCurrentLevel.includes(level[i]) && match) {
 		  	if(isFolder) {
 		      if(!flatten) {
 		      	var index = arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
 		      	if(current < max){
-		      		arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current++)
+		      		arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1)
 		      	}
 		      }else {
 		      	if(type === 'folders' || type === null) {
 							arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
 		      	}
 						if(current < max){
-							Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current++), (files) => {
+							Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1), (files) => {
 								arr.push(files)
 							})
 		      	}
