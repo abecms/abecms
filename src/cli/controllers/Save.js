@@ -149,6 +149,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
         }
 
           var obj = {
+            publishAll:publishAll,
             type:type,
             template:{
               path: fullTpl
