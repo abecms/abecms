@@ -166,6 +166,7 @@ function save(url, tplPath) {
       }
 
       var obj = {
+        publishAll: publishAll,
         type: type,
         template: {
           path: fullTpl
