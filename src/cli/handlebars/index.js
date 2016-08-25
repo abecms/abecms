@@ -10,6 +10,7 @@ import className 	from './utils/className'
 import cleanTab 	from './utils/cleanTab'
 import ifCond 		from './utils/ifCond'
 import ifIn 			from './utils/ifIn'
+import isTrue 		from './utils/isTrue'
 import math 			from './utils/math'
 import moduloIf 	from './utils/moduloIf'
 import notEmpty 	from './utils/notEmpty'
@@ -40,6 +41,7 @@ Handlebars.registerHelper('cleanTab', 	cleanTab)
 Handlebars.registerHelper('slugify', 		handlebarsHelperSlugify({Handlebars: Handlebars}).slugify)
 Handlebars.registerHelper('ifCond', 		ifCond)
 Handlebars.registerHelper('ifIn', 			ifIn)
+Handlebars.registerHelper('isTrue', 		isTrue)
 Handlebars.registerHelper('math', 			math)
 Handlebars.registerHelper('moduloIf', 	moduloIf)
 Handlebars.registerHelper('notEmpty', 	notEmpty)
