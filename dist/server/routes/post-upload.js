@@ -126,9 +126,25 @@ var route = function route(req, res, next) {
   });
   req.busboy.on('finish', function () {
     if (hasError) return;
-    resp = _cli.Hooks.instance.trigger('afterSaveImage', resp, req);
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(resp));
+    var triesAllowed = 6;
+    var interval = setInterval(function () {
+      tryUpload();
+    }, 100);
+    var tryUpload = function tryUpload() {
+      if (triesAllowed-- <= 0) {
+        clearInterval(interval);
+        return;
+      }
+      try {
+        var openFile = _fs2.default.readFileSync(filePath).toString();
+        if (openFile === '') throw new Error('');
+        clearInterval(interval);
+        resp = _cli.Hooks.instance.trigger('afterSaveImage', resp, req);
+        res.set('Content-Type', 'application/json');
+        res.send(JSON.stringify(resp));
+      } catch (e) {}
+    };
+    tryUpload();
   });
 };
 
