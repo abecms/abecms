@@ -109,9 +109,26 @@ var route = function(req, res, next){
   })
   req.busboy.on('finish', function() {
     if(hasError) return
-    resp = Hooks.instance.trigger('afterSaveImage', resp, req)
-    res.set('Content-Type', 'application/json')
-    res.send(JSON.stringify(resp))
+    var triesAllowed = 6
+    var interval = setInterval(function () {
+      tryUpload()
+    }, 100)
+    var tryUpload = function () {
+      if(triesAllowed-- <= 0) {
+        clearInterval(interval)
+        return
+      }
+      try{
+        var openFile = fs.readFileSync(filePath).toString()
+        if(openFile === '') throw new Error('')
+        clearInterval(interval)
+        resp = Hooks.instance.trigger('afterSaveImage', resp, req)
+        res.set('Content-Type', 'application/json')
+        res.send(JSON.stringify(resp))
+      }
+      catch(e){}
+    }
+    tryUpload()
   });
 }
 
