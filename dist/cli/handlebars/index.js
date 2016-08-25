@@ -41,9 +41,9 @@ var _ifIn = require('./utils/ifIn');
 
 var _ifIn2 = _interopRequireDefault(_ifIn);
 
-var _ifTrue = require('./utils/ifTrue');
+var _isTrue = require('./utils/isTrue');
 
-var _ifTrue2 = _interopRequireDefault(_ifTrue);
+var _isTrue2 = _interopRequireDefault(_isTrue);
 
 var _math = require('./utils/math');
 
@@ -140,7 +140,7 @@ _handlebars2.default.registerHelper('cleanTab', _cleanTab2.default);
 _handlebars2.default.registerHelper('slugify', (0, _handlebarsHelperSlugify2.default)({ Handlebars: _handlebars2.default }).slugify);
 _handlebars2.default.registerHelper('ifCond', _ifCond2.default);
 _handlebars2.default.registerHelper('ifIn', _ifIn2.default);
-_handlebars2.default.registerHelper('isTrue', _ifTrue2.default);
+_handlebars2.default.registerHelper('isTrue', _isTrue2.default);
 _handlebars2.default.registerHelper('math', _math2.default);
 _handlebars2.default.registerHelper('moduloIf', _moduloIf2.default);
 _handlebars2.default.registerHelper('notEmpty', _notEmpty2.default);
