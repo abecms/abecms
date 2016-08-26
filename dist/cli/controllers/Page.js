@@ -46,7 +46,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Page class
  * manage HTML generation for page template
  */
-
 var Page = function () {
 
   /**
@@ -57,7 +56,6 @@ var Page = function () {
    * @param  {Boolean} onlyHTML default = false, if true HTML content will contains abe attributs
    * @return {String} HTML page as string
    */
-
   function Page(path, text, json) {
     var _this = this;
 
@@ -77,8 +75,8 @@ var Page = function () {
     _handlebars2.default.registerHelper('i18nAbe', _.translate); // HandlebarsJS unique text helper
     _handlebars2.default.registerHelper('math', _.math); // HandlebarsJS unique text helper
     _handlebars2.default.registerHelper('moduloIf', _.moduloIf); // HandlebarsJS helper for modulo test
-    _handlebars2.default.registerHelper('testObj', _.testObj); //
-    _handlebars2.default.registerHelper('attrAbe', _.attrAbe); //
+    _handlebars2.default.registerHelper('testObj', _.testObj); // 
+    _handlebars2.default.registerHelper('attrAbe', _.attrAbe); // 
     _handlebars2.default.registerHelper('printJson', _.printJson);
     _handlebars2.default.registerHelper('printBlock', _.printBlock);
     _handlebars2.default.registerHelper('className', _.className);
