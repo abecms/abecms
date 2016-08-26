@@ -191,7 +191,7 @@ export default class FileParser {
   	return assets
   }
 
-	static getProjetFiles() {
+	static getProjectFiles() {
 	  var site = folderUtils.folderInfos(config.root)
 	  var result = {'structure': [], 'templates': []}
 

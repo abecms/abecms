@@ -34,60 +34,66 @@ import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 var route = function(req, res, next) {
+  // TODO : AOP - responsability of Logging middleware
   var dateStart = new Date()
 
-  if(req.query.filePath){
-    var testXSS = xss(req.query.filePath, {
-      whiteList: [],
-      stripIgnoreTag: true
-    })
-    if(testXSS !== req.query.filePath){
-      // res.status(400).send('<h1>400 Bad Request</h1>Not a valid URL format');
-      res.redirect(`/abe/${req.params[0]}?filePath=${testXSS}`);
-      return
-    }
-  }
+  // sanitize filePath
+  // TODO : AOP - Responsability of Security middleware
+  req.query.filePath = xss(req.query.filePath, {
+    whiteList: [],
+    stripIgnoreTag: true
+  })
+
+  // TODO : AOP - Responsability of Hooks middleware
   Hooks.instance.trigger('beforeRoute', req, res, next)
+
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
+  // TODO : refactor getTemplatePath && getFilePath into one
+  // TODO : Why using the saved template as filePath ? why not use only the json ?
+  // It would simplify the code
   var templatePath = fileUtils.getTemplatePath(req.params[0])
   var filePath = fileUtils.getFilePath(req.query.filePath)
+
+  // TODO : refactor debug layer
   var debugJson = (req.query.debugJson && req.query.debugJson == 'true' ) ? true : false
   var debugJsonKey = (req.query.key) ? req.query.key : false
   var debugHtml = (req.query.debugHtml && req.query.debugHtml == 'true' ) ? true : false
 
   var isHome = true
 
+  if(templatePath !== null && filePath !== null) {
+
+    isHome = false
+
+    if(!fileAttr.isVersion(filePath)){
+      filePath = fileAttr.getLastVersion(filePath)
+    }
+
+    console.log(filePath)
+    var tplUrl = FileParser.getFileDataFromUrl(filePath)
+    console.log(tplUrl)
+
+    // TODO : Remove
+    var fakeContent = (req.query.fakeContent) ? true : false
+
+    // TODO : Remove - How is it possible that there's no json.path
+    // if(!fileUtils.isFile(tplUrl.json.path)) {
+    //   res.redirect("/abe/");
+    //   return;
+    // }
+  }
+
   let p = new Promise((resolve, reject) => {
 
     if(templatePath !== null && filePath !== null) {
 
-      isHome = false
-
-      if(!fileAttr.test(filePath)){
-        var folderFilePath = filePath.split('/')
-        folderFilePath.pop()
-        folderFilePath = fileUtils.pathWithRoot(folderFilePath.join('/'))
-        mkdirp.sync(folderFilePath)
-        var files = FileParser.getFiles(folderFilePath, true, 2)
-        var latest = fileAttr.filterLatestVersion(fileAttr.getFilesRevision(files, filePath), 'draft')
-        if(latest.length) {
-          filePath = latest[0].path
-        }
-      }
-
-      let tplUrl = FileParser.getFileDataFromUrl(filePath)
-      var fakeContent = (req.query.fakeContent) ? true : false
-
-      if(!fileUtils.isFile(tplUrl.json.path)) {
-        res.redirect("/abe/");
-        return;
-      }
-
       editor(templatePath, tplUrl, fakeContent)
         .then((result) => {
+
           var manager = {}
 
+          // TODO : Analyze
           FileParser.getAssetsFolder()
           FileParser.getAssets() 
 

@@ -80,7 +80,7 @@ var html = exphbs.create({
 
   app.set('files', FileParser.getAllFiles());
   app.set('config', config.getConfigByWebsite());
-  app.set('projectFiles', FileParser.getProjetFiles());
+  app.set('projectFiles', FileParser.getProjectFiles());
 
   app.use(bodyParser.json({limit: '1gb'}))
   app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }));
