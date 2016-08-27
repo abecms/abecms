@@ -11,6 +11,10 @@ class Manager {
     if(enforcer != singletonEnforcer) throw "Cannot construct Json singleton"
     
     this._list = FileParser.getAllFiles();
+    this._list[0].files.sort(FileParser.predicatBy('date',-1));
+    // this._list.forEach(function(elt){
+    //   console.log(elt)
+    // })
   }
 
   static get instance() {
@@ -28,6 +32,7 @@ class Manager {
   updateList() {
 
     this._list = FileParser.getAllFiles();
+    this._list.sort(FileParser.predicatBy('date'));
 
     return this
   }

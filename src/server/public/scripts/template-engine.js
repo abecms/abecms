@@ -39,7 +39,7 @@ class Engine {
     this.table = null
     $(document).ready(() => {
       this.table = $('#navigation-list').DataTable({
-        "order": [[ 3, 'desc' ]],
+        //"order": [[ 3, 'desc' ]],
         "pageLength": 50,
         "autoWidth": false
       })
