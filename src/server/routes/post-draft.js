@@ -1,7 +1,8 @@
 import {
   save,
   fileUtils,
-  Hooks
+  Hooks,
+  Manager
 } from '../../cli'
 
 var route = function(req, res, next){
@@ -25,6 +26,7 @@ var route = function(req, res, next){
         result = resSave
       }
       if(typeof resSave.json !== 'undefined' && resSave.json !== null){
+        Manager.instance.updateList()
         result = {
           success: 1,
           json: resSave.json

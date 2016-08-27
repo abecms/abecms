@@ -14,6 +14,7 @@ import {
 	,config
 	,Hooks
 	,Plugins
+  ,Manager
 } from '../'
 
 export default class FileParser {
@@ -394,10 +395,10 @@ export default class FileParser {
     var merged = fileUtils.mergeFiles(drafted, truePublished)
 
     site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
-
 	  return [site]
   }
 
+  // TODO : change the signature of this method to removeFile(file)
   static removeFile(file, json) {
   	if(fileUtils.isFile(file)) {
   		fse.removeSync(file)
@@ -423,10 +424,12 @@ export default class FileParser {
 	      '',
 	      'reject',
 	      null,
-	      'reject')
-	      .then((resSave) => {
-	        FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
-	      })
+	      'reject'
+      )
+	    .then((resSave) => {
+	      FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
+        Manager.instance.updateList()
+	    })
   	}
   }
 
@@ -443,6 +446,7 @@ export default class FileParser {
   	})
 
   	FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
+    Manager.instance.updateList()
   	tplUrl.publish.path = Hooks.instance.trigger('afterDeleteFile', tplUrl.publish.path, tplUrl.publish.json)
   }
 

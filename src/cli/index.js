@@ -27,6 +27,7 @@ import {
 	ifCond
 } from './handlebars/index'
 
+import Manager from './models/Manager'
 import Handlebars from 'handlebars'
 import {getAttr, getEnclosingTags, escapeTextToRegex} from './helpers/regex-helper'
 import slugify from './helpers/slugify'
@@ -105,6 +106,7 @@ export {
 	,saveJson
 	,dateSlug
 	,dateUnslug
+	,Manager
 }
 
 export {compileAbe as compileAbe}

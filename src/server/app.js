@@ -32,7 +32,8 @@ import {
   folders,
   Plugins,
   printConfig,
-  Hooks
+  Hooks,
+  Manager
 } from '../cli'
 
 import {
@@ -78,7 +79,8 @@ var html = exphbs.create({
 
   var app = express(opts)
 
-  app.set('files', FileParser.getAllFiles());
+  // Instantiate Singleton Manager (which lists all blog files)
+  Manager.instance;
   app.set('config', config.getConfigByWebsite());
   app.set('projectFiles', FileParser.getProjectFiles());
 

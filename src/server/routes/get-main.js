@@ -27,7 +27,8 @@ import {
   Hooks,
   Plugins,
   Handlebars,
-  cleanSlug
+  cleanSlug,
+  Manager
 } from '../../cli'
 
 import {editor} from '../controllers/editor'
@@ -129,13 +130,13 @@ var route = function(req, res, next) {
     var obj = result.obj
     var manager = result.manager
     let tplUrl = result.tplUrl
-
+  
     manager.home = {
-      files: FileParser.getAllFiles()
+      files: Manager.instance.getList()
     }
 
-    manager.list = FileParser.getProjectFiles()
-    manager.editConfig = config.getConfigByWebsite()
+    manager.list = req.app.get('projectFiles')
+    manager.editConfig = req.app.get('config')
     manager.config = JSON.stringify(config)
     
     var _hasBlock = (obj) ? obj.hasBlock : false

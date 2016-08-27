@@ -1,7 +1,8 @@
 import {
   save,
   fileUtils,
-  Hooks
+  Hooks,
+  Manager
 } from '../../cli'
 
 var route = function(req, res, next){
@@ -48,6 +49,7 @@ var route = function(req, res, next){
             json: resSave.json
           }
         }
+        Manager.instance.updateList()
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(result))
       })
