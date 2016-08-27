@@ -9,7 +9,7 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
   var filePath = cleanSlug(req.query.filePath)
-  var dirPath = FileParser.unpublishFile(filePath)
+  FileParser.unpublishFile(filePath)
 
   var result = {
     success: 1,

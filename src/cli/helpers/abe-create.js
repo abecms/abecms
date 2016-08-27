@@ -8,7 +8,8 @@ import {
   save,
   config,
   log,
-  Hooks
+  Hooks,
+  Manager
 } from '../../cli'
 
 var create = function(template, path, name, req, forceJson = {}, duplicate = false) {
@@ -39,6 +40,7 @@ var create = function(template, path, name, req, forceJson = {}, duplicate = fal
           Hooks.instance.trigger('afterCreate', json, text, path, name, req, forceJson)
           save(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft')
             .then((resSave) => {
+                Manager.instance.updateList()
                 filePath = resSave.htmlPath
                 tplUrl = FileParser.getFileDataFromUrl(filePath)
                 resolve(resSave.json)
