@@ -12,9 +12,6 @@ class Manager {
     
     this._list = FileParser.getAllFiles();
     this._list[0].files.sort(FileParser.predicatBy('date',-1));
-    // this._list.forEach(function(elt){
-    //   console.log(elt)
-    // })
   }
 
   static get instance() {
