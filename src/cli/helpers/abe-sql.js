@@ -279,7 +279,8 @@ export default class Sql {
   static getDataRequest(tplPath, match, jsonPage) {
     var request = Sql.handleSqlRequest(getAttr(match, 'source'), jsonPage),
         limit = 0,
-        res = []
+        res = [],
+        recursive = 99
     
     let data = config.data.url
     var files = []
@@ -290,6 +291,10 @@ export default class Sql {
         from = from.replace(/___abe___/g, '/')
         from = from.replace(/___abe_dash___/g, '-')
         var fromPath = ''
+        if(from.slice(-1) === '.'){
+          recursive = 0
+          from = from.slice(0, -1);
+        } 
         if(from === '*' || from === '/') {
           fromPath = fileUtils.concatPath(config.root, data)
         }else if(from === './') {
@@ -301,11 +306,12 @@ export default class Sql {
         }
 
         if(folderUtils.isFolder(fromPath)) {
-          files = files.concat(FileParser.getFiles(fromPath, true, 99, /\.json/))
+          // we'll get only published files which don't contain "-abe-"
+          files = files.concat(FileParser.getFiles(fromPath, true, recursive, /(.*(-abe-).*Z\.json)/, true))
         }
       })
     }else {
-      files = FileParser.getFiles(fileUtils.concatPath(config.root, data), true, 99, /\.json/)
+      files = FileParser.getFiles(fileUtils.concatPath(config.root, data), true, recursive, /(.*(-abe-).*Z\.json)/, true)
     }
 
     if(typeof request.orderby !== 'undefined' && request.orderby !== null) {
@@ -326,10 +332,10 @@ export default class Sql {
       var json
 
       // remove not published file
-      var attr = fileAttr.get(file.path)
-      if(typeof attr.d !== 'undefined' && attr.d !== null) {
-        return;
-      }
+      //var attr = fileAttr.get(file.path)
+      // if(typeof attr.d !== 'undefined' && attr.d !== null) {
+      //   return;
+      // }
 
       // check where
       if(typeof request.where !== 'undefined' && request.where !== null) {

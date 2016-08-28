@@ -310,8 +310,9 @@ export default class Utils {
           var type = Sql.getSourceType(obj.sourceString)
           switch (type) {
             case 'request':
-
+              //console.log(obj.sourceString)
               var data = Sql.getDataRequest(tplPath, match[0], jsonPage)
+              //console.log('FIN : ' + type + "(" + data.length +") > " + ((new Date().getTime() - dateStart.getTime()) / 1000))
               jsonPage[sourceAttr][obj.key] = data
               if (!obj.editable) {
                 if (obj.maxLength) {

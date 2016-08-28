@@ -40,94 +40,89 @@ export default class FileParser {
 		return folders.split('/')[0]
 	}
 
-	static read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0) {
-		var website = config.root.split('/')
-		website = website[website.length - 1]
-		var arr = []
-		var level = fse.readdirSync(dirName)
-		var fileCurrentLevel = []
-		let assets = config.files.templates.assets
-	  // read file first
-	  for (var i = 0; i < level.length; i++) {
-	  	var path = dirName + '/' + level[i]
-	  	var match = (isFolder) ? true : extensions.test(level[i])
-	  	if((type === 'files' || type === null) && match) {
-	    	if(fileUtils.isValidFile(level[i])) {
-		    	var extension = /(\.[\s\S]*)/.exec(level[i])[0]
-		    	var cleanName = fileAttr.delete(level[i])
-		    	var cleanNameNoExt = fileUtils.removeExtension(cleanName)
-		    	var fileData = fileAttr.get(level[i])
+	static read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
+  		var website = config.root.split('/')
+  		website = website[website.length - 1]
+  		var arr = []
+  		var level = fse.readdirSync(dirName)
+  		var fileCurrentLevel = []
+  		let assets = config.files.templates.assets
+  	  
+  	  for (var i = 0; i < level.length; i++) {
+  	  	var path = dirName + '/' + level[i]
+        var isFolder = folderUtils.isFolder(path)
+  	  	var match = (isFolder) ? true : (inversePattern) ? !extensions.test(level[i]) : extensions.test(level[i])
+  	  	if((type === 'files' || type === null) && match) {
 
-		    	var date
-		    	if (fileData.d) {
-						date = fileData.d
-		    	}else {
-						var stat = fse.statSync(path)
-						date = stat.mtime
-		    	}
-		    	var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
-		    	var cleanFilePath = fileUtils.cleanFilePath(path)
+  	    	if(fileUtils.isValidFile(level[i])) {
+  		    	var extension = /(\.[\s\S]*)/.exec(level[i])[0]
+  		    	var cleanName = fileAttr.delete(level[i])
+  		    	var cleanNameNoExt = fileUtils.removeExtension(cleanName)
+  		    	var fileData = fileAttr.get(level[i])
 
-		    	var fileDate = fileDate = moment(date)
-		    	var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
+  		    	var date
+  		    	if (fileData.d) {
+  						date = fileData.d
+  		    	}else {
+  						var stat = fse.statSync(path)
+  						date = stat.mtime
+  		    	}
+  		    	var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
+  		    	var cleanFilePath = fileUtils.cleanFilePath(path)
 
-		    	var filePath = path.replace(config.root, '')
-		    	filePath = filePath.split('/')
-		    	filePath.shift()
-		    	filePath = filePath.join('/')
-		    	var item = {
-						'name': level[i],
-						'path': path,
-						'website': website,
-						'cleanPathName': fileAttr.delete(path),
-						'cleanPath': path.replace(base + '/', ''),
-						date: date,
-						cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
-						duration: duration,
-						status: status,
-	      		cleanName: cleanName,
-	      		cleanNameNoExt: cleanNameNoExt,
-						cleanFilePath: cleanFilePath,
-						filePath: filePath,
-						'type': 'file',
-						'fileType': extension
-					}
+  		    	var fileDate = moment(date)
+  		    	var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
 
-		    	if(!flatten) item['folders'] = [];
-		      arr.push(item)
-		      // push current file name into array to check if siblings folder are assets folder
-		      fileCurrentLevel.push(fileUtils.removeExtension(level[i]) + assets)
-	    	}
-	    }
-	  }
+  		    	var filePath = path.replace(config.root, '')
+  		    	filePath = filePath.split('/')
+  		    	filePath.shift()
+  		    	filePath = filePath.join('/')
+  		    	var item = {
+  						'name': level[i],
+  						'path': path,
+  						'website': website,
+  						'cleanPathName': fileAttr.delete(path),
+  						'cleanPath': path.replace(base + '/', ''),
+  						date: date,
+  						cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
+  						duration: duration,
+  						status: status,
+  	      		cleanName: cleanName,
+  	      		cleanNameNoExt: cleanNameNoExt,
+  						cleanFilePath: cleanFilePath,
+  						filePath: filePath,
+  						'type': 'file',
+  						'fileType': extension
+  					}
 
-	  // read folder now
-	  for (i = 0; i < level.length; i++) {
-	  	var path = dirName + '/' + level[i]
-	  	var isFolder = folderUtils.isFolder(path)
-	  	var match = (isFolder) ? true : extensions.test(level[i])
-	  	if(!fileCurrentLevel.includes(level[i]) && match) {
-		  	if(isFolder) {
-		      if(!flatten) {
-		      	var index = arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
-		      	if(current < max){
-		      		arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1)
-		      	}
-		      }else {
-		      	if(type === 'folders' || type === null) {
-							arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
-		      	}
-						if(current < max){
-							Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1), (files) => {
-								arr.push(files)
-							})
-		      	}
-		      }
-		    }
-	  	}
-	  }
+  		    	if(!flatten) item['folders'] = [];
+  		      arr.push(item)
+  		      // push current file name into array to check if siblings folder are assets folder
+  		      fileCurrentLevel.push(fileUtils.removeExtension(level[i]) + assets)
+  	    	}
+  	    }
+        if(!fileCurrentLevel.includes(level[i]) && match) {
+          if(isFolder) {
+            if(!flatten) {
+              var index = arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
+              if(current < max){
+                arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern)
+              }
+            }else {
+              if(type === 'folders' || type === null) {
+                arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
+              }
+              if(current < max){
+                Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern), (files) => {
+                  arr.push(files)
+                })
+              }
+            }
+          }
+        }
+  	  }
 
-	  return arr
+    return arr
 	}
 
   static getFolders(folder, flatten, level) {
@@ -137,11 +132,12 @@ export default class FileParser {
   	return arr
   }
   
-  static getFiles(folder, flatten, level, extensions = /(.*?)/) {
+  static getFiles(folder, flatten, level, extensions = /(.*?)/, inversePattern = false) {
   	var arr = []
   	flatten = flatten || false
-  	arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), 'files', flatten, extensions, level)
-  	return arr
+  	arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), 'files', flatten, extensions, level, 0, inversePattern)
+
+    return arr
   }
 
   static getFilesByType(path, type = null) {
