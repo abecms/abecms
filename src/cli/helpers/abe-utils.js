@@ -268,13 +268,32 @@ export default class Utils {
     json[meta][type].latest.abeUrl = abeUrl
   }
 
+  static sanitizeSourceAttribute(obj, jsonPage){
+    if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
+      var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
+      if(matches !== null) {
+        Array.prototype.forEach.call(matches, (match) => {
+          var val = match.replace('{{', '')
+          val = val.replace('}}', '')
+          val = Sql.deep_value_array(jsonPage, val)
+          if(typeof val === 'undefined' || val === null) {
+            val = ''
+          }
+          obj.sourceString = obj.sourceString.replace(match, val)
+        })
+      }
+    }
+
+    return obj
+  }
+
   static getDataList(tplPath, text, jsonPage) {
 
     var p = new Promise((resolve, reject) => {
-      var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
-          match
-
+      var listReg = /({{abe.*type=[\'|\"]data.*}})/g
+      var match
       var sourceAttr = config.source.name
+
       if(typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
         jsonPage[sourceAttr] = {}
       }
@@ -286,111 +305,96 @@ export default class Utils {
 
         var pSource = new Promise((resolveSource, rejectSource) => {
           var obj = Utils.getAllAttributes(match[0], jsonPage)
-
-          // var source = getAttr(match[0], 'source')
-          // var key = getAttr(match[0], 'key')
-          // var editable = getAttr(match[0], 'editable')
-          // var paginate = getAttr(match[0], 'paginate')
-          // editable = (typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') ? false : true
-
-          if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
-            var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
-            if(matches !== null) {
-              Array.prototype.forEach.call(matches, (match) => {
-                var val = match.replace('{{', '')
-                val = val.replace('}}', '')
-                val = Sql.deep_value_array(jsonPage, val)
-                if(typeof val === 'undefined' || val === null) {
-                  val = ''
-                }
-                obj.sourceString = obj.sourceString.replace(match, val)
-              })
-            }
-          }
+          obj = Utils.sanitizeSourceAttribute(obj, jsonPage)
+          
           var type = Sql.getSourceType(obj.sourceString)
+
           switch (type) {
             case 'request':
               //console.log(obj.sourceString)
-              var data = Sql.getDataRequest(tplPath, match[0], jsonPage)
-              //console.log('FIN : ' + type + "(" + data.length +") > " + ((new Date().getTime() - dateStart.getTime()) / 1000))
-              jsonPage[sourceAttr][obj.key] = data
-              if (!obj.editable) {
-                if (obj.maxLength) {
-                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
-                }else {
-                  jsonPage[obj.key] = data
-                }
-              }else if (obj.prefill) {
-                // console.log("msg")
-                if (obj.prefillQuantity && obj.maxLength) {
-                  jsonPage[obj.key] = data.slice(0, (obj.prefillQuantity > obj.maxLength) ? obj.maxLength : obj.prefillQuantity)
-                }else if (obj.prefillQuantity) {
-                  jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
-                }else if (obj.maxLength) {
-                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
-                }else {
-                  jsonPage[obj.key] = data
-                }
-                // console.log(obj.key, jsonPage[obj.key])
-              }
-
-              if(typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
-                obj.paginate = parseInt(obj.paginate)
-                if(typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
-                  jsonPage.abe_meta.paginate = {}
-                }
-                if(typeof jsonPage.abe_meta.paginate[obj.key] === 'undefined' || jsonPage.abe_meta.paginate[obj.key] === null) {
-                  jsonPage.abe_meta.paginate[obj.key] = {}
-                }
-
-                var linksSize = Math.ceil(data.length / obj.paginate)
-
-                if (linksSize > 0) {
-                  jsonPage.abe_meta.paginate[obj.key].size = obj.paginate
-                  jsonPage.abe_meta.paginate[obj.key].current = 1
-                  jsonPage.abe_meta.paginate[obj.key].links = []
-
-                  if(typeof jsonPage.abe_meta.paginate[obj.key].prev !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].prev !== null) {
-                    delete jsonPage.abe_meta.paginate[obj.key].prev
-                  }
-                  if(typeof jsonPage.abe_meta.paginate[obj.key].first === 'undefined' || jsonPage.abe_meta.paginate[obj.key].first === null) {
-                    jsonPage.abe_meta.paginate[obj.key].first = jsonPage.abe_meta.link
-                  }
-                  for (var i = 0; i <= linksSize; i++) {
-                    var link = jsonPage.abe_meta.link
-                    if (i > 0) {
-                      link = fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + config.files.templates.extension
+              Sql.getDataRequest(tplPath, match[0], jsonPage)
+                .then((data) => {
+                  //console.log('FIN : ' + type + "(" + data.length +") > " + ((new Date().getTime() - dateStart.getTime()) / 1000))
+                  jsonPage[sourceAttr][obj.key] = data
+                  if (!obj.editable) {
+                    if (obj.maxLength) {
+                      jsonPage[obj.key] = data.slice(0, obj.maxLength)
+                    }else {
+                      jsonPage[obj.key] = data
                     }
-                    jsonPage.abe_meta.paginate[obj.key].links.push({
-                      link: link,
-                      index: (i + 1)
+                  }else if (obj.prefill) {
+                    // console.log("msg")
+                    if (obj.prefillQuantity && obj.maxLength) {
+                      jsonPage[obj.key] = data.slice(0, (obj.prefillQuantity > obj.maxLength) ? obj.maxLength : obj.prefillQuantity)
+                    }else if (obj.prefillQuantity) {
+                      jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
+                    }else if (obj.maxLength) {
+                      jsonPage[obj.key] = data.slice(0, obj.maxLength)
+                    }else {
+                      jsonPage[obj.key] = data
+                    }
+                    // console.log(obj.key, jsonPage[obj.key])
+                  }
+
+                  if(typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
+                    obj.paginate = parseInt(obj.paginate)
+                    if(typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
+                      jsonPage.abe_meta.paginate = {}
+                    }
+                    if(typeof jsonPage.abe_meta.paginate[obj.key] === 'undefined' || jsonPage.abe_meta.paginate[obj.key] === null) {
+                      jsonPage.abe_meta.paginate[obj.key] = {}
+                    }
+
+                    var linksSize = Math.ceil(data.length / obj.paginate)
+
+                    if (linksSize > 0) {
+                      jsonPage.abe_meta.paginate[obj.key].size = obj.paginate
+                      jsonPage.abe_meta.paginate[obj.key].current = 1
+                      jsonPage.abe_meta.paginate[obj.key].links = []
+
+                      if(typeof jsonPage.abe_meta.paginate[obj.key].prev !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].prev !== null) {
+                        delete jsonPage.abe_meta.paginate[obj.key].prev
+                      }
+                      if(typeof jsonPage.abe_meta.paginate[obj.key].first === 'undefined' || jsonPage.abe_meta.paginate[obj.key].first === null) {
+                        jsonPage.abe_meta.paginate[obj.key].first = jsonPage.abe_meta.link
+                      }
+                      for (var i = 0; i <= linksSize; i++) {
+                        var link = jsonPage.abe_meta.link
+                        if (i > 0) {
+                          link = fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + config.files.templates.extension
+                        }
+                        jsonPage.abe_meta.paginate[obj.key].links.push({
+                          link: link,
+                          index: (i + 1)
+                        })
+                      }
+                      if((typeof jsonPage.abe_meta.paginate[obj.key].next === 'undefined' || jsonPage.abe_meta.paginate[obj.key].next === null)
+                        && (typeof jsonPage.abe_meta.paginate[obj.key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1] !== null)
+                        && (typeof jsonPage.abe_meta.paginate[obj.key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1].link !== null)) {
+                        jsonPage.abe_meta.paginate[obj.key].next = jsonPage.abe_meta.paginate[obj.key].links[1].link
+                      }
+                      jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length-1].link
+                    }
+                    jsonPage = Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj)
+                  }
+
+                  if(typeof jsonPage[obj.key] !== 'undefined' && jsonPage[obj.key] !== null) {
+                    var newJsonValue = []
+                    Array.prototype.forEach.call(jsonPage[obj.key], (oldValue) => {
+                      Array.prototype.forEach.call(jsonPage[sourceAttr][obj.key], (newValue) => {
+                        if(typeof oldValue[config.meta.name] !== 'undefined' && oldValue[config.meta.name] !== null
+                          && oldValue[config.meta.name].link === newValue[config.meta.name].link) {
+                          newJsonValue.push(newValue)
+                        }
+                      })
                     })
                   }
-                  if((typeof jsonPage.abe_meta.paginate[obj.key].next === 'undefined' || jsonPage.abe_meta.paginate[obj.key].next === null)
-                    && (typeof jsonPage.abe_meta.paginate[obj.key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1] !== null)
-                    && (typeof jsonPage.abe_meta.paginate[obj.key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1].link !== null)) {
-                    jsonPage.abe_meta.paginate[obj.key].next = jsonPage.abe_meta.paginate[obj.key].links[1].link
-                  }
-                  jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length-1].link
-                }
-                jsonPage = Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj)
-              }
 
-              if(typeof jsonPage[obj.key] !== 'undefined' && jsonPage[obj.key] !== null) {
-                var newJsonValue = []
-                Array.prototype.forEach.call(jsonPage[obj.key], (oldValue) => {
-                  Array.prototype.forEach.call(jsonPage[sourceAttr][obj.key], (newValue) => {
-                    if(typeof oldValue[config.meta.name] !== 'undefined' && oldValue[config.meta.name] !== null
-                      && oldValue[config.meta.name].link === newValue[config.meta.name].link) {
-                      newJsonValue.push(newValue)
-                    }
-                  })
+                  log.duration(type + " > " + logTime, ((new Date().getTime() - dateStart.getTime()) / 1000))
+
+                  resolveSource()
                 })
-              }
-
-              log.duration(type + " > " + logTime, ((new Date().getTime() - dateStart.getTime()) / 1000))
-
-              resolveSource()
+              
               break;
             case 'value':
               var value = Sql.getDataSource(match[0])
