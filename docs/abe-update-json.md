@@ -6,7 +6,7 @@ Can be used to upda te json file (with a specific hook)
 
 > inside : hooks/hooks.js
 
-```json
+```javascript
 var hooks = {
 	beforeUpdateJson: function (jsonFilesArray, abe) {
 		// jsonFilesArray = array of json object containing references to json data files (abe data)
