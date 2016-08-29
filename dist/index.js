@@ -343,6 +343,28 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			});
 
 			break;
+		case 'update-json':
+			var dir = process.cwd();
+			if (process.env.ROOT) {
+				dir = process.env.ROOT.replace(/\/$/, '');
+			}
+
+			var updateJson = (0, _child_process.spawn)('node', ['--harmony', '--debug', __dirname + '/cli/process/update-json.js', 'ABE_WEBSITE=' + dir]);
+
+			updateJson.stdout.on('data', function (data) {
+				console.log(_cliColor2.default.cyan('stdout'), data.toString());
+			});
+
+			updateJson.stderr.on('data', function (data) {
+				console.log(_cliColor2.default.red('stderr'), data.toString());
+			});
+
+			updateJson.on('close', function (code) {
+				console.log(_cliColor2.default.cyan('child process exited with code'), code);
+				process.exit(0);
+			});
+
+			break;
 		case 'install':
 			var dir = process.cwd();
 			var plugin = userArgs[1];
