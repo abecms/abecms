@@ -93,9 +93,10 @@ if (_cli.fileUtils.isFile(_cli.fileUtils.concatPath(_cli.config.root, 'cert.pem'
 
 var app = (0, _express2.default)(opts);
 
-app.set('files', _cli.FileParser.getAllFiles());
+// Instantiate Singleton Manager (which lists all blog files)
+_cli.Manager.instance;
 app.set('config', _cli.config.getConfigByWebsite());
-app.set('projectFiles', _cli.FileParser.getProjetFiles());
+app.set('projectFiles', _cli.FileParser.getProjectFiles());
 
 app.use(_bodyParser2.default.json({ limit: '1gb' }));
 app.use(_bodyParser2.default.urlencoded({ limit: '1gb', extended: true, parameterLimit: 10000 }));

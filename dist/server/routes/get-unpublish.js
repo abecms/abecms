@@ -11,7 +11,7 @@ var route = function route(req, res, next) {
   if (typeof res._header !== 'undefined' && res._header !== null) return;
 
   var filePath = (0, _cli.cleanSlug)(req.query.filePath);
-  var dirPath = _cli.FileParser.unpublishFile(filePath);
+  _cli.FileParser.unpublishFile(filePath);
 
   var result = {
     success: 1,

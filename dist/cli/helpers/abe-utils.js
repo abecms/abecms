@@ -282,14 +282,34 @@ var Utils = function () {
       json[meta][type].latest.abeUrl = abeUrl;
     }
   }, {
+    key: 'sanitizeSourceAttribute',
+    value: function sanitizeSourceAttribute(obj, jsonPage) {
+      if (typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
+        var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g);
+        if (matches !== null) {
+          Array.prototype.forEach.call(matches, function (match) {
+            var val = match.replace('{{', '');
+            val = val.replace('}}', '');
+            val = _.Sql.deep_value_array(jsonPage, val);
+            if (typeof val === 'undefined' || val === null) {
+              val = '';
+            }
+            obj.sourceString = obj.sourceString.replace(match, val);
+          });
+        }
+      }
+
+      return obj;
+    }
+  }, {
     key: 'getDataList',
     value: function getDataList(tplPath, text, jsonPage) {
 
       var p = new _es6Promise.Promise(function (resolve, reject) {
-        var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
-            match;
-
+        var listReg = /({{abe.*type=[\'|\"]data.*}})/g;
+        var match;
         var sourceAttr = _.config.source.name;
+
         if (typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
           jsonPage[sourceAttr] = {};
         }
@@ -301,107 +321,92 @@ var Utils = function () {
 
           var pSource = new _es6Promise.Promise(function (resolveSource, rejectSource) {
             var obj = Utils.getAllAttributes(match[0], jsonPage);
+            obj = Utils.sanitizeSourceAttribute(obj, jsonPage);
 
-            // var source = getAttr(match[0], 'source')
-            // var key = getAttr(match[0], 'key')
-            // var editable = getAttr(match[0], 'editable')
-            // var paginate = getAttr(match[0], 'paginate')
-            // editable = (typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') ? false : true
-
-            if (typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
-              var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g);
-              if (matches !== null) {
-                Array.prototype.forEach.call(matches, function (match) {
-                  var val = match.replace('{{', '');
-                  val = val.replace('}}', '');
-                  val = _.Sql.deep_value_array(jsonPage, val);
-                  if (typeof val === 'undefined' || val === null) {
-                    val = '';
-                  }
-                  obj.sourceString = obj.sourceString.replace(match, val);
-                });
-              }
-            }
             var type = _.Sql.getSourceType(obj.sourceString);
+
             switch (type) {
               case 'request':
-
-                var data = _.Sql.getDataRequest(tplPath, match[0], jsonPage);
-                jsonPage[sourceAttr][obj.key] = data;
-                if (!obj.editable) {
-                  if (obj.maxLength) {
-                    jsonPage[obj.key] = data.slice(0, obj.maxLength);
-                  } else {
-                    jsonPage[obj.key] = data;
-                  }
-                } else if (obj.prefill) {
-                  // console.log("msg")
-                  if (obj.prefillQuantity && obj.maxLength) {
-                    jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
-                  } else if (obj.prefillQuantity) {
-                    jsonPage[obj.key] = data.slice(0, obj.prefillQuantity);
-                  } else if (obj.maxLength) {
-                    jsonPage[obj.key] = data.slice(0, obj.maxLength);
-                  } else {
-                    jsonPage[obj.key] = data;
-                  }
-                  // console.log(obj.key, jsonPage[obj.key])
-                }
-
-                if (typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
-                  obj.paginate = parseInt(obj.paginate);
-                  if (typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
-                    jsonPage.abe_meta.paginate = {};
-                  }
-                  if (typeof jsonPage.abe_meta.paginate[obj.key] === 'undefined' || jsonPage.abe_meta.paginate[obj.key] === null) {
-                    jsonPage.abe_meta.paginate[obj.key] = {};
-                  }
-
-                  var linksSize = Math.ceil(data.length / obj.paginate);
-
-                  if (linksSize > 0) {
-                    jsonPage.abe_meta.paginate[obj.key].size = obj.paginate;
-                    jsonPage.abe_meta.paginate[obj.key].current = 1;
-                    jsonPage.abe_meta.paginate[obj.key].links = [];
-
-                    if (typeof jsonPage.abe_meta.paginate[obj.key].prev !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].prev !== null) {
-                      delete jsonPage.abe_meta.paginate[obj.key].prev;
+                //console.log(obj.sourceString)
+                _.Sql.getDataRequest(tplPath, match[0], jsonPage).then(function (data) {
+                  //console.log('FIN : ' + type + "(" + data.length +") > " + ((new Date().getTime() - dateStart.getTime()) / 1000))
+                  jsonPage[sourceAttr][obj.key] = data;
+                  if (!obj.editable) {
+                    if (obj.maxLength) {
+                      jsonPage[obj.key] = data.slice(0, obj.maxLength);
+                    } else {
+                      jsonPage[obj.key] = data;
                     }
-                    if (typeof jsonPage.abe_meta.paginate[obj.key].first === 'undefined' || jsonPage.abe_meta.paginate[obj.key].first === null) {
-                      jsonPage.abe_meta.paginate[obj.key].first = jsonPage.abe_meta.link;
+                  } else if (obj.prefill) {
+                    // console.log("msg")
+                    if (obj.prefillQuantity && obj.maxLength) {
+                      jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
+                    } else if (obj.prefillQuantity) {
+                      jsonPage[obj.key] = data.slice(0, obj.prefillQuantity);
+                    } else if (obj.maxLength) {
+                      jsonPage[obj.key] = data.slice(0, obj.maxLength);
+                    } else {
+                      jsonPage[obj.key] = data;
                     }
-                    for (var i = 0; i <= linksSize; i++) {
-                      var link = jsonPage.abe_meta.link;
-                      if (i > 0) {
-                        link = _.fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + _.config.files.templates.extension;
+                    // console.log(obj.key, jsonPage[obj.key])
+                  }
+
+                  if (typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
+                    obj.paginate = parseInt(obj.paginate);
+                    if (typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
+                      jsonPage.abe_meta.paginate = {};
+                    }
+                    if (typeof jsonPage.abe_meta.paginate[obj.key] === 'undefined' || jsonPage.abe_meta.paginate[obj.key] === null) {
+                      jsonPage.abe_meta.paginate[obj.key] = {};
+                    }
+
+                    var linksSize = Math.ceil(data.length / obj.paginate);
+
+                    if (linksSize > 0) {
+                      jsonPage.abe_meta.paginate[obj.key].size = obj.paginate;
+                      jsonPage.abe_meta.paginate[obj.key].current = 1;
+                      jsonPage.abe_meta.paginate[obj.key].links = [];
+
+                      if (typeof jsonPage.abe_meta.paginate[obj.key].prev !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].prev !== null) {
+                        delete jsonPage.abe_meta.paginate[obj.key].prev;
                       }
-                      jsonPage.abe_meta.paginate[obj.key].links.push({
-                        link: link,
-                        index: i + 1
+                      if (typeof jsonPage.abe_meta.paginate[obj.key].first === 'undefined' || jsonPage.abe_meta.paginate[obj.key].first === null) {
+                        jsonPage.abe_meta.paginate[obj.key].first = jsonPage.abe_meta.link;
+                      }
+                      for (var i = 0; i <= linksSize; i++) {
+                        var link = jsonPage.abe_meta.link;
+                        if (i > 0) {
+                          link = _.fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + _.config.files.templates.extension;
+                        }
+                        jsonPage.abe_meta.paginate[obj.key].links.push({
+                          link: link,
+                          index: i + 1
+                        });
+                      }
+                      if ((typeof jsonPage.abe_meta.paginate[obj.key].next === 'undefined' || jsonPage.abe_meta.paginate[obj.key].next === null) && typeof jsonPage.abe_meta.paginate[obj.key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1] !== null && typeof jsonPage.abe_meta.paginate[obj.key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1].link !== null) {
+                        jsonPage.abe_meta.paginate[obj.key].next = jsonPage.abe_meta.paginate[obj.key].links[1].link;
+                      }
+                      jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length - 1].link;
+                    }
+                    jsonPage = _.Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj);
+                  }
+
+                  if (typeof jsonPage[obj.key] !== 'undefined' && jsonPage[obj.key] !== null) {
+                    var newJsonValue = [];
+                    Array.prototype.forEach.call(jsonPage[obj.key], function (oldValue) {
+                      Array.prototype.forEach.call(jsonPage[sourceAttr][obj.key], function (newValue) {
+                        if (typeof oldValue[_.config.meta.name] !== 'undefined' && oldValue[_.config.meta.name] !== null && oldValue[_.config.meta.name].link === newValue[_.config.meta.name].link) {
+                          newJsonValue.push(newValue);
+                        }
                       });
-                    }
-                    if ((typeof jsonPage.abe_meta.paginate[obj.key].next === 'undefined' || jsonPage.abe_meta.paginate[obj.key].next === null) && typeof jsonPage.abe_meta.paginate[obj.key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1] !== null && typeof jsonPage.abe_meta.paginate[obj.key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1].link !== null) {
-                      jsonPage.abe_meta.paginate[obj.key].next = jsonPage.abe_meta.paginate[obj.key].links[1].link;
-                    }
-                    jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length - 1].link;
-                  }
-                  jsonPage = _.Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj);
-                }
-
-                if (typeof jsonPage[obj.key] !== 'undefined' && jsonPage[obj.key] !== null) {
-                  var newJsonValue = [];
-                  Array.prototype.forEach.call(jsonPage[obj.key], function (oldValue) {
-                    Array.prototype.forEach.call(jsonPage[sourceAttr][obj.key], function (newValue) {
-                      if (typeof oldValue[_.config.meta.name] !== 'undefined' && oldValue[_.config.meta.name] !== null && oldValue[_.config.meta.name].link === newValue[_.config.meta.name].link) {
-                        newJsonValue.push(newValue);
-                      }
                     });
-                  });
-                }
+                  }
 
-                _.log.duration(type + " > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000);
+                  _.log.duration(type + " > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000);
 
-                resolveSource();
+                  resolveSource();
+                });
+
                 break;
               case 'value':
                 var value = _.Sql.getDataSource(match[0]);

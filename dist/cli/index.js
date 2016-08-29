@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.removeDuplicateAttr = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.deep_value = exports.abeCreate = exports.Util = exports.clc = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
+exports.compileAbe = exports.Manager = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.Page = exports.removeDuplicateAttr = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.deep_value = exports.abeCreate = exports.Util = exports.clc = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -30,6 +30,10 @@ var _cliColor = require('cli-color');
 var _cliColor2 = _interopRequireDefault(_cliColor);
 
 var _index = require('./handlebars/index');
+
+var _Manager = require('./models/Manager');
+
+var _Manager2 = _interopRequireDefault(_Manager);
 
 var _handlebars = require('handlebars');
 
@@ -169,4 +173,5 @@ exports.checkRequired = _Save.checkRequired;
 exports.saveJson = _Save.saveJson;
 exports.dateSlug = _abeDate.dateSlug;
 exports.dateUnslug = _abeDate.dateUnslug;
+exports.Manager = _Manager2.default;
 exports.compileAbe = _index.compileAbe;

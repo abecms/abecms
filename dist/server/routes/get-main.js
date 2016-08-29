@@ -165,11 +165,11 @@ var route = function route(req, res, next) {
     var tplUrl = result.tplUrl;
 
     manager.home = {
-      files: _cli.FileParser.getAllFiles()
+      files: _cli.Manager.instance.getList()
     };
 
-    manager.list = _cli.FileParser.getProjetFiles();
-    manager.editConfig = _cli.config.getConfigByWebsite();
+    manager.list = req.app.get('projectFiles');
+    manager.editConfig = req.app.get('config');
     manager.config = JSON.stringify(_cli.config);
 
     var _hasBlock = obj ? obj.hasBlock : false;

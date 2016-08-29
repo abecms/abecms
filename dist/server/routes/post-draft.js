@@ -19,6 +19,7 @@ var route = function route(req, res, next) {
       result = resSave;
     }
     if (typeof resSave.json !== 'undefined' && resSave.json !== null) {
+      _cli.Manager.instance.updateList();
       result = {
         success: 1,
         json: resSave.json

@@ -35,6 +35,7 @@ var route = function route(req, res, next) {
           json: resSave.json
         };
       }
+      _cli.Manager.instance.updateList();
       res.set('Content-Type', 'application/json');
       res.send(JSON.stringify(result));
     });
