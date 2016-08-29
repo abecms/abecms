@@ -270,6 +270,9 @@ export default class Sql {
    */
   static getFromDirectory(statement, tplPath){
     var path = ''
+    if(typeof tplPath === 'undefined' || tplPath === null || tplPath === ''){
+      tplPath = '/'
+    }
 
     if(statement === '' || statement === '*' || statement === '/') {
       path = fileUtils.concatPath(config.root, config.data.url)
@@ -454,7 +457,6 @@ export default class Sql {
     if(typeof wheres !== 'undefined' && wheres !== null) {
       let meta = config.meta.name
       if(typeof json[meta] !== 'undefined' && json[meta] !== null) {
-        var template = FileParser.getTemplate(json[meta].template)
         Array.prototype.forEach.call(wheres, (where) => {
           var value
           var compare
