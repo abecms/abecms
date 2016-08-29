@@ -17,6 +17,8 @@ Array.prototype.forEach.call(process.argv, (item) => {
   }
 })
 
+pConfig.TYPE = pConfig.TYPE || 'publish';
+
 // var logsPub = ""
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
@@ -71,14 +73,17 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
           var d = (new Date().getTime() - dateStart.getTime()) / 1000
           // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
           console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath)
+          // resolve()
+          // return
+          console.log(pConfig)
           save(
             pub.path,
             json.abe_meta.template,
             null,
             '',
-            'publish',
+            pConfig.TYPE,
             null,
-            'publish',
+            pConfig.TYPE,
             true)
             .then(() => {
               // logsPub += 'successfully update > ' + pub.path .replace(config.root, '')
