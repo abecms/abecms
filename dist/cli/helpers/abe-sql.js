@@ -219,38 +219,6 @@ var Sql = function () {
       }
       return 0;
     }
-
-    // static sortByDateDesc(a, b) {
-    //   var jsonA = FileParser.getJson(a.path)
-    //   var jsonB = FileParser.getJson(b.path)
-    //   let metaA = config.meta.name
-    //   let metaB = config.meta.name
-
-    //   var dateA = (jsonA[metaA]) ? new Date(jsonA[metaA].latest.date) : new Date()
-    //   var dateB = (jsonB[metaB]) ? new Date(jsonB[metaB].latest.date) : new Date()
-    //   if(dateA < dateB) {
-    //     return 1
-    //   }else if(dateA > dateB) {
-    //     return -1
-    //   }
-    //   return 0
-    // }
-
-    // static sortByDateAsc(a, b) {
-    //   // var jsonA = FileParser.getJson(a.path)
-    //   // var jsonB = FileParser.getJson(b.path)
-    //   // let metaA = config.meta.name
-    //   // let metaB = config.meta.name
-    //   var dateA = new Date(a.date)
-    //   var dateB = new Date(b.date)
-    //   if(dateA > dateB) {
-    //     return 1
-    //   }else if(dateA < dateB) {
-    //     return -1
-    //   }
-    //   return 0
-    // }
-
   }, {
     key: 'shuffle',
     value: function shuffle(array) {
@@ -302,94 +270,107 @@ var Sql = function () {
 
       return res.substring(0, res.length - 1);
     }
+
+    /**
+     * replaces escaped characters with the right ones
+     * @param  {String} statement the from clause
+     * @return {String}           the from sanitized
+     */
+
   }, {
-    key: 'getDataRequest',
-    value: function getDataRequest(tplPath, match, jsonPage) {
-      var request = Sql.handleSqlRequest((0, _.getAttr)(match, 'source'), jsonPage),
-          limit = 0,
-          res = [];
+    key: 'sanitizeFromStatement',
+    value: function sanitizeFromStatement(statement) {
+      var from = '';
 
-      var data = _.config.data.url;
-      var files = [];
-
-      if (typeof request.from !== 'undefined' && request.from !== null) {
-        Array.prototype.forEach.call(request.from, function (from) {
-          from = from.replace(/___abe_dot___/g, '.');
-          from = from.replace(/___abe___/g, '/');
-          from = from.replace(/___abe_dash___/g, '-');
-          var fromPath = '';
-          if (from === '*' || from === '/') {
-            fromPath = _.fileUtils.concatPath(_.config.root, data);
-          } else if (from === './') {
-            fromPath = _.fileUtils.concatPath(_.config.root, data, tplPath);
-          } else if (from.indexOf('/') === 0) {
-            fromPath = _.fileUtils.concatPath(_.config.root, data, from);
-          } else if (from.indexOf('/') !== 0) {
-            fromPath = _.fileUtils.concatPath(_.config.root, data, tplPath, from);
-          }
-
-          if (_.folderUtils.isFolder(fromPath)) {
-            files = files.concat(_.FileParser.getFiles(fromPath, true, 99, /\.json/));
-          }
-        });
-      } else {
-        files = _.FileParser.getFiles(_.fileUtils.concatPath(_.config.root, data), true, 99, /\.json/);
+      if (typeof statement !== 'undefined' && statement !== null) {
+        from = statement[0].replace(/___abe_dot___/g, '.');
+        from = from.replace(/___abe___/g, '/');
+        from = from.replace(/___abe_dash___/g, '-');
       }
 
-      if (typeof request.orderby !== 'undefined' && request.orderby !== null) {
-        if (request.orderby.column.toLowerCase() === 'random') {
+      return from;
+    }
+
+    /**
+     * calculate the directory to analyze from the from clause
+     * @param  {String} statement the from clause
+     * @param  {String} tplPath   the path from the template originator
+     * @return {string}           the directory to analyze
+     */
+
+  }, {
+    key: 'getFromDirectory',
+    value: function getFromDirectory(statement, tplPath) {
+      var path = '';
+
+      if (statement === '' || statement === '*' || statement === '/') {
+        path = _.fileUtils.concatPath(_.config.root, _.config.data.url);
+      } else if (statement === './') {
+        path = _.fileUtils.concatPath(_.config.root, _.config.data.url, tplPath);
+      } else if (statement.indexOf('/') === 0) {
+        path = _.fileUtils.concatPath(_.config.root, _.config.data.url, statement);
+      } else if (statement.indexOf('/') !== 0) {
+        path = _.fileUtils.concatPath(_.config.root, _.config.data.url, tplPath, statement);
+      }
+
+      return path;
+    }
+  }, {
+    key: 'executeOrderByClause',
+    value: function executeOrderByClause(files, orderby) {
+      if (typeof orderby !== 'undefined' && orderby !== null) {
+        if (orderby.column.toLowerCase() === 'random') {
           Sql.shuffle(files);
-        } else if (request.orderby.column.toLowerCase() === 'date') {
-          if (request.orderby.type === 'ASC') {
+        } else if (orderby.column.toLowerCase() === 'date') {
+          if (orderby.type === 'ASC') {
             files.sort(Sql.sortByDateAsc);
-          } else if (request.orderby.type === 'DESC') {
+          } else if (orderby.type === 'DESC') {
             files.sort(Sql.sortByDateDesc);
           }
         }
       }
 
-      Array.prototype.forEach.call(files, function (file) {
-        var shouldAdd = true;
-        var folderPath = _.folderUtils.getFolderPath(file.path);
-        var json;
+      return files;
+    }
+  }, {
+    key: 'executeFromClause',
+    value: function executeFromClause(statement, path) {
+      var files = [];
+      var recursive = 99;
+      var fileRegex = /(.*(-abe-).*Z\.json)/;
+      var from = Sql.sanitizeFromStatement(statement);
 
-        // remove not published file
-        var attr = _.fileAttr.get(file.path);
-        if (typeof attr.d !== 'undefined' && attr.d !== null) {
-          return;
-        }
+      // if the from clause ends with a dot, we won't recurse the directory analyze
+      if (from.slice(-1) === '.') {
+        recursive = 0;
+        from = from.slice(0, -1);
+      }
 
-        // check where
-        if (typeof request.where !== 'undefined' && request.where !== null) {
-          shouldAdd = Sql.reqWhere(file, request.where, jsonPage);
-        }
+      var fromDirectory = Sql.getFromDirectory(from, path);
 
-        if (shouldAdd) {
-          if (typeof json === 'undefined' || json === null) {
-            json = JSON.parse(JSON.stringify(_.FileParser.getJson(file.path)));
-          }
-          var jsonValues = {};
+      if (_.folderUtils.isFolder(fromDirectory)) {
+        // we'll get only published files which don't contain "-abe-"
+        files = _.FileParser.getFiles(fromDirectory, true, recursive, fileRegex, true);
+      }
 
-          if (typeof request.columns !== 'undefined' && request.columns !== null && request.columns.length > 0 && request.columns[0] !== '*') {
+      return files;
+    }
+  }, {
+    key: 'getDataRequest',
+    value: function getDataRequest(path, match, jsonPage) {
+      var p = new _es6Promise.Promise(function (resolve, reject) {
+        var res = [];
+        var files = [];
+        var request = Sql.handleSqlRequest((0, _.getAttr)(match, 'source'), jsonPage);
 
-            Array.prototype.forEach.call(request.columns, function (column) {
-              if (typeof json[column] !== 'undefined' && json[column] !== null) {
-                jsonValues[column] = json[column];
-              }
-            });
-            jsonValues[_.config.meta.name] = json[_.config.meta.name];
-          } else {
-            jsonValues = json;
-          }
+        files = Sql.executeFromClause(request.from, path);
+        files = Sql.executeOrderByClause(files, request.orderby);
+        res = Sql.executeWhereClause(files, request.where, request.limit, request.columns, jsonPage);
 
-          if (limit < request.limit || request.limit === -1) {
-            res.push(jsonValues);
-          }
-          limit++;
-        }
+        resolve(res);
       });
 
-      return res;
+      return p;
     }
   }, {
     key: 'getSourceType',
@@ -466,172 +447,236 @@ var Sql = function () {
       return res;
     }
   }, {
-    key: 'reqWhere',
-    value: function reqWhere(file, wheres, jsonPage) {
-      var shouldAdd = true;
+    key: 'executeWhereClause',
+    value: function executeWhereClause(files, wheres, maxLimit, columns, jsonPage) {
+      var res = [];
+      var limit = 0;
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = files[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var file = _step.value;
+
+          if (limit < maxLimit || maxLimit === -1) {
+            var doc = Sql.executeWhereClauseToFile(file, wheres, jsonPage);
+
+            if (doc) {
+              var json = JSON.parse(JSON.stringify(doc));
+              var jsonValues = {};
+
+              if (typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
+
+                Array.prototype.forEach.call(columns, function (column) {
+                  if (typeof json[column] !== 'undefined' && json[column] !== null) {
+                    jsonValues[column] = json[column];
+                  }
+                });
+                jsonValues[_.config.meta.name] = json[_.config.meta.name];
+              } else {
+                jsonValues = json;
+              }
+
+              res.push(jsonValues);
+              limit++;
+            }
+          } else {
+            break;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return res;
+    }
+  }, {
+    key: 'executeWhereClauseToFile',
+    value: function executeWhereClauseToFile(file, wheres, jsonPage) {
       var json = {};
       if (_.fileUtils.isFile(file.path)) {
         json = _fsExtra2.default.readJsonSync(file.path);
       }
-      var meta = _.config.meta.name;
+      var shouldAdd = json;
 
-      if (typeof json[meta] !== 'undefined' && json[meta] !== null) {
-        var template = _.FileParser.getTemplate(json[meta].template);
-        Array.prototype.forEach.call(wheres, function (where) {
-          var value;
-          var compare;
+      if (typeof wheres !== 'undefined' && wheres !== null) {
+        var template;
 
-          if (where.left === 'template') {
-            value = _.FileParser.getTemplate(json[meta].template);
-          } else {
-            value = Sql.deep_value_array(json, where.left);
-          }
-          compare = where.right;
+        (function () {
+          var meta = _.config.meta.name;
+          if (typeof json[meta] !== 'undefined' && json[meta] !== null) {
+            template = _.FileParser.getTemplate(json[meta].template);
 
-          var matchVariable = /^{{(.*)}}$/.exec(compare);
-          if (typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
-            var shouldCompare = Sql.deep_value_array(jsonPage, matchVariable[1]);
-            if (typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
-              compare = shouldCompare;
-            } else {
-              shouldAdd = false;
-            }
-          }
+            Array.prototype.forEach.call(wheres, function (where) {
+              var value;
+              var compare;
 
-          if (typeof value !== 'undefined' && value !== null) {
-            switch (where.compare) {
-              case '=':
-                if (where.left === 'template') {
-                  if (value.indexOf('/') > -1 && value !== compare) {
-                    shouldAdd = false;
-                  } else if (value.indexOf('/') === -1 && compare.indexOf(value) === -1) {
-                    shouldAdd = false;
-                  }
+              if (where.left === 'template') {
+                value = _.FileParser.getTemplate(json[meta].template);
+              } else {
+                value = Sql.deep_value_array(json, where.left);
+              }
+              compare = where.right;
+
+              var matchVariable = /^{{(.*)}}$/.exec(compare);
+              if (typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
+                var shouldCompare = Sql.deep_value_array(jsonPage, matchVariable[1]);
+                if (typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+                  compare = shouldCompare;
                 } else {
-
-                  // if both entries are Array
-                  var foundOne = false;
-                  if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]' && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-
-                    Array.prototype.forEach.call(value, function (v) {
-                      if (compare.includes(v)) {
-                        foundOne = true;
-                      }
-                    });
-                  } else if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]') {
-                    // only "compare" is Array
-                    if (compare.includes(value)) {
-                      foundOne = true;
-                    }
-                  } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-                    // only "value" is Array
-                    if (value.includes(compare)) {
-                      foundOne = true;
-                    }
-                  } else if (value == compare) {
-                    // only none is Array
-                    foundOne = true;
-                  }
-
-                  if (!foundOne) {
-                    shouldAdd = false;
-                  }
+                  shouldAdd = false;
                 }
-                break;
-              case '!=':
-                if (where.left === 'template') {
+              }
 
-                  if (value.indexOf('/') > -1 && value === compare) {
-                    shouldAdd = false;
-                  } else if (value.indexOf('/') === -1 && compare.indexOf(value) !== -1) {
-                    shouldAdd = false;
-                  }
-                } else {
-
-                  // if both entries are Array
-                  var foundOne = false;
-                  if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]' && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-
-                    Array.prototype.forEach.call(value, function (v) {
-                      if (compare.includes(v)) {
-                        foundOne = true;
+              if (typeof value !== 'undefined' && value !== null) {
+                switch (where.compare) {
+                  case '=':
+                    if (where.left === 'template') {
+                      if (value.indexOf('/') > -1 && value !== compare) {
+                        shouldAdd = false;
+                      } else if (value.indexOf('/') === -1 && compare.indexOf(value) === -1) {
+                        shouldAdd = false;
                       }
-                    });
-                  } else if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]') {
-                    // only "compare" is Array
-                    if (compare.includes(value)) {
-                      foundOne = true;
-                    }
-                  } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-                    // only "value" is Array
-                    if (value.includes(compare)) {
-                      foundOne = true;
-                    }
-                  } else if (value === compare) {
-                    // only none is Array
-                    foundOne = true;
-                  }
+                    } else {
 
-                  if (foundOne) {
-                    shouldAdd = false;
-                  }
-                }
-                break;
-              case 'LIKE':
-                if (where.left === 'template') {
+                      // if both entries are Array
+                      var foundOne = false;
+                      if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]' && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
 
-                  if (value.indexOf(compare) === -1) {
-                    shouldAdd = false;
-                  }
-                } else {
-
-                  // if both entries are Array
-                  var foundOne = false;
-                  if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]' && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-
-                    Array.prototype.forEach.call(compare, function (v) {
-                      Array.prototype.forEach.call(value, function (v2) {
-                        if (v.indexOf(v2) !== -1) {
+                        Array.prototype.forEach.call(value, function (v) {
+                          if (compare.includes(v)) {
+                            foundOne = true;
+                          }
+                        });
+                      } else if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]') {
+                        // only "compare" is Array
+                        if (compare.includes(value)) {
                           foundOne = true;
                         }
-                      });
-                    });
-                  } else if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]') {
-                    // only "compare" is Array
-                    Array.prototype.forEach.call(compare, function (v) {
-                      if (v.indexOf(value) !== -1) {
+                      } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+                        // only "value" is Array
+                        if (value.includes(compare)) {
+                          foundOne = true;
+                        }
+                      } else if (value == compare) {
+                        // only none is Array
                         foundOne = true;
                       }
-                    });
-                  } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-                    // only "value" is Array
-                    Array.prototype.forEach.call(value, function (v) {
-                      if (compare.indexOf(v) !== -1) {
-                        foundOne = true;
+
+                      if (!foundOne) {
+                        shouldAdd = false;
                       }
-                    });
-                  } else if (value === compare) {
-                    // only none is Array
-                    if (value.indexOf(compare) !== -1) {
-                      foundOne = true;
                     }
-                  }
+                    break;
+                  case '!=':
+                    if (where.left === 'template') {
 
-                  if (foundOne) {
-                    shouldAdd = false;
-                  }
+                      if (value.indexOf('/') > -1 && value === compare) {
+                        shouldAdd = false;
+                      } else if (value.indexOf('/') === -1 && compare.indexOf(value) !== -1) {
+                        shouldAdd = false;
+                      }
+                    } else {
+
+                      // if both entries are Array
+                      var foundOne = false;
+                      if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]' && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+
+                        Array.prototype.forEach.call(value, function (v) {
+                          if (compare.includes(v)) {
+                            foundOne = true;
+                          }
+                        });
+                      } else if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]') {
+                        // only "compare" is Array
+                        if (compare.includes(value)) {
+                          foundOne = true;
+                        }
+                      } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+                        // only "value" is Array
+                        if (value.includes(compare)) {
+                          foundOne = true;
+                        }
+                      } else if (value === compare) {
+                        // only none is Array
+                        foundOne = true;
+                      }
+
+                      if (foundOne) {
+                        shouldAdd = false;
+                      }
+                    }
+                    break;
+                  case 'LIKE':
+                    if (where.left === 'template') {
+
+                      if (value.indexOf(compare) === -1) {
+                        shouldAdd = false;
+                      }
+                    } else {
+
+                      // if both entries are Array
+                      var foundOne = false;
+                      if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]' && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+
+                        Array.prototype.forEach.call(compare, function (v) {
+                          Array.prototype.forEach.call(value, function (v2) {
+                            if (v.indexOf(v2) !== -1) {
+                              foundOne = true;
+                            }
+                          });
+                        });
+                      } else if ((typeof compare === 'undefined' ? 'undefined' : _typeof(compare)) === 'object' && Object.prototype.toString.call(compare) === '[object Array]') {
+                        // only "compare" is Array
+                        Array.prototype.forEach.call(compare, function (v) {
+                          if (v.indexOf(value) !== -1) {
+                            foundOne = true;
+                          }
+                        });
+                      } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+                        // only "value" is Array
+                        Array.prototype.forEach.call(value, function (v) {
+                          if (compare.indexOf(v) !== -1) {
+                            foundOne = true;
+                          }
+                        });
+                      } else if (value === compare) {
+                        // only none is Array
+                        if (value.indexOf(compare) !== -1) {
+                          foundOne = true;
+                        }
+                      }
+
+                      if (foundOne) {
+                        shouldAdd = false;
+                      }
+                    }
+
+                    break;
+                  default:
+                    break;
                 }
-
-                break;
-              default:
-                break;
-            }
+              } else {
+                shouldAdd = false;
+              }
+            });
           } else {
             shouldAdd = false;
           }
-        });
-      } else {
-        shouldAdd = false;
+        })();
       }
 
       return shouldAdd;
