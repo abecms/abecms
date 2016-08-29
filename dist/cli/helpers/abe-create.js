@@ -36,6 +36,7 @@ var create = function create(template, path, name, req) {
 
         _cli.Hooks.instance.trigger('afterCreate', json, text, path, name, req, forceJson);
         (0, _cli.save)(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft').then(function (resSave) {
+          _cli.Manager.instance.updateList();
           filePath = resSave.htmlPath;
           tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
           resolve(resSave.json);

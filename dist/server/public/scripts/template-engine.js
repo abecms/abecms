@@ -79,7 +79,7 @@ var Engine = function () {
     this.table = null;
     $(document).ready(function () {
       _this.table = $('#navigation-list').DataTable({
-        "order": [[3, 'desc']],
+        //"order": [[ 3, 'desc' ]],
         "pageLength": 50,
         "autoWidth": false
       });
