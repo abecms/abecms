@@ -8,7 +8,6 @@ Can be used to upda te json file (with a specific hook)
 
 ```json
 var hooks = {
-  ...
 	beforeUpdateJson: function (jsonFilesArray, abe) {
 		// jsonFilesArray = array of json object containing references to json data files (abe data)
     var index = jsonFilesArray.length;
@@ -20,6 +19,5 @@ var hooks = {
 
     return jsonFilesArray
   }
-  ...
 };
 ```
