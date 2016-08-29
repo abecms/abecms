@@ -235,8 +235,8 @@ export default class Sql {
     var reg = /([^'"]*=[\s\S]*?}})/g
     var matches = res.match(reg)
     if(typeof matches !== 'undefined' && matches !== null) {
-      Array.prototype.forEach.call(matches, (matche) => {
-        res = res.replace(matche, '')
+      Array.prototype.forEach.call(matches, (match) => {
+        res = res.replace(match, '')
       })
     }else {
       res = res.replace('}}', '')
@@ -322,7 +322,7 @@ export default class Sql {
     return files
   }
 
-  static getDataRequest(path, match, jsonPage) {
+  static executeQuery(path, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
       var res = []
       var files = []
