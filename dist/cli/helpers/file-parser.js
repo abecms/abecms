@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -33,515 +33,555 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var FileParser = function () {
-	function FileParser() {
-		_classCallCheck(this, FileParser);
-	}
+  function FileParser() {
+    _classCallCheck(this, FileParser);
+  }
 
-	_createClass(FileParser, null, [{
-		key: 'getWebsite',
-		value: function getWebsite(path) {
-			var beforeRoot = _.config.root.split('/');
-			beforeRoot = beforeRoot.pop();
-			var website = beforeRoot;
-			return website.split('/')[0];
-		}
-	}, {
-		key: 'getTemplate',
-		value: function getTemplate(path) {
-			var file = path.replace(_.config.root, '');
-			var file = path.replace(_.config.templates.url, '');
-			return file.replace(/^\//, "");
-		}
-	}, {
-		key: 'getType',
-		value: function getType(path) {
-			var folders = path.replace(_.config.root, '');
-			folders = folders.replace(/^\//, "");
-			return folders.split('/')[0];
-		}
-	}, {
-		key: 'read',
-		value: function read(base, dirName, type, flatten) {
-			var extensions = arguments.length <= 4 || arguments[4] === undefined ? /(.*?)/ : arguments[4];
-			var max = arguments.length <= 5 || arguments[5] === undefined ? 99 : arguments[5];
-			var current = arguments.length <= 6 || arguments[6] === undefined ? 0 : arguments[6];
+  _createClass(FileParser, null, [{
+    key: 'getWebsite',
+    value: function getWebsite(path) {
+      var beforeRoot = _.config.root.split('/');
+      beforeRoot = beforeRoot.pop();
+      var website = beforeRoot;
+      return website.split('/')[0];
+    }
+  }, {
+    key: 'getTemplate',
+    value: function getTemplate(path) {
+      var file = path.replace(_.config.root, '');
+      var file = path.replace(_.config.templates.url, '');
+      return file.replace(/^\//, "");
+    }
+  }, {
+    key: 'getType',
+    value: function getType(path) {
+      var folders = path.replace(_.config.root, '');
+      folders = folders.replace(/^\//, "");
+      return folders.split('/')[0];
+    }
+  }, {
+    key: 'read',
+    value: function read(base, dirName, type, flatten) {
+      var extensions = arguments.length <= 4 || arguments[4] === undefined ? /(.*?)/ : arguments[4];
+      var max = arguments.length <= 5 || arguments[5] === undefined ? 99 : arguments[5];
+      var current = arguments.length <= 6 || arguments[6] === undefined ? 0 : arguments[6];
+      var inversePattern = arguments.length <= 7 || arguments[7] === undefined ? false : arguments[7];
 
-			var website = _.config.root.split('/');
-			website = website[website.length - 1];
-			var arr = [];
-			var level = _fsExtra2.default.readdirSync(dirName);
-			var fileCurrentLevel = [];
-			var assets = _.config.files.templates.assets;
-			// read file first
-			for (var i = 0; i < level.length; i++) {
-				var path = dirName + '/' + level[i];
-				var match = isFolder ? true : extensions.test(level[i]);
-				if ((type === 'files' || type === null) && match) {
-					if (_.fileUtils.isValidFile(level[i])) {
-						var extension = /(\.[\s\S]*)/.exec(level[i])[0];
-						var cleanName = _.fileAttr.delete(level[i]);
-						var cleanNameNoExt = _.fileUtils.removeExtension(cleanName);
-						var fileData = _.fileAttr.get(level[i]);
+      var website = _.config.root.split('/');
+      website = website[website.length - 1];
+      var arr = [];
+      var level = _fsExtra2.default.readdirSync(dirName);
+      var fileCurrentLevel = [];
+      var assets = _.config.files.templates.assets;
 
-						var date;
-						if (fileData.d) {
-							date = fileData.d;
-						} else {
-							var stat = _fsExtra2.default.statSync(path);
-							date = stat.mtime;
-						}
-						var status = fileData.s ? dirName.replace(_.config.root, '').replace(/^\//, '').split('/')[0] : 'published';
-						var cleanFilePath = _.fileUtils.cleanFilePath(path);
+      for (var i = 0; i < level.length; i++) {
+        var path = dirName + '/' + level[i];
+        var isFolder = _.folderUtils.isFolder(path);
+        var match = isFolder ? true : inversePattern ? !extensions.test(level[i]) : extensions.test(level[i]);
+        if ((type === 'files' || type === null) && match) {
 
-						var fileDate = fileDate = (0, _moment2.default)(date);
-						var duration = _moment2.default.duration((0, _moment2.default)(fileDate).diff(new Date())).humanize(true);
+          if (_.fileUtils.isValidFile(level[i])) {
+            var extension = /(\.[\s\S]*)/.exec(level[i])[0];
+            var cleanName = _.fileAttr.delete(level[i]);
+            var cleanNameNoExt = _.fileUtils.removeExtension(cleanName);
+            var fileData = _.fileAttr.get(level[i]);
 
-						var filePath = path.replace(_.config.root, '');
-						filePath = filePath.split('/');
-						filePath.shift();
-						filePath = filePath.join('/');
-						var item = {
-							'name': level[i],
-							'path': path,
-							'website': website,
-							'cleanPathName': _.fileAttr.delete(path),
-							'cleanPath': path.replace(base + '/', ''),
-							date: date,
-							cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
-							duration: duration,
-							status: status,
-							cleanName: cleanName,
-							cleanNameNoExt: cleanNameNoExt,
-							cleanFilePath: cleanFilePath,
-							filePath: filePath,
-							'type': 'file',
-							'fileType': extension
-						};
+            var date;
+            if (fileData.d) {
+              date = fileData.d;
+            } else {
+              var stat = _fsExtra2.default.statSync(path);
+              date = stat.mtime;
+            }
+            var status = fileData.s ? dirName.replace(_.config.root, '').replace(/^\//, '').split('/')[0] : 'published';
+            var cleanFilePath = _.fileUtils.cleanFilePath(path);
 
-						if (!flatten) item['folders'] = [];
-						arr.push(item);
-						// push current file name into array to check if siblings folder are assets folder
-						fileCurrentLevel.push(_.fileUtils.removeExtension(level[i]) + assets);
-					}
-				}
-			}
+            var fileDate = (0, _moment2.default)(date);
+            var duration = _moment2.default.duration((0, _moment2.default)(fileDate).diff(new Date())).humanize(true);
 
-			// read folder now
-			for (i = 0; i < level.length; i++) {
-				var path = dirName + '/' + level[i];
-				var isFolder = _.folderUtils.isFolder(path);
-				var match = isFolder ? true : extensions.test(level[i]);
-				if (!fileCurrentLevel.includes(level[i]) && match) {
-					if (isFolder) {
-						if (!flatten) {
-							var index = arr.push({ 'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder' }) - 1;
-							if (current < max) {
-								arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1);
-							}
-						} else {
-							if (type === 'folders' || type === null) {
-								arr.push({ 'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder' });
-							}
-							if (current < max) {
-								Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1), function (files) {
-									arr.push(files);
-								});
-							}
-						}
-					}
-				}
-			}
+            var filePath = path.replace(_.config.root, '');
+            filePath = filePath.split('/');
+            filePath.shift();
+            filePath = filePath.join('/');
+            var item = {
+              'name': level[i],
+              'path': path,
+              'website': website,
+              'cleanPathName': _.fileAttr.delete(path),
+              'cleanPath': path.replace(base + '/', ''),
+              date: date,
+              cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
+              duration: duration,
+              status: status,
+              cleanName: cleanName,
+              cleanNameNoExt: cleanNameNoExt,
+              cleanFilePath: cleanFilePath,
+              filePath: filePath,
+              'type': 'file',
+              'fileType': extension
+            };
 
-			return arr;
-		}
-	}, {
-		key: 'getFolders',
-		value: function getFolders(folder, flatten, level) {
-			var arr = [];
-			flatten = flatten || false;
-			arr = FileParser.read(_.fileUtils.cleanPath(folder), _.fileUtils.cleanPath(folder), 'folders', flatten, /(.*?)/, level);
-			return arr;
-		}
-	}, {
-		key: 'getFiles',
-		value: function getFiles(folder, flatten, level) {
-			var extensions = arguments.length <= 3 || arguments[3] === undefined ? /(.*?)/ : arguments[3];
+            if (!flatten) item['folders'] = [];
+            arr.push(item);
+            // push current file name into array to check if siblings folder are assets folder
+            fileCurrentLevel.push(_.fileUtils.removeExtension(level[i]) + assets);
+          }
+        }
+        if (!fileCurrentLevel.includes(level[i]) && match) {
+          if (isFolder) {
+            if (!flatten) {
+              var index = arr.push({ 'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder' }) - 1;
+              if (current < max) {
+                arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern);
+              }
+            } else {
+              if (type === 'folders' || type === null) {
+                arr.push({ 'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder' });
+              }
+              if (current < max) {
+                Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern), function (files) {
+                  arr.push(files);
+                });
+              }
+            }
+          }
+        }
+      }
 
-			var arr = [];
-			flatten = flatten || false;
-			arr = FileParser.read(_.fileUtils.cleanPath(folder), _.fileUtils.cleanPath(folder), 'files', flatten, extensions, level);
-			return arr;
-		}
-	}, {
-		key: 'getFilesByType',
-		value: function getFilesByType(path) {
-			var type = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      return arr;
+    }
+  }, {
+    key: 'getFolders',
+    value: function getFolders(folder, flatten, level) {
+      var arr = [];
+      flatten = flatten || false;
+      arr = FileParser.read(_.fileUtils.cleanPath(folder), _.fileUtils.cleanPath(folder), 'folders', flatten, /(.*?)/, level);
+      return arr;
+    }
+  }, {
+    key: 'getFiles',
+    value: function getFiles(folder, flatten, level) {
+      var extensions = arguments.length <= 3 || arguments[3] === undefined ? /(.*?)/ : arguments[3];
+      var inversePattern = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
 
-			if (!_.folderUtils.isFolder(path)) {
-				_mkdirp2.default.sync(path);
-			}
-			var files = FileParser.getFiles(path, true, 20, new RegExp('.' + _.config.files.templates.extension));
+      var arr = [];
+      flatten = flatten || false;
+      arr = FileParser.read(_.fileUtils.cleanPath(folder), _.fileUtils.cleanPath(folder), 'files', flatten, extensions, level, 0, inversePattern);
 
-			var result = [];
+      return arr;
+    }
+  }, {
+    key: 'getFilesByType',
+    value: function getFilesByType(path) {
+      var type = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
-			Array.prototype.forEach.call(files, function (file) {
-				var val = _.fileAttr.get(file.path).s;
-				if (type === null || val === type) result.push(file);
-			});
-			return result;
-		}
-	}, {
-		key: 'getAssetsFolder',
-		value: function getAssetsFolder() {
-			var path = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+      if (!_.folderUtils.isFolder(path)) {
+        _mkdirp2.default.sync(path);
+      }
+      var files = FileParser.getFiles(path, true, 20, new RegExp('.' + _.config.files.templates.extension));
 
-			var folder = _.fileUtils.pathWithRoot(path);
-			var assetsFolders = [];
-			var flatten = true;
-			var site = folder;
+      var result = [];
 
-			var templates = _.config.templates.url;
-			var assets = _.config.files.templates.assets;
-			var path = _.fileUtils.concatPath(folder, templates);
+      Array.prototype.forEach.call(files, function (file) {
+        var val = _.fileAttr.get(file.path).s;
+        if (type === null || val === type) result.push(file);
+      });
+      return result;
+    }
+  }, {
+    key: 'getAssetsFolder',
+    value: function getAssetsFolder() {
+      var path = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
 
-			if (_.folderUtils.isFolder(path)) {
-				var arr = FileParser.read(path, path, 'files', flatten, /(.*?)/, 99);
+      var folder = _.fileUtils.pathWithRoot(path);
+      var assetsFolders = [];
+      var flatten = true;
+      var site = folder;
 
-				// now check if file for folder exist
-				Array.prototype.forEach.call(arr, function (file) {
-					var folderName = _.fileUtils.removeExtension(file.path) + assets;
-					if (_.folderUtils.isFolder(folderName)) assetsFolders.push(folderName);
-				});
-			}
+      var templates = _.config.templates.url;
+      var assets = _.config.files.templates.assets;
+      var path = _.fileUtils.concatPath(folder, templates);
 
-			return assetsFolders;
-		}
-	}, {
-		key: 'getAssets',
-		value: function getAssets() {
-			var folders = FileParser.getAssetsFolder();
-			var assets = [];
-			Array.prototype.forEach.call(folders, function (folder) {
-				assets = assets.concat(FileParser.read(folder, folder, 'files', true, /(.*?)/, 99));
-			});
+      if (_.folderUtils.isFolder(path)) {
+        var arr = FileParser.read(path, path, 'files', flatten, /(.*?)/, 99);
 
-			return assets;
-		}
-	}, {
-		key: 'getProjetFiles',
-		value: function getProjetFiles() {
-			var site = _.folderUtils.folderInfos(_.config.root);
-			var result = { 'structure': [], 'templates': [] };
+        // now check if file for folder exist
+        Array.prototype.forEach.call(arr, function (file) {
+          var folderName = _.fileUtils.removeExtension(file.path) + assets;
+          if (_.folderUtils.isFolder(folderName)) assetsFolders.push(folderName);
+        });
+      }
 
-			var structure = _.config.structure.url;
-			var templates = _.config.templates.url;
+      return assetsFolders;
+    }
+  }, {
+    key: 'getAssets',
+    value: function getAssets() {
+      var folders = FileParser.getAssetsFolder();
+      var assets = [];
+      Array.prototype.forEach.call(folders, function (folder) {
+        assets = assets.concat(FileParser.read(folder, folder, 'files', true, /(.*?)/, 99));
+      });
 
-			if (_.folderUtils.isFolder(_.fileUtils.concatPath(site.path, structure)) && _.folderUtils.isFolder(_.fileUtils.concatPath(site.path, templates))) {
-				site.folders = FileParser.getFolders(_.fileUtils.concatPath(site.path, structure), false);
-				result.structure = site.folders;
-				result.templates = result.templates.concat(FileParser.getFiles(_.fileUtils.concatPath(site.path, templates), true, 10, new RegExp('.' + _.config.files.templates.extension)));
-			}
+      return assets;
+    }
+  }, {
+    key: 'getProjectFiles',
+    value: function getProjectFiles() {
+      var site = _.folderUtils.folderInfos(_.config.root);
+      var result = { 'structure': [], 'templates': [] };
 
-			return result;
-		}
-	}, {
-		key: 'changePathEnv',
-		value: function changePathEnv(path, change) {
-			path = path.replace(_.config.root, '').replace(/^\//, '').split('/');
-			path[0] = change;
+      var structure = _.config.structure.url;
+      var templates = _.config.templates.url;
 
-			return _.fileUtils.concatPath(_.config.root, path.join('/'));
-		}
-	}, {
-		key: 'getFileDataFromUrl',
-		value: function getFileDataFromUrl(url) {
-			var res = {
-				root: '',
-				draft: {
-					dir: '',
-					file: '',
-					path: ''
-				},
-				publish: {
-					dir: '',
-					file: '',
-					link: '',
-					path: '',
-					json: ''
-				},
-				json: {
-					path: '',
-					file: ''
-				}
-			};
+      if (_.folderUtils.isFolder(_.fileUtils.concatPath(site.path, structure)) && _.folderUtils.isFolder(_.fileUtils.concatPath(site.path, templates))) {
+        site.folders = FileParser.getFolders(_.fileUtils.concatPath(site.path, structure), false);
+        result.structure = site.folders;
+        result.templates = result.templates.concat(FileParser.getFiles(_.fileUtils.concatPath(site.path, templates), true, 10, new RegExp('.' + _.config.files.templates.extension)));
+      }
 
-			var extension = _.config.files.templates.extension;
-			if (typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension) > -1) {
+      return result;
+    }
+  }, {
+    key: 'changePathEnv',
+    value: function changePathEnv(path, change) {
+      path = path.replace(_.config.root, '').replace(/^\//, '').split('/');
+      path[0] = change;
 
-				var dir = _.fileUtils.removeLast(url).replace(_.config.root, '');
-				var filename = _.fileUtils.filename(url);
-				var basePath = dir.replace(_.config.root, '').split('/');
-				var link = url.replace(_.config.root, '');
-				link = link.split('/');
-				link.shift();
-				link = _.fileAttr.delete('/' + _.fileUtils.cleanPath(link.join('/')));
+      return _.fileUtils.concatPath(_.config.root, path.join('/'));
+    }
+  }, {
+    key: 'getFileDataFromUrl',
+    value: function getFileDataFromUrl(url) {
+      var res = {
+        root: '',
+        draft: {
+          dir: '',
+          file: '',
+          path: ''
+        },
+        publish: {
+          dir: '',
+          file: '',
+          link: '',
+          path: '',
+          json: ''
+        },
+        json: {
+          path: '',
+          file: ''
+        }
+      };
 
-				var draft = _.config.draft.url;
-				var publish = _.config.publish.url;
-				var data = _.config.data.url;
+      var extension = _.config.files.templates.extension;
+      if (typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension) > -1) {
 
-				var draftPath = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), draft);
+        var dir = _.fileUtils.removeLast(url).replace(_.config.root, '');
+        var filename = _.fileUtils.filename(url);
+        var basePath = dir.replace(_.config.root, '').split('/');
+        var link = url.replace(_.config.root, '');
+        link = link.split('/');
+        link.shift();
+        link = _.fileAttr.delete('/' + _.fileUtils.cleanPath(link.join('/')));
 
-				res.root = _.config.root;
+        var draft = _.config.draft.url;
+        var publish = _.config.publish.url;
+        var data = _.config.data.url;
 
-				// set dir path draft/json
-				res.draft.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), draft);
-				res.json.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), data);
-				res.publish.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), publish);
-				res.publish.json = res.json.dir;
+        var draftPath = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), draft);
 
-				// set filename draft/json
-				res.draft.file = filename;
-				res.publish.file = _.fileAttr.delete(filename);
-				res.publish.link = link;
-				res.json.file = _.fileUtils.replaceExtension(filename, 'json');
-				res.publish.json = _.fileUtils.concatPath(res.json.dir, _.fileAttr.delete(res.json.file));
+        res.root = _.config.root;
 
-				// set filename draft/json
-				res.draft.path = _.fileUtils.concatPath(res.draft.dir, res.draft.file);
-				res.publish.path = _.fileUtils.concatPath(res.publish.dir, res.publish.file);
-				res.json.path = _.fileUtils.concatPath(res.json.dir, res.json.file);
+        // set dir path draft/json
+        res.draft.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), draft);
+        res.json.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), data);
+        res.publish.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), publish);
+        res.publish.json = res.json.dir;
 
-				if (!_.fileUtils.isFile(res.json.path) && _.folderUtils.isFolder(res.json.dir)) {
-					var files = _.fileAttr.filterLatestVersion(FileParser.getFiles(res.json.dir), 'draft');
-					Array.prototype.forEach.call(files, function (file) {
-						if (file.cleanName === res.json.file) res.json.path = file.path;
-					});
-				}
-				// config.workflow.forEach(function (flow) {
-				// 	res[flow] = {
-				// 		dir: FileParser.changePathEnv(res.publish.dir, flow),
-				// 		file: res.publish.file,
-				// 		link: res.publish.link,
-				// 		path: FileParser.changePathEnv(res.publish.path, flow),
-				// 		json: res.json.path
-				// 	}
-				// })
-				// console.log(res)
-			}
-			return res;
-		}
-	}, {
-		key: 'copySiteAssets',
-		value: function copySiteAssets(path) {
-			var publicFolders = FileParser.getAssetsFolder(path);
-			var publish = _.config.publish.url;
-			var dest = _.fileUtils.concatPath(_.config.root, publish);
-			if (!_.folderUtils.isFolder(dest)) {
-				_mkdirp2.default.sync(dest);
-			}
+        // set filename draft/json
+        res.draft.file = filename;
+        res.publish.file = _.fileAttr.delete(filename);
+        res.publish.link = link;
+        res.json.file = _.fileUtils.replaceExtension(filename, 'json');
+        res.publish.json = _.fileUtils.concatPath(res.json.dir, _.fileAttr.delete(res.json.file));
 
-			Array.prototype.forEach.call(publicFolders, function (publicFolder) {
-				var res = _dirCompare2.default.compareSync(publicFolder, dest, { compareSize: true });
+        // set filename draft/json
+        res.draft.path = _.fileUtils.concatPath(res.draft.dir, res.draft.file);
+        res.publish.path = _.fileUtils.concatPath(res.publish.dir, res.publish.file);
+        res.json.path = _.fileUtils.concatPath(res.json.dir, res.json.file);
 
-				res.diffSet.forEach(function (entry) {
-					var state = {
-						'equal': '==',
-						'left': '->',
-						'right': '<-',
-						'distinct': '<>'
-					}[entry.state];
+        if (!_.fileUtils.isFile(res.json.path) && _.folderUtils.isFolder(res.json.dir)) {
+          var files = _.fileAttr.filterLatestVersion(FileParser.getFiles(res.json.dir), 'draft');
+          Array.prototype.forEach.call(files, function (file) {
+            if (file.cleanName === res.json.file) res.json.path = file.path;
+          });
+        }
+        // config.workflow.forEach(function (flow) {
+        // 	res[flow] = {
+        // 		dir: FileParser.changePathEnv(res.publish.dir, flow),
+        // 		file: res.publish.file,
+        // 		link: res.publish.link,
+        // 		path: FileParser.changePathEnv(res.publish.path, flow),
+        // 		json: res.json.path
+        // 	}
+        // })
+        // console.log(res)
+      }
+      return res;
+    }
+  }, {
+    key: 'copySiteAssets',
+    value: function copySiteAssets(path) {
+      var publicFolders = FileParser.getAssetsFolder(path);
+      var publish = _.config.publish.url;
+      var dest = _.fileUtils.concatPath(_.config.root, publish);
+      if (!_.folderUtils.isFolder(dest)) {
+        _mkdirp2.default.sync(dest);
+      }
 
-					var name1 = entry.name1 ? entry.name1 : '';
-					var name2 = entry.name2 ? entry.name2 : '';
+      Array.prototype.forEach.call(publicFolders, function (publicFolder) {
+        var res = _dirCompare2.default.compareSync(publicFolder, dest, { compareSize: true });
 
-					var exclude = _.config.files.exclude;
-					if (!exclude.test(name1) && !exclude.test(name2) && entry.type1 !== 'directory' && entry.type2 !== 'directory') {
+        res.diffSet.forEach(function (entry) {
+          var state = {
+            'equal': '==',
+            'left': '->',
+            'right': '<-',
+            'distinct': '<>'
+          }[entry.state];
 
-						if (typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
-							var original = entry.path1;
-							var basePath = original.replace(publicFolder, '');
-							var move = _.fileUtils.concatPath(dest, basePath);
+          var name1 = entry.name1 ? entry.name1 : '';
+          var name2 = entry.name2 ? entry.name2 : '';
 
-							if (entry.type2 === 'missing' || entry.state === 'distinct') {
-								_fsExtra2.default.removeSync(move);
-								var cp = _fsExtra2.default.copySync(original, move);
-							}
-						}
-					}
-				});
-			});
+          var exclude = _.config.files.exclude;
+          if (!exclude.test(name1) && !exclude.test(name2) && entry.type1 !== 'directory' && entry.type2 !== 'directory') {
 
-			return publicFolders;
-		}
-	}, {
-		key: 'getMetas',
-		value: function getMetas(arr, type) {
-			var res = [];
-			Array.prototype.forEach.call(arr, function (file) {
-				var meta = _.config.meta.name;
+            if (typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
+              var original = entry.path1;
+              var basePath = original.replace(publicFolder, '');
+              var move = _.fileUtils.concatPath(dest, basePath);
 
-				var jsonPath = FileParser.getFileDataFromUrl(file.path).json.path;
-				var json = FileParser.getJson(jsonPath);
-				if (typeof json[meta] === 'undefined' || json[meta] === null) json[meta] = {};
-				file['template'] = json[meta].template;
-				if (typeof json[meta].latest !== 'undefined' && json[meta].latest !== null) {
-					file['date'] = json[meta].latest.date;
-				}
-				if (typeof json[meta].complete === 'undefined' || json[meta].complete === null) {
-					json[meta].complete = 0;
-				}
-				if (typeof json[meta] !== 'undefined' && json[meta] !== null) {
-					file[_.config.meta.name] = json[meta];
-				}
-				res.push(file);
-			});
+              if (entry.type2 === 'missing' || entry.state === 'distinct') {
+                _fsExtra2.default.removeSync(move);
+                var cp = _fsExtra2.default.copySync(original, move);
+              }
+            }
+          }
+        });
+      });
 
-			return res;
-		}
-	}, {
-		key: 'getAllFiles',
-		value: function getAllFiles() {
-			var site = _.folderUtils.folderInfos(_.config.root);
-			var allDraft = [];
-			var allPublished = [];
+      return publicFolders;
+    }
+  }, {
+    key: 'getMetas',
+    value: function getMetas(arr, type) {
+      var res = [];
+      Array.prototype.forEach.call(arr, function (file) {
+        var meta = _.config.meta.name;
 
-			var draft = _.config.draft.url;
-			var publish = _.config.publish.url;
+        var jsonPath = FileParser.getFileDataFromUrl(file.path).json.path;
+        var json = FileParser.getJson(jsonPath);
+        if (typeof json[meta] === 'undefined' || json[meta] === null) json[meta] = {};
+        file['template'] = json[meta].template;
+        if (typeof json[meta].latest !== 'undefined' && json[meta].latest !== null) {
+          file['date'] = json[meta].latest.date;
+        }
+        if (typeof json[meta].complete === 'undefined' || json[meta].complete === null) {
+          json[meta].complete = 0;
+        }
+        if (typeof json[meta] !== 'undefined' && json[meta] !== null) {
+          file[_.config.meta.name] = json[meta];
+        }
+        res.push(file);
+      });
 
-			var drafted = FileParser.getFilesByType(_.fileUtils.concatPath(site.path, draft), 'd');
-			var published = FileParser.getFilesByType(_.fileUtils.concatPath(site.path, publish));
+      return res;
+    }
 
-			drafted = _.Hooks.instance.trigger('beforeGetAllFilesDraft', drafted);
-			published = _.Hooks.instance.trigger('beforeGetAllFilesPublished', published);
+    /**
+     * This function makes sorting on an array of Json objects possible.
+     * Pass the property to be sorted on.
+     * Usage: myArray.sort(FileParser.predicatBy('date',-1));
+     * @param  String prop  the json property to sort on
+     * @param  integer order order ASC if 1, DESC if -1
+     * @return integer the ordered value
+     */
 
-			drafted = FileParser.getMetas(drafted, 'draft');
-			published = FileParser.getMetas(published, 'draft');
-			var truePublished = [];
+  }, {
+    key: 'predicatBy',
+    value: function predicatBy(prop, order) {
+      if (order !== -1) {
+        order = 1;
+      }
+      if (prop === 'date') {
+        return function (a, b) {
+          a = new Date(a[prop]);
+          b = new Date(b[prop]);
+          if (a > b) {
+            return 1 * order;
+          } else if (a < b) {
+            return -1 * order;
+          }
+          return 0;
+        };
+      }
 
-			published.forEach(function (pub) {
+      return function (a, b) {
+        if (a[prop] > b[prop]) {
+          return 1 * order;
+        } else if (a[prop] < b[prop]) {
+          return -1 * order;
+        }
+        return 0;
+      };
+    }
+  }, {
+    key: 'getAllFiles',
+    value: function getAllFiles() {
+      var site = _.folderUtils.folderInfos(_.config.root);
+      var allDraft = [];
+      var allPublished = [];
 
-				var json = FileParser.getJson(FileParser.changePathEnv(pub.path, _.config.data.url).replace(new RegExp("\\." + _.config.files.templates.extension), '.json'));
+      var draft = _.config.draft.url;
+      var publish = _.config.publish.url;
 
-				if (typeof json[_.config.meta.name] !== 'undefined' && json[_.config.meta.name] !== null && typeof json[_.config.meta.name][_.config.draft.url] !== 'undefined' && json[_.config.meta.name][_.config.draft.url] !== null) {
-					pub.filePath = json[_.config.meta.name][_.config.draft.url].latest.abeUrl;
-					truePublished.push(pub);
-				}
-			});
-			var merged = _.fileUtils.mergeFiles(drafted, truePublished);
+      var drafted = FileParser.getFilesByType(_.fileUtils.concatPath(site.path, draft), 'd');
+      var published = FileParser.getFilesByType(_.fileUtils.concatPath(site.path, publish));
 
-			site.files = _.Hooks.instance.trigger('afterGetAllFiles', merged);
+      drafted = _.Hooks.instance.trigger('beforeGetAllFilesDraft', drafted);
+      published = _.Hooks.instance.trigger('beforeGetAllFilesPublished', published);
 
-			return [site];
-		}
-	}, {
-		key: 'removeFile',
-		value: function removeFile(file, json) {
-			if (_.fileUtils.isFile(file)) {
-				_fsExtra2.default.removeSync(file);
-			}
+      drafted = FileParser.getMetas(drafted, 'draft');
+      published = FileParser.getMetas(published, 'draft');
+      var truePublished = [];
 
-			if (_.fileUtils.isFile(json)) {
-				_fsExtra2.default.removeSync(json);
-			}
-		}
-	}, {
-		key: 'unpublishFile',
-		value: function unpublishFile(filePath) {
-			var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.publish.url, filePath));
-			if (_.fileUtils.isFile(tplUrl.json.path)) {
-				var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)));
-				if (typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
-					delete json.abe_meta.publish;
-				}
+      published.forEach(function (pub) {
 
-				(0, _.save)(_.fileUtils.getFilePath(json.abe_meta.link), json.abe_meta.template, json, '', 'reject', null, 'reject').then(function (resSave) {
-					FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
-				});
-			}
-		}
-	}, {
-		key: 'deleteFile',
-		value: function deleteFile(filePath) {
-			filePath = _.Hooks.instance.trigger('beforeDeleteFile', filePath);
+        var json = FileParser.getJson(FileParser.changePathEnv(pub.path, _.config.data.url).replace(new RegExp("\\." + _.config.files.templates.extension), '.json'));
 
-			var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.draft.url, filePath));
-			var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + _.config.files.templates.extension));
-			var revisions = _.fileAttr.getFilesRevision(files, tplUrl.publish.file);
+        if (typeof json[_.config.meta.name] !== 'undefined' && json[_.config.meta.name] !== null && typeof json[_.config.meta.name][_.config.draft.url] !== 'undefined' && json[_.config.meta.name][_.config.draft.url] !== null) {
+          pub.filePath = json[_.config.meta.name][_.config.draft.url].latest.abeUrl;
+          truePublished.push(pub);
+        }
+      });
+      var merged = _.fileUtils.mergeFiles(drafted, truePublished);
 
-			Array.prototype.forEach.call(revisions, function (revision) {
-				var revisionUrl = FileParser.getFileDataFromUrl(revision.path);
-				FileParser.removeFile(revision.path, revisionUrl.json.path);
-			});
+      site.files = _.Hooks.instance.trigger('afterGetAllFiles', merged);
+      return [site];
+    }
 
-			FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
-			tplUrl.publish.path = _.Hooks.instance.trigger('afterDeleteFile', tplUrl.publish.path, tplUrl.publish.json);
-		}
-	}, {
-		key: 'deleteFileFromName',
-		value: function deleteFileFromName(filePath) {
-			var path = filePath.split('/');
-			var file = path.pop();
-			path = path.join('/');
-			try {
-				var stat = _fsExtra2.default.statSync(path);
-				if (stat) {
-					var files = FileParser.getFiles(path, true, 10, new RegExp('.' + _.config.files.templates.extension));
+    // TODO : change the signature of this method to removeFile(file)
 
-					Array.prototype.forEach.call(files, function (item) {
-						if (_.fileAttr.delete(item.name) === file) _fsExtra2.default.removeSync(item.path);
-					});
-				}
-			} catch (e) {
-				console.log(e);
-			}
-		}
-	}, {
-		key: 'getReference',
-		value: function getReference() {
-			var ref = {};
+  }, {
+    key: 'removeFile',
+    value: function removeFile(file, json) {
+      if (_.fileUtils.isFile(file)) {
+        _fsExtra2.default.removeSync(file);
+      }
 
-			var refFolder = _.fileUtils.concatPath(_.config.root, _.config.reference.url);
-			if (_.folderUtils.isFolder(refFolder)) {
-				var files = FileParser.read(_.fileUtils.cleanPath(refFolder), _.fileUtils.cleanPath(refFolder), 'files', true, /.json/);
-				Array.prototype.forEach.call(files, function (file) {
-					var name = file.filePath.replace(file.fileType, '');
-					name = name.replace(/\//g, '.');
-					var json = _fsExtra2.default.readJsonSync(file.path);
+      if (_.fileUtils.isFile(json)) {
+        _fsExtra2.default.removeSync(json);
+      }
+    }
+  }, {
+    key: 'unpublishFile',
+    value: function unpublishFile(filePath) {
+      var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.publish.url, filePath));
+      if (_.fileUtils.isFile(tplUrl.json.path)) {
+        var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)));
+        if (typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
+          delete json.abe_meta.publish;
+        }
 
-					ref[name] = json;
-				});
-			}
+        (0, _.save)(_.fileUtils.getFilePath(json.abe_meta.link), json.abe_meta.template, json, '', 'reject', null, 'reject').then(function (resSave) {
+          FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
+          _.Manager.instance.updateList();
+        });
+      }
+    }
+  }, {
+    key: 'deleteFile',
+    value: function deleteFile(filePath) {
+      filePath = _.Hooks.instance.trigger('beforeDeleteFile', filePath);
 
-			return ref;
-		}
-	}, {
-		key: 'getJson',
-		value: function getJson(path) {
-			var displayError = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+      var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.draft.url, filePath));
+      var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + _.config.files.templates.extension));
+      var revisions = _.fileAttr.getFilesRevision(files, tplUrl.publish.file);
 
-			var json = {};
-			// HOOKS beforeGetJson
-			path = _.Hooks.instance.trigger('beforeGetJson', path);
+      Array.prototype.forEach.call(revisions, function (revision) {
+        var revisionUrl = FileParser.getFileDataFromUrl(revision.path);
+        FileParser.removeFile(revision.path, revisionUrl.json.path);
+      });
 
-			try {
-				var stat = _fsExtra2.default.statSync(path);
-				if (stat) {
-					var json = _fsExtra2.default.readJsonSync(path);
-					// var references = FileParser.getReference()
-					// json[config.reference.name] = references
-				}
-			} catch (e) {}
-			// if(displayError) console.log(clc.red(`Error loading json ${path}`),  `\n${e}`)
+      FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
+      _.Manager.instance.updateList();
+      tplUrl.publish.path = _.Hooks.instance.trigger('afterDeleteFile', tplUrl.publish.path, tplUrl.publish.json);
+    }
+  }, {
+    key: 'deleteFileFromName',
+    value: function deleteFileFromName(filePath) {
+      var path = filePath.split('/');
+      var file = path.pop();
+      path = path.join('/');
+      try {
+        var stat = _fsExtra2.default.statSync(path);
+        if (stat) {
+          var files = FileParser.getFiles(path, true, 10, new RegExp('.' + _.config.files.templates.extension));
+
+          Array.prototype.forEach.call(files, function (item) {
+            if (_.fileAttr.delete(item.name) === file) _fsExtra2.default.removeSync(item.path);
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, {
+    key: 'getReference',
+    value: function getReference() {
+      var ref = {};
+
+      var refFolder = _.fileUtils.concatPath(_.config.root, _.config.reference.url);
+      if (_.folderUtils.isFolder(refFolder)) {
+        var files = FileParser.read(_.fileUtils.cleanPath(refFolder), _.fileUtils.cleanPath(refFolder), 'files', true, /.json/);
+        Array.prototype.forEach.call(files, function (file) {
+          var name = file.filePath.replace(file.fileType, '');
+          name = name.replace(/\//g, '.');
+          var json = _fsExtra2.default.readJsonSync(file.path);
+
+          ref[name] = json;
+        });
+      }
+
+      return ref;
+    }
+  }, {
+    key: 'getJson',
+    value: function getJson(path) {
+      var displayError = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+      var json = {};
+      // HOOKS beforeGetJson
+      path = _.Hooks.instance.trigger('beforeGetJson', path);
+
+      try {
+        var stat = _fsExtra2.default.statSync(path);
+        if (stat) {
+          var json = _fsExtra2.default.readJsonSync(path);
+          // var references = FileParser.getReference()
+          // json[config.reference.name] = references
+        }
+      } catch (e) {}
+      // if(displayError) console.log(clc.red(`Error loading json ${path}`),  `\n${e}`)
 
 
-			// HOOKS afterGetJson
-			json = _.Hooks.instance.trigger('afterGetJson', json);
-			return json;
-		}
-	}]);
+      // HOOKS afterGetJson
+      json = _.Hooks.instance.trigger('afterGetJson', json);
+      return json;
+    }
+  }]);
 
-	return FileParser;
+  return FileParser;
 }();
 
 exports.default = FileParser;
