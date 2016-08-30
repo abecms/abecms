@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
    value: true
 });
+var keys = [];
 var hooks = {
    /***************** express *****************/
    beforeExpress: function beforeExpress(port, abe) {
@@ -148,6 +149,9 @@ var hooks = {
    },
    afterGetJson: function afterGetJson(json, abe) {
       return json;
+   },
+   beforeUpdateJson: function beforeUpdateJson(jsonFilesArray, abe) {
+      return jsonFilesArray;
    },
 
    /***************** text *****************/

@@ -60,7 +60,7 @@ var hooks = {
     }
   },
   beforeSave: (obj, abe) => {
-     return obj
+    return obj
   },
   afterSave: (obj, abe) => {
      return obj
@@ -143,6 +143,9 @@ var hooks = {
   },
   afterGetJson: (json, abe) => {
      return json
+  },
+  beforeUpdateJson: (jsonFilesArray, abe) => {
+     return jsonFilesArray
   },
 
   /***************** text *****************/

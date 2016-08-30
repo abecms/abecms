@@ -261,8 +261,8 @@ var Sql = function () {
       var reg = /([^'"]*=[\s\S]*?}})/g;
       var matches = res.match(reg);
       if (typeof matches !== 'undefined' && matches !== null) {
-        Array.prototype.forEach.call(matches, function (matche) {
-          res = res.replace(matche, '');
+        Array.prototype.forEach.call(matches, function (match) {
+          res = res.replace(match, '');
         });
       } else {
         res = res.replace('}}', '');
@@ -302,6 +302,9 @@ var Sql = function () {
     key: 'getFromDirectory',
     value: function getFromDirectory(statement, tplPath) {
       var path = '';
+      if (typeof tplPath === 'undefined' || tplPath === null || tplPath === '') {
+        tplPath = '/';
+      }
 
       if (statement === '' || statement === '*' || statement === '/') {
         path = _.fileUtils.concatPath(_.config.root, _.config.data.url);
@@ -356,8 +359,8 @@ var Sql = function () {
       return files;
     }
   }, {
-    key: 'getDataRequest',
-    value: function getDataRequest(path, match, jsonPage) {
+    key: 'executeQuery',
+    value: function executeQuery(path, match, jsonPage) {
       var p = new _es6Promise.Promise(function (resolve, reject) {
         var res = [];
         var files = [];
@@ -513,13 +516,9 @@ var Sql = function () {
       var shouldAdd = json;
 
       if (typeof wheres !== 'undefined' && wheres !== null) {
-        var template;
-
         (function () {
           var meta = _.config.meta.name;
           if (typeof json[meta] !== 'undefined' && json[meta] !== null) {
-            template = _.FileParser.getTemplate(json[meta].template);
-
             Array.prototype.forEach.call(wheres, function (where) {
               var value;
               var compare;

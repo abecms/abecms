@@ -327,9 +327,7 @@ var Utils = function () {
 
             switch (type) {
               case 'request':
-                //console.log(obj.sourceString)
-                _.Sql.getDataRequest(tplPath, match[0], jsonPage).then(function (data) {
-                  //console.log('FIN : ' + type + "(" + data.length +") > " + ((new Date().getTime() - dateStart.getTime()) / 1000))
+                _.Sql.executeQuery(tplPath, match[0], jsonPage).then(function (data) {
                   jsonPage[sourceAttr][obj.key] = data;
                   if (!obj.editable) {
                     if (obj.maxLength) {
@@ -338,7 +336,6 @@ var Utils = function () {
                       jsonPage[obj.key] = data;
                     }
                   } else if (obj.prefill) {
-                    // console.log("msg")
                     if (obj.prefillQuantity && obj.maxLength) {
                       jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
                     } else if (obj.prefillQuantity) {
@@ -348,7 +345,6 @@ var Utils = function () {
                     } else {
                       jsonPage[obj.key] = data;
                     }
-                    // console.log(obj.key, jsonPage[obj.key])
                   }
 
                   if (typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
@@ -389,17 +385,6 @@ var Utils = function () {
                       jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length - 1].link;
                     }
                     jsonPage = _.Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj);
-                  }
-
-                  if (typeof jsonPage[obj.key] !== 'undefined' && jsonPage[obj.key] !== null) {
-                    var newJsonValue = [];
-                    Array.prototype.forEach.call(jsonPage[obj.key], function (oldValue) {
-                      Array.prototype.forEach.call(jsonPage[sourceAttr][obj.key], function (newValue) {
-                        if (typeof oldValue[_.config.meta.name] !== 'undefined' && oldValue[_.config.meta.name] !== null && oldValue[_.config.meta.name].link === newValue[_.config.meta.name].link) {
-                          newJsonValue.push(newValue);
-                        }
-                      });
-                    });
                   }
 
                   _.log.duration(type + " > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000);
