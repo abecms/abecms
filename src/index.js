@@ -329,6 +329,28 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 			});
 
 		break
+		case 'update-json':
+			var dir = process.cwd();
+			if(process.env.ROOT) {
+				dir = process.env.ROOT.replace(/\/$/, '')
+			}
+
+  		const updateJson = spawn('node', ['--harmony', '--debug', __dirname + '/cli/process/update-json.js', 'ABE_WEBSITE=' + dir]);
+
+			updateJson.stdout.on('data', (data) => {
+			  console.log(clc.cyan('stdout'), data.toString())
+			});
+
+			updateJson.stderr.on('data', (data) => {
+			  console.log(clc.red('stderr'), data.toString())
+			});
+
+			updateJson.on('close', (code) => {
+				console.log(clc.cyan(`child process exited with code`), code);
+				process.exit(0)
+			});
+
+		break
 		case 'install':
 			var dir = process.cwd();
 			var plugin = userArgs[1]

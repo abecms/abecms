@@ -12,6 +12,8 @@ Array.prototype.forEach.call(process.argv, function (item) {
   }
 });
 
+pConfig.TYPE = pConfig.TYPE || 'publish';
+
 // var logsPub = ""
 if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   if (pConfig.ABE_WEBSITE) _cli.config.set({ root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/' });
@@ -64,7 +66,10 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
           var d = (new Date().getTime() - dateStart.getTime()) / 1000;
           // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
           console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path.replace(_cli.config.root, '') + ' < ' + jsonPath);
-          (0, _cli.save)(pub.path, json.abe_meta.template, null, '', 'publish', null, 'publish', true).then(function () {
+          // resolve()
+          // return
+          console.log(pConfig);
+          (0, _cli.save)(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
             // logsPub += 'successfully update > ' + pub.path .replace(config.root, '')
             // console.log('successfully update > ' + pub.path .replace(config.root, ''))
             resolve();
