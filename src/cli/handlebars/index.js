@@ -17,7 +17,8 @@ import notEmpty 	from './utils/notEmpty'
 import printJson 	from './utils/printJson'
 import testObj 		from './utils/testObj'
 import translate 	from './utils/translate'
-import times 	from './utils/times'
+import times 			from './utils/times'
+import truncate 	from './utils/truncate'
 
 /* Handlebar abe */
 import abeEngine 						from './abe/abeEngine'
@@ -48,7 +49,8 @@ Handlebars.registerHelper('notEmpty', 	notEmpty)
 Handlebars.registerHelper('printJson', 	printJson)
 Handlebars.registerHelper('testObj', 		testObj)
 Handlebars.registerHelper('i18nAbe', 		translate)
-Handlebars.registerHelper('times', 		times)
+Handlebars.registerHelper('times', 			times)
+Handlebars.registerHelper('truncate', 	truncate)
 
 /* Register abe */
 Handlebars.registerHelper('abeImport', 	abeImport)
@@ -67,6 +69,8 @@ export {
 	,cleanTab
 	,ifCond
 	,ifIn
+	,isTrue
+	,truncate
 	,math
 	,moduloIf
 	,notEmpty

@@ -39,7 +39,6 @@ class Builder {
           .then(() => {
             var page = new Page(json.abe_meta.link, text, json, true)
             saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
-            console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
             if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
             console.error(e)
@@ -54,7 +53,6 @@ class Builder {
           .then(() => {
             var page = new Page(json.abe_meta.link, text, json, true)
             saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
-            console.log(fileUtils.concatPath(root, dest + json.abe_meta.link))
             if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
             console.error(e)
