@@ -50,6 +50,26 @@ export default class Reload {
     return script
   }
 
+  inject(str) { 
+    var iframe = document.querySelector('#page-template') 
+    var iframeBody = IframeDocument('#page-template').body 
+    var scrollTop = iframeBody.scrollTop 
+ 
+    var doc = iframe.contentWindow.document; 
+    str = str.replace(/<\/head>/, '<base href="/" /></head>') 
+    doc.open(); 
+    doc.write(str); 
+    doc.close(); 
+     
+    setTimeout(function () { 
+      var iframeDoc = IframeDocument('#page-template') 
+      if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
+        && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
+        iframeDoc.body.scrollTop = scrollTop 
+      } 
+    }, 1000) 
+  }
+  
   reload() {
     var iframe = document.querySelector('#page-template')
     var iframeBody = IframeDocument('#page-template').body
@@ -69,20 +89,7 @@ export default class Reload {
     },
     (code, responseText, request) => {
       if(typeof responseText !== 'undefined' && responseText !== null) {
-        var str = responseText
-        var doc = iframe.contentWindow.document;
-        str = str.replace(/<\/head>/, '<base href="/" /></head>')
-        doc.open();
-        doc.write(str);
-        doc.close();
-        
-        setTimeout(function () {
-          var iframeDoc = IframeDocument('#page-template')
-          if(typeof iframeDoc !== 'undefined' && iframeDoc !== null
-            && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) {
-            iframeDoc.body.scrollTop = scrollTop
-          }
-        }, 1000)
+        this.inject(responseText)
       }
         
       return

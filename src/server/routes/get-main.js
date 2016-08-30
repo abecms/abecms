@@ -151,7 +151,16 @@ var route = function(req, res, next) {
       _filePath = '/' + _filePath.replace(/^\/+/, '')
     }
 
+    var pageHtml = '' 
+    if(typeof _json !== 'undefined' && _json !== null 
+      && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) { 
+      var text = getTemplate(_json.abe_meta.template) 
+      var page = new Page(req.params[0], text, _json, false) 
+      pageHtml = page.html.replace(/"/g, '\"').replace(/'/g, "\'") 
+    } 
+
     var EditorVariables = {
+      pageHtml: pageHtml,
       isHome: isHome,
       abeUrl: '/abe/',
       test: JSON.stringify(locale),
