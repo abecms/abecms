@@ -1,4 +1,3 @@
-var keys = [];
 var hooks = {
   /***************** express *****************/
   beforeExpress: (port, abe) => {
