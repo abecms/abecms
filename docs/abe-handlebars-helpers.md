@@ -9,6 +9,34 @@
 ## ifCond
 ## ifIn
 
+## truncate
+
+###Example
+
+```html
+{{truncate 'my Text which is quite long' 10}}
+```
+
+###Description
+
+This helper remove html tags and truncate it.
+
+###Parameters
+```html
+{{truncate text len}}
+```
+
+> __text__ = The text to truncate
+> 
+> __len__ = the length of the text to keep
+
+
+###Usage
+The text to pass can of course be a handlebars variable
+```html
+{{truncate nbVariable 10}}
+```
+
 ## isTrue
 
 ###Example
