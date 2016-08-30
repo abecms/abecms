@@ -132,10 +132,9 @@ if (_cli.config.security === true) {
       sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
       reportUri: '/report-violation',
       objectSrc: [] },
-    // An empty array allows nothing through
     reportOnly: false, // Set to true if you only want browsers to report errors, not block them
     setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
-    disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.   
+    disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
     browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
   }));
 }

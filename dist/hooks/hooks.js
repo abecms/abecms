@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
    value: true
 });
-var keys = [];
 var hooks = {
    /***************** express *****************/
    beforeExpress: function beforeExpress(port, abe) {

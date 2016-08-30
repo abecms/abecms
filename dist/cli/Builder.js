@@ -42,7 +42,6 @@ var Builder = function Builder(root, folder, dest, flow) {
       _.Util.getDataList(_.fileUtils.removeLast(json.abe_meta.link), text, json).then(function () {
         var page = new _.Page(json.abe_meta.link, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
-        console.log(_.fileUtils.concatPath(root, dest + json.abe_meta.link));
         if (files[index + 1]) build(index + 1);
       }).catch(function (e) {
         console.error(e);
@@ -55,7 +54,6 @@ var Builder = function Builder(root, folder, dest, flow) {
       _.Util.getDataList(_.fileUtils.removeLast(json.abe_meta.link), text, json).then(function () {
         var page = new _.Page(json.abe_meta.link, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
-        console.log(_.fileUtils.concatPath(root, dest + json.abe_meta.link));
         if (files[index + 1]) build(index + 1);
       }).catch(function (e) {
         console.error(e);
