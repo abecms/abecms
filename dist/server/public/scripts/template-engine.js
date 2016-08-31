@@ -87,9 +87,33 @@ var Engine = function () {
   }
 
   _createClass(Engine, [{
-    key: 'loadIframe',
-    value: function loadIframe() {
-      _EditorReload2.default.instance.reload();
+    key: 'inject',
+    value: function inject() {
+      var findComments = function findComments(el) {
+        var arr = [];
+        for (var i = 0; i < el.childNodes.length; i++) {
+          var node = el.childNodes[i];
+          if (node.nodeType === 8) {
+            arr.push(node);
+          } else {
+            arr.push.apply(arr, findComments(node));
+          }
+        }
+        return arr;
+      };
+
+      var commentNodes = findComments(document);
+
+      Array.prototype.forEach.call(commentNodes, function (comment) {
+        if (comment.nodeValue.indexOf('[pageHTML]') > -1) {
+          var base = comment.data;
+          if (typeof base !== 'undefined' && base !== null) {
+            base = base.replace(/\[pageHTML\]/g, '');
+            base = base.replace(/-- >/g, '-->');
+            _EditorReload2.default.instance.inject(base);
+          }
+        }
+      });
     }
   }, {
     key: '_bindEvents',
@@ -139,5 +163,5 @@ window.abe = {
 };
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  if (document.querySelector('#page-template')) engine.loadIframe();
+  if (document.querySelector('#page-template')) engine.inject();
 });
