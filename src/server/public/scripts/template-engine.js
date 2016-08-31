@@ -67,7 +67,7 @@ class Engine {
         var base = comment.data 
         if(typeof base !== 'undefined' && base !== null) { 
           base = base.replace(/\[pageHTML\]/g, '') 
-          base = base.replace(/-- >/g, '-->') 
+          base = base.replace(/<ABE!--/g, '<!--',).replace(/--ABE>/g, '-->') 
           EditorReload.instance.inject(base) 
         } 
       } 
