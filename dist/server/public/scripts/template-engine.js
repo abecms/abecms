@@ -109,7 +109,7 @@ var Engine = function () {
           var base = comment.data;
           if (typeof base !== 'undefined' && base !== null) {
             base = base.replace(/\[pageHTML\]/g, '');
-            base = base.replace(/-- >/g, '-->');
+            base = base.replace(/<ABE!--/g, '<!--').replace(/--ABE>/g, '-->');
             _EditorReload2.default.instance.inject(base);
           }
         }
