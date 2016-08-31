@@ -70,8 +70,30 @@ var Reload = function () {
       return script;
     }
   }, {
+    key: 'inject',
+    value: function inject(str) {
+      var iframe = document.querySelector('#page-template');
+      var iframeBody = (0, _iframe.IframeDocument)('#page-template').body;
+      var scrollTop = iframeBody.scrollTop;
+
+      var doc = iframe.contentWindow.document;
+      str = str.replace(/<\/head>/, '<base href="/" /></head>');
+      doc.open();
+      doc.write(str);
+      doc.close();
+
+      setTimeout(function () {
+        var iframeDoc = (0, _iframe.IframeDocument)('#page-template');
+        if (typeof iframeDoc !== 'undefined' && iframeDoc !== null && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) {
+          iframeDoc.body.scrollTop = scrollTop;
+        }
+      }, 1000);
+    }
+  }, {
     key: 'reload',
     value: function reload() {
+      var _this = this;
+
       var iframe = document.querySelector('#page-template');
       var iframeBody = (0, _iframe.IframeDocument)('#page-template').body;
       var scrollTop = iframeBody.scrollTop;
@@ -88,19 +110,7 @@ var Reload = function () {
         method: 'post'
       }, function (code, responseText, request) {
         if (typeof responseText !== 'undefined' && responseText !== null) {
-          var str = responseText;
-          var doc = iframe.contentWindow.document;
-          str = str.replace(/<\/head>/, '<base href="/" /></head>');
-          doc.open();
-          doc.write(str);
-          doc.close();
-
-          setTimeout(function () {
-            var iframeDoc = (0, _iframe.IframeDocument)('#page-template');
-            if (typeof iframeDoc !== 'undefined' && iframeDoc !== null && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) {
-              iframeDoc.body.scrollTop = scrollTop;
-            }
-          }, 1000);
+          _this.inject(responseText);
         }
 
         return;
