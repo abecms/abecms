@@ -325,17 +325,28 @@ export default class Sql {
     return files
   }
 
+  static execQuery(path, match, jsonPage) {
+    var res = []
+    var files = []
+    var request = Sql.handleSqlRequest(getAttr(match, 'source'), jsonPage)
+
+    files = Sql.executeFromClause(request.from, path)
+    files = Sql.executeOrderByClause(files, request.orderby)
+    res = Sql.executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
+
+    return res
+  }
+
+  static executeQuerySync(path, match, jsonPage) {
+    return Sql.execQuery(path, match, jsonPage)
+  }
+
   static executeQuery(path, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      var res = []
-      var files = []
-      var request = Sql.handleSqlRequest(getAttr(match, 'source'), jsonPage)
-
-      files = Sql.executeFromClause(request.from, path)
-      files = Sql.executeOrderByClause(files, request.orderby)
-      res = Sql.executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
-
+      var res = Sql.execQuery(path, match, jsonPage)
       resolve(res)
+    }).catch(function(e) {
+      console.error(e)
     })
 
     return p
