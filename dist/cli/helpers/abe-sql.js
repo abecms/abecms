@@ -359,18 +359,31 @@ var Sql = function () {
       return files;
     }
   }, {
+    key: 'execQuery',
+    value: function execQuery(path, match, jsonPage) {
+      var res = [];
+      var files = [];
+      var request = Sql.handleSqlRequest((0, _.getAttr)(match, 'source'), jsonPage);
+
+      files = Sql.executeFromClause(request.from, path);
+      files = Sql.executeOrderByClause(files, request.orderby);
+      res = Sql.executeWhereClause(files, request.where, request.limit, request.columns, jsonPage);
+
+      return res;
+    }
+  }, {
+    key: 'executeQuerySync',
+    value: function executeQuerySync(path, match, jsonPage) {
+      return Sql.execQuery(path, match, jsonPage);
+    }
+  }, {
     key: 'executeQuery',
     value: function executeQuery(path, match, jsonPage) {
       var p = new _es6Promise.Promise(function (resolve, reject) {
-        var res = [];
-        var files = [];
-        var request = Sql.handleSqlRequest((0, _.getAttr)(match, 'source'), jsonPage);
-
-        files = Sql.executeFromClause(request.from, path);
-        files = Sql.executeOrderByClause(files, request.orderby);
-        res = Sql.executeWhereClause(files, request.where, request.limit, request.columns, jsonPage);
-
+        var res = Sql.execQuery(path, match, jsonPage);
         resolve(res);
+      }).catch(function (e) {
+        console.error(e);
       });
 
       return p;
