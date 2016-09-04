@@ -156,20 +156,6 @@ var hooks = {
      return text
   },
 
-  /***************** Pagingate *****************/
-  afterSplittedPagination: (jsonPart, json, abe) => {
-     return jsonPart
-  },
-  beforePaginateEditor: (json, obj, abe) => {
-     return json
-  },
-  beforePaginateHtml: (html, index, abe) => {
-     return html
-  },
-  beforeSavePaginate: (obj, abe, json) => {
-     return obj
-  },
-
   /***************** Page *****************/
   afterAddSourcePage: (json, text, abe) => {
      return json

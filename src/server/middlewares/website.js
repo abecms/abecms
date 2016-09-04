@@ -29,7 +29,6 @@ import {
   cleanSlug
 } from '../../cli'
 
-import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 var middleware = function(req, res, next) {

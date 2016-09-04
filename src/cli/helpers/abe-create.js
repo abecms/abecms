@@ -4,7 +4,6 @@ import {
   Util,
   cleanSlug,
   getTemplate,
-  removeDuplicateAttr,
   save,
   config,
   log,

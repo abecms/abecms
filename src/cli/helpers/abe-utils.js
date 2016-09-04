@@ -332,48 +332,6 @@ export default class Utils {
                     }
                   }
 
-                  if(typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
-                    obj.paginate = parseInt(obj.paginate)
-                    if(typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
-                      jsonPage.abe_meta.paginate = {}
-                    }
-                    if(typeof jsonPage.abe_meta.paginate[obj.key] === 'undefined' || jsonPage.abe_meta.paginate[obj.key] === null) {
-                      jsonPage.abe_meta.paginate[obj.key] = {}
-                    }
-
-                    var linksSize = Math.ceil(data.length / obj.paginate)
-
-                    if (linksSize > 0) {
-                      jsonPage.abe_meta.paginate[obj.key].size = obj.paginate
-                      jsonPage.abe_meta.paginate[obj.key].current = 1
-                      jsonPage.abe_meta.paginate[obj.key].links = []
-
-                      if(typeof jsonPage.abe_meta.paginate[obj.key].prev !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].prev !== null) {
-                        delete jsonPage.abe_meta.paginate[obj.key].prev
-                      }
-                      if(typeof jsonPage.abe_meta.paginate[obj.key].first === 'undefined' || jsonPage.abe_meta.paginate[obj.key].first === null) {
-                        jsonPage.abe_meta.paginate[obj.key].first = jsonPage.abe_meta.link
-                      }
-                      for (var i = 0; i <= linksSize; i++) {
-                        var link = jsonPage.abe_meta.link
-                        if (i > 0) {
-                          link = fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + config.files.templates.extension
-                        }
-                        jsonPage.abe_meta.paginate[obj.key].links.push({
-                          link: link,
-                          index: (i + 1)
-                        })
-                      }
-                      if((typeof jsonPage.abe_meta.paginate[obj.key].next === 'undefined' || jsonPage.abe_meta.paginate[obj.key].next === null)
-                        && (typeof jsonPage.abe_meta.paginate[obj.key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1] !== null)
-                        && (typeof jsonPage.abe_meta.paginate[obj.key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1].link !== null)) {
-                        jsonPage.abe_meta.paginate[obj.key].next = jsonPage.abe_meta.paginate[obj.key].links[1].link
-                      }
-                      jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length-1].link
-                    }
-                    jsonPage = Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj)
-                  }
-
                   log.duration(type + " > " + logTime, ((new Date().getTime() - dateStart.getTime()) / 1000))
 
                   resolveSource()
@@ -525,7 +483,6 @@ export default class Utils {
         ,order: 0
         ,required: false
         ,editable: true
-        ,paginate: null
         ,visible: true
       }
 
@@ -552,7 +509,6 @@ export default class Utils {
         ,required: getAttr(str, 'required')
         ,visible: getAttr(str, 'visible')
         ,editable: getAttr(str, 'editable')
-        ,paginate: getAttr(str, 'paginate')
       }
     obj = extend(true, defaultValues, obj)
 

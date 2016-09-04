@@ -28,6 +28,7 @@ import {
 } from './handlebars/index'
 
 import Manager from './models/Manager'
+import Page from './models/Page'
 import Handlebars from 'handlebars'
 import {getAttr, getEnclosingTags, escapeTextToRegex} from './helpers/regex-helper'
 import slugify from './helpers/slugify'
@@ -47,7 +48,6 @@ import abeDuplicate from './helpers/abe-duplicate'
 import deep_value from './helpers/abe-deep-val'
 import Sql from './helpers/abe-sql'
 import abeProcess from './helpers/abe-process'
-import Page from './controllers/Page'
 import {save, checkRequired, saveJson} from './controllers/Save'
 import Hooks from './helpers/abe-hooks'
 import Plugins from './helpers/abe-plugins'
@@ -97,7 +97,6 @@ export {
 	,getTemplate
 	,log
 	,removeDuplicateAttr
-	,Page
 	,save
 	,Hooks
 	,Plugins
@@ -107,6 +106,7 @@ export {
 	,dateSlug
 	,dateUnslug
 	,Manager
+	,Page
 }
 
 export {compileAbe as compileAbe}

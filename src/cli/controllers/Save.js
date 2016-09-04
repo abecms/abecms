@@ -114,39 +114,21 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       text = getTemplate(fullTpl)
     }
 
-    /**
-     * For paginate
-     */
-    var listRegSource = /({{abe.*type=[\'|\"]data.*}})/g
-      ,matchSource
-      ,paginated = []
-
-    while (matchSource = listRegSource.exec(text)) {
-      var objSource = Util.getAllAttributes(matchSource[0], json)
-      if(typeof objSource.paginate !== 'undefined' && objSource.paginate !== null && objSource.paginate !== '') {
-        paginated.push({
-          start: objSource.paginateStart || 0,
-          key: objSource.key,
-          size: parseInt(objSource.paginate)
-        })
-      }
-    }
-
     Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
         .then(() => {
 
-        json = Hooks.instance.trigger('afterGetDataListOnSave', json)
-        for(var prop in json){
-          if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
-            var valuesAreEmplty = true
-            json[prop].forEach(function (element) {
-              for(var p in element) {
-                if(element[p] !== '') valuesAreEmplty = false
-              }
-            })
-            if(valuesAreEmplty) delete json[prop];
+          json = Hooks.instance.trigger('afterGetDataListOnSave', json)
+          for(var prop in json){
+            if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
+              var valuesAreEmplty = true
+              json[prop].forEach(function (element) {
+                for(var p in element) {
+                  if(element[p] !== '') valuesAreEmplty = false
+                }
+              })
+              if(valuesAreEmplty) delete json[prop];
+            }
           }
-        }
 
           var obj = {
             publishAll:publishAll,
@@ -169,18 +151,8 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
           text = Util.removeDataList(text)
 
-          var res = {}
-
-          if (paginated.length > 0) {
-            Array.prototype.forEach.call(paginated, (page) => {
-              if(typeof page.key !== 'undefined' && page.key !== null) {
-                res = saveJsonAndHtml(tplUrl.publish.path, obj, text, type, page.key, page.size)
-              }
-            })
-          }else {
-            res = saveJsonAndHtml(tplUrl.publish.path, obj, text, type)
-          }
-
+          var res = saveJsonAndHtml(tplUrl.publish.path, obj, text, type)
+          
           obj = Hooks.instance.trigger('afterSave', obj)
           
           FileParser.copySiteAssets()
@@ -209,108 +181,12 @@ function splitArray(ar, chunkSize) {
   )
 }
 
-export function saveJsonAndHtml(tplPath, obj, html, type, paginateKey, paginateSize) {
-  var page = ''
-  if(type === 'publish' && typeof paginateKey !== 'undefined' && paginateKey !== null) {
-    var jsonPart = splitArray(obj.json.content[paginateKey], paginateSize)
-    jsonPart = Hooks.instance.trigger('afterSplittedPagination', jsonPart, obj.json.content)
+export function saveJsonAndHtml(tplPath, obj, html, type) {
+  
+  var page = new Page(tplPath, html, obj.json.content, true)
 
-    return {}
-    var pageToSave = []
-    var paginateLink = []
-
-    var currentUrl = fileUtils.removeExtension(obj.html.path)
-    currentUrl = currentUrl.replace(config.root, '')
-    currentUrl = currentUrl.replace(config.publish.url, '')
-
-    for(var k = 1, length3 = jsonPart.length; k <= length3; k++) {
-      var newJson = JSON.parse(JSON.stringify(obj.json.content))
-      newJson[paginateKey] = jsonPart[k-1]
-      var current = k
-      var prev
-      var next
-      if (k !== 1) {
-        prev = k-1
-      }
-      if (k !== length3) {
-        next = k+1
-      }
-
-      var paginatePath = ''
-      if (k === 1) {
-        paginatePath = obj.html.path
-      }else {
-        paginatePath = fileUtils.removeExtension(obj.html.path) + '-' + k + '.' + config.files.templates.extension
-      }
-
-      var link = paginatePath.replace(config.root, '')
-          link = link.replace(config.publish.url, '')
-
-      paginateLink.push({
-        link: link,
-        index: k
-      })
-      var currentJson = {
-        size: paginateSize,
-        path: paginatePath,
-        current: k,
-        json: newJson
-      }
-      if (prev > 0) {
-        currentJson.prev = currentUrl + '-' + (k-1) + '.' + config.files.templates.extension
-      }
-      if (k < length3) {
-        currentJson.next = currentUrl + '-' + (next) + '.' + config.files.templates.extension
-      }
-      currentJson.first = currentUrl + '.' + config.files.templates.extension
-      currentJson.last = currentUrl + '-' + length3 + '.' + config.files.templates.extension
-
-      pageToSave.push(currentJson)
-    }
-
-    Array.prototype.forEach.call(pageToSave, (pSave) => {
-      var jsonToSave = JSON.parse(JSON.stringify(pSave.json))
-      if(typeof jsonToSave.abe_meta.paginate === 'undefined' || jsonToSave.abe_meta.paginate === null) {
-        jsonToSave.abe_meta.paginate = {}
-      }
-      jsonToSave.abe_meta.paginate[paginateKey] = {
-        size: pSave.size,
-        current: pSave.current,
-        links: paginateLink
-      }
-      if(typeof (pSave.prev) !== 'undefined' && (pSave.prev) !== null) {
-        jsonToSave.abe_meta.paginate[paginateKey].prev = pSave.prev
-      }
-      if(typeof (pSave.next) !== 'undefined' && (pSave.next) !== null) {
-        jsonToSave.abe_meta.paginate[paginateKey].next = pSave.next
-      }
-      if(typeof (pSave.first) !== 'undefined' && (pSave.first) !== null) {
-        jsonToSave.abe_meta.paginate[paginateKey].first = pSave.first
-      }
-      if(typeof (pSave.last) !== 'undefined' && (pSave.last) !== null) {
-        jsonToSave.abe_meta.paginate[paginateKey].last = pSave.last
-      }
-
-      var paginateHtml = Hooks.instance.trigger('beforePaginateHtml', html, pSave.current)
-      page = new Page(tplPath, paginateHtml, jsonToSave, true)
-      saveHtml(pSave.path, page.html)
-    })
-
-    if(typeof obj.json.content.abe_meta.paginate === 'undefined' || obj.json.content.abe_meta.paginate === null) {
-        obj.json.content.abe_meta.paginate = {
-          links: paginateLink,
-          size: paginateSize
-        }
-      }
-  }else {
-    page = new Page(tplPath, html, obj.json.content, true)
-
-    saveHtml(obj.html.path, page.html)
-  }
+  saveHtml(obj.html.path, page.html)
   saveJson(obj.json.path, obj.json.content)
-  // page = new Page(tplPath, html, json, true)
-
-  // saveHtml(obj.html, page.html)
 
   return {
     json: obj.json.content,
