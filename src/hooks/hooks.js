@@ -161,17 +161,7 @@ var hooks = {
      return json
   },
 
-  beforePageText: (text, json, Handlebars, abe) => {
-     return text
-  },
-  afterPageText: (text, json, Handlebars, abe) => {
-     return text
-  },
-
   beforePageJson: (json, abe) => {
-     return json
-  },
-  afterPageJson: (json, abe) => {
      return json
   }
 }

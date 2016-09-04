@@ -36,7 +36,7 @@ class Builder {
         
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
-            var page = new Page(json.abe_meta.link, text, json, true)
+            var page = new Page(json.abe_meta.template, text, json, true)
             saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
             if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
@@ -50,7 +50,7 @@ class Builder {
 
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
-            var page = new Page(json.abe_meta.link, text, json, true)
+            var page = new Page(json.abe_meta.template, text, json, true)
             saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
             if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
