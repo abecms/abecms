@@ -1,37 +1,12 @@
-import express from 'express'
-import fs from 'fs'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
-import {minify} from 'html-minifier'
-import extend from 'extend'
-import * as abe from '../../cli'
-import xss from 'xss'
-import pkg from '../../../package'
 
 import {
-  fileAttr,
-  save,
-  getAttr, getEnclosingTags, escapeTextToRegex,
-  Util,
-  FileParser,
   fileUtils,
-  folderUtils,
   config,
-  cli,
-  log,
-  Page,
-  Locales,
-  abeProcess,
-  getTemplate,
   Hooks,
-  Plugins,
-  Handlebars,
   cleanSlug
 } from '../../cli'
-
-import {editor} from '../controllers/editor'
-import locale from '../helpers/abe-locale'
-import pageHelper from '../helpers/page'
 
 var route = function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
@@ -80,12 +55,11 @@ var route = function(req, res, next){
       ext = ext[ext.length - 1]
       var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
       var cleanFileName = cleanSlug(filename).replace(`.${config.files.templates.extension}`, `${randID}.${ext}`)
-      // var sfStat = fs.statSync(abe.fileUtils.concatPath(abe.config.root, abe.config.publish.url, path));
 
       filePath = fileUtils.concatPath(folderFilePath, cleanFileName)
       var createImage = function () {
         try{
-          var sfStat = fs.statSync(filePath)
+          var sfStat = fse.statSync(filePath)
 
           if(sfStat){
             var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg)/)
@@ -96,7 +70,7 @@ var route = function(req, res, next){
         }
         catch(e){
           resp['filePath'] = fileUtils.concatPath(folderWebPath, cleanFileName)
-          fstream = fs.createWriteStream(filePath)
+          fstream = fse.createWriteStream(filePath)
           for (var i = 0; i < file.fileRead.length; i++) {
             fstream.write(file.fileRead[i])
           }
@@ -119,7 +93,7 @@ var route = function(req, res, next){
         return
       }
       try{
-        var openFile = fs.readFileSync(filePath).toString()
+        var openFile = fse.readFileSync(filePath).toString()
         if(openFile === '') throw new Error('')
         clearInterval(interval)
         resp = Hooks.instance.trigger('afterSaveImage', resp, req)

@@ -23,7 +23,6 @@ class Builder {
 
     if(flow === 'publish') {
       files = FileParser.getFiles(fileUtils.concatPath(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
-      // files = FileParser.getMetas(files, 'draft')
     }
 
     var build = function (index) {
