@@ -31,7 +31,9 @@ import {
 import {
   fileAttr,
   save,
-  getAttr, getEnclosingTags, escapeTextToRegex,
+  getAttr, 
+  getEnclosingTags, 
+  escapeTextToRegex,
   Util,
   FileParser,
   fileUtils,

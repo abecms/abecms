@@ -68,7 +68,8 @@ var config = {
     templates: {
       extension: 'html',
       assets: '_files',
-      check: /\.hbs|\.shtml|\.html|\.htm/
+      check: /\.hbs|\.shtml|\.html|\.htm/,
+      precompile: false
     }
   },
   log: {

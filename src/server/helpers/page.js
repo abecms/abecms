@@ -1,5 +1,6 @@
 import {
   Util,
+  fileAttr,
   FileParser,
   fileUtils,
   config,
@@ -9,7 +10,6 @@ import {
 } from '../../cli'
 
 var page = function (req, res, next) {
-  var templatePath = fileUtils.getTemplatePath(req.params[0])
   var filePath = cleanSlug(req.query.filePath)
   filePath = fileUtils.getFilePath(filePath)
   var html = (req.query.html) ? true : false
@@ -45,14 +45,13 @@ var page = function (req, res, next) {
     }
     
     let meta = config.meta.name
-    let extension = config.files.templates.extension
 
     var template = ''
     if(typeof json[meta] !== 'undefined' && json[meta] !== null && json[meta] !== ''
       && json[meta].template !== 'undefined' && json[meta].template !== null && json[meta].template !== '') {
       template = json[meta].template
     }else {
-      template = fileUtils.getTemplatePath(req.params[0])
+      template = req.params[0]
     }
     var text = getTemplate(template)
 
@@ -60,7 +59,7 @@ var page = function (req, res, next) {
 
       Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
         .then(() => {
-          var page = new Page(templatePath, text, json, html)
+          var page = new Page(template, text, json, html)
           res.set('Content-Type', 'text/html')
           res.send(page.html)
         }).catch(function(e) {
@@ -68,7 +67,7 @@ var page = function (req, res, next) {
         })
     }else {
       text = Util.removeDataList(text)
-      var page = new Page(templatePath, text, json, html)
+      var page = new Page(template, text, json, html)
       res.set('Content-Type', 'text/html')
       res.send(page.html)
     }
