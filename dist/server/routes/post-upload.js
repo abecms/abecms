@@ -4,14 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _express = require('express');
-
-var _express2 = _interopRequireDefault(_express);
-
-var _fs = require('fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
 var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
@@ -20,35 +12,7 @@ var _mkdirp = require('mkdirp');
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
-var _htmlMinifier = require('html-minifier');
-
-var _extend = require('extend');
-
-var _extend2 = _interopRequireDefault(_extend);
-
 var _cli = require('../../cli');
-
-var abe = _interopRequireWildcard(_cli);
-
-var _xss = require('xss');
-
-var _xss2 = _interopRequireDefault(_xss);
-
-var _package = require('../../../package');
-
-var _package2 = _interopRequireDefault(_package);
-
-var _editor = require('../controllers/editor');
-
-var _abeLocale = require('../helpers/abe-locale');
-
-var _abeLocale2 = _interopRequireDefault(_abeLocale);
-
-var _page = require('../helpers/page');
-
-var _page2 = _interopRequireDefault(_page);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -99,12 +63,11 @@ var route = function route(req, res, next) {
       ext = ext[ext.length - 1];
       var randID = '-' + ((1 + Math.random()) * 0x100000 | 0).toString(16).substring(2);
       var cleanFileName = (0, _cli.cleanSlug)(filename).replace('.' + _cli.config.files.templates.extension, randID + '.' + ext);
-      // var sfStat = fs.statSync(abe.fileUtils.concatPath(abe.config.root, abe.config.publish.url, path));
 
       filePath = _cli.fileUtils.concatPath(folderFilePath, cleanFileName);
       var createImage = function createImage() {
         try {
-          var sfStat = _fs2.default.statSync(filePath);
+          var sfStat = _fsExtra2.default.statSync(filePath);
 
           if (sfStat) {
             var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg)/);
@@ -113,7 +76,7 @@ var route = function route(req, res, next) {
           }
         } catch (e) {
           resp['filePath'] = _cli.fileUtils.concatPath(folderWebPath, cleanFileName);
-          fstream = _fs2.default.createWriteStream(filePath);
+          fstream = _fsExtra2.default.createWriteStream(filePath);
           for (var i = 0; i < file.fileRead.length; i++) {
             fstream.write(file.fileRead[i]);
           }
@@ -136,7 +99,7 @@ var route = function route(req, res, next) {
         return;
       }
       try {
-        var openFile = _fs2.default.readFileSync(filePath).toString();
+        var openFile = _fsExtra2.default.readFileSync(filePath).toString();
         if (openFile === '') throw new Error('');
         clearInterval(interval);
         resp = _cli.Hooks.instance.trigger('afterSaveImage', resp, req);

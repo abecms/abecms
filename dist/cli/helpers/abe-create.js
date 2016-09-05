@@ -26,7 +26,7 @@ var create = function create(template, path, name, req) {
         var tpl = templatePath;
         var text = (0, _cli.getTemplate)(tpl);
         if (duplicate) {
-          json = (0, _cli.removeDuplicateAttr)(text, json);
+          json = removeDuplicateAttr(text, json);
         }
         text = _cli.Util.removeDataList(text);
         var resHook = _cli.Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text);
