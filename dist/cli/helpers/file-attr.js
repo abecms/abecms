@@ -31,7 +31,6 @@ var Attr = function () {
    * @param  {String} str string to work with
    * @return {void}
    */
-
   function Attr(str) {
     _classCallCheck(this, Attr);
 
