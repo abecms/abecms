@@ -347,46 +347,6 @@ var Utils = function () {
                     }
                   }
 
-                  if (typeof obj.paginate !== 'undefined' && obj.paginate !== null && obj.paginate !== '') {
-                    obj.paginate = parseInt(obj.paginate);
-                    if (typeof jsonPage.abe_meta.paginate === 'undefined' || jsonPage.abe_meta.paginate === null) {
-                      jsonPage.abe_meta.paginate = {};
-                    }
-                    if (typeof jsonPage.abe_meta.paginate[obj.key] === 'undefined' || jsonPage.abe_meta.paginate[obj.key] === null) {
-                      jsonPage.abe_meta.paginate[obj.key] = {};
-                    }
-
-                    var linksSize = Math.ceil(data.length / obj.paginate);
-
-                    if (linksSize > 0) {
-                      jsonPage.abe_meta.paginate[obj.key].size = obj.paginate;
-                      jsonPage.abe_meta.paginate[obj.key].current = 1;
-                      jsonPage.abe_meta.paginate[obj.key].links = [];
-
-                      if (typeof jsonPage.abe_meta.paginate[obj.key].prev !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].prev !== null) {
-                        delete jsonPage.abe_meta.paginate[obj.key].prev;
-                      }
-                      if (typeof jsonPage.abe_meta.paginate[obj.key].first === 'undefined' || jsonPage.abe_meta.paginate[obj.key].first === null) {
-                        jsonPage.abe_meta.paginate[obj.key].first = jsonPage.abe_meta.link;
-                      }
-                      for (var i = 0; i <= linksSize; i++) {
-                        var link = jsonPage.abe_meta.link;
-                        if (i > 0) {
-                          link = _.fileUtils.removeExtension(link) + '-' + (i + 1) + '.' + _.config.files.templates.extension;
-                        }
-                        jsonPage.abe_meta.paginate[obj.key].links.push({
-                          link: link,
-                          index: i + 1
-                        });
-                      }
-                      if ((typeof jsonPage.abe_meta.paginate[obj.key].next === 'undefined' || jsonPage.abe_meta.paginate[obj.key].next === null) && typeof jsonPage.abe_meta.paginate[obj.key].links[1] !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1] !== null && typeof jsonPage.abe_meta.paginate[obj.key].links[1].link !== 'undefined' && jsonPage.abe_meta.paginate[obj.key].links[1].link !== null) {
-                        jsonPage.abe_meta.paginate[obj.key].next = jsonPage.abe_meta.paginate[obj.key].links[1].link;
-                      }
-                      jsonPage.abe_meta.paginate[obj.key].last = jsonPage.abe_meta.paginate[obj.key].links[jsonPage.abe_meta.paginate[obj.key].links.length - 1].link;
-                    }
-                    jsonPage = _.Hooks.instance.trigger('beforePaginateEditor', jsonPage, obj);
-                  }
-
                   _.log.duration(type + " > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000);
 
                   resolveSource();
@@ -540,7 +500,6 @@ var Utils = function () {
         order: 0,
         required: false,
         editable: true,
-        paginate: null,
         visible: true
       };
 
@@ -564,8 +523,7 @@ var Utils = function () {
         order: (0, _.getAttr)(str, 'order'),
         required: (0, _.getAttr)(str, 'required'),
         visible: (0, _.getAttr)(str, 'visible'),
-        editable: (0, _.getAttr)(str, 'editable'),
-        paginate: (0, _.getAttr)(str, 'paginate')
+        editable: (0, _.getAttr)(str, 'editable')
       };
       obj = (0, _extend2.default)(true, defaultValues, obj);
 

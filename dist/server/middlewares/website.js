@@ -38,8 +38,6 @@ var _package = require('../../../package');
 
 var _package2 = _interopRequireDefault(_package);
 
-var _editor = require('../controllers/editor');
-
 var _abeLocale = require('../helpers/abe-locale');
 
 var _abeLocale2 = _interopRequireDefault(_abeLocale);
