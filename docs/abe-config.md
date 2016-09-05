@@ -48,7 +48,8 @@
 	"files": {
 		"templates": {
 			"extension": "html",
-			"assets": "_files"
+			"assets": "_files",
+			"precompile": true
 		}
 	},
 	"cookie": {
@@ -78,6 +79,8 @@ Wysiwyg configuration
 > files
 
 file extension + [ folder ]_files assets
+
+__precompile__ (false by default): If set to true, the templates are precompiled by Handlebars. Big performance improvement. This precompilation occurs when a page is displayed in Abe. While you design your templates, set this option to false and clear the hbs directory (in your templates directory) for reinitializing the cache.
 
 > cookie
 
