@@ -28,7 +28,6 @@ var Builder = function Builder(root, folder, dest, flow) {
 
   if (flow === 'publish') {
     files = _.FileParser.getFiles(_.fileUtils.concatPath(root, _.config.publish.url), new RegExp('.' + _.config.files.templates.extension));
-    // files = FileParser.getMetas(files, 'draft')
   }
 
   var build = function build(index) {
@@ -40,7 +39,7 @@ var Builder = function Builder(root, folder, dest, flow) {
       var text = (0, _.getTemplate)(json.abe_meta.template);
 
       _.Util.getDataList(_.fileUtils.removeLast(json.abe_meta.link), text, json).then(function () {
-        var page = new _.Page(json.abe_meta.link, text, json, true);
+        var page = new _.Page(json.abe_meta.template, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
         if (files[index + 1]) build(index + 1);
       }).catch(function (e) {
@@ -52,7 +51,7 @@ var Builder = function Builder(root, folder, dest, flow) {
       var text = (0, _.getTemplate)(json.abe_meta.template);
 
       _.Util.getDataList(_.fileUtils.removeLast(json.abe_meta.link), text, json).then(function () {
-        var page = new _.Page(json.abe_meta.link, text, json, true);
+        var page = new _.Page(json.abe_meta.template, text, json, true);
         (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
         if (files[index + 1]) build(index + 1);
       }).catch(function (e) {

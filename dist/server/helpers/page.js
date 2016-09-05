@@ -4,52 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _express = require('express');
-
-var _express2 = _interopRequireDefault(_express);
-
-var _fs = require('fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
-var _fsExtra = require('fs-extra');
-
-var _fsExtra2 = _interopRequireDefault(_fsExtra);
-
-var _mkdirp = require('mkdirp');
-
-var _mkdirp2 = _interopRequireDefault(_mkdirp);
-
-var _htmlMinifier = require('html-minifier');
-
-var _extend = require('extend');
-
-var _extend2 = _interopRequireDefault(_extend);
-
 var _cli = require('../../cli');
 
-var abe = _interopRequireWildcard(_cli);
-
-var _xss = require('xss');
-
-var _xss2 = _interopRequireDefault(_xss);
-
-var _package = require('../../../package');
-
-var _package2 = _interopRequireDefault(_package);
-
-var _editor = require('../controllers/editor');
-
-var _abeLocale = require('../helpers/abe-locale');
-
-var _abeLocale2 = _interopRequireDefault(_abeLocale);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var page = function page(req, res, next) {
-  var templatePath = _cli.fileUtils.getTemplatePath(req.params[0]);
   var filePath = (0, _cli.cleanSlug)(req.query.filePath);
   filePath = _cli.fileUtils.getFilePath(filePath);
   var html = req.query.html ? true : false;
@@ -70,7 +27,7 @@ var page = function page(req, res, next) {
       var folderFilePath = filePath.split('/');
       folderFilePath.pop();
       folderFilePath = _cli.fileUtils.pathWithRoot(folderFilePath.join('/'));
-      _mkdirp2.default.sync(folderFilePath);
+      mkdirp.sync(folderFilePath);
       var files = _cli.FileParser.getFiles(folderFilePath, true, 2);
       var latest = _cli.fileAttr.filterLatestVersion(_cli.fileAttr.getFilesRevision(files, filePath), 'draft');
       if (latest.length) {
@@ -85,20 +42,19 @@ var page = function page(req, res, next) {
     }
 
     var meta = _cli.config.meta.name;
-    var extension = _cli.config.files.templates.extension;
 
     var template = '';
     if (typeof json[meta] !== 'undefined' && json[meta] !== null && json[meta] !== '' && json[meta].template !== 'undefined' && json[meta].template !== null && json[meta].template !== '') {
       template = json[meta].template;
     } else {
-      template = _cli.fileUtils.getTemplatePath(req.params[0]);
+      template = req.params[0];
     }
     var text = (0, _cli.getTemplate)(template);
 
     if (!editor) {
 
       _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json).then(function () {
-        var page = new _cli.Page(templatePath, text, json, html);
+        var page = new _cli.Page(template, text, json, html);
         res.set('Content-Type', 'text/html');
         res.send(page.html);
       }).catch(function (e) {
@@ -106,7 +62,7 @@ var page = function page(req, res, next) {
       });
     } else {
       text = _cli.Util.removeDataList(text);
-      var page = new _cli.Page(templatePath, text, json, html);
+      var page = new _cli.Page(template, text, json, html);
       res.set('Content-Type', 'text/html');
       res.send(page.html);
     }

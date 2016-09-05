@@ -173,10 +173,7 @@ function addSource(text, json, fakeContent, util, arrayBlock) {
   while (match = listReg.exec(text)) {
     var obj = _cli.Util.getAllAttributes(match[0], json);
 
-    if (obj.paginate) {
-      obj.value = obj.value.slice(0, parseInt(obj.paginate));
-      add(obj, json, text, fakeContent, util);
-    } else if (obj.editable) {
+    if (obj.editable) {
       add(obj, json, text, fakeContent, util);
     } else {
       json[obj.key] = obj.source;

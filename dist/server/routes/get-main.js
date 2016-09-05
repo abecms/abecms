@@ -187,7 +187,7 @@ var route = function route(req, res, next) {
     var pageHtml = '';
     if (typeof _json !== 'undefined' && _json !== null && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) {
       var text = (0, _cli.getTemplate)(_json.abe_meta.template);
-      var page = new _cli.Page(req.params[0], text, _json, false);
+      var page = new _cli.Page(_json.abe_meta.template, text, _json, false);
       pageHtml = page.html.replace(/"/g, '\"').replace(/'/g, "\'").replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>');
     }
 
