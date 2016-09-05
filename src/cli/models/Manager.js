@@ -43,6 +43,12 @@ class Manager {
     return this
   }
 
+  addHbsTemplate(templateId) {
+    const path = fileUtils.concatPath(config.root, config.templates.url, 'hbs', templateId) + '.hbs';
+    var tmpl = eval("(function(){return " + fse.readFileSync(path) + "}());");
+    Handlebars.templates[templateId] = Handlebars.template(tmpl);
+  }
+
   loadHbsTemplates() {
     const path = fileUtils.concatPath(config.root, config.templates.url, 'hbs');
 

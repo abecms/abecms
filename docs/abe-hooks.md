@@ -42,10 +42,7 @@ beforeGetJson | (path, abe) | change json path before it load
 afterGetJson | (json, abe) | change json data after load
 beforeGetTemplate | (file, abe) | change html template path
 afterGetTemplate | (text, abe) | change text of template
-beforePageText | (text, json, Handlebars, abe) | change text before page render
-afterPageText | (text, json, Handlebars, abe) | change after page rendered
 beforePageJson | (json, abe) | change json before page render
-afterPageJson | (json, abe) | change json after page render
 beforeAddWorkflow | (flows, userFlow, currentFlow, text, abe) | Allow to add stuff **before** to the toolbar
 afterAddWorkflow | (flows, userFlow, currentFlow, text, abe) |  Allow to add stuff **after** to the toolbar
 beforeListPage | (file, workflow, index, action, text, abe) | Call **before** each row is created on table list
