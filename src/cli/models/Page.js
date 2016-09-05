@@ -41,7 +41,7 @@ export default class Page {
       var template = Handlebars.templates[templateId];
       this.html = template(json, {data: {intl: config.intlData}})
 
-      console.log('precompile')
+      //console.log('precompile')
 
     } else {
 
@@ -114,7 +114,7 @@ export default class Page {
       this.html = Hooks.instance.trigger('afterPageEditorCompile', this.html, json)
     }
 
-    console.log('result: ' + ((new Date().getTime() - dateStart.getTime()) / 1000))
+    //console.log('result: ' + ((new Date().getTime() - dateStart.getTime()) / 1000))
   }
 
   _updateAbeAsAttribute() {
