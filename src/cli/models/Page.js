@@ -87,6 +87,46 @@ export default class Page {
 
         // je rajoute les attributs pour les tags Abe (qui ne sont pas dans un attribut HTML)
         this._updateAbeAsTag()
+
+        // Don't know what it does...
+        var source = config.source.name
+        if(typeof json[source] !== 'undefined' && json[source] !== null) {
+          var keys = Object.keys(json[source])
+          
+          for(var i in keys) {
+            var replaceEach = new RegExp(`<!-- \\[\\[${keys[i]}\\]\\][\\s\\S]*?-->`, 'g')
+            this.template = this.template.replace(replaceEach, '')
+
+            var patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g')
+            var patAttrSourceMatch = this.template.match(patAttrSource)
+
+            if(typeof patAttrSourceMatch !== 'undefined' && patAttrSourceMatch !== null) {
+              var patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
+              Array.prototype.forEach.call(patAttrSourceMatch, (pat) => {
+                var patAttrSourceCheck = patAttrSourceInside.exec(pat)
+                if(typeof patAttrSourceCheck !== 'undefined' && patAttrSourceCheck !== null) {
+                  var checkEscaped = /["|'](.*?)["|']/
+                  checkEscaped = checkEscaped.exec(patAttrSourceCheck[0])
+                  if(typeof checkEscaped !== 'undefined' && checkEscaped !== null && checkEscaped.length > 0) {
+                    checkEscaped = escape(checkEscaped[1])
+                    this.template = this.template.replace(
+                      patAttrSourceCheck[0],
+                      ` data-abe-attr="${patAttrSourceCheck[1]}" data-abe-attr-escaped="${checkEscaped}" data-abe="${keys[i]}" ${patAttrSourceCheck[0]}`
+                    )
+                  }
+                }
+              })
+            }
+
+            var eachSource = new RegExp(`({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`, 'g')
+            var matches = this.template.match(eachSource)
+            if(typeof matches !== 'undefined' && matches !== null) {
+              Array.prototype.forEach.call(matches, (match) => {
+                this.template = this.template.replace(match, `${match}<!-- [[${keys[i]}]] ${util.encodeAbe(match)} -->`)
+              })
+            }
+          }
+        }
       }
      
       this._addSource(json)
@@ -97,9 +137,11 @@ export default class Page {
       // It's time to replace the [index] by {{@index}} (concerning each blocks)
       this.template = this.template.replace(/\[index\]\./g, '{{@index}}-')
 
-      // Let's persist the precompiled template for future use (kind of cache)
-      fse.writeFileSync(this.HbsTemplatePath, Handlebars.precompile(this.template), 'utf8')
-      Manager.instance.loadHbsTemplates()
+      if(config.files.templates.precompile){
+        // Let's persist the precompiled template for future use (kind of cache)
+        fse.writeFileSync(this.HbsTemplatePath, Handlebars.precompile(this.template), 'utf8')
+        Manager.instance.addHbsTemplate(templateId)
+      }
 
       // I compile the text
       var compiledTemplate = Handlebars.compile((!this._onlyHTML) ? util.insertDebugtoolUtilities(this.template) : this.template)
@@ -170,11 +212,16 @@ export default class Page {
 
       if(!this._onlyHTML) {
 
-        // je rajoute un data-able-block avec index sur tous les tags html du bloc each
+        var voidData = {}
+        voidData[key] = [{}]
+        var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?)}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
+        var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
+
+        // je rajoute un data-abe-block avec index sur tous les tags html du bloc each
         var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
 
         // je remplace le block dans le texte par ça
-        this.template = this.template.replace(block, textEachWithIndex)
+        this.template = this.template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${util.encodeAbe(blockHtml)} -->`)
       }
 
       // Pour chaque tag Abe, je mets en forme ce tag avec des data- supplémentaires
