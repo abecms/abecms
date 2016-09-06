@@ -151,7 +151,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
           text = Util.removeDataList(text)
 
-          var res = saveJsonAndHtml(tplUrl.publish.path, obj, text, type)
+          var res = saveJsonAndHtml(tpl, obj, text, type)
           
           obj = Hooks.instance.trigger('afterSave', obj)
           
@@ -183,6 +183,7 @@ function splitArray(ar, chunkSize) {
 
 export function saveJsonAndHtml(tplPath, obj, html, type) {
   
+  console.log(tplPath)
   var page = new Page(tplPath, html, obj.json.content, true)
 
   saveHtml(obj.html.path, page.html)
