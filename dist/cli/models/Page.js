@@ -35,6 +35,8 @@ var Page = function () {
    * @return {String} HTML page as string
    */
   function Page(templateId, template, json) {
+    var _this = this;
+
     var onlyHTML = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
     _classCallCheck(this, Page);
@@ -51,68 +53,127 @@ var Page = function () {
 
       //console.log('precompile')
     } else {
+      var source;
+      var keys;
+      var i;
+      var replaceEach;
+      var patAttrSource;
+      var patAttrSourceMatch;
+      var patAttrSourceInside;
+      var eachSource;
+      var matches;
+      var compiledTemplate;
 
-      this._onlyHTML = onlyHTML;
-      this.template = template;
-      this.HbsTemplatePath = _.fileUtils.getTemplatePath('hbs/' + templateId + '.hbs');
+      (function () {
 
-      var util = new _.Util();
+        _this._onlyHTML = onlyHTML;
+        _this.template = template;
+        _this.HbsTemplatePath = _.fileUtils.getTemplatePath('hbs/' + templateId + '.hbs');
 
-      _.abeEngine.instance.content = json;
+        var util = new _.Util();
 
-      // This pattern finds all abe tags which are not enclosed in a html tag attribute
-      // it finds this one: <title>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</title>
-      // it excludes this one: <meta name="description" content='{{abe type="text" key="meta_description" desc="Meta description" tab="Meta" order="4100"}}"/> 
-      this.abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g;
+        _.abeEngine.instance.content = json;
 
-      // This pattern finds all abe tags enclosed in a HTML tag attribute
-      this.abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
+        // This pattern finds all abe tags which are not enclosed in a html tag attribute
+        // it finds this one: <title>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</title>
+        // it excludes this one: <meta name="description" content='{{abe type="text" key="meta_description" desc="Meta description" tab="Meta" order="4100"}}"/> 
+        _this.abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g;
 
-      // This pattern finds all {{#each ...}}...{{/each}} blocks
-      this.eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
+        // This pattern finds all abe tags enclosed in a HTML tag attribute
+        _this.abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
 
-      // This pattern finds all {{#each ...}}...{{/each}} blocks
-      this.blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g;
+        // This pattern finds all {{#each ...}}...{{/each}} blocks
+        _this.eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
 
-      // Remove text with attribute "visible=false"
-      this._removeHidden();
+        // This pattern finds all {{#each ...}}...{{/each}} blocks
+        _this.blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g;
 
-      if (!this._onlyHTML) {
+        // Remove text with attribute "visible=false"
+        _this._removeHidden();
 
-        // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
-        // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
-        this._encloseAbeTag();
-      }
+        if (!_this._onlyHTML) {
 
-      // je rajoute les index pour chaque bloc lié à un each
-      this._indexEachBlocks();
+          // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
+          // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
+          _this._encloseAbeTag();
+        }
 
-      if (!this._onlyHTML) {
+        // je rajoute les index pour chaque bloc lié à un each
+        _this._indexEachBlocks();
 
-        // Je maj les attributs associés aux Abe qui sont dans des attributs de tag HTML
-        this._updateAbeAsAttribute();
+        if (!_this._onlyHTML) {
 
-        // je rajoute les attributs pour les tags Abe (qui ne sont pas dans un attribut HTML)
-        this._updateAbeAsTag();
-      }
+          // Je maj les attributs associés aux Abe qui sont dans des attributs de tag HTML
+          _this._updateAbeAsAttribute();
 
-      this._addSource(json);
+          // je rajoute les attributs pour les tags Abe (qui ne sont pas dans un attribut HTML)
+          _this._updateAbeAsTag();
 
-      // We remove the {{abe type=data ...}} from the text 
-      this.template = _.Util.removeDataList(this.template);
+          // Don't know what it does...
+          source = _.config.source.name;
 
-      // It's time to replace the [index] by {{@index}} (concerning each blocks)
-      this.template = this.template.replace(/\[index\]\./g, '{{@index}}-');
+          if (typeof json[source] !== 'undefined' && json[source] !== null) {
+            keys = Object.keys(json[source]);
 
-      // Let's persist the precompiled template for future use (kind of cache)
-      _fsExtra2.default.writeFileSync(this.HbsTemplatePath, _handlebars2.default.precompile(this.template), 'utf8');
-      _.Manager.instance.loadHbsTemplates();
 
-      // I compile the text
-      var compiledTemplate = _handlebars2.default.compile(!this._onlyHTML ? util.insertDebugtoolUtilities(this.template) : this.template);
+            for (i in keys) {
+              replaceEach = new RegExp('<!-- \\[\\[' + keys[i] + '\\]\\][\\s\\S]*?-->', 'g');
 
-      // I create the html page ! yeah !!!
-      this.html = compiledTemplate(json, { data: { intl: _.config.intlData } });
+              _this.template = _this.template.replace(replaceEach, '');
+
+              patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g');
+              patAttrSourceMatch = _this.template.match(patAttrSource);
+
+
+              if (typeof patAttrSourceMatch !== 'undefined' && patAttrSourceMatch !== null) {
+                patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g');
+
+                Array.prototype.forEach.call(patAttrSourceMatch, function (pat) {
+                  var patAttrSourceCheck = patAttrSourceInside.exec(pat);
+                  if (typeof patAttrSourceCheck !== 'undefined' && patAttrSourceCheck !== null) {
+                    var checkEscaped = /["|'](.*?)["|']/;
+                    checkEscaped = checkEscaped.exec(patAttrSourceCheck[0]);
+                    if (typeof checkEscaped !== 'undefined' && checkEscaped !== null && checkEscaped.length > 0) {
+                      checkEscaped = escape(checkEscaped[1]);
+                      _this.template = _this.template.replace(patAttrSourceCheck[0], ' data-abe-attr="' + patAttrSourceCheck[1] + '" data-abe-attr-escaped="' + checkEscaped + '" data-abe="' + keys[i] + '" ' + patAttrSourceCheck[0]);
+                    }
+                  }
+                });
+              }
+
+              eachSource = new RegExp('({{#each ' + keys[i] + '}[\\s\\S a-z]*?{{/each}})', 'g');
+              matches = _this.template.match(eachSource);
+
+              if (typeof matches !== 'undefined' && matches !== null) {
+                Array.prototype.forEach.call(matches, function (match) {
+                  _this.template = _this.template.replace(match, match + '<!-- [[' + keys[i] + ']] ' + util.encodeAbe(match) + ' -->');
+                });
+              }
+            }
+          }
+        }
+
+        _this._addSource(json);
+
+        // We remove the {{abe type=data ...}} from the text 
+        _this.template = _.Util.removeDataList(_this.template);
+
+        // It's time to replace the [index] by {{@index}} (concerning each blocks)
+        _this.template = _this.template.replace(/\[index\]\./g, '{{@index}}-');
+
+        if (_.config.files.templates.precompile) {
+          // Let's persist the precompiled template for future use (kind of cache)
+          _fsExtra2.default.writeFileSync(_this.HbsTemplatePath, _handlebars2.default.precompile(_this.template), 'utf8');
+          _.Manager.instance.addHbsTemplate(templateId);
+        }
+
+        // I compile the text
+        compiledTemplate = _handlebars2.default.compile(!_this._onlyHTML ? util.insertDebugtoolUtilities(_this.template) : _this.template);
+
+        // I create the html page ! yeah !!!
+
+        _this.html = compiledTemplate(json, { data: { intl: _.config.intlData } });
+      })();
     }
 
     if (this._onlyHTML) {
@@ -165,7 +226,7 @@ var Page = function () {
   }, {
     key: '_indexEachBlocks',
     value: function _indexEachBlocks() {
-      var _this = this;
+      var _this2 = this;
 
       // create an array of {{each}} blocks
       var blocks = this._splitEachBlocks();
@@ -176,23 +237,28 @@ var Page = function () {
         var util = new _.Util();
         var match;
 
-        if (!_this._onlyHTML) {
+        if (!_this2._onlyHTML) {
 
-          // je rajoute un data-able-block avec index sur tous les tags html du bloc each
+          var voidData = {};
+          voidData[key] = [{}];
+          var blockCompiled = _handlebars2.default.compile(block.replace(/{{abe (.*?)}}/g, '[[abe $1]]').replace(new RegExp('\\.\\./' + _.config.meta.name, 'g'), _.config.meta.name));
+          var blockHtml = blockCompiled(voidData, { data: { intl: _.config.intlData } }).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}');
+
+          // je rajoute un data-abe-block avec index sur tous les tags html du bloc each
           var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"');
 
           // je remplace le block dans le texte par ça
-          _this.template = _this.template.replace(block, textEachWithIndex);
+          _this2.template = _this2.template.replace(block, textEachWithIndex + ('<!-- [[' + key + ']] ' + util.encodeAbe(blockHtml) + ' -->'));
         }
 
         // Pour chaque tag Abe, je mets en forme ce tag avec des data- supplémentaires
-        while (match = _this.abePattern.exec(block)) {
-          _this._insertAbeEach(match, key, _this.eachBlockPattern.lastIndex - block.length, util);
+        while (match = _this2.abePattern.exec(block)) {
+          _this2._insertAbeEach(match, key, _this2.eachBlockPattern.lastIndex - block.length, util);
         }
 
         // Pour chaque tag Abe attribut de HTML, je mets en forme ce tag avec des data- supplémentaires sur le tag html parent
-        while (match = _this.abeAsAttributePattern.exec(block)) {
-          _this._insertAbeEach(match, key, _this.eachBlockPattern.lastIndex - block.length, util);
+        while (match = _this2.abeAsAttributePattern.exec(block)) {
+          _this2._insertAbeEach(match, key, _this2.eachBlockPattern.lastIndex - block.length, util);
         }
       });
 
