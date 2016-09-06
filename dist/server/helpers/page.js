@@ -4,7 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _mkdirp = require('mkdirp');
+
+var _mkdirp2 = _interopRequireDefault(_mkdirp);
+
 var _cli = require('../../cli');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var page = function page(req, res, next) {
   var filePath = (0, _cli.cleanSlug)(req.query.filePath);
@@ -27,7 +33,7 @@ var page = function page(req, res, next) {
       var folderFilePath = filePath.split('/');
       folderFilePath.pop();
       folderFilePath = _cli.fileUtils.pathWithRoot(folderFilePath.join('/'));
-      mkdirp.sync(folderFilePath);
+      _mkdirp2.default.sync(folderFilePath);
       var files = _cli.FileParser.getFiles(folderFilePath, true, 2);
       var latest = _cli.fileAttr.filterLatestVersion(_cli.fileAttr.getFilesRevision(files, filePath), 'draft');
       if (latest.length) {
