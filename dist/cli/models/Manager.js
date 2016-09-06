@@ -55,6 +55,13 @@ var Manager = function () {
       return this;
     }
   }, {
+    key: 'addHbsTemplate',
+    value: function addHbsTemplate(templateId) {
+      var path = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.templates.url, 'hbs', templateId) + '.hbs';
+      var tmpl = eval("(function(){return " + _fsExtra2.default.readFileSync(path) + "}());");
+      _handlebars2.default.templates[templateId] = _handlebars2.default.template(tmpl);
+    }
+  }, {
     key: 'loadHbsTemplates',
     value: function loadHbsTemplates() {
       var path = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.templates.url, 'hbs');
