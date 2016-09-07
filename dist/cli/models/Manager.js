@@ -72,8 +72,27 @@ var Manager = function () {
 
       _fsExtra2.default.readdirSync(path).forEach(function (file) {
         if (file.indexOf(".hbs") > -1) {
-          var tmpl = eval("(function(){return " + _fsExtra2.default.readFileSync(_cli.fileUtils.concatPath(path, file)) + "}());");
-          _handlebars2.default.templates[file.replace('.hbs', '')] = _handlebars2.default.template(tmpl);
+          var originalTemplatePath = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.templates.url) + '/' + file.replace('.hbs', '.' + _cli.config.files.templates.extension);
+
+          try {
+            var originalTemplateStat = _fsExtra2.default.statSync(originalTemplatePath);
+            var originalTemplateMdate = originalTemplateStat.mtime;
+            var stat = _fsExtra2.default.statSync(_cli.fileUtils.concatPath(path, file));
+            var mdate = stat.mtime;
+
+            // if the original template has been updated after precompilation, I delete the precompiled file
+            // else I add it to the hbs template array
+            if (originalTemplateMdate > mdate) {
+              _fsExtra2.default.unlinkSync(_cli.fileUtils.concatPath(path, file));
+            } else {
+              var tmpl = eval("(function(){return " + _fsExtra2.default.readFileSync(_cli.fileUtils.concatPath(path, file)) + "}());");
+              _handlebars2.default.templates[file.replace('.hbs', '')] = _handlebars2.default.template(tmpl);
+            }
+          } catch (err) {
+            console.log('The original template has not been found or the hbs template is corrupted');
+            console.log(originalTemplatePath);
+            console.log(err);
+          }
         }
       });
     }
