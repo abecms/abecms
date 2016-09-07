@@ -9,5 +9,5 @@ find . -type f -name '*.json' -exec sed -i '' s/My text to replace/My text repla
 ##Linux
 
 ```
-find . -type f -name '*.json' -exec sed -i 's/My text to replace/My text replaced/g' {} \;
+find . -type f -name "*.json" -exec sed -i s/My text to replace/My text replaced/g {} \;
 ```
