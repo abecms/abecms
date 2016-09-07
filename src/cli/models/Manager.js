@@ -58,8 +58,28 @@ class Manager {
 
     fse.readdirSync(path).forEach(function (file) {
       if (file.indexOf(".hbs") > -1) {
-        var tmpl = eval("(function(){return " + fse.readFileSync(fileUtils.concatPath(path, file)) + "}());");
-        Handlebars.templates[file.replace('.hbs', '')] = Handlebars.template(tmpl);
+        let originalTemplatePath = fileUtils.concatPath(config.root, config.templates.url) + '/' + file.replace('.hbs', '.' + config.files.templates.extension)
+        
+        try{
+          let originalTemplateStat = fse.statSync(originalTemplatePath);
+          let originalTemplateMdate = originalTemplateStat.mtime;
+          let stat = fse.statSync(fileUtils.concatPath(path, file));
+          let mdate = stat.mtime;
+
+          // if the original template has been updated after precompilation, I delete the precompiled file
+          // else I add it to the hbs template array
+          if(originalTemplateMdate>mdate){
+            fse.unlinkSync(fileUtils.concatPath(path, file));
+          } else {
+            var tmpl = eval("(function(){return " + fse.readFileSync(fileUtils.concatPath(path, file)) + "}());");
+            Handlebars.templates[file.replace('.hbs', '')] = Handlebars.template(tmpl);
+          }
+        }
+        catch(err) {
+            console.log('The original template has not been found or the hbs template is corrupted');
+            console.log(originalTemplatePath)
+            console.log(err)
+        } 
       }
     })
   }
