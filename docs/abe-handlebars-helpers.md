@@ -79,6 +79,11 @@ You can chain ifTrue tests if you want to test multiple parameters :
 {{#if (isTrue (isTrue 4 '==' 5) '||' object1)}}
 ```
 
+__CAUTION__ : If you want to test a handlebars variable like geocode.code, you'll have to use "../" to access the parent properties
+```html 
+{{#if (isTrue (isTrue (lowercase hotelCityCodeGeo) "==" ../geocode.code)}}
+```
+
 ## math
 ## moduloIf
 ## notEmpty
