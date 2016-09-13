@@ -1,14 +1,5 @@
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
-import {
-  config
-  ,FileParser
-  ,fileUtils
-  ,folderUtils
-  ,save
-  ,log
-} from '../../cli'
-
 var pConfig = {}
 Array.prototype.forEach.call(process.argv, (item) => {
   if (item.indexOf('=') > -1) {
@@ -23,12 +14,21 @@ if(typeof pConfig.ABE_PATH === 'undefined' || pConfig.ABE_PATH === null) {
   pConfig.ABE_PATH = ''
 }
 
-
 // var logsPub = ""
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
+  var config = require('../../cli').config
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
   try {
-      
+
+    var FileParser = require('../../cli').FileParser
+    var fileUtils = require('../../cli').fileUtils
+    var folderUtils = require('../../cli').folderUtils
+    var save = require('../../cli').save
+    var log = require('../../cli').log
+    var Manager = require('../../cli').Manager
+
+    Manager.instance;
+
     // log.write('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
     console.log('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
     // log.write('publish-all', 'start process publish')
@@ -60,7 +60,6 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     let publish = config.publish.url
     var published = FileParser.getFilesByType(fileUtils.concatPath(site.path, publish, pConfig.ABE_PATH))
     published = FileParser.getMetas(published, 'draft')
-
     var ar_url = []
     var promises = []
     var i = 0
