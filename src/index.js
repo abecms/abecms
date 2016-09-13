@@ -308,12 +308,16 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 		break
 		case 'publish-all':
 			var dir = process.cwd();
+			var customPath = ''
+			if(typeof userArgs[1] !== 'undefined' && userArgs[1] !== null){
+				customPath = 'ABE_PATH=' + userArgs[1]
+			}
 			if(process.env.ROOT) {
 				dir = process.env.ROOT.replace(/\/$/, '')
 			}
 
   		// var command = `node --harmony --debug ./cli/process/publish-all.js ABE_WEBSITE=${dir}`
-  		const publishAll = spawn('node', ['--harmony', '--debug', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir]);
+  		const publishAll = spawn('node', ['--harmony', '--debug', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir, customPath]);
 
 			publishAll.stdout.on('data', (data) => {
 			  console.log(clc.cyan('stdout'), data.toString())
