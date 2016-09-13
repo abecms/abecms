@@ -33,7 +33,8 @@ export default class Page {
     // HOOKS beforePageJson
     json = Hooks.instance.trigger('beforePageJson', json)
 
-    if( typeof Handlebars.templates[templateId] !== 'undefined' && 
+    if( typeof Handlebars.templates !== 'undefined' && 
+        Handlebars.templates !== null && typeof Handlebars.templates[templateId] !== 'undefined' && 
         Handlebars.templates[templateId] !== null && 
         config.files.templates.precompile
       ){

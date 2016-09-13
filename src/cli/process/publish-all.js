@@ -19,6 +19,11 @@ Array.prototype.forEach.call(process.argv, (item) => {
 
 pConfig.TYPE = pConfig.TYPE || 'publish';
 
+if(typeof pConfig.ABE_PATH === 'undefined' || pConfig.ABE_PATH === null) {
+  pConfig.ABE_PATH = ''
+}
+
+
 // var logsPub = ""
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
@@ -53,7 +58,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var allPublished = []
 
     let publish = config.publish.url
-    var published = FileParser.getFilesByType(fileUtils.concatPath(site.path, publish))
+    var published = FileParser.getFilesByType(fileUtils.concatPath(site.path, publish, pConfig.ABE_PATH))
     published = FileParser.getMetas(published, 'draft')
 
     var ar_url = []
@@ -72,7 +77,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
         var p = new Promise((resolve, reject) => {
           var d = (new Date().getTime() - dateStart.getTime()) / 1000
           // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
-          console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath)
+          console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath + ' (template: ' + json.abe_meta.template + ')')
           // resolve()
           // return
           console.log(pConfig)
