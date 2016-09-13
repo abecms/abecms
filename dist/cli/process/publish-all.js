@@ -1,10 +1,8 @@
 'use strict';
 
-var _cli = require('../../cli');
-
-var pConfig = {}; // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
+// ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
-
+var pConfig = {};
 Array.prototype.forEach.call(process.argv, function (item) {
   if (item.indexOf('=') > -1) {
     var ar = item.split('=');
@@ -14,10 +12,24 @@ Array.prototype.forEach.call(process.argv, function (item) {
 
 pConfig.TYPE = pConfig.TYPE || 'publish';
 
+if (typeof pConfig.ABE_PATH === 'undefined' || pConfig.ABE_PATH === null) {
+  pConfig.ABE_PATH = '';
+}
+
 // var logsPub = ""
 if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
-  if (pConfig.ABE_WEBSITE) _cli.config.set({ root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/' });
+  var config = require('../../cli').config;
+  if (pConfig.ABE_WEBSITE) config.set({ root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/' });
   try {
+
+    var FileParser = require('../../cli').FileParser;
+    var fileUtils = require('../../cli').fileUtils;
+    var folderUtils = require('../../cli').folderUtils;
+    var save = require('../../cli').save;
+    var log = require('../../cli').log;
+    var Manager = require('../../cli').Manager;
+
+    Manager.instance;
 
     // log.write('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
     console.log('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
@@ -29,33 +41,32 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
     var folder = null;
     if (typeof pConfig.FILEPATH !== 'undefined' && pConfig.FILEPATH !== null) {
       // log.write('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
-      console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(_cli.config.root, ''));
-      pConfig.FILEPATH = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.data.url, pConfig.FILEPATH.replace(_cli.config.root));
+      console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''));
+      pConfig.FILEPATH = fileUtils.concatPath(config.root, config.data.url, pConfig.FILEPATH.replace(config.root));
 
-      var fileJson = _cli.FileParser.getJson(pConfig.FILEPATH.replace(new RegExp("\\." + _cli.config.files.templates.extension), '.json'));
+      var fileJson = FileParser.getJson(pConfig.FILEPATH.replace(new RegExp("\\." + config.files.templates.extension), '.json'));
 
       if (typeof fileJson !== 'undefined' && fileJson !== null) {
         if (typeof fileJson.abe_meta !== 'undefined' && fileJson.abe_meta !== null) {
           type = fileJson.abe_meta.template;
-          folder = _cli.fileUtils.removeLast(fileJson.abe_meta.link);
+          folder = fileUtils.removeLast(fileJson.abe_meta.link);
         }
       }
     }
 
-    var site = _cli.folderUtils.folderInfos(_cli.config.root);
+    var site = folderUtils.folderInfos(config.root);
     var allPublished = [];
 
-    var publish = _cli.config.publish.url;
-    var published = _cli.FileParser.getFilesByType(_cli.fileUtils.concatPath(site.path, publish));
-    published = _cli.FileParser.getMetas(published, 'draft');
-
+    var publish = config.publish.url;
+    var published = FileParser.getFilesByType(fileUtils.concatPath(site.path, publish, pConfig.ABE_PATH));
+    published = FileParser.getMetas(published, 'draft');
     var ar_url = [];
     var promises = [];
     var i = 0;
 
     published.forEach(function (pub) {
-      var jsonPath = _cli.FileParser.changePathEnv(pub.path, _cli.config.data.url).replace(new RegExp("\\." + _cli.config.files.templates.extension), '.json');
-      var json = _cli.FileParser.getJson(jsonPath);
+      var jsonPath = FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp("\\." + config.files.templates.extension), '.json');
+      var json = FileParser.getJson(jsonPath);
       if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         i++;
         ar_url.push(pub.path);
@@ -65,11 +76,11 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
         var p = new Promise(function (resolve, reject) {
           var d = (new Date().getTime() - dateStart.getTime()) / 1000;
           // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
-          console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path.replace(_cli.config.root, '') + ' < ' + jsonPath);
+          console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path.replace(config.root, '') + ' < ' + jsonPath + ' (template: ' + json.abe_meta.template + ')');
           // resolve()
           // return
           console.log(pConfig);
-          (0, _cli.save)(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
+          save(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
             // logsPub += 'successfully update > ' + pub.path .replace(config.root, '')
             // console.log('successfully update > ' + pub.path .replace(config.root, ''))
             resolve();
@@ -78,7 +89,7 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
             // log.write('publish-all', e)
             console.log('publish-all', e);
             // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
-            console.log('publish-all', 'ERROR on ' + pub.path.replace(_cli.config.root, ''));
+            console.log('publish-all', 'ERROR on ' + pub.path.replace(config.root, ''));
             resolve();
           });
         });
