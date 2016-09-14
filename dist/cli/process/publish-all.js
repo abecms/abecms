@@ -22,6 +22,8 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
   if (pConfig.ABE_WEBSITE) config.set({ root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/' });
   try {
 
+    // require controller to instanciate hooks
+    var controllers = require('../../server/controllers');
     var FileParser = require('../../cli').FileParser;
     var fileUtils = require('../../cli').fileUtils;
     var folderUtils = require('../../cli').folderUtils;
@@ -85,7 +87,6 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
             // console.log('successfully update > ' + pub.path .replace(config.root, ''))
             resolve();
           }).catch(function (e) {
-            console.log(e);
             // log.write('publish-all', e)
             console.log('publish-all', e);
             // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
