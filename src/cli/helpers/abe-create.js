@@ -8,6 +8,7 @@ import {
   config,
   log,
   Hooks,
+  removeDuplicateAttr,
   Manager
 } from '../../cli'
 
