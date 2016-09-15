@@ -317,18 +317,18 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 			}
 
   		// var command = `node --harmony --debug ./cli/process/publish-all.js ABE_WEBSITE=${dir}`
-  		const publishAll = spawn('node', ['--harmony', '--debug', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir, customPath]);
+  		const publishAll = spawn('node', ['--harmony', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir, customPath]);
 
 			publishAll.stdout.on('data', (data) => {
-			  console.log(clc.cyan('stdout'), data.toString())
+			  console.log(data.toString())
 			});
 
 			publishAll.stderr.on('data', (data) => {
-			  console.log(clc.red('stderr'), data.toString())
+			  console.log(data.toString())
 			});
 
 			publishAll.on('close', (code) => {
-				console.log(clc.cyan(`child process exited with code`), code);
+				console.log(clc.cyan(`child process exited with code`) + ' ' + code);
 				process.exit(0)
 			});
 
