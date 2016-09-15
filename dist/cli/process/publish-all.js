@@ -1,5 +1,11 @@
 'use strict';
 
+var _cliColor = require('cli-color');
+
+var _cliColor2 = _interopRequireDefault(_cliColor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
 var pConfig = {};
@@ -16,6 +22,50 @@ if (typeof pConfig.ABE_PATH === 'undefined' || pConfig.ABE_PATH === null) {
   pConfig.ABE_PATH = '';
 }
 
+console.log(_cliColor2.default.green('start publish all') + ' path ' + pConfig.ABE_PATH);
+
+function publishNext(published, cb) {
+  var i = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+  var currentDateStart = new Date();
+  var pub = published.shift();
+  if (typeof pub !== 'undefined' && pub !== null) {
+
+    var jsonPath = FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp("\\." + config.files.templates.extension), '.json');
+    var json = FileParser.getJson(jsonPath);
+    if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+      i++;
+      ar_url.push(pub.path);
+
+      var p = new Promise(function (resolve, reject) {
+        save(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
+          var d = (new Date().getTime() - currentDateStart.getTime()) / 1000;
+          var total = Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100) / 100;
+          // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
+          console.log(i + ' - (' + _cliColor2.default.green(d + 's') + ' / ' + total + 'm)');
+          console.log(_cliColor2.default.bgWhite(_cliColor2.default.black(pub.path.replace(config.root, ''))) + ' < ' + _cliColor2.default.bgWhite(_cliColor2.default.black(jsonPath.replace(config.root, ''))) + ' (' + _cliColor2.default.cyan(json.abe_meta.template) + ')');
+          resolve();
+        }).catch(function (e) {
+          // log.write('publish-all', e)
+          console.log('publish-all', e);
+          // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
+          console.log('publish-all', 'ERROR on ' + pub.path.replace(config.root, ''));
+          resolve();
+        });
+      });
+    }
+
+    p.then(function () {
+      publishNext(published, cb, i++);
+    }).catch(function () {
+      console.log('error', _cliColor2.default.red(e));
+    });
+  } else {
+    cb(i);
+  }
+}
+
+var dateStart = new Date();
 // var logsPub = ""
 if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   var config = require('../../cli').config;
@@ -32,12 +82,6 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
     var Manager = require('../../cli').Manager;
 
     Manager.instance;
-
-    // log.write('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('publish-all', '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
-    // log.write('publish-all', 'start process publish')
-    console.log('publish-all', 'start process publish');
-    var dateStart = new Date();
 
     var type = null;
     var folder = null;
@@ -66,52 +110,23 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
     var promises = [];
     var i = 0;
 
-    published.forEach(function (pub) {
-      var jsonPath = FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp("\\." + config.files.templates.extension), '.json');
-      var json = FileParser.getJson(jsonPath);
-      if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-        i++;
-        ar_url.push(pub.path);
+    dateStart = new Date();
+    publishNext(published, function (i) {
+      console.log('total ' + _cliColor2.default.green(i) + ' files');
 
-        // save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false)
-
-        var p = new Promise(function (resolve, reject) {
-          var d = (new Date().getTime() - dateStart.getTime()) / 1000;
-          // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
-          console.log(i + ' [' + d + 'sec] > start publishing ' + pub.path.replace(config.root, '') + ' < ' + jsonPath + ' (template: ' + json.abe_meta.template + ')');
-          // resolve()
-          // return
-          console.log(pConfig);
-          save(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
-            // logsPub += 'successfully update > ' + pub.path .replace(config.root, '')
-            // console.log('successfully update > ' + pub.path .replace(config.root, ''))
-            resolve();
-          }).catch(function (e) {
-            // log.write('publish-all', e)
-            console.log('publish-all', e);
-            // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
-            console.log('publish-all', 'ERROR on ' + pub.path.replace(config.root, ''));
-            resolve();
-          });
-        });
-        promises.push(p);
-      }
-    });
-
-    // logsPub += 'total ' + promises.length + ' files'
-    console.log('total ' + promises.length + ' files');
-
-    Promise.all(promises).then(function () {
-      dateStart = (new Date().getTime() - dateStart.getTime()) / 1000;
+      // Promise.all(promises)
+      //   .then(() => {
+      dateStart = Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100) / 100;
       // logsPub += 'publish process finished in ' + dateStart + 'sec'
-      console.log('publish process finished in ' + dateStart + 'sec');
+      console.log('publish process finished in ' + _cliColor2.default.green(dateStart) + 'm');
       // log.write('publish-all', logsPub)
       // console.log('publish-all', logsPub)
       process.exit(0);
-    }).catch(function (e) {
-      // log.write('publish-all', e)
-      console.log('publish-all', e);
-      console.log(e);
+      // }).catch(function(e) {
+      //   // log.write('publish-all', e)
+      //   console.log('publish-all', e)
+      //   console.log(e)
+      // })
     });
   } catch (e) {
     // statements
