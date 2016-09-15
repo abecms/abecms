@@ -320,11 +320,11 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
   		const publishAll = spawn('node', ['--harmony', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir, customPath]);
 
 			publishAll.stdout.on('data', (data) => {
-			  console.log(data.toString())
+			  console.log(data.toString().replace(/\n/, ''))
 			});
 
 			publishAll.stderr.on('data', (data) => {
-			  console.log(data.toString())
+			  console.log(data.toString().replace(/\n/, ''))
 			});
 
 			publishAll.on('close', (code) => {
@@ -339,7 +339,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 				dir = process.env.ROOT.replace(/\/$/, '')
 			}
 
-  		const updateJson = spawn('node', ['--harmony', '--debug', __dirname + '/cli/process/update-json.js', 'ABE_WEBSITE=' + dir]);
+  		const updateJson = spawn('node', ['--harmony', __dirname + '/cli/process/update-json.js', 'ABE_WEBSITE=' + dir]);
 
 			updateJson.stdout.on('data', (data) => {
 			  console.log(clc.cyan('stdout'), data.toString())

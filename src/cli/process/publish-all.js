@@ -30,31 +30,37 @@ function publishNext(published, cb, i = 0) {
       ar_url.push(pub.path)
 
       var p = new Promise((resolve, reject) => {
-        save(
-          pub.path,
-          json.abe_meta.template,
-          null,
-          '',
-          pConfig.TYPE,
-          null,
-          pConfig.TYPE,
-          true)
-          .then(() => {
-            var d = (new Date().getTime() - currentDateStart.getTime()) / 1000
-            var total = (Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100)) / 100
-            // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
-            console.log(i + ' - (' + clc.green(d + 's') + ' / ' + total + 'm)')
-            console.log(clc.bgWhite(clc.black(pub.path.replace(config.root, '')))
-              + ' < ' + clc.bgWhite(clc.black(jsonPath.replace(config.root, '')))
-              + ' (' + clc.cyan(json.abe_meta.template) + ')')
-            resolve()
-          }).catch(function(e) {
-            // log.write('publish-all', e)
-            console.log('publish-all', e)
-            // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
-            console.log('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
-            resolve()
-          })
+        try {
+          
+          save(
+            pub.path,
+            json.abe_meta.template,
+            null,
+            '',
+            pConfig.TYPE,
+            null,
+            pConfig.TYPE,
+            true)
+            .then(() => {
+              var d = (new Date().getTime() - currentDateStart.getTime()) / 1000
+              var total = (Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100)) / 100
+              // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
+              console.log(i + ' - (' + clc.green(d + 's') + ' / ' + total + 'm)')
+              console.log(clc.bgWhite(clc.black(pub.path.replace(config.root, '')))
+                + ' < ' + clc.bgWhite(clc.black(jsonPath.replace(config.root, '')))
+                + ' (' + clc.cyan(json.abe_meta.template) + ')')
+              resolve()
+            }).catch(function(e) {
+              // log.write('publish-all', e)
+              console.log('publish-all', e)
+              // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
+              console.log('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
+              resolve()
+            })
+        } catch(e) {
+          console.log(clc.red('cannot save') + ' ' + pub.path);
+          resolve()
+        }
       })
     }
 
@@ -62,6 +68,7 @@ function publishNext(published, cb, i = 0) {
        publishNext(published, cb, i++)
     })
     .catch(function () {
+      publishNext(published, cb, i++)
        console.log('error', clc.red(e))
     })
   }else {
@@ -116,6 +123,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var promises = []
     var i = 0
 
+    console.log('Found ' + clc.green(published.length) + ' to republish')
     dateStart = new Date()
     publishNext(published, function (i) {
       console.log('total ' + clc.green(i) + ' files')

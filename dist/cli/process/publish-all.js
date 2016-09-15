@@ -38,26 +38,33 @@ function publishNext(published, cb) {
       ar_url.push(pub.path);
 
       var p = new Promise(function (resolve, reject) {
-        save(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
-          var d = (new Date().getTime() - currentDateStart.getTime()) / 1000;
-          var total = Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100) / 100;
-          // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
-          console.log(i + ' - (' + _cliColor2.default.green(d + 's') + ' / ' + total + 'm)');
-          console.log(_cliColor2.default.bgWhite(_cliColor2.default.black(pub.path.replace(config.root, ''))) + ' < ' + _cliColor2.default.bgWhite(_cliColor2.default.black(jsonPath.replace(config.root, ''))) + ' (' + _cliColor2.default.cyan(json.abe_meta.template) + ')');
+        try {
+
+          save(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
+            var d = (new Date().getTime() - currentDateStart.getTime()) / 1000;
+            var total = Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100) / 100;
+            // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
+            console.log(i + ' - (' + _cliColor2.default.green(d + 's') + ' / ' + total + 'm)');
+            console.log(_cliColor2.default.bgWhite(_cliColor2.default.black(pub.path.replace(config.root, ''))) + ' < ' + _cliColor2.default.bgWhite(_cliColor2.default.black(jsonPath.replace(config.root, ''))) + ' (' + _cliColor2.default.cyan(json.abe_meta.template) + ')');
+            resolve();
+          }).catch(function (e) {
+            // log.write('publish-all', e)
+            console.log('publish-all', e);
+            // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
+            console.log('publish-all', 'ERROR on ' + pub.path.replace(config.root, ''));
+            resolve();
+          });
+        } catch (e) {
+          console.log(_cliColor2.default.red('cannot save') + ' ' + pub.path);
           resolve();
-        }).catch(function (e) {
-          // log.write('publish-all', e)
-          console.log('publish-all', e);
-          // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
-          console.log('publish-all', 'ERROR on ' + pub.path.replace(config.root, ''));
-          resolve();
-        });
+        }
       });
     }
 
     p.then(function () {
       publishNext(published, cb, i++);
     }).catch(function () {
+      publishNext(published, cb, i++);
       console.log('error', _cliColor2.default.red(e));
     });
   } else {
@@ -110,6 +117,7 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
     var promises = [];
     var i = 0;
 
+    console.log('Found ' + _cliColor2.default.green(published.length) + ' to republish');
     dateStart = new Date();
     publishNext(published, function (i) {
       console.log('total ' + _cliColor2.default.green(i) + ' files');
