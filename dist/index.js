@@ -334,11 +334,11 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 			var publishAll = (0, _child_process.spawn)('node', ['--harmony', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir, customPath]);
 
 			publishAll.stdout.on('data', function (data) {
-				console.log(data.toString());
+				console.log(data.toString().replace(/\n/, ''));
 			});
 
 			publishAll.stderr.on('data', function (data) {
-				console.log(data.toString());
+				console.log(data.toString().replace(/\n/, ''));
 			});
 
 			publishAll.on('close', function (code) {
@@ -353,7 +353,7 @@ if (typeof userArgs[0] !== 'undefined' && userArgs[0] !== null) {
 				dir = process.env.ROOT.replace(/\/$/, '');
 			}
 
-			var updateJson = (0, _child_process.spawn)('node', ['--harmony', '--debug', __dirname + '/cli/process/update-json.js', 'ABE_WEBSITE=' + dir]);
+			var updateJson = (0, _child_process.spawn)('node', ['--harmony', __dirname + '/cli/process/update-json.js', 'ABE_WEBSITE=' + dir]);
 
 			updateJson.stdout.on('data', function (data) {
 				console.log(_cliColor2.default.cyan('stdout'), data.toString());
