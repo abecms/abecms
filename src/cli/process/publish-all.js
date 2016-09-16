@@ -18,7 +18,20 @@ if(typeof pConfig.ABE_PATH === 'undefined' || pConfig.ABE_PATH === null) {
 
 console.log(clc.green('start publish all') + ' path ' + pConfig.ABE_PATH)
 
-function publishNext(published, cb, i = 0) {
+function msToTime(duration) {
+    var milliseconds = parseInt((duration%1000)/100)
+        , seconds = parseInt((duration/1000)%60)
+        , minutes = parseInt((duration/(1000*60))%60)
+        , hours = parseInt((duration/(1000*60*60))%24);
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+}
+
+function publishNext(published, tt, cb, i = 0) {
   var currentDateStart = new Date()
   var pub = published.shift()
   if(typeof pub !== 'undefined' && pub !== null) {
@@ -42,12 +55,12 @@ function publishNext(published, cb, i = 0) {
             pConfig.TYPE,
             true)
             .then(() => {
-              var d = (new Date().getTime() - currentDateStart.getTime()) / 1000
-              var total = (Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100)) / 100
+              var d = new Date(new Date().getTime() - currentDateStart.getTime())
+              var total = new Date(new Date().getTime() - dateStart.getTime())
               // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
-              console.log(i + ' - (' + clc.green(d + 's') + ' / ' + total + 'm)')
-              console.log(clc.bgWhite(clc.black(pub.path.replace(config.root, '')))
-                + ' < ' + clc.bgWhite(clc.black(jsonPath.replace(config.root, '')))
+              console.log(clc.green(i) + '/' + tt + ' - (' + clc.green(msToTime(d)) + '/' + msToTime(total) + ')')
+              console.log(clc.bgWhite(clc.black(pub.path.replace(config.root, '').replace(config.publish.url, '')))
+                + ' < ' + clc.bgWhite(clc.black(jsonPath.replace(config.root, '').replace(config.data.url, '')))
                 + ' (' + clc.cyan(json.abe_meta.template) + ')')
               resolve()
             }).catch(function(e) {
@@ -65,10 +78,10 @@ function publishNext(published, cb, i = 0) {
     }
 
     p.then(function () {
-       publishNext(published, cb, i++)
+       publishNext(published, tt, cb, i++)
     })
     .catch(function () {
-      publishNext(published, cb, i++)
+      publishNext(published, tt, cb, i++)
        console.log('error', clc.red(e))
     })
   }else {
@@ -125,7 +138,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
 
     console.log('Found ' + clc.green(published.length) + ' to republish')
     dateStart = new Date()
-    publishNext(published, function (i) {
+    publishNext(published, published.length, function (i) {
       console.log('total ' + clc.green(i) + ' files')
 
       // Promise.all(promises)
