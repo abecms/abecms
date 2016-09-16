@@ -1,7 +1,7 @@
 import fse from 'fs-extra'
 import extend from 'extend'
 import {Promise} from 'es6-promise'
-
+import path from 'path'
 import {
   getAttr
   ,Util
@@ -45,7 +45,7 @@ function partials(text) {
   while (match = importReg.exec(text)) {
     var file = getAttr(match[0], 'file')
     var partial = ''
-    file = fileUtils.concatPath(config.root, config.partials, file)
+    file = path.join(config.root, config.partials, file)
     if(fileUtils.isFile(file)) {
       partial = fse.readFileSync(file, 'utf8')
     }
@@ -106,12 +106,12 @@ export function getTemplate (file) {
   // HOOKS beforeGetTemplate
   file = Hooks.instance.trigger('beforeGetTemplate', file)
 
-  file = file.replace(fileUtils.concatPath(config.root, config.templates.url), '')
+  file = file.replace(path.join(config.root, config.templates.url), '')
   file = file.replace(config.root, '')
   if (file.indexOf('.') > -1) {
   	file = fileUtils.removeExtension(file)
   }
-  file = fileUtils.concatPath(config.root, config.templates.url, file + '.' + config.files.templates.extension)
+  file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
   if(fileUtils.isFile(file)) {
     text = fse.readFileSync(file, 'utf8')
 	  text = partials(text)

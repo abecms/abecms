@@ -13,7 +13,7 @@ import {
 
 var result = {}
 
-var pathToLocale = fileUtils.concatPath(__dirname, '../' + config.localeFolder, config.intlData.locales)
+var pathToLocale = path.join(__dirname, '../' + config.localeFolder, config.intlData.locales)
 var files = fse.readdirSync(pathToLocale)
 
 Array.prototype.forEach.call(files, (file) => {

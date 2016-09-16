@@ -1,3 +1,4 @@
+import path from 'path'
 import Handlebars from 'handlebars'
 import {
   fileUtils,
@@ -24,7 +25,7 @@ var route = function(router, req, res, next) {
     })
   })
 
-  var page = fileUtils.concatPath(__dirname + '/../views/list-url.html')
+  var page = path.join(__dirname + '/../views/list-url.html')
   var html = fileUtils.getFileContent(page);
 
 

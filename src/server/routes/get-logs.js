@@ -1,3 +1,4 @@
+import path from 'path'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 
@@ -9,7 +10,7 @@ import {
 } from '../../cli'
 
 var route = function(req, res, next){
-  var file = fileUtils.concatPath(config.root, 'logs', `${req.params[0]}.log`)
+  var file = path.join(config.root, 'logs', `${req.params[0]}.log`)
   var html = ''
   if (fileUtils.isFile(file)) {
     var commonStyle = "font-family: arial; font-size: 12px;"
@@ -34,11 +35,11 @@ var route = function(req, res, next){
     })
     html += "\n" + '</body>' + "\n" + '</html>'
   }else {
-    var path = fileUtils.concatPath(config.root, 'logs')
-    if (!folderUtils.isFolder(path)) {
-      mkdirp.sync(path)
+    var pathLog = path.join(config.root, 'logs')
+    if (!folderUtils.isFolder(pathLog)) {
+      mkdirp.sync(pathLog)
     }
-    var files = FileParser.read(path, path, 'files', true, /\.log/, 99)
+    var files = FileParser.read(pathLog, pathLog, 'files', true, /\.log/, 99)
     html += '<a href="/abe/delete-logs">Go to delete logs</a>'
     html += '<br /><br /><div>Choose to see logs files</div>'
     html += '<ul>'

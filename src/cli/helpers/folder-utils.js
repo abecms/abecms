@@ -50,17 +50,17 @@ export default class FolderUtils {
 		return folders
 	}
 
-	static folderInfos(path) {
-		var pathArr = path.split('/')
+	static folderInfos(pathFolder) {
+		var pathArr = pathFolder.split('/')
 		var name = pathArr[pathArr.length - 1]
 
 		var rootArr = config.root.split('/')
 		var website = rootArr[pathArr.length - 1]
 		return {
 			'name': name,
-			'path': path,
+			'path': pathFolder,
 			'website': website,
-			'cleanPath': fileUtils.cleanPath(path.replace(config.root, '')),
+			'cleanPath': fileUtils.cleanPath(pathFolder.replace(config.root, '')),
 			'type': 'folder'
 		}
 	}

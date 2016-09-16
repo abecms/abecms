@@ -26,7 +26,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var result = {};
 
-var pathToLocale = _cli.fileUtils.concatPath(__dirname, '../' + _cli.config.localeFolder, _cli.config.intlData.locales);
+var pathToLocale = _path2.default.join(__dirname, '../' + _cli.config.localeFolder, _cli.config.intlData.locales);
 var files = _fsExtra2.default.readdirSync(pathToLocale);
 
 Array.prototype.forEach.call(files, function (file) {

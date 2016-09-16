@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
@@ -17,7 +21,7 @@ var _cli = require('../../cli');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var route = function route(req, res, next) {
-  var file = _cli.fileUtils.concatPath(_cli.config.root, 'logs', req.params[0] + '.log');
+  var file = _path2.default.join(_cli.config.root, 'logs', req.params[0] + '.log');
   var html = '';
   if (_cli.fileUtils.isFile(file)) {
     var commonStyle = "font-family: arial; font-size: 12px;";
@@ -42,11 +46,11 @@ var route = function route(req, res, next) {
     });
     html += "\n" + '</body>' + "\n" + '</html>';
   } else {
-    var path = _cli.fileUtils.concatPath(_cli.config.root, 'logs');
-    if (!_cli.folderUtils.isFolder(path)) {
-      _mkdirp2.default.sync(path);
+    var pathLog = _path2.default.join(_cli.config.root, 'logs');
+    if (!_cli.folderUtils.isFolder(pathLog)) {
+      _mkdirp2.default.sync(pathLog);
     }
-    var files = _cli.FileParser.read(path, path, 'files', true, /\.log/, 99);
+    var files = _cli.FileParser.read(pathLog, pathLog, 'files', true, /\.log/, 99);
     html += '<a href="/abe/delete-logs">Go to delete logs</a>';
     html += '<br /><br /><div>Choose to see logs files</div>';
     html += '<ul>';

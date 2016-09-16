@@ -4,6 +4,10 @@ var _cliColor = require('cli-color');
 
 var _cliColor2 = _interopRequireDefault(_cliColor);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
@@ -24,8 +28,21 @@ if (typeof pConfig.ABE_PATH === 'undefined' || pConfig.ABE_PATH === null) {
 
 console.log(_cliColor2.default.green('start publish all') + ' path ' + pConfig.ABE_PATH);
 
-function publishNext(published, cb) {
-  var i = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+function msToTime(duration) {
+  var milliseconds = parseInt(duration % 1000 / 100),
+      seconds = parseInt(duration / 1000 % 60),
+      minutes = parseInt(duration / (1000 * 60) % 60),
+      hours = parseInt(duration / (1000 * 60 * 60) % 24);
+
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+}
+
+function publishNext(published, tt, cb) {
+  var i = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
 
   var currentDateStart = new Date();
   var pub = published.shift();
@@ -41,11 +58,11 @@ function publishNext(published, cb) {
         try {
 
           save(pub.path, json.abe_meta.template, null, '', pConfig.TYPE, null, pConfig.TYPE, true).then(function () {
-            var d = (new Date().getTime() - currentDateStart.getTime()) / 1000;
-            var total = Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100) / 100;
+            var d = new Date(new Date().getTime() - currentDateStart.getTime());
+            var total = new Date(new Date().getTime() - dateStart.getTime());
             // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
-            console.log(i + ' - (' + _cliColor2.default.green(d + 's') + ' / ' + total + 'm)');
-            console.log(_cliColor2.default.bgWhite(_cliColor2.default.black(pub.path.replace(config.root, ''))) + ' < ' + _cliColor2.default.bgWhite(_cliColor2.default.black(jsonPath.replace(config.root, ''))) + ' (' + _cliColor2.default.cyan(json.abe_meta.template) + ')');
+            console.log(_cliColor2.default.green(i) + '/' + tt + ' - (' + _cliColor2.default.green(msToTime(d)) + '/' + msToTime(total) + ')');
+            console.log(_cliColor2.default.bgWhite(_cliColor2.default.black(pub.path.replace(config.root, '').replace(config.publish.url, ''))) + ' < ' + _cliColor2.default.bgWhite(_cliColor2.default.black(jsonPath.replace(config.root, '').replace(config.data.url, ''))) + ' (' + _cliColor2.default.cyan(json.abe_meta.template) + ')');
             resolve();
           }).catch(function (e) {
             // log.write('publish-all', e)
@@ -62,9 +79,9 @@ function publishNext(published, cb) {
     }
 
     p.then(function () {
-      publishNext(published, cb, i++);
+      publishNext(published, tt, cb, i++);
     }).catch(function () {
-      publishNext(published, cb, i++);
+      publishNext(published, tt, cb, i++);
       console.log('error', _cliColor2.default.red(e));
     });
   } else {
@@ -95,7 +112,7 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
     if (typeof pConfig.FILEPATH !== 'undefined' && pConfig.FILEPATH !== null) {
       // log.write('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
       console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''));
-      pConfig.FILEPATH = fileUtils.concatPath(config.root, config.data.url, pConfig.FILEPATH.replace(config.root));
+      pConfig.FILEPATH = _path2.default.join(config.root, config.data.url, pConfig.FILEPATH.replace(config.root));
 
       var fileJson = FileParser.getJson(pConfig.FILEPATH.replace(new RegExp("\\." + config.files.templates.extension), '.json'));
 
@@ -111,7 +128,7 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
     var allPublished = [];
 
     var publish = config.publish.url;
-    var published = FileParser.getFilesByType(fileUtils.concatPath(site.path, publish, pConfig.ABE_PATH));
+    var published = FileParser.getFilesByType(_path2.default.join(site.path, publish, pConfig.ABE_PATH));
     published = FileParser.getMetas(published, 'draft');
     var ar_url = [];
     var promises = [];
@@ -119,7 +136,7 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
 
     console.log('Found ' + _cliColor2.default.green(published.length) + ' to republish');
     dateStart = new Date();
-    publishNext(published, function (i) {
+    publishNext(published, published.length, function (i) {
       console.log('total ' + _cliColor2.default.green(i) + ' files');
 
       // Promise.all(promises)

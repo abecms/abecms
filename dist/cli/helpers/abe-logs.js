@@ -32,6 +32,10 @@ var _cliColor = require('cli-color');
 
 var _cliColor2 = _interopRequireDefault(_cliColor);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -45,17 +49,17 @@ var Logs = function () {
 
 	_createClass(Logs, null, [{
 		key: 'cleanPath',
-		value: function cleanPath(path) {
-			if (typeof path !== 'undefined' && path !== null) {
+		value: function cleanPath(pathClean) {
+			if (typeof pathClean !== 'undefined' && pathClean !== null) {
 				// console.log('cleanPath', path)
-				path = path.replace(/\/$/, "");
+				pathClean = pathClean.replace(/\/$/, "");
 			}
-			return path;
+			return pathClean;
 		}
 	}, {
 		key: 'removeLast',
-		value: function removeLast(path) {
-			return path.substring(0, Logs.cleanPath(path).lastIndexOf('/'));
+		value: function removeLast(pathRemove) {
+			return pathRemove.substring(0, Logs.cleanPath(pathRemove).lastIndexOf('/'));
 		}
 	}, {
 		key: 'table',
@@ -119,37 +123,37 @@ var Logs = function () {
 			var type = Logs.getType.apply(this, arguments);
 			var msg = '[ ERROR ' + type + ' ]\n' + Logs.text.apply(this, arguments);
 			console.log(_cliColor2.default.red(msg));
-			var path = _.fileUtils.concatPath(_.config.root, '/logs/ERROR-' + Logs.getType.apply(this, arguments) + '.log');
-			Logs.writeFile(path, msg, 'a+');
+			var pathError = _path2.default.join(_.config.root, '/logs/ERROR-' + Logs.getType.apply(this, arguments) + '.log');
+			Logs.writeFile(pathError, msg, 'a+');
 		}
 	}, {
 		key: 'duration',
 		value: function duration(str, time) {
 			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {
-				var path = _.fileUtils.concatPath(_.config.root, '/logs/duration.log');
+				var pathDuration = _path2.default.join(_.config.root, '/logs/duration.log');
 				var durationColor = '#B2FF59';
 				if (time > 5) {
 					durationColor = '#ff003b';
 				} else if (time > 1) {
 					durationColor = '#ffbc00';
 				}
-				Logs.writeFile(path, str + ' in <span style="color: ' + durationColor + ';">' + time + "</span>\n", 'a+');
+				Logs.writeFile(pathDuration, str + ' in <span style="color: ' + durationColor + ';">' + time + "</span>\n", 'a+');
 			}
 		}
 	}, {
 		key: 'write',
 		value: function write() {
 			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {
-				var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
-				Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+');
+				var pathWrite = _path2.default.join(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
+				Logs.writeFile(pathWrite, Logs.text.apply(this, arguments), 'a+');
 			}
 		}
 	}, {
 		key: 'delAndWrite',
 		value: function delAndWrite() {
 			if (typeof _.config.logs !== 'undefined' && _.config.logs !== null && _.config.logs === true) {
-				var path = _.fileUtils.concatPath(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
-				Logs.writeFile(path, Logs.text.apply(this, arguments), 'w');
+				var pathWrite = _path2.default.join(_.config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log');
+				Logs.writeFile(pathWrite, Logs.text.apply(this, arguments), 'w');
 			}
 		}
 	}, {

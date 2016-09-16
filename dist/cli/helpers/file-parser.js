@@ -26,6 +26,10 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -191,19 +195,19 @@ var FileParser = function () {
   }, {
     key: 'getAssetsFolder',
     value: function getAssetsFolder() {
-      var path = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+      var pathAssets = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
 
-      var folder = _.fileUtils.pathWithRoot(path);
+      var folder = _.fileUtils.pathWithRoot(pathAssets);
       var assetsFolders = [];
       var flatten = true;
       var site = folder;
 
       var templates = _.config.templates.url;
       var assets = _.config.files.templates.assets;
-      var path = _.fileUtils.concatPath(folder, templates);
+      var pathAssets = _path2.default.join(folder, templates);
 
-      if (_.folderUtils.isFolder(path)) {
-        var arr = FileParser.read(path, path, 'files', flatten, /(.*?)/, 99);
+      if (_.folderUtils.isFolder(pathAssets)) {
+        var arr = FileParser.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99);
 
         // now check if file for folder exist
         Array.prototype.forEach.call(arr, function (file) {
@@ -234,21 +238,21 @@ var FileParser = function () {
       var structure = _.config.structure.url;
       var templates = _.config.templates.url;
 
-      if (_.folderUtils.isFolder(_.fileUtils.concatPath(site.path, structure)) && _.folderUtils.isFolder(_.fileUtils.concatPath(site.path, templates))) {
-        site.folders = FileParser.getFolders(_.fileUtils.concatPath(site.path, structure), false);
+      if (_.folderUtils.isFolder(_path2.default.join(site.path, structure)) && _.folderUtils.isFolder(_path2.default.join(site.path, templates))) {
+        site.folders = FileParser.getFolders(_path2.default.join(site.path, structure), false);
         result.structure = site.folders;
-        result.templates = result.templates.concat(FileParser.getFiles(_.fileUtils.concatPath(site.path, templates), true, 10, new RegExp('.' + _.config.files.templates.extension)));
+        result.templates = result.templates.concat(FileParser.getFiles(_path2.default.join(site.path, templates), true, 10, new RegExp('.' + _.config.files.templates.extension)));
       }
 
       return result;
     }
   }, {
     key: 'changePathEnv',
-    value: function changePathEnv(path, change) {
-      path = path.replace(_.config.root, '').replace(/^\//, '').split('/');
-      path[0] = change;
+    value: function changePathEnv(pathEnv, change) {
+      pathEnv = pathEnv.replace(_.config.root, '').replace(/^\//, '').split('/');
+      pathEnv[0] = change;
 
-      return _.fileUtils.concatPath(_.config.root, path.join('/'));
+      return _path2.default.join(_.config.root, pathEnv.join('/'));
     }
   }, {
     key: 'getFileDataFromUrl',
@@ -288,14 +292,14 @@ var FileParser = function () {
         var publish = _.config.publish.url;
         var data = _.config.data.url;
 
-        var draftPath = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), draft);
+        var draftPath = FileParser.changePathEnv(_path2.default.join(_.config.root, dir), draft);
 
         res.root = _.config.root;
 
         // set dir path draft/json
-        res.draft.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), draft);
-        res.json.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), data);
-        res.publish.dir = FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, dir), publish);
+        res.draft.dir = FileParser.changePathEnv(_path2.default.join(_.config.root, dir), draft);
+        res.json.dir = FileParser.changePathEnv(_path2.default.join(_.config.root, dir), data);
+        res.publish.dir = FileParser.changePathEnv(_path2.default.join(_.config.root, dir), publish);
         res.publish.json = res.json.dir;
 
         // set filename draft/json
@@ -303,12 +307,12 @@ var FileParser = function () {
         res.publish.file = _.fileAttr.delete(filename);
         res.publish.link = link;
         res.json.file = _.fileUtils.replaceExtension(filename, 'json');
-        res.publish.json = _.fileUtils.concatPath(res.json.dir, _.fileAttr.delete(res.json.file));
+        res.publish.json = _path2.default.join(res.json.dir, _.fileAttr.delete(res.json.file));
 
         // set filename draft/json
-        res.draft.path = _.fileUtils.concatPath(res.draft.dir, res.draft.file);
-        res.publish.path = _.fileUtils.concatPath(res.publish.dir, res.publish.file);
-        res.json.path = _.fileUtils.concatPath(res.json.dir, res.json.file);
+        res.draft.path = _path2.default.join(res.draft.dir, res.draft.file);
+        res.publish.path = _path2.default.join(res.publish.dir, res.publish.file);
+        res.json.path = _path2.default.join(res.json.dir, res.json.file);
 
         if (!_.fileUtils.isFile(res.json.path) && _.folderUtils.isFolder(res.json.dir)) {
           var files = _.fileAttr.filterLatestVersion(FileParser.getFiles(res.json.dir), 'draft');
@@ -331,10 +335,10 @@ var FileParser = function () {
     }
   }, {
     key: 'copySiteAssets',
-    value: function copySiteAssets(path) {
-      var publicFolders = FileParser.getAssetsFolder(path);
+    value: function copySiteAssets(pathAssets) {
+      var publicFolders = FileParser.getAssetsFolder(pathAssets);
       var publish = _.config.publish.url;
-      var dest = _.fileUtils.concatPath(_.config.root, publish);
+      var dest = _path2.default.join(_.config.root, publish);
       if (!_.folderUtils.isFolder(dest)) {
         _mkdirp2.default.sync(dest);
       }
@@ -359,7 +363,7 @@ var FileParser = function () {
             if (typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
               var original = entry.path1;
               var basePath = original.replace(publicFolder, '');
-              var move = _.fileUtils.concatPath(dest, basePath);
+              var move = _path2.default.join(dest, basePath);
 
               if (entry.type2 === 'missing' || entry.state === 'distinct') {
                 _fsExtra2.default.removeSync(move);
@@ -445,8 +449,8 @@ var FileParser = function () {
       var draft = _.config.draft.url;
       var publish = _.config.publish.url;
 
-      var drafted = FileParser.getFilesByType(_.fileUtils.concatPath(site.path, draft), 'd');
-      var published = FileParser.getFilesByType(_.fileUtils.concatPath(site.path, publish));
+      var drafted = FileParser.getFilesByType(_path2.default.join(site.path, draft), 'd');
+      var published = FileParser.getFilesByType(_path2.default.join(site.path, publish));
 
       drafted = _.Hooks.instance.trigger('beforeGetAllFilesDraft', drafted);
       published = _.Hooks.instance.trigger('beforeGetAllFilesPublished', published);
@@ -486,7 +490,7 @@ var FileParser = function () {
   }, {
     key: 'unpublishFile',
     value: function unpublishFile(filePath) {
-      var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.publish.url, filePath));
+      var tplUrl = FileParser.getFileDataFromUrl(_path2.default.join(_.config.publish.url, filePath));
       if (_.fileUtils.isFile(tplUrl.json.path)) {
         var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)));
         if (typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
@@ -504,7 +508,7 @@ var FileParser = function () {
     value: function deleteFile(filePath) {
       filePath = _.Hooks.instance.trigger('beforeDeleteFile', filePath);
 
-      var tplUrl = FileParser.getFileDataFromUrl(_.fileUtils.concatPath(_.config.draft.url, filePath));
+      var tplUrl = FileParser.getFileDataFromUrl(_path2.default.join(_.config.draft.url, filePath));
       var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + _.config.files.templates.extension));
       var revisions = _.fileAttr.getFilesRevision(files, tplUrl.publish.file);
 
@@ -520,13 +524,13 @@ var FileParser = function () {
   }, {
     key: 'deleteFileFromName',
     value: function deleteFileFromName(filePath) {
-      var path = filePath.split('/');
-      var file = path.pop();
-      path = path.join('/');
+      var pathDelete = filePath.split('/');
+      var file = pathDelete.pop();
+      pathDelete = pathDelete.join('/');
       try {
-        var stat = _fsExtra2.default.statSync(path);
+        var stat = _fsExtra2.default.statSync(pathDelete);
         if (stat) {
-          var files = FileParser.getFiles(path, true, 10, new RegExp('.' + _.config.files.templates.extension));
+          var files = FileParser.getFiles(pathDelete, true, 10, new RegExp('.' + _.config.files.templates.extension));
 
           Array.prototype.forEach.call(files, function (item) {
             if (_.fileAttr.delete(item.name) === file) _fsExtra2.default.removeSync(item.path);
@@ -541,7 +545,7 @@ var FileParser = function () {
     value: function getReference() {
       var ref = {};
 
-      var refFolder = _.fileUtils.concatPath(_.config.root, _.config.reference.url);
+      var refFolder = _path2.default.join(_.config.root, _.config.reference.url);
       if (_.folderUtils.isFolder(refFolder)) {
         var files = FileParser.read(_.fileUtils.cleanPath(refFolder), _.fileUtils.cleanPath(refFolder), 'files', true, /.json/);
         Array.prototype.forEach.call(files, function (file) {
@@ -557,17 +561,17 @@ var FileParser = function () {
     }
   }, {
     key: 'getJson',
-    value: function getJson(path) {
+    value: function getJson(pathJson) {
       var displayError = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
       var json = {};
       // HOOKS beforeGetJson
-      path = _.Hooks.instance.trigger('beforeGetJson', path);
+      pathJson = _.Hooks.instance.trigger('beforeGetJson', pathJson);
 
       try {
-        var stat = _fsExtra2.default.statSync(path);
+        var stat = _fsExtra2.default.statSync(pathJson);
         if (stat) {
-          var json = _fsExtra2.default.readJsonSync(path);
+          var json = _fsExtra2.default.readJsonSync(pathJson);
           // var references = FileParser.getReference()
           // json[config.reference.name] = references
         }

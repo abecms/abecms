@@ -1,3 +1,4 @@
+import path from 'path'
 import fse from 'fs-extra'
 
 import {
@@ -7,14 +8,14 @@ import {
 } from '../../cli'
 
 var route = function(req, res, next){
-  var file = fileUtils.concatPath(config.root, 'logs', `${req.params[0]}.log`)
+  var file = path.join(config.root, 'logs', `${req.params[0]}.log`)
   var html = ''
   if (fileUtils.isFile(file)) {
     fse.removeSync(file)
     res.redirect('/abe/delete-logs/');
   }else {
-    var path = fileUtils.concatPath(config.root, 'logs')
-    var files = FileParser.read(path, path, 'files', true, /\.log/, 99)
+    var pathDelete = path.join(config.root, 'logs')
+    var files = FileParser.read(pathDelete, pathDelete, 'files', true, /\.log/, 99)
 
     html += '<a href="/abe/logs">Go to logs</a>'
     html += '<br /><br /><div>Choose to remove logs files</div>'

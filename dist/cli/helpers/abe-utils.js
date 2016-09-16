@@ -38,6 +38,10 @@ var _https = require('https');
 
 var _https2 = _interopRequireDefault(_https);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -380,18 +384,18 @@ var Utils = function () {
                   }
                   host = host[2].split(':');
 
-                  var path = obj.sourceString.split('//');
-                  if (typeof path[1] !== 'undefined' && path[1] !== null) {
-                    path = path[1].split('/');
-                    path.shift();
-                    path = '/' + path.join('/');
+                  var pathSource = obj.sourceString.split('//');
+                  if (typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
+                    pathSource = pathSource[1].split('/');
+                    pathSource.shift();
+                    pathSource = '/' + _path2.default.join('/');
                   } else {
-                    path = '/';
+                    pathSource = '/';
                   }
                   var options = {
                     hostname: host[0],
                     port: typeof host[1] !== 'undefined' && host[1] !== null ? host[1] : defaultPort,
-                    path: path,
+                    path: pathSource,
                     method: 'GET',
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded',
@@ -441,7 +445,7 @@ var Utils = function () {
 
                 break;
               case 'file':
-                jsonPage[sourceAttr][obj.key] = _.FileParser.getJson(_.fileUtils.concatPath(_.config.root, obj.sourceString));
+                jsonPage[sourceAttr][obj.key] = _.FileParser.getJson(_path2.default.join(_.config.root, obj.sourceString));
                 resolveSource();
                 break;
               default:
@@ -455,11 +459,11 @@ var Utils = function () {
         _es6Promise.Promise.all(promises).then(function () {
           resolve();
         }).catch(function (e) {
-          console.error(e);
+          console.error('getDataList', e);
         });
         // return filesRequest
       }).catch(function (e) {
-        console.error(e);
+        console.error('getDataList', e);
       });
 
       return p;

@@ -4,7 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _cli = require('../../cli');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var create = function create(template, path, name, req) {
   var forceJson = arguments.length <= 4 || arguments[4] === undefined ? {} : arguments[4];
@@ -14,7 +20,7 @@ var create = function create(template, path, name, req) {
     _cli.Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson);
 
     var templatePath = _cli.fileUtils.getTemplatePath(template.replace(_cli.config.root, ""));
-    var filePath = _cli.fileUtils.concatPath(path, name);
+    var filePath = path.join(path, name);
     filePath = (0, _cli.cleanSlug)(filePath);
     filePath = _cli.fileUtils.getFilePath(filePath);
 

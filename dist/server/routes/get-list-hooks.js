@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _handlebars = require('handlebars');
 
 var _handlebars2 = _interopRequireDefault(_handlebars);
@@ -27,7 +31,7 @@ var route = function route(req, res, next) {
   //   })
   // })
 
-  var page = _cli.fileUtils.concatPath(__dirname + '/../views/list-hooks.html');
+  var page = _path2.default.join(__dirname + '/../views/list-hooks.html');
   var html = _cli.fileUtils.getFileContent(page);
   var allHooks = [];
 

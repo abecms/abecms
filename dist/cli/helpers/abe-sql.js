@@ -36,6 +36,10 @@ var _ajaxRequest2 = _interopRequireDefault(_ajaxRequest);
 
 var _es6Promise = require('es6-promise');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -301,22 +305,22 @@ var Sql = function () {
   }, {
     key: 'getFromDirectory',
     value: function getFromDirectory(statement, tplPath) {
-      var path = '';
+      var pathFromDir = '';
       if (typeof tplPath === 'undefined' || tplPath === null || tplPath === '') {
         tplPath = '/';
       }
 
       if (statement === '' || statement === '*' || statement === '/') {
-        path = _.fileUtils.concatPath(_.config.root, _.config.data.url);
+        pathFromDir = _path2.default.join(_.config.root, _.config.data.url);
       } else if (statement === './') {
-        path = _.fileUtils.concatPath(_.config.root, _.config.data.url, tplPath);
+        pathFromDir = _path2.default.join(_.config.root, _.config.data.url, tplPath);
       } else if (statement.indexOf('/') === 0) {
-        path = _.fileUtils.concatPath(_.config.root, _.config.data.url, statement);
+        pathFromDir = _path2.default.join(_.config.root, _.config.data.url, statement);
       } else if (statement.indexOf('/') !== 0) {
-        path = _.fileUtils.concatPath(_.config.root, _.config.data.url, tplPath, statement);
+        pathFromDir = _path2.default.join(_.config.root, _.config.data.url, tplPath, statement);
       }
 
-      return path;
+      return pathFromDir;
     }
   }, {
     key: 'executeOrderByClause',
@@ -337,7 +341,7 @@ var Sql = function () {
     }
   }, {
     key: 'executeFromClause',
-    value: function executeFromClause(statement, path) {
+    value: function executeFromClause(statement, pathFromClause) {
       var files = [];
       var recursive = 99;
       var fileRegex = /(.*(-abe-).*Z\.json)/;
@@ -349,7 +353,7 @@ var Sql = function () {
         from = from.slice(0, -1);
       }
 
-      var fromDirectory = Sql.getFromDirectory(from, path);
+      var fromDirectory = Sql.getFromDirectory(from, pathFromClause);
 
       if (_.folderUtils.isFolder(fromDirectory)) {
         // we'll get only published files which don't contain "-abe-"
@@ -360,12 +364,12 @@ var Sql = function () {
     }
   }, {
     key: 'execQuery',
-    value: function execQuery(path, match, jsonPage) {
+    value: function execQuery(pathQuery, match, jsonPage) {
       var res = [];
       var files = [];
       var request = Sql.handleSqlRequest((0, _.getAttr)(match, 'source'), jsonPage);
 
-      files = Sql.executeFromClause(request.from, path);
+      files = Sql.executeFromClause(request.from, pathQuery);
       files = Sql.executeOrderByClause(files, request.orderby);
       res = Sql.executeWhereClause(files, request.where, request.limit, request.columns, jsonPage);
 
@@ -373,14 +377,14 @@ var Sql = function () {
     }
   }, {
     key: 'executeQuerySync',
-    value: function executeQuerySync(path, match, jsonPage) {
-      return Sql.execQuery(path, match, jsonPage);
+    value: function executeQuerySync(pathQuerySync, match, jsonPage) {
+      return Sql.execQuery(pathQuerySync, match, jsonPage);
     }
   }, {
     key: 'executeQuery',
-    value: function executeQuery(path, match, jsonPage) {
+    value: function executeQuery(pathexecuteQuery, match, jsonPage) {
       var p = new _es6Promise.Promise(function (resolve, reject) {
-        var res = Sql.execQuery(path, match, jsonPage);
+        var res = Sql.execQuery(pathexecuteQuery, match, jsonPage);
         resolve(res);
       }).catch(function (e) {
         console.error(e);
@@ -411,13 +415,13 @@ var Sql = function () {
     }
   }, {
     key: 'deep_value',
-    value: function deep_value(obj, path) {
+    value: function deep_value(obj, pathDeep) {
 
-      if (path.indexOf('.') === -1) {
-        return typeof obj[path] !== 'undefined' && obj[path] !== null ? obj[path] : null;
+      if (pathDeep.indexOf('.') === -1) {
+        return typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null ? obj[pathDeep] : null;
       }
 
-      var pathSplit = path.split('.');
+      var pathSplit = pathDeep.split('.');
       var res = JSON.parse(JSON.stringify(obj));
       for (var i = 0; i < pathSplit.length; i++) {
         if (typeof res[pathSplit[i]] !== 'undefined' && res[pathSplit[i]] !== null) {
@@ -431,13 +435,13 @@ var Sql = function () {
     }
   }, {
     key: 'deep_value_array',
-    value: function deep_value_array(obj, path) {
+    value: function deep_value_array(obj, pathDeep) {
 
-      if (path.indexOf('.') === -1) {
-        return typeof obj[path] !== 'undefined' && obj[path] !== null ? obj[path] : null;
+      if (pathDeep.indexOf('.') === -1) {
+        return typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null ? obj[pathDeep] : null;
       }
 
-      var pathSplit = path.split('.');
+      var pathSplit = pathDeep.split('.');
       var res = JSON.parse(JSON.stringify(obj));
 
       while (pathSplit.length > 0) {

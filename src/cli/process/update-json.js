@@ -1,5 +1,6 @@
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
+import path from 'path'
 import {
   config
   ,FileParser
@@ -23,7 +24,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
 
   var allJson;
 
-  pConfig.FILEPATH = fileUtils.concatPath(config.root, config.data.url, pConfig.FILEPATH ? pConfig.FILEPATH.replace(config.root) : '');
+  pConfig.FILEPATH = path.join(config.root, config.data.url, pConfig.FILEPATH ? pConfig.FILEPATH.replace(config.root) : '');
 
   if(pConfig.FILETYPE) {
     allJson = FileParser.getFilesByType(pConfig.FILEPATH, pConfig.FILETYPE)

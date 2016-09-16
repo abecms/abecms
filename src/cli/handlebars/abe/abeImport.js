@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars'
 import fse from 'fs-extra'
+import path from 'path'
 
 import {
   Plugins
@@ -30,7 +31,7 @@ export default function abeImport (file, config, ctx) {
 
   var pluginsPartials = Plugins.instance.getPartials()
   Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
-    var checkFile = fileUtils.concatPath(pluginPartials, `${file}.html`)
+    var checkFile = path.join(pluginPartials, `${file}.html`)
     if (fileUtils.isFile(checkFile)) {
       html += fse.readFileSync(checkFile, 'utf8')
     }

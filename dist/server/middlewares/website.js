@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -52,13 +56,13 @@ var middleware = function middleware(req, res, next) {
   }
 
   if (req.originalUrl === '' || req.originalUrl === '/' || req.originalUrl.indexOf('.') === -1) {
-    var path = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.publish.url, req.originalUrl);
-    if (!_cli.folderUtils.isFolder(path)) {
+    var pathWebsite = _path2.default.join(_cli.config.root, _cli.config.publish.url, req.originalUrl);
+    if (!_cli.folderUtils.isFolder(pathWebsite)) {
       return next();
     }
-    var files = _cli.FileParser.getFiles(path, true, 0, /(.*?)/);
+    var files = _cli.FileParser.getFiles(pathWebsite, true, 0, /(.*?)/);
 
-    var folders = _cli.FileParser.getFolders(path, true, 0);
+    var folders = _cli.FileParser.getFolders(pathWebsite, true, 0);
     var html = '<ul>';
     html += '<li><a href="/abe/">abe</abe></li>';
     html += '<br />';
@@ -90,7 +94,7 @@ var middleware = function middleware(req, res, next) {
 
     var html = '';
 
-    var page = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.publish.url, req.originalUrl);
+    var page = _path2.default.join(_cli.config.root, _cli.config.publish.url, req.originalUrl);
     if (_cli.fileUtils.isFile(page)) {
       html = _cli.fileUtils.getFileContent(page);
     } else {

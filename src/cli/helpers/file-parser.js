@@ -3,6 +3,7 @@ import clc from 'cli-color'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import moment from 'moment'
+import path from 'path'
 
 import {
 	cli
@@ -155,18 +156,18 @@ export default class FileParser {
 	  return result
 	}
   
-  static getAssetsFolder(path = '') {
-		var folder = fileUtils.pathWithRoot(path)
+  static getAssetsFolder(pathAssets = '') {
+		var folder = fileUtils.pathWithRoot(pathAssets)
 		var assetsFolders = []
   	var flatten = true
 	  var site = folder
 
   	let templates = config.templates.url
   	let assets = config.files.templates.assets
-  	var path = fileUtils.concatPath(folder, templates)
+  	var pathAssets = path.join(folder, templates)
 
-		if(folderUtils.isFolder(path)) {
-	  	var arr = FileParser.read(path, path, 'files', flatten, /(.*?)/, 99)
+		if(folderUtils.isFolder(pathAssets)) {
+	  	var arr = FileParser.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99)
 
 	  	// now check if file for folder exist
 	  	Array.prototype.forEach.call(arr, (file) => {
@@ -195,20 +196,20 @@ export default class FileParser {
     let structure = config.structure.url
     let templates = config.templates.url
 
-    if(folderUtils.isFolder(fileUtils.concatPath(site.path, structure)) && folderUtils.isFolder(fileUtils.concatPath(site.path, templates))) {
-	    site.folders = FileParser.getFolders(fileUtils.concatPath(site.path, structure), false)
+    if(folderUtils.isFolder(path.join(site.path, structure)) && folderUtils.isFolder(path.join(site.path, templates))) {
+	    site.folders = FileParser.getFolders(path.join(site.path, structure), false)
 	    result.structure = site.folders
-	    result.templates = result.templates.concat(FileParser.getFiles(fileUtils.concatPath(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
+	    result.templates = result.templates.concat(FileParser.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
     }
 
 	  return result
 	}
 
-  static changePathEnv(path, change) {
-  	path = path.replace(config.root, '').replace(/^\//, '').split('/')
-  	path[0] = change
+  static changePathEnv(pathEnv, change) {
+  	pathEnv = pathEnv.replace(config.root, '').replace(/^\//, '').split('/')
+  	pathEnv[0] = change
   	
-  	return fileUtils.concatPath(config.root, path.join('/'))
+  	return path.join(config.root, pathEnv.join('/'))
   }
   
   static getFileDataFromUrl(url) {
@@ -247,14 +248,14 @@ export default class FileParser {
 	  	let publish = config.publish.url
 	  	let data = config.data.url
 
-	  	var draftPath = FileParser.changePathEnv(fileUtils.concatPath(config.root, dir), draft)
+	  	var draftPath = FileParser.changePathEnv(path.join(config.root, dir), draft)
 
 	  	res.root = config.root
 
 	  	// set dir path draft/json
-	  	res.draft.dir = FileParser.changePathEnv(fileUtils.concatPath(config.root, dir), draft)
-	  	res.json.dir = FileParser.changePathEnv(fileUtils.concatPath(config.root, dir), data)
-	  	res.publish.dir = FileParser.changePathEnv(fileUtils.concatPath(config.root, dir), publish)
+	  	res.draft.dir = FileParser.changePathEnv(path.join(config.root, dir), draft)
+	  	res.json.dir = FileParser.changePathEnv(path.join(config.root, dir), data)
+	  	res.publish.dir = FileParser.changePathEnv(path.join(config.root, dir), publish)
 	  	res.publish.json = res.json.dir
 
 	  	// set filename draft/json
@@ -262,12 +263,12 @@ export default class FileParser {
 	  	res.publish.file = fileAttr.delete(filename)
 	  	res.publish.link = link
 	  	res.json.file = fileUtils.replaceExtension(filename, 'json')
-	  	res.publish.json = fileUtils.concatPath(res.json.dir, fileAttr.delete(res.json.file))
+	  	res.publish.json = path.join(res.json.dir, fileAttr.delete(res.json.file))
 
 	  	// set filename draft/json
-	  	res.draft.path = fileUtils.concatPath(res.draft.dir, res.draft.file)
-	  	res.publish.path = fileUtils.concatPath(res.publish.dir, res.publish.file)
-	  	res.json.path = fileUtils.concatPath(res.json.dir, res.json.file)
+	  	res.draft.path = path.join(res.draft.dir, res.draft.file)
+	  	res.publish.path = path.join(res.publish.dir, res.publish.file)
+	  	res.json.path = path.join(res.json.dir, res.json.file)
 
 	  	if(!fileUtils.isFile(res.json.path) && folderUtils.isFolder(res.json.dir)) {
 	  		var files = fileAttr.filterLatestVersion(FileParser.getFiles(res.json.dir), 'draft')
@@ -289,10 +290,10 @@ export default class FileParser {
   	return res
   }
 
-  static copySiteAssets(path) {
-  	var publicFolders = FileParser.getAssetsFolder(path)
+  static copySiteAssets(pathAssets) {
+  	var publicFolders = FileParser.getAssetsFolder(pathAssets)
   	let publish = config.publish.url
-  	var dest = fileUtils.concatPath(config.root, publish)
+  	var dest = path.join(config.root, publish)
   	if (!folderUtils.isFolder(dest)) {
   		mkdirp.sync(dest)
   	}
@@ -317,7 +318,7 @@ export default class FileParser {
 			    if(typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
 			      var original = entry.path1
 			      var basePath = original.replace(publicFolder, '')
-			      var move = fileUtils.concatPath(dest, basePath)
+			      var move = path.join(dest, basePath)
 
 				    if(entry.type2 === 'missing' || entry.state === 'distinct') {
 				    	fse.removeSync(move)
@@ -398,8 +399,8 @@ export default class FileParser {
     let draft = config.draft.url
     let publish = config.publish.url
 
-    var drafted = FileParser.getFilesByType(fileUtils.concatPath(site.path, draft), 'd')
-    var published = FileParser.getFilesByType(fileUtils.concatPath(site.path, publish))
+    var drafted = FileParser.getFilesByType(path.join(site.path, draft), 'd')
+    var published = FileParser.getFilesByType(path.join(site.path, publish))
 
 		drafted = Hooks.instance.trigger('beforeGetAllFilesDraft', drafted)
 		published = Hooks.instance.trigger('beforeGetAllFilesPublished', published)
@@ -441,7 +442,7 @@ export default class FileParser {
   }
 
   static unpublishFile(filePath) {
-  	var tplUrl = FileParser.getFileDataFromUrl(fileUtils.concatPath(config.publish.url, filePath))
+  	var tplUrl = FileParser.getFileDataFromUrl(path.join(config.publish.url, filePath))
   	if(fileUtils.isFile(tplUrl.json.path)) {
 	  	var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)))
 	  	if(typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
@@ -467,7 +468,7 @@ export default class FileParser {
   static deleteFile(filePath) {
   	filePath = Hooks.instance.trigger('beforeDeleteFile', filePath)
 
-  	var tplUrl = FileParser.getFileDataFromUrl(fileUtils.concatPath(config.draft.url, filePath))
+  	var tplUrl = FileParser.getFileDataFromUrl(path.join(config.draft.url, filePath))
   	var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + config.files.templates.extension))
   	var revisions = fileAttr.getFilesRevision(files, tplUrl.publish.file)
 
@@ -482,13 +483,13 @@ export default class FileParser {
   }
 
   static deleteFileFromName(filePath) {
-  	var path = filePath.split('/')
-  	var file = path.pop()
-  	path = path.join('/')
+  	var pathDelete = filePath.split('/')
+  	var file = pathDelete.pop()
+  	pathDelete = pathDelete.join('/')
 		try{
-  		var stat = fse.statSync(path)
+  		var stat = fse.statSync(pathDelete)
 			if (stat) {
-				var files = FileParser.getFiles(path, true, 10, new RegExp(`.${config.files.templates.extension}`))
+				var files = FileParser.getFiles(pathDelete, true, 10, new RegExp(`.${config.files.templates.extension}`))
 				
 				Array.prototype.forEach.call(files, (item) => {
 					if(fileAttr.delete(item.name) === file) fse.removeSync(item.path)
@@ -503,7 +504,7 @@ export default class FileParser {
   static getReference() {
   	var ref = {}
 
-  	var refFolder = fileUtils.concatPath(config.root, config.reference.url)
+  	var refFolder = path.join(config.root, config.reference.url)
   	if(folderUtils.isFolder(refFolder)) {
 			var files = FileParser.read(fileUtils.cleanPath(refFolder), fileUtils.cleanPath(refFolder), 'files', true, /.json/)
 			Array.prototype.forEach.call(files, (file) => {
@@ -518,15 +519,15 @@ export default class FileParser {
   	return ref
   }
 
-  static getJson(path, displayError = true) {
+  static getJson(pathJson, displayError = true) {
   	var json = {}
     // HOOKS beforeGetJson
-    path = Hooks.instance.trigger('beforeGetJson', path)
+    pathJson = Hooks.instance.trigger('beforeGetJson', pathJson)
     
 		try {
-			var stat = fse.statSync(path)
+			var stat = fse.statSync(pathJson)
 			if (stat) {
-				var json = fse.readJsonSync(path)
+				var json = fse.readJsonSync(pathJson)
 				// var references = FileParser.getReference()
 				// json[config.reference.name] = references
 			}

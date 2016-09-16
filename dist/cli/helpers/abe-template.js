@@ -15,6 +15,10 @@ var _extend2 = _interopRequireDefault(_extend);
 
 var _es6Promise = require('es6-promise');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -49,7 +53,7 @@ function partials(text) {
   while (match = importReg.exec(text)) {
     var file = (0, _cli.getAttr)(match[0], 'file');
     var partial = '';
-    file = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.partials, file);
+    file = _path2.default.join(_cli.config.root, _cli.config.partials, file);
     if (_cli.fileUtils.isFile(file)) {
       partial = _fsExtra2.default.readFileSync(file, 'utf8');
     }
@@ -109,12 +113,12 @@ function getTemplate(file) {
   // HOOKS beforeGetTemplate
   file = _cli.Hooks.instance.trigger('beforeGetTemplate', file);
 
-  file = file.replace(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.templates.url), '');
+  file = file.replace(_path2.default.join(_cli.config.root, _cli.config.templates.url), '');
   file = file.replace(_cli.config.root, '');
   if (file.indexOf('.') > -1) {
     file = _cli.fileUtils.removeExtension(file);
   }
-  file = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.templates.url, file + '.' + _cli.config.files.templates.extension);
+  file = _path2.default.join(_cli.config.root, _cli.config.templates.url, file + '.' + _cli.config.files.templates.extension);
   if (_cli.fileUtils.isFile(file)) {
     text = _fsExtra2.default.readFileSync(file, 'utf8');
     text = partials(text);

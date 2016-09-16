@@ -4,7 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _cli = require('../../cli');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var duplicate = function duplicate(oldFilePath, template, path, name, req) {
   var isUpdate = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
@@ -13,7 +19,7 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
     _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, isUpdate);
 
     if (typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
-      var url = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.draft.url, oldFilePath);
+      var url = path.join(_cli.config.root, _cli.config.draft.url, oldFilePath);
       var revisions = [];
 
       if (!_cli.fileAttr.test(url)) {

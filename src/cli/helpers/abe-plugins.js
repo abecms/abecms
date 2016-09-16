@@ -1,7 +1,7 @@
 import fse from 'fs-extra'
 import clc from 'cli-color'
 import extend from 'extend'
-
+import path from 'path'
 import {
   Util,
   FileParser,
@@ -21,14 +21,14 @@ class Plugins {
   	if(enforcer != singletonEnforcer) throw "Cannot construct Plugins singleton"
     this._plugins = []
     this.fn = []
-    var pluginsDir = fileUtils.concatPath(config.root, config.plugins.url)
+    var pluginsDir = path.join(config.root, config.plugins.url)
     if(folderUtils.isFolder(pluginsDir)) {
       this._plugins = FileParser.getFolders(pluginsDir, true, 0)
       Array.prototype.forEach.call(this._plugins, (plugin) => {
         // has hooks
-        var plugHooks = fileUtils.concatPath(plugin.path, config.hooks.url)
+        var plugHooks = path.join(plugin.path, config.hooks.url)
         if(folderUtils.isFolder(plugHooks)) {
-          var plugHooksFile = fileUtils.concatPath(plugHooks, 'hooks.js')
+          var plugHooksFile = path.join(plugHooks, 'hooks.js')
           var h = require(plugHooksFile)
           plugin.hooks = h.default
         }else {
@@ -36,7 +36,7 @@ class Plugins {
         }
 
         // has partials
-        var plugPartials = fileUtils.concatPath(plugin.path, config.pluginsPartials)
+        var plugPartials = path.join(plugin.path, config.pluginsPartials)
         if(folderUtils.isFolder(plugPartials)) {
           plugin.partials = plugPartials
         }else {
@@ -44,7 +44,7 @@ class Plugins {
         }
 
         // has templates
-        var plugTemplates = fileUtils.concatPath(plugin.path, config.templates.url)
+        var plugTemplates = path.join(plugin.path, config.templates.url)
         if(folderUtils.isFolder(plugTemplates)) {
           plugin.templates = plugTemplates
         }else {
@@ -52,11 +52,11 @@ class Plugins {
         }
 
         // has routes
-        var plugRoutes = fileUtils.concatPath(plugin.path, 'routes')
+        var plugRoutes = path.join(plugin.path, 'routes')
         if(folderUtils.isFolder(plugRoutes)) {
           plugin.routes = {}
 
-          var gets = fileUtils.concatPath(plugRoutes, 'get')
+          var gets = path.join(plugRoutes, 'get')
           if(folderUtils.isFolder(gets)) {
             var routesGet = FileParser.getFiles(gets, true, 0)
             Array.prototype.forEach.call(routesGet, (route) => {
@@ -65,7 +65,7 @@ class Plugins {
             plugin.routes.get = routesGet
           }
 
-          var posts = fileUtils.concatPath(plugRoutes, 'post')
+          var posts = path.join(plugRoutes, 'post')
           if(folderUtils.isFolder(posts)) {
             var routesPost = FileParser.getFiles(posts, true, 0)
             Array.prototype.forEach.call(routesPost, (route) => {

@@ -6,6 +6,7 @@ import ajaxRequest from 'ajax-request'
 import {Promise} from 'es6-promise'
 import http from 'http' 
 import https from 'https'
+import path from 'path'
 
 import {
   config
@@ -365,18 +366,18 @@ export default class Utils {
                 }
                 host = host[2].split(':')
 
-                var path = obj.sourceString.split('//')
-                if(typeof path[1] !== 'undefined' && path[1] !== null) {
-                  path = path[1].split('/')
-                  path.shift()
-                  path = '/' + path.join('/')
+                var pathSource = obj.sourceString.split('//')
+                if(typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
+                  pathSource = pathSource[1].split('/')
+                  pathSource.shift()
+                  pathSource = '/' + path.join('/')
                 }else {
-                  path = '/'
+                  pathSource = '/'
                 }
                 var options = {
                   hostname: host[0],
                   port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
-                  path: path,
+                  path: pathSource,
                   method: 'GET',
                   headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -427,7 +428,7 @@ export default class Utils {
 
               break;
             case 'file':
-              jsonPage[sourceAttr][obj.key] = FileParser.getJson(fileUtils.concatPath(config.root, obj.sourceString))
+              jsonPage[sourceAttr][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
               resolveSource()
               break;
             default:
@@ -442,11 +443,11 @@ export default class Utils {
         .then(() => {
           resolve()
         }).catch(function(e) {
-          console.error(e)
+          console.error('getDataList', e)
         })
       // return filesRequest
       }).catch(function(e) {
-        console.error(e);
+        console.error('getDataList', e)
       })
 
     return p

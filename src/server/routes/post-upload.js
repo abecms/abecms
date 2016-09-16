@@ -1,3 +1,4 @@
+import path from 'path'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 
@@ -17,7 +18,7 @@ var route = function(req, res, next){
   var fstream
   var folderWebPath = '/' + config.upload.image
   folderWebPath = Hooks.instance.trigger('beforeSaveImage', folderWebPath, req)
-  var folderFilePath = fileUtils.concatPath(config.root, config.publish.url, folderWebPath)
+  var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
   req.pipe(req.busboy)
   var size = 0
@@ -56,7 +57,7 @@ var route = function(req, res, next){
       var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
       var cleanFileName = cleanSlug(filename).replace(`.${config.files.templates.extension}`, `${randID}.${ext}`)
 
-      filePath = fileUtils.concatPath(folderFilePath, cleanFileName)
+      filePath = path.join(folderFilePath, cleanFileName)
       var createImage = function () {
         try{
           var sfStat = fse.statSync(filePath)
@@ -69,7 +70,7 @@ var route = function(req, res, next){
           }
         }
         catch(e){
-          resp['filePath'] = fileUtils.concatPath(folderWebPath, cleanFileName)
+          resp['filePath'] = path.join(folderWebPath, cleanFileName)
           fstream = fse.createWriteStream(filePath)
           for (var i = 0; i < file.fileRead.length; i++) {
             fstream.write(file.fileRead[i])
