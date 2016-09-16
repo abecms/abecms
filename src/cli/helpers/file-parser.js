@@ -196,9 +196,11 @@ export default class FileParser {
     let structure = config.structure.url
     let templates = config.templates.url
 
-    if(folderUtils.isFolder(path.join(site.path, structure)) && folderUtils.isFolder(path.join(site.path, templates))) {
-	    site.folders = FileParser.getFolders(path.join(site.path, structure), false)
-	    result.structure = site.folders
+    if(folderUtils.isFolder(path.join(site.path, structure))) {
+      site.folders = FileParser.getFolders(path.join(site.path, structure), false)
+      result.structure = site.folders
+    }
+    if(folderUtils.isFolder(path.join(site.path, templates))) {
 	    result.templates = result.templates.concat(FileParser.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
     }
 
