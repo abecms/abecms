@@ -101,7 +101,9 @@ var route = function(req, res, next){
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(resp))
       }
-      catch(e){}
+      catch(e){
+        console.log('post upload finish', e)
+      }
     }
     tryUpload()
   });
