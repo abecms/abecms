@@ -31,6 +31,10 @@ var _xss2 = _interopRequireDefault(_xss);
 
 var _es6Promise = require('es6-promise');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -87,21 +91,22 @@ function save(url, tplPath) {
       type = 'draft';
       realType = 'draft';
       url = _.Hooks.instance.trigger('afterReject', url);
-      resolve({ reject: _.fileAttr.delete(url).replace(_.fileUtils.concatPath(_.config.root, _.config.draft.url), '') });
+      resolve({ reject: _.fileAttr.delete(url).replace(_path2.default.join(_.config.root, _.config.draft.url), '') });
     }
     var tplUrl = _.FileParser.getFileDataFromUrl(url);
     type = type || _.FileParser.getType(url);
-    var path = dateIso(tplUrl, type);
+    var pathIso = dateIso(tplUrl, type);
     if (typeof previousSave !== 'undefined' && previousSave !== null) {
-      path.jsonPath = _.fileUtils.concatPath(_.config.root, previousSave.jsonPath.replace(_.config.root, '')).replace(/-abe-d/, '-abe-' + realType[0]);
-      path.htmlPath = _.fileUtils.concatPath(_.config.root, previousSave.htmlPath.replace(_.config.root, '')).replace(/-abe-d/, '-abe-' + realType[0]);
+      pathIso.jsonPath = _path2.default.join(_.config.root, previousSave.jsonPath.replace(_.config.root, '')).replace(/-abe-d/, '-abe-' + realType[0]);
+      pathIso.htmlPath = _path2.default.join(_.config.root, previousSave.htmlPath.replace(_.config.root, '')).replace(/-abe-d/, '-abe-' + realType[0]);
     }
 
     if (tplPath.indexOf('.') > -1) {
       tplPath = _.fileUtils.removeExtension(tplPath);
     }
     var tpl = tplPath.replace(_.config.root, '');
-    var fullTpl = _.fileUtils.concatPath(_.config.root, _.config.templates.url, tpl) + '.' + _.config.files.templates.extension;
+
+    var fullTpl = _path2.default.join(_.config.root, _.config.templates.url, tpl) + '.' + _.config.files.templates.extension;
 
     if (typeof json === 'undefined' || json === null) {
       json = _.FileParser.getJson(tplUrl.json.path);
@@ -116,7 +121,7 @@ function save(url, tplPath) {
 
     var meta = _.config.meta.name;
     json[meta] = (0, _extend2.default)(json[meta], ext);
-    var date = _.fileAttr.get(path.jsonPath).d;
+    var date = _.fileAttr.get(pathIso.jsonPath).d;
 
     if (publishAll) {
       date = json[meta].publish.date;
@@ -154,11 +159,11 @@ function save(url, tplPath) {
           path: fullTpl
         },
         html: {
-          path: path.htmlPath
+          path: pathIso.htmlPath
         },
         json: {
           content: json,
-          path: path.jsonPath
+          path: pathIso.jsonPath
         }
       };
 
@@ -183,7 +188,7 @@ function save(url, tplPath) {
       _.log.duration('save: ' + url.replace(_.config.root, '') + ' (' + type + ')', (new Date().getTime() - dateStart.getTime()) / 1000);
       resolve(res);
     }).catch(function (e) {
-      console.error(e);
+      console.error('Save.js', e);
     });
   });
 

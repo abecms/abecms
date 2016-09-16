@@ -1,3 +1,4 @@
+import path from 'path'
 import {
   fileUtils,
   FileParser,
@@ -17,7 +18,7 @@ var create = function(template, path, name, req, forceJson = {}, duplicate = fal
       Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson)
 
       var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ""))
-      var filePath = fileUtils.concatPath(path, name)
+      var filePath = path.join(path, name)
       filePath = cleanSlug(filePath)
       filePath = fileUtils.getFilePath(filePath)
 

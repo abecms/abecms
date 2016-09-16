@@ -3,9 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 exports.editor = editor;
 
 var _fsExtra = require('fs-extra');
@@ -26,7 +23,7 @@ var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function add(obj, json, text, fakeContent, util) {
+function add(obj, json, text, util) {
   var value = obj.value;
 
   if (obj.key.indexOf('[') > -1) {
@@ -41,40 +38,16 @@ function add(obj, json, text, fakeContent, util) {
       if (typeof json[key][index] === 'undefined' || json[key][index] === null) json[key][index] = {};
       json[key][index][prop] = value;
     }
-  } else {
-    if ((typeof value === 'undefined' || value === null || value === '') && fakeContent) {
-      if (typeof obj.source === 'undefined' || obj.source === null) {
-        value = util.lorem(obj.type);
-      } else {
-        if (_typeof(obj.source) === 'object') {
-          value = [];
-          var i = 0;
-          Array.prototype.forEach.call(obj.source, function (item) {
-            if (typeof obj.maxLength === 'undefined' || obj.maxLength === null || obj.maxLength === '' || i < obj.maxLength) {
-              value.push(item);
-            }
-            i++;
-          });
-          json[obj.key] = value;
-        } else {
-          value = obj.source;
-        }
-      }
-      json[obj.key] = value;
-    }
   }
 
-  if (fakeContent) {
-    value = util.lorem(obj.type);
-  }
   util.add(obj);
 
   return value;
 }
 
-function addToForm(match, text, json, fakeContent, util, arrayBlock) {
-  var keyArray = arguments.length <= 6 || arguments[6] === undefined ? null : arguments[6];
-  var i = arguments.length <= 7 || arguments[7] === undefined ? 0 : arguments[7];
+function addToForm(match, text, json, util, arrayBlock) {
+  var keyArray = arguments.length <= 5 || arguments[5] === undefined ? null : arguments[5];
+  var i = arguments.length <= 6 || arguments[6] === undefined ? 0 : arguments[6];
 
   var v = '{{' + match + '}}',
       obj = _cli.Util.getAllAttributes(v, json);
@@ -86,28 +59,28 @@ function addToForm(match, text, json, fakeContent, util, arrayBlock) {
       obj.keyArray = keyArray;
       obj.realKey = realKey;
       obj.key = keyArray + "[" + i + "]." + realKey;
-      obj.desc = obj.desc + " " + i, insertAbeEach(obj, text, json, fakeContent, util, arrayBlock);
+      obj.desc = obj.desc + " " + i, insertAbeEach(obj, text, json, util, arrayBlock);
     } else if (util.dontHaveKey(obj.key)) {
       obj.value = json[obj.key];
-      json[obj.key] = add(obj, json, text, fakeContent, util);
+      json[obj.key] = add(obj, json, text, util);
     }
   } else if (util.dontHaveKey(obj.key) && util.isSingleAbe(v, text)) {
     var realKey = obj.key.replace(/\./g, '-');
     obj.value = json[realKey];
-    json[obj.key] = add(obj, json, text, fakeContent, util);
+    json[obj.key] = add(obj, json, text, util);
   }
 }
 
-function matchAttrAbe(text, json, fakeContent, util, arrayBlock) {
+function matchAttrAbe(text, json, util, arrayBlock) {
   var patt = /abe [^{{}}]+?(?=\}})/g,
       match;
   // While regexp match HandlebarsJS template item => keepgoing
   while (match = patt.exec(text)) {
-    addToForm(match[0], text, json, fakeContent, util, arrayBlock, null, null);
+    addToForm(match[0], text, json, util, arrayBlock, null, null);
   }
 }
 
-function insertAbeEach(obj, text, json, fakeContent, util, arrayBlock) {
+function insertAbeEach(obj, text, json, util, arrayBlock) {
   if (typeof arrayBlock[obj.keyArray][obj.realKey] === "undefined" || arrayBlock[obj.keyArray][obj.realKey] === null) {
     arrayBlock[obj.keyArray][obj.realKey] = [];
   }
@@ -122,7 +95,7 @@ function insertAbeEach(obj, text, json, fakeContent, util, arrayBlock) {
   }
 }
 
-function each(text, json, fakeContent, util, arrayBlock) {
+function each(text, json, util, arrayBlock) {
   var pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
   var patt = /abe [^{{}}]+?(?=\}})/g;
   var textEach, match;
@@ -141,10 +114,10 @@ function each(text, json, fakeContent, util, arrayBlock) {
         if (json[keyArray]) {
           for (var i = 0; i < json[keyArray].length; i++) {
             var key = json[keyArray];
-            addToForm(v, text, json, fakeContent, util, arrayBlock, keyArray, i);
+            addToForm(v, text, json, util, arrayBlock, keyArray, i);
           }
         } else {
-          addToForm(v, text, json, fakeContent, util, arrayBlock, keyArray, 0);
+          addToForm(v, text, json, util, arrayBlock, keyArray, 0);
         }
       }
     }
@@ -159,13 +132,13 @@ function each(text, json, fakeContent, util, arrayBlock) {
 
     for (var i = 0; i < length; i++) {
       for (var j = 0; j < attrArray.length; j++) {
-        add(arrayBlock[keyArray][attrArray[j]][i], json, text, fakeContent, util);
+        add(arrayBlock[keyArray][attrArray[j]][i], json, text, util);
       }
     }
   }
 }
 
-function addSource(text, json, fakeContent, util, arrayBlock) {
+function addSource(text, json, util, arrayBlock) {
   var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
       match,
       limit = 0;
@@ -174,7 +147,7 @@ function addSource(text, json, fakeContent, util, arrayBlock) {
     var obj = _cli.Util.getAllAttributes(match[0], json);
 
     if (obj.editable) {
-      add(obj, json, text, fakeContent, util);
+      add(obj, json, text, util);
     } else {
       json[obj.key] = obj.source;
     }
@@ -248,13 +221,12 @@ function orderBlock(util) {
   return formTabsOrdered;
 }
 
-function editor(fileName, tplUrl, fake) {
+function editor(fileName, tplUrl) {
   var p = new _es6Promise.Promise(function (resolve, reject) {
     var util = new _cli.Util();
     var arrayBlock = [];
     var text;
     var json;
-    var fakeContent = fake;
     var tabIndex = 0;
 
     json = {};
@@ -265,13 +237,13 @@ function editor(fileName, tplUrl, fake) {
     text = (0, _cli.getTemplate)(fileName);
 
     _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json, true).then(function () {
-      addSource(text, json, fakeContent, util, arrayBlock);
+      addSource(text, json, util, arrayBlock);
 
       text = _cli.Util.removeDataList(text);
 
-      matchAttrAbe(text, json, fakeContent, util, arrayBlock);
+      matchAttrAbe(text, json, util, arrayBlock);
       arrayBlock = [];
-      each(text, json, fakeContent, util, arrayBlock);
+      each(text, json, util, arrayBlock);
 
       if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         var tpl = json.abe_meta.template.split('/');

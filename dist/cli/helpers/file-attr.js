@@ -10,6 +10,10 @@ var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -273,7 +277,7 @@ var FileAttr = function () {
       var fileName = filePath.replace(folder + '/', '');
       folder = folder.replace(_.config.root, '');
 
-      folder = _.FileParser.changePathEnv(_.fileUtils.concatPath(_.config.root, folder), draft);
+      folder = _.FileParser.changePathEnv(_path2.default.join(_.config.root, folder), draft);
 
       var arr = _.FileParser.getFiles(folder, true, 0);
       var sameFiles = [];

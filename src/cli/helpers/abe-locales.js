@@ -1,5 +1,6 @@
 import fse from 'fs-extra'
 import clc from 'cli-color'
+import path from 'path'
 
 import {
 	cli
@@ -36,7 +37,7 @@ class Locales {
 		var website = config.root
 
 	  try{
-	  	var localesFolder = fileUtils.concatPath(website, 'locales')
+	  	var localesFolder = path.join(website, 'locales')
 			var stat = fse.statSync(localesFolder)
 			if (stat && stat.isDirectory()) {
 	      var files = FileParser.read(fileUtils.cleanPath(localesFolder), fileUtils.cleanPath(localesFolder), 'files', true, /\.json/, 0)

@@ -14,6 +14,10 @@ var _cliColor = require('cli-color');
 
 var _cliColor2 = _interopRequireDefault(_cliColor);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -44,7 +48,7 @@ var Locales = function () {
 						var website = _.config.root;
 
 						try {
-								var localesFolder = _.fileUtils.concatPath(website, 'locales');
+								var localesFolder = _path2.default.join(website, 'locales');
 								var stat = _fsExtra2.default.statSync(localesFolder);
 								if (stat && stat.isDirectory()) {
 										var files = _.FileParser.read(_.fileUtils.cleanPath(localesFolder), _.fileUtils.cleanPath(localesFolder), 'files', true, /\.json/, 0);

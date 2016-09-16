@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
@@ -25,7 +29,7 @@ var route = function route(req, res, next) {
   var fstream;
   var folderWebPath = '/' + _cli.config.upload.image;
   folderWebPath = _cli.Hooks.instance.trigger('beforeSaveImage', folderWebPath, req);
-  var folderFilePath = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.publish.url, folderWebPath);
+  var folderFilePath = _path2.default.join(_cli.config.root, _cli.config.publish.url, folderWebPath);
   _mkdirp2.default.sync(folderFilePath);
   req.pipe(req.busboy);
   var size = 0;
@@ -64,7 +68,7 @@ var route = function route(req, res, next) {
       var randID = '-' + ((1 + Math.random()) * 0x100000 | 0).toString(16).substring(2);
       var cleanFileName = (0, _cli.cleanSlug)(filename).replace('.' + _cli.config.files.templates.extension, randID + '.' + ext);
 
-      filePath = _cli.fileUtils.concatPath(folderFilePath, cleanFileName);
+      filePath = _path2.default.join(folderFilePath, cleanFileName);
       var createImage = function createImage() {
         try {
           var sfStat = _fsExtra2.default.statSync(filePath);
@@ -75,7 +79,7 @@ var route = function route(req, res, next) {
             createImage();
           }
         } catch (e) {
-          resp['filePath'] = _cli.fileUtils.concatPath(folderWebPath, cleanFileName);
+          resp['filePath'] = _path2.default.join(folderWebPath, cleanFileName);
           fstream = _fsExtra2.default.createWriteStream(filePath);
           for (var i = 0; i < file.fileRead.length; i++) {
             fstream.write(file.fileRead[i]);

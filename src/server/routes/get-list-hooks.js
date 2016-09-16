@@ -1,3 +1,4 @@
+import path from 'path'
 import Handlebars from 'handlebars'
 import hooksDefault from "../../hooks/hooks"
 import {
@@ -25,7 +26,7 @@ var route = function(req, res, next) {
   //   })
   // })
 
-  var page = fileUtils.concatPath(__dirname + '/../views/list-hooks.html')
+  var page = path.join(__dirname + '/../views/list-hooks.html')
   var html = fileUtils.getFileContent(page);
   var allHooks = []
 

@@ -4,7 +4,7 @@ import Table from 'cli-table'
 import mkdirp from 'mkdirp'
 import fs from 'fs'
 import clc from 'cli-color'
-
+import path from 'path'
 import {config, cli, fileUtils} from '../'
 
 export default class Logs {
@@ -13,16 +13,16 @@ export default class Logs {
 
 	}
 
-	static cleanPath(path) {
-		if(typeof path !== 'undefined' && path !== null) {
+	static cleanPath(pathClean) {
+		if(typeof pathClean !== 'undefined' && pathClean !== null) {
 			// console.log('cleanPath', path)
-			path = path.replace(/\/$/, "")
+			pathClean = pathClean.replace(/\/$/, "")
 		}
-		return path
+		return pathClean
 	}
 
-	static removeLast(path) {
-		return path.substring(0, Logs.cleanPath(path).lastIndexOf('/'))
+	static removeLast(pathRemove) {
+		return pathRemove.substring(0, Logs.cleanPath(pathRemove).lastIndexOf('/'))
 	}
 
 	static table(arr) {
@@ -81,37 +81,37 @@ export default class Logs {
 		var type = Logs.getType.apply(this, arguments)
 		var msg = `[ ERROR ${type} ]\n` + Logs.text.apply(this, arguments)
 		console.log(clc.red(msg))
-		var path = fileUtils.concatPath(config.root, '/logs/ERROR-' + Logs.getType.apply(this, arguments) + '.log')
-		Logs.writeFile(path, msg, 'a+')
+		var pathError = path.join(config.root, '/logs/ERROR-' + Logs.getType.apply(this, arguments) + '.log')
+		Logs.writeFile(pathError, msg, 'a+')
 	}
 
 	static duration(str, time) {
 		if(typeof config.logs !== 'undefined' && config.logs !== null
 			&& config.logs === true) {
-			var path = fileUtils.concatPath(config.root, '/logs/duration.log')
+			var pathDuration = path.join(config.root, '/logs/duration.log')
 			var durationColor = '#B2FF59'
 			if (time > 5) {
 				durationColor = '#ff003b'
 			}else if (time > 1) {
 				durationColor = '#ffbc00'
 			}
-			Logs.writeFile(path, str + ' in <span style="color: ' + durationColor + ';">' + time + "</span>\n", 'a+')
+			Logs.writeFile(pathDuration, str + ' in <span style="color: ' + durationColor + ';">' + time + "</span>\n", 'a+')
 		}
 	}
 
 	static write() {
 		if(typeof config.logs !== 'undefined' && config.logs !== null
 			&& config.logs === true) {
-			var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
-			Logs.writeFile(path, Logs.text.apply(this, arguments), 'a+')
+			var pathWrite = path.join(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
+			Logs.writeFile(pathWrite, Logs.text.apply(this, arguments), 'a+')
 		}
 	}
 
 	static delAndWrite() {
 		if(typeof config.logs !== 'undefined' && config.logs !== null
 			&& config.logs === true) {
-			var path = fileUtils.concatPath(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
-			Logs.writeFile(path, Logs.text.apply(this, arguments), 'w')
+			var pathWrite = path.join(config.root, '/logs/' + Logs.getType.apply(this, arguments) + '.log')
+			Logs.writeFile(pathWrite, Logs.text.apply(this, arguments), 'w')
 		}
 	}
 

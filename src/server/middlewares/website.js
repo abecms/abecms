@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import fs from 'fs'
 import fse from 'fs-extra'
@@ -37,13 +38,13 @@ var middleware = function(req, res, next) {
   }
 
   if (req.originalUrl === '' || req.originalUrl === '/' || req.originalUrl.indexOf('.') === -1) {
-    var path = fileUtils.concatPath(config.root, config.publish.url, req.originalUrl)
-    if (!folderUtils.isFolder(path)) {
+    var pathWebsite = path.join(config.root, config.publish.url, req.originalUrl)
+    if (!folderUtils.isFolder(pathWebsite)) {
       return next()
     }
-    var files = FileParser.getFiles(path, true, 0, /(.*?)/)
+    var files = FileParser.getFiles(pathWebsite, true, 0, /(.*?)/)
 
-    var folders = FileParser.getFolders(path, true, 0)
+    var folders = FileParser.getFolders(pathWebsite, true, 0)
     var html = '<ul>'
     html += '<li><a href="/abe/">abe</abe></li>'
     html += '<br />'
@@ -76,7 +77,7 @@ var middleware = function(req, res, next) {
 
     var html = '';
 
-    var page = fileUtils.concatPath(config.root, config.publish.url, req.originalUrl)
+    var page = path.join(config.root, config.publish.url, req.originalUrl)
     if (fileUtils.isFile(page)) {
       html = fileUtils.getFileContent(page);
 

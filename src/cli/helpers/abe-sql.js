@@ -6,7 +6,7 @@ import fse from 'fs-extra'
 import requestAjax from 'request'
 import ajaxRequest from 'ajax-request'
 import {Promise} from 'es6-promise'
-
+import path from 'path'
 import {
   config,
   cli,
@@ -269,22 +269,22 @@ export default class Sql {
    * @return {string}           the directory to analyze
    */
   static getFromDirectory(statement, tplPath){
-    var path = ''
+    var pathFromDir = ''
     if(typeof tplPath === 'undefined' || tplPath === null || tplPath === ''){
       tplPath = '/'
     }
 
     if(statement === '' || statement === '*' || statement === '/') {
-      path = fileUtils.concatPath(config.root, config.data.url)
+      pathFromDir = path.join(config.root, config.data.url)
     }else if(statement === './') {
-      path = fileUtils.concatPath(config.root, config.data.url, tplPath)
+      pathFromDir = path.join(config.root, config.data.url, tplPath)
     }else if(statement.indexOf('/') === 0) {
-      path = fileUtils.concatPath(config.root, config.data.url, statement)
+      pathFromDir = path.join(config.root, config.data.url, statement)
     }else if(statement.indexOf('/') !== 0) {
-      path = fileUtils.concatPath(config.root, config.data.url, tplPath, statement)
+      pathFromDir = path.join(config.root, config.data.url, tplPath, statement)
     }
 
-    return path
+    return pathFromDir
   }
 
   static executeOrderByClause(files, orderby){
@@ -303,7 +303,7 @@ export default class Sql {
     return files
   }
 
-  static executeFromClause(statement, path){
+  static executeFromClause(statement, pathFromClause){
     var files = []
     var recursive = 99
     var fileRegex = /(.*(-abe-).*Z\.json)/
@@ -315,7 +315,7 @@ export default class Sql {
       from = from.slice(0, -1);
     }
 
-    var fromDirectory = Sql.getFromDirectory(from, path)
+    var fromDirectory = Sql.getFromDirectory(from, pathFromClause)
 
     if(folderUtils.isFolder(fromDirectory)) {
       // we'll get only published files which don't contain "-abe-"
@@ -325,25 +325,25 @@ export default class Sql {
     return files
   }
 
-  static execQuery(path, match, jsonPage) {
+  static execQuery(pathQuery, match, jsonPage) {
     var res = []
     var files = []
     var request = Sql.handleSqlRequest(getAttr(match, 'source'), jsonPage)
 
-    files = Sql.executeFromClause(request.from, path)
+    files = Sql.executeFromClause(request.from, pathQuery)
     files = Sql.executeOrderByClause(files, request.orderby)
     res = Sql.executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
 
     return res
   }
 
-  static executeQuerySync(path, match, jsonPage) {
-    return Sql.execQuery(path, match, jsonPage)
+  static executeQuerySync(pathQuerySync, match, jsonPage) {
+    return Sql.execQuery(pathQuerySync, match, jsonPage)
   }
 
-  static executeQuery(path, match, jsonPage) {
+  static executeQuery(pathexecuteQuery, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      var res = Sql.execQuery(path, match, jsonPage)
+      var res = Sql.execQuery(pathexecuteQuery, match, jsonPage)
       resolve(res)
     }).catch(function(e) {
       console.error(e)
@@ -372,13 +372,13 @@ export default class Sql {
     return 'other'
   }
 
-  static deep_value(obj, path) {
+  static deep_value(obj, pathDeep) {
 
-    if(path.indexOf('.') === -1) {
-      return (typeof obj[path] !== 'undefined' && obj[path] !== null) ? obj[path] : null
+    if(pathDeep.indexOf('.') === -1) {
+      return (typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null) ? obj[pathDeep] : null
     }
 
-    var pathSplit = path.split('.')
+    var pathSplit = pathDeep.split('.')
     var res = JSON.parse(JSON.stringify(obj))
     for (var i = 0; i < pathSplit.length; i++) {
       if(typeof res[pathSplit[i]] !== 'undefined' && res[pathSplit[i]] !== null) {
@@ -391,13 +391,13 @@ export default class Sql {
     return res
   }
 
-  static deep_value_array(obj, path) {
+  static deep_value_array(obj, pathDeep) {
 
-    if(path.indexOf('.') === -1) {
-      return (typeof obj[path] !== 'undefined' && obj[path] !== null) ? obj[path] : null
+    if(pathDeep.indexOf('.') === -1) {
+      return (typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null) ? obj[pathDeep] : null
     }
 
-    var pathSplit = path.split('.')
+    var pathSplit = pathDeep.split('.')
     var res = JSON.parse(JSON.stringify(obj))
 
     while(pathSplit.length > 0) {

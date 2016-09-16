@@ -85,10 +85,10 @@ var html = _expressSecureHandlebars2.default.create({
 });
 
 var opts = {};
-if (_cli.fileUtils.isFile(_cli.fileUtils.concatPath(_cli.config.root, 'cert.pem'))) {
+if (_cli.fileUtils.isFile(_path2.default.join(_cli.config.root, 'cert.pem'))) {
   opts = {
-    key: _fsExtra2.default.readFileSync(_cli.fileUtils.concatPath(_cli.config.root, 'key.pem')),
-    cert: _fsExtra2.default.readFileSync(_cli.fileUtils.concatPath(_cli.config.root, 'cert.pem'))
+    key: _fsExtra2.default.readFileSync(_path2.default.join(_cli.config.root, 'key.pem')),
+    cert: _fsExtra2.default.readFileSync(_path2.default.join(_cli.config.root, 'cert.pem'))
   };
 }
 
@@ -157,19 +157,19 @@ _cli.FileParser.copySiteAssets();
 
 var sites = _cli.FileParser.getFolders(_cli.config.root.replace(/\/$/, ""), false, 0);
 
-var publish = _cli.fileUtils.concatPath(_cli.config.root, _cli.config.publish.url);
+var publish = _path2.default.join(_cli.config.root, _cli.config.publish.url);
 app.use(_express2.default.static(publish));
 // app.use(express.static(publish))
 
 if (_cli.config.partials !== '') {
-  if (_cli.fileUtils.isFile(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.partials))) {
-    app.use(_express2.default.static(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.partials)));
+  if (_cli.fileUtils.isFile(_path2.default.join(_cli.config.root, _cli.config.partials))) {
+    app.use(_express2.default.static(_path2.default.join(_cli.config.root, _cli.config.partials)));
   }
 }
 
 if (_cli.config.custom !== '') {
-  if (_cli.fileUtils.isFile(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.custom))) {
-    app.use(_express2.default.static(_cli.fileUtils.concatPath(_cli.config.root, _cli.config.custom)));
+  if (_cli.fileUtils.isFile(_path2.default.join(_cli.config.root, _cli.config.custom))) {
+    app.use(_express2.default.static(_path2.default.join(_cli.config.root, _cli.config.custom)));
   }
 }
 
@@ -200,7 +200,7 @@ app.use((0, _expressSession2.default)({
 
 _cli.Hooks.instance.trigger('afterExpress', app, _express2.default);
 
-if (_cli.fileUtils.isFile(_cli.fileUtils.concatPath(_cli.config.root, 'cert.pem'))) {
+if (_cli.fileUtils.isFile(_path2.default.join(_cli.config.root, 'cert.pem'))) {
   var server = _https2.default.createServer(opts, app);
   server.listen(port, function () {
     console.log(_cliColor2.default.green('\nserver running at https://localhost:' + port + '/'));

@@ -14,6 +14,10 @@ var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
 var _Save = require('./controllers/Save');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('./');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -23,11 +27,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Builder = function Builder(root, folder, dest, flow) {
   _classCallCheck(this, Builder);
 
-  this.pathToJson = _.fileUtils.concatPath(root, _.config.data.url);
+  this.pathToJson = _path2.default.join(root, _.config.data.url);
   var files = _.fileAttr.filterLatestVersion(_.FileParser.getFiles(this.pathToJson, _.config.data.url), flow);
 
   if (flow === 'publish') {
-    files = _.FileParser.getFiles(_.fileUtils.concatPath(root, _.config.publish.url), new RegExp('.' + _.config.files.templates.extension));
+    files = _.FileParser.getFiles(_path2.default.join(root, _.config.publish.url), new RegExp('.' + _.config.files.templates.extension));
   }
 
   var build = function build(index) {
@@ -40,7 +44,7 @@ var Builder = function Builder(root, folder, dest, flow) {
 
       _.Util.getDataList(_.fileUtils.removeLast(json.abe_meta.link), text, json).then(function () {
         var page = new _.Page(json.abe_meta.template, text, json, true);
-        (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
+        (0, _Save.saveHtml)(_path2.default.join(root, dest + json.abe_meta.link), page.html);
         if (files[index + 1]) build(index + 1);
       }).catch(function (e) {
         console.error(e);
@@ -52,7 +56,7 @@ var Builder = function Builder(root, folder, dest, flow) {
 
       _.Util.getDataList(_.fileUtils.removeLast(json.abe_meta.link), text, json).then(function () {
         var page = new _.Page(json.abe_meta.template, text, json, true);
-        (0, _Save.saveHtml)(_.fileUtils.concatPath(root, dest + json.abe_meta.link), page.html);
+        (0, _Save.saveHtml)(_path2.default.join(root, dest + json.abe_meta.link), page.html);
         if (files[index + 1]) build(index + 1);
       }).catch(function (e) {
         console.error(e);

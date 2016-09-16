@@ -3,6 +3,7 @@ import extend from 'extend'
 import mkdirp from 'mkdirp'
 import xss from 'xss'
 import {Promise} from 'es6-promise'
+import path from 'path'
 
 import {
   Util
@@ -69,21 +70,22 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       type = 'draft'
       realType = 'draft'
       url = Hooks.instance.trigger('afterReject', url)
-      resolve({reject: fileAttr.delete(url).replace(fileUtils.concatPath(config.root, config.draft.url), '')})
+      resolve({reject: fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')})
     }
     var tplUrl = FileParser.getFileDataFromUrl(url)
     type = type || FileParser.getType(url)
-    var path = dateIso(tplUrl, type)
+    var pathIso = dateIso(tplUrl, type)
     if(typeof previousSave !== 'undefined' && previousSave !== null){
-      path.jsonPath = fileUtils.concatPath(config.root, previousSave.jsonPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
-      path.htmlPath = fileUtils.concatPath(config.root, previousSave.htmlPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
+      pathIso.jsonPath = path.join(config.root, previousSave.jsonPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
+      pathIso.htmlPath = path.join(config.root, previousSave.htmlPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
     }
 
     if (tplPath.indexOf('.') > -1) {
       tplPath = fileUtils.removeExtension(tplPath)
     }
     var tpl = tplPath.replace(config.root, '')
-    var fullTpl = fileUtils.concatPath(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
+
+    var fullTpl = path.join(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
 
     if(typeof json === 'undefined' || json === null) {
       json = FileParser.getJson(tplUrl.json.path)
@@ -98,7 +100,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
     let meta = config.meta.name
     json[meta] = extend(json[meta], ext)
-    var date = fileAttr.get(path.jsonPath).d
+    var date = fileAttr.get(pathIso.jsonPath).d
 
     if (publishAll) {
       date = json[meta].publish.date
@@ -137,11 +139,11 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
               path: fullTpl
             },
             html: {
-              path:path.htmlPath
+              path:pathIso.htmlPath
             },
             json: {
               content: json,
-              path: path.jsonPath
+              path: pathIso.jsonPath
             }
           }
 
@@ -166,7 +168,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           log.duration('save: ' + url.replace(config.root, '') + ' (' + type + ')', ((new Date().getTime() - dateStart.getTime()) / 1000))
           resolve(res)
         }).catch(function(e) {
-          console.error(e)
+          console.error('Save.js', e)
         })
   })
 

@@ -18,6 +18,10 @@ var _extend = require('extend');
 
 var _extend2 = _interopRequireDefault(_extend);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _hooks = require('../../hooks/hooks');
 
 var _hooks2 = _interopRequireDefault(_hooks);
@@ -41,8 +45,8 @@ var Hooks = function () {
 
     if (enforcer != singletonEnforcer) throw "Cannot construct Json singleton";
 
-    if (_.fileUtils.isFile(_.fileUtils.concatPath(_.config.root, _.config.hooks.url, 'hooks.js'))) {
-      var h = require(_.fileUtils.concatPath(_.config.root, _.config.hooks.url, 'hooks.js'));
+    if (_.fileUtils.isFile(_path2.default.join(_.config.root, _.config.hooks.url, 'hooks.js'))) {
+      var h = require(_path2.default.join(_.config.root, _.config.hooks.url, 'hooks.js'));
       this.fn = (0, _extend2.default)(true, _hooks2.default, h.default);
     } else {
       this.fn = _hooks2.default;

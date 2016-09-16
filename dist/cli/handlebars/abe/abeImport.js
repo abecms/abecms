@@ -13,6 +13,10 @@ var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -38,7 +42,7 @@ function abeImport(file, config, ctx) {
 
   var pluginsPartials = _.Plugins.instance.getPartials();
   Array.prototype.forEach.call(pluginsPartials, function (pluginPartials) {
-    var checkFile = _.fileUtils.concatPath(pluginPartials, file + '.html');
+    var checkFile = _path2.default.join(pluginPartials, file + '.html');
     if (_.fileUtils.isFile(checkFile)) {
       html += _fsExtra2.default.readFileSync(checkFile, 'utf8');
     }

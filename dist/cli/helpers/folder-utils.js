@@ -76,17 +76,17 @@ var FolderUtils = function () {
 		}
 	}, {
 		key: 'folderInfos',
-		value: function folderInfos(path) {
-			var pathArr = path.split('/');
+		value: function folderInfos(pathFolder) {
+			var pathArr = pathFolder.split('/');
 			var name = pathArr[pathArr.length - 1];
 
 			var rootArr = _.config.root.split('/');
 			var website = rootArr[pathArr.length - 1];
 			return {
 				'name': name,
-				'path': path,
+				'path': pathFolder,
 				'website': website,
-				'cleanPath': _.fileUtils.cleanPath(path.replace(_.config.root, '')),
+				'cleanPath': _.fileUtils.cleanPath(pathFolder.replace(_.config.root, '')),
 				'type': 'folder'
 			};
 		}

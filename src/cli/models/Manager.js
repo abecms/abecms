@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
+import path from 'path'
 import {
   config,
   FileParser,
@@ -44,34 +45,34 @@ class Manager {
   }
 
   addHbsTemplate(templateId) {
-    const path = fileUtils.concatPath(config.root, config.templates.url, 'hbs', templateId) + '.hbs';
-    var tmpl = eval("(function(){return " + fse.readFileSync(path) + "}());");
+    const pathTemplate = path.join(config.root, config.templates.url, 'hbs', templateId) + '.hbs';
+    var tmpl = eval("(function(){return " + fse.readFileSync(pathTemplate) + "}());");
     Handlebars.templates[templateId] = Handlebars.template(tmpl);
   }
 
   loadHbsTemplates() {
-    const path = fileUtils.concatPath(config.root, config.templates.url, 'hbs');
+    const pathTemplate = path.join(config.root, config.templates.url, 'hbs');
 
-    if(!folderUtils.isFolder(path)) {
-      mkdirp.sync(path)
+    if(!folderUtils.isFolder(pathTemplate)) {
+      mkdirp.sync(pathTemplate)
     }
 
-    fse.readdirSync(path).forEach(function (file) {
+    fse.readdirSync(pathTemplate).forEach(function (file) {
       if (file.indexOf(".hbs") > -1) {
-        let originalTemplatePath = fileUtils.concatPath(config.root, config.templates.url) + '/' + file.replace('.hbs', '.' + config.files.templates.extension)
+        let originalTemplatePath = path.join(config.root, config.templates.url) + '/' + file.replace('.hbs', '.' + config.files.templates.extension)
         
         try{
           let originalTemplateStat = fse.statSync(originalTemplatePath);
           let originalTemplateMdate = originalTemplateStat.mtime;
-          let stat = fse.statSync(fileUtils.concatPath(path, file));
+          let stat = fse.statSync(path.join(pathTemplate, file));
           let mdate = stat.mtime;
 
           // if the original template has been updated after precompilation, I delete the precompiled file
           // else I add it to the hbs template array
           if(originalTemplateMdate>mdate){
-            fse.unlinkSync(fileUtils.concatPath(path, file));
+            fse.unlinkSync(path.join(pathTemplate, file));
           } else {
-            var tmpl = eval("(function(){return " + fse.readFileSync(fileUtils.concatPath(path, file)) + "}());");
+            var tmpl = eval("(function(){return " + fse.readFileSync(path.join(pathTemplate, file)) + "}());");
             Handlebars.templates[file.replace('.hbs', '')] = Handlebars.template(tmpl);
           }
         }

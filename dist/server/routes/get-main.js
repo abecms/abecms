@@ -44,6 +44,10 @@ var _cliColor = require('cli-color');
 
 var _cliColor2 = _interopRequireDefault(_cliColor);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _editor = require('../controllers/editor');
 
 var _abeLocale = require('../helpers/abe-locale');
@@ -85,7 +89,6 @@ var route = function route(req, res, next) {
       var folderFilePath;
       var files;
       var latest;
-      var fakeContent;
 
       var _ret = function () {
 
@@ -106,8 +109,6 @@ var route = function route(req, res, next) {
         }
 
         var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-        fakeContent = req.query.fakeContent ? true : false;
-
 
         if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
           res.redirect("/abe/");
@@ -116,7 +117,7 @@ var route = function route(req, res, next) {
           };
         }
 
-        (0, _editor.editor)(templatePath, tplUrl, fakeContent).then(function (result) {
+        (0, _editor.editor)(templatePath, tplUrl).then(function (result) {
           var manager = {};
 
           _cli.FileParser.getAssetsFolder();

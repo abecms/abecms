@@ -8,11 +8,10 @@ import * as abe from '../../cli'
 import xss from 'xss'
 import pkg from '../../../package'
 import clc from 'cli-color'
+import path from 'path'
 
 import {
   fileAttr,
-  save,
-  getAttr, getEnclosingTags, escapeTextToRegex,
   Util,
   FileParser,
   fileUtils,

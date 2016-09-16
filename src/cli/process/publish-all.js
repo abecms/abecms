@@ -1,4 +1,5 @@
 import clc from 'cli-color'
+import path from 'path'
 
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
@@ -112,7 +113,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     if(typeof pConfig.FILEPATH !== 'undefined' && pConfig.FILEPATH !== null) {
       // log.write('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
       console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
-      pConfig.FILEPATH = fileUtils.concatPath(config.root, config.data.url, pConfig.FILEPATH.replace(config.root))
+      pConfig.FILEPATH = path.join(config.root, config.data.url, pConfig.FILEPATH.replace(config.root))
 
       var fileJson = FileParser.getJson(
         pConfig.FILEPATH.replace(new RegExp("\\." + config.files.templates.extension), '.json')
@@ -130,7 +131,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var allPublished = []
 
     let publish = config.publish.url
-    var published = FileParser.getFilesByType(fileUtils.concatPath(site.path, publish, pConfig.ABE_PATH))
+    var published = FileParser.getFilesByType(path.join(site.path, publish, pConfig.ABE_PATH))
     published = FileParser.getMetas(published, 'draft')
     var ar_url = []
     var promises = []

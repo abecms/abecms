@@ -1,6 +1,7 @@
 import fse from 'fs-extra'
 import clc from 'cli-color'
 import extend from 'extend'
+import path from 'path'
 
 import hooksDefault from "../../hooks/hooks"
 
@@ -24,8 +25,8 @@ class Hooks {
   constructor(enforcer) {
   	if(enforcer != singletonEnforcer) throw "Cannot construct Json singleton"
 
-    if(fileUtils.isFile(fileUtils.concatPath(config.root, config.hooks.url, 'hooks.js'))){
-      var h = require(fileUtils.concatPath(config.root, config.hooks.url, 'hooks.js'))
+    if(fileUtils.isFile(path.join(config.root, config.hooks.url, 'hooks.js'))){
+      var h = require(path.join(config.root, config.hooks.url, 'hooks.js'))
       this.fn = extend(true, hooksDefault, h.default)
     }
     else{

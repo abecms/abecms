@@ -1,5 +1,5 @@
 import fse from 'fs-extra'
-
+import path from 'path'
 import {
   cli
   ,FileParser
@@ -220,7 +220,7 @@ export default class FileAttr {
     var fileName = filePath.replace(folder + '/', '')
     folder = folder.replace(config.root, '')
 
-    folder = FileParser.changePathEnv(fileUtils.concatPath(config.root, folder), draft)
+    folder = FileParser.changePathEnv(path.join(config.root, folder), draft)
 
     var arr = FileParser.getFiles(folder, true, 0)
     var sameFiles = []

@@ -22,6 +22,10 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -42,9 +46,9 @@ var FileUtils = function () {
 
 	_createClass(FileUtils, null, [{
 		key: 'pathWithRoot',
-		value: function pathWithRoot(path) {
-			if (typeof path === 'undefined' || path === null || path === '') path = '';
-			return FileUtils.concatPath(_.config.root, path.replace(_.config.root, '')).replace(/\/$/, "");
+		value: function pathWithRoot(ppath) {
+			if (typeof ppath === 'undefined' || ppath === null || ppath === '') ppath = '';
+			return _path2.default.join(_.config.root, ppath.replace(_.config.root, '')).replace(/\/$/, "");
 		}
 
 		/**
@@ -55,9 +59,9 @@ var FileUtils = function () {
 
 	}, {
 		key: 'cleanPath',
-		value: function cleanPath(path) {
-			if (typeof path !== 'undefined' && path !== null) path = path.replace(/\/$/, "");
-			return path;
+		value: function cleanPath(cpath) {
+			if (typeof cpath !== 'undefined' && cpath !== null) cpath = cpath.replace(/\/$/, "");
+			return cpath;
 		}
 
 		/**
@@ -69,15 +73,15 @@ var FileUtils = function () {
 	}, {
 		key: 'concatPath',
 		value: function concatPath() {
-			var path = '';
+			var cpath = '';
 			Array.prototype.forEach.call([].slice.call(arguments), function (argument) {
-				if (path !== '') argument = argument.replace(/^\//, "");
-				if (argument !== '') path += FileUtils.cleanPath(argument) + '/';
+				if (cpath !== '') argument = argument.replace(/^\//, "");
+				if (argument !== '') cpath += FileUtils.cleanPath(argument) + '/';
 			});
 
-			path = FileUtils.cleanPath(path);
+			cpath = FileUtils.cleanPath(cpath);
 
-			return path;
+			return cpath;
 		}
 
 		/**
@@ -88,9 +92,9 @@ var FileUtils = function () {
 
 	}, {
 		key: 'removeLast',
-		value: function removeLast(path) {
+		value: function removeLast(pathRemove) {
 
-			return path.substring(0, FileUtils.cleanPath(path).lastIndexOf('/'));
+			return pathRemove.substring(0, FileUtils.cleanPath(pathRemove).lastIndexOf('/'));
 		}
 
 		/**
@@ -193,8 +197,8 @@ var FileUtils = function () {
 
 	}, {
 		key: 'cleanTplName',
-		value: function cleanTplName(path) {
-			var cleanTplName = _.fileAttr.delete(path);
+		value: function cleanTplName(pathClean) {
+			var cleanTplName = _.fileAttr.delete(pathClean);
 			cleanTplName = cleanTplName.replace(_.config.root, '');
 			cleanTplName = cleanTplName.split('/');
 			cleanTplName.shift();
@@ -205,8 +209,8 @@ var FileUtils = function () {
 
 	}, {
 		key: 'cleanFilePath',
-		value: function cleanFilePath(path) {
-			var cleanFilePath = _.fileAttr.delete(path);
+		value: function cleanFilePath(pathClean) {
+			var cleanFilePath = _.fileAttr.delete(pathClean);
 			cleanFilePath = cleanFilePath.replace(_.config.root, '');
 			cleanFilePath = cleanFilePath.split('/');
 			cleanFilePath.shift();
@@ -217,11 +221,11 @@ var FileUtils = function () {
 
 	}, {
 		key: 'getFilePath',
-		value: function getFilePath(path) {
+		value: function getFilePath(pathFile) {
 			var res = null;
-			if (typeof path !== 'undefined' && path !== null && path !== '') {
-				res = path.replace(_.config.root);
-				res = FileUtils.concatPath(_.config.root, _.config.draft.url, res);
+			if (typeof pathFile !== 'undefined' && pathFile !== null && pathFile !== '') {
+				res = pathFile.replace(_.config.root);
+				res = _path2.default.join(_.config.root, _.config.draft.url, res);
 			}
 			return res;
 		}
@@ -230,16 +234,16 @@ var FileUtils = function () {
 
 	}, {
 		key: 'getTemplatePath',
-		value: function getTemplatePath(path) {
-			if (path.indexOf('.') === -1) {
+		value: function getTemplatePath(pathTemplate) {
+			if (pathTemplate.indexOf('.') === -1) {
 				// no extension add one
-				path = path + '.' + _.config.files.templates.extension;
+				pathTemplate = pathTemplate + '.' + _.config.files.templates.extension;
 			}
 
 			var res = null;
-			if (typeof path !== 'undefined' && path !== null && path !== '') {
-				res = path.replace(_.config.root);
-				res = FileUtils.concatPath(_.config.root, _.config.templates.url, res);
+			if (typeof pathTemplate !== 'undefined' && pathTemplate !== null && pathTemplate !== '') {
+				res = pathTemplate.replace(_.config.root);
+				res = _path2.default.join(_.config.root, _.config.templates.url, res);
 			}
 			return res;
 		}

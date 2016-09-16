@@ -1,3 +1,4 @@
+import path from 'path'
 import {
   Hooks,
   fileUtils,
@@ -17,7 +18,7 @@ var duplicate = function(oldFilePath, template, path, name, req, isUpdate = fals
     Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, isUpdate)
 
     if(typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
-      var url = fileUtils.concatPath(config.root, config.draft.url, oldFilePath)
+      var url = path.join(config.root, config.draft.url, oldFilePath)
       var revisions = []
 
       if(!fileAttr.test(url)){

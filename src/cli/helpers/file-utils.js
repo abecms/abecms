@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import moment from 'moment'
-
+import path from 'path'
 import {
 	cli,
 	log,
@@ -20,9 +20,9 @@ export default class FileUtils {
 	 * @param  {string} path The path to be prepended
 	 * @return {string}      The path prepended with the root path
 	 */
-	static pathWithRoot(path) {
-		if(typeof path === 'undefined' || path === null || path === '') path = ''
-		return FileUtils.concatPath(config.root, path.replace(config.root, '')).replace(/\/$/, "")
+	static pathWithRoot(ppath) {
+		if(typeof ppath === 'undefined' || ppath === null || ppath === '') ppath = ''
+		return path.join(config.root, ppath.replace(config.root, '')).replace(/\/$/, "")
 	}
 
 	/**
@@ -30,9 +30,9 @@ export default class FileUtils {
 	 * @param  {string} path The path to be cleaned
 	 * @return {string}      The path with no trailing slash
 	 */
-	static cleanPath(path) {
-		if(typeof path !== 'undefined' && path !== null) path = path.replace(/\/$/, "")
-		return path
+	static cleanPath(cpath) {
+		if(typeof cpath !== 'undefined' && cpath !== null) cpath = cpath.replace(/\/$/, "")
+		return cpath
 	}
 
 	/**
@@ -41,15 +41,15 @@ export default class FileUtils {
 	 * @return {string} path as the result of concatenation
 	 */
 	static concatPath() {
-		var path = ''
+		var cpath = ''
 		Array.prototype.forEach.call([].slice.call(arguments), (argument) => {
-			if(path !== '') argument = argument.replace(/^\//, "")
-			if(argument !== '') path += FileUtils.cleanPath(argument) + '/'
+			if(cpath !== '') argument = argument.replace(/^\//, "")
+			if(argument !== '') cpath += FileUtils.cleanPath(argument) + '/'
 		})
 
-		path = FileUtils.cleanPath(path)
+		cpath = FileUtils.cleanPath(cpath)
 
-		return path
+		return cpath
 	}
 
 	/**
@@ -57,9 +57,9 @@ export default class FileUtils {
 	 * @param  {string} path the path
 	 * @return {string}      The path with the last segment removed
 	 */
-	static removeLast(path) {
+	static removeLast(pathRemove) {
 
-		return path.substring(0, FileUtils.cleanPath(path).lastIndexOf('/'))
+		return pathRemove.substring(0, FileUtils.cleanPath(pathRemove).lastIndexOf('/'))
 	}
 
 	/**
@@ -140,8 +140,8 @@ export default class FileUtils {
 	}
 
 	/* TODO: put this method in the right helper */
-	static cleanTplName(path) {
-		var cleanTplName = fileAttr.delete(path)
+	static cleanTplName(pathClean) {
+		var cleanTplName = fileAttr.delete(pathClean)
 		cleanTplName = cleanTplName.replace(config.root, '')
 		cleanTplName = cleanTplName.split('/')
 		cleanTplName.shift()
@@ -149,8 +149,8 @@ export default class FileUtils {
 	}
 
 	/* TODO: Remove this method and replace it with the previous one */
-	static cleanFilePath(path) {
-		var cleanFilePath = fileAttr.delete(path)
+	static cleanFilePath(pathClean) {
+		var cleanFilePath = fileAttr.delete(pathClean)
 		cleanFilePath = cleanFilePath.replace(config.root, '')
 		cleanFilePath = cleanFilePath.split('/')
 		cleanFilePath.shift()
@@ -159,25 +159,25 @@ export default class FileUtils {
 
 	
 	/* TODO: put this method in the right helper */
-  static getFilePath(path) {
+  static getFilePath(pathFile) {
   	var res = null
-  	if(typeof path !== 'undefined' && path !== null && path !== '') {
-  		res = path.replace(config.root)
-  		res = FileUtils.concatPath(config.root, config.draft.url, res)
+  	if(typeof pathFile !== 'undefined' && pathFile !== null && pathFile !== '') {
+  		res = pathFile.replace(config.root)
+  		res = path.join(config.root, config.draft.url, res)
   	}
   	return res
   }
 
   /* TODO: refactor this method as Facade method to a method adding a fragment in a path */
-  static getTemplatePath(path) {
-		if (path.indexOf('.') === -1) { // no extension add one
-			path = `${path}.${config.files.templates.extension}`
+  static getTemplatePath(pathTemplate) {
+		if (pathTemplate.indexOf('.') === -1) { // no extension add one
+			pathTemplate = `${pathTemplate}.${config.files.templates.extension}`
 		}
 
   	var res = null
-  	if(typeof path !== 'undefined' && path !== null && path !== '') {
-  		res = path.replace(config.root)
-  		res = FileUtils.concatPath(config.root, config.templates.url, res)
+  	if(typeof pathTemplate !== 'undefined' && pathTemplate !== null && pathTemplate !== '') {
+  		res = pathTemplate.replace(config.root)
+  		res = path.join(config.root, config.templates.url, res)
   	}
   	return res
   }

@@ -18,6 +18,10 @@ var _extend = require('extend');
 
 var _extend2 = _interopRequireDefault(_extend);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _ = require('../');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -34,14 +38,14 @@ var Plugins = function () {
     if (enforcer != singletonEnforcer) throw "Cannot construct Plugins singleton";
     this._plugins = [];
     this.fn = [];
-    var pluginsDir = _.fileUtils.concatPath(_.config.root, _.config.plugins.url);
+    var pluginsDir = _path2.default.join(_.config.root, _.config.plugins.url);
     if (_.folderUtils.isFolder(pluginsDir)) {
       this._plugins = _.FileParser.getFolders(pluginsDir, true, 0);
       Array.prototype.forEach.call(this._plugins, function (plugin) {
         // has hooks
-        var plugHooks = _.fileUtils.concatPath(plugin.path, _.config.hooks.url);
+        var plugHooks = _path2.default.join(plugin.path, _.config.hooks.url);
         if (_.folderUtils.isFolder(plugHooks)) {
-          var plugHooksFile = _.fileUtils.concatPath(plugHooks, 'hooks.js');
+          var plugHooksFile = _path2.default.join(plugHooks, 'hooks.js');
           var h = require(plugHooksFile);
           plugin.hooks = h.default;
         } else {
@@ -49,7 +53,7 @@ var Plugins = function () {
         }
 
         // has partials
-        var plugPartials = _.fileUtils.concatPath(plugin.path, _.config.pluginsPartials);
+        var plugPartials = _path2.default.join(plugin.path, _.config.pluginsPartials);
         if (_.folderUtils.isFolder(plugPartials)) {
           plugin.partials = plugPartials;
         } else {
@@ -57,7 +61,7 @@ var Plugins = function () {
         }
 
         // has templates
-        var plugTemplates = _.fileUtils.concatPath(plugin.path, _.config.templates.url);
+        var plugTemplates = _path2.default.join(plugin.path, _.config.templates.url);
         if (_.folderUtils.isFolder(plugTemplates)) {
           plugin.templates = plugTemplates;
         } else {
@@ -65,11 +69,11 @@ var Plugins = function () {
         }
 
         // has routes
-        var plugRoutes = _.fileUtils.concatPath(plugin.path, 'routes');
+        var plugRoutes = _path2.default.join(plugin.path, 'routes');
         if (_.folderUtils.isFolder(plugRoutes)) {
           plugin.routes = {};
 
-          var gets = _.fileUtils.concatPath(plugRoutes, 'get');
+          var gets = _path2.default.join(plugRoutes, 'get');
           if (_.folderUtils.isFolder(gets)) {
             var routesGet = _.FileParser.getFiles(gets, true, 0);
             Array.prototype.forEach.call(routesGet, function (route) {
@@ -78,7 +82,7 @@ var Plugins = function () {
             plugin.routes.get = routesGet;
           }
 
-          var posts = _.fileUtils.concatPath(plugRoutes, 'post');
+          var posts = _path2.default.join(plugRoutes, 'post');
           if (_.folderUtils.isFolder(posts)) {
             var routesPost = _.FileParser.getFiles(posts, true, 0);
             Array.prototype.forEach.call(routesPost, function (route) {

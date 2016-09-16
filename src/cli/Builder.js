@@ -2,6 +2,7 @@ import fse from 'fs-extra'
 import extend from 'extend'
 import mkdirp from 'mkdirp'
 import {saveHtml} from './controllers/Save'
+import path from 'path'
 
 import {
   Util,
@@ -18,11 +19,11 @@ import {
 class Builder {
 
   constructor(root, folder, dest, flow){
-    this.pathToJson = fileUtils.concatPath(root, config.data.url)
+    this.pathToJson = path.join(root, config.data.url)
     var files = fileAttr.filterLatestVersion(FileParser.getFiles(this.pathToJson, config.data.url), flow)
 
     if(flow === 'publish') {
-      files = FileParser.getFiles(fileUtils.concatPath(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
+      files = FileParser.getFiles(path.join(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
     }
 
     var build = function (index) {
@@ -37,7 +38,7 @@ class Builder {
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
             var page = new Page(json.abe_meta.template, text, json, true)
-            saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
+            saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
             if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
             console.error(e)
@@ -51,7 +52,7 @@ class Builder {
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
             var page = new Page(json.abe_meta.template, text, json, true)
-            saveHtml(fileUtils.concatPath(root, dest + json.abe_meta.link), page.html)
+            saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
             if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
             console.error(e)
