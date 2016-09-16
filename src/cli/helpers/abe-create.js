@@ -13,12 +13,12 @@ import {
   Manager
 } from '../../cli'
 
-var create = function(template, path, name, req, forceJson = {}, duplicate = false) {
+var create = function(template, pathCreate, name, req, forceJson = {}, duplicate = false) {
   var p = new Promise((resolve, reject) => {
-      Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson)
+      Hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
       var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ""))
-      var filePath = path.join(path, name)
+      var filePath = path.join(pathCreate, name)
       filePath = cleanSlug(filePath)
       filePath = fileUtils.getFilePath(filePath)
 
@@ -38,7 +38,7 @@ var create = function(template, path, name, req, forceJson = {}, duplicate = fal
           json = resHook.json
           text = resHook.text
 
-          Hooks.instance.trigger('afterCreate', json, text, path, name, req, forceJson)
+          Hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
           save(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft')
             .then((resSave) => {
                 Manager.instance.updateList()
