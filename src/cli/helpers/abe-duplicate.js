@@ -13,9 +13,9 @@ import {
   log
 } from '../../cli'
 
-var duplicate = function(oldFilePath, template, path, name, req, isUpdate = false) {
+var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = false) {
   var p = new Promise((resolve, reject) => {
-    Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, isUpdate)
+    Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, newPath, name, req, isUpdate)
 
     if(typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
       var url = path.join(config.root, config.draft.url, oldFilePath)
@@ -47,16 +47,16 @@ var duplicate = function(oldFilePath, template, path, name, req, isUpdate = fals
     }
 
     if (isUpdate) {
-      Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, isUpdate)
+      Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
       Array.prototype.forEach.call(revisions, (revision) => {
         if(typeof revision.path !== 'undefined' && revision.path !== null) {
           FileParser.deleteFile(revision.path)
         }
       })
     }
-    Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, path, name, req, isUpdate)
+    Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate)
 
-    var pCreate = abeCreate(template, path, name, req, json, (isUpdate) ? false : true)
+    var pCreate = abeCreate(template, newPath, name, req, json, (isUpdate) ? false : true)
     pCreate.then((resSave) => {
       resolve(resSave)
     },
