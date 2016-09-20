@@ -348,7 +348,7 @@ export default class Utils {
                     }
                   }
 
-                  log.duration(type + " > " + logTime, ((new Date().getTime() - dateStart.getTime()) / 1000))
+                  console.log(type + "(found " + data.length + ") > " + logTime, ((new Date().getTime() - dateStart.getTime()) / 1000), "\n")
 
                   resolveSource()
                 })

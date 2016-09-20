@@ -477,7 +477,7 @@ export default class Sql {
 
   static whereEquals(where, value, compare, json) {
     var shouldAdd = true
-    if(where.left === 'template') {
+    if(where.left === 'template' || where.left === 'abe_meta.template') {
       if(value.indexOf('/') > -1 && value !== compare) {
         shouldAdd = false
       }else if(value.indexOf('/') === -1 && compare.indexOf(value) === -1) {
@@ -504,7 +504,7 @@ export default class Sql {
         if(value.includes(compare)) {
           foundOne = true
         }
-      }else if(value == compare) { // only none is Array
+      }else if(value === compare) { // only none is Array
         foundOne = true
       }
 
@@ -627,7 +627,7 @@ export default class Sql {
           var value
           var compare
 
-          if(where.left === 'template') {
+          if(where.left === 'template' || where.left === 'abe_meta.template') {
             value = FileParser.getTemplate(json[meta].template)
           }else {
             value = Sql.deep_value_array(json, where.left)
@@ -647,13 +647,13 @@ export default class Sql {
           if(typeof value !== 'undefined' && value !== null) {
             switch(where.compare) {
               case '=':
-                shouldAdd = Sql.whereEquals(where, value, compare, json)
+                shouldAdd = Sql.whereEquals(where, value, compare, shouldAdd)
                 break;
               case '!=':
-                shouldAdd = Sql.whereNotEquals(where, value, compare, json)
+                shouldAdd = Sql.whereNotEquals(where, value, compare, shouldAdd)
                 break;
               case 'LIKE':
-                shouldAdd = Sql.whereLike(where, value, compare, json)
+                shouldAdd = Sql.whereLike(where, value, compare, shouldAdd)
                 break;
               default:
                 break;

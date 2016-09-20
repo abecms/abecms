@@ -409,7 +409,10 @@ export default class FileParser {
       Array.prototype.forEach.call(withKeys, (key) => {
         // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
         // console.log(key, key.split('.').reduce((o,i)=>o[i], json))
-        set_deep_value(cleanFile, key, key.split('.').reduce((o,i)=>o[i], json))
+        if(typeof json !== 'undefined' && json !== null
+          && typeof json[key.split('.')[0]] !== 'undefined' && json[key.split('.')[0]] !== null) {
+          set_deep_value(cleanFile, key, key.split('.').reduce((o,i)=>o[i], json))
+        }
         // if(typeof json[key] !== 'undefined' && json[key] !== null) {
         //   cleanFile[key] = json[key]
         // }
