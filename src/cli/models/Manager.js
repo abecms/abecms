@@ -6,7 +6,8 @@ import {
   config,
   FileParser,
   fileUtils,
-  folderUtils
+  folderUtils,
+  getSelectTemplateKeys
 } from '../../cli'
 
 let singleton = Symbol()
@@ -20,8 +21,7 @@ class Manager {
     
     Handlebars.templates = Handlebars.templates || {};
     this.loadHbsTemplates();
-
-    this.updateList()    
+    this._init()
   }
 
   static get instance() {
@@ -36,10 +36,25 @@ class Manager {
     return this._list
   }
 
-  updateList() {
+  _init() {
+    const pathTemplate = path.join(config.root, config.templates.url);
+    getSelectTemplateKeys(pathTemplate)
+      .then((whereKeys) => {
+        this._whereKeys = whereKeys
+        this.updateList()
+      })
+      .catch((e) => {
+        console.log('Manager._init', e)
+      })
+  }
 
-    this._list = FileParser.getAllFiles();
-    this._list.sort(FileParser.predicatBy('date'));
+  updateList() {
+    this._list = FileParser.getAllFilesWithMeta(this._whereKeys)
+
+    // this._list = FileParser.getAllFiles(useKeys)
+    this._list.sort(FileParser.predicatBy('date'))
+    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    // console.log('this._list[0].files', this._list[0].files)
 
     return this
   }

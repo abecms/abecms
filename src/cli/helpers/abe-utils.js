@@ -133,6 +133,21 @@ export default class Utils {
   }
 
   /**
+   * Test if a string contains string key from {{#each}} block statement
+   * @param  {String}  str string to test
+   * @return {Boolean} true = this is a block content
+   */
+  dataRequest(text) {
+    let listReg = /({{abe.*type=[\'|\"]data.*}})/g
+    var matches = []
+    var match
+    while (match = listReg.exec(text)) {
+      matches.push(match)
+    }
+    return matches
+  }
+
+  /**
    * Encode / Escape && add data-abe attributs
    * @param  {String} block
    * @return {String} escaped string
@@ -291,8 +306,6 @@ export default class Utils {
   static getDataList(tplPath, text, jsonPage) {
 
     var p = new Promise((resolve, reject) => {
-      var listReg = /({{abe.*type=[\'|\"]data.*}})/g
-      var match
       var sourceAttr = config.source.name
 
       if(typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
@@ -300,7 +313,9 @@ export default class Utils {
       }
 
       var promises = []
-      while (match = listReg.exec(text)) {
+      let util = new Utils()
+      var matches = util.dataRequest(text)
+      Array.prototype.forEach.call(matches, (match) => {
         var logTime = tplPath + " > " + match[0]
         var dateStart = new Date()
 
@@ -437,17 +452,18 @@ export default class Utils {
           }
         })
         promises.push(pSource)
-      }
+      })
+      // while (match = listReg.exec(text)) {}
 
       Promise.all(promises)
         .then(() => {
           resolve()
         }).catch(function(e) {
-          console.error('getDataList', e)
+          console.error('abe-utils.js getDataList', e)
         })
       // return filesRequest
       }).catch(function(e) {
-        console.error('getDataList', e)
+        console.error('abe-utils.js getDataList', e)
       })
 
     return p

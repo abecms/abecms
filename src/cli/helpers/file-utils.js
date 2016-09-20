@@ -222,13 +222,13 @@ export default class FileUtils {
   static checkMergedFile(file, merged) {
 
   	var cleanFilePath = file.cleanFilePath
-		var revision = {
-  			status: file.status,
-  			filePath: file.filePath,
-  			date: file.abe_meta && file.abe_meta.latest ? file.abe_meta.latest.date : '',
-				template: file[config.meta.name].template ? file[config.meta.name].template.replace(/^\/+/, '') : '',
-  			cleanFilePath: cleanFilePath
-		}
+  	var revision = file
+		revision.status = file.status
+		revision.filePath = file.filePath
+		revision.date = file.abe_meta && file.abe_meta.latest ? file.abe_meta.latest.date : ''
+		revision.template = file[config.meta.name].template ? file[config.meta.name].template.replace(/^\/+/, '') : ''
+		revision.cleanFilePath = cleanFilePath
+
 		revision[config.meta.name] = file[config.meta.name]
 
 		if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
@@ -258,15 +258,45 @@ export default class FileUtils {
   }
   
   /* TODO: put this method in its right helper */
-  static mergeFiles(files1, files2) {
+  // static mergeFiles(files1, files2) {
+  // 	var merged = {}
+  // 	var arMerged = []
+		
+  // 	Array.prototype.forEach.call(files1, (file) => {
+  // 		FileUtils.checkMergedFile(file, merged)
+  // 	})
+
+  // 	Array.prototype.forEach.call(files2, (file) => {
+  // 		FileUtils.checkMergedFile(file, merged)
+  // 	})
+
+  // 	Array.prototype.forEach.call(Object.keys(merged), (key) => {
+  // 		var merge = merged[key]
+  // 		var publishedDate = (typeof merge.published !== 'undefined' && merge.published !== null) ? new Date(merge.published.date) : null
+  // 		var draftDate = (typeof merge.draft !== 'undefined' && merge.draft !== null) ? new Date(merge.draft.date) : null
+
+  // 		if(publishedDate !== null && draftDate !== null && publishedDate >= draftDate) {
+  // 			merge.draft = null
+  // 		}
+  // 		var revision = {
+  // 			path: merge.cleanFilePath,
+  // 			template: merge.template,
+  // 			published: merge.published,
+  // 			date: merge.date,
+  // 			draft: merge.draft
+  // 		}
+  // 		arMerged.push(revision)
+  // 	})
+
+  // 	return arMerged
+  // }
+  
+  /* TODO: put this method in its right helper */
+  static getFilesMerged(files) {
   	var merged = {}
   	var arMerged = []
 		
-  	Array.prototype.forEach.call(files1, (file) => {
-  		FileUtils.checkMergedFile(file, merged)
-  	})
-
-  	Array.prototype.forEach.call(files2, (file) => {
+  	Array.prototype.forEach.call(files, (file) => {
   		FileUtils.checkMergedFile(file, merged)
   	})
 
@@ -279,6 +309,7 @@ export default class FileUtils {
   			merge.draft = null
   		}
   		var revision = {
+				fileUrl: path.join(merge.cleanFilePath.replace(/\.json/, `.${config.files.templates.extension}`)),
   			path: merge.cleanFilePath,
   			template: merge.template,
   			published: merge.published,

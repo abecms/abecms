@@ -46,12 +46,15 @@ import removeDuplicateAttr from './helpers/abe-remove-duplicate-attr'
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
 import deep_value from './helpers/abe-deep-val'
+import set_deep_value from './helpers/abe-set-deep-value'
 import Sql from './helpers/abe-sql'
 import abeProcess from './helpers/abe-process'
 import {save, checkRequired, saveJson} from './controllers/Save'
 import Hooks from './helpers/abe-hooks'
 import Plugins from './helpers/abe-plugins'
 import Locales from './helpers/abe-locales'
+
+import getSelectTemplateKeys from './helpers/abe-get-select-template-keys'
 
 export {
 	fileAttr
@@ -62,6 +65,7 @@ export {
 	,Util
 	,abeCreate
 	,deep_value
+	,set_deep_value
 	,abeDuplicate
 	,slugify
 	,cleanSlug
@@ -107,6 +111,7 @@ export {
 	,dateUnslug
 	,Manager
 	,Page
+	,getSelectTemplateKeys
 }
 
 export {compileAbe as compileAbe}
