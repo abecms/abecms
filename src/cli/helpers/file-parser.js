@@ -16,6 +16,7 @@ import {
 	,Hooks
 	,Plugins
   ,Manager
+  ,set_deep_value
 } from '../'
 
 export default class FileParser {
@@ -393,44 +394,72 @@ export default class FileParser {
     }
   }
 
-  static getAllFiles() {
-  	var site = folderUtils.folderInfos(config.root)
-	  var allDraft = []
-	  var allPublished = []
+  static getAllFilesWithMeta(withKeys) {
+    var site = folderUtils.folderInfos(config.root)
 
-    let draft = config.draft.url
-    let publish = config.publish.url
+    var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
+    var filesArr = []
+    files.forEach(function (file) {
+      var cleanFile = file
+      var json = FileParser.getJson(file.path)
 
-    var drafted = FileParser.getFilesByType(path.join(site.path, draft), 'd')
-    var published = FileParser.getFilesByType(path.join(site.path, publish))
-
-		drafted = Hooks.instance.trigger('beforeGetAllFilesDraft', drafted)
-		published = Hooks.instance.trigger('beforeGetAllFilesPublished', published)
-
-    drafted = FileParser.getMetas(drafted, 'draft')
-    published = FileParser.getMetas(published, 'draft')
-    var truePublished = []
-
-    published.forEach(function (pub) {
-    	
-    	var json = FileParser.getJson(
-  								FileParser.changePathEnv(pub.path, config.data.url)
-  													.replace(new RegExp("\\." + config.files.templates.extension), '.json')
-								  )
-    	
-    	if(typeof json[config.meta.name] !== 'undefined'
-    		&& json[config.meta.name] !== null
-    		&& typeof json[config.meta.name][config.draft.url] !== 'undefined'
-    		&& json[config.meta.name][config.draft.url] !== null) {
-  			pub.filePath = json[config.meta.name][config.draft.url].latest.abeUrl
-    		truePublished.push(pub)
-    	}
+      if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+        cleanFile.abe_meta = json.abe_meta
+      }
+      Array.prototype.forEach.call(withKeys, (key) => {
+        // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+        // console.log(key, key.split('.').reduce((o,i)=>o[i], json))
+        set_deep_value(cleanFile, key, key.split('.').reduce((o,i)=>o[i], json))
+        // if(typeof json[key] !== 'undefined' && json[key] !== null) {
+        //   cleanFile[key] = json[key]
+        // }
+      })
+      filesArr.push(cleanFile)
     })
-    var merged = fileUtils.mergeFiles(drafted, truePublished)
+    var merged = fileUtils.getFilesMerged(filesArr)
 
     site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
-	  return [site]
+    return [site]
   }
+
+  // static getAllFiles(withKeys) {
+  // 	var site = folderUtils.folderInfos(config.root)
+	 //  var allDraft = []
+	 //  var allPublished = []
+
+  //   let draft = config.draft.url
+  //   let publish = config.publish.url
+
+  //   var drafted = FileParser.getFilesByType(path.join(site.path, draft), 'd')
+  //   var published = FileParser.getFilesByType(path.join(site.path, publish))
+
+		// drafted = Hooks.instance.trigger('beforeGetAllFilesDraft', drafted)
+		// published = Hooks.instance.trigger('beforeGetAllFilesPublished', published)
+
+  //   drafted = FileParser.getMetas(drafted, 'draft')
+  //   published = FileParser.getMetas(published, 'draft')
+  //   var truePublished = []
+
+  //   published.forEach(function (pub) {
+    	
+  //   	var json = FileParser.getJson(
+  // 								FileParser.changePathEnv(pub.path, config.data.url)
+  // 													.replace(new RegExp("\\." + config.files.templates.extension), '.json')
+		// 						  )
+    	
+  //   	if(typeof json[config.meta.name] !== 'undefined'
+  //   		&& json[config.meta.name] !== null
+  //   		&& typeof json[config.meta.name][config.draft.url] !== 'undefined'
+  //   		&& json[config.meta.name][config.draft.url] !== null) {
+  // 			pub.filePath = json[config.meta.name][config.draft.url].latest.abeUrl
+  //   		truePublished.push(pub)
+  //   	}
+  //   })
+  //   var merged = fileUtils.mergeFiles(drafted, truePublished)
+
+  //   site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
+	 //  return [site]
+  // }
 
   // TODO : change the signature of this method to removeFile(file)
   static removeFile(file, json) {

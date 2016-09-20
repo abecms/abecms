@@ -11,6 +11,7 @@ import {
   config,
   cli,
   log,
+  Manager,
   folderUtils,
   fileUtils,
   FileParser,
@@ -115,11 +116,14 @@ export default class Sql {
       str = str.replace(res, escapedFrom)
     }
 
+    str = str.replace(/``/g, "''")
+
     return str
   }
 
   static handleSqlRequest(str, jsonPage) {
-    var request = parse(Sql.cleanRequest(str, jsonPage))
+    var cleanRequest = Sql.cleanRequest(str, jsonPage)
+    var request = parse(cleanRequest)
     var reconstructSql = ''
 
     // SQL TYPE
@@ -317,12 +321,25 @@ export default class Sql {
 
     var fromDirectory = Sql.getFromDirectory(from, pathFromClause)
 
-    if(folderUtils.isFolder(fromDirectory)) {
-      // we'll get only published files which don't contain "-abe-"
-      files = FileParser.getFiles(fromDirectory, true, recursive, fileRegex, true)
-    }
+    var list = Manager.instance.getList()
+    var files_array = list[0].files.filter((element, index, arr) => {
+      if(typeof element.published !== 'undefined' && element.published !== null) {
+        if (element.published.path.indexOf(fromDirectory) > -1) {
+          return true
+        }
+      }
+      return false
+    })
+    return files_array
 
-    return files
+    // if(folderUtils.isFolder(fromDirectory)) {
+    //   // we'll get only published files which don't contain "-abe-"
+    //   files = FileParser.getFiles(fromDirectory, true, recursive, fileRegex, true)
+    // }
+    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    // console.log('files', files)
+
+    // return files
   }
 
   static execQuery(pathQuery, match, jsonPage) {
@@ -429,7 +446,7 @@ export default class Sql {
 
     for(let file of files) {
       if(limit < maxLimit || maxLimit === -1) {
-        var doc = Sql.executeWhereClauseToFile(file, wheres, jsonPage)
+        var doc = Sql.executeWhereClauseToFile(file.published, wheres, jsonPage)
 
         if(doc) {
           var json = JSON.parse(JSON.stringify(doc))
@@ -458,11 +475,149 @@ export default class Sql {
     return res
   }
 
-  static executeWhereClauseToFile(file, wheres, jsonPage) {
-    var json = {}
-    if (fileUtils.isFile(file.path)) {
-      json = fse.readJsonSync(file.path)
+  static whereEquals(where, value, compare, json) {
+    var shouldAdd = true
+    if(where.left === 'template') {
+      if(value.indexOf('/') > -1 && value !== compare) {
+        shouldAdd = false
+      }else if(value.indexOf('/') === -1 && compare.indexOf(value) === -1) {
+        shouldAdd = false
+      }
+
+    }else {
+
+      // if both entries are Array
+      var foundOne = false
+      if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]'
+        && typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+        
+        Array.prototype.forEach.call(value, (v) => {
+          if(compare.includes(v)) {
+            foundOne = true
+          }
+        })
+      }else if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]') { // only "compare" is Array
+        if(compare.includes(value)) {
+          foundOne = true
+        }
+      }else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') { // only "value" is Array
+        if(value.includes(compare)) {
+          foundOne = true
+        }
+      }else if(value == compare) { // only none is Array
+        foundOne = true
+      }
+
+      if(!foundOne) {
+        shouldAdd = false
+      }
     }
+    if (shouldAdd) {
+      return json
+    }
+    return shouldAdd
+  }
+
+  static whereNotEquals(where, value, compare, json) {
+    var shouldAdd = true
+    if(where.left === 'template') {
+
+      if (value.indexOf('/') > -1 && value === compare) { 
+        shouldAdd = false; 
+      } else if (value.indexOf('/') === -1 && compare.indexOf(value) !== -1) { 
+        shouldAdd = false
+      }
+
+    }else {
+
+      // if both entries are Array
+      var foundOne = false
+      if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]'
+        && typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+        
+        Array.prototype.forEach.call(value, (v) => {
+          if(compare.includes(v)) {
+            foundOne = true
+          }
+        })
+      }else if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]') { // only "compare" is Array
+        if(compare.includes(value)) {
+          foundOne = true
+        }
+      }else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') { // only "value" is Array
+        if(value.includes(compare)) {
+          foundOne = true
+        }
+      }else if(value === compare) { // only none is Array
+        foundOne = true
+      }
+
+      if(foundOne) {
+        shouldAdd = false
+      }
+    }
+    if (shouldAdd) {
+      return json
+    }
+    return shouldAdd
+  }
+
+  static whereLike(where, value, compare, json) {
+    var shouldAdd = true
+    if(where.left === 'template') {
+
+      if(value.indexOf(compare) === -1) {
+        shouldAdd = false
+      }
+
+    }else {
+
+      // if both entries are Array
+      var foundOne = false
+      if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]'
+        && typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
+        
+        Array.prototype.forEach.call(compare, (v) => {
+          Array.prototype.forEach.call(value, (v2) => {
+            if(v.indexOf(v2) !== -1) {
+              foundOne = true
+            }
+          })
+        })
+      }else if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]') { // only "compare" is Array
+        Array.prototype.forEach.call(compare, (v) => {
+          if(v.indexOf(value) !== -1) {
+            foundOne = true
+          }
+        })
+      }else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') { // only "value" is Array
+        Array.prototype.forEach.call(value, (v) => {
+          if(compare.indexOf(v) !== -1) {
+            foundOne = true
+          }
+        })
+      }else if(value === compare) { // only none is Array
+        if(value.indexOf(compare) !== -1) {
+          foundOne = true
+        }
+      }
+
+      if(foundOne) {
+        shouldAdd = false
+      }
+    }
+    if (shouldAdd) {
+      return json
+    }
+    return shouldAdd
+  }
+
+  static executeWhereClauseToFile(file, wheres, jsonPage) {
+    var json = file
+    // if (fileUtils.isFile(file.path)) {
+    //   json = fse.readJsonSync(file.path)
+    // }
+    // 
     var shouldAdd = json
 
     if(typeof wheres !== 'undefined' && wheres !== null) {
@@ -492,124 +647,13 @@ export default class Sql {
           if(typeof value !== 'undefined' && value !== null) {
             switch(where.compare) {
               case '=':
-                if(where.left === 'template') {
-                  if(value.indexOf('/') > -1 && value !== compare) {
-                    shouldAdd = false
-                  }else if(value.indexOf('/') === -1 && compare.indexOf(value) === -1) {
-                    shouldAdd = false
-                  }
-
-                }else {
-
-                  // if both entries are Array
-                  var foundOne = false
-                  if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]'
-                    && typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-                    
-                    Array.prototype.forEach.call(value, (v) => {
-                      if(compare.includes(v)) {
-                        foundOne = true
-                      }
-                    })
-                  }else if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]') { // only "compare" is Array
-                    if(compare.includes(value)) {
-                      foundOne = true
-                    }
-                  }else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') { // only "value" is Array
-                    if(value.includes(compare)) {
-                      foundOne = true
-                    }
-                  }else if(value == compare) { // only none is Array
-                    foundOne = true
-                  }
-
-                  if(!foundOne) {
-                    shouldAdd = false
-                  }
-                }
+                shouldAdd = Sql.whereEquals(where, value, compare, json)
                 break;
               case '!=':
-                if(where.left === 'template') {
-
-                  if (value.indexOf('/') > -1 && value === compare) { 
-                    shouldAdd = false; 
-                  } else if (value.indexOf('/') === -1 && compare.indexOf(value) !== -1) { 
-                    shouldAdd = false
-                  }
-
-                }else {
-
-                  // if both entries are Array
-                  var foundOne = false
-                  if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]'
-                    && typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-                    
-                    Array.prototype.forEach.call(value, (v) => {
-                      if(compare.includes(v)) {
-                        foundOne = true
-                      }
-                    })
-                  }else if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]') { // only "compare" is Array
-                    if(compare.includes(value)) {
-                      foundOne = true
-                    }
-                  }else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') { // only "value" is Array
-                    if(value.includes(compare)) {
-                      foundOne = true
-                    }
-                  }else if(value === compare) { // only none is Array
-                    foundOne = true
-                  }
-
-                  if(foundOne) {
-                    shouldAdd = false
-                  }
-                }
+                shouldAdd = Sql.whereNotEquals(where, value, compare, json)
                 break;
               case 'LIKE':
-                if(where.left === 'template') {
-
-                  if(value.indexOf(compare) === -1) {
-                    shouldAdd = false
-                  }
-
-                }else {
-
-                  // if both entries are Array
-                  var foundOne = false
-                  if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]'
-                    && typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
-                    
-                    Array.prototype.forEach.call(compare, (v) => {
-                      Array.prototype.forEach.call(value, (v2) => {
-                        if(v.indexOf(v2) !== -1) {
-                          foundOne = true
-                        }
-                      })
-                    })
-                  }else if(typeof compare === 'object' && Object.prototype.toString.call(compare) === '[object Array]') { // only "compare" is Array
-                    Array.prototype.forEach.call(compare, (v) => {
-                      if(v.indexOf(value) !== -1) {
-                        foundOne = true
-                      }
-                    })
-                  }else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') { // only "value" is Array
-                    Array.prototype.forEach.call(value, (v) => {
-                      if(compare.indexOf(v) !== -1) {
-                        foundOne = true
-                      }
-                    })
-                  }else if(value === compare) { // only none is Array
-                    if(value.indexOf(compare) !== -1) {
-                      foundOne = true
-                    }
-                  }
-
-                  if(foundOne) {
-                    shouldAdd = false
-                  }
-                }
-
+                shouldAdd = Sql.whereLike(where, value, compare, json)
                 break;
               default:
                 break;

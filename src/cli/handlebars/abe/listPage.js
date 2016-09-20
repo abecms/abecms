@@ -10,8 +10,8 @@ export default function listPage(file, index, text) {
   res += `<tr>`
   res += `<td>${math(index, '+', 1)}</td>
         <td>
-          <a href="/abe/${file.template}?filePath=${file.path}" class="file-path">
-            ${file.path}
+          <a href="/abe/${file.template}?filePath=${file.fileUrl}" class="file-path">
+            ${file.fileUrl}
           </a>
         </td>`
   
@@ -37,9 +37,9 @@ export default function listPage(file, index, text) {
 
   workflow += `<td align="center" class="draft">`
   if((typeof file.published !== undefined && file.published !== null && !file.published) || (file.published && file.draft && file.published.date < file.draft.date)) {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.path}" class="label label-default label-draft">draft</a>`
+    workflow += `<a href="/abe/${file.template}?filePath=${file.fileUrl}" class="label label-default label-draft">draft</a>`
   }else {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.path}" class="hidden label label-default label-draft"></a>`
+    workflow += `<a href="/abe/${file.template}?filePath=${file.fileUrl}" class="hidden label label-default label-draft"></a>`
   }
 
   workflow += `</td>`
@@ -57,9 +57,9 @@ export default function listPage(file, index, text) {
             <div class="row icons-action">`
   
   if (this.published){
-    res += `<a href="/unpublish/?filePath=${file.path}"
+    res += `<a href="/unpublish/?filePath=${file.fileUrl}"
                title="${text.unpublish}"
-               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.path}">
+               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.fileUrl}">
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
@@ -68,7 +68,7 @@ export default function listPage(file, index, text) {
              title="${text.delete}"
              class="icon"
              data-delete="true"
-             data-text="${text.confirmDelete} ${file.path}">
+             data-text="${text.confirmDelete} ${file.fileUrl}">
             <span class="glyphicon glyphicon-trash"></span>
           </a>`
 
