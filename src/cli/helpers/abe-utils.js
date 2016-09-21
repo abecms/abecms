@@ -303,7 +303,7 @@ export default class Utils {
     return obj
   }
 
-  static getDataList(tplPath, text, jsonPage) {
+  static nextDataList(tplPath, text, jsonPage, match) {
     var p = new Promise((resolve, reject) => {
       var sourceAttr = config.source.name
 
@@ -311,155 +311,183 @@ export default class Utils {
         jsonPage[sourceAttr] = {}
       }
 
+      var obj = Utils.getAllAttributes(match, jsonPage)
+      obj = Utils.sanitizeSourceAttribute(obj, jsonPage)
+      
+      var type = Sql.getSourceType(obj.sourceString)
+
+      switch (type) {
+        case 'request':
+          Sql.executeQuery(tplPath, match, jsonPage)
+            .then((data) => {
+              jsonPage[sourceAttr][obj.key] = data
+              if (!obj.editable) {
+                if (obj.maxLength) {
+                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
+                }else {
+                  jsonPage[obj.key] = data
+                }
+              } else if (obj.prefill) {
+                if (obj.prefillQuantity && obj.maxLength) {
+                  jsonPage[obj.key] = data.slice(0, (obj.prefillQuantity > obj.maxLength) ? obj.maxLength : obj.prefillQuantity)
+                }else if (obj.prefillQuantity) {
+                  jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
+                }else if (obj.maxLength) {
+                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
+                }else {
+                  jsonPage[obj.key] = data
+                }
+              }
+
+              resolve()
+            })
+          
+          break;
+        case 'value':
+          var value = Sql.getDataSource(match)
+
+          if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
+            try{
+              value = JSON.parse(value)
+
+              jsonPage[sourceAttr][obj.key] = value
+            }catch(e){
+              jsonPage[sourceAttr][obj.key] = null
+              console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
+            }
+          }
+          resolve()
+          break;
+        case 'url':
+          if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
+            var host = obj.sourceString
+            host = host.split('/')
+            var httpUse = http
+            var defaultPort = 80
+            if(host[0] === 'https:') {
+              httpUse = https
+              defaultPort = 443
+            }
+            host = host[2].split(':')
+
+            var pathSource = obj.sourceString.split('//')
+            if(typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
+              pathSource = pathSource[1].split('/')
+              pathSource.shift()
+              pathSource = '/' + path.join('/')
+            }else {
+              pathSource = '/'
+            }
+            var options = {
+              hostname: host[0],
+              port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
+              path: pathSource,
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': 0
+              }
+            }
+
+            var body = ''
+
+            var localReq = httpUse.request(options, (localRes) => {
+              localRes.setEncoding('utf8');
+              localRes.on('data', (chunk) => {
+                body += chunk;
+              });
+              localRes.on('end', () => {
+                try {
+                  if(typeof body === 'string') {
+                    var parsedBody = JSON.parse(body)
+                    if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
+                      jsonPage[sourceAttr][obj.key] = parsedBody
+                    }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
+                      jsonPage[sourceAttr][obj.key] = [parsedBody]
+                    }
+                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
+                    jsonPage[sourceAttr][obj.key] = body
+                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
+                    jsonPage[sourceAttr][obj.key] = body
+                  }
+                } catch(e) {
+                  console.log(clc.red(`Error ${obj.sourceString} is not a valid JSON`),  `\n${e}`)
+                }
+                resolve()
+              })
+            });
+
+            localReq.on('error', (e) => {
+              console.log(e)
+            });
+
+            // write data to request body
+            localReq.write('');
+            localReq.end();
+            
+          }else {
+            jsonPage[sourceAttr][obj.key] = obj.sourceString
+            resolve()
+          }
+
+          break;
+        case 'file':
+          jsonPage[sourceAttr][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
+          resolve()
+          break;
+        default:
+          resolve()
+          break;
+      }
+    })
+
+    return p
+  }
+
+  static performDataList(tplPath, text, jsonPage, matches, cb) {
+    var match = matches.shift()
+    var dateStart = new Date()
+
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('performDataList')
+    console.log(match)
+
+    Utils.nextDataList(tplPath, text, jsonPage, match)
+      .then(() => {
+        console.log(((new Date().getTime() - dateStart.getTime()) / 1000) + 'sec')
+        if (matches.length > 0) {
+          Utils.performDataList(tplPath, text, jsonPage, matches, cb)
+        }else {
+          cb()
+        }
+      })
+      .catch((e) => {
+        console.log('[ERROR] performDataList', e)
+      })
+  }
+
+  static getDataList(tplPath, text, jsonPage) {
+    var p = new Promise((resolve, reject) => {
+
       var promises = []
       let util = new Utils()
       var matches = util.dataRequest(text)
-      Array.prototype.forEach.call(matches, (match) => {
-        var logTime = tplPath + " > " + match[0]
-        var dateStart = new Date()
-
-        var pSource = new Promise((resolveSource, rejectSource) => {
-          var obj = Utils.getAllAttributes(match[0], jsonPage)
-          obj = Utils.sanitizeSourceAttribute(obj, jsonPage)
-          
-          var type = Sql.getSourceType(obj.sourceString)
-
-          switch (type) {
-            case 'request':
-              Sql.executeQuery(tplPath, match[0], jsonPage)
-                .then((data) => {
-                  jsonPage[sourceAttr][obj.key] = data
-                  if (!obj.editable) {
-                    if (obj.maxLength) {
-                      jsonPage[obj.key] = data.slice(0, obj.maxLength)
-                    }else {
-                      jsonPage[obj.key] = data
-                    }
-                  } else if (obj.prefill) {
-                    if (obj.prefillQuantity && obj.maxLength) {
-                      jsonPage[obj.key] = data.slice(0, (obj.prefillQuantity > obj.maxLength) ? obj.maxLength : obj.prefillQuantity)
-                    }else if (obj.prefillQuantity) {
-                      jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
-                    }else if (obj.maxLength) {
-                      jsonPage[obj.key] = data.slice(0, obj.maxLength)
-                    }else {
-                      jsonPage[obj.key] = data
-                    }
-                  }
-
-                  console.log(type + "(found " + data.length + ") > " + logTime, ((new Date().getTime() - dateStart.getTime()) / 1000), "\n")
-
-                  resolveSource()
-                })
-              
-              break;
-            case 'value':
-              var value = Sql.getDataSource(match[0])
-
-              if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
-                try{
-                  value = JSON.parse(value)
-
-                  jsonPage[sourceAttr][obj.key] = value
-                }catch(e){
-                  jsonPage[sourceAttr][obj.key] = null
-                  console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
-                }
-              }
-              resolveSource()
-              break;
-            case 'url':
-              if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
-                var host = obj.sourceString
-                host = host.split('/')
-                var httpUse = http
-                var defaultPort = 80
-                if(host[0] === 'https:') {
-                  httpUse = https
-                  defaultPort = 443
-                }
-                host = host[2].split(':')
-
-                var pathSource = obj.sourceString.split('//')
-                if(typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
-                  pathSource = pathSource[1].split('/')
-                  pathSource.shift()
-                  pathSource = '/' + path.join('/')
-                }else {
-                  pathSource = '/'
-                }
-                var options = {
-                  hostname: host[0],
-                  port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
-                  path: pathSource,
-                  method: 'GET',
-                  headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Content-Length': 0
-                  }
-                }
-
-                var body = ''
-
-                var localReq = httpUse.request(options, (localRes) => {
-                  localRes.setEncoding('utf8');
-                  localRes.on('data', (chunk) => {
-                    body += chunk;
-                  });
-                  localRes.on('end', () => {
-                    try {
-                      if(typeof body === 'string') {
-                        var parsedBody = JSON.parse(body)
-                        if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
-                          jsonPage[sourceAttr][obj.key] = parsedBody
-                        }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
-                          jsonPage[sourceAttr][obj.key] = [parsedBody]
-                        }
-                      }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
-                        jsonPage[sourceAttr][obj.key] = body
-                      }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
-                        jsonPage[sourceAttr][obj.key] = body
-                      }
-                    } catch(e) {
-                      console.log(clc.red(`Error ${obj.sourceString} is not a valid JSON`),  `\n${e}`)
-                    }
-                    resolveSource()
-                  })
-                });
-
-                localReq.on('error', (e) => {
-                  console.log(e)
-                });
-
-                // write data to request body
-                localReq.write('');
-                localReq.end();
-                
-              }else {
-                jsonPage[sourceAttr][obj.key] = obj.sourceString
-                resolveSource()
-              }
-
-              break;
-            case 'file':
-              jsonPage[sourceAttr][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
-              resolveSource()
-              break;
-            default:
-              resolveSource()
-              break;
-          }
-        })
-        promises.push(pSource)
+      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+      console.log('matches', matches)
+      Utils.performDataList(tplPath, text, jsonPage, matches[0], () => {
+        resolve()
       })
+      // Array.prototype.forEach.call(matches, (match) => {
+
+      // })
       // while (match = listReg.exec(text)) {}
 
-      Promise.all(promises)
-        .then(() => {
-          resolve()
-        }).catch(function(e) {
-          console.error('abe-utils.js getDataList', e)
-        })
+      // Promise.all(promises)
+      //   .then(() => {
+      //     resolve()
+      //   }).catch(function(e) {
+      //     console.error('abe-utils.js getDataList', e)
+      //   })
       // return filesRequest
       }).catch(function(e) {
         console.error('abe-utils.js getDataList', e)

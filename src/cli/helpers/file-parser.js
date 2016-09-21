@@ -416,6 +416,8 @@ export default class FileParser {
       })
       filesArr.push(cleanFile)
     })
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('filesArr[0]', filesArr[0])
     var merged = fileUtils.getFilesMerged(filesArr)
 
     Hooks.instance.trigger('afterGetAllFiles', merged)
