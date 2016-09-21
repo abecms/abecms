@@ -304,7 +304,6 @@ export default class Utils {
   }
 
   static getDataList(tplPath, text, jsonPage) {
-
     var p = new Promise((resolve, reject) => {
       var sourceAttr = config.source.name
 

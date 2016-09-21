@@ -17,6 +17,7 @@ import {
 	,Plugins
   ,Manager
   ,set_deep_value
+  ,deep_value
 } from '../'
 
 export default class FileParser {
@@ -43,8 +44,6 @@ export default class FileParser {
 	}
 
 	static read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
-  		var website = config.root.split('/')
-  		website = website[website.length - 1]
   		var arr = []
   		var level = fse.readdirSync(dirName)
   		var fileCurrentLevel = []
@@ -82,7 +81,6 @@ export default class FileParser {
   		    	var item = {
   						'name': level[i],
   						'path': path,
-  						'website': website,
   						'cleanPathName': fileAttr.delete(path),
   						'cleanPath': path.replace(base + '/', ''),
   						date: date,
@@ -106,13 +104,13 @@ export default class FileParser {
         if(!fileCurrentLevel.includes(level[i]) && match) {
           if(isFolder) {
             if(!flatten) {
-              var index = arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
+              var index = arr.push({'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
               if(current < max){
                 arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern)
               }
             }else {
               if(type === 'folders' || type === null) {
-                arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
+                arr.push({'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
               }
               if(current < max){
                 Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern), (files) => {
@@ -409,20 +407,19 @@ export default class FileParser {
       Array.prototype.forEach.call(withKeys, (key) => {
         // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
         // console.log(key, key.split('.').reduce((o,i)=>o[i], json))
+        var keys = key.split('.')
+        var firstKey = keys[0]
         if(typeof json !== 'undefined' && json !== null
-          && typeof json[key.split('.')[0]] !== 'undefined' && json[key.split('.')[0]] !== null) {
-          set_deep_value(cleanFile, key, key.split('.').reduce((o,i)=>o[i], json))
+          && typeof json[firstKey] !== 'undefined' && json[firstKey] !== null) {
+          set_deep_value(cleanFile, key, deep_value(json, key))
         }
-        // if(typeof json[key] !== 'undefined' && json[key] !== null) {
-        //   cleanFile[key] = json[key]
-        // }
       })
       filesArr.push(cleanFile)
     })
     var merged = fileUtils.getFilesMerged(filesArr)
 
-    site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
-    return [site]
+    Hooks.instance.trigger('afterGetAllFiles', merged)
+    return merged
   }
 
   // static getAllFiles(withKeys) {

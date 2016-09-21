@@ -10,8 +10,8 @@ export default function listPage(file, index, text) {
   res += `<tr>`
   res += `<td>${math(index, '+', 1)}</td>
         <td>
-          <a href="/abe/${file.template}?filePath=${file.fileUrl}" class="file-path">
-            ${file.fileUrl}
+          <a href="/abe/${file.template}?filePath=${file.abe_meta.link}" class="file-path">
+            ${file.abe_meta.link}
           </a>
         </td>`
   
@@ -37,9 +37,9 @@ export default function listPage(file, index, text) {
 
   workflow += `<td align="center" class="draft">`
   if((typeof file.published !== undefined && file.published !== null && !file.published) || (file.published && file.draft && file.published.date < file.draft.date)) {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.fileUrl}" class="label label-default label-draft">draft</a>`
+    workflow += `<a href="/abe/${file.template}?filePath=${file.abe_meta.link}" class="label label-default label-draft">draft</a>`
   }else {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.fileUrl}" class="hidden label label-default label-draft"></a>`
+    workflow += `<a href="/abe/${file.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft"></a>`
   }
 
   workflow += `</td>`
@@ -57,9 +57,9 @@ export default function listPage(file, index, text) {
             <div class="row icons-action">`
   
   if (this.published){
-    res += `<a href="/unpublish/?filePath=${file.fileUrl}"
+    res += `<a href="/unpublish/?filePath=${file.abe_meta.link}"
                title="${text.unpublish}"
-               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.fileUrl}">
+               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}">
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
@@ -68,7 +68,7 @@ export default function listPage(file, index, text) {
              title="${text.delete}"
              class="icon"
              data-delete="true"
-             data-text="${text.confirmDelete} ${file.fileUrl}">
+             data-text="${text.confirmDelete} ${file.abe_meta.link}">
             <span class="glyphicon glyphicon-trash"></span>
           </a>`
 
