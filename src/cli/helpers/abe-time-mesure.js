@@ -4,9 +4,9 @@ export default class TimeMesure {
 
   constructor(str) {
     this._name = str
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    if(typeof str !== 'undefined' && str !== null) {
-      console.log('start: ' + clc.green(str))
+    if(typeof this._name !== 'undefined' && this._name !== null) {
+      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+      console.log('start: ' + clc.green(this._name))
     }
     this._dateStart = new Date()
   }
@@ -30,6 +30,9 @@ export default class TimeMesure {
    */
   duration(str) {
     var d = new Date(new Date().getTime() - this._dateStart.getTime()).getTime()
+    if(typeof this._name === 'undefined' || this._name === null) {
+      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    }
     console.log((this._name ? 'end ' + this._name : "") + "(" + clc.green(this._msToTime(d)) + ") " + (str ? str : ""))
   }
 }

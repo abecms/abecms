@@ -306,8 +306,145 @@ export default class Utils {
     return obj
   }
 
+  static requestList(obj, sourceAttr, tplPath, match, jsonPage) {
+    var p = new Promise((resolve, reject) => {
+      Sql.executeQuery(tplPath, match, jsonPage)
+        .then((data) => {
+          jsonPage[sourceAttr][obj.key] = data
+          if (!obj.editable) {
+            if (obj.maxLength) {
+              jsonPage[obj.key] = data.slice(0, obj.maxLength)
+            }else {
+              jsonPage[obj.key] = data
+            }
+          } else if (obj.prefill) {
+            if (obj.prefillQuantity && obj.maxLength) {
+              jsonPage[obj.key] = data.slice(0, (obj.prefillQuantity > obj.maxLength) ? obj.maxLength : obj.prefillQuantity)
+            }else if (obj.prefillQuantity) {
+              jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
+            }else if (obj.maxLength) {
+              jsonPage[obj.key] = data.slice(0, obj.maxLength)
+            }else {
+              jsonPage[obj.key] = data
+            }
+          }
+
+          resolve()
+        })
+    })
+
+    return p
+  }
+
+  static valueList(obj, sourceAttr, tplPath, match, jsonPage) {
+    var p = new Promise((resolve, reject) => {
+      var value = Sql.getDataSource(match)
+
+      if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
+        try{
+          value = JSON.parse(value)
+
+          jsonPage[sourceAttr][obj.key] = value
+        }catch(e){
+          jsonPage[sourceAttr][obj.key] = null
+          console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
+        }
+      }
+      resolve()
+    })
+
+    return p
+  }
+
+  static urlList(obj, sourceAttr, tplPath, match, jsonPage) {
+    var p = new Promise((resolve, reject) => {
+      if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
+        var host = obj.sourceString
+        host = host.split('/')
+        var httpUse = http
+        var defaultPort = 80
+        if(host[0] === 'https:') {
+          httpUse = https
+          defaultPort = 443
+        }
+        host = host[2].split(':')
+
+        var pathSource = obj.sourceString.split('//')
+        if(typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
+          pathSource = pathSource[1].split('/')
+          pathSource.shift()
+          pathSource = '/' + path.join('/')
+        }else {
+          pathSource = '/'
+        }
+        var options = {
+          hostname: host[0],
+          port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
+          path: pathSource,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': 0
+          }
+        }
+
+        var body = ''
+
+        var localReq = httpUse.request(options, (localRes) => {
+          localRes.setEncoding('utf8');
+          localRes.on('data', (chunk) => {
+            body += chunk;
+          });
+          localRes.on('end', () => {
+            try {
+              if(typeof body === 'string') {
+                var parsedBody = JSON.parse(body)
+                if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
+                  jsonPage[sourceAttr][obj.key] = parsedBody
+                }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
+                  jsonPage[sourceAttr][obj.key] = [parsedBody]
+                }
+              }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
+                jsonPage[sourceAttr][obj.key] = body
+              }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
+                jsonPage[sourceAttr][obj.key] = body
+              }
+            } catch(e) {
+              console.log(clc.red(`Error ${obj.sourceString} is not a valid JSON`),  `\n${e}`)
+            }
+            resolve()
+          })
+        });
+
+        localReq.on('error', (e) => {
+          console.log(e)
+        });
+
+        // write data to request body
+        localReq.write('');
+        localReq.end();
+        
+      }else {
+        jsonPage[sourceAttr][obj.key] = obj.sourceString
+        resolve()
+      }
+    })
+
+    return p
+  }
+
+  static fileList(obj, sourceAttr, tplPath, match, jsonPage) {
+    var p = new Promise((resolve, reject) => {
+      jsonPage[sourceAttr][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
+      resolve()
+    })
+
+    return p
+  }
+
   static nextDataList(tplPath, text, jsonPage, match) {
     var p = new Promise((resolve, reject) => {
+      var t = new TimeMesure()
       var sourceAttr = config.source.name
 
       if(typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
@@ -321,122 +458,37 @@ export default class Utils {
 
       switch (type) {
         case 'request':
-          Sql.executeQuery(tplPath, match, jsonPage)
-            .then((data) => {
-              jsonPage[sourceAttr][obj.key] = data
-              if (!obj.editable) {
-                if (obj.maxLength) {
-                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
-                }else {
-                  jsonPage[obj.key] = data
-                }
-              } else if (obj.prefill) {
-                if (obj.prefillQuantity && obj.maxLength) {
-                  jsonPage[obj.key] = data.slice(0, (obj.prefillQuantity > obj.maxLength) ? obj.maxLength : obj.prefillQuantity)
-                }else if (obj.prefillQuantity) {
-                  jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
-                }else if (obj.maxLength) {
-                  jsonPage[obj.key] = data.slice(0, obj.maxLength)
-                }else {
-                  jsonPage[obj.key] = data
-                }
-              }
-
+          Utils.requestList(obj, sourceAttr, tplPath, match, jsonPage)
+            .then(() => {
+              t.duration(match)
               resolve()
+            }).catch((e) => {
+              console.log('[ERROR] abe-utils.js requestList', e)
             })
-          
           break;
         case 'value':
-          var value = Sql.getDataSource(match)
-
-          if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
-            try{
-              value = JSON.parse(value)
-
-              jsonPage[sourceAttr][obj.key] = value
-            }catch(e){
-              jsonPage[sourceAttr][obj.key] = null
-              console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
-            }
-          }
-          resolve()
+          Utils.valueList(obj, sourceAttr, tplPath, match, jsonPage)
+            .then(() => {
+              resolve()
+            }).catch((e) => {
+              console.log('[ERROR] abe-utils.js valueList', e)
+            })
           break;
         case 'url':
-          if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
-            var host = obj.sourceString
-            host = host.split('/')
-            var httpUse = http
-            var defaultPort = 80
-            if(host[0] === 'https:') {
-              httpUse = https
-              defaultPort = 443
-            }
-            host = host[2].split(':')
-
-            var pathSource = obj.sourceString.split('//')
-            if(typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
-              pathSource = pathSource[1].split('/')
-              pathSource.shift()
-              pathSource = '/' + path.join('/')
-            }else {
-              pathSource = '/'
-            }
-            var options = {
-              hostname: host[0],
-              port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
-              path: pathSource,
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': 0
-              }
-            }
-
-            var body = ''
-
-            var localReq = httpUse.request(options, (localRes) => {
-              localRes.setEncoding('utf8');
-              localRes.on('data', (chunk) => {
-                body += chunk;
-              });
-              localRes.on('end', () => {
-                try {
-                  if(typeof body === 'string') {
-                    var parsedBody = JSON.parse(body)
-                    if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
-                      jsonPage[sourceAttr][obj.key] = parsedBody
-                    }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
-                      jsonPage[sourceAttr][obj.key] = [parsedBody]
-                    }
-                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
-                    jsonPage[sourceAttr][obj.key] = body
-                  }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
-                    jsonPage[sourceAttr][obj.key] = body
-                  }
-                } catch(e) {
-                  console.log(clc.red(`Error ${obj.sourceString} is not a valid JSON`),  `\n${e}`)
-                }
-                resolve()
-              })
-            });
-
-            localReq.on('error', (e) => {
-              console.log(e)
-            });
-
-            // write data to request body
-            localReq.write('');
-            localReq.end();
-            
-          }else {
-            jsonPage[sourceAttr][obj.key] = obj.sourceString
-            resolve()
-          }
-
+          Utils.urlList(obj, sourceAttr, tplPath, match, jsonPage)
+            .then(() => {
+              resolve()
+            }).catch((e) => {
+              console.log('[ERROR] abe-utils.js urlList', e)
+            })
           break;
         case 'file':
-          jsonPage[sourceAttr][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
-          resolve()
+          Utils.fileList(obj, sourceAttr, tplPath, match, jsonPage)
+            .then(() => {
+              resolve()
+            }).catch((e) => {
+              console.log('[ERROR] abe-utils.js fileList', e)
+            })
           break;
         default:
           resolve()
@@ -447,46 +499,63 @@ export default class Utils {
     return p
   }
 
-  static performDataList(tplPath, text, jsonPage, matches, cb) {
-    var match = matches.shift()
-    var t = new TimeMesure('performDataList')
+  // static performDataList(tplPath, text, jsonPage, matches, cb) {
+  //   var match = matches.shift()
+  //   var t = new TimeMesure('performDataList')
 
-    console.log(match[0])
+  //   console.log(match[0])
 
-    Utils.nextDataList(tplPath, text, jsonPage, match[0])
-      .then(() => {
-        t.duration()
-        if (matches.length > 0) {
-          Utils.performDataList(tplPath, text, jsonPage, matches, cb)
-        }else {
-          cb()
-        }
-      })
-      .catch((e) => {
-        console.log('[ERROR] performDataList', e)
-      })
-  }
+  //   Utils.nextDataList(tplPath, text, jsonPage, match[0])
+  //     .then(() => {
+  //       t.duration()
+  //       if (matches.length > 0) {
+  //         Utils.performDataList(tplPath, text, jsonPage, matches, cb)
+  //       }else {
+  //         cb()
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       console.log('[ERROR] performDataList', e)
+  //     })
+  // }
 
   static getDataList(tplPath, text, jsonPage) {
     var p = new Promise((resolve, reject) => {
+      var t = new TimeMesure('getDataList')
 
       var promises = []
       let util = new Utils()
       var matches = util.dataRequest(text)
-      Utils.performDataList(tplPath, text, jsonPage, matches, () => {
-        resolve()
+      Array.prototype.forEach.call(matches, (match) => {
+        promises.push(Utils.nextDataList(tplPath, text, jsonPage, match[0]))
+          // .then(() => {
+          //   t.duration()
+          //   if (matches.length > 0) {
+          //     Utils.performDataList(tplPath, text, jsonPage, matches, cb)
+          //   }else {
+          //     cb()
+          //   }
+          // })
+          // .catch((e) => {
+          //   console.log('[ERROR] performDataList', e)
+          // })
       })
+
+      // Utils.performDataList(tplPath, text, jsonPage, matches, () => {
+      //   resolve()
+      // })
       // Array.prototype.forEach.call(matches, (match) => {
 
       // })
       // while (match = listReg.exec(text)) {}
 
-      // Promise.all(promises)
-      //   .then(() => {
-      //     resolve()
-      //   }).catch(function(e) {
-      //     console.error('abe-utils.js getDataList', e)
-      //   })
+      Promise.all(promises)
+        .then(() => {
+          t.duration()
+          resolve()
+        }).catch(function(e) {
+          console.error('abe-utils.js getDataList', e)
+        })
       // return filesRequest
       }).catch(function(e) {
         console.error('abe-utils.js getDataList', e)
