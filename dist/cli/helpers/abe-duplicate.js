@@ -12,14 +12,14 @@ var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var duplicate = function duplicate(oldFilePath, template, path, name, req) {
+var duplicate = function duplicate(oldFilePath, template, newPath, name, req) {
   var isUpdate = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
 
   var p = new Promise(function (resolve, reject) {
-    _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, path, name, req, isUpdate);
+    _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, newPath, name, req, isUpdate);
 
     if (typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
-      var url = path.join(_cli.config.root, _cli.config.draft.url, oldFilePath);
+      var url = _path2.default.join(_cli.config.root, _cli.config.draft.url, oldFilePath);
       var revisions = [];
 
       if (!_cli.fileAttr.test(url)) {
@@ -45,16 +45,16 @@ var duplicate = function duplicate(oldFilePath, template, path, name, req) {
     }
 
     if (isUpdate) {
-      _cli.Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, path, name, req, isUpdate);
+      _cli.Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate);
       Array.prototype.forEach.call(revisions, function (revision) {
         if (typeof revision.path !== 'undefined' && revision.path !== null) {
           _cli.FileParser.deleteFile(revision.path);
         }
       });
     }
-    _cli.Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, path, name, req, isUpdate);
+    _cli.Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate);
 
-    var pCreate = (0, _cli.abeCreate)(template, path, name, req, json, isUpdate ? false : true);
+    var pCreate = (0, _cli.abeCreate)(template, newPath, name, req, json, isUpdate ? false : true);
     pCreate.then(function (resSave) {
       resolve(resSave);
     }, function () {

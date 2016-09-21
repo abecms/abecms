@@ -55,10 +55,10 @@ var route = function route(req, res, next) {
       file.fileRead.push(chunk);
     });
 
-    if (mimetype !== 'image/jpeg' && mimetype !== 'image/png' && mimetype !== 'image/svg+xml') {
+    if (mimetype !== 'image/jpeg' && mimetype !== 'image/png' && mimetype !== 'image/svg+xml' && mimetype !== 'video/mp4') {
       returnErr('unauthorized file');
-    } else if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png' && ext !== 'svg') {
-      returnErr('not an image');
+    } else if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png' && ext !== 'svg' && ext !== 'mp4') {
+      returnErr('not an valid asset');
     }
 
     file.on('end', function () {
@@ -74,8 +74,8 @@ var route = function route(req, res, next) {
           var sfStat = _fsExtra2.default.statSync(filePath);
 
           if (sfStat) {
-            var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg)/);
-            if (nb && nb[1]) filePath = filePath.replace(/_([0-9])\.(jpg|png|gif|svg)/, '_' + (parseInt(nb[1]) + 1) + '.$2');else filePath = filePath.replace(/\.(jpg|png|gif|svg)/, '_1.$1');
+            var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg|mp4)/);
+            if (nb && nb[1]) filePath = filePath.replace(/_([0-9])\.(jpg|png|gif|svg|mp4)/, '_' + (parseInt(nb[1]) + 1) + '.$2');else filePath = filePath.replace(/\.(jpg|png|gif|svg|mp4)/, '_1.$1');
             createImage();
           }
         } catch (e) {
@@ -106,10 +106,12 @@ var route = function route(req, res, next) {
         var openFile = _fsExtra2.default.readFileSync(filePath).toString();
         if (openFile === '') throw new Error('');
         clearInterval(interval);
-        resp = _cli.Hooks.instance.trigger('afterSaveImage', resp, req);
+        if (/\.(jpg|png|gif|svg)/.test(filePath)) resp = _cli.Hooks.instance.trigger('afterSaveImage', resp, req);
         res.set('Content-Type', 'application/json');
         res.send(JSON.stringify(resp));
-      } catch (e) {}
+      } catch (e) {
+        console.log('post upload finish', e);
+      }
     };
     tryUpload();
   });

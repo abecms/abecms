@@ -164,6 +164,24 @@ var Utils = function () {
     }
 
     /**
+     * Test if a string contains string key from {{#each}} block statement
+     * @param  {String}  str string to test
+     * @return {Boolean} true = this is a block content
+     */
+
+  }, {
+    key: 'dataRequest',
+    value: function dataRequest(text) {
+      var listReg = /({{abe.*type=[\'|\"]data.*}})/g;
+      var matches = [];
+      var match;
+      while (match = listReg.exec(text)) {
+        matches.push(match);
+      }
+      return matches;
+    }
+
+    /**
      * Encode / Escape && add data-abe attributs
      * @param  {String} block
      * @return {String} escaped string
@@ -310,8 +328,6 @@ var Utils = function () {
     value: function getDataList(tplPath, text, jsonPage) {
 
       var p = new _es6Promise.Promise(function (resolve, reject) {
-        var listReg = /({{abe.*type=[\'|\"]data.*}})/g;
-        var match;
         var sourceAttr = _.config.source.name;
 
         if (typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
@@ -319,7 +335,9 @@ var Utils = function () {
         }
 
         var promises = [];
-        while (match = listReg.exec(text)) {
+        var util = new Utils();
+        var matches = util.dataRequest(text);
+        Array.prototype.forEach.call(matches, function (match) {
           var logTime = tplPath + " > " + match[0];
           var dateStart = new Date();
 
@@ -351,7 +369,7 @@ var Utils = function () {
                     }
                   }
 
-                  _.log.duration(type + " > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000);
+                  console.log(type + "(found " + data.length + ") > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000, "\n");
 
                   resolveSource();
                 });
@@ -454,16 +472,17 @@ var Utils = function () {
             }
           });
           promises.push(pSource);
-        }
+        });
+        // while (match = listReg.exec(text)) {}
 
         _es6Promise.Promise.all(promises).then(function () {
           resolve();
         }).catch(function (e) {
-          console.error('getDataList', e);
+          console.error('abe-utils.js getDataList', e);
         });
         // return filesRequest
       }).catch(function (e) {
-        console.error('getDataList', e);
+        console.error('abe-utils.js getDataList', e);
       });
 
       return p;
