@@ -12,15 +12,15 @@ var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var create = function create(template, path, name, req) {
+var create = function create(template, pathCreate, name, req) {
   var forceJson = arguments.length <= 4 || arguments[4] === undefined ? {} : arguments[4];
   var duplicate = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
 
   var p = new Promise(function (resolve, reject) {
-    _cli.Hooks.instance.trigger('beforeCreate', template, path, name, req, forceJson);
+    _cli.Hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson);
 
     var templatePath = _cli.fileUtils.getTemplatePath(template.replace(_cli.config.root, ""));
-    var filePath = path.join(path, name);
+    var filePath = _path2.default.join(pathCreate, name);
     filePath = (0, _cli.cleanSlug)(filePath);
     filePath = _cli.fileUtils.getFilePath(filePath);
 
@@ -40,7 +40,7 @@ var create = function create(template, path, name, req) {
         json = resHook.json;
         text = resHook.text;
 
-        _cli.Hooks.instance.trigger('afterCreate', json, text, path, name, req, forceJson);
+        _cli.Hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson);
         (0, _cli.save)(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft').then(function (resSave) {
           _cli.Manager.instance.updateList();
           filePath = resSave.htmlPath;

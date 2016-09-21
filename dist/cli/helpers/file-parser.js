@@ -238,9 +238,11 @@ var FileParser = function () {
       var structure = _.config.structure.url;
       var templates = _.config.templates.url;
 
-      if (_.folderUtils.isFolder(_path2.default.join(site.path, structure)) && _.folderUtils.isFolder(_path2.default.join(site.path, templates))) {
+      if (_.folderUtils.isFolder(_path2.default.join(site.path, structure))) {
         site.folders = FileParser.getFolders(_path2.default.join(site.path, structure), false);
         result.structure = site.folders;
+      }
+      if (_.folderUtils.isFolder(_path2.default.join(site.path, templates))) {
         result.templates = result.templates.concat(FileParser.getFiles(_path2.default.join(site.path, templates), true, 10, new RegExp('.' + _.config.files.templates.extension)));
       }
 
