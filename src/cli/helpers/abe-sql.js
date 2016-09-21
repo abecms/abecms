@@ -323,8 +323,6 @@ export default class Sql {
 
     var dateStart = new Date()
 
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('executeFromClause')
     var list = Manager.instance.getList()
     var files_array = list.filter((element, index, arr) => {
       if(element.published) {
@@ -334,7 +332,6 @@ export default class Sql {
       }
       return false
     })
-        console.log(((new Date().getTime() - dateStart.getTime()) / 1000) + 'sec')
     return files_array
 
     // if(folderUtils.isFolder(fromDirectory)) {

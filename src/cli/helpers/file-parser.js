@@ -18,6 +18,7 @@ import {
   ,Manager
   ,set_deep_value
   ,deep_value
+  ,TimeMesure
 } from '../'
 
 export default class FileParser {
@@ -397,13 +398,20 @@ export default class FileParser {
 
     var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
     var filesArr = []
+
+    var i = 0
+
+    var t2 = new TimeMesure('files.forEach')
     files.forEach(function (file) {
+      // var t = new TimeMesure('add files')
       var cleanFile = file
       var json = FileParser.getJson(file.path)
 
       if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         cleanFile.abe_meta = json.abe_meta
       }
+      /**
+       * OLD
       Array.prototype.forEach.call(withKeys, (key) => {
         // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
         // console.log(key, key.split('.').reduce((o,i)=>o[i], json))
@@ -414,8 +422,19 @@ export default class FileParser {
           set_deep_value(cleanFile, key, deep_value(json, key))
         }
       })
+      */
+      Array.prototype.forEach.call(withKeys, (key) => {
+        var current = json
+        key.split('.').forEach(function(p){ current = current[p] })
+
+        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+        console.log('current', current)
+      })
       filesArr.push(cleanFile)
+      // t.duration()
     })
+    t2.duration()
+
     console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
     console.log('filesArr[0]', filesArr[0])
     var merged = fileUtils.getFilesMerged(filesArr)

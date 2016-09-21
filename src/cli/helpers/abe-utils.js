@@ -23,6 +23,7 @@ import {
   ,getAttr
   ,Hooks
   ,Plugins
+  ,TimeMesure
 } from '../'
 
 export default class Utils {
@@ -446,15 +447,13 @@ export default class Utils {
 
   static performDataList(tplPath, text, jsonPage, matches, cb) {
     var match = matches.shift()
-    var dateStart = new Date()
+    var t = new TimeMesure('performDataList')
 
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('performDataList')
-    console.log(match)
+    console.log(match[0])
 
-    Utils.nextDataList(tplPath, text, jsonPage, match)
+    Utils.nextDataList(tplPath, text, jsonPage, match[0])
       .then(() => {
-        console.log(((new Date().getTime() - dateStart.getTime()) / 1000) + 'sec')
+        t.duration()
         if (matches.length > 0) {
           Utils.performDataList(tplPath, text, jsonPage, matches, cb)
         }else {
@@ -472,9 +471,7 @@ export default class Utils {
       var promises = []
       let util = new Utils()
       var matches = util.dataRequest(text)
-      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-      console.log('matches', matches)
-      Utils.performDataList(tplPath, text, jsonPage, matches[0], () => {
+      Utils.performDataList(tplPath, text, jsonPage, matches, () => {
         resolve()
       })
       // Array.prototype.forEach.call(matches, (match) => {
