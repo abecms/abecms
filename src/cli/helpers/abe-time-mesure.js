@@ -30,8 +30,6 @@ export default class TimeMesure {
    */
   duration(str) {
     var d = new Date(new Date().getTime() - this._dateStart.getTime()).getTime()
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('d', d)
     console.log((this._name ? 'end ' + this._name : "") + "(" + clc.green(this._msToTime(d)) + ") " + (str ? str : ""))
   }
 }

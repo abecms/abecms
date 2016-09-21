@@ -16,8 +16,6 @@ import {
 	,Hooks
 	,Plugins
   ,Manager
-  ,set_deep_value
-  ,deep_value
   ,TimeMesure
 } from '../'
 
@@ -410,77 +408,21 @@ export default class FileParser {
       if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         cleanFile.abe_meta = json.abe_meta
       }
-      /**
-       * OLD
+     
       Array.prototype.forEach.call(withKeys, (key) => {
-        // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-        // console.log(key, key.split('.').reduce((o,i)=>o[i], json))
-        var keys = key.split('.')
-        var firstKey = keys[0]
-        if(typeof json !== 'undefined' && json !== null
-          && typeof json[firstKey] !== 'undefined' && json[firstKey] !== null) {
-          set_deep_value(cleanFile, key, deep_value(json, key))
-        }
-      })
-      */
-      Array.prototype.forEach.call(withKeys, (key) => {
-        var current = json
-        key.split('.').forEach(function(p){ current = current[p] })
-
-        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-        console.log('current', current)
+        var keyFirst = key.split('.')[0]
+        cleanFile[keyFirst] = json[keyFirst]
       })
       filesArr.push(cleanFile)
       // t.duration()
     })
     t2.duration()
 
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('filesArr[0]', filesArr[0])
     var merged = fileUtils.getFilesMerged(filesArr)
 
     Hooks.instance.trigger('afterGetAllFiles', merged)
     return merged
   }
-
-  // static getAllFiles(withKeys) {
-  // 	var site = folderUtils.folderInfos(config.root)
-	 //  var allDraft = []
-	 //  var allPublished = []
-
-  //   let draft = config.draft.url
-  //   let publish = config.publish.url
-
-  //   var drafted = FileParser.getFilesByType(path.join(site.path, draft), 'd')
-  //   var published = FileParser.getFilesByType(path.join(site.path, publish))
-
-		// drafted = Hooks.instance.trigger('beforeGetAllFilesDraft', drafted)
-		// published = Hooks.instance.trigger('beforeGetAllFilesPublished', published)
-
-  //   drafted = FileParser.getMetas(drafted, 'draft')
-  //   published = FileParser.getMetas(published, 'draft')
-  //   var truePublished = []
-
-  //   published.forEach(function (pub) {
-    	
-  //   	var json = FileParser.getJson(
-  // 								FileParser.changePathEnv(pub.path, config.data.url)
-  // 													.replace(new RegExp("\\." + config.files.templates.extension), '.json')
-		// 						  )
-    	
-  //   	if(typeof json[config.meta.name] !== 'undefined'
-  //   		&& json[config.meta.name] !== null
-  //   		&& typeof json[config.meta.name][config.draft.url] !== 'undefined'
-  //   		&& json[config.meta.name][config.draft.url] !== null) {
-  // 			pub.filePath = json[config.meta.name][config.draft.url].latest.abeUrl
-  //   		truePublished.push(pub)
-  //   	}
-  //   })
-  //   var merged = fileUtils.mergeFiles(drafted, truePublished)
-
-  //   site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
-	 //  return [site]
-  // }
 
   // TODO : change the signature of this method to removeFile(file)
   static removeFile(file, json) {

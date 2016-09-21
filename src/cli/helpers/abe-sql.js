@@ -87,11 +87,16 @@ export default class Sql {
       while (fromMatch = matchVariable.exec(toReplace)) {
         if(typeof fromMatch !== 'undefined' && fromMatch !== null
           && typeof fromMatch[1] !== 'undefined' && fromMatch[1] !== null) {
-          var value = Sql.deep_value_array(jsonPage, fromMatch[1])
-          if(typeof value !== 'undefined' && value !== null) {
-            toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
-          }else {
-            toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
+
+          try {
+            var value = eval('jsonPage.' + fromMatch[1])
+            if(typeof value !== 'undefined' && value !== null) {
+              toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
+            }else {
+              toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
+            }
+          }catch(e) {
+
           }
         }
       }
@@ -391,57 +396,6 @@ export default class Sql {
     return 'other'
   }
 
-  static deep_value(obj, pathDeep) {
-
-    if(pathDeep.indexOf('.') === -1) {
-      return (typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null) ? obj[pathDeep] : null
-    }
-
-    var pathSplit = pathDeep.split('.')
-    var res = JSON.parse(JSON.stringify(obj))
-    for (var i = 0; i < pathSplit.length; i++) {
-      if(typeof res[pathSplit[i]] !== 'undefined' && res[pathSplit[i]] !== null) {
-        res = res[pathSplit[i]]
-      }else {
-        return null
-      }
-    }
-
-    return res
-  }
-
-  static deep_value_array(obj, pathDeep) {
-
-    if(pathDeep.indexOf('.') === -1) {
-      return (typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null) ? obj[pathDeep] : null
-    }
-
-    var pathSplit = pathDeep.split('.')
-    var res = JSON.parse(JSON.stringify(obj))
-
-    while(pathSplit.length > 0) {
-      
-      if(typeof res[pathSplit[0]] !== 'undefined' && res[pathSplit[0]] !== null) {
-        if(typeof res[pathSplit[0]] === 'object' && Object.prototype.toString.call(res[pathSplit[0]]) === '[object Array]') {
-          var resArray = []
-
-          Array.prototype.forEach.call(res[pathSplit[0]], (item) => {
-            resArray.push(Sql.deep_value_array(item, pathSplit.join('.').replace(`${pathSplit[0]}.`, '')))
-          })
-          res = resArray
-          pathSplit.shift()
-        }else {
-          res = res[pathSplit[0]]
-        }
-      }else {
-        return null
-      }
-      pathSplit.shift()
-    }
-
-    return res
-  }
-
   static executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
     var res = []
     var limit = 0
@@ -634,17 +588,26 @@ export default class Sql {
           if(where.left === 'template' || where.left === 'abe_meta.template') {
             value = FileParser.getTemplate(json[meta].template)
           }else {
-            value = Sql.deep_value_array(json, where.left)
+            try {
+              value = eval('json.' + where.left)
+            }catch(e) {
+              // console.log('e', e)
+            }
           }
           compare = where.right
 
           var matchVariable = /^{{(.*)}}$/.exec(compare)
           if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
-            var shouldCompare = Sql.deep_value_array(jsonPage, matchVariable[1])
-            if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
-              compare = shouldCompare
-            }else {
+            try {
+              var shouldCompare = eval('jsonPage.' + matchVariable[1])
+              if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+                compare = shouldCompare
+              }else {
+                shouldAdd = false
+              }
+            }catch(e) {
               shouldAdd = false
+              // console.log('e', e)
             }
           }
 

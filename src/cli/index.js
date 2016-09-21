@@ -45,8 +45,6 @@ import log from './helpers/abe-logs'
 import removeDuplicateAttr from './helpers/abe-remove-duplicate-attr'
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
-import deep_value from './helpers/abe-deep-val'
-import set_deep_value from './helpers/abe-set-deep-value'
 import Sql from './helpers/abe-sql'
 import abeProcess from './helpers/abe-process'
 import {save, checkRequired, saveJson} from './controllers/Save'
@@ -65,8 +63,6 @@ export {
 	,clc
 	,Util
 	,abeCreate
-	,deep_value
-	,set_deep_value
 	,abeDuplicate
 	,slugify
 	,cleanSlug
