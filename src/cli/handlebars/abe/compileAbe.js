@@ -19,15 +19,15 @@ export default function compileAbe(){
     var hash = arguments[0].hash
     hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]')
     var value = ((content) ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key)
+    if(typeof value === 'undefined' || typeof value === 'function' || value === null) {
+      value = ''
+    }
     if(typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich'){
       var testXSS = xss(value.replace(/&quot;/g, '"'), {
         "whiteList": config.htmlWhiteList,
         stripIgnoreTag: true
       })
       return new Handlebars.SafeString(testXSS)
-    }
-    if(typeof value === 'undefined' || typeof value === 'function' || value === null) {
-      value = ''
     }
     return value.replace(/%27/, "'")
   }
