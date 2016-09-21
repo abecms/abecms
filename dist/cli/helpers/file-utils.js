@@ -297,13 +297,13 @@ var FileUtils = function () {
 		value: function checkMergedFile(file, merged) {
 
 			var cleanFilePath = file.cleanFilePath;
-			var revision = {
-				status: file.status,
-				filePath: file.filePath,
-				date: file.abe_meta && file.abe_meta.latest ? file.abe_meta.latest.date : '',
-				template: file[_.config.meta.name].template ? file[_.config.meta.name].template.replace(/^\/+/, '') : '',
-				cleanFilePath: cleanFilePath
-			};
+			var revision = file;
+			revision.status = file.status;
+			revision.filePath = file.filePath;
+			revision.date = file.abe_meta && file.abe_meta.latest ? file.abe_meta.latest.date : '';
+			revision.template = file[_.config.meta.name].template ? file[_.config.meta.name].template.replace(/^\/+/, '') : '';
+			revision.cleanFilePath = cleanFilePath;
+
 			revision[_.config.meta.name] = file[_.config.meta.name];
 
 			if (typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
@@ -333,18 +333,48 @@ var FileUtils = function () {
 		}
 
 		/* TODO: put this method in its right helper */
+		// static mergeFiles(files1, files2) {
+		// 	var merged = {}
+		// 	var arMerged = []
+
+		// 	Array.prototype.forEach.call(files1, (file) => {
+		// 		FileUtils.checkMergedFile(file, merged)
+		// 	})
+
+		// 	Array.prototype.forEach.call(files2, (file) => {
+		// 		FileUtils.checkMergedFile(file, merged)
+		// 	})
+
+		// 	Array.prototype.forEach.call(Object.keys(merged), (key) => {
+		// 		var merge = merged[key]
+		// 		var publishedDate = (typeof merge.published !== 'undefined' && merge.published !== null) ? new Date(merge.published.date) : null
+		// 		var draftDate = (typeof merge.draft !== 'undefined' && merge.draft !== null) ? new Date(merge.draft.date) : null
+
+		// 		if(publishedDate !== null && draftDate !== null && publishedDate >= draftDate) {
+		// 			merge.draft = null
+		// 		}
+		// 		var revision = {
+		// 			path: merge.cleanFilePath,
+		// 			template: merge.template,
+		// 			published: merge.published,
+		// 			date: merge.date,
+		// 			draft: merge.draft
+		// 		}
+		// 		arMerged.push(revision)
+		// 	})
+
+		// 	return arMerged
+		// }
+
+		/* TODO: put this method in its right helper */
 
 	}, {
-		key: 'mergeFiles',
-		value: function mergeFiles(files1, files2) {
+		key: 'getFilesMerged',
+		value: function getFilesMerged(files) {
 			var merged = {};
 			var arMerged = [];
 
-			Array.prototype.forEach.call(files1, function (file) {
-				FileUtils.checkMergedFile(file, merged);
-			});
-
-			Array.prototype.forEach.call(files2, function (file) {
+			Array.prototype.forEach.call(files, function (file) {
 				FileUtils.checkMergedFile(file, merged);
 			});
 
@@ -357,6 +387,7 @@ var FileUtils = function () {
 					merge.draft = null;
 				}
 				var revision = {
+					fileUrl: _path2.default.join(merge.cleanFilePath.replace(/\.json/, '.' + _.config.files.templates.extension)),
 					path: merge.cleanFilePath,
 					template: merge.template,
 					published: merge.published,

@@ -238,9 +238,11 @@ var FileParser = function () {
       var structure = _.config.structure.url;
       var templates = _.config.templates.url;
 
-      if (_.folderUtils.isFolder(_path2.default.join(site.path, structure)) && _.folderUtils.isFolder(_path2.default.join(site.path, templates))) {
+      if (_.folderUtils.isFolder(_path2.default.join(site.path, structure))) {
         site.folders = FileParser.getFolders(_path2.default.join(site.path, structure), false);
         result.structure = site.folders;
+      }
+      if (_.folderUtils.isFolder(_path2.default.join(site.path, templates))) {
         result.templates = result.templates.concat(FileParser.getFiles(_path2.default.join(site.path, templates), true, 10, new RegExp('.' + _.config.files.templates.extension)));
       }
 
@@ -440,39 +442,77 @@ var FileParser = function () {
       };
     }
   }, {
-    key: 'getAllFiles',
-    value: function getAllFiles() {
+    key: 'getAllFilesWithMeta',
+    value: function getAllFilesWithMeta(withKeys) {
       var site = _.folderUtils.folderInfos(_.config.root);
-      var allDraft = [];
-      var allPublished = [];
 
-      var draft = _.config.draft.url;
-      var publish = _.config.publish.url;
+      var files = FileParser.getFiles(_path2.default.join(_.config.root, _.config.data.url), true, 99, /\.json/);
+      var filesArr = [];
+      files.forEach(function (file) {
+        var cleanFile = file;
+        var json = FileParser.getJson(file.path);
 
-      var drafted = FileParser.getFilesByType(_path2.default.join(site.path, draft), 'd');
-      var published = FileParser.getFilesByType(_path2.default.join(site.path, publish));
-
-      drafted = _.Hooks.instance.trigger('beforeGetAllFilesDraft', drafted);
-      published = _.Hooks.instance.trigger('beforeGetAllFilesPublished', published);
-
-      drafted = FileParser.getMetas(drafted, 'draft');
-      published = FileParser.getMetas(published, 'draft');
-      var truePublished = [];
-
-      published.forEach(function (pub) {
-
-        var json = FileParser.getJson(FileParser.changePathEnv(pub.path, _.config.data.url).replace(new RegExp("\\." + _.config.files.templates.extension), '.json'));
-
-        if (typeof json[_.config.meta.name] !== 'undefined' && json[_.config.meta.name] !== null && typeof json[_.config.meta.name][_.config.draft.url] !== 'undefined' && json[_.config.meta.name][_.config.draft.url] !== null) {
-          pub.filePath = json[_.config.meta.name][_.config.draft.url].latest.abeUrl;
-          truePublished.push(pub);
+        if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          cleanFile.abe_meta = json.abe_meta;
         }
+        Array.prototype.forEach.call(withKeys, function (key) {
+          // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+          // console.log(key, key.split('.').reduce((o,i)=>o[i], json))
+          if (typeof json !== 'undefined' && json !== null && typeof json[key.split('.')[0]] !== 'undefined' && json[key.split('.')[0]] !== null) {
+            (0, _.set_deep_value)(cleanFile, key, key.split('.').reduce(function (o, i) {
+              return o[i];
+            }, json));
+          }
+          // if(typeof json[key] !== 'undefined' && json[key] !== null) {
+          //   cleanFile[key] = json[key]
+          // }
+        });
+        filesArr.push(cleanFile);
       });
-      var merged = _.fileUtils.mergeFiles(drafted, truePublished);
+      var merged = _.fileUtils.getFilesMerged(filesArr);
 
       site.files = _.Hooks.instance.trigger('afterGetAllFiles', merged);
       return [site];
     }
+
+    // static getAllFiles(withKeys) {
+    // 	var site = folderUtils.folderInfos(config.root)
+    //  var allDraft = []
+    //  var allPublished = []
+
+    //   let draft = config.draft.url
+    //   let publish = config.publish.url
+
+    //   var drafted = FileParser.getFilesByType(path.join(site.path, draft), 'd')
+    //   var published = FileParser.getFilesByType(path.join(site.path, publish))
+
+    // drafted = Hooks.instance.trigger('beforeGetAllFilesDraft', drafted)
+    // published = Hooks.instance.trigger('beforeGetAllFilesPublished', published)
+
+    //   drafted = FileParser.getMetas(drafted, 'draft')
+    //   published = FileParser.getMetas(published, 'draft')
+    //   var truePublished = []
+
+    //   published.forEach(function (pub) {
+
+    //   	var json = FileParser.getJson(
+    // 								FileParser.changePathEnv(pub.path, config.data.url)
+    // 													.replace(new RegExp("\\." + config.files.templates.extension), '.json')
+    // 						  )
+
+    //   	if(typeof json[config.meta.name] !== 'undefined'
+    //   		&& json[config.meta.name] !== null
+    //   		&& typeof json[config.meta.name][config.draft.url] !== 'undefined'
+    //   		&& json[config.meta.name][config.draft.url] !== null) {
+    // 			pub.filePath = json[config.meta.name][config.draft.url].latest.abeUrl
+    //   		truePublished.push(pub)
+    //   	}
+    //   })
+    //   var merged = fileUtils.mergeFiles(drafted, truePublished)
+
+    //   site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
+    //  return [site]
+    // }
 
     // TODO : change the signature of this method to removeFile(file)
 
