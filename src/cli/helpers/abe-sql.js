@@ -322,9 +322,9 @@ export default class Sql {
     var fromDirectory = Sql.getFromDirectory(from, pathFromClause)
 
     var list = Manager.instance.getList()
-    var files_array = list[0].files.filter((element, index, arr) => {
-      if(typeof element.published !== 'undefined' && element.published !== null) {
-        if (element.published.path.indexOf(fromDirectory) > -1) {
+    var files_array = list.filter((element, index, arr) => {
+      if(element.published) {
+        if (element.path.indexOf(fromDirectory) > -1) {
           return true
         }
       }
@@ -446,26 +446,28 @@ export default class Sql {
 
     for(let file of files) {
       if(limit < maxLimit || maxLimit === -1) {
-        var doc = Sql.executeWhereClauseToFile(file.published, wheres, jsonPage)
+        if (file.published === true) {
+          var doc = Sql.executeWhereClauseToFile(file, wheres, jsonPage)
 
-        if(doc) {
-          var json = JSON.parse(JSON.stringify(doc))
-          var jsonValues = {}
+          if(doc) {
+            var json = JSON.parse(JSON.stringify(doc))
+            var jsonValues = {}
 
-          if(typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
-            
-            Array.prototype.forEach.call(columns, (column) => {
-              if(typeof json[column] !== 'undefined' && json[column] !== null) {
-                jsonValues[column] = json[column]
-              }
-            })
-            jsonValues[config.meta.name] = json[config.meta.name]
-          }else {
-            jsonValues = json
+            if(typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
+              
+              Array.prototype.forEach.call(columns, (column) => {
+                if(typeof json[column] !== 'undefined' && json[column] !== null) {
+                  jsonValues[column] = json[column]
+                }
+              })
+              jsonValues[config.meta.name] = json[config.meta.name]
+            }else {
+              jsonValues = json
+            }
+
+            res.push(jsonValues)
+            limit++
           }
-
-          res.push(jsonValues)
-          limit++
         }
       } else {
         break

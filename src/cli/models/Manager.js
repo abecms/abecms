@@ -50,11 +50,11 @@ class Manager {
 
   updateList() {
     this._list = FileParser.getAllFilesWithMeta(this._whereKeys)
+    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    // console.log('this._list[0]', this._list[0])
 
     // this._list = FileParser.getAllFiles(useKeys)
     this._list.sort(FileParser.predicatBy('date'))
-    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    // console.log('this._list[0].files', this._list[0].files)
 
     return this
   }
