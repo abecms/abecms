@@ -292,8 +292,10 @@ export default class Utils {
         Array.prototype.forEach.call(matches, (match) => {
           var val = match.replace('{{', '')
           val = val.replace('}}', '')
-          val = Sql.deep_value_array(jsonPage, val)
-          if(typeof val === 'undefined' || val === null) {
+          
+          try {
+            val = eval('jsonPage.' + val)
+          }catch(e) {
             val = ''
           }
           obj.sourceString = obj.sourceString.replace(match, val)
