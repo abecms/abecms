@@ -16,4 +16,3 @@ cli/config/*-local.js
 
 # debug
 abe-logs/*
-test/*

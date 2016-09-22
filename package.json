@@ -8,6 +8,7 @@
     "url": "git://github.com/AdFabConnect/abejs.git"
   },
   "scripts": {
+    "test": "mocha --compilers js:babel-core/register",
     "start": "node --debug --harmony ./dist/server/index.js",
     "startpm2": "pm2 startOrRestart ./processes.json",
     "babel": "babelify src/server/public/scripts/template-engine.js -o src/server/public/scripts/template-engine-compiled.js",
@@ -82,7 +83,9 @@
     "babel-preset-stage-0": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
+    "chai": "^3.5.0",
     "mkdirp": "^0.5.1",
+    "mocha": "^3.0.2",
     "node-sass": "^3.6.0",
     "nodemon": "^1.8.1",
     "parallelshell": "^2.0.0",
