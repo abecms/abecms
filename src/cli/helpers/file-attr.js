@@ -175,7 +175,7 @@ export default class FileAttr {
    * @param  {String} type (draft|waiting|valid)
    * @return {Object} urls object filtered
    */
-  static getLatestVersion(docPath) {
+  static getVersions(docPath) {
     var files = Manager.instance.getList()
     var fileWithoutExtension = docPath.replace('.' + config.files.templates.extension, '')
     var sameFiles = []
@@ -185,6 +185,17 @@ export default class FileAttr {
         console.log('file.path', file.path)
       }
     })
+    return sameFiles
+  }
+
+  /**
+   * Filter and array of file path and return the latest version of those files
+   * @param  {Object} urls object with path to file, filename etc ...
+   * @param  {String} type (draft|waiting|valid)
+   * @return {Object} urls object filtered
+   */
+  static getLatestVersion(docPath) {
+    var sameFiles = FileAttr.getVersions(docPath)
     if (sameFiles.length > 0) {
       sameFiles.sort(FileAttr.sortByDateDesc)
       return sameFiles[0]
