@@ -7,6 +7,7 @@ import {
   FileParser,
   fileUtils,
   folderUtils,
+  TimeMesure,
   getSelectTemplateKeys
 } from '../../cli'
 
@@ -36,7 +37,13 @@ class Manager {
     return this._list
   }
 
+  setList(list) {
+
+    this._list = list
+  }
+
   _init() {
+    this._loadTime = new TimeMesure('Loading Manager')
     const pathTemplate = path.join(config.root, config.templates.url);
     getSelectTemplateKeys(pathTemplate)
       .then((whereKeys) => {
@@ -49,12 +56,14 @@ class Manager {
   }
 
   updateList() {
-    this._list = FileParser.getAllFilesWithMeta(this._whereKeys)
+    
+    this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
+    this._loadTime.duration()
+    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    // console.log('this._list[0]', this._list[0])
 
     // this._list = FileParser.getAllFiles(useKeys)
     this._list.sort(FileParser.predicatBy('date'))
-    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    // console.log('this._list[0].files', this._list[0].files)
 
     return this
   }
