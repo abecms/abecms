@@ -85,7 +85,7 @@ export default class FileParser {
   						date: date,
   						cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
   						duration: duration,
-  						status: status,
+  						// status: status,
   	      		cleanName: cleanName,
   	      		cleanNameNoExt: cleanNameNoExt,
   						cleanFilePath: cleanFilePath,
@@ -234,7 +234,7 @@ export default class FileParser {
   	}
 
   	let extension = config.files.templates.extension
-  	if(typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension) > -1) {
+  	if(typeof url !== 'undefined' && url !== null) {
 
 	  	var dir = fileUtils.removeLast(url).replace(config.root, '')
 	  	var filename = fileUtils.filename(url)
@@ -405,9 +405,16 @@ export default class FileParser {
       var json = FileParser.getJson(file.path)
 
       if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-        cleanFile.abe_meta = json.abe_meta
+        cleanFile.abe_meta = {
+          date: (typeof json.abe_meta.date !== 'undefined' && json.abe_meta.date !== null) ? json.abe_meta.date : null
+          , type: (typeof json.abe_meta.type !== 'undefined' && json.abe_meta.type !== null) ? json.abe_meta.type : null
+          , link: (typeof json.abe_meta.link !== 'undefined' && json.abe_meta.link !== null) ? json.abe_meta.link : null
+          , template: (typeof json.abe_meta.template !== 'undefined' && json.abe_meta.template !== null) ? json.abe_meta.template : null
+          , status: (typeof json.abe_meta.status !== 'undefined' && json.abe_meta.status !== null) ? json.abe_meta.status : null
+          , cleanName: (typeof json.abe_meta.cleanName !== 'undefined' && json.abe_meta.cleanName !== null) ? json.abe_meta.cleanName : null
+          , cleanFilename: (typeof json.abe_meta.cleanFilename !== 'undefined' && json.abe_meta.cleanFilename !== null) ? json.abe_meta.cleanFilename : null
+        }
       }
-     
       Array.prototype.forEach.call(withKeys, (key) => {
         var keyFirst = key.split('.')[0]
         cleanFile[keyFirst] = json[keyFirst]
