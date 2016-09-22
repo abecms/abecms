@@ -467,18 +467,15 @@ export default class FileParser {
   static deleteFile(filePath) {
   	filePath = Hooks.instance.trigger('beforeDeleteFile', filePath)
 
-  	var tplUrl = FileParser.getFileDataFromUrl(path.join(config.draft.url, filePath))
-  	var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + config.files.templates.extension))
-  	var revisions = fileAttr.getFilesRevision(files, tplUrl.publish.file)
+    var file = fileAttr.getLatestVersion(filePath)
 
-  	Array.prototype.forEach.call(revisions, (revision) => {
-  		var revisionUrl = FileParser.getFileDataFromUrl(revision.path)
-  		FileParser.removeFile(revision.path, revisionUrl.json.path)
-  	})
+    Array.prototype.forEach.call(file.revisions, (revision) => {
+      var data = path.join(config.root, config.data.url, revision)
+      var draft = data.replace(/\.json/, config.files.templates.extension).replace(/\/data\//, "/draft/")
+      FileParser.removeFile(draft, data)
+    })
 
-  	FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
     Manager.instance.updateList()
-  	tplUrl.publish.path = Hooks.instance.trigger('afterDeleteFile', tplUrl.publish.path, tplUrl.publish.json)
   }
 
   static deleteFileFromName(filePath) {

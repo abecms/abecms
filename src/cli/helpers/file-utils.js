@@ -228,7 +228,12 @@ export default class FileUtils {
 
 			if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
 				merged[cleanFilePath] = file
-				merged[cleanFilePath][file.abe_meta.status] = true
+				merged[cleanFilePath].revisions = []
+				merged[cleanFilePath][file.abe_meta.status] = {
+					path: file.cleanPath,
+					date: new Date(file.date),
+					link: file.abe_meta.link
+				}
 			}else {
 				var oldDate = new Date(merged[cleanFilePath].date)
 				var newDate = new Date(file.date)
@@ -236,16 +241,28 @@ export default class FileUtils {
 				if(merged[cleanFilePath][file.abe_meta.status]) {
 					oldStatus = file.abe_meta.status
 				}
+				if (file.abe_meta.status === 'publish') {
+					var filea = fileAttr.get(file.name).s
+					if(typeof filea !== 'undefined' && filea !== null) {
+						// not really publish (draft that have publish as status)
+						file.abe_meta.status = 'draft'
+					}
+				}
 				if(typeof merged[cleanFilePath][file.abe_meta.status] === 'undefined' || merged[cleanFilePath][file.abe_meta.status] === null) {
-					merged[cleanFilePath][file.abe_meta.status] = true
+					merged[cleanFilePath][file.abe_meta.status] = {
+						path: file.cleanPath,
+						date: newDate,
+						link: file.abe_meta.link
+					}
 				}else if(newDate > oldDate && oldStatus === file.abe_meta.status) {
-					merged[cleanFilePath][file.abe_meta.status] = true
+					merged[cleanFilePath][file.abe_meta.status] = {
+						path: file.cleanPath,
+						date: newDate,
+						link: file.abe_meta.link
+					}
 				}
 			}
-  // if (file.path.indexOf('one-hour-one-day-one-week/manchester-united-maillot-595fc') > -1) {
-  //   console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  //   console.log('file', file)
-  // }
+			merged[cleanFilePath].revisions.push(file.cleanPath)
   	})
 
     // return merged

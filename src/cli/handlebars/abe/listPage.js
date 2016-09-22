@@ -4,11 +4,12 @@ import moment from 'moment'
 import {Hooks} from '../../'
 
 export default function listPage(file, index, text) {
-  if (file.path.indexOf('one-hour-one-day-one-week/manchester-united-maillot-595fc') > -1) {
+  var res = '';
+
+  if (file.path.indexOf('hland/magazine/did-you-know/hotels-basel-visual-4378f') > -1) {
     console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
     console.log('file', file)
   }
-  var res = '';
   file = Hooks.instance.trigger('beforeListPage', file, index, text)
 
   res += `<tr>`
@@ -40,7 +41,8 @@ export default function listPage(file, index, text) {
   var workflow = ''
 
   workflow += `<td align="center" class="draft">`
-  if((typeof file.published !== undefined && file.published !== null && !file.published) || (file.published && file.draft && file.published.date < file.draft.date)) {
+  if((typeof file.published === "undefined" || file.published === null)
+    || (file.published && file.draft && file.published.date < file.draft.date)) {
     workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="label label-default label-draft">draft</a>`
   }else {
     workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft"></a>`
@@ -59,8 +61,8 @@ export default function listPage(file, index, text) {
 
   res += `<td align="center">
             <div class="row icons-action">`
-  
-  if (this.published){
+
+  if(typeof file.publish !== 'undefined' && file.publish !== null) {
     res += `<a href="/unpublish/?filePath=${file.abe_meta.link}"
                title="${text.unpublish}"
                class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}">
@@ -68,7 +70,7 @@ export default function listPage(file, index, text) {
             </a>`
   }
       
-  res += `<a href="/delete/?filePath=${this.path}"
+  res += `<a href="/delete/?filePath=${file.abe_meta.link}"
              title="${text.delete}"
              class="icon"
              data-delete="true"
