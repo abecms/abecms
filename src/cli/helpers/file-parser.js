@@ -16,7 +16,7 @@ import {
 	,Hooks
 	,Plugins
   ,Manager
-  ,set_deep_value
+  ,TimeMesure
 } from '../'
 
 export default class FileParser {
@@ -43,8 +43,6 @@ export default class FileParser {
 	}
 
 	static read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
-  		var website = config.root.split('/')
-  		website = website[website.length - 1]
   		var arr = []
   		var level = fse.readdirSync(dirName)
   		var fileCurrentLevel = []
@@ -82,7 +80,6 @@ export default class FileParser {
   		    	var item = {
   						'name': level[i],
   						'path': path,
-  						'website': website,
   						'cleanPathName': fileAttr.delete(path),
   						'cleanPath': path.replace(base + '/', ''),
   						date: date,
@@ -106,13 +103,13 @@ export default class FileParser {
         if(!fileCurrentLevel.includes(level[i]) && match) {
           if(isFolder) {
             if(!flatten) {
-              var index = arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
+              var index = arr.push({'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
               if(current < max){
                 arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern)
               }
             }else {
               if(type === 'folders' || type === null) {
-                arr.push({'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
+                arr.push({'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
               }
               if(current < max){
                 Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern), (files) => {
@@ -394,75 +391,36 @@ export default class FileParser {
     }
   }
 
-  static getAllFilesWithMeta(withKeys) {
+  static getAllFilesWithKeys(withKeys) {
     var site = folderUtils.folderInfos(config.root)
 
     var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
     var filesArr = []
+
+    var i = 0
+
     files.forEach(function (file) {
+      // var t = new TimeMesure('add files')
       var cleanFile = file
       var json = FileParser.getJson(file.path)
 
       if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         cleanFile.abe_meta = json.abe_meta
       }
+     
       Array.prototype.forEach.call(withKeys, (key) => {
-        // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-        // console.log(key, key.split('.').reduce((o,i)=>o[i], json))
-        if(typeof json !== 'undefined' && json !== null
-          && typeof json[key.split('.')[0]] !== 'undefined' && json[key.split('.')[0]] !== null) {
-          set_deep_value(cleanFile, key, key.split('.').reduce((o,i)=>o[i], json))
-        }
-        // if(typeof json[key] !== 'undefined' && json[key] !== null) {
-        //   cleanFile[key] = json[key]
-        // }
+        var keyFirst = key.split('.')[0]
+        cleanFile[keyFirst] = json[keyFirst]
       })
       filesArr.push(cleanFile)
+      // t.duration()
     })
+
     var merged = fileUtils.getFilesMerged(filesArr)
 
-    site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
-    return [site]
+    Hooks.instance.trigger('afterGetAllFiles', merged)
+    return merged
   }
-
-  // static getAllFiles(withKeys) {
-  // 	var site = folderUtils.folderInfos(config.root)
-	 //  var allDraft = []
-	 //  var allPublished = []
-
-  //   let draft = config.draft.url
-  //   let publish = config.publish.url
-
-  //   var drafted = FileParser.getFilesByType(path.join(site.path, draft), 'd')
-  //   var published = FileParser.getFilesByType(path.join(site.path, publish))
-
-		// drafted = Hooks.instance.trigger('beforeGetAllFilesDraft', drafted)
-		// published = Hooks.instance.trigger('beforeGetAllFilesPublished', published)
-
-  //   drafted = FileParser.getMetas(drafted, 'draft')
-  //   published = FileParser.getMetas(published, 'draft')
-  //   var truePublished = []
-
-  //   published.forEach(function (pub) {
-    	
-  //   	var json = FileParser.getJson(
-  // 								FileParser.changePathEnv(pub.path, config.data.url)
-  // 													.replace(new RegExp("\\." + config.files.templates.extension), '.json')
-		// 						  )
-    	
-  //   	if(typeof json[config.meta.name] !== 'undefined'
-  //   		&& json[config.meta.name] !== null
-  //   		&& typeof json[config.meta.name][config.draft.url] !== 'undefined'
-  //   		&& json[config.meta.name][config.draft.url] !== null) {
-  // 			pub.filePath = json[config.meta.name][config.draft.url].latest.abeUrl
-  //   		truePublished.push(pub)
-  //   	}
-  //   })
-  //   var merged = fileUtils.mergeFiles(drafted, truePublished)
-
-  //   site.files = Hooks.instance.trigger('afterGetAllFiles', merged)
-	 //  return [site]
-  // }
 
   // TODO : change the signature of this method to removeFile(file)
   static removeFile(file, json) {
