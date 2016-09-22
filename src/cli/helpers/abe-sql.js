@@ -403,7 +403,7 @@ export default class Sql {
     for(let file of files) {
       if(limit < maxLimit || maxLimit === -1) {
         if (file.published === true) {
-          var doc = Sql.executeWhereClauseToFile(file, wheres, jsonPage)
+          var doc = Sql.executeWhereClauseOnDocument(file, wheres, jsonPage)
 
           if(doc) {
             var json = JSON.parse(JSON.stringify(doc))
@@ -570,26 +570,21 @@ export default class Sql {
     return shouldAdd
   }
 
-  static executeWhereClauseToFile(file, wheres, jsonPage) {
-    var json = file
-    // if (fileUtils.isFile(file.path)) {
-    //   json = fse.readJsonSync(file.path)
-    // }
-    // 
-    var shouldAdd = json
+  static executeWhereClauseOnDocument(jsonDoc, wheres, jsonOriginalDoc) {
+    var shouldAdd = jsonDoc
 
     if(typeof wheres !== 'undefined' && wheres !== null) {
       let meta = config.meta.name
-      if(typeof json[meta] !== 'undefined' && json[meta] !== null) {
+      if(typeof jsonDoc[meta] !== 'undefined' && jsonDoc[meta] !== null) {
         Array.prototype.forEach.call(wheres, (where) => {
           var value
           var compare
 
           if(where.left === 'template' || where.left === 'abe_meta.template') {
-            value = FileParser.getTemplate(json[meta].template)
+            value = FileParser.getTemplate(jsonDoc[meta].template)
           }else {
             try {
-              value = eval('json.' + where.left)
+              value = eval('jsonDoc.' + where.left)
             }catch(e) {
               // console.log('e', e)
             }
@@ -599,7 +594,7 @@ export default class Sql {
           var matchVariable = /^{{(.*)}}$/.exec(compare)
           if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
             try {
-              var shouldCompare = eval('jsonPage.' + matchVariable[1])
+              var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
               if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
                 compare = shouldCompare
               }else {

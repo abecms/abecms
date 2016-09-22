@@ -391,7 +391,7 @@ export default class FileParser {
     }
   }
 
-  static getAllFilesWithMeta(withKeys) {
+  static getAllFilesWithKeys(withKeys) {
     var site = folderUtils.folderInfos(config.root)
 
     var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
@@ -399,7 +399,6 @@ export default class FileParser {
 
     var i = 0
 
-    var t2 = new TimeMesure('files.forEach')
     files.forEach(function (file) {
       // var t = new TimeMesure('add files')
       var cleanFile = file
@@ -416,7 +415,6 @@ export default class FileParser {
       filesArr.push(cleanFile)
       // t.duration()
     })
-    t2.duration()
 
     var merged = fileUtils.getFilesMerged(filesArr)
 
