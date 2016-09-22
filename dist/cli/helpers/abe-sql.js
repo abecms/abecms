@@ -109,12 +109,15 @@ var Sql = function () {
         var toReplace = matchFromExec[1];
         while (fromMatch = matchVariable.exec(toReplace)) {
           if (typeof fromMatch !== 'undefined' && fromMatch !== null && typeof fromMatch[1] !== 'undefined' && fromMatch[1] !== null) {
-            var value = Sql.deep_value_array(jsonPage, fromMatch[1]);
-            if (typeof value !== 'undefined' && value !== null) {
-              toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value);
-            } else {
-              toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '');
-            }
+
+            try {
+              var value = eval('jsonPage.' + fromMatch[1]);
+              if (typeof value !== 'undefined' && value !== null) {
+                toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value);
+              } else {
+                toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '');
+              }
+            } catch (e) {}
           }
         }
 
@@ -358,10 +361,12 @@ var Sql = function () {
 
       var fromDirectory = Sql.getFromDirectory(from, pathFromClause);
 
+      var dateStart = new Date();
+
       var list = _.Manager.instance.getList();
-      var files_array = list[0].files.filter(function (element, index, arr) {
-        if (typeof element.published !== 'undefined' && element.published !== null) {
-          if (element.published.path.indexOf(fromDirectory) > -1) {
+      var files_array = list.filter(function (element, index, arr) {
+        if (element.published) {
+          if (element.path.indexOf(fromDirectory) > -1) {
             return true;
           }
         }
@@ -430,59 +435,6 @@ var Sql = function () {
       return 'other';
     }
   }, {
-    key: 'deep_value',
-    value: function deep_value(obj, pathDeep) {
-
-      if (pathDeep.indexOf('.') === -1) {
-        return typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null ? obj[pathDeep] : null;
-      }
-
-      var pathSplit = pathDeep.split('.');
-      var res = JSON.parse(JSON.stringify(obj));
-      for (var i = 0; i < pathSplit.length; i++) {
-        if (typeof res[pathSplit[i]] !== 'undefined' && res[pathSplit[i]] !== null) {
-          res = res[pathSplit[i]];
-        } else {
-          return null;
-        }
-      }
-
-      return res;
-    }
-  }, {
-    key: 'deep_value_array',
-    value: function deep_value_array(obj, pathDeep) {
-
-      if (pathDeep.indexOf('.') === -1) {
-        return typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null ? obj[pathDeep] : null;
-      }
-
-      var pathSplit = pathDeep.split('.');
-      var res = JSON.parse(JSON.stringify(obj));
-
-      while (pathSplit.length > 0) {
-
-        if (typeof res[pathSplit[0]] !== 'undefined' && res[pathSplit[0]] !== null) {
-          if (_typeof(res[pathSplit[0]]) === 'object' && Object.prototype.toString.call(res[pathSplit[0]]) === '[object Array]') {
-            var resArray = [];
-
-            Array.prototype.forEach.call(res[pathSplit[0]], function (item) {
-              resArray.push(Sql.deep_value_array(item, pathSplit.join('.').replace(pathSplit[0] + '.', '')));
-            });
-            res = resArray;
-            pathSplit.shift();
-          } else {
-            res = res[pathSplit[0]];
-          }
-        } else {
-          return null;
-        }
-        pathSplit.shift();
-      }
-
-      return res;
-    }
-  }, {
     key: 'executeWhereClause',
     value: function executeWhereClause(files, wheres, maxLimit, columns, jsonPage) {
       var res = [];
@@ -497,26 +449,28 @@ var Sql = function () {
           var file = _step.value;
 
           if (limit < maxLimit || maxLimit === -1) {
-            var doc = Sql.executeWhereClauseToFile(file.published, wheres, jsonPage);
+            if (file.published === true) {
+              var doc = Sql.executeWhereClauseOnDocument(file, wheres, jsonPage);
 
-            if (doc) {
-              var json = JSON.parse(JSON.stringify(doc));
-              var jsonValues = {};
+              if (doc) {
+                var json = JSON.parse(JSON.stringify(doc));
+                var jsonValues = {};
 
-              if (typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
+                if (typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
 
-                Array.prototype.forEach.call(columns, function (column) {
-                  if (typeof json[column] !== 'undefined' && json[column] !== null) {
-                    jsonValues[column] = json[column];
-                  }
-                });
-                jsonValues[_.config.meta.name] = json[_.config.meta.name];
-              } else {
-                jsonValues = json;
+                  Array.prototype.forEach.call(columns, function (column) {
+                    if (typeof json[column] !== 'undefined' && json[column] !== null) {
+                      jsonValues[column] = json[column];
+                    }
+                  });
+                  jsonValues[_.config.meta.name] = json[_.config.meta.name];
+                } else {
+                  jsonValues = json;
+                }
+
+                res.push(jsonValues);
+                limit++;
               }
-
-              res.push(jsonValues);
-              limit++;
             }
           } else {
             break;
@@ -683,37 +637,41 @@ var Sql = function () {
       return shouldAdd;
     }
   }, {
-    key: 'executeWhereClauseToFile',
-    value: function executeWhereClauseToFile(file, wheres, jsonPage) {
-      var json = file;
-      // if (fileUtils.isFile(file.path)) {
-      //   json = fse.readJsonSync(file.path)
-      // }
-      //
-      var shouldAdd = json;
+    key: 'executeWhereClauseOnDocument',
+    value: function executeWhereClauseOnDocument(jsonDoc, wheres, jsonOriginalDoc) {
+      var shouldAdd = jsonDoc;
 
       if (typeof wheres !== 'undefined' && wheres !== null) {
         (function () {
           var meta = _.config.meta.name;
-          if (typeof json[meta] !== 'undefined' && json[meta] !== null) {
+          if (typeof jsonDoc[meta] !== 'undefined' && jsonDoc[meta] !== null) {
             Array.prototype.forEach.call(wheres, function (where) {
               var value;
               var compare;
 
               if (where.left === 'template' || where.left === 'abe_meta.template') {
-                value = _.FileParser.getTemplate(json[meta].template);
+                value = _.FileParser.getTemplate(jsonDoc[meta].template);
               } else {
-                value = Sql.deep_value_array(json, where.left);
+                try {
+                  value = eval('jsonDoc.' + where.left);
+                } catch (e) {
+                  // console.log('e', e)
+                }
               }
               compare = where.right;
 
               var matchVariable = /^{{(.*)}}$/.exec(compare);
               if (typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
-                var shouldCompare = Sql.deep_value_array(jsonPage, matchVariable[1]);
-                if (typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
-                  compare = shouldCompare;
-                } else {
+                try {
+                  var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1]);
+                  if (typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+                    compare = shouldCompare;
+                  } else {
+                    shouldAdd = false;
+                  }
+                } catch (e) {
                   shouldAdd = false;
+                  // console.log('e', e)
                 }
               }
 

@@ -49,10 +49,17 @@ var Manager = function () {
       return this._list;
     }
   }, {
+    key: 'setList',
+    value: function setList(list) {
+
+      this._list = list;
+    }
+  }, {
     key: '_init',
     value: function _init() {
       var _this = this;
 
+      this._loadTime = new _cli.TimeMesure('Loading Manager');
       var pathTemplate = _path2.default.join(_cli.config.root, _cli.config.templates.url);
       (0, _cli.getSelectTemplateKeys)(pathTemplate).then(function (whereKeys) {
         _this._whereKeys = whereKeys;
@@ -64,12 +71,14 @@ var Manager = function () {
   }, {
     key: 'updateList',
     value: function updateList() {
-      this._list = _cli.FileParser.getAllFilesWithMeta(this._whereKeys);
+
+      this._list = _cli.FileParser.getAllFilesWithKeys(this._whereKeys);
+      this._loadTime.duration();
+      // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+      // console.log('this._list[0]', this._list[0])
 
       // this._list = FileParser.getAllFiles(useKeys)
       this._list.sort(_cli.FileParser.predicatBy('date'));
-      // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-      // console.log('this._list[0].files', this._list[0].files)
 
       return this;
     }
