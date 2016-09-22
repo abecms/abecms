@@ -43,6 +43,7 @@ class Manager {
   }
 
   _init() {
+    this._loadTime = new TimeMesure('Loading Manager')
     const pathTemplate = path.join(config.root, config.templates.url);
     getSelectTemplateKeys(pathTemplate)
       .then((whereKeys) => {
@@ -55,7 +56,9 @@ class Manager {
   }
 
   updateList() {
-    this._list = FileParser.getAllFilesWithMeta(this._whereKeys)
+    
+    this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
+    this._loadTime.duration()
     // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
     // console.log('this._list[0]', this._list[0])
 
