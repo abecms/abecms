@@ -4,6 +4,10 @@ import moment from 'moment'
 import {Hooks} from '../../'
 
 export default function listPage(file, index, text) {
+  if (file.path.indexOf('one-hour-one-day-one-week/manchester-united-maillot-595fc') > -1) {
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('file', file)
+  }
   var res = '';
   file = Hooks.instance.trigger('beforeListPage', file, index, text)
 

@@ -228,26 +228,29 @@ export default class FileUtils {
 
 			if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
 				merged[cleanFilePath] = file
-				merged[cleanFilePath][file.status] = true
+				merged[cleanFilePath][file.abe_meta.status] = true
 			}else {
 				var oldDate = new Date(merged[cleanFilePath].date)
 				var newDate = new Date(file.date)
 				var oldStatus = ''
-				if(merged[cleanFilePath][file.status]) {
-					oldStatus = file.status
+				if(merged[cleanFilePath][file.abe_meta.status]) {
+					oldStatus = file.abe_meta.status
 				}
-				if(typeof merged[cleanFilePath][file.status] === 'undefined' || merged[cleanFilePath][file.status] === null) {
-					merged[cleanFilePath][file.status] = true
-				}else if(newDate > oldDate && oldStatus === file.status) {
-					merged[cleanFilePath][file.status] = true
+				if(typeof merged[cleanFilePath][file.abe_meta.status] === 'undefined' || merged[cleanFilePath][file.abe_meta.status] === null) {
+					merged[cleanFilePath][file.abe_meta.status] = true
+				}else if(newDate > oldDate && oldStatus === file.abe_meta.status) {
+					merged[cleanFilePath][file.abe_meta.status] = true
 				}
 			}
+  // if (file.path.indexOf('one-hour-one-day-one-week/manchester-united-maillot-595fc') > -1) {
+  //   console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+  //   console.log('file', file)
+  // }
   	})
 
     // return merged
   	Array.prototype.forEach.call(Object.keys(merged), (key) => {
-  		var merge = merged[key]
-  		arMerged.push(merge)
+  		arMerged.push(merged[key])
   	})
 
   	return arMerged

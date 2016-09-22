@@ -65,23 +65,13 @@ var route = function(req, res, next) {
       isHome = false
 
       if(!fileAttr.test(filePath)){
-        var folderFilePath = filePath.split('/')
-        folderFilePath.pop()
-        folderFilePath = fileUtils.pathWithRoot(folderFilePath.join('/'))
-        mkdirp.sync(folderFilePath)
-        var files = FileParser.getFiles(folderFilePath, true, 2)
-        var latest = fileAttr.filterLatestVersion(fileAttr.getFilesRevision(files, filePath), 'draft')
-        if(latest.length) {
-          filePath = latest[0].path
+        var filePathTest = fileAttr.getLatestVersion(req.query.filePath)
+        if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
+          filePath = filePathTest.path
         }
       }
 
       let tplUrl = FileParser.getFileDataFromUrl(filePath)
-
-      if(!fileUtils.isFile(tplUrl.json.path)) {
-        res.redirect("/abe/");
-        return;
-      }
 
       editor(templatePath, tplUrl)
         .then((result) => {

@@ -59,8 +59,6 @@ class Manager {
     
     this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
     this._loadTime.duration()
-    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    // console.log('this._list[0]', this._list[0])
 
     // this._list = FileParser.getAllFiles(useKeys)
     this._list.sort(FileParser.predicatBy('date'))
