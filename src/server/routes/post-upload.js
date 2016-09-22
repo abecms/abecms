@@ -63,9 +63,9 @@ var route = function(req, res, next){
           var sfStat = fse.statSync(filePath)
 
           if(sfStat){
-            var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg|mp4)/)
-            if(nb && nb[1]) filePath = filePath.replace(/_([0-9])\.(jpg|png|gif|svg|mp4)/, `_${parseInt(nb[1]) + 1}.$2`)
-            else filePath = filePath.replace(/\.(jpg|png|gif|svg|mp4)/, `_1.$1`)
+            var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg|mp4)/) 
+            if(nb && nb[1]) filePath = filePath.replace(/_([0-9])\.(jpg|png|gif|svg|mp4)/, `_${parseInt(nb[1]) + 1}.$2`) 
+            else filePath = filePath.replace(/\.(jpg|png|gif|svg|mp4)/, `_1.$1`) 
             createImage()
           }
         }
@@ -97,7 +97,7 @@ var route = function(req, res, next){
         var openFile = fse.readFileSync(filePath).toString()
         if(openFile === '') throw new Error('')
         clearInterval(interval)
-        if(/\.(jpg|png|gif|svg)/.test(filePath)) resp = Hooks.instance.trigger('afterSaveImage', resp, req)
+        if(/\.(jpg|png|gif|svg)/.test(filePath)) resp = Hooks.instance.trigger('afterSaveImage', resp, req) 
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(resp))
       }
