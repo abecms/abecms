@@ -18,32 +18,48 @@ var _cli = require('../../cli');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var traverseFileSystem = function traverseFileSystem(currentPath, arr) {
+  var res = [];
+  var files = _fsExtra2.default.readdirSync(currentPath);
+  for (var i in files) {
+    var currentFile = currentPath + '/' + files[i];
+    var stats = _fsExtra2.default.statSync(currentFile);
+    if (stats.isFile()) {
+      if (currentFile.indexOf(_cli.config.files.templates.extension) > -1) {
+        res.push(currentFile);
+      }
+    } else if (stats.isDirectory()) {
+      res = res.concat(traverseFileSystem(currentFile));
+    }
+  }
+  return res;
+};
+
 var findTemplates = function findTemplates(templatesPath) {
   var p = new Promise(function (resolve, reject) {
-    (0, _child_process.execFile)('find', [templatesPath], function (err, stdout, stderr) {
-      if (err) reject(err);
-
-      var file_list = stdout.split('\n');
-      var file_list_with_extention = [];
-      Array.prototype.forEach.call(file_list, function (file) {
-        if (file.indexOf(_cli.config.files.templates.extension) > -1) {
-          file_list_with_extention.push(file);
-        }
-      });
-
-      resolve(file_list_with_extention);
-    });
+    var templatesList = traverseFileSystem(templatesPath);
+    resolve(templatesList);
   });
 
   return p;
 };
 
-var findRequestKeys = function findRequestKeys(file_list_with_extention) {
+/**
+ * Get columns and where.left ids of a select statement
+ *
+ * select title, image from ../ where template=""
+ *
+ * return [title, image, template]
+ * 
+ * @param  {Array} templatesList ["article.html", "other.html"]
+ * @return {Promise}
+ */
+var findRequestColumns = function findRequestColumns(templatesList) {
   var whereKeysCheck = {};
   var whereKeys = [];
   var p = new Promise(function (resolve, reject) {
     var util = new _cli.Util();
-    Array.prototype.forEach.call(file_list_with_extention, function (file) {
+    Array.prototype.forEach.call(templatesList, function (file) {
       var template = _fsExtra2.default.readFileSync(file, 'utf8');
       var matches = util.dataRequest(template);
 
@@ -79,13 +95,13 @@ var findRequestKeys = function findRequestKeys(file_list_with_extention) {
 
 var getSelectTemplateKeys = function getSelectTemplateKeys(templatesPath) {
   var p = new Promise(function (resolve, reject) {
-    findTemplates(templatesPath).then(function (file_list_with_extention) {
+    findTemplates(templatesPath).then(function (templatesList) {
 
-      findRequestKeys(file_list_with_extention).then(function (whereKeys) {
+      findRequestColumns(templatesList).then(function (whereKeys) {
 
         resolve(whereKeys);
       }, function () {
-        console.log('findRequestKeys reject');
+        console.log('findRequestColumns reject');
         reject();
       }).catch(function (e) {
         console.error('getSelectTemplateKeys', e);

@@ -10,14 +10,14 @@ export default function listPage(file, index, text) {
   res += `<tr>`
   res += `<td>${math(index, '+', 1)}</td>
         <td>
-          <a href="/abe/${file.template}?filePath=${file.abe_meta.link}" class="file-path">
+          <a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="file-path">
             ${file.abe_meta.link}
           </a>
         </td>`
   
-  if(file.template){
+  if(file.abe_meta.template){
     res += `<td align="center">
-              ${file.template}
+              ${file.abe_meta.template}
             </td>`
   }else {
     res += `<td align="center"></td>`
@@ -37,16 +37,16 @@ export default function listPage(file, index, text) {
 
   workflow += `<td align="center" class="draft">`
   if((typeof file.published !== undefined && file.published !== null && !file.published) || (file.published && file.draft && file.published.date < file.draft.date)) {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.abe_meta.link}" class="label label-default label-draft">draft</a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="label label-default label-draft">draft</a>`
   }else {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft"></a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft"></a>`
   }
 
   workflow += `</td>`
   workflow += `<td align="center" class="publish">`
 
   if (file.published){
-    workflow += `<a href="/abe/${file.template}?filePath=${file.published.filePath}" class="checkmark label-published">&#10004;</a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.published.filePath}" class="checkmark label-published">&#10004;</a>`
   }
   workflow += `</td>`
 

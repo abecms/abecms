@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.compileAbe = exports.getSelectTemplateKeys = exports.Page = exports.Manager = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.removeDuplicateAttr = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.set_deep_value = exports.deep_value = exports.abeCreate = exports.Util = exports.clc = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
+exports.compileAbe = exports.TimeMesure = exports.getSelectTemplateKeys = exports.Page = exports.Manager = exports.dateUnslug = exports.dateSlug = exports.saveJson = exports.checkRequired = exports.Locales = exports.Plugins = exports.Hooks = exports.save = exports.removeDuplicateAttr = exports.log = exports.getTemplate = exports.cli = exports.config = exports.escapeTextToRegex = exports.getEnclosingTags = exports.getAttr = exports.ifCond = exports.ifIn = exports.printConfig = exports.cleanTab = exports.folders = exports.attrAbe = exports.abeEngine = exports.listPage = exports.moduloIf = exports.className = exports.printJson = exports.notEmpty = exports.printBlock = exports.translate = exports.abeProcess = exports.Sql = exports.Create = exports.testObj = exports.math = exports.abeImport = exports.printInput = exports.fileUtils = exports.folderUtils = exports.FileParser = exports.cleanSlug = exports.slugify = exports.abeDuplicate = exports.abeCreate = exports.Util = exports.clc = exports.Handlebars = exports.fse = exports.moment = exports.fileAttr = undefined;
 
 var _fileAttr = require('./helpers/file-attr');
 
@@ -93,14 +93,6 @@ var _abeDuplicate = require('./helpers/abe-duplicate');
 
 var _abeDuplicate2 = _interopRequireDefault(_abeDuplicate);
 
-var _abeDeepVal = require('./helpers/abe-deep-val');
-
-var _abeDeepVal2 = _interopRequireDefault(_abeDeepVal);
-
-var _abeSetDeepValue = require('./helpers/abe-set-deep-value');
-
-var _abeSetDeepValue2 = _interopRequireDefault(_abeSetDeepValue);
-
 var _abeSql = require('./helpers/abe-sql');
 
 var _abeSql2 = _interopRequireDefault(_abeSql);
@@ -127,6 +119,10 @@ var _abeGetSelectTemplateKeys = require('./helpers/abe-get-select-template-keys'
 
 var _abeGetSelectTemplateKeys2 = _interopRequireDefault(_abeGetSelectTemplateKeys);
 
+var _abeTimeMesure = require('./helpers/abe-time-mesure');
+
+var _abeTimeMesure2 = _interopRequireDefault(_abeTimeMesure);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.fileAttr = _fileAttr2.default;
@@ -136,8 +132,6 @@ exports.Handlebars = _handlebars2.default;
 exports.clc = _cliColor2.default;
 exports.Util = _abeUtils2.default;
 exports.abeCreate = _abeCreate2.default;
-exports.deep_value = _abeDeepVal2.default;
-exports.set_deep_value = _abeSetDeepValue2.default;
 exports.abeDuplicate = _abeDuplicate2.default;
 exports.slugify = _slugify2.default;
 exports.cleanSlug = _slugify.cleanSlug;
@@ -184,4 +178,5 @@ exports.dateUnslug = _abeDate.dateUnslug;
 exports.Manager = _Manager2.default;
 exports.Page = _Page2.default;
 exports.getSelectTemplateKeys = _abeGetSelectTemplateKeys2.default;
+exports.TimeMesure = _abeTimeMesure2.default;
 exports.compileAbe = _index.compileAbe;

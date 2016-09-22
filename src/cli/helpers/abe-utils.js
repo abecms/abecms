@@ -444,7 +444,7 @@ export default class Utils {
 
   static nextDataList(tplPath, text, jsonPage, match) {
     var p = new Promise((resolve, reject) => {
-      var t = new TimeMesure()
+      // var t = new TimeMesure()
       var sourceAttr = config.source.name
 
       if(typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
@@ -460,7 +460,7 @@ export default class Utils {
         case 'request':
           Utils.requestList(obj, sourceAttr, tplPath, match, jsonPage)
             .then(() => {
-              t.duration(match)
+              // t.duration(match)
               resolve()
             }).catch((e) => {
               console.log('[ERROR] abe-utils.js requestList', e)
@@ -499,59 +499,20 @@ export default class Utils {
     return p
   }
 
-  // static performDataList(tplPath, text, jsonPage, matches, cb) {
-  //   var match = matches.shift()
-  //   var t = new TimeMesure('performDataList')
-
-  //   console.log(match[0])
-
-  //   Utils.nextDataList(tplPath, text, jsonPage, match[0])
-  //     .then(() => {
-  //       t.duration()
-  //       if (matches.length > 0) {
-  //         Utils.performDataList(tplPath, text, jsonPage, matches, cb)
-  //       }else {
-  //         cb()
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       console.log('[ERROR] performDataList', e)
-  //     })
-  // }
-
   static getDataList(tplPath, text, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      var t = new TimeMesure('getDataList')
+      // var t = new TimeMesure('getDataList')
 
       var promises = []
       let util = new Utils()
       var matches = util.dataRequest(text)
       Array.prototype.forEach.call(matches, (match) => {
         promises.push(Utils.nextDataList(tplPath, text, jsonPage, match[0]))
-          // .then(() => {
-          //   t.duration()
-          //   if (matches.length > 0) {
-          //     Utils.performDataList(tplPath, text, jsonPage, matches, cb)
-          //   }else {
-          //     cb()
-          //   }
-          // })
-          // .catch((e) => {
-          //   console.log('[ERROR] performDataList', e)
-          // })
       })
-
-      // Utils.performDataList(tplPath, text, jsonPage, matches, () => {
-      //   resolve()
-      // })
-      // Array.prototype.forEach.call(matches, (match) => {
-
-      // })
-      // while (match = listReg.exec(text)) {}
 
       Promise.all(promises)
         .then(() => {
-          t.duration()
+          // t.duration()
           resolve()
         }).catch(function(e) {
           console.error('abe-utils.js getDataList', e)
