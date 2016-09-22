@@ -37,6 +37,11 @@ class Manager {
     return this._list
   }
 
+  setList(list) {
+
+    this._list = list
+  }
+
   _init() {
     const pathTemplate = path.join(config.root, config.templates.url);
     getSelectTemplateKeys(pathTemplate)
