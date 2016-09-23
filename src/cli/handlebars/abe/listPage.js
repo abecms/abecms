@@ -6,10 +6,6 @@ import {Hooks} from '../../'
 export default function listPage(file, index, text) {
   var res = '';
 
-  if (file.path.indexOf('hland/magazine/did-you-know/hotels-basel-visual-4378f') > -1) {
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('file', file)
-  }
   file = Hooks.instance.trigger('beforeListPage', file, index, text)
 
   res += `<tr>`
@@ -41,18 +37,18 @@ export default function listPage(file, index, text) {
   var workflow = ''
 
   workflow += `<td align="center" class="draft">`
-  if((typeof file.published === "undefined" || file.published === null)
-    || (file.published && file.draft && file.published.date < file.draft.date)) {
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="label label-default label-draft">draft</a>`
+  if((typeof file.publish === "undefined" || file.publish === null)
+    || (file.publish && file.draft && file.publish.date < file.draft.date)) {
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="label label-default label-draft">draft</a>`
   }else {
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft"></a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="hidden label label-default label-draft">draft</a>`
   }
 
   workflow += `</td>`
   workflow += `<td align="center" class="publish">`
 
-  if (file.published){
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.published.filePath}" class="checkmark label-published">&#10004;</a>`
+  if (file.publish){
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="checkmark label-published">&#10004;</a>`
   }
   workflow += `</td>`
 

@@ -330,7 +330,7 @@ export default class Sql {
 
     var list = Manager.instance.getList()
     var files_array = list.filter((element, index, arr) => {
-      if(element.published) {
+      if(element.publish) {
         if (element.path.indexOf(fromDirectory) > -1) {
           return true
         }
@@ -338,15 +338,6 @@ export default class Sql {
       return false
     })
     return files_array
-
-    // if(folderUtils.isFolder(fromDirectory)) {
-    //   // we'll get only published files which don't contain "-abe-"
-    //   files = FileParser.getFiles(fromDirectory, true, recursive, fileRegex, true)
-    // }
-    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    // console.log('files', files)
-
-    // return files
   }
 
   static execQuery(pathQuery, match, jsonPage) {
@@ -402,28 +393,26 @@ export default class Sql {
 
     for(let file of files) {
       if(limit < maxLimit || maxLimit === -1) {
-        if (file.published === true) {
-          var doc = Sql.executeWhereClauseOnDocument(file, wheres, jsonPage)
+        var doc = Sql.executeWhereClauseOnDocument(file.publish, wheres, jsonPage)
 
-          if(doc) {
-            var json = JSON.parse(JSON.stringify(doc))
-            var jsonValues = {}
+        if(doc) {
+          var json = JSON.parse(JSON.stringify(doc))
+          var jsonValues = {}
 
-            if(typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
-              
-              Array.prototype.forEach.call(columns, (column) => {
-                if(typeof json[column] !== 'undefined' && json[column] !== null) {
-                  jsonValues[column] = json[column]
-                }
-              })
-              jsonValues[config.meta.name] = json[config.meta.name]
-            }else {
-              jsonValues = json
-            }
-
-            res.push(jsonValues)
-            limit++
+          if(typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
+            
+            Array.prototype.forEach.call(columns, (column) => {
+              if(typeof json[column] !== 'undefined' && json[column] !== null) {
+                jsonValues[column] = json[column]
+              }
+            })
+            jsonValues[config.meta.name] = json[config.meta.name]
+          }else {
+            jsonValues = json
           }
+
+          res.push(jsonValues)
+          limit++
         }
       } else {
         break
