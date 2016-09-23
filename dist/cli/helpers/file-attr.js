@@ -35,6 +35,7 @@ var Attr = function () {
    * @param  {String} str string to work with
    * @return {void}
    */
+
   function Attr(str) {
     _classCallCheck(this, Attr);
 
@@ -225,7 +226,7 @@ var FileAttr = function () {
     key: 'getVersions',
     value: function getVersions(docPath) {
       var files = _.Manager.instance.getList();
-      var fileWithoutExtension = docPath.replace('.' + _.config.files.templates.extension, '');
+      var fileWithoutExtension = docPath.replace('.' + _.config.files.templates.extension, '.json');
 
       var result = [];
       Array.prototype.forEach.call(files, function (file) {
