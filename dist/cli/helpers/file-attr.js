@@ -35,7 +35,6 @@ var Attr = function () {
    * @param  {String} str string to work with
    * @return {void}
    */
-
   function Attr(str) {
     _classCallCheck(this, Attr);
 
@@ -201,6 +200,57 @@ var FileAttr = function () {
         }
       });
       return res;
+    }
+  }, {
+    key: 'sortByDateDesc',
+    value: function sortByDateDesc(a, b) {
+      var dateA = new Date(a.date);
+      var dateB = new Date(b.date);
+      if (dateA < dateB) {
+        return 1;
+      } else if (dateA > dateB) {
+        return -1;
+      }
+      return 0;
+    }
+
+    /**
+     * Filter and array of file path and return the latest version of those files
+     * @param  {Object} urls object with path to file, filename etc ...
+     * @param  {String} type (draft|waiting|valid)
+     * @return {Object} urls object filtered
+     */
+
+  }, {
+    key: 'getVersions',
+    value: function getVersions(docPath) {
+      var files = _.Manager.instance.getList();
+      var fileWithoutExtension = docPath.replace('.' + _.config.files.templates.extension, '');
+
+      var result = [];
+      Array.prototype.forEach.call(files, function (file) {
+        if (file.path.indexOf(fileWithoutExtension) > -1) {
+          result = file.revisions;
+        }
+      });
+      return result;
+    }
+
+    /**
+     * Filter and array of file path and return the latest version of those files
+     * @param  {Object} urls object with path to file, filename etc ...
+     * @param  {String} type (draft|waiting|valid)
+     * @return {Object} urls object filtered
+     */
+
+  }, {
+    key: 'getLatestVersion',
+    value: function getLatestVersion(docPath) {
+      var sameFiles = FileAttr.getVersions(docPath);
+      if (sameFiles.length > 0) {
+        return sameFiles[sameFiles.length - 1];
+      }
+      return null;
     }
 
     /**

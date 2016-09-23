@@ -113,7 +113,7 @@ var FileParser = function () {
               date: date,
               cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
               duration: duration,
-              status: status,
+              // status: status,
               cleanName: cleanName,
               cleanNameNoExt: cleanNameNoExt,
               cleanFilePath: cleanFilePath,
@@ -277,7 +277,7 @@ var FileParser = function () {
       };
 
       var extension = _.config.files.templates.extension;
-      if (typeof url !== 'undefined' && url !== null && url.indexOf('.' + extension) > -1) {
+      if (typeof url !== 'undefined' && url !== null) {
 
         var dir = _.fileUtils.removeLast(url).replace(_.config.root, '');
         var filename = _.fileUtils.filename(url);
@@ -454,9 +454,16 @@ var FileParser = function () {
         var json = FileParser.getJson(file.path);
 
         if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-          cleanFile.abe_meta = json.abe_meta;
+          cleanFile.abe_meta = {
+            date: typeof json.abe_meta.date !== 'undefined' && json.abe_meta.date !== null ? json.abe_meta.date : null,
+            type: typeof json.abe_meta.type !== 'undefined' && json.abe_meta.type !== null ? json.abe_meta.type : null,
+            link: typeof json.abe_meta.link !== 'undefined' && json.abe_meta.link !== null ? json.abe_meta.link : null,
+            template: typeof json.abe_meta.template !== 'undefined' && json.abe_meta.template !== null ? json.abe_meta.template : null,
+            status: typeof json.abe_meta.status !== 'undefined' && json.abe_meta.status !== null ? json.abe_meta.status : null,
+            cleanName: typeof json.abe_meta.cleanName !== 'undefined' && json.abe_meta.cleanName !== null ? json.abe_meta.cleanName : null,
+            cleanFilename: typeof json.abe_meta.cleanFilename !== 'undefined' && json.abe_meta.cleanFilename !== null ? json.abe_meta.cleanFilename : null
+          };
         }
-
         Array.prototype.forEach.call(withKeys, function (key) {
           var keyFirst = key.split('.')[0];
           cleanFile[keyFirst] = json[keyFirst];
@@ -505,18 +512,13 @@ var FileParser = function () {
     value: function deleteFile(filePath) {
       filePath = _.Hooks.instance.trigger('beforeDeleteFile', filePath);
 
-      var tplUrl = FileParser.getFileDataFromUrl(_path2.default.join(_.config.draft.url, filePath));
-      var files = FileParser.getFiles(tplUrl.draft.dir, true, 1, new RegExp("\\." + _.config.files.templates.extension));
-      var revisions = _.fileAttr.getFilesRevision(files, tplUrl.publish.file);
+      var revisions = _.fileAttr.getVersions(filePath);
 
       Array.prototype.forEach.call(revisions, function (revision) {
-        var revisionUrl = FileParser.getFileDataFromUrl(revision.path);
-        FileParser.removeFile(revision.path, revisionUrl.json.path);
+        FileParser.removeFile(revision.path, revision.htmlPath);
       });
 
-      FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json);
       _.Manager.instance.updateList();
-      tplUrl.publish.path = _.Hooks.instance.trigger('afterDeleteFile', tplUrl.publish.path, tplUrl.publish.json);
     }
   }, {
     key: 'deleteFileFromName',

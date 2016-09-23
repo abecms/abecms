@@ -52,6 +52,12 @@ var _cli = require('../cli');
 
 var _middlewares = require('./middlewares');
 
+var _RedisClient = require('../cli/services/RedisClient');
+
+var redis = _interopRequireWildcard(_RedisClient);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var abePort = null;
@@ -94,8 +100,12 @@ if (_cli.fileUtils.isFile(_path2.default.join(_cli.config.root, 'cert.pem'))) {
 
 var app = (0, _express2.default)(opts);
 
+if (_cli.config.redis.enable) {
+  redis.connect(_cli.config.redis.port, _cli.config.redis.host);
+}
+
 // Instantiate Singleton Manager (which lists all blog files)
-_cli.Manager.instance;
+_cli.Manager.instance.init();
 app.set('config', _cli.config.getConfigByWebsite());
 app.set('projectFiles', _cli.FileParser.getProjectFiles());
 
@@ -133,10 +143,9 @@ if (_cli.config.security === true) {
       sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
       reportUri: '/report-violation',
       objectSrc: [] },
-    // An empty array allows nothing through
     reportOnly: false, // Set to true if you only want browsers to report errors, not block them
     setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
-    disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.   
+    disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
     browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
   }));
 }

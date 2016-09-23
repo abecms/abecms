@@ -301,28 +301,65 @@ var FileUtils = function () {
 			Array.prototype.forEach.call(files, function (file) {
 				var cleanFilePath = file.cleanFilePath;
 
-				if (typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
-					merged[cleanFilePath] = file;
-					merged[cleanFilePath][file.status] = true;
-				} else {
-					var oldDate = new Date(merged[cleanFilePath].date);
-					var newDate = new Date(file.date);
-					var oldStatus = '';
-					if (merged[cleanFilePath][file.status]) {
-						oldStatus = file.status;
-					}
-					if (typeof merged[cleanFilePath][file.status] === 'undefined' || merged[cleanFilePath][file.status] === null) {
-						merged[cleanFilePath][file.status] = true;
-					} else if (newDate > oldDate && oldStatus === file.status) {
-						merged[cleanFilePath][file.status] = true;
-					}
+				var fileStatusIsPublish = _.fileAttr.get(file.cleanPath);
+				if (typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null) {
+					file.abe_meta.status = 'draft';
 				}
+
+				file.html = _path2.default.join('/', file.filePath.replace(/\.json/, '.' + _.config.files.templates.extension));
+				if (file.abe_meta.status === 'publish') {
+					file.htmlPath = _path2.default.join(_.config.root, _.config.publish.url, _path2.default.join('/', file.filePath.replace(/\.json/, '.' + _.config.files.templates.extension)));
+				} else {
+					file.htmlPath = _path2.default.join(_.config.root, _.config.draft.url, _path2.default.join('/', file.filePath.replace(/\.json/, '.' + _.config.files.templates.extension)));
+				}
+
+				if (typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
+					merged[cleanFilePath] = {
+						name: _.fileAttr.delete(file.name),
+						path: _.fileAttr.delete(file.path),
+						html: _.fileAttr.delete(_path2.default.join('/', file.filePath.replace(/\.json/, '.' + _.config.files.templates.extension))),
+						htmlPath: _path2.default.join(_.config.root, _.config.publish.url, _path2.default.join('/', _.fileAttr.delete(file.filePath.replace(/\.json/, '.' + _.config.files.templates.extension)))),
+						cleanPathName: file.cleanPathName,
+						cleanPath: file.cleanPath,
+						cleanName: file.cleanName,
+						cleanNameNoExt: file.cleanNameNoExt,
+						cleanFilePath: file.cleanFilePath,
+						filePath: _.fileAttr.delete(file.filePath),
+						revisions: []
+					};
+				}
+				merged[cleanFilePath].revisions.push(JSON.parse(JSON.stringify(file)));
 			});
 
 			// return merged
 			Array.prototype.forEach.call(Object.keys(merged), function (key) {
-				var merge = merged[key];
-				arMerged.push(merge);
+				var revisions = merged[key].revisions;
+				revisions.sort(_.FileParser.predicatBy('date', 1));
+
+				Array.prototype.forEach.call(revisions, function (revision) {
+
+					var status = revision.abe_meta.status;
+
+					if (status === 'publish') {
+						merged[key][status] = revision;
+					} else {
+						merged[key][status] = {};
+					}
+					merged[key][status].path = revision.path;
+					merged[key][status].html = revision.html;
+					merged[key][status].htmlPath = revision.htmlPath;
+					merged[key][status].date = new Date(revision.date);
+					merged[key][status].link = revision.abe_meta.link;
+				});
+
+				merged[key].revisions = revisions;
+
+				merged[key].date = revisions[0].date;
+				merged[key].cleanDate = revisions[0].cleanDate;
+				merged[key].duration = revisions[0].duration;
+				merged[key].abe_meta = revisions[0].abe_meta;
+
+				arMerged.push(merged[key]);
 			});
 
 			return arMerged;

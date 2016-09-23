@@ -33,7 +33,12 @@ function compileAbe() {
     key = key[key.length - 1];
     var hash = arguments[0].hash;
     hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]');
-    var value = content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key;
+    var value;
+    try {
+      value = content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key;
+    } catch (e) {
+      value = '';
+    }
     if (typeof value === 'undefined' || typeof value === 'function' || value === null) {
       value = '';
     }

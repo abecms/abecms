@@ -86,12 +86,14 @@ function save(url, tplPath) {
   url = (0, _.cleanSlug)(url);
 
   var p = new _es6Promise.Promise(function (resolve, reject) {
+    var isRejectedDoc = false;
     if (type === 'reject') {
+      isRejectedDoc = true;
       url = _.Hooks.instance.trigger('beforeReject', url);
       type = 'draft';
       realType = 'draft';
       url = _.Hooks.instance.trigger('afterReject', url);
-      resolve({ reject: _.fileAttr.delete(url).replace(_path2.default.join(_.config.root, _.config.draft.url), '') });
+      // resolve({reject: fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')})
     }
     var tplUrl = _.FileParser.getFileDataFromUrl(url);
     type = type || _.FileParser.getType(url);
@@ -174,6 +176,9 @@ function save(url, tplPath) {
       text = _.Util.removeDataList(text);
 
       var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text, type);
+      if (isRejectedDoc) {
+        res.reject = _.fileAttr.delete(url).replace(_path2.default.join(_.config.root, _.config.draft.url), '');
+      }
 
       obj = _.Hooks.instance.trigger('afterSave', obj);
 
@@ -234,6 +239,7 @@ function saveJson(url, json) {
     space: 2,
     encoding: 'utf-8'
   });
+  return true;
 }
 
 function saveHtml(url, html) {
