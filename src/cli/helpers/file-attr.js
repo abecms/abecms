@@ -178,14 +178,14 @@ export default class FileAttr {
   static getVersions(docPath) {
     var files = Manager.instance.getList()
     var fileWithoutExtension = docPath.replace('.' + config.files.templates.extension, '')
-    var sameFiles = []
+
+    var result = []
     Array.prototype.forEach.call(files, (file) => {
       if (file.path.indexOf(fileWithoutExtension) > -1) {
-        sameFiles.push(file)
-        console.log('file.path', file.path)
+        result = file.revisions
       }
     })
-    return sameFiles
+    return result
   }
 
   /**
@@ -197,8 +197,7 @@ export default class FileAttr {
   static getLatestVersion(docPath) {
     var sameFiles = FileAttr.getVersions(docPath)
     if (sameFiles.length > 0) {
-      sameFiles.sort(FileAttr.sortByDateDesc)
-      return sameFiles[0]
+      return sameFiles[sameFiles.length - 1]
     }
     return null
   }

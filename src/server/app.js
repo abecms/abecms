@@ -81,7 +81,7 @@ var html = exphbs.create({
   var app = express(opts)
 
   // Instantiate Singleton Manager (which lists all blog files)
-  Manager.instance;
+  Manager.instance.init();
   app.set('config', config.getConfigByWebsite());
   app.set('projectFiles', FileParser.getProjectFiles());
 

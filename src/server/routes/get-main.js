@@ -73,6 +73,11 @@ var route = function(req, res, next) {
 
       let tplUrl = FileParser.getFileDataFromUrl(filePath)
 
+      if(!fileUtils.isFile(tplUrl.json.path)) { 
+        res.redirect("/abe/"); 
+        return; 
+      } 
+
       editor(templatePath, tplUrl)
         .then((result) => {
           var manager = {}

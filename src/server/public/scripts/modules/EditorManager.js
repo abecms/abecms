@@ -82,7 +82,6 @@ export default class EditorManager {
       (code, responseText, request) => {
         var labels = target.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
         var p = target.parentNode.parentNode.parentNode.querySelector('.label-published')
-
         Array.prototype.forEach.call(labels, (label) => {
           label.classList.add('hidden')
         })

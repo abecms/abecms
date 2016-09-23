@@ -226,47 +226,64 @@ export default class FileUtils {
   	Array.prototype.forEach.call(files, (file) => {
 	  	var cleanFilePath = file.cleanFilePath
 
-			if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
-				merged[cleanFilePath] = file
-				merged[cleanFilePath].revisions = []
-				merged[cleanFilePath][file.abe_meta.status] = {
-					path: file.cleanPath,
-					date: new Date(file.date),
-					link: file.abe_meta.link
-				}
+			var fileStatusIsPublish = fileAttr.get(file.cleanPath)
+			if(typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null) {
+				file.abe_meta.status = 'draft'
+			}
+
+			file.html = path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))
+			if (file.abe_meta.status === 'publish') {
+				file.htmlPath = path.join(config.root, config.publish.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
 			}else {
-				var oldDate = new Date(merged[cleanFilePath].date)
-				var newDate = new Date(file.date)
-				var oldStatus = ''
-				if(merged[cleanFilePath][file.abe_meta.status]) {
-					oldStatus = file.abe_meta.status
-				}
-				if (file.abe_meta.status === 'publish') {
-					var filea = fileAttr.get(file.name).s
-					if(typeof filea !== 'undefined' && filea !== null) {
-						// not really publish (draft that have publish as status)
-						file.abe_meta.status = 'draft'
-					}
-				}
-				if(typeof merged[cleanFilePath][file.abe_meta.status] === 'undefined' || merged[cleanFilePath][file.abe_meta.status] === null) {
-					merged[cleanFilePath][file.abe_meta.status] = {
-						path: file.cleanPath,
-						date: newDate,
-						link: file.abe_meta.link
-					}
-				}else if(newDate > oldDate && oldStatus === file.abe_meta.status) {
-					merged[cleanFilePath][file.abe_meta.status] = {
-						path: file.cleanPath,
-						date: newDate,
-						link: file.abe_meta.link
-					}
+				file.htmlPath = path.join(config.root, config.draft.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+			}
+
+			if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
+				merged[cleanFilePath] = {
+					name: fileAttr.delete(file.name)
+					, path: fileAttr.delete(file.path)
+					, html: fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+					, htmlPath: path.join(config.root, config.publish.url, path.join('/', fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))))
+					, cleanPathName: file.cleanPathName
+					, cleanPath: file.cleanPath
+					, cleanName: file.cleanName
+					, cleanNameNoExt: file.cleanNameNoExt
+					, cleanFilePath: file.cleanFilePath
+					, filePath: fileAttr.delete(file.filePath)
+					, revisions: []
 				}
 			}
-			merged[cleanFilePath].revisions.push(file.cleanPath)
+			merged[cleanFilePath].revisions.push(JSON.parse(JSON.stringify(file)))
   	})
 
     // return merged
   	Array.prototype.forEach.call(Object.keys(merged), (key) => {
+			var revisions = merged[key].revisions
+  		revisions.sort(FileParser.predicatBy('date', 1))
+
+			Array.prototype.forEach.call(revisions, (revision) => {
+				
+				var status = revision.abe_meta.status
+
+				if (status === 'publish') {
+					merged[key][status] = revision
+				}else {
+					merged[key][status] = {}
+				}
+				merged[key][status].path = revision.path
+				merged[key][status].html = revision.html
+				merged[key][status].htmlPath = revision.htmlPath
+				merged[key][status].date = new Date(revision.date)
+				merged[key][status].link = revision.abe_meta.link
+			})
+
+  		merged[key].revisions = revisions
+
+			merged[key].date = revisions[0].date
+			merged[key].cleanDate = revisions[0].cleanDate
+			merged[key].duration = revisions[0].duration
+			merged[key].abe_meta = revisions[0].abe_meta
+
   		arMerged.push(merged[key])
   	})
 

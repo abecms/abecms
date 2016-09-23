@@ -22,7 +22,6 @@ class Manager {
     
     Handlebars.templates = Handlebars.templates || {};
     this.loadHbsTemplates();
-    this._init()
   }
 
   static get instance() {
@@ -42,17 +41,22 @@ class Manager {
     this._list = list
   }
 
-  _init() {
-    this._loadTime = new TimeMesure('Loading Manager')
-    const pathTemplate = path.join(config.root, config.templates.url);
-    getSelectTemplateKeys(pathTemplate)
-      .then((whereKeys) => {
-        this._whereKeys = whereKeys
-        this.updateList()
-      })
-      .catch((e) => {
-        console.log('Manager._init', e)
-      })
+  init() {
+    var p = new Promise((resolve, reject) => {
+      this._loadTime = new TimeMesure('Loading Manager')
+      const pathTemplate = path.join(config.root, config.templates.url);
+      getSelectTemplateKeys(pathTemplate)
+        .then((whereKeys) => {
+          this._whereKeys = whereKeys
+          this.updateList()
+          resolve()
+        })
+        .catch((e) => {
+          console.log('Manager._init', e)
+        })
+    })
+
+    return p
   }
 
   updateList() {
@@ -61,7 +65,7 @@ class Manager {
     this._loadTime.duration()
 
     // this._list = FileParser.getAllFiles(useKeys)
-    this._list.sort(FileParser.predicatBy('date'))
+    // this._list.sort(FileParser.predicatBy('date'))
 
     return this
   }
