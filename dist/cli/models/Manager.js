@@ -24,6 +24,12 @@ var _path2 = _interopRequireDefault(_path);
 
 var _cli = require('../../cli');
 
+var _RedisClient = require('../services/RedisClient');
+
+var redis = _interopRequireWildcard(_RedisClient);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -39,46 +45,47 @@ var Manager = function () {
 
     _handlebars2.default.templates = _handlebars2.default.templates || {};
     this.loadHbsTemplates();
-    this._init();
   }
 
   _createClass(Manager, [{
     key: 'getList',
     value: function getList() {
+      if (_cli.config.redis.enable) {
+        redis.get().get('list', function (err, reply) {
+          this._list = JSON.parse(reply);
+        });
+      }
 
       return this._list;
     }
   }, {
-    key: 'setList',
-    value: function setList(list) {
-
-      this._list = list;
-    }
-  }, {
-    key: '_init',
-    value: function _init() {
+    key: 'init',
+    value: function init() {
       var _this = this;
 
-      this._loadTime = new _cli.TimeMesure('Loading Manager');
-      var pathTemplate = _path2.default.join(_cli.config.root, _cli.config.templates.url);
-      (0, _cli.getSelectTemplateKeys)(pathTemplate).then(function (whereKeys) {
-        _this._whereKeys = whereKeys;
-        _this.updateList();
-      }).catch(function (e) {
-        console.log('Manager._init', e);
+      var p = new Promise(function (resolve, reject) {
+        _this._loadTime = new _cli.TimeMesure('Loading Manager');
+        var pathTemplate = _path2.default.join(_cli.config.root, _cli.config.templates.url);
+        (0, _cli.getSelectTemplateKeys)(pathTemplate).then(function (whereKeys) {
+          _this._whereKeys = whereKeys;
+          _this.updateList();
+          resolve();
+        }).catch(function (e) {
+          console.log('Manager._init', e);
+        });
       });
+
+      return p;
     }
   }, {
     key: 'updateList',
     value: function updateList() {
-
       this._list = _cli.FileParser.getAllFilesWithKeys(this._whereKeys);
-      this._loadTime.duration();
-      // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-      // console.log('this._list[0]', this._list[0])
-
-      // this._list = FileParser.getAllFiles(useKeys)
       this._list.sort(_cli.FileParser.predicatBy('date'));
+      if (_cli.config.redis.enable) {
+        redis.get().set('list', JSON.stringify(this._list));
+      }
+      this._loadTime.duration();
 
       return this;
     }

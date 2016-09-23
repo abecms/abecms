@@ -18,39 +18,33 @@ var duplicate = function duplicate(oldFilePath, template, newPath, name, req) {
   var p = new Promise(function (resolve, reject) {
     _cli.Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, newPath, name, req, isUpdate);
 
+    var json = {};
+    var revisions = [];
     if (typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
-      var url = _path2.default.join(_cli.config.root, _cli.config.draft.url, oldFilePath);
-      var revisions = [];
+      var files = _cli.Manager.instance.getList();
+      var fileWithoutExtension = oldFilePath.replace('.' + _cli.config.files.templates.extension, '');
 
-      if (!_cli.fileAttr.test(url)) {
-        var folderFilePath = url.split('/');
-        folderFilePath.pop();
-        folderFilePath = _cli.fileUtils.pathWithRoot(folderFilePath.join('/'));
-
-        var files = _cli.FileParser.getFiles(folderFilePath, true, 2);
-        revisions = _cli.fileAttr.getFilesRevision(files, url);
-        var latest = _cli.fileAttr.filterLatestVersion(revisions, 'draft');
-        if (latest.length) {
-          url = latest[0].path;
+      var doc = null;
+      Array.prototype.forEach.call(files, function (file) {
+        if (file.path.indexOf(fileWithoutExtension) > -1) {
+          doc = file;
         }
-      } else if (isUpdate) {
-        files = _cli.FileParser.getFiles(folderFilePath, true, 2);
-        revisions = _cli.fileAttr.getFilesRevision(files, url);
+      });
+
+      if (typeof doc.revisions !== 'undefined' && doc.revisions !== null) {
+        revisions = doc.revisions;
+
+        if (typeof revisions !== 'undefined' && revisions !== null && typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
+          json = _cli.FileParser.getJson(revisions[0].path);
+        }
       }
 
-      var tplUrl = _cli.FileParser.getFileDataFromUrl(url);
-      if (!_cli.fileUtils.isFile(tplUrl.json.path)) {} else {}
-      var json = _cli.FileParser.getJson(tplUrl.json.path);
       delete json.abe_meta;
     }
 
     if (isUpdate) {
       _cli.Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate);
-      Array.prototype.forEach.call(revisions, function (revision) {
-        if (typeof revision.path !== 'undefined' && revision.path !== null) {
-          _cli.FileParser.deleteFile(revision.path);
-        }
-      });
+      _cli.FileParser.deleteFile(oldFilePath);
     }
     _cli.Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate);
 
@@ -60,7 +54,7 @@ var duplicate = function duplicate(oldFilePath, template, newPath, name, req) {
     }, function () {
       reject();
     }).catch(function (e) {
-      console.error(e);
+      console.error('[ERROR] abe-duplicate.js', e);
       reject();
     });
   });

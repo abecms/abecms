@@ -86,25 +86,17 @@ var route = function route(req, res, next) {
   var p = new Promise(function (resolve, reject) {
 
     if (templatePath !== null && filePath !== null) {
-      var folderFilePath;
-      var files;
-      var latest;
+      var filePathTest;
 
       var _ret = function () {
 
         isHome = false;
 
         if (!_cli.fileAttr.test(filePath)) {
-          folderFilePath = filePath.split('/');
+          filePathTest = _cli.fileAttr.getLatestVersion(req.query.filePath);
 
-          folderFilePath.pop();
-          folderFilePath = _cli.fileUtils.pathWithRoot(folderFilePath.join('/'));
-          _mkdirp2.default.sync(folderFilePath);
-          files = _cli.FileParser.getFiles(folderFilePath, true, 2);
-          latest = _cli.fileAttr.filterLatestVersion(_cli.fileAttr.getFilesRevision(files, filePath), 'draft');
-
-          if (latest.length) {
-            filePath = latest[0].path;
+          if (typeof filePathTest !== 'undefined' && filePathTest !== null) {
+            filePath = filePathTest.path;
           }
         }
 

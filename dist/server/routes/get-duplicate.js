@@ -25,7 +25,7 @@ var route = function route(req, res, next) {
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result));
   }).catch(function (e) {
-    console.error(e);
+    console.error('[ERROR] get-duplicate.js', e);
     reject();
   });
 };
