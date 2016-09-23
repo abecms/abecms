@@ -11,6 +11,8 @@ import {
   getSelectTemplateKeys
 } from '../../cli'
 
+import * as redis from '../services/RedisClient';
+
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
 
@@ -32,13 +34,13 @@ class Manager {
   }
 
   getList() {
+    if(config.redis.enable){
+      redis.get().get('list', function(err, reply) {
+        this._list = JSON.parse(reply);
+      });
+    }
 
     return this._list
-  }
-
-  setList(list) {
-
-    this._list = list
   }
 
   init() {
@@ -60,12 +62,12 @@ class Manager {
   }
 
   updateList() {
-    
     this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
+    this._list.sort(FileParser.predicatBy('date'))
+    if(config.redis.enable){
+      redis.get().set('list', JSON.stringify(this._list))
+    }
     this._loadTime.duration()
-
-    // this._list = FileParser.getAllFiles(useKeys)
-    // this._list.sort(FileParser.predicatBy('date'))
 
     return this
   }
