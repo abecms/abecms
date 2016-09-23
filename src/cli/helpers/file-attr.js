@@ -177,7 +177,7 @@ export default class FileAttr {
    */
   static getVersions(docPath) {
     var files = Manager.instance.getList()
-    var fileWithoutExtension = docPath.replace('.' + config.files.templates.extension, '')
+    var fileWithoutExtension = docPath.replace('.' + config.files.templates.extension, '.json')
 
     var result = []
     Array.prototype.forEach.call(files, (file) => {
