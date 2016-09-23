@@ -36,7 +36,6 @@ var route = function(req, res, next){
     }
 
     file.on('limit', function() {
-      req.unpipe(req.busboy)
       returnErr('file to big')
     })
 
@@ -44,10 +43,10 @@ var route = function(req, res, next){
       file.fileRead.push(chunk)
     });
 
-    if (mimetype !== 'image/jpeg' && mimetype !== 'image/png' && mimetype !== 'image/svg+xml' && mimetype !== 'video/mp4') { 
+    if (mimetype !== 'image/jpeg' && mimetype !== 'image/png' && mimetype !== 'image/svg+xml' && mimetype !== 'video/mp4') {
       returnErr('unauthorized file')
-    } else if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png' && ext !== 'svg' && ext !== 'mp4') { 
-      returnErr('not an valid asset') 
+    } else if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png' && ext !== 'svg' && ext !== 'mp4') {
+      returnErr('not an valid asset')
     }
 
     file.on('end', function() {

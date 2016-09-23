@@ -217,79 +217,6 @@ export default class FileUtils {
   		})
   	}
   }
-
-  /* TODO: put this method in its right helper */
-  static checkMergedFile(file, merged) {
-
-  	var cleanFilePath = file.cleanFilePath
-  	var revision = file
-		revision.status = file.status
-		revision.filePath = file.filePath
-		revision.date = file.abe_meta && file.abe_meta.latest ? file.abe_meta.latest.date : ''
-		revision.template = file[config.meta.name].template ? file[config.meta.name].template.replace(/^\/+/, '') : ''
-		revision.cleanFilePath = cleanFilePath
-
-		revision[config.meta.name] = file[config.meta.name]
-
-		if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
-			merged[cleanFilePath] = {}
-
-			merged[cleanFilePath].cleanFilePath = revision.cleanFilePath
-			merged[cleanFilePath].date = revision.date
-			merged[cleanFilePath].template = revision.template
-			merged[cleanFilePath][config.meta.name] = revision[config.meta.name]
-			merged[cleanFilePath][file.status] = revision
-		}else {
-			var oldDate = new Date(merged[cleanFilePath].date)
-			var newDate = new Date(revision.date)
-			var oldStatus = ''
-			if(typeof merged[cleanFilePath][revision.status] !== 'undefined' && merged[cleanFilePath][revision.status] !== null) {
-				oldStatus = merged[cleanFilePath][revision.status].status
-			}
-			var newStatus = revision.status
-
-			// if draft > publish
-			if(typeof merged[cleanFilePath][newStatus] === 'undefined' || merged[cleanFilePath][newStatus] === null) {
-				merged[cleanFilePath][newStatus] = revision
-			}else if(newDate > oldDate && oldStatus === newStatus) {
-				merged[cleanFilePath][file.status] = revision
-			}
-		}
-  }
-  
-  /* TODO: put this method in its right helper */
-  // static mergeFiles(files1, files2) {
-  // 	var merged = {}
-  // 	var arMerged = []
-		
-  // 	Array.prototype.forEach.call(files1, (file) => {
-  // 		FileUtils.checkMergedFile(file, merged)
-  // 	})
-
-  // 	Array.prototype.forEach.call(files2, (file) => {
-  // 		FileUtils.checkMergedFile(file, merged)
-  // 	})
-
-  // 	Array.prototype.forEach.call(Object.keys(merged), (key) => {
-  // 		var merge = merged[key]
-  // 		var publishedDate = (typeof merge.published !== 'undefined' && merge.published !== null) ? new Date(merge.published.date) : null
-  // 		var draftDate = (typeof merge.draft !== 'undefined' && merge.draft !== null) ? new Date(merge.draft.date) : null
-
-  // 		if(publishedDate !== null && draftDate !== null && publishedDate >= draftDate) {
-  // 			merge.draft = null
-  // 		}
-  // 		var revision = {
-  // 			path: merge.cleanFilePath,
-  // 			template: merge.template,
-  // 			published: merge.published,
-  // 			date: merge.date,
-  // 			draft: merge.draft
-  // 		}
-  // 		arMerged.push(revision)
-  // 	})
-
-  // 	return arMerged
-  // }
   
   /* TODO: put this method in its right helper */
   static getFilesMerged(files) {
@@ -297,26 +224,67 @@ export default class FileUtils {
   	var arMerged = []
 		
   	Array.prototype.forEach.call(files, (file) => {
-  		FileUtils.checkMergedFile(file, merged)
+	  	var cleanFilePath = file.cleanFilePath
+
+			var fileStatusIsPublish = fileAttr.get(file.cleanPath)
+			if(typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null) {
+				file.abe_meta.status = 'draft'
+			}
+
+			file.html = path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))
+			if (file.abe_meta.status === 'publish') {
+				file.htmlPath = path.join(config.root, config.publish.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+			}else {
+				file.htmlPath = path.join(config.root, config.draft.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+			}
+
+			if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
+				merged[cleanFilePath] = {
+					name: fileAttr.delete(file.name)
+					, path: fileAttr.delete(file.path)
+					, html: fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+					, htmlPath: path.join(config.root, config.publish.url, path.join('/', fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))))
+					, cleanPathName: file.cleanPathName
+					, cleanPath: file.cleanPath
+					, cleanName: file.cleanName
+					, cleanNameNoExt: file.cleanNameNoExt
+					, cleanFilePath: file.cleanFilePath
+					, filePath: fileAttr.delete(file.filePath)
+					, revisions: []
+				}
+			}
+			merged[cleanFilePath].revisions.push(JSON.parse(JSON.stringify(file)))
   	})
 
+    // return merged
   	Array.prototype.forEach.call(Object.keys(merged), (key) => {
-  		var merge = merged[key]
-  		var publishedDate = (typeof merge.published !== 'undefined' && merge.published !== null) ? new Date(merge.published.date) : null
-  		var draftDate = (typeof merge.draft !== 'undefined' && merge.draft !== null) ? new Date(merge.draft.date) : null
+			var revisions = merged[key].revisions
+  		revisions.sort(FileParser.predicatBy('date', 1))
 
-  		if(publishedDate !== null && draftDate !== null && publishedDate >= draftDate) {
-  			merge.draft = null
-  		}
-  		var revision = {
-				fileUrl: path.join(merge.cleanFilePath.replace(/\.json/, `.${config.files.templates.extension}`)),
-  			path: merge.cleanFilePath,
-  			template: merge.template,
-  			published: merge.published,
-  			date: merge.date,
-  			draft: merge.draft
-  		}
-  		arMerged.push(revision)
+			Array.prototype.forEach.call(revisions, (revision) => {
+				
+				var status = revision.abe_meta.status
+
+				if (status === 'publish') {
+					merged[key][status] = revision
+				}else {
+					merged[key][status] = {}
+				}
+				merged[key][status].path = revision.path
+				merged[key][status].html = revision.html
+				merged[key][status].htmlPath = revision.htmlPath
+				merged[key][status].date = new Date(revision.date)
+				merged[key][status].link = revision.abe_meta.link
+			})
+
+  		merged[key].revisions = revisions
+
+			merged[key].date = revisions[0].date
+			merged[key].cleanDate = revisions[0].cleanDate
+			merged[key].duration = revisions[0].duration
+			merged[key].abe_meta = revisions[0].abe_meta
+
+  		arMerged.push(merged[key])
   	})
 
   	return arMerged

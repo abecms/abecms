@@ -6,6 +6,7 @@ import {
   ,fileUtils
   ,dateUnslug
   ,config
+  ,Manager
 } from '../'
 
 var fullAttr = '-abe-(.+?)(?=\.';
@@ -155,6 +156,50 @@ export default class FileAttr {
       }
     })
     return res
+  }
+
+  static sortByDateDesc(a, b) {
+    var dateA = new Date(a.date)
+    var dateB = new Date(b.date)
+    if(dateA < dateB) {
+      return 1
+    }else if(dateA > dateB) {
+      return -1
+    }
+    return 0
+  }
+
+  /**
+   * Filter and array of file path and return the latest version of those files
+   * @param  {Object} urls object with path to file, filename etc ...
+   * @param  {String} type (draft|waiting|valid)
+   * @return {Object} urls object filtered
+   */
+  static getVersions(docPath) {
+    var files = Manager.instance.getList()
+    var fileWithoutExtension = docPath.replace('.' + config.files.templates.extension, '')
+
+    var result = []
+    Array.prototype.forEach.call(files, (file) => {
+      if (file.path.indexOf(fileWithoutExtension) > -1) {
+        result = file.revisions
+      }
+    })
+    return result
+  }
+
+  /**
+   * Filter and array of file path and return the latest version of those files
+   * @param  {Object} urls object with path to file, filename etc ...
+   * @param  {String} type (draft|waiting|valid)
+   * @return {Object} urls object filtered
+   */
+  static getLatestVersion(docPath) {
+    var sameFiles = FileAttr.getVersions(docPath)
+    if (sameFiles.length > 0) {
+      return sameFiles[sameFiles.length - 1]
+    }
+    return null
   }
 
   /**

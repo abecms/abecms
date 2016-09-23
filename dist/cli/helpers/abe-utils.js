@@ -164,6 +164,24 @@ var Utils = function () {
     }
 
     /**
+     * Test if a string contains string key from {{#each}} block statement
+     * @param  {String}  str string to test
+     * @return {Boolean} true = this is a block content
+     */
+
+  }, {
+    key: 'dataRequest',
+    value: function dataRequest(text) {
+      var listReg = /({{abe.*type=[\'|\"]data.*}})/g;
+      var matches = [];
+      var match;
+      while (match = listReg.exec(text)) {
+        matches.push(match);
+      }
+      return matches;
+    }
+
+    /**
      * Encode / Escape && add data-abe attributs
      * @param  {String} block
      * @return {String} escaped string
@@ -294,8 +312,10 @@ var Utils = function () {
           Array.prototype.forEach.call(matches, function (match) {
             var val = match.replace('{{', '');
             val = val.replace('}}', '');
-            val = _.Sql.deep_value_array(jsonPage, val);
-            if (typeof val === 'undefined' || val === null) {
+
+            try {
+              val = eval('jsonPage.' + val);
+            } catch (e) {
               val = '';
             }
             obj.sourceString = obj.sourceString.replace(match, val);
@@ -306,164 +326,219 @@ var Utils = function () {
       return obj;
     }
   }, {
-    key: 'getDataList',
-    value: function getDataList(tplPath, text, jsonPage) {
-
+    key: 'requestList',
+    value: function requestList(obj, sourceAttr, tplPath, match, jsonPage) {
       var p = new _es6Promise.Promise(function (resolve, reject) {
-        var listReg = /({{abe.*type=[\'|\"]data.*}})/g;
-        var match;
+        _.Sql.executeQuery(tplPath, match, jsonPage).then(function (data) {
+          jsonPage[sourceAttr][obj.key] = data;
+          if (!obj.editable) {
+            if (obj.maxLength) {
+              jsonPage[obj.key] = data.slice(0, obj.maxLength);
+            } else {
+              jsonPage[obj.key] = data;
+            }
+          } else if (obj.prefill) {
+            if (obj.prefillQuantity && obj.maxLength) {
+              jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
+            } else if (obj.prefillQuantity) {
+              jsonPage[obj.key] = data.slice(0, obj.prefillQuantity);
+            } else if (obj.maxLength) {
+              jsonPage[obj.key] = data.slice(0, obj.maxLength);
+            } else {
+              jsonPage[obj.key] = data;
+            }
+          }
+
+          resolve();
+        });
+      });
+
+      return p;
+    }
+  }, {
+    key: 'valueList',
+    value: function valueList(obj, sourceAttr, tplPath, match, jsonPage) {
+      var p = new _es6Promise.Promise(function (resolve, reject) {
+        var value = _.Sql.getDataSource(match);
+
+        if (value.indexOf('{') > -1 || value.indexOf('[') > -1) {
+          try {
+            value = JSON.parse(value);
+
+            jsonPage[sourceAttr][obj.key] = value;
+          } catch (e) {
+            jsonPage[sourceAttr][obj.key] = null;
+            console.log(_cliColor2.default.red('Error ' + value + '/is not a valid JSON'), '\n' + e);
+          }
+        }
+        resolve();
+      });
+
+      return p;
+    }
+  }, {
+    key: 'urlList',
+    value: function urlList(obj, sourceAttr, tplPath, match, jsonPage) {
+      var p = new _es6Promise.Promise(function (resolve, reject) {
+        if (obj.autocomplete !== true && obj.autocomplete !== 'true') {
+          var host = obj.sourceString;
+          host = host.split('/');
+          var httpUse = _http2.default;
+          var defaultPort = 80;
+          if (host[0] === 'https:') {
+            httpUse = _https2.default;
+            defaultPort = 443;
+          }
+          host = host[2].split(':');
+
+          var pathSource = obj.sourceString.split('//');
+          if (typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
+            pathSource = pathSource[1].split('/');
+            pathSource.shift();
+            pathSource = '/' + _path2.default.join('/');
+          } else {
+            pathSource = '/';
+          }
+          var options = {
+            hostname: host[0],
+            port: typeof host[1] !== 'undefined' && host[1] !== null ? host[1] : defaultPort,
+            path: pathSource,
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Content-Length': 0
+            }
+          };
+
+          var body = '';
+
+          var localReq = httpUse.request(options, function (localRes) {
+            localRes.setEncoding('utf8');
+            localRes.on('data', function (chunk) {
+              body += chunk;
+            });
+            localRes.on('end', function () {
+              try {
+                if (typeof body === 'string') {
+                  var parsedBody = JSON.parse(body);
+                  if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
+                    jsonPage[sourceAttr][obj.key] = parsedBody;
+                  } else if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
+                    jsonPage[sourceAttr][obj.key] = [parsedBody];
+                  }
+                } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
+                  jsonPage[sourceAttr][obj.key] = body;
+                } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
+                  jsonPage[sourceAttr][obj.key] = body;
+                }
+              } catch (e) {
+                console.log(_cliColor2.default.red('Error ' + obj.sourceString + ' is not a valid JSON'), '\n' + e);
+              }
+              resolve();
+            });
+          });
+
+          localReq.on('error', function (e) {
+            console.log(e);
+          });
+
+          // write data to request body
+          localReq.write('');
+          localReq.end();
+        } else {
+          jsonPage[sourceAttr][obj.key] = obj.sourceString;
+          resolve();
+        }
+      });
+
+      return p;
+    }
+  }, {
+    key: 'fileList',
+    value: function fileList(obj, sourceAttr, tplPath, match, jsonPage) {
+      var p = new _es6Promise.Promise(function (resolve, reject) {
+        jsonPage[sourceAttr][obj.key] = _.FileParser.getJson(_path2.default.join(_.config.root, obj.sourceString));
+        resolve();
+      });
+
+      return p;
+    }
+  }, {
+    key: 'nextDataList',
+    value: function nextDataList(tplPath, text, jsonPage, match) {
+      var p = new _es6Promise.Promise(function (resolve, reject) {
+        // var t = new TimeMesure()
         var sourceAttr = _.config.source.name;
 
         if (typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
           jsonPage[sourceAttr] = {};
         }
 
-        var promises = [];
-        while (match = listReg.exec(text)) {
-          var logTime = tplPath + " > " + match[0];
-          var dateStart = new Date();
+        var obj = Utils.getAllAttributes(match, jsonPage);
+        obj = Utils.sanitizeSourceAttribute(obj, jsonPage);
 
-          var pSource = new _es6Promise.Promise(function (resolveSource, rejectSource) {
-            var obj = Utils.getAllAttributes(match[0], jsonPage);
-            obj = Utils.sanitizeSourceAttribute(obj, jsonPage);
+        var type = _.Sql.getSourceType(obj.sourceString);
 
-            var type = _.Sql.getSourceType(obj.sourceString);
-
-            switch (type) {
-              case 'request':
-                _.Sql.executeQuery(tplPath, match[0], jsonPage).then(function (data) {
-                  jsonPage[sourceAttr][obj.key] = data;
-                  if (!obj.editable) {
-                    if (obj.maxLength) {
-                      jsonPage[obj.key] = data.slice(0, obj.maxLength);
-                    } else {
-                      jsonPage[obj.key] = data;
-                    }
-                  } else if (obj.prefill) {
-                    if (obj.prefillQuantity && obj.maxLength) {
-                      jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
-                    } else if (obj.prefillQuantity) {
-                      jsonPage[obj.key] = data.slice(0, obj.prefillQuantity);
-                    } else if (obj.maxLength) {
-                      jsonPage[obj.key] = data.slice(0, obj.maxLength);
-                    } else {
-                      jsonPage[obj.key] = data;
-                    }
-                  }
-
-                  _.log.duration(type + " > " + logTime, (new Date().getTime() - dateStart.getTime()) / 1000);
-
-                  resolveSource();
-                });
-
-                break;
-              case 'value':
-                var value = _.Sql.getDataSource(match[0]);
-
-                if (value.indexOf('{') > -1 || value.indexOf('[') > -1) {
-                  try {
-                    value = JSON.parse(value);
-
-                    jsonPage[sourceAttr][obj.key] = value;
-                  } catch (e) {
-                    jsonPage[sourceAttr][obj.key] = null;
-                    console.log(_cliColor2.default.red('Error ' + value + '/is not a valid JSON'), '\n' + e);
-                  }
-                }
-                resolveSource();
-                break;
-              case 'url':
-                if (obj.autocomplete !== true && obj.autocomplete !== 'true') {
-                  var host = obj.sourceString;
-                  host = host.split('/');
-                  var httpUse = _http2.default;
-                  var defaultPort = 80;
-                  if (host[0] === 'https:') {
-                    httpUse = _https2.default;
-                    defaultPort = 443;
-                  }
-                  host = host[2].split(':');
-
-                  var pathSource = obj.sourceString.split('//');
-                  if (typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
-                    pathSource = pathSource[1].split('/');
-                    pathSource.shift();
-                    pathSource = '/' + _path2.default.join('/');
-                  } else {
-                    pathSource = '/';
-                  }
-                  var options = {
-                    hostname: host[0],
-                    port: typeof host[1] !== 'undefined' && host[1] !== null ? host[1] : defaultPort,
-                    path: pathSource,
-                    method: 'GET',
-                    headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded',
-                      'Content-Length': 0
-                    }
-                  };
-
-                  var body = '';
-
-                  var localReq = httpUse.request(options, function (localRes) {
-                    localRes.setEncoding('utf8');
-                    localRes.on('data', function (chunk) {
-                      body += chunk;
-                    });
-                    localRes.on('end', function () {
-                      try {
-                        if (typeof body === 'string') {
-                          var parsedBody = JSON.parse(body);
-                          if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
-                            jsonPage[sourceAttr][obj.key] = parsedBody;
-                          } else if ((typeof parsedBody === 'undefined' ? 'undefined' : _typeof(parsedBody)) === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
-                            jsonPage[sourceAttr][obj.key] = [parsedBody];
-                          }
-                        } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
-                          jsonPage[sourceAttr][obj.key] = body;
-                        } else if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
-                          jsonPage[sourceAttr][obj.key] = body;
-                        }
-                      } catch (e) {
-                        console.log(_cliColor2.default.red('Error ' + obj.sourceString + ' is not a valid JSON'), '\n' + e);
-                      }
-                      resolveSource();
-                    });
-                  });
-
-                  localReq.on('error', function (e) {
-                    console.log(e);
-                  });
-
-                  // write data to request body
-                  localReq.write('');
-                  localReq.end();
-                } else {
-                  jsonPage[sourceAttr][obj.key] = obj.sourceString;
-                  resolveSource();
-                }
-
-                break;
-              case 'file':
-                jsonPage[sourceAttr][obj.key] = _.FileParser.getJson(_path2.default.join(_.config.root, obj.sourceString));
-                resolveSource();
-                break;
-              default:
-                resolveSource();
-                break;
-            }
-          });
-          promises.push(pSource);
+        switch (type) {
+          case 'request':
+            Utils.requestList(obj, sourceAttr, tplPath, match, jsonPage).then(function () {
+              // t.duration(match)
+              resolve();
+            }).catch(function (e) {
+              console.log('[ERROR] abe-utils.js requestList', e);
+            });
+            break;
+          case 'value':
+            Utils.valueList(obj, sourceAttr, tplPath, match, jsonPage).then(function () {
+              resolve();
+            }).catch(function (e) {
+              console.log('[ERROR] abe-utils.js valueList', e);
+            });
+            break;
+          case 'url':
+            Utils.urlList(obj, sourceAttr, tplPath, match, jsonPage).then(function () {
+              resolve();
+            }).catch(function (e) {
+              console.log('[ERROR] abe-utils.js urlList', e);
+            });
+            break;
+          case 'file':
+            Utils.fileList(obj, sourceAttr, tplPath, match, jsonPage).then(function () {
+              resolve();
+            }).catch(function (e) {
+              console.log('[ERROR] abe-utils.js fileList', e);
+            });
+            break;
+          default:
+            resolve();
+            break;
         }
+      });
+
+      return p;
+    }
+  }, {
+    key: 'getDataList',
+    value: function getDataList(tplPath, text, jsonPage) {
+      var p = new _es6Promise.Promise(function (resolve, reject) {
+        // var t = new TimeMesure('getDataList')
+
+        var promises = [];
+        var util = new Utils();
+        var matches = util.dataRequest(text);
+        Array.prototype.forEach.call(matches, function (match) {
+          promises.push(Utils.nextDataList(tplPath, text, jsonPage, match[0]));
+        });
 
         _es6Promise.Promise.all(promises).then(function () {
+          // t.duration()
           resolve();
         }).catch(function (e) {
-          console.error('getDataList', e);
+          console.error('abe-utils.js getDataList', e);
         });
         // return filesRequest
       }).catch(function (e) {
-        console.error('getDataList', e);
+        console.error('abe-utils.js getDataList', e);
       });
 
       return p;

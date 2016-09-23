@@ -90,6 +90,7 @@ function publishNext(published, tt, cb, i = 0) {
   }
 }
 
+var ar_url = []
 var dateStart = new Date()
 // var logsPub = ""
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
@@ -106,59 +107,47 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var log = require('../../cli').log
     var Manager = require('../../cli').Manager
 
-    Manager.instance;
+    Manager.instance.init()
+      .then(() => {
+        var type = null
+        var folder = null
+        if(typeof pConfig.FILEPATH !== 'undefined' && pConfig.FILEPATH !== null) {
+          console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
+          pConfig.FILEPATH = path.join(config.root, config.data.url, pConfig.FILEPATH.replace(config.root))
 
-    var type = null
-    var folder = null
-    if(typeof pConfig.FILEPATH !== 'undefined' && pConfig.FILEPATH !== null) {
-      // log.write('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
-      console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
-      pConfig.FILEPATH = path.join(config.root, config.data.url, pConfig.FILEPATH.replace(config.root))
+          var fileJson = FileParser.getJson(
+            pConfig.FILEPATH.replace(new RegExp("\\." + config.files.templates.extension), '.json')
+          )
 
-      var fileJson = FileParser.getJson(
-        pConfig.FILEPATH.replace(new RegExp("\\." + config.files.templates.extension), '.json')
-      )
-
-      if(typeof fileJson !== 'undefined' && fileJson !== null) {
-        if(typeof fileJson.abe_meta !== 'undefined' && fileJson.abe_meta !== null) {
-          type = fileJson.abe_meta.template
-          folder = fileUtils.removeLast(fileJson.abe_meta.link)
+          if(typeof fileJson !== 'undefined' && fileJson !== null) {
+            if(typeof fileJson.abe_meta !== 'undefined' && fileJson.abe_meta !== null) {
+              type = fileJson.abe_meta.template
+              folder = fileUtils.removeLast(fileJson.abe_meta.link)
+            }
+          }
         }
-      }
-    }
 
-    var site = folderUtils.folderInfos(config.root)
-    var allPublished = []
+        var site = folderUtils.folderInfos(config.root)
+        let publish = config.publish.url
+        var published = FileParser.getFilesByType(path.join(site.path, publish, pConfig.ABE_PATH))
+        published = FileParser.getMetas(published, 'draft')
+        var i = 0
 
-    let publish = config.publish.url
-    var published = FileParser.getFilesByType(path.join(site.path, publish, pConfig.ABE_PATH))
-    published = FileParser.getMetas(published, 'draft')
-    var ar_url = []
-    var promises = []
-    var i = 0
-
-    console.log('Found ' + clc.green(published.length) + ' to republish')
-    dateStart = new Date()
-    publishNext(published, published.length, function (i) {
-      console.log('total ' + clc.green(i) + ' files')
-
-      // Promise.all(promises)
-      //   .then(() => {
+        console.log('Found ' + clc.green(published.length) + ' to republish')
+        dateStart = new Date()
+        publishNext(published, published.length, function (i) {
+          console.log('total ' + clc.green(i) + ' files')
           dateStart = (Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100)) / 100
-          // logsPub += 'publish process finished in ' + dateStart + 'sec'
           console.log('publish process finished in ' + clc.green(dateStart) + 'm')
-          // log.write('publish-all', logsPub)
-          // console.log('publish-all', logsPub)
           process.exit(0)
-        // }).catch(function(e) {
-        //   // log.write('publish-all', e)
-        //   console.log('publish-all', e)
-        //   console.log(e)
-        // })
-    })
+        })
+      })
+      .catch((e) => {
+        // log.write('publish-all', e)
+        console.log('publish-all', e)
+      })
+
   } catch(e) {
-    // statements
-    console.log(e);
     // log.write('publish-all', e)
     console.log('publish-all', e)
   }

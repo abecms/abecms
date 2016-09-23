@@ -87,11 +87,16 @@ export default class Sql {
       while (fromMatch = matchVariable.exec(toReplace)) {
         if(typeof fromMatch !== 'undefined' && fromMatch !== null
           && typeof fromMatch[1] !== 'undefined' && fromMatch[1] !== null) {
-          var value = Sql.deep_value_array(jsonPage, fromMatch[1])
-          if(typeof value !== 'undefined' && value !== null) {
-            toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
-          }else {
-            toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
+
+          try {
+            var value = eval('jsonPage.' + fromMatch[1])
+            if(typeof value !== 'undefined' && value !== null) {
+              toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
+            }else {
+              toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
+            }
+          }catch(e) {
+
           }
         }
       }
@@ -321,25 +326,18 @@ export default class Sql {
 
     var fromDirectory = Sql.getFromDirectory(from, pathFromClause)
 
+    var dateStart = new Date()
+
     var list = Manager.instance.getList()
-    var files_array = list[0].files.filter((element, index, arr) => {
-      if(typeof element.published !== 'undefined' && element.published !== null) {
-        if (element.published.path.indexOf(fromDirectory) > -1) {
+    var files_array = list.filter((element, index, arr) => {
+      if(element.publish) {
+        if (element.path.indexOf(fromDirectory) > -1) {
           return true
         }
       }
       return false
     })
     return files_array
-
-    // if(folderUtils.isFolder(fromDirectory)) {
-    //   // we'll get only published files which don't contain "-abe-"
-    //   files = FileParser.getFiles(fromDirectory, true, recursive, fileRegex, true)
-    // }
-    // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    // console.log('files', files)
-
-    // return files
   }
 
   static execQuery(pathQuery, match, jsonPage) {
@@ -389,64 +387,13 @@ export default class Sql {
     return 'other'
   }
 
-  static deep_value(obj, pathDeep) {
-
-    if(pathDeep.indexOf('.') === -1) {
-      return (typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null) ? obj[pathDeep] : null
-    }
-
-    var pathSplit = pathDeep.split('.')
-    var res = JSON.parse(JSON.stringify(obj))
-    for (var i = 0; i < pathSplit.length; i++) {
-      if(typeof res[pathSplit[i]] !== 'undefined' && res[pathSplit[i]] !== null) {
-        res = res[pathSplit[i]]
-      }else {
-        return null
-      }
-    }
-
-    return res
-  }
-
-  static deep_value_array(obj, pathDeep) {
-
-    if(pathDeep.indexOf('.') === -1) {
-      return (typeof obj[pathDeep] !== 'undefined' && obj[pathDeep] !== null) ? obj[pathDeep] : null
-    }
-
-    var pathSplit = pathDeep.split('.')
-    var res = JSON.parse(JSON.stringify(obj))
-
-    while(pathSplit.length > 0) {
-      
-      if(typeof res[pathSplit[0]] !== 'undefined' && res[pathSplit[0]] !== null) {
-        if(typeof res[pathSplit[0]] === 'object' && Object.prototype.toString.call(res[pathSplit[0]]) === '[object Array]') {
-          var resArray = []
-
-          Array.prototype.forEach.call(res[pathSplit[0]], (item) => {
-            resArray.push(Sql.deep_value_array(item, pathSplit.join('.').replace(`${pathSplit[0]}.`, '')))
-          })
-          res = resArray
-          pathSplit.shift()
-        }else {
-          res = res[pathSplit[0]]
-        }
-      }else {
-        return null
-      }
-      pathSplit.shift()
-    }
-
-    return res
-  }
-
   static executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
     var res = []
     var limit = 0
 
     for(let file of files) {
       if(limit < maxLimit || maxLimit === -1) {
-        var doc = Sql.executeWhereClauseToFile(file.published, wheres, jsonPage)
+        var doc = Sql.executeWhereClauseOnDocument(file.publish, wheres, jsonPage)
 
         if(doc) {
           var json = JSON.parse(JSON.stringify(doc))
@@ -612,35 +559,39 @@ export default class Sql {
     return shouldAdd
   }
 
-  static executeWhereClauseToFile(file, wheres, jsonPage) {
-    var json = file
-    // if (fileUtils.isFile(file.path)) {
-    //   json = fse.readJsonSync(file.path)
-    // }
-    // 
-    var shouldAdd = json
+  static executeWhereClauseOnDocument(jsonDoc, wheres, jsonOriginalDoc) {
+    var shouldAdd = jsonDoc
 
     if(typeof wheres !== 'undefined' && wheres !== null) {
       let meta = config.meta.name
-      if(typeof json[meta] !== 'undefined' && json[meta] !== null) {
+      if(typeof jsonDoc[meta] !== 'undefined' && jsonDoc[meta] !== null) {
         Array.prototype.forEach.call(wheres, (where) => {
           var value
           var compare
 
           if(where.left === 'template' || where.left === 'abe_meta.template') {
-            value = FileParser.getTemplate(json[meta].template)
+            value = FileParser.getTemplate(jsonDoc[meta].template)
           }else {
-            value = Sql.deep_value_array(json, where.left)
+            try {
+              value = eval('jsonDoc.' + where.left)
+            }catch(e) {
+              // console.log('e', e)
+            }
           }
           compare = where.right
 
           var matchVariable = /^{{(.*)}}$/.exec(compare)
           if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
-            var shouldCompare = Sql.deep_value_array(jsonPage, matchVariable[1])
-            if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
-              compare = shouldCompare
-            }else {
+            try {
+              var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
+              if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+                compare = shouldCompare
+              }else {
+                shouldAdd = false
+              }
+            }catch(e) {
               shouldAdd = false
+              // console.log('e', e)
             }
           }
 

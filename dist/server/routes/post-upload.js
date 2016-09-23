@@ -47,7 +47,6 @@ var route = function route(req, res, next) {
     };
 
     file.on('limit', function () {
-      req.unpipe(req.busboy);
       returnErr('file to big');
     });
 
