@@ -28,12 +28,10 @@
           <th align="center">actions</th>
         </tr>
       </thead>
-    {{#each manager.home.files}}
       <tbody>
-        {{#each this.files}}
+        {{#each manager.home.files}}
           {{listPage this @index @root.text}}
         {{/each}}
-      {{/each}}
       </tbody>
     </table>
   <br />

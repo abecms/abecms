@@ -39,8 +39,7 @@ var Manager = function () {
 
     _handlebars2.default.templates = _handlebars2.default.templates || {};
     this.loadHbsTemplates();
-
-    this.updateList();
+    this._init();
   }
 
   _createClass(Manager, [{
@@ -50,10 +49,35 @@ var Manager = function () {
       return this._list;
     }
   }, {
+    key: 'setList',
+    value: function setList(list) {
+
+      this._list = list;
+    }
+  }, {
+    key: '_init',
+    value: function _init() {
+      var _this = this;
+
+      this._loadTime = new _cli.TimeMesure('Loading Manager');
+      var pathTemplate = _path2.default.join(_cli.config.root, _cli.config.templates.url);
+      (0, _cli.getSelectTemplateKeys)(pathTemplate).then(function (whereKeys) {
+        _this._whereKeys = whereKeys;
+        _this.updateList();
+      }).catch(function (e) {
+        console.log('Manager._init', e);
+      });
+    }
+  }, {
     key: 'updateList',
     value: function updateList() {
 
-      this._list = _cli.FileParser.getAllFiles();
+      this._list = _cli.FileParser.getAllFilesWithKeys(this._whereKeys);
+      this._loadTime.duration();
+      // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+      // console.log('this._list[0]', this._list[0])
+
+      // this._list = FileParser.getAllFiles(useKeys)
       this._list.sort(_cli.FileParser.predicatBy('date'));
 
       return this;

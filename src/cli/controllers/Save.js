@@ -65,12 +65,14 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
   url = cleanSlug(url)
 
   var p = new Promise((resolve, reject) => {
+    var isRejectedDoc = false
     if(type === 'reject'){
+      isRejectedDoc = true
       url = Hooks.instance.trigger('beforeReject', url)
       type = 'draft'
       realType = 'draft'
       url = Hooks.instance.trigger('afterReject', url)
-      resolve({reject: fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')})
+      // resolve({reject: fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')})
     }
     var tplUrl = FileParser.getFileDataFromUrl(url)
     type = type || FileParser.getType(url)
@@ -154,6 +156,9 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           text = Util.removeDataList(text)
 
           var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text, type)
+          if (isRejectedDoc) {
+            res.reject = fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
+          }
           
           obj = Hooks.instance.trigger('afterSave', obj)
           
@@ -217,6 +222,7 @@ export function saveJson(url, json) {
     space: 2,
     encoding: 'utf-8'
   })
+  return true
 }
 
 export function saveHtml(url, html) {

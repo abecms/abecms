@@ -71,8 +71,6 @@ var FileParser = function () {
       var current = arguments.length <= 6 || arguments[6] === undefined ? 0 : arguments[6];
       var inversePattern = arguments.length <= 7 || arguments[7] === undefined ? false : arguments[7];
 
-      var website = _.config.root.split('/');
-      website = website[website.length - 1];
       var arr = [];
       var level = _fsExtra2.default.readdirSync(dirName);
       var fileCurrentLevel = [];
@@ -110,7 +108,6 @@ var FileParser = function () {
             var item = {
               'name': level[i],
               'path': path,
-              'website': website,
               'cleanPathName': _.fileAttr.delete(path),
               'cleanPath': path.replace(base + '/', ''),
               date: date,
@@ -134,13 +131,13 @@ var FileParser = function () {
         if (!fileCurrentLevel.includes(level[i]) && match) {
           if (isFolder) {
             if (!flatten) {
-              var index = arr.push({ 'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder' }) - 1;
+              var index = arr.push({ 'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder' }) - 1;
               if (current < max) {
                 arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern);
               }
             } else {
               if (type === 'folders' || type === null) {
-                arr.push({ 'name': level[i], 'path': path, 'website': website, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder' });
+                arr.push({ 'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder' });
               }
               if (current < max) {
                 Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern), function (files) {
@@ -442,38 +439,36 @@ var FileParser = function () {
       };
     }
   }, {
-    key: 'getAllFiles',
-    value: function getAllFiles() {
+    key: 'getAllFilesWithKeys',
+    value: function getAllFilesWithKeys(withKeys) {
       var site = _.folderUtils.folderInfos(_.config.root);
-      var allDraft = [];
-      var allPublished = [];
 
-      var draft = _.config.draft.url;
-      var publish = _.config.publish.url;
+      var files = FileParser.getFiles(_path2.default.join(_.config.root, _.config.data.url), true, 99, /\.json/);
+      var filesArr = [];
 
-      var drafted = FileParser.getFilesByType(_path2.default.join(site.path, draft), 'd');
-      var published = FileParser.getFilesByType(_path2.default.join(site.path, publish));
+      var i = 0;
 
-      drafted = _.Hooks.instance.trigger('beforeGetAllFilesDraft', drafted);
-      published = _.Hooks.instance.trigger('beforeGetAllFilesPublished', published);
+      files.forEach(function (file) {
+        // var t = new TimeMesure('add files')
+        var cleanFile = file;
+        var json = FileParser.getJson(file.path);
 
-      drafted = FileParser.getMetas(drafted, 'draft');
-      published = FileParser.getMetas(published, 'draft');
-      var truePublished = [];
-
-      published.forEach(function (pub) {
-
-        var json = FileParser.getJson(FileParser.changePathEnv(pub.path, _.config.data.url).replace(new RegExp("\\." + _.config.files.templates.extension), '.json'));
-
-        if (typeof json[_.config.meta.name] !== 'undefined' && json[_.config.meta.name] !== null && typeof json[_.config.meta.name][_.config.draft.url] !== 'undefined' && json[_.config.meta.name][_.config.draft.url] !== null) {
-          pub.filePath = json[_.config.meta.name][_.config.draft.url].latest.abeUrl;
-          truePublished.push(pub);
+        if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          cleanFile.abe_meta = json.abe_meta;
         }
-      });
-      var merged = _.fileUtils.mergeFiles(drafted, truePublished);
 
-      site.files = _.Hooks.instance.trigger('afterGetAllFiles', merged);
-      return [site];
+        Array.prototype.forEach.call(withKeys, function (key) {
+          var keyFirst = key.split('.')[0];
+          cleanFile[keyFirst] = json[keyFirst];
+        });
+        filesArr.push(cleanFile);
+        // t.duration()
+      });
+
+      var merged = _.fileUtils.getFilesMerged(filesArr);
+
+      _.Hooks.instance.trigger('afterGetAllFiles', merged);
+      return merged;
     }
 
     // TODO : change the signature of this method to removeFile(file)

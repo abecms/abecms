@@ -5,6 +5,7 @@ import {
   FileParser,
   fileAttr,
   Util,
+  Manager,
   cleanSlug,
   getTemplate,
   config,
@@ -17,42 +18,34 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
   var p = new Promise((resolve, reject) => {
     Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, newPath, name, req, isUpdate)
 
+    var json = {}
+    var revisions = []
     if(typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
-      var url = path.join(config.root, config.draft.url, oldFilePath)
-      var revisions = []
+      var files = Manager.instance.getList()
+      var fileWithoutExtension = oldFilePath.replace('.' + config.files.templates.extension, '')
 
-      if(!fileAttr.test(url)){
-        var folderFilePath = url.split('/')
-        folderFilePath.pop()
-        folderFilePath = fileUtils.pathWithRoot(folderFilePath.join('/'))
-
-        var files = FileParser.getFiles(folderFilePath, true, 2)
-        revisions = fileAttr.getFilesRevision(files, url)
-        var latest = fileAttr.filterLatestVersion(revisions, 'draft')
-        if(latest.length) {
-          url = latest[0].path
+      var doc = null
+      Array.prototype.forEach.call(files, (file) => {
+        if (file.path.indexOf(fileWithoutExtension) > -1) {
+          doc = file
         }
-      }else if (isUpdate) {
-        files = FileParser.getFiles(folderFilePath, true, 2)
-        revisions = fileAttr.getFilesRevision(files, url)
-      }
+      })
 
+      if(typeof doc.revisions !== 'undefined' && doc.revisions !== null) {
+        revisions = doc.revisions
 
-      var tplUrl = FileParser.getFileDataFromUrl(url)
-      if (!fileUtils.isFile(tplUrl.json.path)) {
-      }else {
+        if(typeof revisions !== 'undefined' && revisions !== null
+          && typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
+          json = FileParser.getJson(revisions[0].path)
+        }
       }
-      var json = FileParser.getJson(tplUrl.json.path)
+      
       delete json.abe_meta
     }
 
     if (isUpdate) {
       Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
-      Array.prototype.forEach.call(revisions, (revision) => {
-        if(typeof revision.path !== 'undefined' && revision.path !== null) {
-          FileParser.deleteFile(revision.path)
-        }
-      })
+      FileParser.deleteFile(oldFilePath)
     }
     Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate)
 
@@ -63,7 +56,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
     () => {
       reject()
     }).catch(function(e) {
-      console.error(e)
+      console.error('[ERROR] abe-duplicate.js', e)
       reject()
     })
   })

@@ -16,32 +16,49 @@ import {
   Manager
 } from '../../cli'
 
+var traverseFileSystem = function (currentPath, arr) {
+  var res = []
+  var files = fse.readdirSync(currentPath);
+  for (var i in files) {
+    var currentFile = currentPath + '/' + files[i]
+    var stats = fse.statSync(currentFile)
+    if (stats.isFile()) {
+      if (currentFile.indexOf(config.files.templates.extension) > -1) {
+        res.push(currentFile)
+      }
+    }
+    else if (stats.isDirectory()) {
+      res = res.concat(traverseFileSystem(currentFile))
+    }
+  }
+  return res
+};
+
 var findTemplates = function(templatesPath) {
   var p = new Promise((resolve, reject) => {
-    execFile('find', [ templatesPath ], (err, stdout, stderr) => {
-        if (err) reject(err)
-
-        var file_list = stdout.split('\n')
-        var file_list_with_extention = []
-        Array.prototype.forEach.call(file_list, (file) => {
-          if (file.indexOf(config.files.templates.extension) > -1) {
-            file_list_with_extention.push(file)
-          }
-        })
-        
-        resolve(file_list_with_extention)
-      });
+    let templatesList = traverseFileSystem(templatesPath)
+    resolve(templatesList)
   })
 
   return p
 }
 
-var findRequestKeys = function(file_list_with_extention) {
+/**
+ * Get columns and where.left ids of a select statement
+ *
+ * select title, image from ../ where template=""
+ *
+ * return [title, image, template]
+ * 
+ * @param  {Array} templatesList ["article.html", "other.html"]
+ * @return {Promise}
+ */
+var findRequestColumns = function(templatesList) {
   var whereKeysCheck = {}
   var whereKeys = []
   var p = new Promise((resolve, reject) => {
     let util = new Util()
-    Array.prototype.forEach.call(file_list_with_extention, (file) => {
+    Array.prototype.forEach.call(templatesList, (file) => {
       var template = fse.readFileSync(file, 'utf8')
       var matches = util.dataRequest(template)
 
@@ -78,15 +95,15 @@ var findRequestKeys = function(file_list_with_extention) {
 var getSelectTemplateKeys = function(templatesPath) {
   var p = new Promise((resolve, reject) => {
     findTemplates(templatesPath)
-      .then((file_list_with_extention) => {
+      .then((templatesList) => {
 
-        findRequestKeys(file_list_with_extention)
+        findRequestColumns(templatesList)
           .then((whereKeys) => {
               
               resolve(whereKeys)
           },
           () => {
-            console.log('findRequestKeys reject')
+            console.log('findRequestColumns reject')
             reject()
           })
           .catch((e) => {

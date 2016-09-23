@@ -5,19 +5,20 @@ import {Hooks} from '../../'
 
 export default function listPage(file, index, text) {
   var res = '';
+
   file = Hooks.instance.trigger('beforeListPage', file, index, text)
 
   res += `<tr>`
   res += `<td>${math(index, '+', 1)}</td>
         <td>
-          <a href="/abe/${file.template}?filePath=${file.fileUrl}" class="file-path">
-            ${file.fileUrl}
+          <a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="file-path">
+            ${file.abe_meta.link}
           </a>
         </td>`
   
-  if(file.template){
+  if(file.abe_meta.template){
     res += `<td align="center">
-              ${file.template}
+              ${file.abe_meta.template}
             </td>`
   }else {
     res += `<td align="center"></td>`
@@ -36,17 +37,18 @@ export default function listPage(file, index, text) {
   var workflow = ''
 
   workflow += `<td align="center" class="draft">`
-  if((typeof file.published !== undefined && file.published !== null && !file.published) || (file.published && file.draft && file.published.date < file.draft.date)) {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.fileUrl}" class="label label-default label-draft">draft</a>`
+  if((typeof file.publish === "undefined" || file.publish === null)
+    || (file.publish && file.draft && file.publish.date < file.draft.date)) {
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="label label-default label-draft">draft</a>`
   }else {
-    workflow += `<a href="/abe/${file.template}?filePath=${file.fileUrl}" class="hidden label label-default label-draft"></a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="hidden label label-default label-draft">draft</a>`
   }
 
   workflow += `</td>`
   workflow += `<td align="center" class="publish">`
 
-  if (file.published){
-    workflow += `<a href="/abe/${file.template}?filePath=${file.published.filePath}" class="checkmark label-published">&#10004;</a>`
+  if (file.publish){
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="checkmark label-published">&#10004;</a>`
   }
   workflow += `</td>`
 
@@ -55,20 +57,20 @@ export default function listPage(file, index, text) {
 
   res += `<td align="center">
             <div class="row icons-action">`
-  
-  if (this.published){
-    res += `<a href="/unpublish/?filePath=${file.fileUrl}"
+
+  if(typeof file.publish !== 'undefined' && file.publish !== null) {
+    res += `<a href="/unpublish/?filePath=${file.abe_meta.link}"
                title="${text.unpublish}"
-               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.fileUrl}">
+               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}">
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
       
-  res += `<a href="/delete/?filePath=${this.path}"
+  res += `<a href="/delete/?filePath=${file.abe_meta.link}"
              title="${text.delete}"
              class="icon"
              data-delete="true"
-             data-text="${text.confirmDelete} ${file.fileUrl}">
+             data-text="${text.confirmDelete} ${file.abe_meta.link}">
             <span class="glyphicon glyphicon-trash"></span>
           </a>`
 
