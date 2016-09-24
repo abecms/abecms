@@ -93,7 +93,6 @@ function save(url, tplPath) {
       type = 'draft';
       realType = 'draft';
       url = _.Hooks.instance.trigger('afterReject', url);
-      // resolve({reject: fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')})
     }
     var tplUrl = _.FileParser.getFileDataFromUrl(url);
     type = type || _.FileParser.getType(url);
@@ -173,8 +172,6 @@ function save(url, tplPath) {
 
       obj.json.content[meta].complete = checkRequired(text, obj.json.content);
 
-      text = _.Util.removeDataList(text);
-
       var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text, type);
       if (isRejectedDoc) {
         res.reject = _.fileAttr.delete(url).replace(_path2.default.join(_.config.root, _.config.draft.url), '');
@@ -206,7 +203,7 @@ function splitArray(ar, chunkSize) {
   }));
 }
 
-function saveJsonAndHtml(templateId, obj, html, type) {
+function saveJsonAndHtml(templateId, obj, html) {
   var page = new _.Page(templateId, html, obj.json.content, true);
 
   saveHtml(obj.html.path, page.html);
