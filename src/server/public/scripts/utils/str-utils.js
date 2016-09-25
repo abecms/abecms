@@ -1,12 +1,12 @@
 
 export default class StrUtils {
 
-    constructor() {}
+  constructor() {}
 
-    static escapeRegExp(str) {
-        var specials = [
+  static escapeRegExp(str) {
+    var specials = [
       // order matters for these
-                '-'
+        '-'
       , '['
       , ']'
       // order doesn't matter for any of these
@@ -23,12 +23,12 @@ export default class StrUtils {
       , '^'
       , '$'
       , '|'
-            ]
+      ]
 
     // I choose to escape every character with '\'
     // even though only some strictly require it when inside of []
     , regex = RegExp('[' + specials.join('\\') + ']', 'g')
-        return str.replace(regex, '\\$&')
-    }
+    return str.replace(regex, '\\$&')
+  }
 
 }

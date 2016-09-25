@@ -17,8 +17,8 @@ var pathToLocale = path.join(__dirname, '../' + config.localeFolder, config.intl
 var files = fse.readdirSync(pathToLocale)
 
 Array.prototype.forEach.call(files, (file) => {
-    var json = fse.readJsonSync(pathToLocale + '/' + file)
-    result = extend(true, result, json)
+  var json = fse.readJsonSync(pathToLocale + '/' + file)
+  result = extend(true, result, json)
 })
 
 export default result
