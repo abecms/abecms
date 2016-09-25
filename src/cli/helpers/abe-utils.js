@@ -541,22 +541,22 @@ export default class Utils {
     str = Hooks.instance.trigger('beforeAbeAttributes', str, json)
 
     var defaultValues = {
-      type: 'text'
-        ,prefill: false
-        ,prefillQuantity: null
-        ,key: ''
-        ,desc: ''
-        ,maxLength: null
-        ,tab: 'default'
-        ,value: ''
-        ,source: null
-        ,autocomplete: null
-        ,display: null
-        ,reload: false
-        ,order: 0
-        ,required: false
-        ,editable: true
-        ,visible: true
+      type: 'text',
+      prefill: false,
+      prefillQuantity: null,
+      key: '',
+      desc: '',
+      maxLength: null,
+      tab: 'default',
+      value: '',
+      source: null,
+      autocomplete: null,
+      display: null,
+      reload: false,
+      order: 0,
+      required: false,
+      editable: true,
+      visible: true
     }
 
     var source = getAttr(str, 'source')
