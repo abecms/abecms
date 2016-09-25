@@ -34,9 +34,9 @@ describe('Request', function() {
     var Sql = require('../src/cli').Sql;
     var Manager = require('../src/cli').Manager;
 
-    var list = Manager.instance.setList([
-      {"path": "/Users/nicolas/Documents/programmation/websites/sofitel/data/test.json", "published": true},
-      {"path": "/Users/nicolas/Documents/programmation/websites/sofitel/data/truc/test.json", "published": true}
+    Manager.instance.setList([
+      {"path": "data/test.json", "publish": true},
+      {"path": "data/truc/test.json", "publish": true}
     ])
 
     var from = ["/truc"]
@@ -53,8 +53,8 @@ describe('Request', function() {
     var Sql = require('../src/cli').Sql;
 
     var files = [
-      {"abe_meta": {"template": "test"}, "published": true},
-      {"abe_meta": {"template": "truc"}, "published": true}
+      {"abe_meta": {"template": "test"}, "publish": true},
+      {"abe_meta": {"template": "truc"}, "publish": true}
     ];
     var where = [{ left: 'template', right: 'test', compare: '=', operator: '' }]
 
