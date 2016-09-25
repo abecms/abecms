@@ -8,30 +8,30 @@ import {Hooks} from '../../'
  * @return {String|html} input / input group ...
  */
 export default function printInput () {
-  var params = arguments[0];
+    var params = arguments[0]
 
-  params = Hooks.instance.trigger('beforeEditorInput', params)
-  var desc = params.desc + ((params.required) ? ' *' : '')
+    params = Hooks.instance.trigger('beforeEditorInput', params)
+    var desc = params.desc + ((params.required) ? ' *' : '')
 
-  var res = `<div class="form-group">
+    var res = `<div class="form-group">
               <label class="control-label" for="${params.key}" 
                       ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + params.key + '"' : ''} >
                 ${desc}
               </label>`,
-      disabled = ''
+        disabled = ''
 
-  if(typeof params.placeholder === 'undefined' || params.placeholder === null || params.placeholder === 'undefined') {
-    params.placeholder = ''
-  }
+    if(typeof params.placeholder === 'undefined' || params.placeholder === null || params.placeholder === 'undefined') {
+        params.placeholder = ''
+    }
 
-  if(typeof params.value === 'undefined' || params.value === null) {
-    params.value = ''
-  }
+    if(typeof params.value === 'undefined' || params.value === null) {
+        params.value = ''
+    }
 
-  if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
+    if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
-  var inputClass = 'form-control form-abe'
-  var commonParams = `id="${params.key}"
+    var inputClass = 'form-control form-abe'
+    var commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     value="${params.value}"
                     maxlength="${params.maxLength}"
@@ -43,8 +43,8 @@ export default function printInput () {
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"`
 
-  if(typeof params.source !== 'undefined' && params.source !== null) {
-    commonParams = `id="${params.key}"
+    if(typeof params.source !== 'undefined' && params.source !== null) {
+        commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     data-maxlength="${params.maxLength}"
                     reload="${params.reload}"
@@ -55,50 +55,50 @@ export default function printInput () {
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"`
 
-    var multiple = ''
-    var disabled = ''
-    if(typeof params.maxLength === 'undefined' || params.maxLength === null || params.maxLength === ''
+        var multiple = ''
+        var disabled = ''
+        if(typeof params.maxLength === 'undefined' || params.maxLength === null || params.maxLength === ''
       || (params.maxLength > 1 && params.source.length > 0)) {
-      multiple = 'multiple'
-    }
-    if(params.source.length <= 0) {
-      disabled = 'disabled'
-    }
+            multiple = 'multiple'
+        }
+        if(params.source.length <= 0) {
+            disabled = 'disabled'
+        }
 
-    var lastValues
-    if(typeof params.autocomplete !== 'undefined' && params.autocomplete !== null
+        var lastValues
+        if(typeof params.autocomplete !== 'undefined' && params.autocomplete !== null
        && (params.autocomplete === 'true' || params.autocomplete === 'true')) {
-      if(params.source.indexOf('http') === 0) {
-        lastValues = params.source
-      }else {
-        lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
-      }
-      res += `<div class="autocomplete-result-wrapper">`
-      Array.prototype.forEach.call(params.value, (val) => {
-        res += sourceAutocomplete(val, params)
-      })
-      res += `</div>`
-      res += `<input value="" autocomplete="off" data-value='${lastValues}' type="text" ${disabled} ${commonParams} class="${inputClass}" />`
-    }else {
-      lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
-      res += `<select ${multiple} ${disabled} ${commonParams} class="${inputClass}"
+            if(params.source.indexOf('http') === 0) {
+                lastValues = params.source
+            }else {
+                lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
+            }
+            res += '<div class="autocomplete-result-wrapper">'
+            Array.prototype.forEach.call(params.value, (val) => {
+                res += sourceAutocomplete(val, params)
+            })
+            res += '</div>'
+            res += `<input value="" autocomplete="off" data-value='${lastValues}' type="text" ${disabled} ${commonParams} class="${inputClass}" />`
+        }else {
+            lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
+            res += `<select ${multiple} ${disabled} ${commonParams} class="${inputClass}"
                         last-values='${lastValues}'>
               <option value=''></option>`
 
-      if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
-        Array.prototype.forEach.call(params.source, (val) => {
-          res += sourceOption(val, params)
-        })
+            if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
+                Array.prototype.forEach.call(params.source, (val) => {
+                    res += sourceOption(val, params)
+                })
 
-      }else {
-        res += sourceOption(params.source, params)
-      }
+            }else {
+                res += sourceOption(params.source, params)
+            }
 
-      res += `</select>`
+            res += '</select>'
 
-    }
-  }else if (params.type.indexOf("rich") >= 0){
-    commonParams = `id="${params.key}"
+        }
+    }else if (params.type.indexOf('rich') >= 0){
+        commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     maxlength="${params.maxLength}"
                     reload="${params.reload}"
@@ -109,7 +109,7 @@ export default function printInput () {
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"`
                     
-    res += `<div class="wysiwyg-container rich">
+        res += `<div class="wysiwyg-container rich">
               <div class="wysiwyg-toolbar wysiwyg-toolbar-top">
                 <a class="wysiwyg-toolbar-icon" href="#" title="Bold (Ctrl+B)" hotkey="b" data-action="bold" data-param="">
                   <span class="glyphicon glyphicon-bold"></span>
@@ -167,25 +167,25 @@ export default function printInput () {
                         ${commonParams}
                         rows="4">${params.value}</textarea>
             </div>`
-  }
-  else if (params.type.indexOf("file") >= 0){
-    res += `<input class="form-control" ${commonParams} name="${params.key}" type="file" />
+    }
+    else if (params.type.indexOf('file') >= 0){
+        res += `<input class="form-control" ${commonParams} name="${params.key}" type="file" />
             <span class="percent"></span>
             <input type="text" ${commonParams} class="${inputClass} hidden" />`
-  }
-  else if (params.type.indexOf("textarea") >= 0){
-    res += `<textarea class="${inputClass}" ${commonParams} rows="4">${params.value}</textarea>`
-  }
-  else if (params.type.indexOf("link") >= 0){
-    res += `<div class="input-group">
+    }
+    else if (params.type.indexOf('textarea') >= 0){
+        res += `<textarea class="${inputClass}" ${commonParams} rows="4">${params.value}</textarea>`
+    }
+    else if (params.type.indexOf('link') >= 0){
+        res += `<div class="input-group">
             <div class="input-group-addon link">
               <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
             </div>
             <input type="text" ${commonParams} class="${inputClass}" />
           </div>`
-  }
-  else if (params.type.indexOf("image") >= 0){
-    res += `<div class="input-group img-upload">
+    }
+    else if (params.type.indexOf('image') >= 0){
+        res += `<div class="input-group img-upload">
               <div class="input-group-addon image">
                 <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
               </div>
@@ -198,19 +198,19 @@ export default function printInput () {
               </div>
             </div>
             <div class="input-error"></div>`
-  }
-  else {
-    res += `<div class="input-group">
+    }
+    else {
+        res += `<div class="input-group">
             <div class="input-group-addon">
               <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
               </div>
               <input type="text" ${commonParams} class="${inputClass}" />
             </div>`
-  }
+    }
 
-  res += '</div>'
+    res += '</div>'
 
-  res = Hooks.instance.trigger('afterEditorInput', res, params)
+    res = Hooks.instance.trigger('afterEditorInput', res, params)
 
-  return res
+    return res
 }

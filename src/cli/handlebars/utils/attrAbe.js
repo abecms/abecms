@@ -8,6 +8,6 @@ import abeEngine from '../abe/abeEngine'
  * @return {String} the value to print inside the attribut
  */
 export default function attrAbe (attr, value) {
-  var content = abeEngine._content
-  return new Handlebars.SafeString(value)
+    var content = abeEngine._content
+    return new Handlebars.SafeString(value)
 }

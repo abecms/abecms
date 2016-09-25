@@ -8,6 +8,7 @@
     "url": "git://github.com/AdFabConnect/abejs.git"
   },
   "scripts": {
+    "lint": "eslint src",
     "test": "mocha --compilers js:babel-core/register",
     "start": "node --debug --harmony ./dist/server/index.js",
     "startpm2": "pm2 startOrRestart ./processes.json",
@@ -85,6 +86,7 @@
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
+    "eslint": "^3.6.0",
     "mkdirp": "^0.5.1",
     "mocha": "^3.0.2",
     "node-sass": "^3.6.0",

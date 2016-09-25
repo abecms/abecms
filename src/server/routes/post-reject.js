@@ -6,11 +6,11 @@ import {
 } from '../../cli'
 
 var route = function(req, res, next){
-  Hooks.instance.trigger('beforeRoute', req, res, next)
-  if(typeof res._header !== 'undefined' && res._header !== null) return;
+    Hooks.instance.trigger('beforeRoute', req, res, next)
+    if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var p = new Promise((resolve, reject) => {
-    save(
+    var p = new Promise((resolve, reject) => {
+        save(
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,
       req.body.json,
@@ -19,14 +19,14 @@ var route = function(req, res, next){
       null,
       'reject')
       .then(() => {
-        resolve()
+          resolve()
       }).catch(function(e) {
-        console.error(e)
+          console.error(e)
       })
-  })
+    })
 
-  p.then((resSave) => {
-    save(
+    p.then((resSave) => {
+        save(
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,
       req.body.json,
@@ -35,27 +35,27 @@ var route = function(req, res, next){
       resSave,
       'reject')
       .then((resSave) => {
-        if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
-          res.set('Content-Type', 'application/json')
-          res.send(JSON.stringify({error: resSave.error}))
-        }
-        var result
-        if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
-          result = resSave
-        }
-        if(typeof resSave.json !== 'undefined' && resSave.json !== null){
-          result = {
-            success: 1,
-            json: resSave.json
+          if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
+              res.set('Content-Type', 'application/json')
+              res.send(JSON.stringify({error: resSave.error}))
           }
-        }
-        Manager.instance.updateList()
-        res.set('Content-Type', 'application/json')
-        res.send(JSON.stringify(result))
+          var result
+          if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
+              result = resSave
+          }
+          if(typeof resSave.json !== 'undefined' && resSave.json !== null){
+              result = {
+                  success: 1,
+                  json: resSave.json
+              }
+          }
+          Manager.instance.updateList()
+          res.set('Content-Type', 'application/json')
+          res.send(JSON.stringify(result))
       })
-  }).catch(function(e) {
-    console.error(e)
-  })
+    }).catch(function(e) {
+        console.error(e)
+    })
 }
 
 export default route

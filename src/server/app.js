@@ -40,7 +40,7 @@ import {
   middleWebsite,
 } from './middlewares'
 
-import * as redis from '../cli/services/RedisClient';
+import * as redis from '../cli/services/RedisClient'
 
 var abePort = null
 
@@ -49,92 +49,92 @@ if(config.port) abePort = config.port
 if(process.env.PORT) abePort = process.env.PORT
 config.set({webport: process.env.WEBPORT ? process.env.WEBPORT : 8081})
 
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 var html = exphbs.create({
-  extname: '.' + config.files.templates.extension,
-  helpers: {
-    abe: compileAbe,
-    listPage: listPage,
-    math: math,
-    printInput: printInput,
-    abeImport: abeImport,
-    moduloIf: moduloIf,
-    testObj: testObj,
-    notEmpty: notEmpty,
-    printJson: printJson,
-    className: className,
-    attrAbe: attrAbe,
-    folders: folders,
-    printConfig: printConfig,
-    ifIn: ifIn,
-    ifCond: ifCond
-  }
+    extname: '.' + config.files.templates.extension,
+    helpers: {
+        abe: compileAbe,
+        listPage: listPage,
+        math: math,
+        printInput: printInput,
+        abeImport: abeImport,
+        moduloIf: moduloIf,
+        testObj: testObj,
+        notEmpty: notEmpty,
+        printJson: printJson,
+        className: className,
+        attrAbe: attrAbe,
+        folders: folders,
+        printConfig: printConfig,
+        ifIn: ifIn,
+        ifCond: ifCond
+    }
 })
 
-  var opts = {}
-  if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
+var opts = {}
+if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
     opts = {
-      key: fse.readFileSync( path.join(config.root, 'key.pem')),
-      cert: fse.readFileSync( path.join(config.root, 'cert.pem'))
+        key: fse.readFileSync( path.join(config.root, 'key.pem')),
+        cert: fse.readFileSync( path.join(config.root, 'cert.pem'))
     }
-  }
+}
 
-  var app = express(opts)
+var app = express(opts)
 
-  if(config.redis.enable){
+if(config.redis.enable){
     redis.connect(config.redis.port, config.redis.host)
-  }
+}
   
   // Instantiate Singleton Manager (which lists all blog files)
-  Manager.instance.init();
-  app.set('config', config.getConfigByWebsite());
-  app.set('projectFiles', FileParser.getProjectFiles());
+Manager.instance.init()
+app.set('config', config.getConfigByWebsite())
+app.set('projectFiles', FileParser.getProjectFiles())
 
-  app.use(bodyParser.json({limit: '1gb'}))
-  app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }));
+app.use(bodyParser.json({limit: '1gb'}))
+app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
 
-  app.use(function (req, res, next) {
+app.use(function (req, res, next) {
     res.locals.nonce = uuid.v4()
     next()
-  })
+})
 
-  app.use(function (req, res, next) {
+app.use(function (req, res, next) {
     if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
       && req.query.logs === 'true') {
-      config.logs = true
+        config.logs = true
     }else if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
       && req.query.logs === 'false') {
-      config.logs = false
+        config.logs = false
     }
     next()
-  })
+})
 
-  if(config.security === true){
+if(config.security === true){
     app.use(helmet())
     app.use(helmet.csp({
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"].concat(config.csp.scriptSrc),
-        styleSrc: ["'self'", "'unsafe-inline'"].concat(config.csp.styleSrc),
-        imgSrc: ["'self'", 'data:'].concat(config.csp.imgSrc),
+        directives: {
+            defaultSrc: ['\'self\''],
+            scriptSrc: ['\'self\''].concat(config.csp.scriptSrc),
+            styleSrc: ['\'self\'', '\'unsafe-inline\''].concat(config.csp.styleSrc),
+            imgSrc: ['\'self\'', 'data:'].concat(config.csp.imgSrc),
         // frameSrc: ["'self'"],
-        childSrc: ["'self'"].concat(config.csp.childSrc),
-        frameAncestors: ["'self'"].concat(config.csp.frameAncestors),
-        mediaSrc: ["'self'"].concat(config.csp.mediaSrc),
-        fontSrc: ["'self'"].concat(config.csp.fontSrc),
-        connectSrc: ["'self'"].concat(config.csp.connectSrc),
-        sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
-        reportUri: '/report-violation',
-        objectSrc: [], // An empty array allows nothing through
-      },
-      reportOnly: false, // Set to true if you only want browsers to report errors, not block them
-      setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
-      disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
-      browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
+            childSrc: ['\'self\''].concat(config.csp.childSrc),
+            frameAncestors: ['\'self\''].concat(config.csp.frameAncestors),
+            mediaSrc: ['\'self\''].concat(config.csp.mediaSrc),
+            fontSrc: ['\'self\''].concat(config.csp.fontSrc),
+            connectSrc: ['\'self\''].concat(config.csp.connectSrc),
+            sandbox: ['allow-same-origin', 'allow-scripts', 'allow-modals', 'allow-popups', 'allow-forms'],
+            reportUri: '/report-violation',
+            objectSrc: [], // An empty array allows nothing through
+        },
+        reportOnly: false, // Set to true if you only want browsers to report errors, not block them
+        setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
+        disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
+        browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
     }))
 
-  }
+}
 
 var port = (abePort !== null) ? abePort : 3000
 port = Hooks.instance.trigger('beforeExpress', port)
@@ -143,41 +143,41 @@ app.set('views', path.join(__dirname, '/templates'))
 app.engine('.html', html.engine)
 app.set('view engine', '.html')
 
-app.locals.layout = false;
+app.locals.layout = false
 
 app.use(middleWebsite)
 app.use(express.static(__dirname + '/public'))
 
 FileParser.copySiteAssets()
 
-var sites = FileParser.getFolders(config.root.replace(/\/$/, ""), false, 0)
+var sites = FileParser.getFolders(config.root.replace(/\/$/, ''), false, 0)
 
 let publish = path.join(config.root, config.publish.url)
 app.use(express.static(publish))
 // app.use(express.static(publish))
 
 if(config.partials !== '') {
-  if (fileUtils.isFile(path.join(config.root, config.partials))) {
-    app.use(express.static(path.join(config.root, config.partials)))
-  }
+    if (fileUtils.isFile(path.join(config.root, config.partials))) {
+        app.use(express.static(path.join(config.root, config.partials)))
+    }
 }
 
 if(config.custom !== '') {
-  if (fileUtils.isFile(path.join(config.root, config.custom))) {
-    app.use(express.static(path.join(config.root, config.custom)))
-  }
+    if (fileUtils.isFile(path.join(config.root, config.custom))) {
+        app.use(express.static(path.join(config.root, config.custom)))
+    }
 }
 
 var pluginsPartials = Plugins.instance.getPartials()
 Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
-  app.use(express.static(pluginPartials))
+    app.use(express.static(pluginPartials))
 })
 
 app.use(express.static(__dirname + '/node_modules/handlebars/dist'))
 app.use(busboy({
-  limits: {
-    fileSize: config.upload.fileSizelimit
-  }
+    limits: {
+        fileSize: config.upload.fileSizelimit
+    }
 }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -196,16 +196,16 @@ app.use(session({
 Hooks.instance.trigger('afterExpress', app, express)
 
 if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
-  var server = https.createServer(opts, app)
-  server.listen(port, function() {
-    console.log(clc.green(`\nserver running at https://localhost:${port}/`))
-    if(process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
-  })
+    var server = https.createServer(opts, app)
+    server.listen(port, function() {
+        console.log(clc.green(`\nserver running at https://localhost:${port}/`))
+        if(process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
+    })
 }else {
-  app.listen(port, function() {
-    console.log(clc.green(`\nserver running at http://localhost:${port}/`))
-    if(process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
-  })
+    app.listen(port, function() {
+        console.log(clc.green(`\nserver running at http://localhost:${port}/`))
+        if(process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
+    })
 }
 
 // important : require here so config.root is defined
