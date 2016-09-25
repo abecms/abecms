@@ -1,6 +1,4 @@
 import fse from 'fs-extra'
-import extend from 'extend'
-import mkdirp from 'mkdirp'
 import {saveHtml} from './controllers/Save'
 import path from 'path'
 
@@ -10,67 +8,65 @@ import {
   config,
   fileUtils,
   fileAttr,
-  cli,
-  log,
   getTemplate,
   Page
 } from './'
 
 class Builder {
 
-    constructor(root, folder, dest, flow){
-        this.pathToJson = path.join(root, config.data.url)
-        var files = fileAttr.filterLatestVersion(FileParser.getFiles(this.pathToJson, config.data.url), flow)
+  constructor(root, folder, dest, flow){
+    this.pathToJson = path.join(root, config.data.url)
+    var files = fileAttr.filterLatestVersion(FileParser.getFiles(this.pathToJson, config.data.url), flow)
 
-        if(flow === 'publish') {
-            files = FileParser.getFiles(path.join(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
-        }
+    if(flow === 'publish') {
+      files = FileParser.getFiles(path.join(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
+    }
 
-        var build = function (index) {
-            var file = files[index]
-            if(file.path.indexOf('.' + config.files.templates.extension) > -1){
-                file.path = file.path.replace(config.publish.url, config.data.url)
+    var build = function (index) {
+      var file = files[index]
+      if(file.path.indexOf('.' + config.files.templates.extension) > -1){
+        file.path = file.path.replace(config.publish.url, config.data.url)
                              .replace('.' + config.files.templates.extension, '.json')
         
-                var json = fse.readJsonSync(file.path)
-                var text = getTemplate(json.abe_meta.template)
+        var json = fse.readJsonSync(file.path)
+        var text = getTemplate(json.abe_meta.template)
         
-                Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
+        Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
-              var page = new Page(json.abe_meta.template, text, json, true)
-              saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
-              if(files[index + 1]) build(index + 1)
+            var page = new Page(json.abe_meta.template, text, json, true)
+            saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
+            if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
-              console.error(e)
-              if(files[index + 1]) build(index + 1)
+            console.error(e)
+            if(files[index + 1]) build(index + 1)
           })
-            }
-            else if(file.path.indexOf('.json') > -1){
-                var json = fse.readJsonSync(file.path)
-                var text = getTemplate(json.abe_meta.template)
+      }
+      else if(file.path.indexOf('.json') > -1){
+        var json = fse.readJsonSync(file.path)
+        var text = getTemplate(json.abe_meta.template)
 
-                Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
+        Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
-              var page = new Page(json.abe_meta.template, text, json, true)
-              saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
-              if(files[index + 1]) build(index + 1)
+            var page = new Page(json.abe_meta.template, text, json, true)
+            saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
+            if(files[index + 1]) build(index + 1)
           }).catch(function(e) {
-              console.error(e)
-              if(files[index + 1]) build(index + 1)
+            console.error(e)
+            if(files[index + 1]) build(index + 1)
           })
-            }
-            else if(files[index + 1]) build(index + 1)
-        }
-
-        build(0)
-
+      }
+      else if(files[index + 1]) build(index + 1)
     }
+
+    build(0)
+
+  }
 
 }
 
 if(process.env.ROOT && process.env.FOLDER && process.env.DEST){
-    config.set({root: process.env.ROOT})
-    var dest = process.env.DEST || 'tmp'
-    var flow = process.env.FLOW || 'draft'
-    new Builder(process.env.ROOT, process.env.FOLDER, dest, flow)
+  config.set({root: process.env.ROOT})
+  var dest = process.env.DEST || 'tmp'
+  var flow = process.env.FLOW || 'draft'
+  new Builder(process.env.ROOT, process.env.FOLDER, dest, flow)
 }

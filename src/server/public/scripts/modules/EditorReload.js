@@ -8,91 +8,91 @@ let singletonEnforcer = Symbol()
 
 export default class Reload {
 
-    constructor(enforcer) {
-        this._ajax = Nanoajax.ajax
-        this._json = Json.instance
+  constructor(enforcer) {
+    this._ajax = Nanoajax.ajax
+    this._json = Json.instance
 
-        if(enforcer != singletonEnforcer) throw 'Cannot construct Reload singleton'
+    if(enforcer != singletonEnforcer) throw 'Cannot construct Reload singleton'
+  }
+
+  static get instance() {
+    if(!this[singleton]) {
+      this[singleton] = new Reload(singletonEnforcer)
+      window.formJson = this[singleton]
+    }
+    return this[singleton]
+  }
+
+  _nodeScriptReplace(node) {
+    if ( this._nodeScriptIs(node) === true ) {
+      node.parentNode.replaceChild( this._nodeScriptClone(node) , node )
+    }else {
+      var i        = 0
+      var children = node.childNodes
+      while ( i < children.length ) {
+        this._nodeScriptReplace( children[i++] )
+      }
     }
 
-    static get instance() {
-        if(!this[singleton]) {
-            this[singleton] = new Reload(singletonEnforcer)
-            window.formJson = this[singleton]
-        }
-        return this[singleton]
+    return node
+  }
+
+  _nodeScriptIs(node) {
+    return node.tagName === 'SCRIPT'
+  }
+
+  _nodeScriptClone(node) {
+    var script  = document.createElement('script')
+    script.text = node.innerHTML
+    for( var i = node.attributes.length-1; i >= 0; i-- ) {
+      script.setAttribute( node.attributes[i].name, node.attributes[i].value )
     }
+    return script
+  }
 
-    _nodeScriptReplace(node) {
-        if ( this._nodeScriptIs(node) === true ) {
-            node.parentNode.replaceChild( this._nodeScriptClone(node) , node )
-        }else {
-            var i        = 0
-            var children = node.childNodes
-            while ( i < children.length ) {
-                this._nodeScriptReplace( children[i++] )
-            }
-        }
-
-        return node
-    }
-
-    _nodeScriptIs(node) {
-        return node.tagName === 'SCRIPT'
-    }
-
-    _nodeScriptClone(node) {
-        var script  = document.createElement('script')
-        script.text = node.innerHTML
-        for( var i = node.attributes.length-1; i >= 0; i-- ) {
-            script.setAttribute( node.attributes[i].name, node.attributes[i].value )
-        }
-        return script
-    }
-
-    inject(str) { 
-        var iframe = document.querySelector('#page-template') 
-        var iframeBody = IframeDocument('#page-template').body 
-        var scrollTop = iframeBody.scrollTop 
+  inject(str) { 
+    var iframe = document.querySelector('#page-template') 
+    var iframeBody = IframeDocument('#page-template').body 
+    var scrollTop = iframeBody.scrollTop 
  
-        var doc = iframe.contentWindow.document 
-        str = str.replace(/<\/head>/, '<base href="/" /></head>') 
-        doc.open() 
-        doc.write(str) 
-        doc.close() 
+    var doc = iframe.contentWindow.document 
+    str = str.replace(/<\/head>/, '<base href="/" /></head>') 
+    doc.open() 
+    doc.write(str) 
+    doc.close() 
      
-        setTimeout(function () { 
-            var iframeDoc = IframeDocument('#page-template') 
-            if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
+    setTimeout(function () { 
+      var iframeDoc = IframeDocument('#page-template') 
+      if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
         && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
-                iframeDoc.body.scrollTop = scrollTop 
-            } 
-        }, 1000) 
-    }
+        iframeDoc.body.scrollTop = scrollTop 
+      } 
+    }, 1000) 
+  }
   
-    reload() {
-        var iframe = document.querySelector('#page-template')
-        var iframeBody = IframeDocument('#page-template').body
-        var scrollTop = iframeBody.scrollTop
-        var json = JSON.parse(JSON.stringify(this._json.data))
+  reload() {
+    var iframe = document.querySelector('#page-template')
+    var iframeBody = IframeDocument('#page-template').body
+    var scrollTop = iframeBody.scrollTop
+    var json = JSON.parse(JSON.stringify(this._json.data))
     
-        delete json.abe_source
-        var data = qs.stringify({
-            json: json
-        })
-
-        this._ajax(
-            {
-                url: iframe.getAttribute('data-iframe-src'),
-                body: data,
-                method: 'post'
-            },
-    (code, responseText, request) => {
-        if(typeof responseText !== 'undefined' && responseText !== null) {
-            this.inject(responseText)
-        }
-        
-        return
+    delete json.abe_source
+    var data = qs.stringify({
+      json: json
     })
-    }
+
+    this._ajax(
+      {
+        url: iframe.getAttribute('data-iframe-src'),
+        body: data,
+        method: 'post'
+      },
+    (code, responseText, request) => {
+      if(typeof responseText !== 'undefined' && responseText !== null) {
+        this.inject(responseText)
+      }
+        
+      return
+    })
+  }
 }
