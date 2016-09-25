@@ -43,6 +43,15 @@ class Manager {
     return this._list
   }
 
+  setList(list) {
+    if(config.redis.enable){
+      redis.get().set('list', JSON.stringify(list))
+    }
+    this._list = list
+
+    return this
+  }
+
   init() {
     var p = new Promise((resolve, reject) => {
       this._loadTime = new TimeMesure('Loading Manager')
