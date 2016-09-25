@@ -2,11 +2,11 @@ import {cli} from '../'
 
 export function getAttr (str, attr) {
   // var rex = new RegExp(attr + '=["\']([^\'"]+)')
-  var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( +[a-zA-Z0-9-]*?=|}})')
+    var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( +[a-zA-Z0-9-]*?=|}})')
   // var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( [a-zA-Z0-9-]*?=|}})')
-  var res = rex.exec(str)
-  res = (typeof res !== null && res !== null && res.length > 1) ? res[1] : ''
-  return res
+    var res = rex.exec(str)
+    res = (typeof res !== null && res !== null && res.length > 1) ? res[1] : ''
+    return res
 }
 
 /**
@@ -25,36 +25,36 @@ export function getAttr (str, attr) {
  * Will return the whole div (use querySelectorTags for that)
  */
 function explodeTag(text, tag) {
-  var startWithTags = false
-  if(text.indexOf("<" + tag) === 0) {
-    startWithTags = true
-  }
-	var tags = text.split("<" + tag)
+    var startWithTags = false
+    if(text.indexOf('<' + tag) === 0) {
+        startWithTags = true
+    }
+    var tags = text.split('<' + tag)
 
-	var i = 0
-	var reconstruct = []
-	var wait = ""
+    var i = 0
+    var reconstruct = []
+    var wait = ''
 
-  reconstruct.push(tags.shift())
-	Array.prototype.forEach.call(tags, function(ele) {
-		i++
-		var matches = ele.match(escapeTextToRegex('</' + tag, 'g'))
-		if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
-			Array.prototype.forEach.call(matches, function(match) {
-				i--
-			})
+    reconstruct.push(tags.shift())
+    Array.prototype.forEach.call(tags, function(ele) {
+        i++
+        var matches = ele.match(escapeTextToRegex('</' + tag, 'g'))
+        if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
+            Array.prototype.forEach.call(matches, function(match) {
+                i--
+            })
 
-      if(i === 0) {
-        reconstruct.push(wait + '<' + tag + ele)
-        wait = ''
-      }else {
-        wait += '<' + tag + ele
-      }
-		}else {
-			wait += '<' + tag + ele
-		}
-	})
-  return reconstruct
+            if(i === 0) {
+                reconstruct.push(wait + '<' + tag + ele)
+                wait = ''
+            }else {
+                wait += '<' + tag + ele
+            }
+        }else {
+            wait += '<' + tag + ele
+        }
+    })
+    return reconstruct
 }
 
 /**
@@ -82,47 +82,47 @@ function explodeTag(text, tag) {
  * 
  */
 function querySelectorTags(text, tag) {
-	var res = []
-  var finalRes = []
+    var res = []
+    var finalRes = []
 
-  while(text !== ''){
-    var checkTags = explodeTag(text, tag)
-    text = ''
-    Array.prototype.forEach.call(checkTags, function(ele) {
-      res.push(ele)
+    while(text !== ''){
+        var checkTags = explodeTag(text, tag)
+        text = ''
+        Array.prototype.forEach.call(checkTags, function(ele) {
+            res.push(ele)
 
-      var matches = ele.match(escapeTextToRegex('<' + tag, 'g'))
-      if(typeof matches !== 'undefined' && matches !== null && matches.length > 1) {
-        var tagLength = "<" + tag
-        tagLength = tagLength.length
+            var matches = ele.match(escapeTextToRegex('<' + tag, 'g'))
+            if(typeof matches !== 'undefined' && matches !== null && matches.length > 1) {
+                var tagLength = '<' + tag
+                tagLength = tagLength.length
 
         // remove first tag
-        var start = ele.indexOf("<" + tag)
-        ele = ele.substring(start + tagLength)
+                var start = ele.indexOf('<' + tag)
+                ele = ele.substring(start + tagLength)
 
         // remove end tag
-        var end = ele.lastIndexOf("</" + tag)
-        ele = ele.substring(0, end)
+                var end = ele.lastIndexOf('</' + tag)
+                ele = ele.substring(0, end)
 
-        text += ele
-      }
-    })
-  }
-  
-  Array.prototype.forEach.call(res, function(ele) {
-    var matches = ele.match(escapeTextToRegex('<' + tag, 'g'))
-    if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
-      var finalEleReg = new RegExp("<" + tag + "([\\s\\S]*?)<\\/" + tag + ">(?![\\s\\S]*<\/" + tag + ">)")
-      finalEleReg = finalEleReg.exec(ele)
-      if(typeof finalEleReg !== 'undefined' && finalEleReg !== null && finalEleReg.length > 0) {
-        finalRes.push(finalEleReg[0])
-      }else {
-        finalRes.push(ele)
-      }
+                text += ele
+            }
+        })
     }
-  })
+  
+    Array.prototype.forEach.call(res, function(ele) {
+        var matches = ele.match(escapeTextToRegex('<' + tag, 'g'))
+        if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
+            var finalEleReg = new RegExp('<' + tag + '([\\s\\S]*?)<\\/' + tag + '>(?![\\s\\S]*<\/' + tag + '>)')
+            finalEleReg = finalEleReg.exec(ele)
+            if(typeof finalEleReg !== 'undefined' && finalEleReg !== null && finalEleReg.length > 0) {
+                finalRes.push(finalEleReg[0])
+            }else {
+                finalRes.push(ele)
+            }
+        }
+    })
 
-	return finalRes
+    return finalRes
 }
 
 /**
@@ -132,23 +132,23 @@ function querySelectorTags(text, tag) {
  * @return {Boolean}  true|false
  */
 function isInsideOtherTag(arr) {
-  var res = []
+    var res = []
 
-  arr = arr.reverse()
+    arr = arr.reverse()
 
-  var uniq = arr.reduce(function(a, b) {
-    var isUniq = true
-    Array.prototype.forEach.call(arr, function(c) {
-      if(c !== b && b.indexOf(c) !== -1) {
-        isUniq = false
-      }
-    })
-    if(isUniq) a.push(b);
+    var uniq = arr.reduce(function(a, b) {
+        var isUniq = true
+        Array.prototype.forEach.call(arr, function(c) {
+            if(c !== b && b.indexOf(c) !== -1) {
+                isUniq = false
+            }
+        })
+        if(isUniq) a.push(b)
 
-    return a;
-  },[]);
+        return a
+    },[])
 
-  return uniq
+    return uniq
 }
 
 /**
@@ -160,19 +160,19 @@ function isInsideOtherTag(arr) {
  * @return {Array} array of matches
  */
 export function getEnclosingTags(text, match, tag) {
-  var res = []
-  var tags = querySelectorTags(text, tag)
+    var res = []
+    var tags = querySelectorTags(text, tag)
   
-  Array.prototype.forEach.call(tags, function(tag) {
-    var matches = tag.match(escapeTextToRegex(match, 'g'))
-    if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
-      res.push(tag)
-    }
-  })
+    Array.prototype.forEach.call(tags, function(tag) {
+        var matches = tag.match(escapeTextToRegex(match, 'g'))
+        if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
+            res.push(tag)
+        }
+    })
 
-  res = isInsideOtherTag(res)
+    res = isInsideOtherTag(res)
 
-  return res
+    return res
 }
 
 /**

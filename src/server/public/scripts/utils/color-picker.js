@@ -3,10 +3,10 @@ import Popup from './popup'
 
 export default class ColorPicker {
 
-  constructor(wrapper) {
-    this.popup = new Popup(wrapper)
-    this.wrapper = wrapper
-    this.colors = [
+    constructor(wrapper) {
+        this.popup = new Popup(wrapper)
+        this.wrapper = wrapper
+        this.colors = [
       ['ffdfdf','ffe7df','ffefdf','fff7df','ffffdf','f7ffdf','efffdf','e7ffdf','dfffdf','dfffe7','dfffef','dffff7','dfffff','dff7ff','dfefff','dfe7ff','dfdfff','e7dfff','efdfff','f7dfff','ffdfff','ffdff7','ffdfef','ffdfe7','ffffff'],
       ['ffbfbf','ffcfbf','ffdfbf','ffefbf','ffffbf','efffbf','dfffbf','cfffbf','bfffbf','bfffcf','bfffdf','bfffef','bfffff','bfefff','bfdfff','bfcfff','bfbfff','cfbfff','dfbfff','efbfff','ffbfff','ffbfef','ffbfdf','ffbfcf','ebebeb'],
       ['ff9f9f','ffb79f','ffcf9f','ffe79f','ffff9f','e7ff9f','cfff9f','b7ff9f','9fff9f','9fffb7','9fffcf','9fffe7','9fffff','9fe7ff','9fcfff','9fb7ff','9f9fff','b79fff','cf9fff','e79fff','ff9fff','ff9fe7','ff9fcf','ff9fb7','d7d7d7'],
@@ -21,41 +21,41 @@ export default class ColorPicker {
       ['7f0000','7f1f00','7f3f00','7f5f00','7f7f00','5f7f00','3f7f00','1f7f00','007f00','007f1f','007f3f','007f5f','007f7f','005f7f','003f7f','001f7f','00007f','1f007f','3f007f','5f007f','7f007f','7f005f','7f003f','7f001f','272727'],
       ['5f0000','5f1700','5f2f00','5f4700','5f5f00','475f00','2f5f00','175f00','005f00','005f17','005f2f','005f47','005f5f','00475f','002f5f','00175f','00005f','17005f','2f005f','47005f','5f005f','5f0047','5f002f','5f0017','131313'],
       ['3f0000','3f0f00','3f1f00','3f2f00','3f3f00','2f3f00','1f3f00','0f3f00','003f00','003f0f','003f1f','003f2f','003f3f','002f3f','001f3f','000f3f','00003f','0f003f','1f003f','2f003f','3f003f','3f002f','3f001f','3f000f','000000']
-    ]
+        ]
 
-    var colorHTML = `<table cellpadding="0" cellspacing="0">
+        var colorHTML = `<table cellpadding="0" cellspacing="0">
                       <tbody>`
 
 
-    this.colors.forEach((color) => {
-      colorHTML += `<tr>`
-      color.forEach((color) => {
-        colorHTML += `<td class="wysiwyg-toolbar-color" title="#${color}" style="background-color:#${color};"></td>`
-      })
-      colorHTML += `</tr>`
-    })
+        this.colors.forEach((color) => {
+            colorHTML += '<tr>'
+            color.forEach((color) => {
+                colorHTML += `<td class="wysiwyg-toolbar-color" title="#${color}" style="background-color:#${color};"></td>`
+            })
+            colorHTML += '</tr>'
+        })
 
-    colorHTML +=     `</tbody>
+        colorHTML +=     `</tbody>
                     </table>`
 
-    this.wrapper.innerHTML = colorHTML
-  	this.bindEvt()
-  }
+        this.wrapper.innerHTML = colorHTML
+        this.bindEvt()
+    }
 
-  bindEvt(){
-    this.onColor = on(this)
-    this.wrapper.addEventListener('click', (e) => {
-      var target = e.target
-      if(target.classList.contains('wysiwyg-toolbar-color')){
-        this.onColor._fire(target.getAttribute('title'))
-        this.popup.close()
-      }
-    })
-  }
+    bindEvt(){
+        this.onColor = on(this)
+        this.wrapper.addEventListener('click', (e) => {
+            var target = e.target
+            if(target.classList.contains('wysiwyg-toolbar-color')){
+                this.onColor._fire(target.getAttribute('title'))
+                this.popup.close()
+            }
+        })
+    }
 
-  show(el){
-    var elBounds = el.getBoundingClientRect()
-    this.popup.open(elBounds.left, (elBounds.top + elBounds.height + 5))
-  }
+    show(el){
+        var elBounds = el.getBoundingClientRect()
+        this.popup.open(elBounds.left, (elBounds.top + elBounds.height + 5))
+    }
 
 }

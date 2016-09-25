@@ -74,46 +74,46 @@ router.get('/unpublish', getUnpublish)
 router.get('/delete', getDelete)
 router.post('/upload/*', postUpload)
 router.get('/abe/list-url*', function (req, res, next) {
-   getListUrl(router, req, res, next) 
+    getListUrl(router, req, res, next) 
 })
 router.get('/abe/list-hooks*', getListHooks)
 
 var routes = Plugins.instance.getRoutes()
 Array.prototype.forEach.call(routes, (route) => {
-  if(typeof route.get !== 'undefined' && route.get !== null) {
-    Array.prototype.forEach.call(route.get, (routeGet) => {
-      try {
-        var pluginRoot = require(routeGet.path)
-        if(typeof pluginRoot.default === 'object') {
-          router.get(routeGet.routePath, pluginRoot.default)
-        }else {
-          router.get(routeGet.routePath, (req, res, next) => {
-            pluginRoot.default(req, res, next, abe)
-          })
-        }
-      } catch(e) {
+    if(typeof route.get !== 'undefined' && route.get !== null) {
+        Array.prototype.forEach.call(route.get, (routeGet) => {
+            try {
+                var pluginRoot = require(routeGet.path)
+                if(typeof pluginRoot.default === 'object') {
+                    router.get(routeGet.routePath, pluginRoot.default)
+                }else {
+                    router.get(routeGet.routePath, (req, res, next) => {
+                        pluginRoot.default(req, res, next, abe)
+                    })
+                }
+            } catch(e) {
         // statements
-        console.log(e);
-      }
-    })
-  }
-  if(typeof route.post !== 'undefined' && route.post !== null) {
-    Array.prototype.forEach.call(route.post, (routePost) => {
-      try {
-        var pluginRoot = require(routePost.path)
-        if(typeof pluginRoot.default === 'object') {
-          router.post(routePost.routePath, pluginRoot.default)
-        }else {
-          router.post(routePost.routePath, (req, res, next) => {
-            pluginRoot.default(req, res, next, abe)
-          })
-        }
-      } catch(e) {
+                console.log(e)
+            }
+        })
+    }
+    if(typeof route.post !== 'undefined' && route.post !== null) {
+        Array.prototype.forEach.call(route.post, (routePost) => {
+            try {
+                var pluginRoot = require(routePost.path)
+                if(typeof pluginRoot.default === 'object') {
+                    router.post(routePost.routePath, pluginRoot.default)
+                }else {
+                    router.post(routePost.routePath, (req, res, next) => {
+                        pluginRoot.default(req, res, next, abe)
+                    })
+                }
+            } catch(e) {
         // statements
-        console.log(e);
-      }
-    })
-  }
+                console.log(e)
+            }
+        })
+    }
 })
 router.get('/abe*', getMain)
 
