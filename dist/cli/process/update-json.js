@@ -10,8 +10,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
-
-
 var pConfig = {};
 Array.prototype.forEach.call(process.argv, function (item) {
   if (item.indexOf('=') > -1) {
