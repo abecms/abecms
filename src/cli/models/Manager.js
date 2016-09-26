@@ -1,7 +1,7 @@
-import Handlebars from 'handlebars'
-import fse from 'fs-extra'
-import mkdirp from 'mkdirp'
-import path from 'path'
+import Handlebars from "handlebars"
+import fse from "fs-extra"
+import mkdirp from "mkdirp"
+import path from "path"
 import {
   config,
   FileParser,
@@ -9,9 +9,9 @@ import {
   folderUtils,
   TimeMesure,
   getSelectTemplateKeys
-} from '../../cli'
+} from "../../cli"
 
-import * as redis from '../services/RedisClient'
+import * as redis from "../services/RedisClient"
 
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
@@ -20,7 +20,7 @@ class Manager {
 
   constructor(enforcer) {
 
-    if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
+    if(enforcer != singletonEnforcer) throw "Cannot construct Json singleton"
     
     Handlebars.templates = Handlebars.templates || {}
     this.loadHbsTemplates()
@@ -35,7 +35,7 @@ class Manager {
 
   getList() {
     if(config.redis.enable){
-      redis.get().get('list', function(err, reply) {
+      redis.get().get("list", function(err, reply) {
         this._list = JSON.parse(reply)
       })
     }
@@ -45,7 +45,7 @@ class Manager {
 
   setList(list) {
     if(config.redis.enable){
-      redis.get().set('list', JSON.stringify(list))
+      redis.get().set("list", JSON.stringify(list))
     }
     this._list = list
 
@@ -55,7 +55,7 @@ class Manager {
   init() {
     this._whereKeys = []
     var p = new Promise((resolve, reject) => {
-      this._loadTime = new TimeMesure('Loading Manager')
+      this._loadTime = new TimeMesure("Loading Manager")
       const pathTemplate = path.join(config.root, config.templates.url)
       getSelectTemplateKeys(pathTemplate)
         .then((whereKeys) => {
@@ -64,10 +64,10 @@ class Manager {
           resolve()
         },
         () => {
-          console.log('Manager._init', e)
+          console.log("Manager._init", e)
         })
         .catch((e) => {
-          console.log('Manager._init', e)
+          console.log("Manager._init", e)
         })
     })
 
@@ -75,13 +75,13 @@ class Manager {
   }
 
   updateList() {
-    if(typeof this._loadTime === 'undefined' || this._loadTime === null) {
-       this._loadTime = new TimeMesure('Loading Manager')
+    if(typeof this._loadTime === "undefined" || this._loadTime === null) {
+      this._loadTime = new TimeMesure("Loading Manager")
     }
     this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
-    this._list.sort(FileParser.predicatBy('date', -1))
+    this._list.sort(FileParser.predicatBy("date", -1))
     if(config.redis.enable){
-      redis.get().set('list', JSON.stringify(this._list))
+      redis.get().set("list", JSON.stringify(this._list))
     }
     this._loadTime.duration()
     delete this._loadTime
@@ -90,21 +90,21 @@ class Manager {
   }
 
   addHbsTemplate(templateId) {
-    const pathTemplate = path.join(config.root, config.templates.url, 'hbs', templateId) + '.hbs'
-    var tmpl = eval('(function(){return ' + fse.readFileSync(pathTemplate) + '}());')
+    const pathTemplate = path.join(config.root, config.templates.url, "hbs", templateId) + ".hbs"
+    var tmpl = eval("(function(){return " + fse.readFileSync(pathTemplate) + "}());")
     Handlebars.templates[templateId] = Handlebars.template(tmpl)
   }
 
   loadHbsTemplates() {
-    const pathTemplate = path.join(config.root, config.templates.url, 'hbs')
+    const pathTemplate = path.join(config.root, config.templates.url, "hbs")
 
     if(!folderUtils.isFolder(pathTemplate)) {
       mkdirp.sync(pathTemplate)
     }
 
     fse.readdirSync(pathTemplate).forEach(function (file) {
-      if (file.indexOf('.hbs') > -1) {
-        let originalTemplatePath = path.join(config.root, config.templates.url) + '/' + file.replace('.hbs', '.' + config.files.templates.extension)
+      if (file.indexOf(".hbs") > -1) {
+        let originalTemplatePath = path.join(config.root, config.templates.url) + "/" + file.replace(".hbs", "." + config.files.templates.extension)
         
         try{
           let originalTemplateStat = fse.statSync(originalTemplatePath)
@@ -117,12 +117,12 @@ class Manager {
           if(originalTemplateMdate>mdate){
             fse.unlinkSync(path.join(pathTemplate, file))
           } else {
-            var tmpl = eval('(function(){return ' + fse.readFileSync(path.join(pathTemplate, file)) + '}());')
-            Handlebars.templates[file.replace('.hbs', '')] = Handlebars.template(tmpl)
+            var tmpl = eval("(function(){return " + fse.readFileSync(path.join(pathTemplate, file)) + "}());")
+            Handlebars.templates[file.replace(".hbs", "")] = Handlebars.template(tmpl)
           }
         }
         catch(err) {
-          console.log('The original template has not been found or the hbs template is corrupted')
+          console.log("The original template has not been found or the hbs template is corrupted")
           console.log(originalTemplatePath)
           console.log(err)
         } 

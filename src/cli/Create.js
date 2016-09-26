@@ -1,7 +1,7 @@
-import fse from 'fs-extra'
-import mkdirp from 'mkdirp'
-import {Promise} from 'es6-promise'
-import slugify from './helpers/slugify'
+import fse from "fs-extra"
+import mkdirp from "mkdirp"
+import {Promise} from "es6-promise"
+import slugify from "./helpers/slugify"
 
 import {
   config,
@@ -12,16 +12,16 @@ import {
   FileParser,
   fileAttr,
   getAttr
-} from './'
+} from "./"
 
 export default class Create {
 
   constructor() {}
 
   init(path) {
-    path = path.split('/')
+    path = path.split("/")
     path[path.length - 1] = slugify(path[path.length - 1])
-    path = path.join('/')
+    path = path.join("/")
     this.addFolder(path)
 			.then(() => {
   process.chdir(path)

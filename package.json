@@ -8,7 +8,7 @@
     "url": "git://github.com/AdFabConnect/abejs.git"
   },
   "scripts": {
-    "lint": "eslint src",
+    "lint": "./node_modules/.bin/eslint src",
     "test": "mocha --compilers js:babel-register --require babel-polyfill",
     "test-cov": "istanbul cover _mocha -- --compilers js:babel-register --require babel-polyfill",
     "start": "node --debug --harmony ./dist/server/index.js",

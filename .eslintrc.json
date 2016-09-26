@@ -26,6 +26,16 @@
         ],
         "no-console":["warn"],
         "no-unused-vars":["warn"],
-        "no-undef":["warn"]
+        "no-undef":["warn"],
+        "no-redeclare":["warn"],
+        "no-unreachable":["warn"],
+        "no-mixed-spaces-and-tabs":["warn"],
+        "no-self-assign":["warn"],
+        "no-cond-assign":["warn"],
+        "no-case-declarations":["warn"],
+        "no-dupe-class-members":["warn"],
+        "no-empty":["warn"],
+        "quotes":["warn"],
+        "valid-typeof":["warn"]
     }
 }

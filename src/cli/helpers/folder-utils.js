@@ -1,7 +1,7 @@
-import fse from 'fs-extra'
-import dircompare from 'dir-compare'
-import mkdirp from 'mkdirp'
-import moment from 'moment'
+import fse from "fs-extra"
+import dircompare from "dir-compare"
+import mkdirp from "mkdirp"
+import moment from "moment"
 
 import {
 	cli,
@@ -9,7 +9,7 @@ import {
 	fileUtils,
 	fileAttr,
 	config
-} from '../'
+} from "../"
 
 export default class FolderUtils {
 
@@ -29,8 +29,8 @@ export default class FolderUtils {
   }
 
   static createFile(path, content = {}) {
-    if(path.indexOf('.json') > -1) {
-      fse.writeJsonSync(path, content, { space: 2, encoding: 'utf-8' })
+    if(path.indexOf(".json") > -1) {
+      fse.writeJsonSync(path, content, { space: 2, encoding: "utf-8" })
     }
   }
 
@@ -41,27 +41,27 @@ export default class FolderUtils {
   }
 
   static getFolderPath(path) {
-    var folders = path.replace(config.root, '')
-    folders = folders.replace(/^\//, '')
-    folders = folders.split('/')
+    var folders = path.replace(config.root, "")
+    folders = folders.replace(/^\//, "")
+    folders = folders.split("/")
     folders.shift()
-    folders = folders.join('/')
+    folders = folders.join("/")
     folders = fileUtils.removeLast(folders)
     return folders
   }
 
   static folderInfos(pathFolder) {
-    var pathArr = pathFolder.split('/')
+    var pathArr = pathFolder.split("/")
     var name = pathArr[pathArr.length - 1]
 
-    var rootArr = config.root.split('/')
+    var rootArr = config.root.split("/")
     var website = rootArr[pathArr.length - 1]
     return {
-      'name': name,
-      'path': pathFolder,
-      'website': website,
-      'cleanPath': fileUtils.cleanPath(pathFolder.replace(config.root, '')),
-      'type': 'folder'
+      "name": name,
+      "path": pathFolder,
+      "website": website,
+      "cleanPath": fileUtils.cleanPath(pathFolder.replace(config.root, "")),
+      "type": "folder"
     }
   }
   

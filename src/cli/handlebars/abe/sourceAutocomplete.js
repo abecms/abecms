@@ -1,4 +1,4 @@
-import sourceAttr from './sourceAttr'
+import sourceAttr from "./sourceAttr"
 
 export default function sourceAutocomplete(val, params) {
   var attr = sourceAttr(val, params)

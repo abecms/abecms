@@ -2,11 +2,11 @@ import {
   cleanSlug
   ,FileParser
   ,Hooks
-} from '../../cli'
+} from "../../cli"
 
 var route = function(req, res, next){
-  Hooks.instance.trigger('beforeRoute', req, res, next)
-  if(typeof res._header !== 'undefined' && res._header !== null) return
+  Hooks.instance.trigger("beforeRoute", req, res, next)
+  if(typeof res._header !== "undefined" && res._header !== null) return
 
   var filePath = cleanSlug(req.query.filePath)
   FileParser.unpublishFile(filePath)
@@ -15,7 +15,7 @@ var route = function(req, res, next){
     success: 1,
     file: req.query.filePath
   }
-  res.set('Content-Type', 'application/json')
+  res.set("Content-Type", "application/json")
   res.send(JSON.stringify(result))
 }
 

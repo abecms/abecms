@@ -1,9 +1,9 @@
-import fse from 'fs-extra'
-import clc from 'cli-color'
-import dircompare from 'dir-compare'
-import mkdirp from 'mkdirp'
-import moment from 'moment'
-import path from 'path'
+import fse from "fs-extra"
+import clc from "cli-color"
+import dircompare from "dir-compare"
+import mkdirp from "mkdirp"
+import moment from "moment"
+import path from "path"
 
 import {
 	cli
@@ -17,29 +17,29 @@ import {
 	,Plugins
   ,Manager
   ,TimeMesure
-} from '../'
+} from "../"
 
 export default class FileParser {
 
   constructor() {}
 
   static getWebsite(path) {
-    var beforeRoot = config.root.split('/')
+    var beforeRoot = config.root.split("/")
     beforeRoot = beforeRoot.pop()
     var website = beforeRoot
-    return website.split('/')[0]
+    return website.split("/")[0]
   }
 
   static getTemplate(path) {
-    var file = path.replace(config.root, '')
-    var file = path.replace(config.templates.url, '')
-    return file.replace(/^\//, '')
+    var file = path.replace(config.root, "")
+    var file = path.replace(config.templates.url, "")
+    return file.replace(/^\//, "")
   }
 
   static getType(path) {
-    var folders = path.replace(config.root, '')
-    folders = folders.replace(/^\//, '')
-    return folders.split('/')[0]
+    var folders = path.replace(config.root, "")
+    folders = folders.replace(/^\//, "")
+    return folders.split("/")[0]
   }
 
   static read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
@@ -49,10 +49,10 @@ export default class FileParser {
     let assets = config.files.templates.assets
   	  
     for (var i = 0; i < level.length; i++) {
-      var path = dirName + '/' + level[i]
+      var path = dirName + "/" + level[i]
       var isFolder = folderUtils.isFolder(path)
       var match = (isFolder) ? true : (inversePattern) ? !extensions.test(level[i]) : extensions.test(level[i])
-      if((type === 'files' || type === null) && match) {
+      if((type === "files" || type === null) && match) {
 
         if(fileUtils.isValidFile(level[i])) {
           var extension = /(\.[\s\S]*)/.exec(level[i])[0]
@@ -67,34 +67,34 @@ export default class FileParser {
             var stat = fse.statSync(path)
             date = stat.mtime
           }
-          var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
+          var status = fileData.s ? dirName.replace(config.root, "").replace(/^\//, "").split("/")[0] : "published"
           var cleanFilePath = fileUtils.cleanFilePath(path)
 
           var fileDate = moment(date)
           var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
 
-          var filePath = path.replace(config.root, '')
-          filePath = filePath.split('/')
+          var filePath = path.replace(config.root, "")
+          filePath = filePath.split("/")
           filePath.shift()
-          filePath = filePath.join('/')
+          filePath = filePath.join("/")
           var item = {
-            'name': level[i],
-            'path': path,
-            'cleanPathName': fileAttr.delete(path),
-            'cleanPath': path.replace(base + '/', ''),
+            "name": level[i],
+            "path": path,
+            "cleanPathName": fileAttr.delete(path),
+            "cleanPath": path.replace(base + "/", ""),
             date: date,
-            cleanDate: fileDate.format('YYYY/MM/DD HH:MM:ss'),
+            cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
             duration: duration,
   						// status: status,
             cleanName: cleanName,
             cleanNameNoExt: cleanNameNoExt,
             cleanFilePath: cleanFilePath,
             filePath: filePath,
-            'type': 'file',
-            'fileType': extension
+            "type": "file",
+            "fileType": extension
           }
 
-          if(!flatten) item['folders'] = []
+          if(!flatten) item["folders"] = []
           arr.push(item)
   		      // push current file name into array to check if siblings folder are assets folder
           fileCurrentLevel.push(fileUtils.removeExtension(level[i]) + assets)
@@ -103,13 +103,13 @@ export default class FileParser {
       if(!fileCurrentLevel.includes(level[i]) && match) {
         if(isFolder) {
           if(!flatten) {
-            var index = arr.push({'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
+            var index = arr.push({"name": level[i], "path": path, "cleanPath": path.replace(base + "/", ""), "folders": [], "type": "folder"}) - 1
             if(current < max){
               arr[index].folders = FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern)
             }
           }else {
-            if(type === 'folders' || type === null) {
-              arr.push({'name': level[i], 'path': path, 'cleanPath': path.replace(base + '/', ''), 'type': 'folder'})
+            if(type === "folders" || type === null) {
+              arr.push({"name": level[i], "path": path, "cleanPath": path.replace(base + "/", ""), "type": "folder"})
             }
             if(current < max){
               Array.prototype.forEach.call(FileParser.read(base, path, type, flatten, extensions, max, current + 1, inversePattern), (files) => {
@@ -127,14 +127,14 @@ export default class FileParser {
   static getFolders(folder, flatten, level) {
     var arr = []
     flatten = flatten || false
-    arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), 'folders', flatten, /(.*?)/, level)
+    arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), "folders", flatten, /(.*?)/, level)
     return arr
   }
   
   static getFiles(folder, flatten, level, extensions = /(.*?)/, inversePattern = false) {
     var arr = []
     flatten = flatten || false
-    arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), 'files', flatten, extensions, level, 0, inversePattern)
+    arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), "files", flatten, extensions, level, 0, inversePattern)
 
     return arr
   }
@@ -154,7 +154,7 @@ export default class FileParser {
     return result
   }
   
-  static getAssetsFolder(pathAssets = '') {
+  static getAssetsFolder(pathAssets = "") {
     var folder = fileUtils.pathWithRoot(pathAssets)
     var assetsFolders = []
     var flatten = true
@@ -165,7 +165,7 @@ export default class FileParser {
     var pathAssets = path.join(folder, templates)
 
     if(folderUtils.isFolder(pathAssets)) {
-      var arr = FileParser.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99)
+      var arr = FileParser.read(pathAssets, pathAssets, "files", flatten, /(.*?)/, 99)
 
 	  	// now check if file for folder exist
       Array.prototype.forEach.call(arr, (file) => {
@@ -181,7 +181,7 @@ export default class FileParser {
     var folders = FileParser.getAssetsFolder()
     var assets = []
     Array.prototype.forEach.call(folders, (folder) => {
-      assets = assets.concat(FileParser.read(folder, folder, 'files', true, /(.*?)/, 99))
+      assets = assets.concat(FileParser.read(folder, folder, "files", true, /(.*?)/, 99))
     })
 
     return assets
@@ -189,7 +189,7 @@ export default class FileParser {
 
   static getProjectFiles() {
     var site = folderUtils.folderInfos(config.root)
-    var result = {'structure': [], 'templates': []}
+    var result = {"structure": [], "templates": []}
 
     let structure = config.structure.url
     let templates = config.templates.url
@@ -206,43 +206,43 @@ export default class FileParser {
   }
 
   static changePathEnv(pathEnv, change) {
-    pathEnv = pathEnv.replace(config.root, '').replace(/^\//, '').split('/')
+    pathEnv = pathEnv.replace(config.root, "").replace(/^\//, "").split("/")
     pathEnv[0] = change
   	
-    return path.join(config.root, pathEnv.join('/'))
+    return path.join(config.root, pathEnv.join("/"))
   }
   
   static getFileDataFromUrl(url) {
     var res = {
-      root: '',
+      root: "",
       draft: {
-        dir: '',
-        file: '',
-        path: ''
+        dir: "",
+        file: "",
+        path: ""
       },
       publish: {
-        dir: '',
-        file: '',
-        link: '',
-        path: '',
-        json: ''
+        dir: "",
+        file: "",
+        link: "",
+        path: "",
+        json: ""
       },
       json: {
-        path: '',
-        file: ''
+        path: "",
+        file: ""
       }
     }
 
     let extension = config.files.templates.extension
-    if(typeof url !== 'undefined' && url !== null) {
+    if(typeof url !== "undefined" && url !== null) {
 
-      var dir = fileUtils.removeLast(url).replace(config.root, '')
+      var dir = fileUtils.removeLast(url).replace(config.root, "")
       var filename = fileUtils.filename(url)
-      var basePath = dir.replace(config.root, '').split('/')
-      var link = url.replace(config.root, '')
-      link = link.split('/')
+      var basePath = dir.replace(config.root, "").split("/")
+      var link = url.replace(config.root, "")
+      link = link.split("/")
       link.shift()
-      link = fileAttr.delete('/' + fileUtils.cleanPath(link.join('/')))
+      link = fileAttr.delete("/" + fileUtils.cleanPath(link.join("/")))
 
       let draft = config.draft.url
       let publish = config.publish.url
@@ -262,7 +262,7 @@ export default class FileParser {
       res.draft.file = filename
       res.publish.file = fileAttr.delete(filename)
       res.publish.link = link
-      res.json.file = fileUtils.replaceExtension(filename, 'json')
+      res.json.file = fileUtils.replaceExtension(filename, "json")
       res.publish.json = path.join(res.json.dir, fileAttr.delete(res.json.file))
 
 	  	// set filename draft/json
@@ -271,7 +271,7 @@ export default class FileParser {
       res.json.path = path.join(res.json.dir, res.json.file)
 
       if(!fileUtils.isFile(res.json.path) && folderUtils.isFolder(res.json.dir)) {
-        var files = fileAttr.filterLatestVersion(FileParser.getFiles(res.json.dir), 'draft')
+        var files = fileAttr.filterLatestVersion(FileParser.getFiles(res.json.dir), "draft")
         Array.prototype.forEach.call(files, (file) => {
           if(file.cleanName === res.json.file) res.json.path = file.path
         })
@@ -303,24 +303,24 @@ export default class FileParser {
 
       res.diffSet.forEach(function (entry) {
         var state = {
-          'equal' : '==',
-          'left' : '->',
-          'right' : '<-',
-          'distinct' : '<>'
+          "equal" : "==",
+          "left" : "->",
+          "right" : "<-",
+          "distinct" : "<>"
         }[entry.state]
 
-        var name1 = entry.name1 ? entry.name1 : ''
-        var name2 = entry.name2 ? entry.name2 : ''
+        var name1 = entry.name1 ? entry.name1 : ""
+        var name2 = entry.name2 ? entry.name2 : ""
 
         let exclude = config.files.exclude
-        if(!exclude.test(name1) && !exclude.test(name2) && entry.type1 !== 'directory' && entry.type2 !== 'directory') {
+        if(!exclude.test(name1) && !exclude.test(name2) && entry.type1 !== "directory" && entry.type2 !== "directory") {
 			    
-          if(typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
+          if(typeof entry.path1 !== "undefined" && entry.path1 !== null) {
             var original = entry.path1
-            var basePath = original.replace(publicFolder, '')
+            var basePath = original.replace(publicFolder, "")
             var move = path.join(dest, basePath)
 
-            if(entry.type2 === 'missing' || entry.state === 'distinct') {
+            if(entry.type2 === "missing" || entry.state === "distinct") {
               fse.removeSync(move)
               var cp = fse.copySync(original, move)
             }
@@ -339,15 +339,15 @@ export default class FileParser {
 
       var jsonPath = FileParser.getFileDataFromUrl(file.path).json.path
       var json = FileParser.getJson(jsonPath)
-      if(typeof json[meta] === 'undefined' || json[meta] === null) json[meta] = {}
-      file['template'] = json[meta].template
-      if(typeof json[meta].latest !== 'undefined' && json[meta].latest !== null) {
-        file['date'] = json[meta].latest.date
+      if(typeof json[meta] === "undefined" || json[meta] === null) json[meta] = {}
+      file["template"] = json[meta].template
+      if(typeof json[meta].latest !== "undefined" && json[meta].latest !== null) {
+        file["date"] = json[meta].latest.date
       }
-      if(typeof json[meta].complete === 'undefined' || json[meta].complete === null) {
+      if(typeof json[meta].complete === "undefined" || json[meta].complete === null) {
         json[meta].complete = 0
       }
-      if(typeof json[meta] !== 'undefined' && json[meta] !== null) {
+      if(typeof json[meta] !== "undefined" && json[meta] !== null) {
         file[config.meta.name] = json[meta]
       }
       res.push(file)
@@ -368,7 +368,7 @@ export default class FileParser {
     if (order !== -1) {
       order = 1
     }
-    if(prop === 'date'){
+    if(prop === "date"){
       return function(a,b){
         a = new Date(a[prop])
         b = new Date(b[prop])
@@ -404,25 +404,25 @@ export default class FileParser {
       var cleanFile = file
       var json = FileParser.getJson(file.path)
 
-      if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+      if(typeof json.abe_meta !== "undefined" && json.abe_meta !== null) {
         var date = null
-        if (typeof json.abe_meta.latest.date !== 'undefined' && json.abe_meta.latest.date !== null) {
+        if (typeof json.abe_meta.latest.date !== "undefined" && json.abe_meta.latest.date !== null) {
           date = json.abe_meta.latest.date
-        }else if (typeof json.abe_meta.date !== 'undefined' && json.abe_meta.date !== null) {
+        }else if (typeof json.abe_meta.date !== "undefined" && json.abe_meta.date !== null) {
           date = json.abe_meta.date
         }
         cleanFile.abe_meta = {
           date: date
-          , type: (typeof json.abe_meta.type !== 'undefined' && json.abe_meta.type !== null) ? json.abe_meta.type : null
-          , link: (typeof json.abe_meta.link !== 'undefined' && json.abe_meta.link !== null) ? json.abe_meta.link : null
-          , template: (typeof json.abe_meta.template !== 'undefined' && json.abe_meta.template !== null) ? json.abe_meta.template : null
-          , status: (typeof json.abe_meta.status !== 'undefined' && json.abe_meta.status !== null) ? json.abe_meta.status : null
-          , cleanName: (typeof json.abe_meta.cleanName !== 'undefined' && json.abe_meta.cleanName !== null) ? json.abe_meta.cleanName : null
-          , cleanFilename: (typeof json.abe_meta.cleanFilename !== 'undefined' && json.abe_meta.cleanFilename !== null) ? json.abe_meta.cleanFilename : null
+          , type: (typeof json.abe_meta.type !== "undefined" && json.abe_meta.type !== null) ? json.abe_meta.type : null
+          , link: (typeof json.abe_meta.link !== "undefined" && json.abe_meta.link !== null) ? json.abe_meta.link : null
+          , template: (typeof json.abe_meta.template !== "undefined" && json.abe_meta.template !== null) ? json.abe_meta.template : null
+          , status: (typeof json.abe_meta.status !== "undefined" && json.abe_meta.status !== null) ? json.abe_meta.status : null
+          , cleanName: (typeof json.abe_meta.cleanName !== "undefined" && json.abe_meta.cleanName !== null) ? json.abe_meta.cleanName : null
+          , cleanFilename: (typeof json.abe_meta.cleanFilename !== "undefined" && json.abe_meta.cleanFilename !== null) ? json.abe_meta.cleanFilename : null
         }
       }
       Array.prototype.forEach.call(withKeys, (key) => {
-        var keyFirst = key.split('.')[0]
+        var keyFirst = key.split(".")[0]
         cleanFile[keyFirst] = json[keyFirst]
       })
       filesArr.push(cleanFile)
@@ -431,7 +431,7 @@ export default class FileParser {
 
     var merged = fileUtils.getFilesMerged(filesArr)
 
-    Hooks.instance.trigger('afterGetAllFiles', merged)
+    Hooks.instance.trigger("afterGetAllFiles", merged)
     return merged
   }
 
@@ -450,7 +450,7 @@ export default class FileParser {
     var tplUrl = FileParser.getFileDataFromUrl(path.join(config.publish.url, filePath))
     if(fileUtils.isFile(tplUrl.json.path)) {
       var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)))
-      if(typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
+      if(typeof json.abe_meta.publish !== "undefined" && json.abe_meta.publish !== null) {
         delete json.abe_meta.publish
       }
 
@@ -458,10 +458,10 @@ export default class FileParser {
 	      fileUtils.getFilePath(json.abe_meta.link),
 	      json.abe_meta.template,
 	      json,
-	      '',
-	      'reject',
+	      "",
+	      "reject",
 	      null,
-	      'reject'
+	      "reject"
       )
 	    .then((resSave) => {
       FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
@@ -471,7 +471,7 @@ export default class FileParser {
   }
 
   static deleteFile(filePath) {
-    filePath = Hooks.instance.trigger('beforeDeleteFile', filePath)
+    filePath = Hooks.instance.trigger("beforeDeleteFile", filePath)
 
     var revisions = fileAttr.getVersions(filePath)
 
@@ -483,9 +483,9 @@ export default class FileParser {
   }
 
   static deleteFileFromName(filePath) {
-    var pathDelete = filePath.split('/')
+    var pathDelete = filePath.split("/")
     var file = pathDelete.pop()
-    pathDelete = pathDelete.join('/')
+    pathDelete = pathDelete.join("/")
     try{
       var stat = fse.statSync(pathDelete)
       if (stat) {
@@ -506,10 +506,10 @@ export default class FileParser {
 
     var refFolder = path.join(config.root, config.reference.url)
     if(folderUtils.isFolder(refFolder)) {
-      var files = FileParser.read(fileUtils.cleanPath(refFolder), fileUtils.cleanPath(refFolder), 'files', true, /.json/)
+      var files = FileParser.read(fileUtils.cleanPath(refFolder), fileUtils.cleanPath(refFolder), "files", true, /.json/)
       Array.prototype.forEach.call(files, (file) => {
-        var name = file.filePath.replace(file.fileType, '')
-        name = name.replace(/\//g, '.')
+        var name = file.filePath.replace(file.fileType, "")
+        name = name.replace(/\//g, ".")
         var json = fse.readJsonSync(file.path)
 
         ref[name] = json
@@ -522,7 +522,7 @@ export default class FileParser {
   static getJson(pathJson, displayError = true) {
     var json = {}
     // HOOKS beforeGetJson
-    pathJson = Hooks.instance.trigger('beforeGetJson', pathJson)
+    pathJson = Hooks.instance.trigger("beforeGetJson", pathJson)
     
     try {
       var stat = fse.statSync(pathJson)
@@ -536,7 +536,7 @@ export default class FileParser {
     }
 
     // HOOKS afterGetJson
-    json = Hooks.instance.trigger('afterGetJson', json)
+    json = Hooks.instance.trigger("afterGetJson", json)
     return json
   }
 }

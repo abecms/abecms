@@ -1,5 +1,5 @@
-import config from './abe-config'
-import configLocal from './abe-config-local'
+import config from "./abe-config"
+import configLocal from "./abe-config-local"
 
 var abeConfig = config
 var abeConfigLocal = configLocal

@@ -1,5 +1,5 @@
-import prettyjson from 'prettyjson'
-import Table from 'cli-table'
+import prettyjson from "prettyjson"
+import Table from "cli-table"
 
 export default class CliUtils {
 
@@ -9,10 +9,10 @@ export default class CliUtils {
   	// instantiate
     var tab = new Table()
 
-    var i = '0'
+    var i = "0"
     Array.prototype.forEach.call(arr, (value) => {
       var obj = {}
-      obj['item-' + (i++)] = value
+      obj["item-" + (i++)] = value
       tab.push(obj)
     })
 
