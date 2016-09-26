@@ -1,5 +1,6 @@
 import clc from 'cli-color'
 import path from 'path'
+import fse from 'fs-extra'
 
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
 // ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
@@ -10,8 +11,6 @@ Array.prototype.forEach.call(process.argv, (item) => {
     pConfig[ar[0]] = ar[1]
   }
 })
-
-pConfig.TYPE = pConfig.TYPE || 'publish'
 
 if(typeof pConfig.ABE_PATH === 'undefined' || pConfig.ABE_PATH === null) {
   pConfig.ABE_PATH = ''
@@ -36,12 +35,10 @@ function publishNext(published, tt, cb, i = 0) {
   var currentDateStart = new Date()
   var pub = published.shift()
   if(typeof pub !== 'undefined' && pub !== null) {
-      
-    var jsonPath = FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp('\\.' + config.files.templates.extension), '.json')
-    var json = FileParser.getJson(jsonPath)
+    
+    var json = FileParser.getJson(pub.path)
     if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
       i++
-      ar_url.push(pub.path)
 
       var p = new Promise((resolve, reject) => {
         try {
@@ -51,24 +48,30 @@ function publishNext(published, tt, cb, i = 0) {
             json.abe_meta.template,
             null,
             '',
-            pConfig.TYPE,
+            'publish',
             null,
-            pConfig.TYPE,
+            'publish',
             true)
             .then(() => {
               var d = new Date(new Date().getTime() - currentDateStart.getTime())
               var total = new Date(new Date().getTime() - dateStart.getTime())
-              // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + jsonPath
+              // logsPub += i + ' [' + d + 'sec] > start publishing ' + pub.path .replace(config.root, '') + ' < ' + pub.path
               console.log(clc.green(i) + '/' + tt + ' - (' + clc.green(msToTime(d)) + '/' + msToTime(total) + ')')
-              console.log(clc.bgWhite(clc.black(pub.path.replace(config.root, '').replace(config.publish.url, '')))
-                + ' < ' + clc.bgWhite(clc.black(jsonPath.replace(config.root, '').replace(config.data.url, '')))
+              console.log(clc.bgWhite(clc.black(pub.path.replace(config.root, '').replace(config.data.url, '')))
                 + ' (' + clc.cyan(json.abe_meta.template) + ')')
               resolve()
             }).catch(function(e) {
+              var d = new Date(new Date().getTime() - currentDateStart.getTime())
+              var total = new Date(new Date().getTime() - dateStart.getTime())
+              console.log(clc.red(i) + '/' + tt + ' - (' + clc.red(msToTime(d)) + '/' + msToTime(total) + ')')
+              publishErrors.push({
+                msg: e + ""
+                , json:json
+              })
               // log.write('publish-all', e)
-              console.log('publish-all', e)
+              console.log(clc.red(e))
               // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
-              console.log('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
+              console.log('publish-all', 'ERROR on ' + pub.path.replace(config.root, '').replace(config.data.url, ''))
               resolve()
             })
         } catch(e) {
@@ -90,7 +93,7 @@ function publishNext(published, tt, cb, i = 0) {
   }
 }
 
-var ar_url = []
+var publishErrors = []
 var dateStart = new Date()
 // var logsPub = ""
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
@@ -104,39 +107,36 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var fileUtils = require('../../cli').fileUtils
     var folderUtils = require('../../cli').folderUtils
     var save = require('../../cli').save
-    var log = require('../../cli').log
     var Manager = require('../../cli').Manager
 
     Manager.instance.init()
       .then(() => {
-        var type = null
-        var folder = null
-        if(typeof pConfig.FILEPATH !== 'undefined' && pConfig.FILEPATH !== null) {
-          console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''))
-          pConfig.FILEPATH = path.join(config.root, config.data.url, pConfig.FILEPATH.replace(config.root))
-
-          var fileJson = FileParser.getJson(
-            pConfig.FILEPATH.replace(new RegExp('\\.' + config.files.templates.extension), '.json')
-          )
-
-          if(typeof fileJson !== 'undefined' && fileJson !== null) {
-            if(typeof fileJson.abe_meta !== 'undefined' && fileJson.abe_meta !== null) {
-              type = fileJson.abe_meta.template
-              folder = fileUtils.removeLast(fileJson.abe_meta.link)
-            }
-          }
-        }
-
-        var site = folderUtils.folderInfos(config.root)
-        let publish = config.publish.url
-        var published = FileParser.getFilesByType(path.join(site.path, publish, pConfig.ABE_PATH))
-        published = FileParser.getMetas(published, 'draft')
         var i = 0
 
+        var files = Manager.instance.getList()
+
+        // var result = []
+        var published = []
+        var folderToParse = path.join(config.root, config.data.url, pConfig.ABE_PATH)
+        Array.prototype.forEach.call(files, (file) => {
+          if (typeof file.publish !== 'undefined' && file.publish !== null && file.path.indexOf(folderToParse) > -1) {
+            published.push(file)
+          }
+        })
+
         console.log('Found ' + clc.green(published.length) + ' to republish')
+
         dateStart = new Date()
         publishNext(published, published.length, function (i) {
           console.log('total ' + clc.green(i) + ' files')
+          if (publishErrors.length > 0) {
+            var errorPath = path.join(config.root, 'abe-publish-all.' + dateStart.getTime() + '.log')
+            console.log('Errors ' + clc.red(publishErrors.length) + ' see ' + errorPath + ' for more info')
+            fse.writeJsonSync(errorPath, publishErrors, {
+              space: 2,
+              encoding: 'utf-8'
+            })
+          }
           dateStart = (Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100)) / 100
           console.log('publish process finished in ' + clc.green(dateStart) + 'm')
           process.exit(0)

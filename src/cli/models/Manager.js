@@ -71,12 +71,16 @@ class Manager {
   }
 
   updateList() {
+    if(typeof this._loadTime === 'undefined' || this._loadTime === null) {
+       this._loadTime = new TimeMesure('Loading Manager')
+    }
     this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
     this._list.sort(FileParser.predicatBy('date', -1))
     if(config.redis.enable){
       redis.get().set('list', JSON.stringify(this._list))
     }
     this._loadTime.duration()
+    delete this._loadTime
 
     return this
   }
