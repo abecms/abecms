@@ -57,34 +57,34 @@ export default class Utils {
    * @param {String} type        textarea | text | meta | link | image | ...
    * @param {String} key         unique ID, no space allowed
    * @param {String} desc        input description
-   * @param {Int}    maxLength   maximum characteres allowed inside input
+   * @param {Int}    max-length   maximum characteres allowed inside input
    * @param {String} tab         tab name
    * @param {String} jsonValue   
    * @return {Void}
    */
   add(obj) {
     var defaultValues = {
-      type: 'text',
-      key: '',
+      autocomplete: null,
+      block:'',
       desc: '',
-      maxLength: null,
-      tab: 'default',
-      placeholder: '',
-      value: '',
-      source: null,
       display: null,
-      reload: false,
-      order: 0,
-      required: false,
       editable: true,
-      visible: true,
-      block: ''
+      key: '',
+      "max-length": null,
+      order: 0,
+      placeholder: '',
+      prefill: false,
+      "prefill-quantity": null,
+      reload: false,
+      required: false,
+      source: null,
+      tab: 'default',
+      type: 'text',
+      value: '',
+      visible: true
     }
 
     obj = extend(true, defaultValues, obj)
-    obj.tab = (typeof obj.tab !== 'undefined' && obj.tab !== null && obj.tab !== '') ? obj.tab : 'default'
-
-    obj.reload = (typeof obj.reload !== 'undefined' && obj.reload !== null && obj.reload === 'true') ? true : false,
     obj.key = obj.key.replace(/\./, '-')
 
     if(obj.key.indexOf('[') < 0 && obj.key.indexOf('.') > -1) {
@@ -312,18 +312,18 @@ export default class Utils {
         .then((data) => {
           jsonPage[sourceAttr][obj.key] = data
           if (!obj.editable) {
-            if (obj.maxLength) {
-              jsonPage[obj.key] = data.slice(0, obj.maxLength)
+            if (obj["max-length"]) {
+              jsonPage[obj.key] = data.slice(0, obj["max-length"])
             }else {
               jsonPage[obj.key] = data
             }
           } else if (obj.prefill) {
-            if (obj.prefillQuantity && obj.maxLength) {
-              jsonPage[obj.key] = data.slice(0, (obj.prefillQuantity > obj.maxLength) ? obj.maxLength : obj.prefillQuantity)
-            }else if (obj.prefillQuantity) {
-              jsonPage[obj.key] = data.slice(0, obj.prefillQuantity)
-            }else if (obj.maxLength) {
-              jsonPage[obj.key] = data.slice(0, obj.maxLength)
+            if (obj["prefill-quantity"] && obj["max-length"]) {
+              jsonPage[obj.key] = data.slice(0, (obj["prefill-quantity"] > obj["max-length"]) ? obj["max-length"] : obj["prefill-quantity"])
+            }else if (obj["prefill-quantity"]) {
+              jsonPage[obj.key] = data.slice(0, obj["prefill-quantity"])
+            }else if (obj["max-length"]) {
+              jsonPage[obj.key] = data.slice(0, obj["max-length"])
             }else {
               jsonPage[obj.key] = data
             }
@@ -537,60 +537,51 @@ export default class Utils {
     return str
   }
 
+  /**
+  * Get All attributes from a Abe tag
+  * @return {Object} parsed attributes
+  */
   static getAllAttributes(str, json) {
     str = Hooks.instance.trigger('beforeAbeAttributes', str, json)
 
-    var defaultValues = {
-      type: 'text',
-      prefill: false,
-      prefillQuantity: null,
-      key: '',
-      desc: '',
-      maxLength: null,
-      tab: 'default',
-      value: '',
-      source: null,
+    //This regex analyzes all attributes of a Abe tag 
+    var re = /\b([a-z][a-z0-9\-]*)\s*=\s*("([^"]+)"|'([^']+)'|(\S+))/ig
+
+    var attrs = {
       autocomplete: null,
+      desc: '',
       display: null,
-      reload: false,
-      order: 0,
-      required: false,
       editable: true,
+      key: '',
+      "max-length": null,
+      "min-length": 0,
+      order: 0,
+      prefill: false,
+      "prefill-quantity": null,
+      reload: false,
+      required: false,
+      source: null,
+      tab: 'default',
+      type: 'text',
+      value: '',
       visible: true
     }
-
-    var source = getAttr(str, 'source')
-    var key = getAttr(str, 'key')
-
-    var obj = {
-      type: getAttr(str, 'type')
-        ,key: key
-        ,prefill: getAttr(str, 'prefill')
-        ,prefillQuantity: getAttr(str, 'prefill-quantity')
-        ,desc: getAttr(str, 'desc')
-        ,autocomplete: getAttr(str, 'autocomplete')
-        ,maxLength: getAttr(str, 'max-length')
-        ,value: json[key]
-        ,tab: getAttr(str, 'tab')
-        ,sourceString: (typeof source !== 'undefined' && source !== null && source !== '') ? source : null
-        ,source: (typeof source !== 'undefined' && source !== null && source !== '')
-          ? ((typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null && json[config.source.name] !== '')
-              ? json[config.source.name][key] : null) : null
-        ,display: getAttr(str, 'display')
-        ,reload: getAttr(str, 'reload')
-        ,order: getAttr(str, 'order')
-        ,required: getAttr(str, 'required')
-        ,visible: getAttr(str, 'visible')
-        ,editable: getAttr(str, 'editable')
+    
+    for (var match; match = re.exec(str); ){
+      attrs[match[1]] = match[3] || match[4] || match[5];
     }
-    obj = extend(true, defaultValues, obj)
 
-    obj.editable = (typeof obj.editable === 'undefined' || obj.editable === null || obj.editable === '' || obj.editable === 'false') ? false : true
-    obj.prefill = (typeof obj.prefill !== 'undefined' && obj.prefill !== null && obj.prefill === 'true') ? true : false
-    obj.prefillQuantity = (typeof obj.prefillQuantity !== 'undefined' && obj.prefillQuantity !== null && obj.prefillQuantity !== '') ? obj.prefillQuantity : false
+    attrs.sourceString = attrs.source
+    attrs.source = (typeof source !== 'undefined' && source !== null && source !== '')? 
+      ((typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null && json[config.source.name] !== '')? 
+        json[config.source.name][key] : 
+        null
+      ) : 
+      null
+    attrs.editable = (typeof attrs.editable === 'undefined' || attrs.editable === null || attrs.editable === '' || attrs.editable === 'false') ? false : true
 
-    obj = Hooks.instance.trigger('afterAbeAttributes', obj, str, json)
+    attrs = Hooks.instance.trigger('afterAbeAttributes', attrs, str, json)
 
-    return obj
+    return attrs
   }
 }

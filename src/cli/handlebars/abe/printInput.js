@@ -34,7 +34,7 @@ export default function printInput () {
   var commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     value="${params.value}"
-                    maxlength="${params.maxLength}"
+                    maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
@@ -46,7 +46,7 @@ export default function printInput () {
   if(typeof params.source !== 'undefined' && params.source !== null) {
     commonParams = `id="${params.key}"
                     data-id="${params.key}"
-                    data-maxlength="${params.maxLength}"
+                    data-maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
@@ -57,8 +57,8 @@ export default function printInput () {
 
     var multiple = ''
     var disabled = ''
-    if(typeof params.maxLength === 'undefined' || params.maxLength === null || params.maxLength === ''
-      || (params.maxLength > 1 && params.source.length > 0)) {
+    if(typeof params['max-length'] === 'undefined' || params['max-length'] === null || params['max-length'] === ''
+      || (params['max-length'] > 1 && params.source.length > 0)) {
       multiple = 'multiple'
     }
     if(params.source.length <= 0) {
@@ -100,7 +100,7 @@ export default function printInput () {
   }else if (params.type.indexOf('rich') >= 0){
     commonParams = `id="${params.key}"
                     data-id="${params.key}"
-                    maxlength="${params.maxLength}"
+                    maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
