@@ -1,35 +1,35 @@
-import fse from 'fs-extra'
-import clc from 'cli-color'
-import extend from 'extend'
+import fse from "fs-extra"
+import clc from "cli-color"
+import extend from "extend"
 
-import {abeConfig, abeConfigLocal} from '../config'
+import {abeConfig, abeConfigLocal} from "../config"
 import {
 	cli,
 	log
-} from '../'
+} from "../"
 
 var result = extend(true, abeConfig, abeConfigLocal)
-result.root = result.root.replace(/\/$/, '')
+result.root = result.root.replace(/\/$/, "")
 var hintAbeJson = false
 
 var loadLocalConfig = (result) => {
-  var website = result.root.replace(/\/$/, '')
+  var website = result.root.replace(/\/$/, "")
   try{
     var stat = fse.statSync(website)
     if (stat && stat.isDirectory()) {
       try{
-        stat = fse.statSync(website + '/abe.json')
+        stat = fse.statSync(website + "/abe.json")
         if (stat) {
-          var json = fse.readJsonSync(website + '/abe.json')
+          var json = fse.readJsonSync(website + "/abe.json")
           var result = extend(true, result, json)
         }
       }catch(e) {
         if (!hintAbeJson) {
           hintAbeJson = true
           console.log(
-						clc.green('[ Hint ]'),
-						'create abe.json to config',
-						clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
+						clc.green("[ Hint ]"),
+						"create abe.json to config",
+						clc.cyan.underline("https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md")
 					)
         }
       }
@@ -40,11 +40,11 @@ var loadLocalConfig = (result) => {
 loadLocalConfig(result)
 
 result.exist = (conf, json) => {
-  var c = conf.split('.')
+  var c = conf.split(".")
   var current = json
-  if(typeof current !== 'undefined' && current !== null) {
+  if(typeof current !== "undefined" && current !== null) {
     Array.prototype.forEach.call(c, (c) => {
-      if(current !== false && typeof current[c] !== 'undefined' && current[c] !== null) {
+      if(current !== false && typeof current[c] !== "undefined" && current[c] !== null) {
         current = current[c]
       }else {
         current = false
@@ -64,9 +64,9 @@ result.getDefault = (conf) => {
 result.get = (conf, file) => {
   return result.exist(conf, result)
 
-  if(typeof file !== 'undefined' && file !== null && file !== '') {
-    var website = file.replace(result.root, '')
-    website = website.split('/')[0]
+  if(typeof file !== "undefined" && file !== null && file !== "") {
+    var website = file.replace(result.root, "")
+    website = website.split("/")[0]
 
     var websiteConf = result.exist(conf, result.websites[website])
     if(websiteConf !== false) {
@@ -85,8 +85,8 @@ result.set = (json) => {
 result.save = (website, json) => {
   extend(true, result, json)
 
-  var confPath = result.root.replace(/\/$/, '') + '/abe.json'
-  fse.writeJsonSync(confPath, json, { space: 2, encoding: 'utf-8' })
+  var confPath = result.root.replace(/\/$/, "") + "/abe.json"
+  fse.writeJsonSync(confPath, json, { space: 2, encoding: "utf-8" })
 }
 
 result.getConfigByWebsite = () => {
@@ -100,32 +100,32 @@ result.getConfigByWebsite = () => {
   var localConfig = extend(true, {}, defaultConfig)
   for(var item in localConfig) {
     switch(item) {
-    case 'intlData':
+    case "intlData":
       configBySite.default.intlData = localConfig[item]
       break
-    case 'templates':
+    case "templates":
       configBySite.default.templates = localConfig[item]
       break
-    case 'structure':
+    case "structure":
       configBySite.default.structure = localConfig[item]
       break
-    case 'data':
+    case "data":
       configBySite.default.data = localConfig[item]
       break
-    case 'draft':
+    case "draft":
       configBySite.default.draft = localConfig[item]
       break
-    case 'publish':
+    case "publish":
       configBySite.default.publish = localConfig[item]
       break
-    case 'files':
+    case "files":
       configBySite.default.files = {
         templates: {
           extension: localConfig[item].templates.extension
         }
       }
       break
-    case 'upload':
+    case "upload":
       configBySite.default.upload = localConfig[item]
       break
     }

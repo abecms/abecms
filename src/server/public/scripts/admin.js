@@ -1,11 +1,11 @@
-import Handlebars from 'handlebars'
-import FormCreate from './modules/FormCreate'
-import FormList from './modules/FormList'
+import Handlebars from "handlebars"
+import FormCreate from "./modules/FormCreate"
+import FormList from "./modules/FormList"
 
 class Admin {
   constructor() {
-    this._page = document.querySelector('body').getAttribute('data-page')
-    this._formCreate = document.querySelector('.form-create')
+    this._page = document.querySelector("body").getAttribute("data-page")
+    this._formCreate = document.querySelector(".form-create")
 
     this._bindEvents()
   }
@@ -15,10 +15,10 @@ class Admin {
    * @return {null}
    */
   _bindEvents() {
-    if(typeof this._formCreate !== 'undefined' && this._formCreate !== null) {
+    if(typeof this._formCreate !== "undefined" && this._formCreate !== null) {
       new FormCreate()
 
-    }else if(this._page === 'list') {
+    }else if(this._page === "list") {
       new FormList()
     }
   }

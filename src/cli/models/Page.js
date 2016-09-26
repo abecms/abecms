@@ -1,5 +1,5 @@
-import Handlebars from 'handlebars'
-import fse from 'fs-extra'
+import Handlebars from "handlebars"
+import fse from "fs-extra"
 
 import {
   Util,
@@ -10,7 +10,7 @@ import {
   config,
   Hooks,
   Manager
-} from '../'
+} from "../"
 
 /**
  * Page class
@@ -31,9 +31,9 @@ export default class Page {
     var dateStart = new Date()
 
     // HOOKS beforePageJson
-    json = Hooks.instance.trigger('beforePageJson', json)
+    json = Hooks.instance.trigger("beforePageJson", json)
 
-    if(typeof Handlebars.templates[templateId] !== 'undefined' && 
+    if(typeof Handlebars.templates[templateId] !== "undefined" && 
         Handlebars.templates[templateId] !== null && 
         config.files.templates.precompile
       ){
@@ -47,7 +47,7 @@ export default class Page {
 
       this._onlyHTML = onlyHTML
       this.template = template
-      this.HbsTemplatePath = fileUtils.getTemplatePath('hbs/'+templateId+'.hbs')
+      this.HbsTemplatePath = fileUtils.getTemplatePath("hbs/"+templateId+".hbs")
 
       let util = new Util()
 
@@ -90,24 +90,24 @@ export default class Page {
 
         // Don't know what it does...
         var source = config.source.name
-        if(typeof json[source] !== 'undefined' && json[source] !== null) {
+        if(typeof json[source] !== "undefined" && json[source] !== null) {
           var keys = Object.keys(json[source])
           
           for(var i in keys) {
-            var replaceEach = new RegExp(`<!-- \\[\\[${keys[i]}\\]\\][\\s\\S]*?-->`, 'g')
-            this.template = this.template.replace(replaceEach, '')
+            var replaceEach = new RegExp(`<!-- \\[\\[${keys[i]}\\]\\][\\s\\S]*?-->`, "g")
+            this.template = this.template.replace(replaceEach, "")
 
-            var patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g')
+            var patAttrSource = new RegExp(" ([A-Za-z0-9\-\_]+)=[\"|'].*?({{" + keys[i] + "}}).*?[\"|']", "g")
             var patAttrSourceMatch = this.template.match(patAttrSource)
 
-            if(typeof patAttrSourceMatch !== 'undefined' && patAttrSourceMatch !== null) {
-              var patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
+            if(typeof patAttrSourceMatch !== "undefined" && patAttrSourceMatch !== null) {
+              var patAttrSourceInside = new RegExp("(\\S+)=[\"']?((?:.(?![\"']?\\s+(?:\\S+)=|[>\"']))+.)[\"']?({{" + keys[i] + "}}).*?[\"|']", "g")
               Array.prototype.forEach.call(patAttrSourceMatch, (pat) => {
                 var patAttrSourceCheck = patAttrSourceInside.exec(pat)
-                if(typeof patAttrSourceCheck !== 'undefined' && patAttrSourceCheck !== null) {
+                if(typeof patAttrSourceCheck !== "undefined" && patAttrSourceCheck !== null) {
                   var checkEscaped = /["|'](.*?)["|']/
                   checkEscaped = checkEscaped.exec(patAttrSourceCheck[0])
-                  if(typeof checkEscaped !== 'undefined' && checkEscaped !== null && checkEscaped.length > 0) {
+                  if(typeof checkEscaped !== "undefined" && checkEscaped !== null && checkEscaped.length > 0) {
                     checkEscaped = escape(checkEscaped[1])
                     this.template = this.template.replace(
                       patAttrSourceCheck[0],
@@ -118,9 +118,9 @@ export default class Page {
               })
             }
 
-            var eachSource = new RegExp(`({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`, 'g')
+            var eachSource = new RegExp(`({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`, "g")
             var matches = this.template.match(eachSource)
-            if(typeof matches !== 'undefined' && matches !== null) {
+            if(typeof matches !== "undefined" && matches !== null) {
               Array.prototype.forEach.call(matches, (match) => {
                 this.template = this.template.replace(match, `${match}<!-- [[${keys[i]}]] ${util.encodeAbe(match)} -->`)
               })
@@ -135,11 +135,11 @@ export default class Page {
       this.template = Util.removeDataList(this.template)
 
       // It's time to replace the [index] by {{@index}} (concerning each blocks)
-      this.template = this.template.replace(/\[index\]\./g, '{{@index}}-')
+      this.template = this.template.replace(/\[index\]\./g, "{{@index}}-")
 
       if(config.files.templates.precompile){
         // Let's persist the precompiled template for future use (kind of cache)
-        fse.writeFileSync(this.HbsTemplatePath, Handlebars.precompile(this.template), 'utf8')
+        fse.writeFileSync(this.HbsTemplatePath, Handlebars.precompile(this.template), "utf8")
         Manager.instance.addHbsTemplate(templateId)
       }
 
@@ -151,9 +151,9 @@ export default class Page {
     }
 
     if(this._onlyHTML) {
-      this.html = Hooks.instance.trigger('afterPageSaveCompile', this.html, json)
+      this.html = Hooks.instance.trigger("afterPageSaveCompile", this.html, json)
     }else {
-      this.html = Hooks.instance.trigger('afterPageEditorCompile', this.html, json)
+      this.html = Hooks.instance.trigger("afterPageEditorCompile", this.html, json)
     }
 
     //console.log('result: ' + ((new Date().getTime() - dateStart.getTime()) / 1000))
@@ -165,13 +165,13 @@ export default class Page {
 
     while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
       if(util.isSingleAbe(match[0], this.template)){
-        var more_attr = ''
-        var getattr = getAttr(match, 'key').replace(/\./g, '-')
+        var more_attr = ""
+        var getattr = getAttr(match, "key").replace(/\./g, "-")
         this.template = this.template.replace(
           new RegExp(match[0]),
-          ' data-abe-attr-' + util.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
-          ' data-abe-' + util.validDataAbe(getattr) + '="'  + getattr + '"' +
-          more_attr + match[0].replace('}}', ' has-abe=1}}')
+          " data-abe-attr-" + util.validDataAbe(getattr) + "=\""  + (match[0].split("=")[0]).trim() + "\"" +
+          " data-abe-" + util.validDataAbe(getattr) + "=\""  + getattr + "\"" +
+          more_attr + match[0].replace("}}", " has-abe=1}}")
         )
       }
     }
@@ -184,10 +184,10 @@ export default class Page {
     let util = new Util()
 
     while (match = this.abePattern.exec(this.template)) {
-      var getattr = getAttr(match, 'key').replace(/\./g, '-')
+      var getattr = getAttr(match, "key").replace(/\./g, "-")
       this.template = this.template.replace(
-        escapeTextToRegex(match[0], 'g'),
-        ' data-abe-' + util.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
+        escapeTextToRegex(match[0], "g"),
+        " data-abe-" + util.validDataAbe(getattr) + "=\""  + getattr + "\" " + match[0]
       )
     }
 
@@ -214,11 +214,11 @@ export default class Page {
 
         var voidData = {}
         voidData[key] = [{}]
-        var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?)}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
-        var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
+        var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?)}}/g, "[[abe $1]]").replace(new RegExp(`\\.\\.\/${config.meta.name}`, "g"), config.meta.name))
+        var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, "{{abe $1}}")
 
         // je rajoute un data-abe-block avec index sur tous les tags html du bloc each
-        var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
+        var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, "$1 data-abe-block=\"" + key + "{{@index}}\"")
 
         // je remplace le block dans le texte par ça
         this.template = this.template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${util.encodeAbe(blockHtml)} -->`)
@@ -258,16 +258,16 @@ export default class Page {
     var matchBlock = theMatch[0]
     if(util.isEachStatement(matchBlock)) return
     if(util.isBlockAbe(matchBlock)){
-      var matchblockattr = (matchBlock.split('=')[0]).trim()
-      var getattr = getAttr(matchBlock, 'key').replace('.', '[index].')
+      var matchblockattr = (matchBlock.split("=")[0]).trim()
+      var getattr = getAttr(matchBlock, "key").replace(".", "[index].")
       var newMatchBlock = ((!this._onlyHTML) ?
                             (/=[\"\']\{\{(.*?)\}\}/g.test(matchBlock) ?
-                                ' data-abe-attr-' + util.validDataAbe(getattr) + '="'  + matchblockattr + '"' :
-                                '') +
-                            ' data-abe-' + util.validDataAbe(getattr) + '="' + getattr + '" ' + matchBlock :
+                                " data-abe-attr-" + util.validDataAbe(getattr) + "=\""  + matchblockattr + "\"" :
+                                "") +
+                            " data-abe-" + util.validDataAbe(getattr) + "=\"" + getattr + "\" " + matchBlock :
                             matchBlock)
-          .replace(new RegExp('(key=[\'|"])' + key + '.', 'g'), '$1' + key + '[index].')
-          .replace(/\{\{abe/, '{{abe dictionnary=\'' + key + '\'')
+          .replace(new RegExp("(key=['|\"])" + key + ".", "g"), "$1" + key + "[index].")
+          .replace(/\{\{abe/, "{{abe dictionnary='" + key + "'")
 
       this.template = this.template.replace(matchBlock, newMatchBlock)
     }
@@ -280,7 +280,7 @@ export default class Page {
    * @param {String} text html string
    */
   _removeHidden() {
-    this.template = this.template.replace(/(\{\{abe.*visible=[\'|\"]false.*\}\})/g, '')
+    this.template = this.template.replace(/(\{\{abe.*visible=[\'|\"]false.*\}\})/g, "")
 
     return this
   }
@@ -292,7 +292,7 @@ export default class Page {
   _encloseAbeTag() {
     var match
     while (match = this.abePattern.exec(this.template)) {
-      this.template = this.template.replace(escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+      this.template = this.template.replace(escapeTextToRegex(match[1], "g"), "<abe>" + match[1].trim() + "</abe>")
     }
 
     return this
@@ -304,14 +304,14 @@ export default class Page {
     var limit = 0
 
     while (match = listReg.exec(this.template)) {
-      var editable = getAttr(match[0], 'editable')
-      var key = getAttr(match[0], 'key')
+      var editable = getAttr(match[0], "editable")
+      var key = getAttr(match[0], "key")
 
-      if(typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') {
+      if(typeof editable === "undefined" || editable === null || editable === "" || editable === "false") {
         json[key] = json[config.source.name][key]
       }
 
-      json = Hooks.instance.trigger('afterAddSourcePage', json, match[0])
+      json = Hooks.instance.trigger("afterAddSourcePage", json, match[0])
     }
   }
 }

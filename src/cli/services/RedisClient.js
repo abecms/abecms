@@ -1,4 +1,4 @@
-import redis from 'redis'
+import redis from "redis"
 
 var state = {
   db: null,
@@ -6,11 +6,11 @@ var state = {
 
 export function connect(port, host) {
   state.db = redis.createClient(port, host)
-  state.db.on('connect', function() {
-    console.log('connected to Redis')
+  state.db.on("connect", function() {
+    console.log("connected to Redis")
   })
-  state.db.on('error', function(err) {
-    console.log('Error connecting to Redis:' + err)
+  state.db.on("error", function(err) {
+    console.log("Error connecting to Redis:" + err)
   })
 }
 

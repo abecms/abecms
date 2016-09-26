@@ -1,17 +1,17 @@
 
-import {Sql} from '../../'
+import {Sql} from "../../"
 
 export default function sourceAttr(val, params) {
   var hiddenVal = val
-  var selected = ''
+  var selected = ""
 
-  if(typeof hiddenVal === 'object' && Object.prototype.toString.call(hiddenVal) === '[object Object]') {
-    hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, '&apos;')
+  if(typeof hiddenVal === "object" && Object.prototype.toString.call(hiddenVal) === "[object Object]") {
+    hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, "&apos;")
 
     try {
-      var displayVal = eval('val.' + params.display)
-      if(typeof params.display !== 'undefined' && params.display !== null
-        && typeof displayVal !== 'undefined' && displayVal !== null) {
+      var displayVal = eval("val." + params.display)
+      if(typeof params.display !== "undefined" && params.display !== null
+        && typeof displayVal !== "undefined" && displayVal !== null) {
         val = displayVal
       }else {
         val = val[Object.keys(val)[0]]
@@ -21,16 +21,16 @@ export default function sourceAttr(val, params) {
     }
   }
 
-  if(typeof params.value === 'object' && Object.prototype.toString.call(params.value) === '[object Array]') {
+  if(typeof params.value === "object" && Object.prototype.toString.call(params.value) === "[object Array]") {
     Array.prototype.forEach.call(params.value, (v) => {
       var item = v
       try {
-        var displayV = eval('item.' + params.display)
-        if(typeof params.display !== 'undefined' && params.display !== null
-          && typeof displayV !== 'undefined' && displayV !== null) {
+        var displayV = eval("item." + params.display)
+        if(typeof params.display !== "undefined" && params.display !== null
+          && typeof displayV !== "undefined" && displayV !== null) {
           item = displayV
         }else {
-          if(typeof v === 'string') {
+          if(typeof v === "string") {
             item = v
           }else {
             item = v[Object.keys(v)[0]]
@@ -40,20 +40,20 @@ export default function sourceAttr(val, params) {
         item = v[Object.keys(v)[0]]
       }
       
-      if(typeof val === 'object' && Object.prototype.toString.call(val) === '[object Array]'
-        && typeof item === 'object' && Object.prototype.toString.call(item) === '[object Array]') {
+      if(typeof val === "object" && Object.prototype.toString.call(val) === "[object Array]"
+        && typeof item === "object" && Object.prototype.toString.call(item) === "[object Array]") {
         
         Array.prototype.forEach.call(item, (i) => {
           if(val.includes(i)) {
-            selected = 'selected="selected"'
+            selected = "selected=\"selected\""
           }
         })
       }else if(val === item) {
-        selected = 'selected="selected"'
+        selected = "selected=\"selected\""
       }
     })
   }else if(params.value === hiddenVal) {
-    selected = 'selected="selected"'
+    selected = "selected=\"selected\""
   }
 
   return {

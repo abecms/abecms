@@ -1,12 +1,12 @@
 
-export default function recursivePrintConfig(obj, key = '') {
-  var res = ''
+export default function recursivePrintConfig(obj, key = "") {
+  var res = ""
 
-  if(typeof obj === 'object' && Object.prototype.toString.call(obj) === '[object Object]') {
+  if(typeof obj === "object" && Object.prototype.toString.call(obj) === "[object Object]") {
     Array.prototype.forEach.call(Object.keys(obj), (k) => {
       var strKey = key
-      if(strKey !== '') {
-        strKey += '.'
+      if(strKey !== "") {
+        strKey += "."
       }
       strKey += k
       res += recursivePrintConfig(obj[k], strKey)

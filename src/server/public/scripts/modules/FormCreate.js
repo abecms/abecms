@@ -1,24 +1,24 @@
-import Nanoajax from 'nanoajax'
-import qs from 'qs'
-import FolderSelect from './FolderSelect'
-import TemplateSelect from './TemplateSelect'
+import Nanoajax from "nanoajax"
+import qs from "qs"
+import FolderSelect from "./FolderSelect"
+import TemplateSelect from "./TemplateSelect"
 
 export default class FormCreate {
   constructor() {
-    this._form = document.querySelector('[data-form-abe-create="true"]')
-    if(typeof this._form !== 'undefined' && this._form !== null) {
+    this._form = document.querySelector("[data-form-abe-create=\"true\"]")
+    if(typeof this._form !== "undefined" && this._form !== null) {
 
     	// constantes variables
-      this._filePath = ''
+      this._filePath = ""
       this._ajax = Nanoajax.ajax
 
     	// constantes variables DOM elements
-      this._form = document.querySelector('.form-create')
-      this._templateName = this._form.querySelector('[data-type-template-abe]')
-      this._tplName = this._form.querySelector('[name=tplName]')
-      this._submitBtn = this._form.querySelector('button[type=submit]')
-      this._inputs = [].slice.call(this._form.querySelectorAll('input[type=text]'))
-      this._selects = [].slice.call(this._form.querySelectorAll('select[id*="level-"]'))
+      this._form = document.querySelector(".form-create")
+      this._templateName = this._form.querySelector("[data-type-template-abe]")
+      this._tplName = this._form.querySelector("[name=tplName]")
+      this._submitBtn = this._form.querySelector("button[type=submit]")
+      this._inputs = [].slice.call(this._form.querySelectorAll("input[type=text]"))
+      this._selects = [].slice.call(this._form.querySelectorAll("select[id*=\"level-\"]"))
 
       // constantes methodes
       this._handlePathChange = this._pathChange.bind(this)
@@ -26,9 +26,9 @@ export default class FormCreate {
       this._handleSubmit = this._submit.bind(this)
 
       // manager update btn
-      this._btnCreate = document.querySelector('[date-abe-create]')
-      this._btnUpdate = document.querySelector('[date-abe-update]')
-      this._btnDuplicate = document.querySelector('[date-abe-duplicate]')
+      this._btnCreate = document.querySelector("[date-abe-create]")
+      this._btnUpdate = document.querySelector("[date-abe-update]")
+      this._btnDuplicate = document.querySelector("[date-abe-duplicate]")
       this._handleBtnDuplicateManagerClick = this._btnDuplicateManagerClick.bind(this)
       this._handleBtnUpdateManagerClick = this._btnUpdateManagerClick.bind(this)
       this._handleBtnCreateManagerClick = this._btnCreateManagerClick.bind(this)
@@ -42,25 +42,25 @@ export default class FormCreate {
   }
 
   _bindEvents() {
-    this._inputs.forEach((input) => { input.addEventListener('keyup', this._handleCanCreate) })
-    this._inputs.forEach((input) => { input.addEventListener('blur', this._handleCanCreate) })
-    this._selects.forEach((select) => { select.addEventListener('change', this._handlePathChange) })
+    this._inputs.forEach((input) => { input.addEventListener("keyup", this._handleCanCreate) })
+    this._inputs.forEach((input) => { input.addEventListener("blur", this._handleCanCreate) })
+    this._selects.forEach((select) => { select.addEventListener("change", this._handlePathChange) })
 
-    if(typeof this._btnUpdate !== 'undefined' && this._btnUpdate !== null) {
-      this._btnUpdate.addEventListener('click', this._handleBtnUpdateManagerClick) // click update metadata
+    if(typeof this._btnUpdate !== "undefined" && this._btnUpdate !== null) {
+      this._btnUpdate.addEventListener("click", this._handleBtnUpdateManagerClick) // click update metadata
     }
-    if(typeof this._btnCreate !== 'undefined' && this._btnCreate !== null) {
-      this._btnCreate.addEventListener('click', this._handleBtnCreateManagerClick) // click update metadata
+    if(typeof this._btnCreate !== "undefined" && this._btnCreate !== null) {
+      this._btnCreate.addEventListener("click", this._handleBtnCreateManagerClick) // click update metadata
     }
-    if(typeof this._btnDuplicate !== 'undefined' && this._btnDuplicate !== null) {
-      this._btnDuplicate.addEventListener('click', this._handleBtnDuplicateManagerClick) // click duplicate content
+    if(typeof this._btnDuplicate !== "undefined" && this._btnDuplicate !== null) {
+      this._btnDuplicate.addEventListener("click", this._handleBtnDuplicateManagerClick) // click duplicate content
     }
 
-    if(typeof this._templateName !== 'undefined' && this._templateName !== null) {
-      this._templateName.addEventListener('submit', this._handleCanCreate)
+    if(typeof this._templateName !== "undefined" && this._templateName !== null) {
+      this._templateName.addEventListener("submit", this._handleCanCreate)
     }
-    if(typeof this._form !== 'undefined' && this._form !== null) {
-      this._form.addEventListener('submit', this._handleSubmit)
+    if(typeof this._form !== "undefined" && this._form !== null) {
+      this._form.addEventListener("submit", this._handleSubmit)
     }
   }
 
@@ -80,88 +80,88 @@ export default class FormCreate {
   _canCreate() {
     var isValid = true
 
-    if(typeof this._templateName !== 'undefined' && this._templateName !== null && this._templateName.value === '') {
+    if(typeof this._templateName !== "undefined" && this._templateName !== null && this._templateName.value === "") {
       isValid = false
     }
 
-    if(typeof this._tplName !== 'undefined' && this._tplName !== null && this._tplName.value === '') {
+    if(typeof this._tplName !== "undefined" && this._tplName !== null && this._tplName.value === "") {
       isValid = false
     }
 
     if(isValid) {
-      this._submitBtn.removeAttribute('disabled')
+      this._submitBtn.removeAttribute("disabled")
     }else {
-      this._submitBtn.setAttribute('disabled', 'disabled')
+      this._submitBtn.setAttribute("disabled", "disabled")
     }
   }
 
   _setFilePath() {
     this._filePath = this._getFilePath()
-    this._form.querySelector('[name="filePath"]').value = this._filePath
+    this._form.querySelector("[name=\"filePath\"]").value = this._filePath
   }
 
   _getFilePath() {
-    var path = ''
+    var path = ""
 
     this._selects.forEach((select) => {
       if(select.offsetWidth > 0 && select.offsetHeight > 0) {
-        var value = select.querySelector('option:checked').getAttribute('clean-value')
-        if(typeof value !== 'undefined' && value !== null && value !== '') {
-          path += value + '/'
-        }else if(typeof select.value !== 'undefined' && select.value !== null && select.value !== '') {
-          path += select.value + '/'
+        var value = select.querySelector("option:checked").getAttribute("clean-value")
+        if(typeof value !== "undefined" && value !== null && value !== "") {
+          path += value + "/"
+        }else if(typeof select.value !== "undefined" && select.value !== null && select.value !== "") {
+          path += select.value + "/"
         }
       }
     })
 
     path = path.slice(0, -1)
-    path = path.split('/')
-    path = path.join('/')
-    path = '/' + path.replace(/^\//, '')
+    path = path.split("/")
+    path = path.join("/")
+    path = "/" + path.replace(/^\//, "")
 
     return path
   }
 
   _submit(type, btn) {
-    if(btn.classList.contains('disable')) return
-    btn.classList.add('disable')
-    var inputs = [].slice.call(document.querySelectorAll('.form-create input'))
-    inputs = inputs.concat([].slice.call(document.querySelectorAll('.form-create select')))
+    if(btn.classList.contains("disable")) return
+    btn.classList.add("disable")
+    var inputs = [].slice.call(document.querySelectorAll(".form-create input"))
+    inputs = inputs.concat([].slice.call(document.querySelectorAll(".form-create select")))
     var values = {}
     Array.prototype.forEach.call(inputs, (input) => {
-      values[input.getAttribute('name')] = input.value
+      values[input.getAttribute("name")] = input.value
     })
     var toSave = qs.stringify(values)
     this._ajax(
       {
-        url: document.location.origin + '/abe/' + type + '/?' + toSave,
+        url: document.location.origin + "/abe/" + type + "/?" + toSave,
         body: toSave,
         headers: {},
-        method: 'get'
+        method: "get"
       },
         (code, responseText, request) => {
           var jsonRes = JSON.parse(responseText)
-          if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== 'undefined' && jsonRes.json.abe_meta !== null) {
-            window.location.href = window.location.origin + '/abe/' + jsonRes.json.abe_meta.template + '?filePath=' + jsonRes.json.abe_meta.link
+          if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== "undefined" && jsonRes.json.abe_meta !== null) {
+            window.location.href = window.location.origin + "/abe/" + jsonRes.json.abe_meta.template + "?filePath=" + jsonRes.json.abe_meta.link
           }else {
-            alert('error')
-            btn.classList.remove('disable')
+            alert("error")
+            btn.classList.remove("disable")
           }
         })
   }
 
   _btnDuplicateManagerClick(e) {
     e.preventDefault()
-    this._submit('duplicate', e.srcElement)
+    this._submit("duplicate", e.srcElement)
   }
 
   _btnUpdateManagerClick(e) {
     e.preventDefault()
-    this._submit('update', e.srcElement)
+    this._submit("update", e.srcElement)
   }
 
   _btnCreateManagerClick(e) {
     e.preventDefault()
-    this._submit('create', e.srcElement)
+    this._submit("create", e.srcElement)
   }
 }

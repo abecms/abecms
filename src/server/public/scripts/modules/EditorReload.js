@@ -1,8 +1,8 @@
-import Nanoajax from 'nanoajax'
-import qs from 'qs'
-import {Promise} from 'es6-promise'
-import Json from '../modules/EditorJson'
-import {IframeDocument} from '../utils/iframe'
+import Nanoajax from "nanoajax"
+import qs from "qs"
+import {Promise} from "es6-promise"
+import Json from "../modules/EditorJson"
+import {IframeDocument} from "../utils/iframe"
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
 
@@ -12,7 +12,7 @@ export default class Reload {
     this._ajax = Nanoajax.ajax
     this._json = Json.instance
 
-    if(enforcer != singletonEnforcer) throw 'Cannot construct Reload singleton'
+    if(enforcer != singletonEnforcer) throw "Cannot construct Reload singleton"
   }
 
   static get instance() {
@@ -38,11 +38,11 @@ export default class Reload {
   }
 
   _nodeScriptIs(node) {
-    return node.tagName === 'SCRIPT'
+    return node.tagName === "SCRIPT"
   }
 
   _nodeScriptClone(node) {
-    var script  = document.createElement('script')
+    var script  = document.createElement("script")
     script.text = node.innerHTML
     for( var i = node.attributes.length-1; i >= 0; i-- ) {
       script.setAttribute( node.attributes[i].name, node.attributes[i].value )
@@ -51,28 +51,28 @@ export default class Reload {
   }
 
   inject(str) { 
-    var iframe = document.querySelector('#page-template') 
-    var iframeBody = IframeDocument('#page-template').body 
+    var iframe = document.querySelector("#page-template") 
+    var iframeBody = IframeDocument("#page-template").body 
     var scrollTop = iframeBody.scrollTop 
  
     var doc = iframe.contentWindow.document 
-    str = str.replace(/<\/head>/, '<base href="/" /></head>') 
+    str = str.replace(/<\/head>/, "<base href=\"/\" /></head>") 
     doc.open() 
     doc.write(str) 
     doc.close() 
      
     setTimeout(function () { 
-      var iframeDoc = IframeDocument('#page-template') 
-      if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
-        && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
+      var iframeDoc = IframeDocument("#page-template") 
+      if(typeof iframeDoc !== "undefined" && iframeDoc !== null 
+        && typeof iframeDoc.body !== "undefined" && iframeDoc.body !== null) { 
         iframeDoc.body.scrollTop = scrollTop 
       } 
     }, 1000) 
   }
   
   reload() {
-    var iframe = document.querySelector('#page-template')
-    var iframeBody = IframeDocument('#page-template').body
+    var iframe = document.querySelector("#page-template")
+    var iframeBody = IframeDocument("#page-template").body
     var scrollTop = iframeBody.scrollTop
     var json = JSON.parse(JSON.stringify(this._json.data))
     
@@ -83,12 +83,12 @@ export default class Reload {
 
     this._ajax(
       {
-        url: iframe.getAttribute('data-iframe-src'),
+        url: iframe.getAttribute("data-iframe-src"),
         body: data,
-        method: 'post'
+        method: "post"
       },
     (code, responseText, request) => {
-      if(typeof responseText !== 'undefined' && responseText !== null) {
+      if(typeof responseText !== "undefined" && responseText !== null) {
         this.inject(responseText)
       }
         
