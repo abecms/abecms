@@ -9,7 +9,7 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "test": "mocha --compilers js:babel-core/register",
+    "test": "mocha --compilers js:babel-register --require babel-polyfill",
     "start": "node --debug --harmony ./dist/server/index.js",
     "startpm2": "pm2 startOrRestart ./processes.json",
     "babel": "babelify src/server/public/scripts/template-engine.js -o src/server/public/scripts/template-engine-compiled.js",

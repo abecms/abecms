@@ -1,20 +1,9 @@
 var chai = require('chai');
+var Sql = require('../src/cli').Sql
+var Util = require('../src/cli').Util
+var Manager = require('../src/cli').Manager;
 
 describe('Request', function() {
-
-  /**
-   * Sql.executeQuery
-   * 
-   */
-  it('Sql.executeQuery()', function() {
-    var Sql = require('../src/cli').Sql
-
-    var match = 'select * from ../'
-    var jsonPage = {}
-    var res = Sql.handleSqlRequest(match, {})
-
-    chai.assert.equal(res.string, 'select ["*"] from ["___abe_dot______abe_dot______abe___"] ', 'select not well formatted')
-  });
 
   /**
    * Sql.getAllAttributes
@@ -22,20 +11,35 @@ describe('Request', function() {
    */
   it('Util.getAllAttributes()', function(done) {
     
-    var Util = require('../src/cli').Util
     var attributes = Util.getAllAttributes("{{abe type='data' key='top_things_slider_highlight' desc='Automatic slider' source='select * from ../' editable='false'}}", {})
 
     chai.assert.equal(attributes.sourceString, 'select * from ../', 'sourceString is ok')
     done();
   });
-  
+
+  /**
+   * Sql.executeQuery
+   * 
+   */
+  it('Sql.executeQuery()', function(done) {
+    try {
+
+      var match = 'select * from ../'
+      var jsonPage = {}
+      var res = Sql.handleSqlRequest(match, {})
+
+      chai.assert.equal(res.string, 'select ["*"] from ["___abe_dot______abe_dot______abe___"] ', 'select not well formatted')
+      done();
+    } catch (x) {
+      done(x);
+    }
+  });
+
   /**
    * Sql.executeFromClause
    * 
    */
   it('Sql.executeFromClause()', function() {
-    var Sql = require('../src/cli').Sql;
-    var Manager = require('../src/cli').Manager;
 
     Manager.instance.setList([
       {"path": "data/test.json", "publish": true},
@@ -71,7 +75,6 @@ describe('Request', function() {
    * 
    */
   it('Sql.whereEquals()', function() {
-    var Sql = require('../src/cli').Sql;
 
     var json = {"template": "test", "title": "test"}
 
