@@ -130,22 +130,23 @@ if (_cli.config.security === true) {
   app.use((0, _helmet2.default)());
   app.use(_helmet2.default.csp({
     directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"].concat(_cli.config.csp.scriptSrc),
-      styleSrc: ["'self'", "'unsafe-inline'"].concat(_cli.config.csp.styleSrc),
-      imgSrc: ["'self'", 'data:'].concat(_cli.config.csp.imgSrc),
+      defaultSrc: ['\'self\''],
+      scriptSrc: ['\'self\''].concat(_cli.config.csp.scriptSrc),
+      styleSrc: ['\'self\'', '\'unsafe-inline\''].concat(_cli.config.csp.styleSrc),
+      imgSrc: ['\'self\'', 'data:'].concat(_cli.config.csp.imgSrc),
       // frameSrc: ["'self'"],
-      childSrc: ["'self'"].concat(_cli.config.csp.childSrc),
-      frameAncestors: ["'self'"].concat(_cli.config.csp.frameAncestors),
-      mediaSrc: ["'self'"].concat(_cli.config.csp.mediaSrc),
-      fontSrc: ["'self'"].concat(_cli.config.csp.fontSrc),
-      connectSrc: ["'self'"].concat(_cli.config.csp.connectSrc),
-      sandbox: ['allow-same-origin', 'allow-scripts', "allow-modals", 'allow-popups', 'allow-forms'],
+      childSrc: ['\'self\''].concat(_cli.config.csp.childSrc),
+      frameAncestors: ['\'self\''].concat(_cli.config.csp.frameAncestors),
+      mediaSrc: ['\'self\''].concat(_cli.config.csp.mediaSrc),
+      fontSrc: ['\'self\''].concat(_cli.config.csp.fontSrc),
+      connectSrc: ['\'self\''].concat(_cli.config.csp.connectSrc),
+      sandbox: ['allow-same-origin', 'allow-scripts', 'allow-modals', 'allow-popups', 'allow-forms'],
       reportUri: '/report-violation',
       objectSrc: [] },
+    // An empty array allows nothing through
     reportOnly: false, // Set to true if you only want browsers to report errors, not block them
     setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
-    disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
+    disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.   
     browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
   }));
 }
@@ -164,7 +165,7 @@ app.use(_express2.default.static(__dirname + '/public'));
 
 _cli.FileParser.copySiteAssets();
 
-var sites = _cli.FileParser.getFolders(_cli.config.root.replace(/\/$/, ""), false, 0);
+var sites = _cli.FileParser.getFolders(_cli.config.root.replace(/\/$/, ''), false, 0);
 
 var publish = _path2.default.join(_cli.config.root, _cli.config.publish.url);
 app.use(_express2.default.static(publish));

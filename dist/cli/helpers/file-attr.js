@@ -35,6 +35,7 @@ var Attr = function () {
    * @param  {String} str string to work with
    * @return {void}
    */
+
   function Attr(str) {
     _classCallCheck(this, Attr);
 
@@ -237,20 +238,39 @@ var FileAttr = function () {
     }
 
     /**
-     * Filter and array of file path and return the latest version of those files
-     * @param  {Object} urls object with path to file, filename etc ...
-     * @param  {String} type (draft|waiting|valid)
-     * @return {Object} urls object filtered
+     * Return the revision from document html file path
+     * if the docPath contains abe revision [status]-[date] will try to return this revision
+     * else it will return the latest revision
+     * or null
+     * 
+     * @param  {String} html path
+     * @return {Object} file revision | null
      */
 
   }, {
-    key: 'getLatestVersion',
-    value: function getLatestVersion(docPath) {
-      var sameFiles = FileAttr.getVersions(docPath);
-      if (sameFiles.length > 0) {
-        return sameFiles[sameFiles.length - 1];
+    key: 'getDocumentRevision',
+    value: function getDocumentRevision(docPath) {
+      var result = null;
+      var documentPath = docPath;
+      var latest = true;
+      if (FileAttr.test(documentPath)) {
+        latest = false;
+        documentPath = FileAttr.delete(documentPath);
       }
-      return null;
+      var revisions = FileAttr.getVersions(documentPath);
+      if (latest && revisions.length >= 0) {
+        result = revisions[0];
+      } else if (!latest) {
+        Array.prototype.forEach.call(revisions, function (revision) {
+          if (revision.html === docPath) {
+            result = revision;
+          }
+        });
+        if (result === null && revisions.length >= 0) {
+          result = revisions[0];
+        }
+      }
+      return result;
     }
 
     /**

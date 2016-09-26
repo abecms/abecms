@@ -64,7 +64,7 @@ function checkRequired(text, json) {
             } else {
               complete++;
             }
-          } else {}
+          }
         }
       }
     });
@@ -197,12 +197,6 @@ function save(url, tplPath) {
   return p;
 }
 
-function splitArray(ar, chunkSize) {
-  return [].concat.apply([], ar.map(function (elem, i) {
-    return i % chunkSize ? [] : [ar.slice(i, i + chunkSize)];
-  }));
-}
-
 function saveJsonAndHtml(templateId, obj, html) {
   var page = new _.Page(templateId, html, obj.json.content, true);
 
@@ -226,7 +220,7 @@ function saveJson(url, json) {
 
   var eachRecursive = function eachRecursive(obj) {
     for (var k in obj) {
-      if (_typeof(obj[k]) === "object" && obj[k] !== null) eachRecursive(obj[k]);else if (typeof obj[k] !== "undefined" && obj[k] !== null) obj[k] = (0, _xss2.default)(obj[k].toString().replace(/&quot;/g, '"'), { "whiteList": _.config.htmlWhiteList });
+      if (_typeof(obj[k]) === 'object' && obj[k] !== null) eachRecursive(obj[k]);else if (typeof obj[k] !== 'undefined' && obj[k] !== null) obj[k] = (0, _xss2.default)(obj[k].toString().replace(/&quot;/g, '"'), { 'whiteList': _.config.htmlWhiteList });
     }
   };
 
@@ -253,11 +247,8 @@ function dateIso(tplUrl) {
 
   var newDateISO;
   var dateISO;
-  var validate;
-
   var saveJsonFile = tplUrl.json.path;
   var saveFile = tplUrl['draft'].path;
-  var oldDateISO = _.fileAttr.get(saveFile).d;
 
   switch (type) {
     case 'draft':

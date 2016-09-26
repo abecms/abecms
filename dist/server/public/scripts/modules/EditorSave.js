@@ -119,7 +119,7 @@ var EditorSave = function () {
                 }
               });
             } else {
-              value = input.value.replace(/\"/g, '\&quot;') + "";
+              value = input.value.replace(/\"/g, '\&quot;') + '';
             }
             _this2._json.data[dataId] = value;
           }

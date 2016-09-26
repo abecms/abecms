@@ -15,7 +15,7 @@ function sourceAttr(val, params) {
   var selected = '';
 
   if ((typeof hiddenVal === 'undefined' ? 'undefined' : _typeof(hiddenVal)) === 'object' && Object.prototype.toString.call(hiddenVal) === '[object Object]') {
-    hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, "&apos;");
+    hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, '&apos;');
 
     try {
       var displayVal = eval('val.' + params.display);

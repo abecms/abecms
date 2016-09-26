@@ -24,6 +24,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Page class
  * manage HTML generation for page template
  */
+
 var Page = function () {
 
   /**
@@ -34,6 +35,7 @@ var Page = function () {
    * @param  {Boolean} onlyHTML default = false, if true HTML content will contains abe attributes
    * @return {String} HTML page as string
    */
+
   function Page(templateId, template, json) {
     var _this = this;
 
@@ -53,128 +55,128 @@ var Page = function () {
 
       //console.log('precompile')
     } else {
-      var source;
-      var keys;
-      var i;
-      var replaceEach;
-      var patAttrSource;
-      var patAttrSourceMatch;
-      var patAttrSourceInside;
-      var eachSource;
-      var matches;
-      var compiledTemplate;
+        var source;
+        var keys;
+        var i;
+        var replaceEach;
+        var patAttrSource;
+        var patAttrSourceMatch;
+        var patAttrSourceInside;
+        var eachSource;
+        var matches;
+        var compiledTemplate;
 
-      (function () {
+        (function () {
 
-        _this._onlyHTML = onlyHTML;
-        _this.template = template;
-        _this.HbsTemplatePath = _.fileUtils.getTemplatePath('hbs/' + templateId + '.hbs');
+          _this._onlyHTML = onlyHTML;
+          _this.template = template;
+          _this.HbsTemplatePath = _.fileUtils.getTemplatePath('hbs/' + templateId + '.hbs');
 
-        var util = new _.Util();
+          var util = new _.Util();
 
-        _.abeEngine.instance.content = json;
+          _.abeEngine.instance.content = json;
 
-        // This pattern finds all abe tags which are not enclosed in a html tag attribute
-        // it finds this one: <title>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</title>
-        // it excludes this one: <meta name="description" content='{{abe type="text" key="meta_description" desc="Meta description" tab="Meta" order="4100"}}"/> 
-        _this.abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g;
+          // This pattern finds all abe tags which are not enclosed in a html tag attribute
+          // it finds this one: <title>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</title>
+          // it excludes this one: <meta name="description" content='{{abe type="text" key="meta_description" desc="Meta description" tab="Meta" order="4100"}}"/>
+          _this.abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g;
 
-        // This pattern finds all abe tags enclosed in a HTML tag attribute
-        _this.abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
+          // This pattern finds all abe tags enclosed in a HTML tag attribute
+          _this.abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
 
-        // This pattern finds all {{#each ...}}...{{/each}} blocks
-        _this.eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
+          // This pattern finds all {{#each ...}}...{{/each}} blocks
+          _this.eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
 
-        // This pattern finds all {{#each ...}}...{{/each}} blocks
-        _this.blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g;
+          // This pattern finds all {{#each ...}}...{{/each}} blocks
+          _this.blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g;
 
-        // Remove text with attribute "visible=false"
-        _this._removeHidden();
+          // Remove text with attribute "visible=false"
+          _this._removeHidden();
 
-        if (!_this._onlyHTML) {
+          if (!_this._onlyHTML) {
 
-          // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
-          // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
-          _this._encloseAbeTag();
-        }
+            // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
+            // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
+            _this._encloseAbeTag();
+          }
 
-        // je rajoute les index pour chaque bloc lié à un each
-        _this._indexEachBlocks();
+          // je rajoute les index pour chaque bloc lié à un each
+          _this._indexEachBlocks();
 
-        if (!_this._onlyHTML) {
+          if (!_this._onlyHTML) {
 
-          // Je maj les attributs associés aux Abe qui sont dans des attributs de tag HTML
-          _this._updateAbeAsAttribute();
+            // Je maj les attributs associés aux Abe qui sont dans des attributs de tag HTML
+            _this._updateAbeAsAttribute();
 
-          // je rajoute les attributs pour les tags Abe (qui ne sont pas dans un attribut HTML)
-          _this._updateAbeAsTag();
+            // je rajoute les attributs pour les tags Abe (qui ne sont pas dans un attribut HTML)
+            _this._updateAbeAsTag();
 
-          // Don't know what it does...
-          source = _.config.source.name;
+            // Don't know what it does...
+            source = _.config.source.name;
 
-          if (typeof json[source] !== 'undefined' && json[source] !== null) {
-            keys = Object.keys(json[source]);
-
-
-            for (i in keys) {
-              replaceEach = new RegExp('<!-- \\[\\[' + keys[i] + '\\]\\][\\s\\S]*?-->', 'g');
-
-              _this.template = _this.template.replace(replaceEach, '');
-
-              patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g');
-              patAttrSourceMatch = _this.template.match(patAttrSource);
+            if (typeof json[source] !== 'undefined' && json[source] !== null) {
+              keys = Object.keys(json[source]);
 
 
-              if (typeof patAttrSourceMatch !== 'undefined' && patAttrSourceMatch !== null) {
-                patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g');
+              for (i in keys) {
+                replaceEach = new RegExp('<!-- \\[\\[' + keys[i] + '\\]\\][\\s\\S]*?-->', 'g');
 
-                Array.prototype.forEach.call(patAttrSourceMatch, function (pat) {
-                  var patAttrSourceCheck = patAttrSourceInside.exec(pat);
-                  if (typeof patAttrSourceCheck !== 'undefined' && patAttrSourceCheck !== null) {
-                    var checkEscaped = /["|'](.*?)["|']/;
-                    checkEscaped = checkEscaped.exec(patAttrSourceCheck[0]);
-                    if (typeof checkEscaped !== 'undefined' && checkEscaped !== null && checkEscaped.length > 0) {
-                      checkEscaped = escape(checkEscaped[1]);
-                      _this.template = _this.template.replace(patAttrSourceCheck[0], ' data-abe-attr="' + patAttrSourceCheck[1] + '" data-abe-attr-escaped="' + checkEscaped + '" data-abe="' + keys[i] + '" ' + patAttrSourceCheck[0]);
+                _this.template = _this.template.replace(replaceEach, '');
+
+                patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g');
+                patAttrSourceMatch = _this.template.match(patAttrSource);
+
+
+                if (typeof patAttrSourceMatch !== 'undefined' && patAttrSourceMatch !== null) {
+                  patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g');
+
+                  Array.prototype.forEach.call(patAttrSourceMatch, function (pat) {
+                    var patAttrSourceCheck = patAttrSourceInside.exec(pat);
+                    if (typeof patAttrSourceCheck !== 'undefined' && patAttrSourceCheck !== null) {
+                      var checkEscaped = /["|'](.*?)["|']/;
+                      checkEscaped = checkEscaped.exec(patAttrSourceCheck[0]);
+                      if (typeof checkEscaped !== 'undefined' && checkEscaped !== null && checkEscaped.length > 0) {
+                        checkEscaped = escape(checkEscaped[1]);
+                        _this.template = _this.template.replace(patAttrSourceCheck[0], ' data-abe-attr="' + patAttrSourceCheck[1] + '" data-abe-attr-escaped="' + checkEscaped + '" data-abe="' + keys[i] + '" ' + patAttrSourceCheck[0]);
+                      }
                     }
-                  }
-                });
-              }
+                  });
+                }
 
-              eachSource = new RegExp('({{#each ' + keys[i] + '}[\\s\\S a-z]*?{{/each}})', 'g');
-              matches = _this.template.match(eachSource);
+                eachSource = new RegExp('({{#each ' + keys[i] + '}[\\s\\S a-z]*?{{/each}})', 'g');
+                matches = _this.template.match(eachSource);
 
-              if (typeof matches !== 'undefined' && matches !== null) {
-                Array.prototype.forEach.call(matches, function (match) {
-                  _this.template = _this.template.replace(match, match + '<!-- [[' + keys[i] + ']] ' + util.encodeAbe(match) + ' -->');
-                });
+                if (typeof matches !== 'undefined' && matches !== null) {
+                  Array.prototype.forEach.call(matches, function (match) {
+                    _this.template = _this.template.replace(match, match + '<!-- [[' + keys[i] + ']] ' + util.encodeAbe(match) + ' -->');
+                  });
+                }
               }
             }
           }
-        }
 
-        _this._addSource(json);
+          _this._addSource(json);
 
-        // We remove the {{abe type=data ...}} from the text 
-        _this.template = _.Util.removeDataList(_this.template);
+          // We remove the {{abe type=data ...}} from the text
+          _this.template = _.Util.removeDataList(_this.template);
 
-        // It's time to replace the [index] by {{@index}} (concerning each blocks)
-        _this.template = _this.template.replace(/\[index\]\./g, '{{@index}}-');
+          // It's time to replace the [index] by {{@index}} (concerning each blocks)
+          _this.template = _this.template.replace(/\[index\]\./g, '{{@index}}-');
 
-        if (_.config.files.templates.precompile) {
-          // Let's persist the precompiled template for future use (kind of cache)
-          _fsExtra2.default.writeFileSync(_this.HbsTemplatePath, _handlebars2.default.precompile(_this.template), 'utf8');
-          _.Manager.instance.addHbsTemplate(templateId);
-        }
+          if (_.config.files.templates.precompile) {
+            // Let's persist the precompiled template for future use (kind of cache)
+            _fsExtra2.default.writeFileSync(_this.HbsTemplatePath, _handlebars2.default.precompile(_this.template), 'utf8');
+            _.Manager.instance.addHbsTemplate(templateId);
+          }
 
-        // I compile the text
-        compiledTemplate = _handlebars2.default.compile(!_this._onlyHTML ? util.insertDebugtoolUtilities(_this.template) : _this.template);
+          // I compile the text
+          compiledTemplate = _handlebars2.default.compile(!_this._onlyHTML ? util.insertDebugtoolUtilities(_this.template) : _this.template);
 
-        // I create the html page ! yeah !!!
+          // I create the html page ! yeah !!!
 
-        _this.html = compiledTemplate(json, { data: { intl: _.config.intlData } });
-      })();
-    }
+          _this.html = compiledTemplate(json, { data: { intl: _.config.intlData } });
+        })();
+      }
 
     if (this._onlyHTML) {
       this.html = _.Hooks.instance.trigger('afterPageSaveCompile', this.html, json);
