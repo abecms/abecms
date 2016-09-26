@@ -64,9 +64,7 @@ class Manager {
           resolve()
         },
         () => {
-          // No where keys found
-          this.updateList()
-          resolve()
+          console.log('Manager._init', e)
         })
         .catch((e) => {
           console.log('Manager._init', e)
