@@ -7,7 +7,7 @@ describe('Request', function() {
    * 
    */
   it('Util.getAllAttributes()', function(done) {
-    this.timeout(15000)
+    this.timeout(0)
     var Util = require('../src/cli').Util
     var attributes = Util.getAllAttributes("{{abe type='data' key='top_things_slider_highlight' desc='Automatic slider' source='select * from ../' editable='false'}}", {})
 
