@@ -72,7 +72,7 @@ class Manager {
 
   updateList() {
     this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
-    this._list.sort(FileParser.predicatBy('date'))
+    this._list.sort(FileParser.predicatBy('date', -1))
     if(config.redis.enable){
       redis.get().set('list', JSON.stringify(this._list))
     }

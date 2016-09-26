@@ -61,24 +61,23 @@ var route = function(req, res, next) {
   let p = new Promise((resolve, reject) => {
 
     if(templatePath !== null && filePath !== null) {
-
+      var jsonPath = null
+      var linkPath = null
       isHome = false
 
-      if(!fileAttr.test(filePath)){
-        var filePathTest = fileAttr.getLatestVersion(req.query.filePath)
-        if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
-          filePath = filePathTest.path
-        }
+      var filePathTest = fileAttr.getDocumentRevision(req.query.filePath)
+      if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
+        // filePath = filePathTest.path
+        jsonPath = filePathTest.path
+        linkPath = filePathTest.abe_meta.link
       }
 
-      let tplUrl = FileParser.getFileDataFromUrl(filePath)
-
-      if(!fileUtils.isFile(tplUrl.json.path)) { 
+      if(jsonPath === null || !fileUtils.isFile(jsonPath)) { 
         res.redirect('/abe/') 
         return 
       } 
 
-      editor(templatePath, tplUrl)
+      editor(templatePath, jsonPath, linkPath)
         .then((result) => {
           var manager = {}
 
@@ -103,8 +102,7 @@ var route = function(req, res, next) {
 
           resolve({
             obj: result,
-            manager: manager,
-            tplUrl: tplUrl
+            manager: manager
           })
         }).catch(function(e) {
           console.error(e)
@@ -122,7 +120,7 @@ var route = function(req, res, next) {
   p.then((result) => {
     var obj = result.obj
     var manager = result.manager
-    let tplUrl = result.tplUrl
+    // let tplUrl = result.tplUrl
   
     manager.home = {
       files: Manager.instance.getList()
@@ -138,7 +136,7 @@ var route = function(req, res, next) {
     var _form = (obj) ? obj.form : false
     var _json = (obj) ? obj.json : false
     var _text = (obj) ? obj.text : false
-    var _file = (tplUrl) ? tplUrl.draft.file : false
+    // var _file = (tplUrl) ? tplUrl.draft.file : false
     var _filePath = (req.query.filePath) ? req.query.filePath : false
     if (_filePath) {
       _filePath = '/' + _filePath.replace(/^\/+/, '')
@@ -164,7 +162,7 @@ var route = function(req, res, next) {
       hasBlock: _hasBlock,
       form: _form,
       urlToSaveFile: _filePath,
-      tplName: _file,
+      // tplName: _file,
       json: _json,
       config: config,
       Locales: Locales.instance.i18n,
