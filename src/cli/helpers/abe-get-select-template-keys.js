@@ -87,6 +87,7 @@ var findRequestColumns = function(templatesList) {
         resolve(whereKeys)
       })
     })
+    reject()
   })
 
   return p
