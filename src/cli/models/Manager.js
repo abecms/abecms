@@ -53,12 +53,18 @@ class Manager {
   }
 
   init() {
+    this._whereKeys = []
     var p = new Promise((resolve, reject) => {
       this._loadTime = new TimeMesure('Loading Manager')
       const pathTemplate = path.join(config.root, config.templates.url)
       getSelectTemplateKeys(pathTemplate)
         .then((whereKeys) => {
           this._whereKeys = whereKeys
+          this.updateList()
+          resolve()
+        },
+        () => {
+          // No where keys found
           this.updateList()
           resolve()
         })
