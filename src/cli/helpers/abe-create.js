@@ -1,4 +1,4 @@
-import path from "path"
+import path from 'path'
 import {
   fileUtils,
   FileParser,
@@ -11,13 +11,13 @@ import {
   Hooks,
   removeDuplicateAttr,
   Manager
-} from "../../cli"
+} from '../../cli'
 
 var create = function(template, pathCreate, name, req, forceJson = {}, duplicate = false) {
   var p = new Promise((resolve, reject) => {
-    Hooks.instance.trigger("beforeCreate", template, pathCreate, name, req, forceJson)
+    Hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
-    var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ""))
+    var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ''))
     var filePath = path.join(pathCreate, name)
     filePath = cleanSlug(filePath)
     filePath = fileUtils.getFilePath(filePath)
@@ -33,13 +33,13 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
           json = removeDuplicateAttr(text, json)
         }
         text = Util.removeDataList(text)
-        var resHook = Hooks.instance.trigger("beforeFirstSave", filePath, req.query, json, text)
+        var resHook = Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
         filePath = resHook.filePath
         json = resHook.json
         text = resHook.text
 
-        Hooks.instance.trigger("afterCreate", json, text, pathCreate, name, req, forceJson)
-        save(filePath, req.query.selectTemplate, json, text, "draft", null, "draft")
+        Hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
+        save(filePath, req.query.selectTemplate, json, text, 'draft', null, 'draft')
             .then((resSave) => {
               Manager.instance.updateList()
               filePath = resSave.htmlPath

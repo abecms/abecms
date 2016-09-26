@@ -4,8 +4,8 @@ export default class RichTexarea {
     this.color = color
     this.link = link
     this.wrapper = wrapper
-    this.textarea = wrapper.querySelector(".form-rich")
-    this.btns = this.wrapper.querySelectorAll(".wysiwyg-toolbar-icon")
+    this.textarea = wrapper.querySelector('.form-rich')
+    this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon')
     this.textEditor = wysiwyg({
       element: this.textarea,
       onKeyDown: (key, character, shiftKey, altKey, ctrlKey, metaKey) => {},
@@ -22,14 +22,14 @@ export default class RichTexarea {
 
     this._action = this.action.bind(this)
     Array.prototype.forEach.call(this.btns, (btn) => {
-      btn.addEventListener("click", this._action)
+      btn.addEventListener('click', this._action)
     })
   }
 
   setHTML() {
     this.textarea.innerHTML = this.textEditor.getHTML()
-    var evt = document.createEvent("KeyboardEvent")
-    evt.initKeyboardEvent("keyup", true, true, window, 0, 0, 0, 0, 0, "e".charCodeAt(0)) 
+    var evt = document.createEvent('KeyboardEvent')
+    evt.initKeyboardEvent('keyup', true, true, window, 0, 0, 0, 0, 0, 'e'.charCodeAt(0)) 
     var canceled = !this.textarea.dispatchEvent(evt)
   }
 
@@ -38,7 +38,7 @@ export default class RichTexarea {
     if (window.getSelection && window.getSelection().getRangeAt) {
       range = window.getSelection().getRangeAt(0)
       range.deleteContents()
-      var div = document.createElement("div")
+      var div = document.createElement('div')
       div.innerHTML = html
       var frag = document.createDocumentFragment(), child
       while ( (child = div.firstChild) ) {
@@ -54,14 +54,14 @@ export default class RichTexarea {
 
   action(e) {
     this.el = e.target
-    if(this.el.tagName.toLowerCase() === "span") this.el = this.el.parentNode
+    if(this.el.tagName.toLowerCase() === 'span') this.el = this.el.parentNode
 
-    this.action = this.el.getAttribute("data-action")
-    this.popup = this.el.getAttribute("data-popup")
-    this.param = this.el.getAttribute("data-param")
-    if(typeof this.popup !== "undefined" && this.popup !== null){
+    this.action = this.el.getAttribute('data-action')
+    this.popup = this.el.getAttribute('data-popup')
+    this.param = this.el.getAttribute('data-param')
+    if(typeof this.popup !== 'undefined' && this.popup !== null){
       switch(this.popup){
-      case "color":
+      case 'color':
         var off = this.color.onColor((color) => {
           if(color !== null) {
             this.textEditor[this.action](color)
@@ -71,16 +71,16 @@ export default class RichTexarea {
         })
         this.color.show(this.el)
         break
-      case "link":
+      case 'link':
         var html = this.textEditor.getHTML()
         this._replaceSelectionWithHtml(`<a href="[LINK]" target="[TARGET]" rel="[REL]">${window.getSelection().toString()}</a>`)
         var off = this.link.onLink((obj) => {
           if(obj.link !== null) {
-            var html = this.textEditor.getHTML().replace("[LINK]", obj.link)
-            if(obj.target) 		html = html.replace(/\[TARGET\]/, "_blank")
-            else 							html = html.replace(/target=\"\[TARGET\]\"/, "")
-            if(obj.noFollow) 	html = html.replace(/\[REL\]/, "nofollow")
-            else 							html = html.replace(/rel=\"\[REL\]\"/, "")
+            var html = this.textEditor.getHTML().replace('[LINK]', obj.link)
+            if(obj.target) 		html = html.replace(/\[TARGET\]/, '_blank')
+            else 							html = html.replace(/target=\"\[TARGET\]\"/, '')
+            if(obj.noFollow) 	html = html.replace(/\[REL\]/, 'nofollow')
+            else 							html = html.replace(/rel=\"\[REL\]\"/, '')
             this.textEditor.setHTML(html)
           }
           else this.textEditor.setHTML(html)
@@ -91,7 +91,7 @@ export default class RichTexarea {
         break
       }
     }
-    else if(this.action === "code"){
+    else if(this.action === 'code'){
       this._replaceSelectionWithHtml(`<pre><code>${window.getSelection().toString()}</code></pre>`)
       this.textEditor.setHTML(this.textEditor.getHTML())
       this.setHTML()

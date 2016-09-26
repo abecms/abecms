@@ -1,4 +1,4 @@
-import middleWebsite from "./website"
+import middleWebsite from './website'
 
 export {
 	middleWebsite

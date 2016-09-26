@@ -1,7 +1,7 @@
-import Nanoajax from "nanoajax"
-import qs from "qs"
-import {Promise} from "es6-promise"
-import on from "on"
+import Nanoajax from 'nanoajax'
+import qs from 'qs'
+import {Promise} from 'es6-promise'
+import on from 'on'
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
 
@@ -16,7 +16,7 @@ export default class Json {
     this.saving = on(this)
     this.headersSaving = on(this)
 
-    if(enforcer != singletonEnforcer) throw "Cannot construct Json singleton"
+    if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
   }
 
   static get instance() {
@@ -27,7 +27,7 @@ export default class Json {
     return this[singleton]
   }
 
-  save(type = "draft", tplPath = null, filePath = null) {
+  save(type = 'draft', tplPath = null, filePath = null) {
     this.saving._fire({type: type})
     var p = new Promise((resolve, reject) => {
       if(!this.canSave){
@@ -38,7 +38,7 @@ export default class Json {
       var jsonSave = this.data
       var abe_source = []
 
-      if(typeof json.abe_source !== "undefined" && json.abe_source !== null) {
+      if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
         delete json.abe_source
       }
 
@@ -48,30 +48,30 @@ export default class Json {
         json: jsonSave
       })
 
-      this.headersSaving._fire({url: document.location.origin + "/" + type})
+      this.headersSaving._fire({url: document.location.origin + '/' + type})
 
       this._ajax(
         {
-          url: document.location.origin + "/" + type,
+          url: document.location.origin + '/' + type,
           body: toSave,
           headers: this._headers,
-          method: "post"
+          method: 'post'
         },
         (code, responseText, request) => {
           try{
             var jsonRes = JSON.parse(responseText)
-            if(typeof jsonRes.error !== "undefined" && jsonRes.error !== null) {
+            if(typeof jsonRes.error !== 'undefined' && jsonRes.error !== null) {
               alert(jsonRes.error)
               return
             }
-            if(typeof jsonRes.reject !== "undefined" && jsonRes.reject !== null) {
+            if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
               location.reload()
               return
             }
             this.data = jsonRes.json
           }
           catch(e){
-            alert("The following error happened : \n" + e + "\n if it persist, reload your web page tab.")
+            alert('The following error happened : \n' + e + '\n if it persist, reload your web page tab.')
             jsonRes = {}
           }
           resolve(jsonRes)

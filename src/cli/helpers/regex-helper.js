@@ -1,9 +1,9 @@
-import {cli} from "../"
+import {cli} from '../'
 
 export function getAttr (str, attr) {
-  var rex = new RegExp(attr + "=[\"|']([\\S\\s]*?)[\"|']( +[a-zA-Z0-9-]*?=|}})")
+  var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( +[a-zA-Z0-9-]*?=|}})')
   var res = rex.exec(str)
-  res = (typeof res !== null && res !== null && res.length > 1) ? res[1] : ""
+  res = (typeof res !== null && res !== null && res.length > 1) ? res[1] : ''
   return res
 }
 
@@ -24,32 +24,32 @@ export function getAttr (str, attr) {
  */
 function explodeTag(text, tag) {
   var startWithTags = false
-  if(text.indexOf("<" + tag) === 0) {
+  if(text.indexOf('<' + tag) === 0) {
     startWithTags = true
   }
-  var tags = text.split("<" + tag)
+  var tags = text.split('<' + tag)
 
   var i = 0
   var reconstruct = []
-  var wait = ""
+  var wait = ''
 
   reconstruct.push(tags.shift())
   Array.prototype.forEach.call(tags, function(ele) {
     i++
-    var matches = ele.match(escapeTextToRegex("</" + tag, "g"))
-    if(typeof matches !== "undefined" && matches !== null && matches.length > 0) {
+    var matches = ele.match(escapeTextToRegex('</' + tag, 'g'))
+    if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
       Array.prototype.forEach.call(matches, function(match) {
         i--
       })
 
       if(i === 0) {
-        reconstruct.push(wait + "<" + tag + ele)
-        wait = ""
+        reconstruct.push(wait + '<' + tag + ele)
+        wait = ''
       }else {
-        wait += "<" + tag + ele
+        wait += '<' + tag + ele
       }
     }else {
-      wait += "<" + tag + ele
+      wait += '<' + tag + ele
     }
   })
   return reconstruct
@@ -83,23 +83,23 @@ function querySelectorTags(text, tag) {
   var res = []
   var finalRes = []
 
-  while(text !== ""){
+  while(text !== ''){
     var checkTags = explodeTag(text, tag)
-    text = ""
+    text = ''
     Array.prototype.forEach.call(checkTags, function(ele) {
       res.push(ele)
 
-      var matches = ele.match(escapeTextToRegex("<" + tag, "g"))
-      if(typeof matches !== "undefined" && matches !== null && matches.length > 1) {
-        var tagLength = "<" + tag
+      var matches = ele.match(escapeTextToRegex('<' + tag, 'g'))
+      if(typeof matches !== 'undefined' && matches !== null && matches.length > 1) {
+        var tagLength = '<' + tag
         tagLength = tagLength.length
 
         // remove first tag
-        var start = ele.indexOf("<" + tag)
+        var start = ele.indexOf('<' + tag)
         ele = ele.substring(start + tagLength)
 
         // remove end tag
-        var end = ele.lastIndexOf("</" + tag)
+        var end = ele.lastIndexOf('</' + tag)
         ele = ele.substring(0, end)
 
         text += ele
@@ -108,11 +108,11 @@ function querySelectorTags(text, tag) {
   }
   
   Array.prototype.forEach.call(res, function(ele) {
-    var matches = ele.match(escapeTextToRegex("<" + tag, "g"))
-    if(typeof matches !== "undefined" && matches !== null && matches.length > 0) {
-      var finalEleReg = new RegExp("<" + tag + "([\\s\\S]*?)<\\/" + tag + ">(?![\\s\\S]*<\/" + tag + ">)")
+    var matches = ele.match(escapeTextToRegex('<' + tag, 'g'))
+    if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
+      var finalEleReg = new RegExp('<' + tag + '([\\s\\S]*?)<\\/' + tag + '>(?![\\s\\S]*<\/' + tag + '>)')
       finalEleReg = finalEleReg.exec(ele)
-      if(typeof finalEleReg !== "undefined" && finalEleReg !== null && finalEleReg.length > 0) {
+      if(typeof finalEleReg !== 'undefined' && finalEleReg !== null && finalEleReg.length > 0) {
         finalRes.push(finalEleReg[0])
       }else {
         finalRes.push(ele)
@@ -162,8 +162,8 @@ export function getEnclosingTags(text, match, tag) {
   var tags = querySelectorTags(text, tag)
   
   Array.prototype.forEach.call(tags, function(tag) {
-    var matches = tag.match(escapeTextToRegex(match, "g"))
-    if(typeof matches !== "undefined" && matches !== null && matches.length > 0) {
+    var matches = tag.match(escapeTextToRegex(match, 'g'))
+    if(typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
       res.push(tag)
     }
   })
@@ -180,6 +180,6 @@ export function getEnclosingTags(text, match, tag) {
  * @return {Object} RegExp
  */
 export function escapeTextToRegex(str, params) {
-  str = str.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")
+  str = str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
   return new RegExp(str, params)
 }

@@ -5,11 +5,11 @@ export function IframeDocument (frameId){
 }
 
 export function IframeNode (frameId, selector){
-  return IframeDocument(frameId).querySelectorAll(selector.replace(/\[([0-9]*)\]/g, "$1"))
+  return IframeDocument(frameId).querySelectorAll(selector.replace(/\[([0-9]*)\]/g, '$1'))
 }
 
 function IframeGetComment(frameId, prop, val, meth, nd, useSelf ) {
-  var prop = "nodeType"
+  var prop = 'nodeType'
   var val = 8
   var meth = null
   var r=[], any= IframeGetComment[val]===true
@@ -23,7 +23,7 @@ function IframeGetComment(frameId, prop, val, meth, nd, useSelf ) {
     if(it.childNodes.length && !useSelf) {
       r = r.concat(IframeGetComment(frameId, prop, val, meth, it, useSelf ))
     }
-    if( any ? it[prop] : (it[prop]!==undefined && (meth ? ""[meth] &&  String(it[prop])[meth](val) : it[prop]==val))) {
+    if( any ? it[prop] : (it[prop]!==undefined && (meth ? ''[meth] &&  String(it[prop])[meth](val) : it[prop]==val))) {
       r[r.length]=it
     }
   }
@@ -31,7 +31,7 @@ function IframeGetComment(frameId, prop, val, meth, nd, useSelf ) {
 }
 
 export function IframeCommentNode(frameId, key) {
-  var nodes = IframeGetComment(frameId, "nodeType", 8, null, null)
+  var nodes = IframeGetComment(frameId, 'nodeType', 8, null, null)
   var found = []
   Array.prototype.forEach.call(nodes, (node) => {
     if(node.textContent.indexOf(key) > -1) {

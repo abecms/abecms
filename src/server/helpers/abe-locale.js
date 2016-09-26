@@ -1,7 +1,7 @@
-import fse from "fs-extra"
-import extend from "extend"
-import clc from "cli-color"
-import path from "path"
+import fse from 'fs-extra'
+import extend from 'extend'
+import clc from 'cli-color'
+import path from 'path'
 
 import {
 	cli,
@@ -9,15 +9,15 @@ import {
 	fileUtils,
 	config,
 	log
-} from "../../cli"
+} from '../../cli'
 
 var result = {}
 
-var pathToLocale = path.join(__dirname, "../" + config.localeFolder, config.intlData.locales)
+var pathToLocale = path.join(__dirname, '../' + config.localeFolder, config.intlData.locales)
 var files = fse.readdirSync(pathToLocale)
 
 Array.prototype.forEach.call(files, (file) => {
-  var json = fse.readJsonSync(pathToLocale + "/" + file)
+  var json = fse.readJsonSync(pathToLocale + '/' + file)
   result = extend(true, result, json)
 })
 

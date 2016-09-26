@@ -1,25 +1,25 @@
-import {Devtool} from "./devtool/Devtool"
+import {Devtool} from './devtool/Devtool'
 
-import EditorInputs from "./modules/EditorInputs"
-import EditorBlock from "./modules/EditorBlock"
-import EditorUtils from "./modules/EditorUtils"
-import EditorFiles from "./modules/EditorFiles"
-import EditorSave from "./modules/EditorSave"
-import EditorJson from "./modules/EditorJson"
-import EditorManager from "./modules/EditorManager"
-import EditorAutocomplete from "./modules/EditorAutocomplete"
-import EditorReload from "./modules/EditorReload"
-import qs from "qs"
+import EditorInputs from './modules/EditorInputs'
+import EditorBlock from './modules/EditorBlock'
+import EditorUtils from './modules/EditorUtils'
+import EditorFiles from './modules/EditorFiles'
+import EditorSave from './modules/EditorSave'
+import EditorJson from './modules/EditorJson'
+import EditorManager from './modules/EditorManager'
+import EditorAutocomplete from './modules/EditorAutocomplete'
+import EditorReload from './modules/EditorReload'
+import qs from 'qs'
 
-var htmlTag = document.querySelector("html")
-window.CONFIG = JSON.parse(htmlTag.getAttribute("data-config"))
+var htmlTag = document.querySelector('html')
+window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
 // window.json = JSON.parse(unescape(htmlTag.getAttribute('data-json').replace(/&quot;/g, '\"')))
-var j = htmlTag.getAttribute("data-json")
-j = j.replace(/&quot;/g, "\"")
+var j = htmlTag.getAttribute('data-json')
+j = j.replace(/&quot;/g, '"')
 j = unescape(j)
-j = j.replace(/\%27/g, "\'")
+j = j.replace(/\%27/g, '\'')
 window.json = JSON.parse(j)
-window.Locales = JSON.parse(htmlTag.getAttribute("data-locales"))
+window.Locales = JSON.parse(htmlTag.getAttribute('data-locales'))
 
 class Engine {
 
@@ -38,10 +38,10 @@ class Engine {
 
     this.table = null
     $(document).ready(() => {
-      this.table = $("#navigation-list").DataTable({
+      this.table = $('#navigation-list').DataTable({
         //"order": [[ 3, 'desc' ]],
-        "pageLength": 50,
-        "autoWidth": false
+        'pageLength': 50,
+        'autoWidth': false
       })
     })
   }
@@ -63,11 +63,11 @@ class Engine {
     var commentNodes = findComments(document) 
   
     Array.prototype.forEach.call(commentNodes, (comment) => { 
-      if (comment.nodeValue.indexOf("[pageHTML]") > -1) { 
+      if (comment.nodeValue.indexOf('[pageHTML]') > -1) { 
         var base = comment.data 
-        if(typeof base !== "undefined" && base !== null) { 
-          base = base.replace(/\[pageHTML\]/g, "") 
-          base = base.replace(/<ABE!--/g, "<!--").replace(/--ABE>/g, "-->") 
+        if(typeof base !== 'undefined' && base !== null) { 
+          base = base.replace(/\[pageHTML\]/g, '') 
+          base = base.replace(/<ABE!--/g, '<!--').replace(/--ABE>/g, '-->') 
           EditorReload.instance.inject(base) 
         } 
       } 
@@ -115,6 +115,6 @@ window.abe = {
   editorReload: EditorReload
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-  if(document.querySelector("#page-template")) engine.inject()
+document.addEventListener('DOMContentLoaded', function(event) {
+  if(document.querySelector('#page-template')) engine.inject()
 })

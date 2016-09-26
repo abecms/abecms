@@ -3,21 +3,21 @@ import {
   fileUtils,
   Hooks,
   Manager
-} from "../../cli"
+} from '../../cli'
 
 var route = function(req, res, next){
-  Hooks.instance.trigger("beforeRoute", req, res, next)
-  if(typeof res._header !== "undefined" && res._header !== null) return
+  Hooks.instance.trigger('beforeRoute', req, res, next)
+  if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var p = new Promise((resolve, reject) => {
     save(
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,
       req.body.json,
-      "",
-      "draft",
+      '',
+      'draft',
       null,
-      "reject")
+      'reject')
       .then(() => {
         resolve()
       }).catch(function(e) {
@@ -30,27 +30,27 @@ var route = function(req, res, next){
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,
       req.body.json,
-      "",
-      "reject",
+      '',
+      'reject',
       resSave,
-      "reject")
+      'reject')
       .then((resSave) => {
-        if(typeof resSave.error !== "undefined" && resSave.error !== null  ){
-          res.set("Content-Type", "application/json")
+        if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
+          res.set('Content-Type', 'application/json')
           res.send(JSON.stringify({error: resSave.error}))
         }
         var result
-        if(typeof resSave.reject !== "undefined" && resSave.reject !== null){
+        if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
           result = resSave
         }
-        if(typeof resSave.json !== "undefined" && resSave.json !== null){
+        if(typeof resSave.json !== 'undefined' && resSave.json !== null){
           result = {
             success: 1,
             json: resSave.json
           }
         }
         Manager.instance.updateList()
-        res.set("Content-Type", "application/json")
+        res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(result))
       })
   }).catch(function(e) {

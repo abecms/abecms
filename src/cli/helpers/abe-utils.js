@@ -1,12 +1,12 @@
-import extend from "extend"
-import loremIpsum from "lorem-ipsum"
-import clc from "cli-color"
-import fse from "fs-extra"
-import ajaxRequest from "ajax-request"
-import {Promise} from "es6-promise"
-import http from "http" 
-import https from "https"
-import path from "path"
+import extend from 'extend'
+import loremIpsum from 'lorem-ipsum'
+import clc from 'cli-color'
+import fse from 'fs-extra'
+import ajaxRequest from 'ajax-request'
+import {Promise} from 'es6-promise'
+import http from 'http' 
+import https from 'https'
+import path from 'path'
 
 import {
   config
@@ -24,7 +24,7 @@ import {
   ,Hooks
   ,Plugins
   ,TimeMesure
-} from "../"
+} from '../'
 
 export default class Utils {
 
@@ -49,7 +49,7 @@ export default class Utils {
    * @return {[type]}     [description]
    */
   dontHaveKey(key){
-    return typeof this._key[key] === "undefined" || this._key[key] === null
+    return typeof this._key[key] === 'undefined' || this._key[key] === null
   }
 
   /**
@@ -65,40 +65,40 @@ export default class Utils {
   add(obj) {
     var defaultValues = {
       autocomplete: null,
-      block:"",
-      desc: "",
+      block:'',
+      desc: '',
       display: null,
       editable: true,
-      key: "",
-      "max-length": null,
+      key: '',
+      'max-length': null,
       order: 0,
-      placeholder: "",
+      placeholder: '',
       prefill: false,
-      "prefill-quantity": null,
+      'prefill-quantity': null,
       reload: false,
       required: false,
       source: null,
-      tab: "default",
-      type: "text",
-      value: "",
+      tab: 'default',
+      type: 'text',
+      value: '',
       visible: true
     }
 
     obj = extend(true, defaultValues, obj)
-    obj.key = obj.key.replace(/\./, "-")
+    obj.key = obj.key.replace(/\./, '-')
 
-    if(obj.key.indexOf("[") < 0 && obj.key.indexOf(".") > -1) {
-      obj.block = obj.key.split(".")[0]
+    if(obj.key.indexOf('[') < 0 && obj.key.indexOf('.') > -1) {
+      obj.block = obj.key.split('.')[0]
     }
 
-    if(typeof this._form[obj.tab] === "undefined" || this._form[obj.tab] === null) this._form[obj.tab] = {item:[]}
+    if(typeof this._form[obj.tab] === 'undefined' || this._form[obj.tab] === null) this._form[obj.tab] = {item:[]}
 
     this._key[obj.key] = true // save key for dontHaveKey()
     this._form[obj.tab].item.push(obj)
   }
 
   isBlock(str){
-    return str.indexOf("[") < 0 && str.indexOf(".") > 0
+    return str.indexOf('[') < 0 && str.indexOf('.') > 0
   }
 
   /**
@@ -107,12 +107,12 @@ export default class Utils {
    * @return {Boolean} true = this is not a block content
    */
   isSingleAbe(str, text){
-    return  !new RegExp("#each(.)+?" + getAttr(str, "key").split(".")[0]).test(text) &&
-            str.indexOf("{{#") < 0 &&
-            str.indexOf("#each") < 0 &&
-            str.indexOf("{{/") < 0 &&
-            str.indexOf("/each") < 0 &&
-            str.indexOf("attrAbe") < 0
+    return  !new RegExp('#each(.)+?' + getAttr(str, 'key').split('.')[0]).test(text) &&
+            str.indexOf('{{#') < 0 &&
+            str.indexOf('#each') < 0 &&
+            str.indexOf('{{/') < 0 &&
+            str.indexOf('/each') < 0 &&
+            str.indexOf('attrAbe') < 0
   }
 
   /**
@@ -121,7 +121,7 @@ export default class Utils {
    * @return {Boolean} true = this is a block content
    */
   isBlockAbe(str) {
-    return str.indexOf("abe") > -1 && getAttr(str, "key").indexOf(".") > -1
+    return str.indexOf('abe') > -1 && getAttr(str, 'key').indexOf('.') > -1
   }
 
   /**
@@ -130,7 +130,7 @@ export default class Utils {
    * @return {Boolean} true = this is a block content
    */
   isEachStatement(str) {
-    return str.indexOf("#each") > -1 || str.indexOf("/each") > -1
+    return str.indexOf('#each') > -1 || str.indexOf('/each') > -1
   }
 
   /**
@@ -157,25 +157,25 @@ export default class Utils {
     var matchAbe = block.match(/>\s*\{\{abe .*\}\}/g)
     if(matchAbe){
       for (var i = 0; i < matchAbe.length; i++){
-        var getattr = getAttr(matchAbe[i], "key").replace(".", "[0]-")
+        var getattr = getAttr(matchAbe[i], 'key').replace('.', '[0]-')
         block = block.replace(
           matchAbe[i],
-          " data-abe-" + this.validDataAbe(getattr) + "=\""  + getattr + "\" >"
+          ' data-abe-' + this.validDataAbe(getattr) + '="'  + getattr + '" >'
         )
       }
     }
     matchAbe = block.match(/( [A-Za-z0-9\-\_]+="*{{.*?}})/g)
     if(matchAbe){
       for (var i = 0; i < matchAbe.length; i++) {
-        if(typeof matchAbe !== "undefined" && matchAbe !== null){
-          var getattr = getAttr(matchAbe[i], "key").replace(".", "[0]-")
-          var matchattr = (matchAbe[i].split("=")[0]).trim()
+        if(typeof matchAbe !== 'undefined' && matchAbe !== null){
+          var getattr = getAttr(matchAbe[i], 'key').replace('.', '[0]-')
+          var matchattr = (matchAbe[i].split('=')[0]).trim()
           block = block.replace(
               matchAbe[i],
-              " data-abe-attr-" + this.validDataAbe(getattr) + "=\""  + matchattr + "\"" +
-              " data-abe-" + this.validDataAbe(getattr) + "=\""  + getattr + "\" " + matchAbe[i]
+              ' data-abe-attr-' + this.validDataAbe(getattr) + '="'  + matchattr + '"' +
+              ' data-abe-' + this.validDataAbe(getattr) + '="'  + getattr + '" ' + matchAbe[i]
             )
-            .replace(/\{\{\abe.*?}\}/, "")
+            .replace(/\{\{\abe.*?}\}/, '')
         }
       }
     }
@@ -203,28 +203,28 @@ export default class Utils {
   }
 
   validDataAbe(str){
-    return str.replace(/\[([0-9]*)\]/g, "$1")
+    return str.replace(/\[([0-9]*)\]/g, '$1')
   }
 
   lorem(type, v) {
-    var lorem = ""
-    if(type === "text") {
+    var lorem = ''
+    if(type === 'text') {
       lorem = loremIpsum({
-        units: "sentences" // Generate words, sentences, or paragraphs.
+        units: 'sentences' // Generate words, sentences, or paragraphs.
         , sentenceLowerBound: 5
         , sentenceUpperBound: 10
       })
-    }else if(type === "link") {
-      lorem = "http://www.google.com"
-    }else if(type === "image" || type === "file") {
-      var width = getAttr(v, "width")
-      width = (width !== "") ? width : 300
-      var height = getAttr(v, "height")
-      height = (height !== "") ? height : 300
+    }else if(type === 'link') {
+      lorem = 'http://www.google.com'
+    }else if(type === 'image' || type === 'file') {
+      var width = getAttr(v, 'width')
+      width = (width !== '') ? width : 300
+      var height = getAttr(v, 'height')
+      height = (height !== '') ? height : 300
       lorem = `http://placehold.it/${height}x${width}`
-    }else if(type === "textarea" || type === "rich") {
+    }else if(type === 'textarea' || type === 'rich') {
       lorem = loremIpsum({
-        units: "paragraphs" // Generate words, sentences, or paragraphs.
+        units: 'paragraphs' // Generate words, sentences, or paragraphs.
         , paragraphLowerBound: 3
         , paragraphUpperBound: 7
       })
@@ -235,47 +235,47 @@ export default class Utils {
   static escapeRegExp(str) {
     var specials = [
       // order matters for these
-        "-"
-      , "["
-      , "]"
+        '-'
+      , '['
+      , ']'
       // order doesn't matter for any of these
-      , "/"
-      , "{"
-      , "}"
-      , "("
-      , ")"
-      , "*"
-      , "+"
-      , "?"
-      , "."
-      , "\\"
-      , "^"
-      , "$"
-      , "|"
+      , '/'
+      , '{'
+      , '}'
+      , '('
+      , ')'
+      , '*'
+      , '+'
+      , '?'
+      , '.'
+      , '\\'
+      , '^'
+      , '$'
+      , '|'
       ]
 
     // I choose to escape every character with '\'
     // even though only some strictly require it when inside of []
-    , regex = RegExp("[" + specials.join("\\") + "]", "g")
-    return str.replace(regex, "\\$&")
+    , regex = RegExp('[' + specials.join('\\') + ']', 'g')
+    return str.replace(regex, '\\$&')
   }
 
-  static addMetas(tpl, json, type, obj = {}, date = null, realType = "draft") {
+  static addMetas(tpl, json, type, obj = {}, date = null, realType = 'draft') {
     let meta = config.meta.name
 
     json[meta] = extend({}, json[meta])
-    var currentDate = (typeof date !== "undefined" && date !== null && date !== "") ? date : new Date()
-    var abeUrl = (type === "publish") ? json[meta].link : fileAttr.add(json[meta].link, "d" + dateSlug(currentDate.toISOString())) + ""
+    var currentDate = (typeof date !== 'undefined' && date !== null && date !== '') ? date : new Date()
+    var abeUrl = (type === 'publish') ? json[meta].link : fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
 
-    if(typeof json[meta].date === "undefined" || json[meta].date === null) {
+    if(typeof json[meta].date === 'undefined' || json[meta].date === null) {
       json[meta].date = currentDate
     }
     json[meta].latest = {
       date: currentDate,
       abeUrl: abeUrl
     }
-    json[meta].status = realType === "reject" ? "draft" : realType
-    if(typeof json[meta][type] === "undefined" || json[meta][type] === null) {
+    json[meta].status = realType === 'reject' ? 'draft' : realType
+    if(typeof json[meta][type] === 'undefined' || json[meta][type] === null) {
       json[meta][type] = JSON.parse(JSON.stringify(obj))
       json[meta][type].date = currentDate
       json[meta][type].abeUrl = abeUrl
@@ -286,17 +286,17 @@ export default class Utils {
   }
 
   static sanitizeSourceAttribute(obj, jsonPage){
-    if(typeof obj.sourceString !== "undefined" && obj.sourceString !== null && obj.sourceString.indexOf("{{") > -1) {
+    if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
       var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
       if(matches !== null) {
         Array.prototype.forEach.call(matches, (match) => {
-          var val = match.replace("{{", "")
-          val = val.replace("}}", "")
+          var val = match.replace('{{', '')
+          val = val.replace('}}', '')
           
           try {
-            val = eval("jsonPage." + val)
+            val = eval('jsonPage.' + val)
           }catch(e) {
-            val = ""
+            val = ''
           }
           obj.sourceString = obj.sourceString.replace(match, val)
         })
@@ -312,18 +312,18 @@ export default class Utils {
         .then((data) => {
           jsonPage[sourceAttr][obj.key] = data
           if (!obj.editable) {
-            if (obj["max-length"]) {
-              jsonPage[obj.key] = data.slice(0, obj["max-length"])
+            if (obj['max-length']) {
+              jsonPage[obj.key] = data.slice(0, obj['max-length'])
             }else {
               jsonPage[obj.key] = data
             }
           } else if (obj.prefill) {
-            if (obj["prefill-quantity"] && obj["max-length"]) {
-              jsonPage[obj.key] = data.slice(0, (obj["prefill-quantity"] > obj["max-length"]) ? obj["max-length"] : obj["prefill-quantity"])
-            }else if (obj["prefill-quantity"]) {
-              jsonPage[obj.key] = data.slice(0, obj["prefill-quantity"])
-            }else if (obj["max-length"]) {
-              jsonPage[obj.key] = data.slice(0, obj["max-length"])
+            if (obj['prefill-quantity'] && obj['max-length']) {
+              jsonPage[obj.key] = data.slice(0, (obj['prefill-quantity'] > obj['max-length']) ? obj['max-length'] : obj['prefill-quantity'])
+            }else if (obj['prefill-quantity']) {
+              jsonPage[obj.key] = data.slice(0, obj['prefill-quantity'])
+            }else if (obj['max-length']) {
+              jsonPage[obj.key] = data.slice(0, obj['max-length'])
             }else {
               jsonPage[obj.key] = data
             }
@@ -340,7 +340,7 @@ export default class Utils {
     var p = new Promise((resolve, reject) => {
       var value = Sql.getDataSource(match)
 
-      if(value.indexOf("{") > -1 || value.indexOf("[") > -1) {
+      if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
         try{
           value = JSON.parse(value)
 
@@ -358,55 +358,55 @@ export default class Utils {
 
   static urlList(obj, sourceAttr, tplPath, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      if(obj.autocomplete !== true && obj.autocomplete !== "true") {
+      if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
         var host = obj.sourceString
-        host = host.split("/")
+        host = host.split('/')
         var httpUse = http
         var defaultPort = 80
-        if(host[0] === "https:") {
+        if(host[0] === 'https:') {
           httpUse = https
           defaultPort = 443
         }
-        host = host[2].split(":")
+        host = host[2].split(':')
 
-        var pathSource = obj.sourceString.split("//")
-        if(typeof pathSource[1] !== "undefined" && pathSource[1] !== null) {
-          pathSource = pathSource[1].split("/")
+        var pathSource = obj.sourceString.split('//')
+        if(typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
+          pathSource = pathSource[1].split('/')
           pathSource.shift()
-          pathSource = "/" + path.join("/")
+          pathSource = '/' + path.join('/')
         }else {
-          pathSource = "/"
+          pathSource = '/'
         }
         var options = {
           hostname: host[0],
-          port: (typeof host[1] !== "undefined" && host[1] !== null) ? host[1] : defaultPort,
+          port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
           path: pathSource,
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Content-Length": 0
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': 0
           }
         }
 
-        var body = ""
+        var body = ''
 
         var localReq = httpUse.request(options, (localRes) => {
-          localRes.setEncoding("utf8")
-          localRes.on("data", (chunk) => {
+          localRes.setEncoding('utf8')
+          localRes.on('data', (chunk) => {
             body += chunk
           })
-          localRes.on("end", () => {
+          localRes.on('end', () => {
             try {
-              if(typeof body === "string") {
+              if(typeof body === 'string') {
                 var parsedBody = JSON.parse(body)
-                if(typeof parsedBody === "object" && Object.prototype.toString.call(parsedBody) === "[object Array]") {
+                if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
                   jsonPage[sourceAttr][obj.key] = parsedBody
-                }else if(typeof parsedBody === "object" && Object.prototype.toString.call(parsedBody) === "[object Object]") {
+                }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
                   jsonPage[sourceAttr][obj.key] = [parsedBody]
                 }
-              }else if(typeof body === "object" && Object.prototype.toString.call(body) === "[object Array]") {
+              }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
                 jsonPage[sourceAttr][obj.key] = body
-              }else if(typeof body === "object" && Object.prototype.toString.call(body) === "[object Object]") {
+              }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
                 jsonPage[sourceAttr][obj.key] = body
               }
             } catch(e) {
@@ -416,12 +416,12 @@ export default class Utils {
           })
         })
 
-        localReq.on("error", (e) => {
+        localReq.on('error', (e) => {
           console.log(e)
         })
 
         // write data to request body
-        localReq.write("")
+        localReq.write('')
         localReq.end()
         
       }else {
@@ -447,7 +447,7 @@ export default class Utils {
       // var t = new TimeMesure()
       var sourceAttr = config.source.name
 
-      if(typeof jsonPage[sourceAttr] === "undefined" || jsonPage[sourceAttr] === null) {
+      if(typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
         jsonPage[sourceAttr] = {}
       }
 
@@ -457,37 +457,37 @@ export default class Utils {
       var type = Sql.getSourceType(obj.sourceString)
 
       switch (type) {
-      case "request":
+      case 'request':
         Utils.requestList(obj, sourceAttr, tplPath, match, jsonPage)
             .then(() => {
               // t.duration(match)
               resolve()
             }).catch((e) => {
-              console.log("[ERROR] abe-utils.js requestList", e)
+              console.log('[ERROR] abe-utils.js requestList', e)
             })
         break
-      case "value":
+      case 'value':
         Utils.valueList(obj, sourceAttr, tplPath, match, jsonPage)
             .then(() => {
               resolve()
             }).catch((e) => {
-              console.log("[ERROR] abe-utils.js valueList", e)
+              console.log('[ERROR] abe-utils.js valueList', e)
             })
         break
-      case "url":
+      case 'url':
         Utils.urlList(obj, sourceAttr, tplPath, match, jsonPage)
             .then(() => {
               resolve()
             }).catch((e) => {
-              console.log("[ERROR] abe-utils.js urlList", e)
+              console.log('[ERROR] abe-utils.js urlList', e)
             })
         break
-      case "file":
+      case 'file':
         Utils.fileList(obj, sourceAttr, tplPath, match, jsonPage)
             .then(() => {
               resolve()
             }).catch((e) => {
-              console.log("[ERROR] abe-utils.js fileList", e)
+              console.log('[ERROR] abe-utils.js fileList', e)
             })
         break
       default:
@@ -515,11 +515,11 @@ export default class Utils {
           // t.duration()
           resolve()
         }).catch(function(e) {
-          console.error("abe-utils.js getDataList", e)
+          console.error('abe-utils.js getDataList', e)
         })
       // return filesRequest
     }).catch(function(e) {
-      console.error("abe-utils.js getDataList", e)
+      console.error('abe-utils.js getDataList', e)
     })
 
     return p
@@ -528,12 +528,12 @@ export default class Utils {
   static removeDataList(text) {
     var listReg = /({{abe.*type=[\'|\"]data.*}})/g
 
-    return text.replace(listReg, "")
+    return text.replace(listReg, '')
   }
 
   static replaceUnwantedChar(str) {
-    var chars = {"’": "", "'": "", "\"": "", "Š": "S", "š": "s", "Ž": "Z", "ž": "z", "À": "A", "Á": "A", "Â": "A", "Ã": "A", "Ä": "A", "Å": "A", "Æ": "A", "Ç": "C", "È": "E", "É": "E", "Ê": "E", "Ë": "E", "Ì": "I", "Í": "I", "Î": "I", "Ï": "I", "Ñ": "N", "Ò": "O", "Ó": "O", "Ô": "O", "Õ": "O", "Ö": "O", "Ø": "O", "Ù": "U", "Ú": "U", "Û": "U", "Ü": "U", "Ý": "Y", "Þ": "B", "ß": "Ss", "à": "a", "á": "a", "â": "a", "ã": "a", "ä": "a", "å": "a", "æ": "a", "ç": "c", "è": "e", "é": "e", "ê": "e", "ë": "e", "œ": "oe", "ì": "i", "í": "i", "î": "i", "ï": "i", "ð": "o", "ñ": "n", "ò": "o", "ó": "o", "ô": "o", "õ": "o", "ö": "o", "ø": "o", "ù": "u", "ú": "u", "û": "u", "ý": "y", "þ": "b", "ÿ": "y"}
-    for(var prop in chars) str = str.replace(new RegExp(prop, "g"), chars[prop])
+    var chars = {'’': '', '\'': '', '"': '', 'Š': 'S', 'š': 's', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B', 'ß': 'Ss', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'œ': 'oe', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ý': 'y', 'þ': 'b', 'ÿ': 'y'}
+    for(var prop in chars) str = str.replace(new RegExp(prop, 'g'), chars[prop])
     return str
   }
 
@@ -542,28 +542,28 @@ export default class Utils {
   * @return {Object} parsed attributes
   */
   static getAllAttributes(str, json) {
-    str = Hooks.instance.trigger("beforeAbeAttributes", str, json)
+    str = Hooks.instance.trigger('beforeAbeAttributes', str, json)
 
     //This regex analyzes all attributes of a Abe tag 
     var re = /\b([a-z][a-z0-9\-]*)\s*=\s*("([^"]+)"|'([^']+)'|(\S+))/ig
 
     var attrs = {
       autocomplete: null,
-      desc: "",
+      desc: '',
       display: null,
       editable: true,
-      key: "",
-      "max-length": null,
-      "min-length": 0,
+      key: '',
+      'max-length': null,
+      'min-length': 0,
       order: 0,
       prefill: false,
-      "prefill-quantity": null,
+      'prefill-quantity': null,
       reload: false,
       required: false,
       source: null,
-      tab: "default",
-      type: "text",
-      value: "",
+      tab: 'default',
+      type: 'text',
+      value: '',
       visible: true
     }
     
@@ -572,15 +572,15 @@ export default class Utils {
     }
 
     attrs.sourceString = attrs.source
-    attrs.source = (typeof source !== "undefined" && source !== null && source !== "")? 
-      ((typeof json[config.source.name] !== "undefined" && json[config.source.name] !== null && json[config.source.name] !== "")? 
+    attrs.source = (typeof source !== 'undefined' && source !== null && source !== '')? 
+      ((typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null && json[config.source.name] !== '')? 
         json[config.source.name][key] : 
         null
       ) : 
       null
-    attrs.editable = (typeof attrs.editable === "undefined" || attrs.editable === null || attrs.editable === "" || attrs.editable === "false") ? false : true
+    attrs.editable = (typeof attrs.editable === 'undefined' || attrs.editable === null || attrs.editable === '' || attrs.editable === 'false') ? false : true
 
-    attrs = Hooks.instance.trigger("afterAbeAttributes", attrs, str, json)
+    attrs = Hooks.instance.trigger('afterAbeAttributes', attrs, str, json)
 
     return attrs
   }
