@@ -219,7 +219,7 @@ function orderBlock(util) {
   return formTabsOrdered
 }
 
-export function editor(fileName, tplUrl) {
+export function editor(fileName, jsonPath, documentLink) {
   let p = new Promise((resolve, reject) => {
     var util = new Util()
     var arrayBlock = []
@@ -228,13 +228,13 @@ export function editor(fileName, tplUrl) {
     var tabIndex = 0
 
     json = {}
-    if(fileUtils.isFile(tplUrl.json.path)) {
-      json = FileParser.getJson(tplUrl.json.path, 'utf8')
+    if(fileUtils.isFile(jsonPath)) {
+      json = FileParser.getJson(jsonPath, 'utf8')
     }
     
     text = getTemplate(fileName)
 
-    Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json, true)
+    Util.getDataList(fileUtils.removeLast(documentLink), text, json, true)
       .then(() => {
         addSource(text, json, util, arrayBlock)
 

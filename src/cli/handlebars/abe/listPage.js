@@ -52,7 +52,7 @@ export default function listPage(file, index, text) {
   workflow += '<td align="center" class="publish">'
 
   if (file.publish){
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="checkmark label-published">&#10004;</a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.publish.html}" class="checkmark label-published">&#10004;</a>`
   }
   workflow += '</td>'
 

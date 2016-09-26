@@ -189,17 +189,36 @@ export default class FileAttr {
   }
 
   /**
-   * Filter and array of file path and return the latest version of those files
-   * @param  {Object} urls object with path to file, filename etc ...
-   * @param  {String} type (draft|waiting|valid)
-   * @return {Object} urls object filtered
+   * Return the revision from document html file path
+   * if the docPath contains abe revision [status]-[date] will try to return this revision
+   * else it will return the latest revision
+   * or null
+   * 
+   * @param  {String} html path
+   * @return {Object} file revision | null
    */
-  static getLatestVersion(docPath) {
-    var sameFiles = FileAttr.getVersions(docPath)
-    if (sameFiles.length > 0) {
-      return sameFiles[sameFiles.length - 1]
+  static getDocumentRevision(docPath) {
+    var result = null
+    var documentPath = docPath
+    var latest = true
+    if(FileAttr.test(documentPath)){
+      latest = false
+      documentPath = FileAttr.delete(documentPath)
     }
-    return null
+    var revisions = FileAttr.getVersions(documentPath)
+    if (latest && revisions.length >= 0) {
+      result = revisions[0]
+    }else if (!latest) {
+      Array.prototype.forEach.call(revisions, (revision) => {
+        if (revision.html === docPath) {
+          result = revision
+        }
+      })
+      if (result === null && revisions.length >= 0) {
+        result = revisions[0]
+      }
+    }
+    return result
   }
 
   /**
