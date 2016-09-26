@@ -6,6 +6,6 @@ env:
 install:
   - npm install
 script:
-  - npm run test
+  - npm run test-cov
   - npm run lint
 

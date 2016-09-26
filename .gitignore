@@ -17,5 +17,8 @@ cli/config/*-local.js
 # debug
 abe-logs/*
 
+# test-coverage
+coverage/*
+
 # dist
 #dist
