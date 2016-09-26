@@ -84,10 +84,9 @@ var findRequestColumns = function(templatesList) {
             }
           })
         }
-        resolve(whereKeys)
       })
     })
-    reject()
+    resolve(whereKeys)
   })
 
   return p
@@ -100,7 +99,6 @@ var getSelectTemplateKeys = function(templatesPath) {
 
         findRequestColumns(templatesList)
           .then((whereKeys) => {
-              
             resolve(whereKeys)
           },
           () => {
