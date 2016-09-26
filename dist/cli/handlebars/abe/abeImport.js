@@ -26,8 +26,8 @@ function abeImport(file, config, ctx) {
 
   var config = JSON.parse(config);
   var intlData = config.intlData;
-  var defaultPartials = __dirname.replace(/\/$/, "") + '/' + config.defaultPartials.replace(/\/$/, "");
-  var custom = config.custom !== '' ? config.root.replace(/\/$/, "") + '/' + config.custom.replace(/\/$/, "") : defaultPartials;
+  var defaultPartials = __dirname.replace(/\/$/, '') + '/' + config.defaultPartials.replace(/\/$/, '');
+  var custom = config.custom !== '' ? config.root.replace(/\/$/, '') + '/' + config.custom.replace(/\/$/, '') : defaultPartials;
   var pathToPartial = custom + '/' + file + '.html';
   try {
     var stat = _fsExtra2.default.statSync(pathToPartial);

@@ -64,7 +64,7 @@ var EditorFiles = function () {
 
       var formData = new FormData();
       if (target.value == '') {
-        console.log("Please choose file!");
+        console.log('Please choose file!');
         return false;
       }
       _EditorUtils2.default.scrollToInputElement(target);

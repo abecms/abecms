@@ -138,7 +138,7 @@ var EditorBlock = function () {
 
               html = html.replace(/data-block=(\'|\")(.*)(\'|\")/g, 'data-block="' + blockId + '"');
               html = html.replace(/data-target=(\'|\")(.*)(\'|\")/g, 'data-target="#' + blockId + '"');
-              html = html.replace(new RegExp('id=(' + "\\'" + '|\\"' + ')' + blockAttr + '(\\d+)(' + "\\'" + '|\\"' + ')', 'g'), 'id="' + blockId + '"');
+              html = html.replace(new RegExp('id=(' + '\\\'' + '|\\"' + ')' + blockAttr + '(\\d+)(' + '\\\'' + '|\\"' + ')', 'g'), 'id="' + blockId + '"');
               html = html.replace(/\[(\d+)\]/g, '[' + (nb - 1) + ']');
               block.innerHTML = html;
               block.setAttribute('data-block', blockAttr + (nb - 1));

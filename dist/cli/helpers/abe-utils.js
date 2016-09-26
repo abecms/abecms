@@ -72,7 +72,7 @@ var Utils = function () {
      * @return {[type]}     [description]
      */
     value: function dontHaveKey(key) {
-      return typeof this._key[key] === "undefined" || this._key[key] === null;
+      return typeof this._key[key] === 'undefined' || this._key[key] === null;
     }
 
     /**
@@ -263,15 +263,15 @@ var Utils = function () {
     value: function escapeRegExp(str) {
       var specials = [
       // order matters for these
-      "-", "[", "]"
+      '-', '[', ']'
       // order doesn't matter for any of these
-      , "/", "{", "}", "(", ")", "*", "+", "?", ".", "\\", "^", "$", "|"]
+      , '/', '{', '}', '(', ')', '*', '+', '?', '.', '\\', '^', '$', '|']
 
       // I choose to escape every character with '\'
       // even though only some strictly require it when inside of []
       ,
           regex = RegExp('[' + specials.join('\\') + ']', 'g');
-      return str.replace(regex, "\\$&");
+      return str.replace(regex, '\\$&');
     }
   }, {
     key: 'addMetas',
@@ -553,7 +553,7 @@ var Utils = function () {
   }, {
     key: 'replaceUnwantedChar',
     value: function replaceUnwantedChar(str) {
-      var chars = { "’": '', "'": '', '\"': '', 'Š': 'S', 'š': 's', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B', 'ß': 'Ss', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'œ': 'oe', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ý': 'y', 'þ': 'b', 'ÿ': 'y' };
+      var chars = { '’': '', '\'': '', '\"': '', 'Š': 'S', 'š': 's', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B', 'ß': 'Ss', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'œ': 'oe', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ý': 'y', 'þ': 'b', 'ÿ': 'y' };
       for (var prop in chars) {
         str = str.replace(new RegExp(prop, 'g'), chars[prop]);
       }return str;

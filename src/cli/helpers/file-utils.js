@@ -227,7 +227,7 @@ export default class FileUtils {
       var cleanFilePath = file.cleanFilePath
 
       var fileStatusIsPublish = fileAttr.get(file.cleanPath)
-      if(typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null) {
+      if(typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null && file.abe_meta.status === 'publish') {
         file.abe_meta.status = 'draft'
       }
 
@@ -253,13 +253,17 @@ export default class FileUtils {
 					, revisions: []
         }
       }
+
       merged[cleanFilePath].revisions.push(JSON.parse(JSON.stringify(file)))
     })
 
     // return merged
     Array.prototype.forEach.call(Object.keys(merged), (key) => {
       var revisions = merged[key].revisions
-      revisions.sort(FileParser.predicatBy('date', 1))
+      revisions.sort(FileParser.predicatBy('date', -1))
+      if(typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
+        merged[key].date = revisions[0].date
+      }
 
       Array.prototype.forEach.call(revisions, (revision) => {
 				

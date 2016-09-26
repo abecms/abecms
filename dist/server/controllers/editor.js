@@ -58,8 +58,8 @@ function addToForm(match, text, json, util, arrayBlock) {
     if (obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0) {
       obj.keyArray = keyArray;
       obj.realKey = realKey;
-      obj.key = keyArray + "[" + i + "]." + realKey;
-      obj.desc = obj.desc + " " + i, insertAbeEach(obj, text, json, util, arrayBlock);
+      obj.key = keyArray + '[' + i + '].' + realKey;
+      obj.desc = obj.desc + ' ' + i, insertAbeEach(obj, text, json, util, arrayBlock);
     } else if (util.dontHaveKey(obj.key)) {
       obj.value = json[obj.key];
       json[obj.key] = add(obj, json, text, util);
@@ -81,7 +81,7 @@ function matchAttrAbe(text, json, util, arrayBlock) {
 }
 
 function insertAbeEach(obj, text, json, util, arrayBlock) {
-  if (typeof arrayBlock[obj.keyArray][obj.realKey] === "undefined" || arrayBlock[obj.keyArray][obj.realKey] === null) {
+  if (typeof arrayBlock[obj.keyArray][obj.realKey] === 'undefined' || arrayBlock[obj.keyArray][obj.realKey] === null) {
     arrayBlock[obj.keyArray][obj.realKey] = [];
   }
   var exist = false;
@@ -221,7 +221,7 @@ function orderBlock(util) {
   return formTabsOrdered;
 }
 
-function editor(fileName, tplUrl) {
+function editor(fileName, jsonPath, documentLink) {
   var p = new _es6Promise.Promise(function (resolve, reject) {
     var util = new _cli.Util();
     var arrayBlock = [];
@@ -230,13 +230,13 @@ function editor(fileName, tplUrl) {
     var tabIndex = 0;
 
     json = {};
-    if (_cli.fileUtils.isFile(tplUrl.json.path)) {
-      json = _cli.FileParser.getJson(tplUrl.json.path, 'utf8');
+    if (_cli.fileUtils.isFile(jsonPath)) {
+      json = _cli.FileParser.getJson(jsonPath, 'utf8');
     }
 
     text = (0, _cli.getTemplate)(fileName);
 
-    _cli.Util.getDataList(_cli.fileUtils.removeLast(tplUrl.publish.link), text, json, true).then(function () {
+    _cli.Util.getDataList(_cli.fileUtils.removeLast(documentLink), text, json, true).then(function () {
       addSource(text, json, util, arrayBlock);
 
       text = _cli.Util.removeDataList(text);

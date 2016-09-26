@@ -139,7 +139,7 @@ var EditorManager = function () {
         var res = JSON.parse(responseText);
         var routePath = typeof dataPage !== 'undefined' && dataPage !== null ? dataPage : '';
         res.port = res.port === 80 ? '' : ':' + res.port;
-        window.open('' + res.webroot.replace(/\/$/, "") + res.port + '/' + routePath, '_blank');
+        window.open('' + res.webroot.replace(/\/$/, '') + res.port + '/' + routePath, '_blank');
       });
     }
   }, {

@@ -24,7 +24,7 @@ var route = function route(router, req, res, next) {
     urls.push({
       url: route.route.path,
       method: Object.keys(route.route.methods)[0].toUpperCase(),
-      regex: "^\\" + route.route.path.replace(/\*$/, '') + ".*?"
+      regex: '^\\' + route.route.path.replace(/\*$/, '') + '.*?'
     });
   });
 

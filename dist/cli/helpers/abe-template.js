@@ -87,7 +87,7 @@ function translate(text) {
           }
 
           if (source.indexOf('{{') === -1) {
-            source = '\'' + source.replace(/'/g, "\\'") + '\'';
+            source = '\'' + source.replace(/'/g, '\\\'') + '\'';
           } else {
             source = source.replace(/\{\{(.*?)\}\}/, '$1');
           }
