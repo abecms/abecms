@@ -34,11 +34,11 @@ function msToTime(duration) {
       minutes = parseInt(duration / (1000 * 60) % 60),
       hours = parseInt(duration / (1000 * 60 * 60) % 24);
 
-  hours = hours < 10 ? "0" + hours : hours;
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  seconds = seconds < 10 ? "0" + seconds : seconds;
+  hours = hours < 10 ? '0' + hours : hours;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  seconds = seconds < 10 ? '0' + seconds : seconds;
 
-  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  return hours + ':' + minutes + ':' + seconds + '.' + milliseconds;
 }
 
 function publishNext(published, tt, cb) {
@@ -48,7 +48,7 @@ function publishNext(published, tt, cb) {
   var pub = published.shift();
   if (typeof pub !== 'undefined' && pub !== null) {
 
-    var jsonPath = FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp("\\." + config.files.templates.extension), '.json');
+    var jsonPath = FileParser.changePathEnv(pub.path, config.data.url).replace(new RegExp('\\.' + config.files.templates.extension), '.json');
     var json = FileParser.getJson(jsonPath);
     if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
       i++;
@@ -113,7 +113,7 @@ if (typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) 
         console.log('publish-all', 'started by < ' + pConfig.FILEPATH.replace(config.root, ''));
         pConfig.FILEPATH = _path2.default.join(config.root, config.data.url, pConfig.FILEPATH.replace(config.root));
 
-        var fileJson = FileParser.getJson(pConfig.FILEPATH.replace(new RegExp("\\." + config.files.templates.extension), '.json'));
+        var fileJson = FileParser.getJson(pConfig.FILEPATH.replace(new RegExp('\\.' + config.files.templates.extension), '.json'));
 
         if (typeof fileJson !== 'undefined' && fileJson !== null) {
           if (typeof fileJson.abe_meta !== 'undefined' && fileJson.abe_meta !== null) {

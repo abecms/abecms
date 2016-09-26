@@ -141,7 +141,7 @@ var Sql = function () {
         str = str.replace(res, escapedFrom);
       }
 
-      str = str.replace(/``/g, "''");
+      str = str.replace(/``/g, '\'\'');
 
       return str;
     }

@@ -14,9 +14,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function truncate(str, len) {
   if (typeof str !== 'undefined' && str.length > len) {
     new_str = new _handlebars2.default.SafeString(str);
-    var new_str = str + " ";
+    var new_str = str + ' ';
     new_str = str.substr(0, len);
-    new_str = str.substr(0, new_str.lastIndexOf(" "));
+    new_str = str.substr(0, new_str.lastIndexOf(' '));
     new_str = new_str.length > 0 ? new_str : str.substr(0, len);
 
     return new_str + '...';

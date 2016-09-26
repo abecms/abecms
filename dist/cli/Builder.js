@@ -4,14 +4,6 @@ var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
-var _extend = require('extend');
-
-var _extend2 = _interopRequireDefault(_extend);
-
-var _mkdirp = require('mkdirp');
-
-var _mkdirp2 = _interopRequireDefault(_mkdirp);
-
 var _Save = require('./controllers/Save');
 
 var _path = require('path');

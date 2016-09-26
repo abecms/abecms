@@ -39,7 +39,7 @@ var Json = function () {
     this.saving = (0, _on2.default)(this);
     this.headersSaving = (0, _on2.default)(this);
 
-    if (enforcer != singletonEnforcer) throw "Cannot construct Json singleton";
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Json singleton';
   }
 
   _createClass(Json, [{

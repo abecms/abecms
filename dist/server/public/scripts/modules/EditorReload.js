@@ -36,7 +36,7 @@ var Reload = function () {
     this._ajax = _nanoajax2.default.ajax;
     this._json = _EditorJson2.default.instance;
 
-    if (enforcer != singletonEnforcer) throw "Cannot construct Reload singleton";
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Reload singleton';
   }
 
   _createClass(Reload, [{
@@ -62,7 +62,7 @@ var Reload = function () {
   }, {
     key: '_nodeScriptClone',
     value: function _nodeScriptClone(node) {
-      var script = document.createElement("script");
+      var script = document.createElement('script');
       script.text = node.innerHTML;
       for (var i = node.attributes.length - 1; i >= 0; i--) {
         script.setAttribute(node.attributes[i].name, node.attributes[i].value);

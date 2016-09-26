@@ -23,7 +23,7 @@ var Devtool = exports.Devtool = function () {
   _createClass(Devtool, [{
     key: 'getCookie',
     value: function getCookie(cname) {
-      var name = cname + "=";
+      var name = cname + '=';
       var ca = document.cookie.split(';');
       for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
@@ -34,15 +34,15 @@ var Devtool = exports.Devtool = function () {
           return c.substring(name.length, c.length);
         }
       }
-      return "";
+      return '';
     }
   }, {
     key: 'setCookie',
     value: function setCookie(cname, cvalue, exdays) {
       var d = new Date();
       d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-      var expires = "expires=" + d.toUTCString();
-      document.cookie = cname + "=" + cvalue + "; " + expires;
+      var expires = 'expires=' + d.toUTCString();
+      document.cookie = cname + '=' + cvalue + '; ' + expires;
     }
 
     // ABE devtool

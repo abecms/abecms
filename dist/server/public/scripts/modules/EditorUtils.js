@@ -139,7 +139,7 @@ var EditorUtils = function () {
       var id = input.id;
       var placeholder = input.getAttribute('placeholder');
       if (typeof placeholder === 'undefined' || placeholder === 'undefined' || placeholder === null) {
-        placeholder = "";
+        placeholder = '';
       }
       if (val.replace(/^\s+|\s+$/g, '').length < 1) {
         val = placeholder;

@@ -35,7 +35,7 @@ var Plugins = function () {
   function Plugins(enforcer) {
     _classCallCheck(this, Plugins);
 
-    if (enforcer != singletonEnforcer) throw "Cannot construct Plugins singleton";
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Plugins singleton';
     this._plugins = [];
     this.fn = [];
     var pluginsDir = _path2.default.join(_.config.root, _.config.plugins.url);

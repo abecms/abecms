@@ -54,13 +54,13 @@ var FileParser = function () {
     value: function getTemplate(path) {
       var file = path.replace(_.config.root, '');
       var file = path.replace(_.config.templates.url, '');
-      return file.replace(/^\//, "");
+      return file.replace(/^\//, '');
     }
   }, {
     key: 'getType',
     value: function getType(path) {
       var folders = path.replace(_.config.root, '');
-      folders = folders.replace(/^\//, "");
+      folders = folders.replace(/^\//, '');
       return folders.split('/')[0];
     }
   }, {
@@ -111,7 +111,7 @@ var FileParser = function () {
               'cleanPathName': _.fileAttr.delete(path),
               'cleanPath': path.replace(base + '/', ''),
               date: date,
-              cleanDate: fileDate.format("YYYY/MM/DD HH:MM:ss"),
+              cleanDate: fileDate.format('YYYY/MM/DD HH:MM:ss'),
               duration: duration,
               // status: status,
               cleanName: cleanName,
@@ -454,8 +454,14 @@ var FileParser = function () {
         var json = FileParser.getJson(file.path);
 
         if (typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          var date = null;
+          if (typeof json.abe_meta.latest.date !== 'undefined' && json.abe_meta.latest.date !== null) {
+            date = json.abe_meta.latest.date;
+          } else if (typeof json.abe_meta.date !== 'undefined' && json.abe_meta.date !== null) {
+            date = json.abe_meta.date;
+          }
           cleanFile.abe_meta = {
-            date: typeof json.abe_meta.date !== 'undefined' && json.abe_meta.date !== null ? json.abe_meta.date : null,
+            date: date,
             type: typeof json.abe_meta.type !== 'undefined' && json.abe_meta.type !== null ? json.abe_meta.type : null,
             link: typeof json.abe_meta.link !== 'undefined' && json.abe_meta.link !== null ? json.abe_meta.link : null,
             template: typeof json.abe_meta.template !== 'undefined' && json.abe_meta.template !== null ? json.abe_meta.template : null,

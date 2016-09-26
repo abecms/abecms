@@ -38,16 +38,16 @@ var LinkPicker = function () {
     this.noFollowLabel.textContent = 'no-follow';
     this.noFollowLabel.classList.add('keep-popup');
     this.noFollow = document.createElement('input');
-    this.noFollow.type = "checkbox";
-    this.noFollow.name = "no-follow-" + parseInt(Math.random() * 100);
+    this.noFollow.type = 'checkbox';
+    this.noFollow.name = 'no-follow-' + parseInt(Math.random() * 100);
     this.noFollow.classList.add('keep-popup');
 
     this.targetLabel = document.createElement('label');
     this.targetLabel.textContent = 'target blank';
     this.targetLabel.classList.add('keep-popup');
     this.target = document.createElement('input');
-    this.target.type = "checkbox";
-    this.target.name = "target-" + parseInt(Math.random() * 100);
+    this.target.type = 'checkbox';
+    this.target.name = 'target-' + parseInt(Math.random() * 100);
     this.target.classList.add('keep-popup');
 
     this.noFollowLabel.appendChild(this.noFollow);

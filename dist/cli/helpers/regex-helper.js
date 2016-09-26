@@ -35,14 +35,14 @@ function getAttr(str, attr) {
  */
 function explodeTag(text, tag) {
   var startWithTags = false;
-  if (text.indexOf("<" + tag) === 0) {
+  if (text.indexOf('<' + tag) === 0) {
     startWithTags = true;
   }
-  var tags = text.split("<" + tag);
+  var tags = text.split('<' + tag);
 
   var i = 0;
   var reconstruct = [];
-  var wait = "";
+  var wait = '';
 
   reconstruct.push(tags.shift());
   Array.prototype.forEach.call(tags, function (ele) {
@@ -102,15 +102,15 @@ function querySelectorTags(text, tag) {
 
       var matches = ele.match(escapeTextToRegex('<' + tag, 'g'));
       if (typeof matches !== 'undefined' && matches !== null && matches.length > 1) {
-        var tagLength = "<" + tag;
+        var tagLength = '<' + tag;
         tagLength = tagLength.length;
 
         // remove first tag
-        var start = ele.indexOf("<" + tag);
+        var start = ele.indexOf('<' + tag);
         ele = ele.substring(start + tagLength);
 
         // remove end tag
-        var end = ele.lastIndexOf("</" + tag);
+        var end = ele.lastIndexOf('</' + tag);
         ele = ele.substring(0, end);
 
         text += ele;
@@ -121,7 +121,7 @@ function querySelectorTags(text, tag) {
   Array.prototype.forEach.call(res, function (ele) {
     var matches = ele.match(escapeTextToRegex('<' + tag, 'g'));
     if (typeof matches !== 'undefined' && matches !== null && matches.length > 0) {
-      var finalEleReg = new RegExp("<" + tag + "([\\s\\S]*?)<\\/" + tag + ">(?![\\s\\S]*<\/" + tag + ">)");
+      var finalEleReg = new RegExp('<' + tag + '([\\s\\S]*?)<\\/' + tag + '>(?![\\s\\S]*<\/' + tag + '>)');
       finalEleReg = finalEleReg.exec(ele);
       if (typeof finalEleReg !== 'undefined' && finalEleReg !== null && finalEleReg.length > 0) {
         finalRes.push(finalEleReg[0]);
