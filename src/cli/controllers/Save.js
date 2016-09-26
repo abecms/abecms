@@ -100,7 +100,9 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     var date = fileAttr.get(pathIso.jsonPath).d
 
     if (publishAll) {
-      date = json[meta].publish.date
+      if(typeof json[meta].publish !== 'undefined' && json[meta].publish !== null) {
+        date = json[meta].publish.date
+      }
     }
     if(typeof date === 'undefined' || date === null || date === '') {
       date = new Date()
@@ -215,7 +217,6 @@ export function saveHtml(url, html) {
   if(fileAttr.test(url) && fileAttr.get(url).s !== 'd'){
     fileUtils.deleteOlderRevisionByType(fileAttr.delete(url), fileAttr.get(url).s)
   }
-  
   fse.writeFileSync(url, html)
 }
 
