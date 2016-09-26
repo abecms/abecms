@@ -41,7 +41,7 @@ var Manager = function () {
   function Manager(enforcer) {
     _classCallCheck(this, Manager);
 
-    if (enforcer != singletonEnforcer) throw "Cannot construct Json singleton";
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Json singleton';
 
     _handlebars2.default.templates = _handlebars2.default.templates || {};
     this.loadHbsTemplates();
@@ -57,6 +57,16 @@ var Manager = function () {
       }
 
       return this._list;
+    }
+  }, {
+    key: 'setList',
+    value: function setList(list) {
+      if (_cli.config.redis.enable) {
+        redis.get().set('list', JSON.stringify(list));
+      }
+      this._list = list;
+
+      return this;
     }
   }, {
     key: 'init',
@@ -81,7 +91,7 @@ var Manager = function () {
     key: 'updateList',
     value: function updateList() {
       this._list = _cli.FileParser.getAllFilesWithKeys(this._whereKeys);
-      this._list.sort(_cli.FileParser.predicatBy('date'));
+      this._list.sort(_cli.FileParser.predicatBy('date', -1));
       if (_cli.config.redis.enable) {
         redis.get().set('list', JSON.stringify(this._list));
       }
@@ -93,7 +103,7 @@ var Manager = function () {
     key: 'addHbsTemplate',
     value: function addHbsTemplate(templateId) {
       var pathTemplate = _path2.default.join(_cli.config.root, _cli.config.templates.url, 'hbs', templateId) + '.hbs';
-      var tmpl = eval("(function(){return " + _fsExtra2.default.readFileSync(pathTemplate) + "}());");
+      var tmpl = eval('(function(){return ' + _fsExtra2.default.readFileSync(pathTemplate) + '}());');
       _handlebars2.default.templates[templateId] = _handlebars2.default.template(tmpl);
     }
   }, {
@@ -106,7 +116,7 @@ var Manager = function () {
       }
 
       _fsExtra2.default.readdirSync(pathTemplate).forEach(function (file) {
-        if (file.indexOf(".hbs") > -1) {
+        if (file.indexOf('.hbs') > -1) {
           var originalTemplatePath = _path2.default.join(_cli.config.root, _cli.config.templates.url) + '/' + file.replace('.hbs', '.' + _cli.config.files.templates.extension);
 
           try {
@@ -120,7 +130,7 @@ var Manager = function () {
             if (originalTemplateMdate > mdate) {
               _fsExtra2.default.unlinkSync(_path2.default.join(pathTemplate, file));
             } else {
-              var tmpl = eval("(function(){return " + _fsExtra2.default.readFileSync(_path2.default.join(pathTemplate, file)) + "}());");
+              var tmpl = eval('(function(){return ' + _fsExtra2.default.readFileSync(_path2.default.join(pathTemplate, file)) + '}());');
               _handlebars2.default.templates[file.replace('.hbs', '')] = _handlebars2.default.template(tmpl);
             }
           } catch (err) {

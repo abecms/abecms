@@ -43,7 +43,7 @@ var Hooks = function () {
   function Hooks(enforcer) {
     _classCallCheck(this, Hooks);
 
-    if (enforcer != singletonEnforcer) throw "Cannot construct Json singleton";
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Json singleton';
 
     if (_.fileUtils.isFile(_path2.default.join(_.config.root, _.config.hooks.url, 'hooks.js'))) {
       var h = require(_path2.default.join(_.config.root, _.config.hooks.url, 'hooks.js'));

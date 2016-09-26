@@ -24,12 +24,12 @@ var route = function route(req, res, next) {
   var file = _path2.default.join(_cli.config.root, 'logs', req.params[0] + '.log');
   var html = '';
   if (_cli.fileUtils.isFile(file)) {
-    var commonStyle = "font-family: arial; font-size: 12px;";
-    var shellp = '<span style="color: #18FFFF;' + commonStyle + '"> > ' + req.params[0].replace(/\//g, '') + "</span>";
+    var commonStyle = 'font-family: arial; font-size: 12px;';
+    var shellp = '<span style="color: #18FFFF;' + commonStyle + '"> > ' + req.params[0].replace(/\//g, '') + '</span>';
     var content = _fsExtra2.default.readFileSync(file, 'utf8');
-    html = '<!doctype html>' + "\n" + '<html>' + "\n" + '<head>' + "\n" + '<style>body, html {background: #212121;}</style>' + "\n" + '</head>' + "\n" + '<body>';
+    html = '<!doctype html>' + '\n' + '<html>' + '\n' + '<head>' + '\n' + '<style>body, html {background: #212121;}</style>' + '\n' + '</head>' + '\n' + '<body>';
     html += '<a href="/abe/logs" style="color: white;' + commonStyle + '">< Go back</a>';
-    content = content.split("\n");
+    content = content.split('\n');
     Array.prototype.forEach.call(content, function (item) {
       if (typeof item !== 'undefined' && item !== null && item !== '') {
 
@@ -38,13 +38,13 @@ var route = function route(req, res, next) {
         var text = '<span style="color: white; ' + commonStyle + '>' + item + '</span>';
         if (typeof cut[0] !== 'undefined' && cut[0] !== null && typeof cut[1] !== 'undefined' && cut[1] !== null) {
           date = cut[0].replace(/([0-9]{0,2}:[0-9]{0,2}:[0-9]{0,2})/, '<strong style="color: #B2FF59;">$1</strong>');
-          date = "\n" + '<span style="color: #00E676; text-transform: uppercase; font-family: arial; font-size: 11px;"> [ ' + date + ' ] </span>';
-          text = "\n" + '<span style="color: white; ' + commonStyle + '">' + cut[1] + '</span>';
+          date = '\n' + '<span style="color: #00E676; text-transform: uppercase; font-family: arial; font-size: 11px;"> [ ' + date + ' ] </span>';
+          text = '\n' + '<span style="color: white; ' + commonStyle + '">' + cut[1] + '</span>';
         }
-        html += "\n" + "<div>" + "\n" + date + "\n" + shellp + "\n" + text + "\n" + "</div>";
+        html += '\n' + '<div>' + '\n' + date + '\n' + shellp + '\n' + text + '\n' + '</div>';
       }
     });
-    html += "\n" + '</body>' + "\n" + '</html>';
+    html += '\n' + '</body>' + '\n' + '</html>';
   } else {
     var pathLog = _path2.default.join(_cli.config.root, 'logs');
     if (!_cli.folderUtils.isFolder(pathLog)) {

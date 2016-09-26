@@ -37,18 +37,22 @@ export default function listPage(file, index, text) {
   var workflow = ''
 
   workflow += '<td align="center" class="draft">'
-  if((typeof file.publish === 'undefined' || file.publish === null)
-    || (file.publish && file.draft && file.publish.date < file.draft.date)) {
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="label label-default label-draft">draft</a>`
+  if(typeof file.draft !== 'undefined' && file.draft !== null) {
+    if((typeof file.publish === 'undefined' || file.publish === null)
+      || (file.publish && file.publish.date < file.draft.date)) {
+      workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="label label-default label-draft">draft</a>`
+    }else {
+      workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="hidden label label-default label-draft">draft</a>`
+    }
   }else {
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="hidden label label-default label-draft">draft</a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft">draft</a>`
   }
 
   workflow += '</td>'
   workflow += '<td align="center" class="publish">'
 
   if (file.publish){
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="checkmark label-published">&#10004;</a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.publish.html}" class="checkmark label-published">&#10004;</a>`
   }
   workflow += '</td>'
 

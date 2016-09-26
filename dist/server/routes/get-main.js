@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -86,62 +84,51 @@ var route = function route(req, res, next) {
   var p = new Promise(function (resolve, reject) {
 
     if (templatePath !== null && filePath !== null) {
-      var filePathTest;
+      var jsonPath = null;
+      var linkPath = null;
+      isHome = false;
 
-      var _ret = function () {
+      var filePathTest = _cli.fileAttr.getDocumentRevision(req.query.filePath);
+      if (typeof filePathTest !== 'undefined' && filePathTest !== null) {
+        // filePath = filePathTest.path
+        jsonPath = filePathTest.path;
+        linkPath = filePathTest.abe_meta.link;
+      }
 
-        isHome = false;
+      if (jsonPath === null || !_cli.fileUtils.isFile(jsonPath)) {
+        res.redirect('/abe/');
+        return;
+      }
 
-        if (!_cli.fileAttr.test(filePath)) {
-          filePathTest = _cli.fileAttr.getLatestVersion(req.query.filePath);
+      (0, _editor.editor)(templatePath, jsonPath, linkPath).then(function (result) {
+        var manager = {};
 
-          if (typeof filePathTest !== 'undefined' && filePathTest !== null) {
-            filePath = filePathTest.path;
-          }
+        _cli.FileParser.getAssetsFolder();
+        _cli.FileParser.getAssets();
+
+        var revisionFilePath = _cli.FileParser.changePathEnv(filePath, _cli.config.draft.url);
+        var dirPath = _cli.fileUtils.removeLast(revisionFilePath);
+        var allDraft = _cli.FileParser.getFiles(dirPath, true, 99, new RegExp('\\.' + _cli.config.files.templates.extension));
+
+        allDraft = _cli.FileParser.getMetas(allDraft, 'draft');
+        var breadcrumb = req.params[0].split('/');
+        manager.file = {
+          revision: _cli.fileAttr.getFilesRevision(allDraft, _cli.fileAttr.delete(revisionFilePath)),
+          template: breadcrumb,
+          path: req.query.filePath ? _cli.fileUtils.cleanTplName(req.query.filePath) : ''
+        };
+        if (manager.file.revision.length > 0) {
+          var publishPath = _cli.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp('/' + _cli.config.draft.url + '/'), '/' + _cli.config.publish.url + '/'));
+          manager.file.isPublished = _cli.fileUtils.isFile(publishPath);
         }
 
-        var tplUrl = _cli.FileParser.getFileDataFromUrl(filePath);
-
-        if (!_cli.fileUtils.isFile(tplUrl.json.path)) {
-          res.redirect("/abe/");
-          return {
-            v: void 0
-          };
-        }
-
-        (0, _editor.editor)(templatePath, tplUrl).then(function (result) {
-          var manager = {};
-
-          _cli.FileParser.getAssetsFolder();
-          _cli.FileParser.getAssets();
-
-          var revisionFilePath = _cli.FileParser.changePathEnv(filePath, _cli.config.draft.url);
-          var dirPath = _cli.fileUtils.removeLast(revisionFilePath);
-          var allDraft = _cli.FileParser.getFiles(dirPath, true, 99, new RegExp("\\." + _cli.config.files.templates.extension));
-
-          allDraft = _cli.FileParser.getMetas(allDraft, 'draft');
-          var breadcrumb = req.params[0].split('/');
-          manager.file = {
-            revision: _cli.fileAttr.getFilesRevision(allDraft, _cli.fileAttr.delete(revisionFilePath)),
-            template: breadcrumb,
-            path: req.query.filePath ? _cli.fileUtils.cleanTplName(req.query.filePath) : ''
-          };
-          if (manager.file.revision.length > 0) {
-            var publishPath = _cli.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp('/' + _cli.config.draft.url + '/'), '/' + _cli.config.publish.url + '/'));
-            manager.file.isPublished = _cli.fileUtils.isFile(publishPath);
-          }
-
-          resolve({
-            obj: result,
-            manager: manager,
-            tplUrl: tplUrl
-          });
-        }).catch(function (e) {
-          console.error(e);
+        resolve({
+          obj: result,
+          manager: manager
         });
-      }();
-
-      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+      }).catch(function (e) {
+        console.error(e);
+      });
     } else {
       resolve({
         obj: {},
@@ -155,7 +142,7 @@ var route = function route(req, res, next) {
   p.then(function (result) {
     var obj = result.obj;
     var manager = result.manager;
-    var tplUrl = result.tplUrl;
+    // let tplUrl = result.tplUrl
 
     manager.home = {
       files: _cli.Manager.instance.getList()
@@ -171,7 +158,7 @@ var route = function route(req, res, next) {
     var _form = obj ? obj.form : false;
     var _json = obj ? obj.json : false;
     var _text = obj ? obj.text : false;
-    var _file = tplUrl ? tplUrl.draft.file : false;
+    // var _file = (tplUrl) ? tplUrl.draft.file : false
     var _filePath = req.query.filePath ? req.query.filePath : false;
     if (_filePath) {
       _filePath = '/' + _filePath.replace(/^\/+/, '');
@@ -181,7 +168,7 @@ var route = function route(req, res, next) {
     if (typeof _json !== 'undefined' && _json !== null && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) {
       var text = (0, _cli.getTemplate)(_json.abe_meta.template);
       var page = new _cli.Page(_json.abe_meta.template, text, _json, false);
-      pageHtml = page.html.replace(/"/g, '\"').replace(/'/g, "\'").replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>');
+      pageHtml = page.html.replace(/"/g, '\"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>');
     }
 
     var EditorVariables = {
@@ -196,7 +183,7 @@ var route = function route(req, res, next) {
       hasBlock: _hasBlock,
       form: _form,
       urlToSaveFile: _filePath,
-      tplName: _file,
+      // tplName: _file,
       json: _json,
       config: _cli.config,
       Locales: _cli.Locales.instance.i18n,
@@ -206,7 +193,7 @@ var route = function route(req, res, next) {
         req: req
       },
       abeVersion: _package2.default.version,
-      nonce: "'nonce-" + res.locals.nonce + "'"
+      nonce: '\'nonce-' + res.locals.nonce + '\''
     };
     var EditorVariables = _cli.Hooks.instance.trigger('afterVariables', EditorVariables);
 

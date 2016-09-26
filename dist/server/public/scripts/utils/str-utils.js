@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -14,19 +14,19 @@ var StrUtils = function () {
   }
 
   _createClass(StrUtils, null, [{
-    key: "escapeRegExp",
+    key: 'escapeRegExp',
     value: function escapeRegExp(str) {
       var specials = [
       // order matters for these
-      "-", "[", "]"
+      '-', '[', ']'
       // order doesn't matter for any of these
-      , "/", "{", "}", "(", ")", "*", "+", "?", ".", "\\", "^", "$", "|"]
+      , '/', '{', '}', '(', ')', '*', '+', '?', '.', '\\', '^', '$', '|']
 
       // I choose to escape every character with '\'
       // even though only some strictly require it when inside of []
       ,
           regex = RegExp('[' + specials.join('\\') + ']', 'g');
-      return str.replace(regex, "\\$&");
+      return str.replace(regex, '\\$&');
     }
   }]);
 

@@ -19,7 +19,7 @@ var create = function create(template, pathCreate, name, req) {
   var p = new Promise(function (resolve, reject) {
     _cli.Hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson);
 
-    var templatePath = _cli.fileUtils.getTemplatePath(template.replace(_cli.config.root, ""));
+    var templatePath = _cli.fileUtils.getTemplatePath(template.replace(_cli.config.root, ''));
     var filePath = _path2.default.join(pathCreate, name);
     filePath = (0, _cli.cleanSlug)(filePath);
     filePath = _cli.fileUtils.getFilePath(filePath);

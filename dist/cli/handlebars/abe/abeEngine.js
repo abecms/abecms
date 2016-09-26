@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -15,12 +15,12 @@ var abeEngine = function () {
   function abeEngine(enforcer) {
     _classCallCheck(this, abeEngine);
 
-    if (enforcer != singletonEnforcer) throw "Cannot construct Json singleton";
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Json singleton';
     this._content = {};
   }
 
   _createClass(abeEngine, [{
-    key: "content",
+    key: 'content',
     get: function get() {
       return this._content;
     },
@@ -28,7 +28,7 @@ var abeEngine = function () {
       this._content = content;
     }
   }], [{
-    key: "instance",
+    key: 'instance',
     get: function get() {
       if (!this[singleton]) {
         this[singleton] = new abeEngine(singletonEnforcer);
