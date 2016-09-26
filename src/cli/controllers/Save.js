@@ -119,13 +119,13 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           json = Hooks.instance.trigger('afterGetDataListOnSave', json)
           for(var prop in json){
             if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
-              var valuesAreEmplty = true
+              var valuesAreEmpty = true
               json[prop].forEach(function (element) {
                 for(var p in element) {
-                  if(element[p] !== '') valuesAreEmplty = false
+                  if(element[p] !== '') valuesAreEmpty = false
                 }
               })
-              if(valuesAreEmplty) delete json[prop]
+              if(valuesAreEmpty) delete json[prop]
             }
           }
 
