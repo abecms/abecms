@@ -10,6 +10,7 @@
   "scripts": {
     "lint": "eslint src",
     "test": "mocha --compilers js:babel-register --require babel-polyfill",
+    "test-cov": "istanbul cover _mocha -- --compilers js:babel-register --require babel-polyfill",
     "start": "node --debug --harmony ./dist/server/index.js",
     "startpm2": "pm2 startOrRestart ./processes.json",
     "babel": "babelify src/server/public/scripts/template-engine.js -o src/server/public/scripts/template-engine-compiled.js",
@@ -87,6 +88,7 @@
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "eslint": "^3.6.0",
+    "istanbul": "^1.1.0-alpha.1",
     "mkdirp": "^0.5.1",
     "mocha": "^3.0.2",
     "node-sass": "^3.6.0",
