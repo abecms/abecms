@@ -6,10 +6,12 @@ describe('Request', function() {
    * Sql.getAllAttributes
    * 
    */
-  it('Util.getAllAttributes()', function() {
+  it('Util.getAllAttributes()', function(done) {
     var Util = require('../src/cli').Util
     var attributes = Util.getAllAttributes("{{abe type='data' key='top_things_slider_highlight' desc='Automatic slider' source='select * from ../' editable='false'}}", {})
+
     chai.assert.equal(attributes.sourceString, 'select * from ../', 'sourceString is ok');
+    done();
   });
 
   /**
