@@ -1,15 +1,15 @@
-import express from "express"
-import https from "https"
-import fse from "fs-extra"
-import session from "express-session"
-import helmet from "helmet"
-import bodyParser from "body-parser"
-import exphbs from "express-secure-handlebars"
-import path from "path"
-import busboy from "connect-busboy"
-import clc from "cli-color"
-import openurl from "openurl"
-import uuid from "node-uuid"
+import express from 'express'
+import https from 'https'
+import fse from 'fs-extra'
+import session from 'express-session'
+import helmet from 'helmet'
+import bodyParser from 'body-parser'
+import exphbs from 'express-secure-handlebars'
+import path from 'path'
+import busboy from 'connect-busboy'
+import clc from 'cli-color'
+import openurl from 'openurl'
+import uuid from 'node-uuid'
 
 import {
   config,
@@ -34,25 +34,25 @@ import {
   printConfig,
   Hooks,
   Manager
-} from "../cli"
+} from '../cli'
 
 import {
   middleWebsite,
-} from "./middlewares"
+} from './middlewares'
 
-import * as redis from "../cli/services/RedisClient"
+import * as redis from '../cli/services/RedisClient'
 
 var abePort = null
 
-if(process.env.ROOT) config.set({root: process.env.ROOT.replace(/\/$/, "") + "/"})
+if(process.env.ROOT) config.set({root: process.env.ROOT.replace(/\/$/, '') + '/'})
 if(config.port) abePort = config.port
 if(process.env.PORT) abePort = process.env.PORT
 config.set({webport: process.env.WEBPORT ? process.env.WEBPORT : 8081})
 
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0"
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 var html = exphbs.create({
-  extname: "." + config.files.templates.extension,
+  extname: '.' + config.files.templates.extension,
   helpers: {
     abe: compileAbe,
     listPage: listPage,
@@ -73,10 +73,10 @@ var html = exphbs.create({
 })
 
 var opts = {}
-if (fileUtils.isFile(path.join(config.root, "cert.pem"))) {
+if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
   opts = {
-    key: fse.readFileSync( path.join(config.root, "key.pem")),
-    cert: fse.readFileSync( path.join(config.root, "cert.pem"))
+    key: fse.readFileSync( path.join(config.root, 'key.pem')),
+    cert: fse.readFileSync( path.join(config.root, 'cert.pem'))
   }
 }
 
@@ -88,11 +88,11 @@ if(config.redis.enable){
   
   // Instantiate Singleton Manager (which lists all blog files)
 Manager.instance.init()
-app.set("config", config.getConfigByWebsite())
-app.set("projectFiles", FileParser.getProjectFiles())
+app.set('config', config.getConfigByWebsite())
+app.set('projectFiles', FileParser.getProjectFiles())
 
-app.use(bodyParser.json({limit: "1gb"}))
-app.use(bodyParser.urlencoded({limit: "1gb", extended: true, parameterLimit: 10000 }))
+app.use(bodyParser.json({limit: '1gb'}))
+app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
 
 app.use(function (req, res, next) {
   res.locals.nonce = uuid.v4()
@@ -100,11 +100,11 @@ app.use(function (req, res, next) {
 })
 
 app.use(function (req, res, next) {
-  if(typeof req.query.logs !== "undefined" && req.query.logs !== null
-      && req.query.logs === "true") {
+  if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
+      && req.query.logs === 'true') {
     config.logs = true
-  }else if(typeof req.query.logs !== "undefined" && req.query.logs !== null
-      && req.query.logs === "false") {
+  }else if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
+      && req.query.logs === 'false') {
     config.logs = false
   }
   next()
@@ -114,18 +114,18 @@ if(config.security === true){
   app.use(helmet())
   app.use(helmet.csp({
     directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"].concat(config.csp.scriptSrc),
-      styleSrc: ["'self'", "'unsafe-inline'"].concat(config.csp.styleSrc),
-      imgSrc: ["'self'", "data:"].concat(config.csp.imgSrc),
+      defaultSrc: ['\'self\''],
+      scriptSrc: ['\'self\''].concat(config.csp.scriptSrc),
+      styleSrc: ['\'self\'', '\'unsafe-inline\''].concat(config.csp.styleSrc),
+      imgSrc: ['\'self\'', 'data:'].concat(config.csp.imgSrc),
         // frameSrc: ["'self'"],
-      childSrc: ["'self'"].concat(config.csp.childSrc),
-      frameAncestors: ["'self'"].concat(config.csp.frameAncestors),
-      mediaSrc: ["'self'"].concat(config.csp.mediaSrc),
-      fontSrc: ["'self'"].concat(config.csp.fontSrc),
-      connectSrc: ["'self'"].concat(config.csp.connectSrc),
-      sandbox: ["allow-same-origin", "allow-scripts", "allow-modals", "allow-popups", "allow-forms"],
-      reportUri: "/report-violation",
+      childSrc: ['\'self\''].concat(config.csp.childSrc),
+      frameAncestors: ['\'self\''].concat(config.csp.frameAncestors),
+      mediaSrc: ['\'self\''].concat(config.csp.mediaSrc),
+      fontSrc: ['\'self\''].concat(config.csp.fontSrc),
+      connectSrc: ['\'self\''].concat(config.csp.connectSrc),
+      sandbox: ['allow-same-origin', 'allow-scripts', 'allow-modals', 'allow-popups', 'allow-forms'],
+      reportUri: '/report-violation',
       objectSrc: [], // An empty array allows nothing through
     },
     reportOnly: false, // Set to true if you only want browsers to report errors, not block them
@@ -137,32 +137,32 @@ if(config.security === true){
 }
 
 var port = (abePort !== null) ? abePort : 3000
-port = Hooks.instance.trigger("beforeExpress", port)
+port = Hooks.instance.trigger('beforeExpress', port)
 
-app.set("views", path.join(__dirname, "/templates"))
-app.engine(".html", html.engine)
-app.set("view engine", ".html")
+app.set('views', path.join(__dirname, '/templates'))
+app.engine('.html', html.engine)
+app.set('view engine', '.html')
 
 app.locals.layout = false
 
 app.use(middleWebsite)
-app.use(express.static(__dirname + "/public"))
+app.use(express.static(__dirname + '/public'))
 
 FileParser.copySiteAssets()
 
-var sites = FileParser.getFolders(config.root.replace(/\/$/, ""), false, 0)
+var sites = FileParser.getFolders(config.root.replace(/\/$/, ''), false, 0)
 
 let publish = path.join(config.root, config.publish.url)
 app.use(express.static(publish))
 // app.use(express.static(publish))
 
-if(config.partials !== "") {
+if(config.partials !== '') {
   if (fileUtils.isFile(path.join(config.root, config.partials))) {
     app.use(express.static(path.join(config.root, config.partials)))
   }
 }
 
-if(config.custom !== "") {
+if(config.custom !== '') {
   if (fileUtils.isFile(path.join(config.root, config.custom))) {
     app.use(express.static(path.join(config.root, config.custom)))
   }
@@ -173,7 +173,7 @@ Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
   app.use(express.static(pluginPartials))
 })
 
-app.use(express.static(__dirname + "/node_modules/handlebars/dist"))
+app.use(express.static(__dirname + '/node_modules/handlebars/dist'))
 app.use(busboy({
   limits: {
     fileSize: config.upload.fileSizelimit
@@ -185,7 +185,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 // depending on the way you serve this app, cookie.secure will be set
 // in Production, this app has to be reverse-proxified
 app.use(session({
-  name: "sessionId",
+  name: 'sessionId',
   secret: config.sessionSecret,
   resave: false,
   saveUninitialized: true,
@@ -193,9 +193,9 @@ app.use(session({
   proxy: true
 }))
 
-Hooks.instance.trigger("afterExpress", app, express)
+Hooks.instance.trigger('afterExpress', app, express)
 
-if (fileUtils.isFile(path.join(config.root, "cert.pem"))) {
+if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
   var server = https.createServer(opts, app)
   server.listen(port, function() {
     console.log(clc.green(`\nserver running at https://localhost:${port}/`))
@@ -209,5 +209,5 @@ if (fileUtils.isFile(path.join(config.root, "cert.pem"))) {
 }
 
 // important : require here so config.root is defined
-var controllers = require("./controllers")
+var controllers = require('./controllers')
 app.use(controllers.default)

@@ -1,6 +1,6 @@
-import path from "path"
-import fse from "fs-extra"
-import {execFile} from "child_process"
+import path from 'path'
+import fse from 'fs-extra'
+import {execFile} from 'child_process'
 import {
   fileUtils,
   FileParser,
@@ -14,13 +14,13 @@ import {
   Hooks,
   removeDuplicateAttr,
   Manager
-} from "../../cli"
+} from '../../cli'
 
 var traverseFileSystem = function (currentPath, arr) {
   var res = []
   var files = fse.readdirSync(currentPath)
   for (var i in files) {
-    var currentFile = currentPath + "/" + files[i]
+    var currentFile = currentPath + '/' + files[i]
     var stats = fse.statSync(currentFile)
     if (stats.isFile()) {
       if (currentFile.indexOf(config.files.templates.extension) > -1) {
@@ -59,7 +59,7 @@ var findRequestColumns = function(templatesList) {
   var p = new Promise((resolve, reject) => {
     let util = new Util()
     Array.prototype.forEach.call(templatesList, (file) => {
-      var template = fse.readFileSync(file, "utf8")
+      var template = fse.readFileSync(file, 'utf8')
       var matches = util.dataRequest(template)
 
       Array.prototype.forEach.call(matches, (match) => {
@@ -69,16 +69,16 @@ var findRequestColumns = function(templatesList) {
         var type = Sql.getSourceType(obj.sourceString)
 
         switch (type) {
-        case "request":
+        case 'request':
           var request = Sql.handleSqlRequest(obj.sourceString, {})
           Array.prototype.forEach.call(request.columns, (column) => {
-            if(typeof whereKeysCheck[column] === "undefined" || whereKeysCheck[column] === null) {
+            if(typeof whereKeysCheck[column] === 'undefined' || whereKeysCheck[column] === null) {
               whereKeysCheck[column] = true
               whereKeys.push(column)
             }
           })
           Array.prototype.forEach.call(request.where, (where) => {
-            if(typeof whereKeysCheck[where.left] === "undefined" || whereKeysCheck[where.left] === null) {
+            if(typeof whereKeysCheck[where.left] === 'undefined' || whereKeysCheck[where.left] === null) {
               whereKeysCheck[where.left] = true
               whereKeys.push(where.left)
             }
@@ -102,20 +102,20 @@ var getSelectTemplateKeys = function(templatesPath) {
             resolve(whereKeys)
           },
           () => {
-            console.log("findRequestColumns reject")
+            console.log('findRequestColumns reject')
             reject()
           })
           .catch((e) => {
-            console.error("getSelectTemplateKeys", e)
+            console.error('getSelectTemplateKeys', e)
             reject()
           })
       },
       () => {
-        console.log("findTemplates reject")
+        console.log('findTemplates reject')
         reject()
       })
       .catch((e) => {
-        console.error("getSelectTemplateKeys", e)
+        console.error('getSelectTemplateKeys', e)
         reject()
       })
 

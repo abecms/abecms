@@ -1,6 +1,6 @@
-import sourceAutocomplete   from "./sourceAutocomplete"
-import sourceOption   from "./sourceOption"
-import {Hooks} from "../../"
+import sourceAutocomplete   from './sourceAutocomplete'
+import sourceOption   from './sourceOption'
+import {Hooks} from '../../'
 
 /**
  * Print form input based on input data type {Textarea | text | meta | link | image | ...}
@@ -10,31 +10,31 @@ import {Hooks} from "../../"
 export default function printInput () {
   var params = arguments[0]
 
-  params = Hooks.instance.trigger("beforeEditorInput", params)
-  var desc = params.desc + ((params.required) ? " *" : "")
+  params = Hooks.instance.trigger('beforeEditorInput', params)
+  var desc = params.desc + ((params.required) ? ' *' : '')
 
   var res = `<div class="form-group">
               <label class="control-label" for="${params.key}" 
-                      ${(params.type.indexOf("text_link") > -1) ? "data-for-link=\"" + params.key + "\"" : ""} >
+                      ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + params.key + '"' : ''} >
                 ${desc}
               </label>`,
-    disabled = ""
+    disabled = ''
 
-  if(typeof params.placeholder === "undefined" || params.placeholder === null || params.placeholder === "undefined") {
-    params.placeholder = ""
+  if(typeof params.placeholder === 'undefined' || params.placeholder === null || params.placeholder === 'undefined') {
+    params.placeholder = ''
   }
 
-  if(typeof params.value === "undefined" || params.value === null) {
-    params.value = ""
+  if(typeof params.value === 'undefined' || params.value === null) {
+    params.value = ''
   }
 
-  if(typeof params.value === "string") params.value = params.value.replace(/\"/g, "&quot;")
+  if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
-  var inputClass = "form-control form-abe"
+  var inputClass = 'form-control form-abe'
   var commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     value="${params.value}"
-                    maxlength="${params["max-length"]}"
+                    maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
@@ -43,10 +43,10 @@ export default function printInput () {
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"`
 
-  if(typeof params.source !== "undefined" && params.source !== null) {
+  if(typeof params.source !== 'undefined' && params.source !== null) {
     commonParams = `id="${params.key}"
                     data-id="${params.key}"
-                    data-maxlength="${params["max-length"]}"
+                    data-maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
@@ -55,37 +55,37 @@ export default function printInput () {
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"`
 
-    var multiple = ""
-    var disabled = ""
-    if(typeof params["max-length"] === "undefined" || params["max-length"] === null || params["max-length"] === ""
-      || (params["max-length"] > 1 && params.source.length > 0)) {
-      multiple = "multiple"
+    var multiple = ''
+    var disabled = ''
+    if(typeof params['max-length'] === 'undefined' || params['max-length'] === null || params['max-length'] === ''
+      || (params['max-length'] > 1 && params.source.length > 0)) {
+      multiple = 'multiple'
     }
     if(params.source.length <= 0) {
-      disabled = "disabled"
+      disabled = 'disabled'
     }
 
     var lastValues
-    if(typeof params.autocomplete !== "undefined" && params.autocomplete !== null
-       && (params.autocomplete === "true" || params.autocomplete === "true")) {
-      if(params.source.indexOf("http") === 0) {
+    if(typeof params.autocomplete !== 'undefined' && params.autocomplete !== null
+       && (params.autocomplete === 'true' || params.autocomplete === 'true')) {
+      if(params.source.indexOf('http') === 0) {
         lastValues = params.source
       }else {
-        lastValues = JSON.stringify(params.source).replace(/\'/g, "&quote;")
+        lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
       }
-      res += "<div class=\"autocomplete-result-wrapper\">"
+      res += '<div class="autocomplete-result-wrapper">'
       Array.prototype.forEach.call(params.value, (val) => {
         res += sourceAutocomplete(val, params)
       })
-      res += "</div>"
+      res += '</div>'
       res += `<input value="" autocomplete="off" data-value='${lastValues}' type="text" ${disabled} ${commonParams} class="${inputClass}" />`
     }else {
-      lastValues = JSON.stringify(params.value).replace(/\'/g, "&quote;")
+      lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
       res += `<select ${multiple} ${disabled} ${commonParams} class="${inputClass}"
                         last-values='${lastValues}'>
               <option value=''></option>`
 
-      if(typeof params.source === "object" && Object.prototype.toString.call(params.source) === "[object Array]") {
+      if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
         Array.prototype.forEach.call(params.source, (val) => {
           res += sourceOption(val, params)
         })
@@ -94,13 +94,13 @@ export default function printInput () {
         res += sourceOption(params.source, params)
       }
 
-      res += "</select>"
+      res += '</select>'
 
     }
-  }else if (params.type.indexOf("rich") >= 0){
+  }else if (params.type.indexOf('rich') >= 0){
     commonParams = `id="${params.key}"
                     data-id="${params.key}"
-                    maxlength="${params["max-length"]}"
+                    maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
@@ -168,15 +168,15 @@ export default function printInput () {
                         rows="4">${params.value}</textarea>
             </div>`
   }
-  else if (params.type.indexOf("file") >= 0){
+  else if (params.type.indexOf('file') >= 0){
     res += `<input class="form-control" ${commonParams} name="${params.key}" type="file" />
             <span class="percent"></span>
             <input type="text" ${commonParams} class="${inputClass} hidden" />`
   }
-  else if (params.type.indexOf("textarea") >= 0){
+  else if (params.type.indexOf('textarea') >= 0){
     res += `<textarea class="${inputClass}" ${commonParams} rows="4">${params.value}</textarea>`
   }
-  else if (params.type.indexOf("link") >= 0){
+  else if (params.type.indexOf('link') >= 0){
     res += `<div class="input-group">
             <div class="input-group-addon link">
               <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
@@ -184,7 +184,7 @@ export default function printInput () {
             <input type="text" ${commonParams} class="${inputClass}" />
           </div>`
   }
-  else if (params.type.indexOf("image") >= 0){
+  else if (params.type.indexOf('image') >= 0){
     res += `<div class="input-group img-upload">
               <div class="input-group-addon image">
                 <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
@@ -208,9 +208,9 @@ export default function printInput () {
             </div>`
   }
 
-  res += "</div>"
+  res += '</div>'
 
-  res = Hooks.instance.trigger("afterEditorInput", res, params)
+  res = Hooks.instance.trigger('afterEditorInput', res, params)
 
   return res
 }

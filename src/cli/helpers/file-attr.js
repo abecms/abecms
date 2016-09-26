@@ -1,5 +1,5 @@
-import fse from "fs-extra"
-import path from "path"
+import fse from 'fs-extra'
+import path from 'path'
 import {
   cli
   ,FileParser
@@ -7,11 +7,11 @@ import {
   ,dateUnslug
   ,config
   ,Manager
-} from "../"
+} from '../'
 
-var fullAttr = "-abe-(.+?)(?=\."
-var captureAttr = "-abe-(.+?)(?=\."
-var oneAttr = ["[\\|]?", "=(.)*?(?=[\||\\]])"]
+var fullAttr = '-abe-(.+?)(?=\.'
+var captureAttr = '-abe-(.+?)(?=\.'
+var oneAttr = ['[\\|]?', '=(.)*?(?=[\||\\]])']
 
 /**
  * Class Attr
@@ -33,10 +33,10 @@ class Attr {
    * @return {Object} attributs extracted from string as an object
    */
   extract() {
-    var rex = new RegExp(captureAttr + this.getExtention() + ")")
+    var rex = new RegExp(captureAttr + this.getExtention() + ')')
     if(rex.test(this.str)) {
-      var arrAttr = this.str.match(rex)[0].replace("-abe-", "")
-      this.val = {"s": arrAttr[0], "d": dateUnslug(arrAttr.slice(1), this.str)}
+      var arrAttr = this.str.match(rex)[0].replace('-abe-', '')
+      this.val = {'s': arrAttr[0], 'd': dateUnslug(arrAttr.slice(1), this.str)}
     }
     return this.val
   }
@@ -45,11 +45,11 @@ class Attr {
    * @return {String} str without an attributs
    */
   remove() {
-    return this.str.replace(new RegExp(fullAttr + this.getExtention() + ")"), "")
+    return this.str.replace(new RegExp(fullAttr + this.getExtention() + ')'), '')
   }
  
   getExtention(){
-    var ext = this.str.split(".")
+    var ext = this.str.split('.')
     return ext[ext.length - 1]
   }
 
@@ -60,8 +60,8 @@ class Attr {
    */
   insert(newValues) {
     var strWithoutAttr = this.remove()
-    strWithoutAttr = strWithoutAttr.replace(new RegExp("\\." + this.getExtention()), "")
-    return strWithoutAttr + "-abe-" + newValues + "." + this.getExtention()
+    strWithoutAttr = strWithoutAttr.replace(new RegExp('\\.' + this.getExtention()), '')
+    return strWithoutAttr + '-abe-' + newValues + '.' + this.getExtention()
   }
 
 }
@@ -106,22 +106,22 @@ export default class FileAttr {
    */
   static test(str) {
     var att = new Attr(str).val
-    return (typeof att.s !== "undefined" && att.s !== null)
+    return (typeof att.s !== 'undefined' && att.s !== null)
   }
 
   static getFilesRevision(urls, fileName) {
     var res = []
     var number = 1
     var tplUrl = FileParser.getFileDataFromUrl(fileName)
-    fileName = fileName.split("/")
+    fileName = fileName.split('/')
     fileName = fileName[fileName.length - 1]
     var publishDate = new Date()
     var json = null
 
     if(fileUtils.isFile(tplUrl.publish.json)) {
       json = FileParser.getJson(tplUrl.publish.json)
-      if(typeof json !== "undefined" && json !== null
-        && typeof json[config.meta.name] !== "undefined" && json[config.meta.name] !== null) {
+      if(typeof json !== 'undefined' && json !== null
+        && typeof json[config.meta.name] !== 'undefined' && json[config.meta.name] !== null) {
         publishDate = new Date(json[config.meta.name].latest.date)
       }
     }
@@ -129,20 +129,20 @@ export default class FileAttr {
     var publishVersion = false
     urls.forEach(function (urlObj) {
       var fileData = FileAttr.get(urlObj.cleanPath)
-      if(fileData.s === "d" && FileAttr.delete(urlObj.cleanPath) == FileAttr.delete(fileName)) {
+      if(fileData.s === 'd' && FileAttr.delete(urlObj.cleanPath) == FileAttr.delete(fileName)) {
         var currentDate = new Date(urlObj.date)
         if(currentDate.getTime() > publishDate.getTime()) {
-          if(!publishVersion && typeof res[res.length - 1] !== "undefined" && res[res.length - 1] !== null) {
-            res[res.length - 1].publishedDate = "same"
+          if(!publishVersion && typeof res[res.length - 1] !== 'undefined' && res[res.length - 1] !== null) {
+            res[res.length - 1].publishedDate = 'same'
           }
           publishVersion = true
-          urlObj.publishedDate = "after"
+          urlObj.publishedDate = 'after'
           
         }else if(currentDate.getTime() === publishDate.getTime()) {
-          urlObj.publishedDate = "same"
+          urlObj.publishedDate = 'same'
           publishVersion = true
         }else {
-          urlObj.publishedDate = "before"
+          urlObj.publishedDate = 'before'
         }
         urlObj.version = number
         number = number + 1
@@ -177,7 +177,7 @@ export default class FileAttr {
    */
   static getVersions(docPath) {
     var files = Manager.instance.getList()
-    var fileWithoutExtension = docPath.replace("." + config.files.templates.extension, ".json")
+    var fileWithoutExtension = docPath.replace('.' + config.files.templates.extension, '.json')
 
     var result = []
     Array.prototype.forEach.call(files, (file) => {
@@ -227,13 +227,13 @@ export default class FileAttr {
    * @param  {String} type (draft|waiting|valid)
    * @return {Object} urls object filtered
    */
-  static filterLatestVersion(urls, type = "") {
-    var typeStr = ""
+  static filterLatestVersion(urls, type = '') {
+    var typeStr = ''
     switch(type){
-    case "draft": typeStr = "d"; break
+    case 'draft': typeStr = 'd'; break
     default: typeStr = type[0]; break
     }
-    return FileAttr.filter(urls, "latest", typeStr)
+    return FileAttr.filter(urls, 'latest', typeStr)
   }
 
   /**
@@ -243,7 +243,7 @@ export default class FileAttr {
    * @param  {String} type
    * @return {Object} urls object filtered
    */
-  static filter(urlsArr, filter, type = "") {
+  static filter(urlsArr, filter, type = '') {
     var latest = []
     var result = []
 
@@ -255,9 +255,9 @@ export default class FileAttr {
       var currentAttrDate = FileAttr.get(urlObj.cleanPath)
       
       if(currentAttrDate.s === type){
-        if(typeof latest[realFileName] !== "undefined" && latest[realFileName] !== null){
+        if(typeof latest[realFileName] !== 'undefined' && latest[realFileName] !== null){
           switch(filter){
-          case "latest": 
+          case 'latest': 
             var savedAttrDate = FileAttr.get(latest[realFileName].cleanPath)
             var dateSavedUrl = new Date(savedAttrDate.length > 1 ? savedAttrDate : 0)
             var dateCurrentUrl = new Date(currentAttrDate.d.length > 1 ? currentAttrDate.d : 0)
@@ -281,8 +281,8 @@ export default class FileAttr {
   static getLatestRevision(filePath) {
     let draft = config.draft.url
     var folder = fileUtils.removeLast(filePath)
-    var fileName = filePath.replace(folder + "/", "")
-    folder = folder.replace(config.root, "")
+    var fileName = filePath.replace(folder + '/', '')
+    folder = folder.replace(config.root, '')
 
     folder = FileParser.changePathEnv(path.join(config.root, folder), draft)
 
@@ -294,8 +294,8 @@ export default class FileAttr {
       }
     })
 
-    var latest = FileAttr.filter(sameFiles, "latest", "d")
-    if(typeof latest !== "undefined" && latest !== null
+    var latest = FileAttr.filter(sameFiles, 'latest', 'd')
+    if(typeof latest !== 'undefined' && latest !== null
       && latest.length > 0) {
       return latest[0]
     }

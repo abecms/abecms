@@ -2,10 +2,10 @@ import {
   abeDuplicate,
   log,
   Hooks
-} from "../../cli"
+} from '../../cli'
 
 var route = function(req, res, next) {
-  Hooks.instance.trigger("beforeRoute", req, res, next)
+  Hooks.instance.trigger('beforeRoute', req, res, next)
 
   var p = abeDuplicate(req.query.oldFilePath, req.query.selectTemplate, req.query.filePath, req.query.tplName, req, true)
 
@@ -14,14 +14,14 @@ var route = function(req, res, next) {
       success: 1,
       json: resSave
     }
-    res.set("Content-Type", "application/json")
+    res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },
   () => {
     var result = {
       success: 0
     }
-    res.set("Content-Type", "application/json")
+    res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   }).catch(function(e) {
     reject()

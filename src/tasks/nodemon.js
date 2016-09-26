@@ -1,43 +1,43 @@
-var nodemon = require("nodemon")
-var watch = require("watch")
-var fs = require("fs")
-var clc = require("cli-color")
+var nodemon = require('nodemon')
+var watch = require('watch')
+var fs = require('fs')
+var clc = require('cli-color')
 
 // NODE_ENV=development nodemon --exec npm run babel-app src/server/app.js --kill-others
 // ROOT=/path/to/my/abesite node src/tasks/nodemon.js
 
 nodemon({
-  script: __dirname + "/../../src/server/app.js",
+  script: __dirname + '/../../src/server/app.js',
   options: {
-    exec: __dirname + "/../../node_modules/.bin/babel-node --presets es2015"
+    exec: __dirname + '/../../node_modules/.bin/babel-node --presets es2015'
   },
-  nodeArgs: ["--debug"],
-  restartable: "rs",
+  nodeArgs: ['--debug'],
+  restartable: 'rs',
   colours: true,
   execMap: {
-    js: __dirname + "/../../node_modules/.bin/babel-node --presets es2015"
+    js: __dirname + '/../../node_modules/.bin/babel-node --presets es2015'
   },
   env: {
-    "NODE_ENV": "development"
+    'NODE_ENV': 'development'
   },
   ignore: [
-    "docs/*"
+    'docs/*'
   ],
   watch: [
-    "src/cli/*",
-    "src/hooks/*",
-    "src/server/routes/*",
-    "src/server/helpers/*",
-    "src/server/middlewares/*",
-    "src/server/controllers/*",
-    "src/server/app.js",
-    "src/server/index.js",
-    process.env.ROOT + "/plugins/**/**/*.js",
-    process.env.ROOT + "/abe.json",
-    process.env.ROOT + "/locales/*",
-    process.env.ROOT + "/test/*",
-    process.env.ROOT + "/hooks/**/*.js",
-    process.env.ROOT + "/reference/**/*.json"
+    'src/cli/*',
+    'src/hooks/*',
+    'src/server/routes/*',
+    'src/server/helpers/*',
+    'src/server/middlewares/*',
+    'src/server/controllers/*',
+    'src/server/app.js',
+    'src/server/index.js',
+    process.env.ROOT + '/plugins/**/**/*.js',
+    process.env.ROOT + '/abe.json',
+    process.env.ROOT + '/locales/*',
+    process.env.ROOT + '/test/*',
+    process.env.ROOT + '/hooks/**/*.js',
+    process.env.ROOT + '/reference/**/*.json'
   ],
   stdin: true,
   runOnChangeOnly: false,
@@ -48,11 +48,11 @@ nodemon({
   stdout: true
 })
 
-nodemon.on("start", function () {
-}).on("quit", function () {
-  console.log(clc.green("Kill process nodemon"))
+nodemon.on('start', function () {
+}).on('quit', function () {
+  console.log(clc.green('Kill process nodemon'))
   process.exit()
-}).on("restart", function (files) {
-  console.log("------------------------------------------------------------")
-  console.log(clc.green("App restarted due to: "), files[0])
+}).on('restart', function (files) {
+  console.log('------------------------------------------------------------')
+  console.log(clc.green('App restarted due to: '), files[0])
 })

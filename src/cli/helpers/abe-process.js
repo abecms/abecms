@@ -1,8 +1,8 @@
-import process from "child_process"
+import process from 'child_process'
 
 import {
   config
-} from "../"
+} from '../'
 
 function prepend(value, array) {
   var newArray = array.slice(0)

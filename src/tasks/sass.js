@@ -1,12 +1,12 @@
-var sass = require("node-sass")
-var fs = require("fs")
-var clc = require("cli-color")
+var sass = require('node-sass')
+var fs = require('fs')
+var clc = require('cli-color')
 
-var output = "./src/server/public/css/styles.css"
+var output = './src/server/public/css/styles.css'
 
 var result = sass.render({
-  file: "./src/server/sass/styles.scss",
-  outputStyle: "compressed",
+  file: './src/server/sass/styles.scss',
+  outputStyle: 'compressed',
   outFile: output,
   sourceMap: true
 }, function(error, result) { // node-style callback from v3.0.0 onwards 

@@ -1,12 +1,12 @@
-import clc from "cli-color"
+import clc from 'cli-color'
 
 export default class TimeMesure {
 
   constructor(str) {
     this._name = str
-    if(typeof this._name !== "undefined" && this._name !== null) {
-      console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
-      console.log("start: " + clc.green(this._name))
+    if(typeof this._name !== 'undefined' && this._name !== null) {
+      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+      console.log('start: ' + clc.green(this._name))
     }
     this._dateStart = new Date()
   }
@@ -17,11 +17,11 @@ export default class TimeMesure {
           , minutes = parseInt((duration/(1000*60))%60)
           , hours = parseInt((duration/(1000*60*60))%24)
 
-    hours = (hours < 10) ? "0" + hours : hours
-    minutes = (minutes < 10) ? "0" + minutes : minutes
-    seconds = (seconds < 10) ? "0" + seconds : seconds
+    hours = (hours < 10) ? '0' + hours : hours
+    minutes = (minutes < 10) ? '0' + minutes : minutes
+    seconds = (seconds < 10) ? '0' + seconds : seconds
 
-    return hours + ":" + minutes + ":" + seconds + "." + milliseconds
+    return hours + ':' + minutes + ':' + seconds + '.' + milliseconds
   }
 
   /**
@@ -30,9 +30,9 @@ export default class TimeMesure {
    */
   duration(str) {
     var d = new Date(new Date().getTime() - this._dateStart.getTime()).getTime()
-    if(typeof this._name === "undefined" || this._name === null) {
-      console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+    if(typeof this._name === 'undefined' || this._name === null) {
+      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
     }
-    console.log((this._name ? "end " + this._name : "") + "(" + clc.green(this._msToTime(d)) + ") " + (str ? str : ""))
+    console.log((this._name ? 'end ' + this._name : '') + '(' + clc.green(this._msToTime(d)) + ') ' + (str ? str : ''))
   }
 }

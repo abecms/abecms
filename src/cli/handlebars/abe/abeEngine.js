@@ -5,7 +5,7 @@ let singletonEnforcer = Symbol()
 class abeEngine {
 
   constructor(enforcer) {
-    if(enforcer != singletonEnforcer) throw "Cannot construct Json singleton"
+    if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
     this._content = {}
   }
 

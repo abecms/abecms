@@ -1,7 +1,7 @@
-import fse from "fs-extra"
-import extend from "extend"
-import {Promise} from "es6-promise"
-import clc from "cli-color"
+import fse from 'fs-extra'
+import extend from 'extend'
+import {Promise} from 'es6-promise'
+import clc from 'cli-color'
 
 import {
   getAttr
@@ -17,23 +17,23 @@ import {
   ,FileParser
   ,Hooks
   ,Plugins
-} from "../../cli"
+} from '../../cli'
 
 function add(obj, json, text, util) {
   var value = obj.value
   
-  if(obj.key.indexOf("[") > -1) {
-    var key = obj.key.split("[")[0]
+  if(obj.key.indexOf('[') > -1) {
+    var key = obj.key.split('[')[0]
     var index = obj.key.match(/[^\[]+?(?=\])/)[0]
-    var prop = obj.key.replace(/[^\.]+?\./, "")
+    var prop = obj.key.replace(/[^\.]+?\./, '')
 
-    if(typeof json[key] !== "undefined" && json[key] !== null &&
-       typeof json[key][index] !== "undefined" && json[key][index] !== null &&
-       typeof json[key][index][prop] !== "undefined" && json[key][index][prop] !== null) {
+    if(typeof json[key] !== 'undefined' && json[key] !== null &&
+       typeof json[key][index] !== 'undefined' && json[key][index] !== null &&
+       typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
       obj.value = json[key][index][prop]
-    }else if(typeof value !== "undefined" && value !== null && value !== "") {
-      if(typeof json[key] === "undefined" || json[key] === null) json[key] = []
-      if(typeof json[key][index] === "undefined" || json[key][index] === null) json[key][index] = {}
+    }else if(typeof value !== 'undefined' && value !== null && value !== '') {
+      if(typeof json[key] === 'undefined' || json[key] === null) json[key] = []
+      if(typeof json[key][index] === 'undefined' || json[key][index] === null) json[key][index] = {}
       json[key][index][prop] = value
     }
   }
@@ -47,14 +47,14 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
   var v = `{{${match}}}`,
     obj = Util.getAllAttributes(v, json)
 
-  if(typeof keyArray !== "undefined" && keyArray !== null) {
-    var realKey = obj.key.replace(/[^\.]+?\./, "")
+  if(typeof keyArray !== 'undefined' && keyArray !== null) {
+    var realKey = obj.key.replace(/[^\.]+?\./, '')
 
-    if(obj.key.indexOf(keyArray + ".") >= 0 && realKey.length > 0){
+    if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
       obj.keyArray = keyArray
       obj.realKey = realKey
-      obj.key = keyArray + "[" + i + "]." + realKey
-      obj.desc = obj.desc + " " + i,
+      obj.key = keyArray + '[' + i + '].' + realKey
+      obj.desc = obj.desc + ' ' + i,
       insertAbeEach(obj, text, json, util, arrayBlock)
 
     }else if(util.dontHaveKey(obj.key)) {
@@ -63,7 +63,7 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
     }
 
   }else if(util.dontHaveKey(obj.key) && util.isSingleAbe(v, text)) {
-    var realKey = obj.key.replace(/\./g, "-")
+    var realKey = obj.key.replace(/\./g, '-')
     obj.value = json[realKey]
     json[obj.key] = add(obj, json, text, util)
   }
@@ -79,7 +79,7 @@ function matchAttrAbe(text, json, util, arrayBlock) {
 }
 
 function insertAbeEach (obj, text, json, util, arrayBlock) {
-  if(typeof arrayBlock[obj.keyArray][obj.realKey] === "undefined" || arrayBlock[obj.keyArray][obj.realKey] === null) {
+  if(typeof arrayBlock[obj.keyArray][obj.realKey] === 'undefined' || arrayBlock[obj.keyArray][obj.realKey] === null) {
     arrayBlock[obj.keyArray][obj.realKey] = []
   }
   var exist = false
@@ -102,13 +102,13 @@ function each(text, json, util, arrayBlock) {
     var keyArray = textEach[0].match(/#each (\n|.)*?\}/)
     keyArray = keyArray[0].slice(6, keyArray[0].length - 1)
 
-    if(keyArray.split(" ").length > 1) keyArray = keyArray.split(" ")[0]
+    if(keyArray.split(' ').length > 1) keyArray = keyArray.split(' ')[0]
     arrayBlock[keyArray] = []
     // ce while boucle sur les block de contenu {{abe}}
     while (match = patt.exec(textEach[0])) {
       var v = match[0]
 
-      if(v.indexOf("abe") > -1){
+      if(v.indexOf('abe') > -1){
         if(json[keyArray]){
           for (var i = 0; i < json[keyArray].length; i++) {
             var key = json[keyArray]
@@ -170,19 +170,19 @@ function orderBlock(util) {
 
     var formBlockTab = {}
     for (var i = 0; i < util.form[tab].item.length; i++) {
-      var blockName = (util.form[tab].item[i].block === "") ? "default_" + i : util.form[tab].item[i].block
-      if(util.form[tab].item[i].key.indexOf("[") > -1){
-        blockName = util.form[tab].item[i].key.split("[")[0]
+      var blockName = (util.form[tab].item[i].block === '') ? 'default_' + i : util.form[tab].item[i].block
+      if(util.form[tab].item[i].key.indexOf('[') > -1){
+        blockName = util.form[tab].item[i].key.split('[')[0]
       }
-      if(typeof formBlockTab[blockName] === "undefined" || formBlockTab[blockName] === null) {
+      if(typeof formBlockTab[blockName] === 'undefined' || formBlockTab[blockName] === null) {
         formBlockTab[blockName] = []
       }
       formBlockTab[blockName].push(util.form[tab].item[i])
     }
-    if(typeof blockName !== "undefined" && blockName !== null) {
+    if(typeof blockName !== 'undefined' && blockName !== null) {
       formBlockTab[blockName].sort(orderByTabindex)
     }
-    if(typeof formBlock[tab] === "undefined" || formBlock[tab] === null) {
+    if(typeof formBlock[tab] === 'undefined' || formBlock[tab] === null) {
       formBlock[tab] = {}
     }
 
@@ -229,7 +229,7 @@ export function editor(fileName, jsonPath, documentLink) {
 
     json = {}
     if(fileUtils.isFile(jsonPath)) {
-      json = FileParser.getJson(jsonPath, "utf8")
+      json = FileParser.getJson(jsonPath, 'utf8')
     }
     
     text = getTemplate(fileName)
@@ -244,26 +244,26 @@ export function editor(fileName, jsonPath, documentLink) {
         arrayBlock = []
         each(text, json, util, arrayBlock)
 
-        if(typeof json.abe_meta !== "undefined" && json.abe_meta !== null) {
-          var tpl = json.abe_meta.template.split("/")
+        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          var tpl = json.abe_meta.template.split('/')
           tpl = tpl.pop()
           json.abe_meta.cleanTemplate = fileUtils.removeExtension(tpl)
         }
 
-        if(typeof json.abe_meta !== "undefined" && json.abe_meta !== null) {
-          var links = json.abe_meta.link.split("/")
+        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          var links = json.abe_meta.link.split('/')
           var link = links.pop()
           json.abe_meta.cleanName = fileUtils.removeExtension(link)
-          json.abe_meta.cleanFilename = fileUtils.removeExtension(links.join("/"))
+          json.abe_meta.cleanFilename = fileUtils.removeExtension(links.join('/'))
         }
 
         // HOOKS beforeEditorFormBlocks
-        json = Hooks.instance.trigger("beforeEditorFormBlocks", json)
+        json = Hooks.instance.trigger('beforeEditorFormBlocks', json)
 
         var blocks = orderBlock(util)
 
         // HOOKS afterEditorFormBlocks
-        blocks = Hooks.instance.trigger("afterEditorFormBlocks", blocks, json)
+        blocks = Hooks.instance.trigger('afterEditorFormBlocks', blocks, json)
 
         abeEngine.instance.content = json
 
