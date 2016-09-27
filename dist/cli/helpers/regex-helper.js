@@ -10,9 +10,7 @@ exports.escapeTextToRegex = escapeTextToRegex;
 var _ = require('../');
 
 function getAttr(str, attr) {
-  // var rex = new RegExp(attr + '=["\']([^\'"]+)')
   var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( +[a-zA-Z0-9-]*?=|}})');
-  // var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( [a-zA-Z0-9-]*?=|}})')
   var res = rex.exec(str);
   res = typeof res !== null && res !== null && res.length > 1 ? res[1] : '';
   return res;
@@ -191,9 +189,6 @@ function getEnclosingTags(text, match, tag) {
  * @return {Object} RegExp
  */
 function escapeTextToRegex(str, params) {
-  // str = str.replace(/\((?![\s\S]*\()/g, '\\(')
-  // str = str.replace(/\)(?![\s\S]*\))/g, '\\)')
-  // str = str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   str = str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
   return new RegExp(str, params);
 }

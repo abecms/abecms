@@ -43,13 +43,13 @@ function compileAbe() {
       value = '';
     }
     if (typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich') {
-      var testXSS = (0, _xss2.default)(value.replace(/&quot;/g, '"'), {
+      var testXSS = (0, _xss2.default)(value.replace(/&quote;/g, "'"), {
         'whiteList': _.config.htmlWhiteList,
         stripIgnoreTag: true
       });
       return new _handlebars2.default.SafeString(testXSS);
     }
-    return value.replace(/%27/, '\'');
+    return value.replace(/%27/, '\'').replace(/&quote;/g, "'");
   }
 
   var key = arguments[0].hash['key'].replace('.', '-');
@@ -61,11 +61,11 @@ function compileAbe() {
   }
 
   if (typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich') {
-    var testXSS = (0, _xss2.default)(value.replace(/&quot;/g, '"'), {
+    var testXSS = (0, _xss2.default)(value.replace(/&quote;/g, "'"), {
       'whiteList': _.config.htmlWhiteList,
       stripIgnoreTag: true
     });
     return new _handlebars2.default.SafeString(testXSS);
   }
-  return value.replace(/%27/, '\'');
+  return value.replace(/%27/, '\'').replace(/&quote;/g, "'");
 }

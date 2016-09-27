@@ -80,7 +80,7 @@ var Utils = function () {
      * @param {String} type        textarea | text | meta | link | image | ...
      * @param {String} key         unique ID, no space allowed
      * @param {String} desc        input description
-     * @param {Int}    maxLength   maximum characteres allowed inside input
+     * @param {Int}    max-length   maximum characteres allowed inside input
      * @param {String} tab         tab name
      * @param {String} jsonValue   
      * @return {Void}
@@ -90,27 +90,28 @@ var Utils = function () {
     key: 'add',
     value: function add(obj) {
       var defaultValues = {
-        type: 'text',
-        key: '',
+        autocomplete: null,
+        block: '',
         desc: '',
-        maxLength: null,
-        tab: 'default',
-        placeholder: '',
-        value: '',
-        source: null,
         display: null,
-        reload: false,
-        order: 0,
-        required: false,
         editable: true,
-        visible: true,
-        block: ''
+        key: '',
+        'max-length': null,
+        order: 0,
+        placeholder: '',
+        prefill: false,
+        'prefill-quantity': null,
+        reload: false,
+        required: false,
+        source: null,
+        tab: 'default',
+        type: 'text',
+        value: '',
+        visible: true
       };
 
       obj = (0, _extend2.default)(true, defaultValues, obj);
-      obj.tab = typeof obj.tab !== 'undefined' && obj.tab !== null && obj.tab !== '' ? obj.tab : 'default';
-
-      obj.reload = typeof obj.reload !== 'undefined' && obj.reload !== null && obj.reload === 'true' ? true : false, obj.key = obj.key.replace(/\./, '-');
+      obj.key = obj.key.replace(/\./, '-');
 
       if (obj.key.indexOf('[') < 0 && obj.key.indexOf('.') > -1) {
         obj.block = obj.key.split('.')[0];
@@ -332,18 +333,18 @@ var Utils = function () {
         _.Sql.executeQuery(tplPath, match, jsonPage).then(function (data) {
           jsonPage[sourceAttr][obj.key] = data;
           if (!obj.editable) {
-            if (obj.maxLength) {
-              jsonPage[obj.key] = data.slice(0, obj.maxLength);
+            if (obj['max-length']) {
+              jsonPage[obj.key] = data.slice(0, obj['max-length']);
             } else {
               jsonPage[obj.key] = data;
             }
           } else if (obj.prefill) {
-            if (obj.prefillQuantity && obj.maxLength) {
-              jsonPage[obj.key] = data.slice(0, obj.prefillQuantity > obj.maxLength ? obj.maxLength : obj.prefillQuantity);
-            } else if (obj.prefillQuantity) {
-              jsonPage[obj.key] = data.slice(0, obj.prefillQuantity);
-            } else if (obj.maxLength) {
-              jsonPage[obj.key] = data.slice(0, obj.maxLength);
+            if (obj['prefill-quantity'] && obj['max-length']) {
+              jsonPage[obj.key] = data.slice(0, obj['prefill-quantity'] > obj['max-length'] ? obj['max-length'] : obj['prefill-quantity']);
+            } else if (obj['prefill-quantity']) {
+              jsonPage[obj.key] = data.slice(0, obj['prefill-quantity']);
+            } else if (obj['max-length']) {
+              jsonPage[obj.key] = data.slice(0, obj['max-length']);
             } else {
               jsonPage[obj.key] = data;
             }
@@ -553,66 +554,58 @@ var Utils = function () {
   }, {
     key: 'replaceUnwantedChar',
     value: function replaceUnwantedChar(str) {
-      var chars = { '’': '', '\'': '', '\"': '', 'Š': 'S', 'š': 's', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B', 'ß': 'Ss', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'œ': 'oe', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ý': 'y', 'þ': 'b', 'ÿ': 'y' };
+      var chars = { '’': '', '\'': '', '"': '', 'Š': 'S', 'š': 's', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B', 'ß': 'Ss', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'œ': 'oe', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ý': 'y', 'þ': 'b', 'ÿ': 'y' };
       for (var prop in chars) {
         str = str.replace(new RegExp(prop, 'g'), chars[prop]);
       }return str;
     }
+
+    /**
+    * Get All attributes from a Abe tag
+    * @return {Object} parsed attributes
+    */
+
   }, {
     key: 'getAllAttributes',
     value: function getAllAttributes(str, json) {
       str = _.Hooks.instance.trigger('beforeAbeAttributes', str, json);
 
-      var defaultValues = {
-        type: 'text',
-        prefill: false,
-        prefillQuantity: null,
-        key: '',
-        desc: '',
-        maxLength: null,
-        tab: 'default',
-        value: '',
-        source: null,
-        autocomplete: null,
-        display: null,
-        reload: false,
-        order: 0,
-        required: false,
-        editable: true,
-        visible: true
-      };
-
+      //This regex analyzes all attributes of a Abe tag
+      var re = /\b([a-z][a-z0-9\-]*)\s*=\s*("([^"]+)"|'([^']+)'|(\S+))/ig;
       var source = (0, _.getAttr)(str, 'source');
       var key = (0, _.getAttr)(str, 'key');
 
-      var obj = {
-        type: (0, _.getAttr)(str, 'type'),
-        key: key,
-        prefill: (0, _.getAttr)(str, 'prefill'),
-        prefillQuantity: (0, _.getAttr)(str, 'prefill-quantity'),
-        desc: (0, _.getAttr)(str, 'desc'),
-        autocomplete: (0, _.getAttr)(str, 'autocomplete'),
-        maxLength: (0, _.getAttr)(str, 'max-length'),
-        value: json[key],
-        tab: (0, _.getAttr)(str, 'tab'),
-        sourceString: typeof source !== 'undefined' && source !== null && source !== '' ? source : null,
-        source: typeof source !== 'undefined' && source !== null && source !== '' ? typeof json[_.config.source.name] !== 'undefined' && json[_.config.source.name] !== null && json[_.config.source.name] !== '' ? json[_.config.source.name][key] : null : null,
-        display: (0, _.getAttr)(str, 'display'),
-        reload: (0, _.getAttr)(str, 'reload'),
-        order: (0, _.getAttr)(str, 'order'),
-        required: (0, _.getAttr)(str, 'required'),
-        visible: (0, _.getAttr)(str, 'visible'),
-        editable: (0, _.getAttr)(str, 'editable')
+      var attrs = {
+        autocomplete: null,
+        desc: '',
+        display: null,
+        editable: true,
+        key: '',
+        'max-length': null,
+        'min-length': 0,
+        order: 0,
+        prefill: false,
+        'prefill-quantity': null,
+        reload: false,
+        required: false,
+        source: null,
+        tab: 'default',
+        type: 'text',
+        value: '',
+        visible: true
       };
-      obj = (0, _extend2.default)(true, defaultValues, obj);
 
-      obj.editable = typeof obj.editable === 'undefined' || obj.editable === null || obj.editable === '' || obj.editable === 'false' ? false : true;
-      obj.prefill = typeof obj.prefill !== 'undefined' && obj.prefill !== null && obj.prefill === 'true' ? true : false;
-      obj.prefillQuantity = typeof obj.prefillQuantity !== 'undefined' && obj.prefillQuantity !== null && obj.prefillQuantity !== '' ? obj.prefillQuantity : false;
+      for (var match; match = re.exec(str);) {
+        attrs[match[1]] = match[3] || match[4] || match[5];
+      }
 
-      obj = _.Hooks.instance.trigger('afterAbeAttributes', obj, str, json);
+      attrs.sourceString = attrs.source;
+      attrs.source = typeof source !== 'undefined' && source !== null && source !== '' ? typeof json[_.config.source.name] !== 'undefined' && json[_.config.source.name] !== null && json[_.config.source.name] !== '' ? json[_.config.source.name][key] : null : null;
+      attrs.editable = typeof attrs.editable === 'undefined' || attrs.editable === null || attrs.editable === '' || attrs.editable === 'false' ? false : true;
 
-      return obj;
+      attrs = _.Hooks.instance.trigger('afterAbeAttributes', attrs, str, json);
+
+      return attrs;
     }
   }]);
 

@@ -85,9 +85,9 @@ var findRequestColumns = function findRequestColumns(templatesList) {
               }
             });
         }
-        resolve(whereKeys);
       });
     });
+    resolve(whereKeys);
   });
 
   return p;
@@ -98,7 +98,6 @@ var getSelectTemplateKeys = function getSelectTemplateKeys(templatesPath) {
     findTemplates(templatesPath).then(function (templatesList) {
 
       findRequestColumns(templatesList).then(function (whereKeys) {
-
         resolve(whereKeys);
       }, function () {
         console.log('findRequestColumns reject');

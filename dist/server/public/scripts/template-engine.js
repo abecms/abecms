@@ -52,9 +52,9 @@ var htmlTag = document.querySelector('html');
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'));
 // window.json = JSON.parse(unescape(htmlTag.getAttribute('data-json').replace(/&quot;/g, '\"')))
 var j = htmlTag.getAttribute('data-json');
-j = j.replace(/&quot;/g, '\"');
+j = j.replace(/&quot;/g, '"');
 j = unescape(j);
-j = j.replace(/\%27/g, "\'");
+j = j.replace(/\%27/g, '\'');
 window.json = JSON.parse(j);
 window.Locales = JSON.parse(htmlTag.getAttribute('data-locales'));
 
@@ -80,8 +80,8 @@ var Engine = function () {
     $(document).ready(function () {
       _this.table = $('#navigation-list').DataTable({
         //"order": [[ 3, 'desc' ]],
-        "pageLength": 50,
-        "autoWidth": false
+        'pageLength': 50,
+        'autoWidth': false
       });
     });
   }
@@ -162,6 +162,6 @@ window.abe = {
   editorReload: _EditorReload2.default
 };
 
-document.addEventListener("DOMContentLoaded", function (event) {
+document.addEventListener('DOMContentLoaded', function (event) {
   if (document.querySelector('#page-template')) engine.inject();
 });
