@@ -145,6 +145,7 @@ function addSource(text, json, util, arrayBlock) {
     var obj = Util.getAllAttributes(match[0], json)
 
     if(obj.editable) {
+      obj.value = json[obj.key]
       add(obj, json, text, util)
     }else {
       json[obj.key] = obj.source
