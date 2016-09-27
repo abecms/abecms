@@ -73,6 +73,7 @@ var Manager = function () {
     value: function init() {
       var _this = this;
 
+      this._whereKeys = [];
       var p = new Promise(function (resolve, reject) {
         _this._loadTime = new _cli.TimeMesure('Loading Manager');
         var pathTemplate = _path2.default.join(_cli.config.root, _cli.config.templates.url);
@@ -80,6 +81,8 @@ var Manager = function () {
           _this._whereKeys = whereKeys;
           _this.updateList();
           resolve();
+        }, function () {
+          console.log('Manager._init', e);
         }).catch(function (e) {
           console.log('Manager._init', e);
         });
@@ -90,12 +93,16 @@ var Manager = function () {
   }, {
     key: 'updateList',
     value: function updateList() {
+      if (typeof this._loadTime === 'undefined' || this._loadTime === null) {
+        this._loadTime = new _cli.TimeMesure('Loading Manager');
+      }
       this._list = _cli.FileParser.getAllFilesWithKeys(this._whereKeys);
       this._list.sort(_cli.FileParser.predicatBy('date', -1));
       if (_cli.config.redis.enable) {
         redis.get().set('list', JSON.stringify(this._list));
       }
       this._loadTime.duration();
+      delete this._loadTime;
 
       return this;
     }

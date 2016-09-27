@@ -125,7 +125,9 @@ function save(url, tplPath) {
     var date = _.fileAttr.get(pathIso.jsonPath).d;
 
     if (publishAll) {
-      date = json[meta].publish.date;
+      if (typeof json[meta].publish !== 'undefined' && json[meta].publish !== null) {
+        date = json[meta].publish.date;
+      }
     }
     if (typeof date === 'undefined' || date === null || date === '') {
       date = new Date();
@@ -143,13 +145,13 @@ function save(url, tplPath) {
       json = _.Hooks.instance.trigger('afterGetDataListOnSave', json);
       for (var prop in json) {
         if (_typeof(json[prop]) === 'object' && Array.isArray(json[prop]) && json[prop].length === 1) {
-          var valuesAreEmplty = true;
+          var valuesAreEmpty = true;
           json[prop].forEach(function (element) {
             for (var p in element) {
-              if (element[p] !== '') valuesAreEmplty = false;
+              if (element[p] !== '') valuesAreEmpty = false;
             }
           });
-          if (valuesAreEmplty) delete json[prop];
+          if (valuesAreEmpty) delete json[prop];
         }
       }
 
@@ -238,7 +240,6 @@ function saveHtml(url, html) {
   if (_.fileAttr.test(url) && _.fileAttr.get(url).s !== 'd') {
     _.fileUtils.deleteOlderRevisionByType(_.fileAttr.delete(url), _.fileAttr.get(url).s);
   }
-
   _fsExtra2.default.writeFileSync(url, html);
 }
 
