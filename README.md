@@ -4,7 +4,7 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c)
 [![Latest Stable Version](https://img.shields.io/npm/v/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
 [![Total Downloads](https://img.shields.io/npm/dt/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
-[![license](https://img.shields.io/github/AdFabConnect/abejs/apistatus.svg?maxAge=2592000)]()
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/AdFabConnect/abejs/master/LICENSE)
 # Abe, A better engine
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
