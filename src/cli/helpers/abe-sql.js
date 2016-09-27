@@ -406,7 +406,7 @@ export default class Sql {
                 jsonValues[column] = json[column]
               }
             })
-            jsonValues[config.meta.name] = json[config.meta.name]
+            jsonValues["abe_meta"] = json["abe_meta"]
           }else {
             jsonValues = json
           }
@@ -467,7 +467,7 @@ export default class Sql {
 
   static whereNotEquals(where, value, compare, json) {
     var shouldAdd = true
-    if(where.left === 'template') {
+    if(where.left === 'template' || where.left === 'abe_meta.template') {
 
       if (value.indexOf('/') > -1 && value === compare) { 
         shouldAdd = false 
@@ -511,7 +511,7 @@ export default class Sql {
 
   static whereLike(where, value, compare, json) {
     var shouldAdd = true
-    if(where.left === 'template') {
+    if(where.left === 'template' || where.left === 'abe_meta.template') {
 
       if(value.indexOf(compare) === -1) {
         shouldAdd = false
@@ -543,10 +543,8 @@ export default class Sql {
             foundOne = true
           }
         })
-      }else if(value === compare) { // only none is Array
-        if(value.indexOf(compare) !== -1) {
-          foundOne = true
-        }
+      }else if(value.indexOf(compare) === -1) {
+        foundOne = true
       }
 
       if(foundOne) {
@@ -563,59 +561,55 @@ export default class Sql {
     var shouldAdd = jsonDoc
 
     if(typeof wheres !== 'undefined' && wheres !== null) {
-      let meta = config.meta.name
-      if(typeof jsonDoc[meta] !== 'undefined' && jsonDoc[meta] !== null) {
-        Array.prototype.forEach.call(wheres, (where) => {
-          var value
-          var compare
+      Array.prototype.forEach.call(wheres, (where) => {
+        var value
+        var compare
 
-          if(where.left === 'template' || where.left === 'abe_meta.template') {
-            value = FileParser.getTemplate(jsonDoc[meta].template)
-          }else {
-            try {
-              value = eval('jsonDoc.' + where.left)
-            }catch(e) {
-              // console.log('e', e)
-            }
+        if((where.left === 'template' || where.left === 'abe_meta.template')
+          && typeof jsonDoc["abe_meta"] !== 'undefined' && jsonDoc["abe_meta"] !== null) {
+          value = FileParser.getTemplate(jsonDoc["abe_meta"].template)
+        }else {
+          try {
+            value = eval('jsonDoc.' + where.left)
+          }catch(e) {
+            // console.log('e', e)
           }
-          compare = where.right
+        }
+        compare = where.right
 
-          var matchVariable = /^{{(.*)}}$/.exec(compare)
-          if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
-            try {
-              var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
-              if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
-                compare = shouldCompare
-              }else {
-                shouldAdd = false
-              }
-            }catch(e) {
+        var matchVariable = /^{{(.*)}}$/.exec(compare)
+        if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
+          try {
+            var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
+            if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+              compare = shouldCompare
+            }else {
               shouldAdd = false
-              // console.log('e', e)
             }
-          }
-
-          if(typeof value !== 'undefined' && value !== null) {
-            switch(where.compare) {
-            case '=':
-              shouldAdd = Sql.whereEquals(where, value, compare, shouldAdd)
-              break
-            case '!=':
-              shouldAdd = Sql.whereNotEquals(where, value, compare, shouldAdd)
-              break
-            case 'LIKE':
-              shouldAdd = Sql.whereLike(where, value, compare, shouldAdd)
-              break
-            default:
-              break
-            }
-          }else {
+          }catch(e) {
             shouldAdd = false
+            // console.log('e', e)
           }
-        })
-      }else {
-        shouldAdd = false
-      }
+        }
+
+        if(typeof value !== 'undefined' && value !== null) {
+          switch(where.compare) {
+          case '=':
+            shouldAdd = Sql.whereEquals(where, value, compare, shouldAdd)
+            break
+          case '!=':
+            shouldAdd = Sql.whereNotEquals(where, value, compare, shouldAdd)
+            break
+          case 'LIKE':
+            shouldAdd = Sql.whereLike(where, value, compare, shouldAdd)
+            break
+          default:
+            break
+          }
+        }else {
+          shouldAdd = false
+        }
+      })
     }
 
     return shouldAdd
