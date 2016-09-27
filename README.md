@@ -2,6 +2,11 @@
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
 
+[![Develop Branch Build Status](https://travis-ci.org/AdFabConnect/abejs.svg)](https://travis-ci.org/AdFabConnect/abejs)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/AdFabConnect/abejs/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AdFabConnect/abejs/)
+[![Coverage Status](https://coveralls.io/github/AdFabConnect/abejs/badge.svg?branch=master&service=github)](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c)
+
 # Contributing
 We've bet on Abe 1 year ago, investing more than 100 000,00EUR in this project. We have decided to open source it so that our customers and you can freely use Abe to create wonderful experiences in a snap !
 
