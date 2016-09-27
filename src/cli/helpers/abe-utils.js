@@ -317,7 +317,7 @@ export default class Utils {
             }else {
               jsonPage[obj.key] = data
             }
-          } else if (obj.prefill) {
+          } else if ((typeof jsonPage[obj.key] === 'undefined' || jsonPage[obj.key] === null) && obj.prefill) {
             if (obj['prefill-quantity'] && obj['max-length']) {
               jsonPage[obj.key] = data.slice(0, (obj['prefill-quantity'] > obj['max-length']) ? obj['max-length'] : obj['prefill-quantity'])
             }else if (obj['prefill-quantity']) {
