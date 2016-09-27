@@ -52,30 +52,27 @@ describe('Request', function() {
     chai.expect(res).to.have.length(1);
   });
 
-  // /**
-  //  * Sql.executeWhereClause
-  //  * 
-  //  */
-  // it('Sql.executeWhereClause()', function() {
-  //   var Sql = require('../src/cli').Sql;
+  /**
+   * Sql.executeWhereClause
+   * 
+   */
+  it('Sql.executeWhereClause()', function() {
+    var files = [
+      {"publish": {"abe_meta": {"template": "test"}}},
+      {"publish": {"abe_meta": {"template": "truc"}}}
+    ];
+    var where = [{ left: 'template', right: 'test', compare: '=', operator: '' }]
 
-  //   var files = [
-  //     {"abe_meta": {"template": "test"}, "publish": true},
-  //     {"abe_meta": {"template": "truc"}, "publish": true}
-  //   ];
-  //   var where = [{ left: 'template', right: 'test', compare: '=', operator: '' }]
+    var res = Sql.executeWhereClause(files, where, -1, ['*'], {})
 
-  //   var res = Sql.executeWhereClause(files, where, -1, ['*'], {})
-
-  //   chai.expect(res).to.have.length(1);
-  // });
+    chai.expect(res).to.have.length(1);
+  });
 
   /**
    * Sql.whereEquals
    * 
    */
   it('Sql.whereEquals()', function() {
-
     var json = {"template": "test", "title": "test"}
 
     chai.expect(json)
@@ -109,73 +106,69 @@ describe('Request', function() {
       );
   });
 
-  // /**
-  //  * Sql.whereNotEquals
-  //  * 
-  //  */
-  // it('Sql.whereNotEquals()', function() {
-  //   var Sql = require('../src/cli').Sql;
+  /**
+   * Sql.whereNotEquals
+   * 
+   */
+  it('Sql.whereNotEquals()', function() {
+    var json = {"template": "truc", "title": "truc"}
 
-  //   var json = {"template": "truc", "title": "truc"}
+    chai.expect(json)
+      .to.deep.equal(
+        Sql.whereNotEquals(
+          [{ left: 'template' }],
+          json.template,
+          "test",
+          json
+        )
+      );
 
-  //   chai.expect(json)
-  //     .to.deep.equal(
-  //       Sql.whereNotEquals(
-  //         [{ left: 'template' }],
-  //         json.template,
-  //         "test",
-  //         json
-  //       )
-  //     );
+    chai.expect(json)
+      .to.deep.equal(
+        Sql.whereNotEquals(
+          [{ left: 'title' }],
+          json.title,
+          "test",
+          json
+        )
+      );
 
-  //   chai.expect(json)
-  //     .to.deep.equal(
-  //       Sql.whereNotEquals(
-  //         [{ left: 'title' }],
-  //         json.title,
-  //         "test",
-  //         json
-  //       )
-  //     );
+    chai.expect(json)
+      .to.not.deep.equal(
+        Sql.whereNotEquals(
+          [{ left: 'template' }],
+          json.title,
+          "truc",
+          json
+        )
+      );
+  });
 
-  //   chai.expect(json)
-  //     .to.not.deep.equal(
-  //       Sql.whereNotEquals(
-  //         [{ left: 'template' }],
-  //         json.title,
-  //         "truc",
-  //         json
-  //       )
-  //     );
-  // });
+  /**
+   * Sql.whereLike
+   * 
+   */
+  it('Sql.whereLike()', function() {
+    var json = {"template": "test", "title": "test"}
 
-  // /**
-  //  * Sql.whereLike
-  //  * 
-  //  */
-  // it('Sql.whereLike()', function() {
-  //   var Sql = require('../src/cli').Sql;
+    chai.expect(json)
+      .to.deep.equal(
+        Sql.whereLike(
+          [{ left: 'template' }],
+          json.template,
+          "te",
+          json
+        )
+      );
 
-  //   var json = {"template": "test", "title": "test"}
-
-  //   chai.expect(json)
-  //     .to.deep.equal(
-  //       Sql.whereLike(
-  //         [{ left: 'template' }],
-  //         json.template,
-  //         "te",
-  //         json
-  //       )
-  //     );
-
-  //   chai.expect(json)
-  //     .to.not.deep.equal(
-  //       Sql.whereLike(
-  //         [{ left: 'title' }],
-  //         json.title,
-  //         "tu",
-  //         json
-  //       )
-  //     );
-  // });
+    chai.expect(json)
+      .to.not.deep.equal(
+        Sql.whereLike(
+          [{ left: 'title' }],
+          json.title,
+          "tu",
+          json
+        )
+      );
+  });
 });
