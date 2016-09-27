@@ -71,18 +71,22 @@ var findRequestColumns = function(templatesList) {
         switch (type) {
         case 'request':
           var request = Sql.handleSqlRequest(obj.sourceString, {})
-          Array.prototype.forEach.call(request.columns, (column) => {
-            if(typeof whereKeysCheck[column] === 'undefined' || whereKeysCheck[column] === null) {
-              whereKeysCheck[column] = true
-              whereKeys.push(column)
-            }
-          })
-          Array.prototype.forEach.call(request.where, (where) => {
-            if(typeof whereKeysCheck[where.left] === 'undefined' || whereKeysCheck[where.left] === null) {
-              whereKeysCheck[where.left] = true
-              whereKeys.push(where.left)
-            }
-          })
+          if(typeof request.columns !== 'undefined' && request.columns !== null) {
+            Array.prototype.forEach.call(request.columns, (column) => {
+              if(typeof whereKeysCheck[column] === 'undefined' || whereKeysCheck[column] === null) {
+                whereKeysCheck[column] = true
+                whereKeys.push(column)
+              }
+            })
+          }
+          if(typeof request.where !== 'undefined' && request.where !== null) {
+            Array.prototype.forEach.call(request.where, (where) => {
+              if(typeof whereKeysCheck[where.left] === 'undefined' || whereKeysCheck[where.left] === null) {
+                whereKeysCheck[where.left] = true
+                whereKeys.push(where.left)
+              }
+            })
+          }
         }
       })
     })

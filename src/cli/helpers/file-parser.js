@@ -406,7 +406,8 @@ export default class FileParser {
 
       if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         var date = null
-        if (typeof json.abe_meta.latest.date !== 'undefined' && json.abe_meta.latest.date !== null) {
+        if (typeof json.abe_meta.latest !== 'undefined' && json.abe_meta.latest !== null
+          && typeof json.abe_meta.latest.date !== 'undefined' && json.abe_meta.latest.date !== null) {
           date = json.abe_meta.latest.date
         }else if (typeof json.abe_meta.date !== 'undefined' && json.abe_meta.date !== null) {
           date = json.abe_meta.date

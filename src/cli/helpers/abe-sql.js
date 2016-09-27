@@ -323,7 +323,7 @@ export default class Sql {
       recursive = 0
       from = from.slice(0, -1)
     }
-
+    
     var fromDirectory = Sql.getFromDirectory(from, pathFromClause)
 
     var dateStart = new Date()
