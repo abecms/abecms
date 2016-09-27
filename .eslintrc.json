@@ -17,7 +17,7 @@
             "unix"
         ],
         "quotes": [
-            "error",
+            "warn",
             "single"
         ],
         "semi": [
@@ -35,7 +35,6 @@
         "no-case-declarations":["warn"],
         "no-dupe-class-members":["warn"],
         "no-empty":["warn"],
-        "quotes":["warn"],
         "valid-typeof":["warn"]
     }
 }
