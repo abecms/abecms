@@ -1,6 +1,6 @@
 [![Develop Branch Build Status](https://travis-ci.org/AdFabConnect/abejs.svg)](https://travis-ci.org/AdFabConnect/abejs)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/AdFabConnect/abejs/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AdFabConnect/abejs/)
-[![Coverage Status](https://coveralls.io/github/AdFabConnect/abejs/badge.svg?branch=master&service=github)](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/AdFabConnect/abejs/badge.svg?branch=master)](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c)
 [![Latest Stable Version](https://img.shields.io/npm/v/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
 [![Total Downloads](https://img.shields.io/npm/dt/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
