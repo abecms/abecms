@@ -1,6 +1,6 @@
 {
   "name": "abe-cli",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "Abe command line tool",
   "main": "src/server/app.js",
   "repository": {
@@ -11,7 +11,7 @@
     "lint": "./node_modules/.bin/eslint src",
     "test": "mocha --compilers js:babel-register --require babel-polyfill",
     "test-cov": "istanbul cover _mocha -- --compilers js:babel-register --require babel-polyfill",
-    "test-coveralls":"istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require babel-polyfill -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test-coveralls": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require babel-polyfill -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "start": "node --debug --harmony ./dist/server/index.js",
     "startpm2": "pm2 startOrRestart ./processes.json",
     "babel": "babelify src/server/public/scripts/template-engine.js -o src/server/public/scripts/template-engine-compiled.js",
