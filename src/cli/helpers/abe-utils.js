@@ -546,8 +546,6 @@ export default class Utils {
 
     //This regex analyzes all attributes of a Abe tag 
     var re = /\b([a-z][a-z0-9\-]*)\s*=\s*("([^"]+)"|'([^']+)'|(\S+))/ig
-    var source = getAttr(str, 'source')
-    var key = getAttr(str, 'key')
     
     var attrs = {
       autocomplete: null,
@@ -574,9 +572,9 @@ export default class Utils {
     }
 
     attrs.sourceString = attrs.source
-    attrs.source = (typeof source !== 'undefined' && source !== null && source !== '')? 
+    attrs.source = (typeof attrs.source !== 'undefined' && attrs.source !== null && attrs.source !== '')? 
       ((typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null && json[config.source.name] !== '')? 
-        json[config.source.name][key] : 
+        json[config.source.name][attrs.key] : 
         null
       ) : 
       null

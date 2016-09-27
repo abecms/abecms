@@ -572,8 +572,6 @@ var Utils = function () {
 
       //This regex analyzes all attributes of a Abe tag
       var re = /\b([a-z][a-z0-9\-]*)\s*=\s*("([^"]+)"|'([^']+)'|(\S+))/ig;
-      var source = (0, _.getAttr)(str, 'source');
-      var key = (0, _.getAttr)(str, 'key');
 
       var attrs = {
         autocomplete: null,
@@ -600,7 +598,7 @@ var Utils = function () {
       }
 
       attrs.sourceString = attrs.source;
-      attrs.source = typeof source !== 'undefined' && source !== null && source !== '' ? typeof json[_.config.source.name] !== 'undefined' && json[_.config.source.name] !== null && json[_.config.source.name] !== '' ? json[_.config.source.name][key] : null : null;
+      attrs.source = typeof attrs.source !== 'undefined' && attrs.source !== null && attrs.source !== '' ? typeof json[_.config.source.name] !== 'undefined' && json[_.config.source.name] !== null && json[_.config.source.name] !== '' ? json[_.config.source.name][attrs.key] : null : null;
       attrs.editable = typeof attrs.editable === 'undefined' || attrs.editable === null || attrs.editable === '' || attrs.editable === 'false' ? false : true;
 
       attrs = _.Hooks.instance.trigger('afterAbeAttributes', attrs, str, json);
