@@ -1,7 +1,7 @@
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import {Promise} from 'es6-promise'
-import slugify from './helpers/slugify'
+import slug from 'limax' 
 
 import {
   config,
@@ -20,7 +20,7 @@ export default class Create {
 
   init(path) {
     path = path.split('/')
-    path[path.length - 1] = slugify(path[path.length - 1])
+    path[path.length - 1] = slug(path[path.length - 1]) 
     path = path.join('/')
     this.addFolder(path)
 			.then(() => {
