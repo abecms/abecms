@@ -124,7 +124,7 @@ export default class EditorAutocomplete {
   }
 
   _select(target) {
-    var val = JSON.parse(target.getAttribute('data-value'))
+    var val = JSON.parse(target.getAttribute('data-value').replace(/&quote;/g, "'"))
     var maxLength = this._currentInput.getAttribute('data-maxlength')
     if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
       maxLength = parseInt(maxLength)
@@ -137,7 +137,7 @@ export default class EditorAutocomplete {
     var div = document.createElement('div')
     div.classList.add('autocomplete-result')
     div.setAttribute('data-parent-id', this._currentInput.getAttribute('data-id'))
-    div.setAttribute('value', target.getAttribute('data-value'))
+    div.setAttribute('value', target.getAttribute('data-value').replace(/&quote;/g, "'"))
     div.innerHTML = `${this._deep_value_array(val, display)}`
 
     var resWrapper = this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper')
@@ -217,7 +217,7 @@ export default class EditorAutocomplete {
       }else {
         this._previousValue = val
       }
-      var dataVal = target.getAttribute('data-value')
+      var dataVal = target.getAttribute('data-value').replace(/&quote;/g, "'")
 
       if (dataVal.indexOf('http') === 0) {
         this._ajax(
@@ -231,7 +231,7 @@ export default class EditorAutocomplete {
             this._showAutocomplete(JSON.parse(responseText), target, val)
           })
       }else {
-        var sources = JSON.parse(target.getAttribute('data-value'))
+        var sources = JSON.parse(target.getAttribute('data-value').replace(/&quote;/g, "'"))
         this._showAutocomplete(sources, target, val)
       }
     }else {
@@ -329,7 +329,7 @@ export default class EditorAutocomplete {
   _deep_value_array(obj, path) {
 
     if(path.indexOf('.') === -1) {
-      return (typeof obj[path] !== 'undefined' && obj[path] !== null) ? obj[path] : null
+      return (typeof obj[path] !== 'undefined' && obj[path] !== null) ? obj[path].replace(/&quote;/g, "'") : null
     }
 
     var pathSplit = path.split('.')
