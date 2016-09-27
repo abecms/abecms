@@ -9,7 +9,8 @@
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
 
-
+# Presentation
+I've designed this CMS because I wanted to simplify and optimize the way we're creating content. Wordpress is way too complex for what it does. Welcome to ABE (A Better Engine) : This CMS will make you create content in a snap and publish it on the web in no time !
 
 # Contributing
 We've bet on Abe 1 year ago, investing more than 100 000,00EUR in this project. We have decided to open source it so that our customers and you can freely use Abe to create wonderful experiences in a snap !
@@ -19,9 +20,23 @@ We will maintain Abe for the next 3 years and have a dedicated 20% Full Time Equ
 # Roadmap
 We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
 
-## Last versions
-#### 1.7.x
+## Changelog
+### 2.4.*
 
+The 2.* family is dedicated to performance. 
+
+### 2.3
+### 2.2
+### 2.1
+The plugins have been put in their respective repository. It's now possible to install plugins directly from Abe.
+
+### 2.0
+
+### 1.8.x
+This version will be the last in the 1.x series.
+- Performance improvements: The overall performance of Abe has been optimized. The "Order By" statement in select statement ine the type="data" has been deeply improved. Furthermore, the front was requesting twice the same content (to populate left and main content). It has been fixed. 
+
+### 1.7.x
 New features :
 - Duplicate : It's now possible to create a new content form an existing one.
 - Routes refactoring : Each action sent to the Abe engine has its own route
@@ -30,17 +45,12 @@ New features :
 - Content metadata updatable : It's now possible to change the path, the name or the template of an existing file
 - Debugging : It's now possible to trigger logs by adding a parameter in the url
 
-#### 1.8.x
-This version will be the last in the 1.x series.
-- Performance improvements: The overall performance of Abe has been optimized. The "Order By" statement in select statement ine the type="data" has been deeply improved. Furthermore, the front was requesting twice the same content (to populate left and main content). It has been fixed. 
 
 ## Roadmap 2016
-#### 2.x planned beginning of 2017
-This major release will focus on quality and stability and will be covered by Unit tests + functional tests.
+The 2.x releases will focus on quality and stability and will be covered by Unit tests + functional tests.
 The separation between the engine, the API server and the front will be reinforced by putting each part in its own repository
 The documentation will be rewritten and included in the modules
-The plugins already written will be put in their respective repository
-As a major feature, it will be possible to create a template from partials.
+As a major new feature, it will be possible to create a template from partials.
 
 # Getting started
 
