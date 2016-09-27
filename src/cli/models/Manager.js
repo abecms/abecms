@@ -63,7 +63,7 @@ class Manager {
           this.updateList()
           resolve()
         },
-        () => {
+        (e) => {
           console.log('Manager._init', e)
         })
         .catch((e) => {

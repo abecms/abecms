@@ -1,19 +1,34 @@
 var chai = require('chai');
+
+var config = require('../src/cli').config
+config.set({root: __dirname + '/fixtures'})
+
 var Sql = require('../src/cli').Sql
 var Util = require('../src/cli').Util
+var fileAttr = require('../src/cli').fileAttr
 var Manager = require('../src/cli').Manager;
+var fse = require('fs-extra');
 
 describe('Request', function() {
+  before( function(done) {
+    Manager.instance.init()
+      .then(function () {
+        this.fixture = {
+          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
+          json: fse.readJsonSync(__dirname + '/fixtures/data/article-1.json')
+        }
+        done()
+        
+      }.bind(this))
+  });
 
   /**
    * Sql.getAllAttributes
    * 
    */
   it('Util.getAllAttributes()', function(done) {
-    
-    var attributes = Util.getAllAttributes("{{abe type='data' key='top_things_slider_highlight' desc='Automatic slider' source='select * from ../' editable='false'}}", {})
-
-    chai.assert.equal(attributes.sourceString, 'select * from ../', 'sourceString is ok')
+    var attributes = Util.getAllAttributes(this.fixture.tag, this.fixture.json)
+    chai.assert.equal(attributes.sourceString, 'select abe_meta from ./', 'sourceString is ok')
     done();
   });
 
@@ -23,7 +38,6 @@ describe('Request', function() {
    */
   it('Sql.executeQuery()', function(done) {
     try {
-
       var match = 'select * from ../'
       var jsonPage = {}
       var res = Sql.handleSqlRequest(match, {})
@@ -40,16 +54,8 @@ describe('Request', function() {
    * 
    */
   it('Sql.executeFromClause()', function() {
-
-    Manager.instance.setList([
-      {"path": "data/test.json", "publish": true},
-      {"path": "data/truc/test.json", "publish": true}
-    ])
-
-    var from = ["/truc"]
-    var res = Sql.executeFromClause(from, from)
-
-    chai.expect(res).to.have.length(1);
+    var res = Sql.executeFromClause(['/'], ['/'])
+    chai.expect(res).to.have.length(2);
   });
 
   /**
@@ -57,13 +63,9 @@ describe('Request', function() {
    * 
    */
   it('Sql.executeWhereClause()', function() {
-    var files = [
-      {"publish": {"abe_meta": {"template": "test"}}},
-      {"publish": {"abe_meta": {"template": "truc"}}}
-    ];
-    var where = [{ left: 'template', right: 'test', compare: '=', operator: '' }]
+    var where = [{ left: 'template', right: 'article', compare: '=', operator: '' }]
 
-    var res = Sql.executeWhereClause(files, where, -1, ['*'], {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), where, -1, ['*'], {})
 
     chai.expect(res).to.have.length(1);
   });
@@ -73,35 +75,25 @@ describe('Request', function() {
    * 
    */
   it('Sql.whereEquals()', function() {
-    var json = {"template": "test", "title": "test"}
+    var article = fileAttr.getDocumentRevision('article-1.json')
 
-    chai.expect(json)
+    chai.expect(article)
       .to.deep.equal(
           Sql.whereEquals(
             [{ left: 'template' }],
-            json.template,
-            "test",
-            json
+            article.abe_meta.template,
+            "article",
+            article
           )
       );
 
-    chai.expect(json)
-      .to.deep.equal(
-        Sql.whereEquals(
-          [{ left: 'title' }],
-          json.title,
-          "test",
-          json
-        )
-      );
-
-    chai.expect(json)
+    chai.expect(article)
       .to.not.deep.equal(
         Sql.whereEquals(
-          [{ left: 'title' }],
-          json.title,
-          "ttt",
-          json
+          [{ left: 'template' }],
+          article.abe_meta.template,
+          "homepage",
+          article
         )
       );
   });
@@ -111,35 +103,25 @@ describe('Request', function() {
    * 
    */
   it('Sql.whereNotEquals()', function() {
-    var json = {"template": "truc", "title": "truc"}
+    var article = fileAttr.getDocumentRevision('article-1.json')
 
-    chai.expect(json)
+    chai.expect(article)
       .to.deep.equal(
         Sql.whereNotEquals(
           [{ left: 'template' }],
-          json.template,
-          "test",
-          json
+          article.abe_meta.template,
+          "homepage",
+          article
         )
       );
 
-    chai.expect(json)
-      .to.deep.equal(
-        Sql.whereNotEquals(
-          [{ left: 'title' }],
-          json.title,
-          "test",
-          json
-        )
-      );
-
-    chai.expect(json)
+    chai.expect(article)
       .to.not.deep.equal(
         Sql.whereNotEquals(
           [{ left: 'template' }],
-          json.title,
-          "truc",
-          json
+          article.abe_meta.template,
+          "article",
+          article
         )
       );
   });
@@ -149,25 +131,25 @@ describe('Request', function() {
    * 
    */
   it('Sql.whereLike()', function() {
-    var json = {"template": "test", "title": "test"}
+    var article = fileAttr.getDocumentRevision('article-1.json')
 
-    chai.expect(json)
+    chai.expect(article)
       .to.deep.equal(
-        Sql.whereLike(
-          [{ left: 'template' }],
-          json.template,
-          "te",
-          json
-        )
+          Sql.whereLike(
+            [{ left: 'template' }],
+            article.abe_meta.template,
+            "art",
+            article
+          )
       );
 
-    chai.expect(json)
+    chai.expect(article)
       .to.not.deep.equal(
         Sql.whereLike(
-          [{ left: 'title' }],
-          json.title,
-          "tu",
-          json
+          [{ left: 'template' }],
+          article.abe_meta.template,
+          "hom",
+          article
         )
       );
   });
