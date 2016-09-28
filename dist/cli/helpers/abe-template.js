@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.addOrder = addOrder;
+exports.getAbeImport = getAbeImport;
+exports.includePartials = includePartials;
 exports.getTemplate = getTemplate;
 
 var _fsExtra = require('fs-extra');
@@ -46,19 +49,31 @@ function addOrder(text) {
   return text;
 }
 
-function partials(text) {
-  var importReg = /({{abe.*type=[\'|\"]import.*}})/g;
+function getAbeImport(text) {
+  var partials = [];
+  var listReg = /({{abe.*?type=[\'|\"]import.*?}})/g;
   var match;
+  while (match = listReg.exec(text)) {
+    partials.push(match[0]);
+  }
 
-  while (match = importReg.exec(text)) {
-    var file = (0, _cli.getAttr)(match[0], 'file');
+  return partials;
+}
+
+function includePartials(text) {
+  var abeImports = getAbeImport(text);
+
+  Array.prototype.forEach.call(abeImports, function (abeImport) {
+    var obj = _cli.Util.getAllAttributes(abeImport, {});
+
+    var file = obj.file;
     var partial = '';
     file = _path2.default.join(_cli.config.root, _cli.config.partials, file);
     if (_cli.fileUtils.isFile(file)) {
       partial = _fsExtra2.default.readFileSync(file, 'utf8');
     }
-    text = text.replace((0, _cli.escapeTextToRegex)(match[0], 'g'), partial);
-  }
+    text = text.replace((0, _cli.escapeTextToRegex)(abeImport, 'g'), partial);
+  });
 
   return text;
 }
@@ -121,7 +136,7 @@ function getTemplate(file) {
   file = _path2.default.join(_cli.config.root, _cli.config.templates.url, file + '.' + _cli.config.files.templates.extension);
   if (_cli.fileUtils.isFile(file)) {
     text = _fsExtra2.default.readFileSync(file, 'utf8');
-    text = partials(text);
+    text = includePartials(text);
     text = translate(text);
     text = addOrder(text);
   } else {

@@ -44,7 +44,7 @@ var config = {
     fontSrc: [],
     connectSrc: []
   },
-  security: true,
+  security: false,
   htmlWhiteList: {
     'blockquote': ['style'],
     'span': ['style'],

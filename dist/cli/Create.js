@@ -16,9 +16,9 @@ var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
 var _es6Promise = require('es6-promise');
 
-var _slugify = require('./helpers/slugify');
+var _limax = require('limax');
 
-var _slugify2 = _interopRequireDefault(_slugify);
+var _limax2 = _interopRequireDefault(_limax);
 
 var _ = require('./');
 
@@ -37,7 +37,7 @@ var Create = function () {
       var _this = this;
 
       path = path.split('/');
-      path[path.length - 1] = (0, _slugify2.default)(path[path.length - 1]);
+      path[path.length - 1] = (0, _limax2.default)(path[path.length - 1]);
       path = path.join('/');
       this.addFolder(path).then(function () {
         process.chdir(path);

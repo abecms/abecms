@@ -590,6 +590,7 @@ var Utils = function () {
         tab: 'default',
         type: 'text',
         value: '',
+        file: '',
         visible: true
       };
 
