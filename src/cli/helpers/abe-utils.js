@@ -564,6 +564,7 @@ export default class Utils {
       tab: 'default',
       type: 'text',
       value: '',
+      file: '',
       visible: true
     }
     
