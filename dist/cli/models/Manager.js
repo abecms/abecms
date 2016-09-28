@@ -81,7 +81,7 @@ var Manager = function () {
           _this._whereKeys = whereKeys;
           _this.updateList();
           resolve();
-        }, function () {
+        }, function (e) {
           console.log('Manager._init', e);
         }).catch(function (e) {
           console.log('Manager._init', e);
