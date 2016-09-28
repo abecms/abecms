@@ -15,7 +15,7 @@ import {
   ,Plugins
 } from '../../cli'
 
-function addOrder(text) {
+export function addOrder(text) {
   var regAbe = /{{abe[\S\s].*?key=['|"]([\S\s].*?['|"| ]}})/g
   var matches = text.match(regAbe)
   var order = 0
@@ -38,19 +38,31 @@ function addOrder(text) {
   return text
 }
 
-function partials(text) {
-  var importReg = /({{abe.*type=[\'|\"]import.*}})/g
+export function getAbeImport(text) {
+  var partials = []
+  let listReg = /({{abe.*?type=[\'|\"]import.*?}})/g
   var match
+  while (match = listReg.exec(text)) {
+    partials.push(match[0])
+  }
 
-  while (match = importReg.exec(text)) {
-    var file = getAttr(match[0], 'file')
+  return partials
+}
+
+export function includePartials(text) {
+  var abeImports = getAbeImport(text)
+
+  Array.prototype.forEach.call(abeImports, (abeImport) => {
+    var obj = Util.getAllAttributes(abeImport, {})
+
+    var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
     if(fileUtils.isFile(file)) {
       partial = fse.readFileSync(file, 'utf8')
     }
-    text = text.replace(escapeTextToRegex(match[0], 'g'), partial)
-  }
+    text = text.replace(escapeTextToRegex(abeImport, 'g'), partial)
+  })
 
   return text
 }
@@ -114,7 +126,7 @@ export function getTemplate (file) {
   file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
   if(fileUtils.isFile(file)) {
     text = fse.readFileSync(file, 'utf8')
-    text = partials(text)
+    text = includePartials(text)
     text = translate(text)
     text = addOrder(text)
   }else {
