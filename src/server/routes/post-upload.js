@@ -3,7 +3,6 @@ import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 
 import {
-  fileUtils,
   config,
   Hooks,
   cleanSlug
@@ -21,7 +20,6 @@ var route = function(req, res, next){
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
   req.pipe(req.busboy)
-  var size = 0
   var hasError = false
   req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
     var ext = filename.split('.')

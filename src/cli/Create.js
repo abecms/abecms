@@ -1,17 +1,9 @@
-import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import {Promise} from 'es6-promise'
 import slug from 'limax' 
 
 import {
-  config,
-  cli,
-  log,
-  folderUtils,
-  fileUtils,
-  FileParser,
-  fileAttr,
-  getAttr
+  config
 } from './'
 
 export default class Create {
@@ -37,7 +29,7 @@ export default class Create {
   }
 
   addFolder(folder){
-    var p = new Promise((resolve, reject) => {
+    var p = new Promise((resolve) => {
       mkdirp(folder)
       resolve()
     })

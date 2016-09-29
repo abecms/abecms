@@ -24,7 +24,7 @@
             "error",
             "never"
         ],
-        "no-console":["warn"],
+        "no-console":0,
         "no-unused-vars":["warn"],
         "no-undef":["warn"],
         "no-redeclare":["warn"],

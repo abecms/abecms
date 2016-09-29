@@ -1,6 +1,4 @@
 var nodemon = require('nodemon')
-var watch = require('watch')
-var fs = require('fs')
 var clc = require('cli-color')
 
 // NODE_ENV=development nodemon --exec npm run babel-app src/server/app.js --kill-others

@@ -11,7 +11,7 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var filePath = cleanSlug(req.body.filePath)
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     save(
       fileUtils.getFilePath(filePath),
       req.body.tplPath,

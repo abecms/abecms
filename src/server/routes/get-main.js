@@ -1,32 +1,16 @@
-import express from 'express'
-import fs from 'fs'
-import fse from 'fs-extra'
-import mkdirp from 'mkdirp'
-import {minify} from 'html-minifier'
-import extend from 'extend'
-import * as abe from '../../cli'
 import xss from 'xss'
 import pkg from '../../../package'
-import clc from 'cli-color'
-import path from 'path'
 
 import {
   fileAttr,
-  Util,
   FileParser,
   fileUtils,
-  folderUtils,
   config,
-  cli,
   log,
   Page,
   Locales,
-  abeProcess,
   getTemplate,
   Hooks,
-  Plugins,
-  Handlebars,
-  cleanSlug,
   Manager
 } from '../../cli'
 
@@ -58,7 +42,7 @@ var route = function(req, res, next) {
 
   var isHome = true
 
-  let p = new Promise((resolve, reject) => {
+  let p = new Promise((resolve) => {
 
     if(templatePath !== null && filePath !== null) {
       var jsonPath = null
@@ -174,7 +158,7 @@ var route = function(req, res, next) {
       abeVersion: pkg.version,
       nonce: '\'nonce-' + res.locals.nonce + '\''
     }
-    var EditorVariables = Hooks.instance.trigger('afterVariables', EditorVariables)
+    EditorVariables = Hooks.instance.trigger('afterVariables', EditorVariables)
 
     if (debugJson) {
       var dj = _json

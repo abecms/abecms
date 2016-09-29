@@ -2,7 +2,7 @@ import {
   abeProcess
 } from '../../cli'
 
-var route = function(req, res, next) {
+var route = function(req, res) {
   abeProcess('publish-all', [''])
 
   var result = {
