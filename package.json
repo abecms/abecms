@@ -8,7 +8,7 @@
     "url": "git://github.com/AdFabConnect/abejs.git"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint src",
+    "lint": "eslint src",
     "test": "mocha --compilers js:babel-register --require babel-polyfill",
     "test-cov": "istanbul cover _mocha -- --compilers js:babel-register --require babel-polyfill",
     "test-coveralls": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require babel-polyfill -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
