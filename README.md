@@ -20,6 +20,11 @@ We will maintain Abe for the next 3 years and have a dedicated 20% Full Time Equ
 # Roadmap
 We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
 
+The 2.x releases will focus on quality and stability and will be covered by Unit tests + functional tests.
+The separation between the engine, the API server and the front will be reinforced by putting each part in its own repository
+The documentation will be rewritten and included in the modules
+As a major new feature, it will be possible to create a template from partials.
+
 ## Changelog
 See the complete [changelog](./CHANGELOG.md)
 
@@ -28,13 +33,25 @@ See the complete [changelog](./CHANGELOG.md)
 - Quality control with esLint added
 - Continuous Integration with [Travis](https://travis-ci.org/AdFabConnect/abejs)
 - Unit test coverage added : [coveralls](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
+- Select data become a first class citizen in Manager => perf X50 on page display including templates with select statements
 
-### 2.3
-### 2.2
+### 2.3.*
+- don't block response when upload image file size reaches a predefined limit
+- allow video upload
+- New handlebars helper : isTrue() (cf. doc)
+- Replacing `Sql.deep_value_array` with `eval` in abe-sql.js resulting in a performance boost on request calculation
+- precompilation of templates added as configurable option resulting in a performance boost on page display
+- Removing pagination option from Abe
+
+### 2.2.*
+- ExecuteQuery becomes asynchronous
+
 ### 2.1
-The plugins have been put in their respective repository. It's now possible to install plugins directly from Abe.
+- New handlebars helper : truncate() (cf. doc)
 
 ### 2.0
+- The plugins have been put in their respective repository. It's now possible to install plugins directly from Abe config file and command `abe install`.
+- Abe becomes a stateful app. A manager is created to handle the file list which is updated on events (CRUD) resulting in a major boost of performance.
 
 ### 1.8.x
 This version will be the last in the 1.x series.
@@ -48,13 +65,6 @@ New features :
 - Routes refactoring : publish-all is a new route triggering the republication of all already published content without modifying the modification date oif these contents. This is the first attempt to address the possibility of updating linked content when publishing a content.
 - Content metadata updatable : It's now possible to change the path, the name or the template of an existing file
 - Debugging : It's now possible to trigger logs by adding a parameter in the url
-
-
-## Roadmap 2016
-The 2.x releases will focus on quality and stability and will be covered by Unit tests + functional tests.
-The separation between the engine, the API server and the front will be reinforced by putting each part in its own repository
-The documentation will be rewritten and included in the modules
-As a major new feature, it will be possible to create a template from partials.
 
 # Getting started
 
