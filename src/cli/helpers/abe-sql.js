@@ -9,14 +9,8 @@ import {Promise} from 'es6-promise'
 import path from 'path'
 import {
   config,
-  cli,
-  log,
   Manager,
-  folderUtils,
-  fileUtils,
   FileParser,
-  Util,
-  fileAttr,
   getAttr
 } from '../'
 
@@ -29,8 +23,6 @@ export default class Sql {
   static recurseWhere(where, operator = '') {
     var arr = []
     var obj = {}
-    var operatorLeft = operator
-    var operatorRight = operator
 
     if(typeof where.left !== 'undefined' && where.left !== null
       && typeof where.right !== 'undefined' && where.right !== null
@@ -76,7 +68,6 @@ export default class Sql {
   static cleanRequest(str, jsonPage) {
     var matchFrom = /from .(.*?) /
     var matchVariable = /{{([a-zA-Z]*)}}/
-    var match
 
     var matchFromExec = matchFrom.exec(str)
     if(typeof matchFromExec !== 'undefined' && matchFromExec !== null
@@ -313,9 +304,7 @@ export default class Sql {
   }
 
   static executeFromClause(statement, pathFromClause){
-    var files = []
     var recursive = 99
-    var fileRegex = /(.*(-abe-).*Z\.json)/
     var from = Sql.sanitizeFromStatement(statement)
 
     // if the from clause ends with a dot, we won't recurse the directory analyze
@@ -325,8 +314,6 @@ export default class Sql {
     }
     
     var fromDirectory = Sql.getFromDirectory(from, pathFromClause)
-
-    var dateStart = new Date()
 
     var list = Manager.instance.getList()
     var files_array = list.filter((element, index, arr) => {
@@ -341,8 +328,8 @@ export default class Sql {
   }
 
   static execQuery(pathQuery, match, jsonPage) {
-    var res = []
-    var files = []
+    var res
+    var files
     var request = Sql.handleSqlRequest(getAttr(match, 'source'), jsonPage)
 
     files = Sql.executeFromClause(request.from, pathQuery)
@@ -357,7 +344,7 @@ export default class Sql {
   }
 
   static executeQuery(pathexecuteQuery, match, jsonPage) {
-    var p = new Promise((resolve, reject) => {
+    var p = new Promise((resolve) => {
       var res = Sql.execQuery(pathexecuteQuery, match, jsonPage)
       resolve(res)
     }).catch(function(e) {

@@ -109,8 +109,8 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       }else {
         date = new Date(date)
       }
-      Util.addMetas(tpl, json, type, {}, date, realType)
     }
+    Util.addMetas(tpl, json, type, {}, date, realType)
 
     if(typeof text === 'undefined' || text === null || text === '') {
       text = getTemplate(fullTpl)
@@ -125,10 +125,14 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
               var valuesAreEmpty = true
               json[prop].forEach(function (element) {
                 for(var p in element) {
-                  if(element[p] !== '') valuesAreEmpty = false
+                  if(element[p] !== ''){
+                    valuesAreEmpty = false
+                  }
                 }
               })
-              if(valuesAreEmpty) delete json[prop]
+              if(valuesAreEmpty){
+                delete json[prop]
+              }
             }
           }
 
@@ -151,12 +155,12 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
           obj.json.content[meta].complete = checkRequired(text, obj.json.content)
 
-          var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text, type)
+          var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text)
           if (isRejectedDoc) {
             res.reject = fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
           }
           
-          obj = Hooks.instance.trigger('afterSave', obj)
+          Hooks.instance.trigger('afterSave', obj)
           
           FileParser.copySiteAssets()
 
@@ -199,8 +203,11 @@ export function saveJson(url, json) {
 
   var eachRecursive = function (obj) {
     for (var k in obj) {
-      if (typeof obj[k] === 'object' && obj[k] !== null) eachRecursive(obj[k])
-      else if (typeof obj[k] !== 'undefined' && obj[k] !== null) obj[k] = xss(obj[k].toString().replace(/&quot;/g, '"'), { 'whiteList': config.htmlWhiteList })
+      if (typeof obj[k] === 'object' && obj[k] !== null){
+        eachRecursive(obj[k])
+      } else if (typeof obj[k] !== 'undefined' && obj[k] !== null){
+       obj[k] = xss(obj[k].toString().replace(/&quot;/g, '"'), { 'whiteList': config.htmlWhiteList })
+      }
     }
   }
 
