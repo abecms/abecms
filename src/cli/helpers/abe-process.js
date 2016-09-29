@@ -14,20 +14,23 @@ function prepend(value, array) {
 
 var abeProcess = function(name, args = []) {
   args = prepend(`ABE_WEBSITE=${config.root}`, args)
+  args = prepend(`ABEJS_PATH=${__dirname}/../../../dist`, args)
 
   var file = `${__dirname}/../../cli/process/${name}.js`
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  console.log('file', file)
   try {
 		var stats = fse.statSync(file)
 		if (stats.isFile()) {
 			process.fork(file, args)
 		}
 	}catch(err) {
-		file = Plugins.instance.getProcess(name)
-		var stats = fse.statSync(file)
-		if (stats.isFile()) {
-			process.fork(file, args)
+		try {
+			file = Plugins.instance.getProcess(name)
+			var stats = fse.statSync(file)
+			if (stats.isFile()) {
+				process.fork(file, args)
+			}
+		}catch(err) {
+			
 		}
 	}
 }
