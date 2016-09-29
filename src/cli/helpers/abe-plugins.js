@@ -51,6 +51,18 @@ class Plugins {
           plugin.templates = null
         }
 
+        // has process
+        var plugProcess = path.join(plugin.path, 'process')
+        if(folderUtils.isFolder(plugProcess)) {
+          plugin.process = {}
+          var processFiles = FileParser.getFiles(plugProcess, true, 0)
+          Array.prototype.forEach.call(processFiles, (processFile) => {
+            plugin.process[processFile.cleanNameNoExt] = processFile.path
+          })
+        }else {
+          plugin.process = null
+        }
+
         // has routes
         var plugRoutes = path.join(plugin.path, 'routes')
         if(folderUtils.isFolder(plugRoutes)) {
@@ -85,6 +97,20 @@ class Plugins {
       this[singleton] = new Plugins(singletonEnforcer)
     }
     return this[singleton]
+  }
+
+  getProcess(fn) {
+    var proc = null
+    if(typeof this._plugins !== 'undefined' && this._plugins !== null) {
+      Array.prototype.forEach.call(this._plugins, (plugin) => {
+        if(typeof plugin.process !== 'undefined' && plugin.process !== null
+          && typeof plugin.process[fn] !== 'undefined' && plugin.process[fn] !== null) {
+          proc = plugin.process[fn]
+        }
+      })
+    }
+
+    return proc
   }
 
   hooks() {
