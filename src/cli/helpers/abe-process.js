@@ -18,21 +18,21 @@ var abeProcess = function(name, args = []) {
 
   var file = `${__dirname}/../../cli/process/${name}.js`
   try {
-		var stats = fse.statSync(file)
-		if (stats.isFile()) {
-			process.fork(file, args)
-		}
-	}catch(err) {
-		try {
-			file = Plugins.instance.getProcess(name)
-			var stats = fse.statSync(file)
-			if (stats.isFile()) {
-				process.fork(file, args)
-			}
-		}catch(err) {
-			
-		}
-	}
+    var stats = fse.statSync(file)
+    if (stats.isFile()) {
+      process.fork(file, args)
+    }
+  }catch(err) {
+    try {
+      file = Plugins.instance.getProcess(name)
+      var stats = fse.statSync(file)
+      if (stats.isFile()) {
+        process.fork(file, args)
+      }
+    }catch(err) {
+      
+    }
+  }
 }
 
 export default abeProcess
