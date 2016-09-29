@@ -404,6 +404,12 @@ export default class FileParser {
       var cleanFile = file
       var json = FileParser.getJson(file.path)
 
+      if(typeof json.abe_meta.latest !== 'undefined' && json.abe_meta.latest !== null
+        && typeof json.abe_meta.latest !== 'undefined' && json.abe_meta.latest !== null
+        && typeof json.abe_meta.latest.date !== 'undefined' && json.abe_meta.latest.date !== null) {
+        file.date = json.abe_meta.latest.date
+      }
+
       if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
         var date = null
         if (typeof json.abe_meta.latest !== 'undefined' && json.abe_meta.latest !== null

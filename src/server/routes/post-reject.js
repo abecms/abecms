@@ -9,7 +9,7 @@ var route = function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     save(
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,

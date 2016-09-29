@@ -60,7 +60,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
   url = cleanSlug(url)
 
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     var isRejectedDoc = false
     if(type === 'reject'){
       isRejectedDoc = true
@@ -103,13 +103,14 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       if(typeof json[meta].publish !== 'undefined' && json[meta].publish !== null) {
         date = json[meta].publish.date
       }
-    }
-    if(typeof date === 'undefined' || date === null || date === '') {
-      date = new Date()
     }else {
-      date = new Date(date)
+      if(typeof date === 'undefined' || date === null || date === '') {
+        date = new Date()
+      }else {
+        date = new Date(date)
+      }
+      Util.addMetas(tpl, json, type, {}, date, realType)
     }
-    Util.addMetas(tpl, json, type, {}, date, realType)
 
     if(typeof text === 'undefined' || text === null || text === '') {
       text = getTemplate(fullTpl)

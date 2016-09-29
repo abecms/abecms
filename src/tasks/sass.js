@@ -4,7 +4,7 @@ var clc = require('cli-color')
 
 var output = './src/server/public/css/styles.css'
 
-var result = sass.render({
+sass.render({
   file: './src/server/sass/styles.scss',
   outputStyle: 'compressed',
   outFile: output,
