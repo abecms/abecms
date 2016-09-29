@@ -21,9 +21,13 @@ We will maintain Abe for the next 3 years and have a dedicated 20% Full Time Equ
 We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
 
 ## Changelog
-### 2.4.*
+See the complete [changelog](./CHANGELOG.md)
 
-The 2.* family is dedicated to performance. 
+### 2.4.*
+- The first unit tests are implemented
+- Quality control with esLint added
+- Continuous Integration with [Travis](https://travis-ci.org/AdFabConnect/abejs)
+- Unit test coverage added : [coveralls](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
 
 ### 2.3
 ### 2.2
