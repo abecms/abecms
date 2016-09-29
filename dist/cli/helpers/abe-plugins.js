@@ -68,6 +68,18 @@ var Plugins = function () {
           plugin.templates = null;
         }
 
+        // has process
+        var plugProcess = _path2.default.join(plugin.path, 'process');
+        if (_.folderUtils.isFolder(plugProcess)) {
+          plugin.process = {};
+          var processFiles = _.FileParser.getFiles(plugProcess, true, 0);
+          Array.prototype.forEach.call(processFiles, function (processFile) {
+            plugin.process[processFile.cleanNameNoExt] = processFile.path;
+          });
+        } else {
+          plugin.process = null;
+        }
+
         // has routes
         var plugRoutes = _path2.default.join(plugin.path, 'routes');
         if (_.folderUtils.isFolder(plugRoutes)) {
@@ -98,6 +110,20 @@ var Plugins = function () {
   }
 
   _createClass(Plugins, [{
+    key: 'getProcess',
+    value: function getProcess(fn) {
+      var proc = null;
+      if (typeof this._plugins !== 'undefined' && this._plugins !== null) {
+        Array.prototype.forEach.call(this._plugins, function (plugin) {
+          if (typeof plugin.process !== 'undefined' && plugin.process !== null && typeof plugin.process[fn] !== 'undefined' && plugin.process[fn] !== null) {
+            proc = plugin.process[fn];
+          }
+        });
+      }
+
+      return proc;
+    }
+  }, {
     key: 'hooks',
     value: function hooks() {
       var _this = this;
