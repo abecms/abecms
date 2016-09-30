@@ -60,24 +60,24 @@ var recurseWhereVariables = function (where) {
   // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
   // console.log('where', where.left)
   switch(where.operator) {
-      case 'AND':
-        var arLeft = recurseWhereVariables(where.left)
-        var arRight = recurseWhereVariables(where.right)
-        return arLeft.concat(arRight)
-        break
-      case 'OR':
-        var arLeft = recurseWhereVariables(where.left)
-        var arRight = recurseWhereVariables(where.right)
-        return arLeft.concat(arRight)
-        break
-      case 'IN':
-        break
-      case 'NOT IN':
-        break
-      default:
-        return [where.left.column]
-        break
-    }
+  case 'AND':
+    var arLeft = recurseWhereVariables(where.left)
+    var arRight = recurseWhereVariables(where.right)
+    return arLeft.concat(arRight)
+    break
+  case 'OR':
+    var arLeft = recurseWhereVariables(where.left)
+    var arRight = recurseWhereVariables(where.right)
+    return arLeft.concat(arRight)
+    break
+  case 'IN':
+    break
+  case 'NOT IN':
+    break
+  default:
+    return [where.left.column]
+    break
+  }
 
   return ar
 }
@@ -111,7 +111,7 @@ var findRequestColumns = function(templatesList) {
         }
       })
     })
-    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos});
+    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
     resolve(whereKeys)
   })
 

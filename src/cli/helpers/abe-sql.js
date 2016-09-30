@@ -338,6 +338,7 @@ export default class Sql {
     for(let file of files) {
       if(limit < maxLimit || maxLimit === -1) {
         if(typeof wheres !== 'undefined' && wheres !== null) {
+
           if(Sql.recurseWhere(wheres, file.publish, jsonPage)) {
             var json = JSON.parse(JSON.stringify(file.publish))
             var jsonValues = {}
@@ -369,9 +370,9 @@ export default class Sql {
   static whereEquals(where, value, compare) {
     var shouldAdd = true
     if(where === 'template' || where === 'abe_meta.template') {
-      if(value.indexOf('/') > -1 && value !== compare) {
+      if(value && value.indexOf('/') > -1 && value !== compare) {
         shouldAdd = false
-      }else if(value.indexOf('/') === -1 && compare.indexOf(value) === -1) {
+      }else if(value && value.indexOf('/') === -1 && compare && compare.indexOf(value) === -1) {
         shouldAdd = false
       }
     }else {
@@ -385,9 +386,9 @@ export default class Sql {
   static whereNotEquals(where, value, compare, json) {
     var shouldAdd = true
     if(where.left === 'template' || where.left === 'abe_meta.template') {
-      if (value.indexOf('/') > -1 && value === compare) { 
+      if (value && value.indexOf('/') > -1 && value === compare) { 
         shouldAdd = false 
-      } else if (value.indexOf('/') === -1 && compare.indexOf(value) !== -1) { 
+      } else if (value && value.indexOf('/') === -1 && compare && compare.indexOf(value) !== -1) { 
         shouldAdd = false
       }
     }else {
@@ -401,11 +402,11 @@ export default class Sql {
   static whereLike(where, value, compare, json) {
     var shouldAdd = true
     if(where.left === 'template' || where.left === 'abe_meta.template') {
-      if(value.indexOf(compare) === -1) {
+      if(value && value.indexOf(compare) === -1) {
         shouldAdd = false
       }
     }else {
-      if(value.indexOf(compare) === -1) {
+      if(value && value.indexOf(compare) === -1) {
         shouldAdd = false
       }
     }
@@ -415,11 +416,11 @@ export default class Sql {
   static whereNotLike(where, value, compare, json) {
     var shouldAdd = true
     if(where.left === 'template' || where.left === 'abe_meta.template') {
-      if(value.indexOf(compare) >= -1) {
+      if(value && value.indexOf(compare) >= -1) {
         shouldAdd = false
       }
     }else {
-      if(value.indexOf(compare) > -1) {
+      if(value && value.indexOf(compare) > -1) {
         shouldAdd = false
       }
     }
@@ -470,65 +471,65 @@ export default class Sql {
     var isCorrect = false
 
     switch(where.operator) {
-      case '=':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = Sql.whereEquals(where.left.column, values.left, values.right)
-        break
-      case '!=':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = Sql.whereNotEquals(where.left.column, values.left, values.right)
-        break
-      case '>':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = (values.left > values.right)
-        break
-      case '>=':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = (values.left >= values.right)
-        break
-      case '<':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = (values.left < values.right)
-        break
-      case '<=':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = (values.left <= values.right)
-        break
-      case 'LIKE':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = Sql.whereLike(where.left.column, values.left, values.right)
-        break
-      case 'NOT LIKE':
-        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = Sql.whereNotLike(where.left.column, values.left, values.right)
-        break
-      case 'AND':
-        isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
-        isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-        isCorrect = isLeftCorrect && isRightCorrect
-        break
-      case 'OR':
-        isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
-        isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-        isCorrect = isLeftCorrect || isRightCorrect
-        break
-      case 'IN':
-        var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        Array.prototype.forEach.call(where.right.value, (right) => {
-          if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
-            isCorrect = true
-          }
-        })
-        break
-      case 'NOT IN':
-        var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-        isCorrect = true
-        Array.prototype.forEach.call(where.right.value, (right) => {
-          if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
-            isCorrect = false
-          }
-        })
-        break
+    case '=':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = Sql.whereEquals(where.left.column, values.left, values.right)
+      break
+    case '!=':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = Sql.whereNotEquals(where.left.column, values.left, values.right)
+      break
+    case '>':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = (values.left > values.right)
+      break
+    case '>=':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = (values.left >= values.right)
+      break
+    case '<':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = (values.left < values.right)
+      break
+    case '<=':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = (values.left <= values.right)
+      break
+    case 'LIKE':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = Sql.whereLike(where.left.column, values.left, values.right)
+      break
+    case 'NOT LIKE':
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = Sql.whereNotLike(where.left.column, values.left, values.right)
+      break
+    case 'AND':
+      isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+      isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+      isCorrect = isLeftCorrect && isRightCorrect
+      break
+    case 'OR':
+      isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+      isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+      isCorrect = isLeftCorrect || isRightCorrect
+      break
+    case 'IN':
+      var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      Array.prototype.forEach.call(where.right.value, (right) => {
+        if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
+          isCorrect = true
+        }
+      })
+      break
+    case 'NOT IN':
+      var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isCorrect = true
+      Array.prototype.forEach.call(where.right.value, (right) => {
+        if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
+          isCorrect = false
+        }
+      })
+      break
     }
 
     return isCorrect
