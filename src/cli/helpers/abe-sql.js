@@ -14,51 +14,6 @@ export default class Sql {
 
   }
 
-  static recurseWhere(where, operator = '') {
-    var arr = []
-    var obj = {}
-
-    if(typeof where.left !== 'undefined' && where.left !== null
-      && typeof where.right !== 'undefined' && where.right !== null
-      && typeof where.operator !== 'undefined' && where.operator !== null) {
-      // SQL WHERE
-      
-      if(typeof where.left.column !== 'undefined' && where.left.column !== null
-        && typeof where.right.column !== 'undefined' && where.right.column !== null
-        && typeof where.operator !== 'undefined' && where.operator !== null) {
-        obj.left = where.left.column
-        obj.right = where.right.column
-        obj.compare = where.operator
-        obj.operator = operator
-        arr.push(obj)
-      }else if(typeof where.left.column !== 'undefined' && where.left.column !== null
-        && typeof where.right.value !== 'undefined' && where.right.value !== null
-        && typeof where.operator !== 'undefined' && where.operator !== null) {
-        obj.left = where.left.column
-        obj.right = where.right.value
-        obj.compare = where.operator
-        obj.operator = operator
-        arr.push(obj)
-      }else {
-        if(typeof where.left.left !== 'undefined' && where.left.left !== null) {
-          if(typeof where.left.left.type !== 'undefined' && where.left.left.type !== null) {
-            operator = where.operator
-          }
-        }
-      }
-
-      if(typeof where.left.left !== 'undefined' && where.left.left !== null) {
-        arr = arr.concat(Sql.recurseWhere(where.left, operator))
-      }
-
-      if(typeof where.right.right !== 'undefined' && where.right.right !== null) {
-        arr = arr.concat(Sql.recurseWhere(where.right, operator))
-      }
-    }
-
-    return arr
-  }
-
   static cleanRequest(str, jsonPage) {
     var matchFrom = /from .(.*?) /
     var matchVariable = /{{([a-zA-Z]*)}}/
@@ -71,14 +26,13 @@ export default class Sql {
       var toReplace = matchFromExec[1]
       while (fromMatch = matchVariable.exec(toReplace)) {
         try {
-          var value = eval('json.' + fromMatch[1])
+          var value = eval('jsonPage.' + fromMatch[1])
           if(typeof value !== 'undefined' && value !== null) {
             toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
           }else {
             toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
           }
         }catch(e) {
-
         }
       }
 
@@ -146,11 +100,12 @@ export default class Sql {
 
     var where
     if(typeof request.where !== 'undefined' && request.where !== null) {
-      where = Sql.recurseWhere(request.where)
-      reconstructSql += 'where '
-      Array.prototype.forEach.call(where, (w) => {
-        reconstructSql += `${w.operator} ${w.left} ${w.compare} ${w.right} `
-      })
+      where = request.where
+      // where = Sql.recurseWhere(request.where)
+      // reconstructSql += 'where '
+      // Array.prototype.forEach.call(where, (w) => {
+      //   reconstructSql += `${w.operator} ${w.left} ${w.compare} ${w.right} `
+      // })
     }
 
     var limit = -1
@@ -382,26 +337,26 @@ export default class Sql {
 
     for(let file of files) {
       if(limit < maxLimit || maxLimit === -1) {
-        var doc = Sql.executeWhereClauseOnDocument(file.publish, wheres, jsonPage)
+        if(typeof wheres !== 'undefined' && wheres !== null) {
+          if(Sql.recurseWhere(wheres, file.publish, jsonPage)) {
+            var json = JSON.parse(JSON.stringify(file.publish))
+            var jsonValues = {}
 
-        if(doc) {
-          var json = JSON.parse(JSON.stringify(doc))
-          var jsonValues = {}
+            if(typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
+              
+              Array.prototype.forEach.call(columns, (column) => {
+                if(typeof json[column] !== 'undefined' && json[column] !== null) {
+                  jsonValues[column] = json[column]
+                }
+              })
+              jsonValues['abe_meta'] = json['abe_meta']
+            }else {
+              jsonValues = json
+            }
 
-          if(typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
-            
-            Array.prototype.forEach.call(columns, (column) => {
-              if(typeof json[column] !== 'undefined' && json[column] !== null) {
-                jsonValues[column] = json[column]
-              }
-            })
-            jsonValues['abe_meta'] = json['abe_meta']
-          }else {
-            jsonValues = json
+            res.push(jsonValues)
+            limit++
           }
-
-          res.push(jsonValues)
-          limit++
         }
       } else {
         break
@@ -411,9 +366,9 @@ export default class Sql {
     return res
   }
 
-  static whereEquals(where, value, compare, json) {
-    var shouldAdd = json
-    if(where.left === 'template' || where.left === 'abe_meta.template') {
+  static whereEquals(where, value, compare) {
+    var shouldAdd = true
+    if(where === 'template' || where === 'abe_meta.template') {
       if(value.indexOf('/') > -1 && value !== compare) {
         shouldAdd = false
       }else if(value.indexOf('/') === -1 && compare.indexOf(value) === -1) {
@@ -428,7 +383,7 @@ export default class Sql {
   }
 
   static whereNotEquals(where, value, compare, json) {
-    var shouldAdd = json
+    var shouldAdd = true
     if(where.left === 'template' || where.left === 'abe_meta.template') {
       if (value.indexOf('/') > -1 && value === compare) { 
         shouldAdd = false 
@@ -444,7 +399,7 @@ export default class Sql {
   }
 
   static whereLike(where, value, compare, json) {
-    var shouldAdd = json
+    var shouldAdd = true
     if(where.left === 'template' || where.left === 'abe_meta.template') {
       if(value.indexOf(compare) === -1) {
         shouldAdd = false
@@ -457,61 +412,125 @@ export default class Sql {
     return shouldAdd
   }
 
-  static executeWhereClauseOnDocument(jsonDoc, wheres, jsonOriginalDoc) {
-    var shouldAdd = jsonDoc
+  static whereNotLike(where, value, compare, json) {
+    var shouldAdd = true
+    if(where.left === 'template' || where.left === 'abe_meta.template') {
+      if(value.indexOf(compare) >= -1) {
+        shouldAdd = false
+      }
+    }else {
+      if(value.indexOf(compare) > -1) {
+        shouldAdd = false
+      }
+    }
+    return shouldAdd
+  }
 
-    if(typeof wheres !== 'undefined' && wheres !== null) {
-      Array.prototype.forEach.call(wheres, (where) => {
-        var value
-        var compare
+  static getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
+    var value
+    var compare
 
-        if((where.left === 'template' || where.left === 'abe_meta.template')
-          && typeof jsonDoc['abe_meta'] !== 'undefined' && jsonDoc['abe_meta'] !== null) {
-          value = FileParser.getTemplate(jsonDoc['abe_meta'].template)
+    if((where.left.column === 'template' || where.left.column === 'abe_meta.template')
+      && typeof jsonDoc['abe_meta'] !== 'undefined' && jsonDoc['abe_meta'] !== null) {
+      value = FileParser.getTemplate(jsonDoc['abe_meta'].template)
+    }else {
+      try {
+        value = eval('jsonDoc.' + where.left.column)
+      }catch(e) {
+        // console.log('e', e)
+      }
+    }
+    compare = where.right.column
+
+    var matchVariable = /^{{(.*)}}$/.exec(compare)
+    if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
+      try {
+        var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
+        if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+          compare = shouldCompare
         }else {
-          try {
-            value = eval('jsonDoc.' + where.left)
-          }catch(e) {
-            // console.log('e', e)
-          }
+          compare = null
         }
-        compare = where.right
-
-        var matchVariable = /^{{(.*)}}$/.exec(compare)
-        if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
-          try {
-            var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
-            if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
-              compare = shouldCompare
-            }else {
-              shouldAdd = false
-            }
-          }catch(e) {
-            shouldAdd = false
-            // console.log('e', e)
-          }
-        }
-
-        if(typeof value !== 'undefined' && value !== null) {
-          switch(where.compare) {
-          case '=':
-            shouldAdd = Sql.whereEquals(where.left, value, compare, shouldAdd)
-            break
-          case '!=':
-            shouldAdd = Sql.whereNotEquals(where.left, value, compare, shouldAdd)
-            break
-          case 'LIKE':
-            shouldAdd = Sql.whereLike(where.left, value, compare, shouldAdd)
-            break
-          default:
-            break
-          }
-        }else {
-          shouldAdd = false
-        }
-      })
+      }catch(e) {
+        compare = null
+        // console.log('e', e)
+      }
     }
 
-    return shouldAdd
+    return {
+      left: value,
+      right: compare
+    }
+  }
+
+  static recurseWhere(where, jsonDoc, jsonOriginalDoc) {
+    var shouldAdd = true
+    var isLeftCorrect = false
+    var isRightCorrect = false
+    var isCorrect = false
+
+    switch(where.operator) {
+      case '=':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = Sql.whereEquals(where.left.column, values.left, values.right)
+        break
+      case '!=':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = Sql.whereNotEquals(where.left.column, values.left, values.right)
+        break
+      case '>':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = (values.left > values.right)
+        break
+      case '>=':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = (values.left >= values.right)
+        break
+      case '<':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = (values.left < values.right)
+        break
+      case '<=':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = (values.left <= values.right)
+        break
+      case 'LIKE':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = Sql.whereLike(where.left.column, values.left, values.right)
+        break
+      case 'NOT LIKE':
+        var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = Sql.whereNotLike(where.left.column, values.left, values.right)
+        break
+      case 'AND':
+        isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+        isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+        isCorrect = isLeftCorrect && isRightCorrect
+        break
+      case 'OR':
+        isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+        isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+        isCorrect = isLeftCorrect || isRightCorrect
+        break
+      case 'IN':
+        var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        Array.prototype.forEach.call(where.right.value, (right) => {
+          if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
+            isCorrect = true
+          }
+        })
+        break
+      case 'NOT IN':
+        var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+        isCorrect = true
+        Array.prototype.forEach.call(where.right.value, (right) => {
+          if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
+            isCorrect = false
+          }
+        })
+        break
+    }
+
+    return isCorrect
   }
 }
