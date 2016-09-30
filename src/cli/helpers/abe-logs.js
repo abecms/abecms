@@ -5,7 +5,7 @@ import mkdirp from 'mkdirp'
 import fs from 'fs'
 import clc from 'cli-color'
 import path from 'path'
-import {config, cli, fileUtils} from '../'
+import {config, fileUtils} from '../'
 
 export default class Logs {
 

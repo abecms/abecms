@@ -4,7 +4,6 @@ import clc from 'cli-color'
 import path from 'path'
 
 import {
-	cli,
 	FileParser,
 	fileUtils,
 	config,
