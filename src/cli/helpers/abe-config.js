@@ -3,10 +3,6 @@ import clc from 'cli-color'
 import extend from 'extend'
 
 import {abeConfig, abeConfigLocal} from '../config'
-import {
-	cli,
-	log
-} from '../'
 
 var result = extend(true, abeConfig, abeConfigLocal)
 result.root = result.root.replace(/\/$/, '')
