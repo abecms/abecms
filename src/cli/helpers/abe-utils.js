@@ -306,11 +306,14 @@ export default class Utils {
     return obj
   }
 
-  static requestList(obj, sourceAttr, tplPath, match, jsonPage) {
+  static requestList(obj, tplPath, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
       Sql.executeQuery(tplPath, match, jsonPage)
         .then((data) => {
-          jsonPage[sourceAttr][obj.key] = data
+          if (!jsonPage['abe_source']) {
+            jsonPage['abe_source'] = {}
+          }
+          jsonPage['abe_source'][obj.key] = data
           if (!obj.editable) {
             if (obj['max-length']) {
               jsonPage[obj.key] = data.slice(0, obj['max-length'])
@@ -336,7 +339,7 @@ export default class Utils {
     return p
   }
 
-  static valueList(obj, sourceAttr, tplPath, match, jsonPage) {
+  static valueList(obj, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
       var value = Sql.getDataSource(match)
 
@@ -344,9 +347,9 @@ export default class Utils {
         try{
           value = JSON.parse(value)
 
-          jsonPage[sourceAttr][obj.key] = value
+          jsonPage['abe_source'][obj.key] = value
         }catch(e){
-          jsonPage[sourceAttr][obj.key] = null
+          jsonPage['abe_source'][obj.key] = null
           console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
         }
       }
@@ -356,7 +359,7 @@ export default class Utils {
     return p
   }
 
-  static urlList(obj, sourceAttr, tplPath, match, jsonPage) {
+  static urlList(obj, tplPath, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
       if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
         var host = obj.sourceString
@@ -400,14 +403,14 @@ export default class Utils {
               if(typeof body === 'string') {
                 var parsedBody = JSON.parse(body)
                 if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
-                  jsonPage[sourceAttr][obj.key] = parsedBody
+                  jsonPage['abe_source'][obj.key] = parsedBody
                 }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
-                  jsonPage[sourceAttr][obj.key] = [parsedBody]
+                  jsonPage['abe_source'][obj.key] = [parsedBody]
                 }
               }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
-                jsonPage[sourceAttr][obj.key] = body
+                jsonPage['abe_source'][obj.key] = body
               }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
-                jsonPage[sourceAttr][obj.key] = body
+                jsonPage['abe_source'][obj.key] = body
               }
             } catch(e) {
               console.log(clc.red(`Error ${obj.sourceString} is not a valid JSON`),  `\n${e}`)
@@ -425,7 +428,7 @@ export default class Utils {
         localReq.end()
         
       }else {
-        jsonPage[sourceAttr][obj.key] = obj.sourceString
+        jsonPage['abe_source'][obj.key] = obj.sourceString
         resolve()
       }
     })
@@ -433,22 +436,20 @@ export default class Utils {
     return p
   }
 
-  static fileList(obj, sourceAttr, tplPath, match, jsonPage) {
+  static fileList(obj, tplPath, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      jsonPage[sourceAttr][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
+      jsonPage['abe_source'][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
       resolve()
     })
 
     return p
   }
 
-  static nextDataList(tplPath, text, jsonPage, match) {
+  static nextDataList(tplPath, jsonPage, match) {
     var p = new Promise((resolve, reject) => {
       // var t = new TimeMesure()
-      var sourceAttr = config.source.name
-
-      if(typeof jsonPage[sourceAttr] === 'undefined' || jsonPage[sourceAttr] === null) {
-        jsonPage[sourceAttr] = {}
+      if(typeof jsonPage['abe_source'] === 'undefined' || jsonPage['abe_source'] === null) {
+        jsonPage['abe_source'] = {}
       }
 
       var obj = Utils.getAllAttributes(match, jsonPage)
@@ -458,7 +459,7 @@ export default class Utils {
 
       switch (type) {
       case 'request':
-        Utils.requestList(obj, sourceAttr, tplPath, match, jsonPage)
+        Utils.requestList(obj, tplPath, match, jsonPage)
             .then(() => {
               // t.duration(match)
               resolve()
@@ -467,7 +468,7 @@ export default class Utils {
             })
         break
       case 'value':
-        Utils.valueList(obj, sourceAttr, tplPath, match, jsonPage)
+        Utils.valueList(obj, match, jsonPage)
             .then(() => {
               resolve()
             }).catch((e) => {
@@ -475,7 +476,7 @@ export default class Utils {
             })
         break
       case 'url':
-        Utils.urlList(obj, sourceAttr, tplPath, match, jsonPage)
+        Utils.urlList(obj, tplPath, match, jsonPage)
             .then(() => {
               resolve()
             }).catch((e) => {
@@ -483,7 +484,7 @@ export default class Utils {
             })
         break
       case 'file':
-        Utils.fileList(obj, sourceAttr, tplPath, match, jsonPage)
+        Utils.fileList(obj, tplPath, match, jsonPage)
             .then(() => {
               resolve()
             }).catch((e) => {
@@ -507,7 +508,7 @@ export default class Utils {
       let util = new Utils()
       var matches = util.dataRequest(text)
       Array.prototype.forEach.call(matches, (match) => {
-        promises.push(Utils.nextDataList(tplPath, text, jsonPage, match[0]))
+        promises.push(Utils.nextDataList(tplPath, jsonPage, match[0]))
       })
 
       Promise.all(promises)
