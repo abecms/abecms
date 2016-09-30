@@ -70,7 +70,7 @@ function includePartials(text) {
     var partial = '';
     file = _path2.default.join(_cli.config.root, _cli.config.partials, file);
     if (_cli.fileUtils.isFile(file)) {
-      partial = _fsExtra2.default.readFileSync(file, 'utf8');
+      partial = includePartials(_fsExtra2.default.readFileSync(file, 'utf8'));
     }
     text = text.replace((0, _cli.escapeTextToRegex)(abeImport, 'g'), partial);
   });
