@@ -316,8 +316,8 @@ export default class Sql {
   }
 
   static execQuery(pathQuery, match, jsonPage) {
-    var res = []
-    var files = []
+    var res
+    var files
     var request = Sql.handleSqlRequest(getAttr(match, 'source'), jsonPage)
 
     files = Sql.executeFromClause(request.from, pathQuery)

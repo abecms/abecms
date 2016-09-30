@@ -4,8 +4,6 @@ import mkdirp from 'mkdirp'
 import moment from 'moment'
 import path from 'path'
 import {
-	cli,
-	log,
 	fileAttr,
 	FileParser,
 	config

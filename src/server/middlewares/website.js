@@ -18,7 +18,6 @@ import {
   fileUtils,
   folderUtils,
   config,
-  cli,
   log,
   Page,
   Locales,

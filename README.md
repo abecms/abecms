@@ -2,6 +2,7 @@
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/AdFabConnect/abejs/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AdFabConnect/abejs/)
 [![Coverage Status](https://coveralls.io/repos/github/AdFabConnect/abejs/badge.svg?branch=master)](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c)
+[![Inline docs](http://inch-ci.org/github/adfabconnect/abejs.svg?branch=master)](http://inch-ci.org/github/github/adfabconnect/abejs)
 [![Latest Stable Version](https://img.shields.io/npm/v/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
 [![Total Downloads](https://img.shields.io/npm/dt/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/AdFabConnect/abejs/master/LICENSE)

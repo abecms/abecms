@@ -8,7 +8,6 @@ import {
   config,
   fileUtils,
   folderUtils,
-  cli,
   log
 } from '../'
 
