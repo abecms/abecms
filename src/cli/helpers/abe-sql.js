@@ -393,7 +393,7 @@ export default class Sql {
                 jsonValues[column] = json[column]
               }
             })
-            jsonValues["abe_meta"] = json["abe_meta"]
+            jsonValues['abe_meta'] = json['abe_meta']
           }else {
             jsonValues = json
           }
@@ -553,8 +553,8 @@ export default class Sql {
         var compare
 
         if((where.left === 'template' || where.left === 'abe_meta.template')
-          && typeof jsonDoc["abe_meta"] !== 'undefined' && jsonDoc["abe_meta"] !== null) {
-          value = FileParser.getTemplate(jsonDoc["abe_meta"].template)
+          && typeof jsonDoc['abe_meta'] !== 'undefined' && jsonDoc['abe_meta'] !== null) {
+          value = FileParser.getTemplate(jsonDoc['abe_meta'].template)
         }else {
           try {
             value = eval('jsonDoc.' + where.left)
