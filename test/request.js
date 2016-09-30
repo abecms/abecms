@@ -1,4 +1,5 @@
 var chai = require('chai');
+var path = require('path');
 
 var config = require('../src/cli').config
 config.set({root: __dirname + '/fixtures'})
@@ -28,7 +29,7 @@ describe('Request', function() {
    */
   it('Util.getAllAttributes()', function(done) {
     var attributes = Util.getAllAttributes(this.fixture.tag, this.fixture.json)
-    chai.assert.equal(attributes.sourceString, 'select abe_meta from ./', 'sourceString is ok')
+    chai.expect(attributes.sourceString).to.contain('select');
     done();
   });
 
@@ -152,5 +153,59 @@ describe('Request', function() {
           article
         )
       );
+  });
+
+  /**
+   * Sql.whereEquals
+   * 
+   */
+  it('Sql.whereOr()', function() {
+    var article = fileAttr.getDocumentRevision('article-1.json')
+
+    var res = Sql.handleSqlRequest('select title from ./ where template=`article` AND template=`test` AND template=`test`', {})
+    var res = Sql.handleSqlRequest('select title from ./ where template=`article` OR template=`test`', {})
+
+    // chai.expect(article)
+    //   .to.deep.equal(
+    //       Sql.whereOr(
+    //         [{ left: 'template' }],
+    //         article.abe_meta.template,
+    //         "article",
+    //         article
+    //       )
+    //   );
+  });
+
+  /**
+   * Sql.whereLike
+   * 
+   */
+  it('Sql.getSourceType()', function() {
+    chai.expect(Sql.getSourceType('http://google.com')).to.equal('url');
+    chai.expect(Sql.getSourceType('select * from test')).to.equal('request');
+    chai.expect(Sql.getSourceType('{"test":"test"}')).to.equal('value');
+    chai.expect(Sql.getSourceType('references.json')).to.equal('file');
+    chai.expect(Sql.getSourceType('test')).to.equal('other');
+  });
+
+  /**
+   * Sql.requestList
+   * 
+   */
+  it('Sql.requestList()', function(done) {
+    let util = new Util()
+    var matches = util.dataRequest(this.fixture.tag)
+
+    chai.expect(matches[0][0]).to.not.be.null
+
+    var attributes = Util.getAllAttributes(matches[0][0], {})
+    chai.expect(matches[0][0]).to.not.be.null
+
+    var jsonPage = {}
+    Util.requestList(attributes, '', matches[0][0], jsonPage)
+      .then(function () {
+        chai.expect(jsonPage.abe_source).to.not.be.undefined
+        done()
+      })
   });
 });
