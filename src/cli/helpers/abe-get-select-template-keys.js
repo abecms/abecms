@@ -53,6 +53,35 @@ var findTemplates = function(templatesPath) {
  * @param  {Array} templatesList ["article.html", "other.html"]
  * @return {Promise}
  */
+
+var recurseWhereVariables = function (where) {
+  var ar = []
+
+  // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+  // console.log('where', where.left)
+  switch(where.operator) {
+      case 'AND':
+        var arLeft = recurseWhereVariables(where.left)
+        var arRight = recurseWhereVariables(where.right)
+        return arLeft.concat(arRight)
+        break
+      case 'OR':
+        var arLeft = recurseWhereVariables(where.left)
+        var arRight = recurseWhereVariables(where.right)
+        return arLeft.concat(arRight)
+        break
+      case 'IN':
+        break
+      case 'NOT IN':
+        break
+      default:
+        return [where.left.column]
+        break
+    }
+
+  return ar
+}
+
 var findRequestColumns = function(templatesList) {
   var whereKeysCheck = {}
   var whereKeys = []
@@ -73,23 +102,16 @@ var findRequestColumns = function(templatesList) {
           var request = Sql.handleSqlRequest(obj.sourceString, {})
           if(typeof request.columns !== 'undefined' && request.columns !== null) {
             Array.prototype.forEach.call(request.columns, (column) => {
-              if(typeof whereKeysCheck[column] === 'undefined' || whereKeysCheck[column] === null) {
-                whereKeysCheck[column] = true
-                whereKeys.push(column)
-              }
+              whereKeys.push(column)
             })
           }
           if(typeof request.where !== 'undefined' && request.where !== null) {
-            Array.prototype.forEach.call(request.where, (where) => {
-              if(typeof whereKeysCheck[where.left] === 'undefined' || whereKeysCheck[where.left] === null) {
-                whereKeysCheck[where.left] = true
-                whereKeys.push(where.left)
-              }
-            })
+            whereKeys = whereKeys.concat(recurseWhereVariables(request.where))
           }
         }
       })
     })
+    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos});
     resolve(whereKeys)
   })
 

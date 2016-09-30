@@ -60,120 +60,68 @@ describe('Request', function() {
   });
 
   /**
-   * Sql.executeWhereClause
+   * Sql.whereEquals
    * 
    */
-  it('Sql.executeWhereClause()', function() {
-    var where = [{ left: 'template', right: 'article', compare: '=', operator: '' }]
-
-    var res = Sql.executeWhereClause(Manager.instance.getList(), where, -1, ['*'], {})
-
+  it('Sql.executeWhereClause() >', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.priority`>`1`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res).to.have.length(1);
   });
-
-  /**
-   * Sql.whereEquals
-   * 
-   */
-  it('Sql.whereEquals()', function() {
-    var article = fileAttr.getDocumentRevision('article-1.json')
-
-    chai.expect(article)
-      .to.deep.equal(
-          Sql.whereEquals(
-            [{ left: 'template' }],
-            article.abe_meta.template,
-            "article",
-            article
-          )
-      );
-
-    chai.expect(article)
-      .to.not.deep.equal(
-        Sql.whereEquals(
-          [{ left: 'template' }],
-          article.abe_meta.template,
-          "homepage",
-          article
-        )
-      );
+  it('Sql.executeWhereClause() >=', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.priority`>=`1`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(2);
   });
-
-  /**
-   * Sql.whereNotEquals
-   * 
-   */
-  it('Sql.whereNotEquals()', function() {
-    var article = fileAttr.getDocumentRevision('article-1.json')
-
-    chai.expect(article)
-      .to.deep.equal(
-        Sql.whereNotEquals(
-          [{ left: 'template' }],
-          article.abe_meta.template,
-          "homepage",
-          article
-        )
-      );
-
-    chai.expect(article)
-      .to.not.deep.equal(
-        Sql.whereNotEquals(
-          [{ left: 'template' }],
-          article.abe_meta.template,
-          "article",
-          article
-        )
-      );
+  it('Sql.executeWhereClause() <', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.priority`<`1`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(0);
   });
-
-  /**
-   * Sql.whereLike
-   * 
-   */
-  it('Sql.whereLike()', function() {
-    var article = fileAttr.getDocumentRevision('article-1.json')
-
-    chai.expect(article)
-      .to.deep.equal(
-          Sql.whereLike(
-            [{ left: 'template' }],
-            article.abe_meta.template,
-            "art",
-            article
-          )
-      );
-
-    chai.expect(article)
-      .to.not.deep.equal(
-        Sql.whereLike(
-          [{ left: 'template' }],
-          article.abe_meta.template,
-          "hom",
-          article
-        )
-      );
+  it('Sql.executeWhereClause() <=', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.priority`<=`1`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
   });
-
-  /**
-   * Sql.whereEquals
-   * 
-   */
-  it('Sql.whereOr()', function() {
-    var article = fileAttr.getDocumentRevision('article-1.json')
-
-    var res = Sql.handleSqlRequest('select title from ./ where template=`article` AND template=`test` AND template=`test`', {})
-    var res = Sql.handleSqlRequest('select title from ./ where template=`article` OR template=`test`', {})
-
-    // chai.expect(article)
-    //   .to.deep.equal(
-    //       Sql.whereOr(
-    //         [{ left: 'template' }],
-    //         article.abe_meta.template,
-    //         "article",
-    //         article
-    //       )
-    //   );
+  it('Sql.executeWhereClause() =', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template=`article`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
+  });
+  it('Sql.executeWhereClause() !=', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template!=`homepage`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
+  });
+  it('Sql.executeWhereClause() LIKE', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template LIKE `home`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
+  });
+  it('Sql.executeWhereClause() NOT LIKE', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template NOT LIKE `home`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
+  });
+  it('Sql.executeWhereClause() AND', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template=`homepage` AND title=`homepage`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
+  });
+  it('Sql.executeWhereClause() OR', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template=`homepage` OR template=`article`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(2);
+  });
+  it('Sql.executeWhereClause() IN', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template IN (`homepage`,`test`) AND title=`homepage`', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
+  });
+  it('Sql.executeWhereClause() NOT IN', function() {
+    var request = Sql.handleSqlRequest('select title from ./ where template NOT IN (`homepage`,`test`)', {})
+    var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    chai.expect(res).to.have.length(1);
   });
 
   /**
