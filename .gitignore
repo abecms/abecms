@@ -22,4 +22,4 @@ coverage/*
 test/templates/hbs/*
 
 # dist
-#dist
+dist
