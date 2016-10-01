@@ -1,22 +1,12 @@
-import fse from 'fs-extra'
-import extend from 'extend'
 import {Promise} from 'es6-promise'
-import clc from 'cli-color'
 
 import {
-  getAttr
-  ,getEnclosingTags
-  ,Util
-  ,config
-  ,fileUtils
-  ,abeEngine
-  ,fileAttr
-  ,cli
-  ,log
-  ,getTemplate
-  ,FileParser
-  ,Hooks
-  ,Plugins
+  Util,
+  fileUtils,
+  abeEngine,
+  getTemplate,
+  FileParser,
+  Hooks
 } from '../../cli'
 
 function add(obj, json, text, util) {
@@ -32,8 +22,12 @@ function add(obj, json, text, util) {
        typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
       obj.value = json[key][index][prop]
     }else if(typeof value !== 'undefined' && value !== null && value !== '') {
-      if(typeof json[key] === 'undefined' || json[key] === null) json[key] = []
-      if(typeof json[key][index] === 'undefined' || json[key][index] === null) json[key][index] = {}
+      if(typeof json[key] === 'undefined' || json[key] === null){
+        json[key] = []
+      }
+      if(typeof json[key][index] === 'undefined' || json[key][index] === null){
+        json[key][index] = {}
+      }
       json[key][index][prop] = value
     }
   }
@@ -102,7 +96,9 @@ function each(text, json, util, arrayBlock) {
     var keyArray = textEach[0].match(/#each (\n|.)*?\}/)
     keyArray = keyArray[0].slice(6, keyArray[0].length - 1)
 
-    if(keyArray.split(' ').length > 1) keyArray = keyArray.split(' ')[0]
+    if(keyArray.split(' ').length > 1){
+      keyArray = keyArray.split(' ')[0]
+    }
     arrayBlock[keyArray] = []
     // ce while boucle sur les block de contenu {{abe}}
     while (match = patt.exec(textEach[0])) {
@@ -111,7 +107,6 @@ function each(text, json, util, arrayBlock) {
       if(v.indexOf('abe') > -1){
         if(json[keyArray]){
           for (var i = 0; i < json[keyArray].length; i++) {
-            var key = json[keyArray]
             addToForm(v, text, json, util, arrayBlock, keyArray, i)
           }
         }else{
@@ -136,10 +131,9 @@ function each(text, json, util, arrayBlock) {
   }
 }
 
-function addSource(text, json, util, arrayBlock) {
-  var listReg = /({{abe.*type=[\'|\"]data.*}})/g,
-    match,
-    limit = 0
+function addSource(text, json, util) {
+  var listReg = /({{abe.*type=[\'|\"]data.*}})/g
+  var match
 
   while (match = listReg.exec(text)) {
     var obj = Util.getAllAttributes(match[0], json)
@@ -221,12 +215,11 @@ function orderBlock(util) {
 }
 
 export function editor(fileName, jsonPath, documentLink) {
-  let p = new Promise((resolve, reject) => {
+  let p = new Promise((resolve) => {
     var util = new Util()
     var arrayBlock = []
     var text
     var json
-    var tabIndex = 0
 
     json = {}
     if(fileUtils.isFile(jsonPath)) {
@@ -237,7 +230,7 @@ export function editor(fileName, jsonPath, documentLink) {
 
     Util.getDataList(fileUtils.removeLast(documentLink), text, json, true)
       .then(() => {
-        addSource(text, json, util, arrayBlock)
+        addSource(text, json, util)
 
         text = Util.removeDataList(text)
 
