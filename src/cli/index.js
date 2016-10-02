@@ -51,7 +51,6 @@ import Plugins from './helpers/abe-plugins'
 import Locales from './helpers/abe-locales'
 
 import getSelectTemplateKeys from './helpers/abe-get-select-template-keys'
-import TimeMesure from './helpers/abe-time-mesure'
 
 export {
 	fileAttr
@@ -105,7 +104,6 @@ export {
 	,Manager
 	,Page
 	,getSelectTemplateKeys
-	,TimeMesure
 }
 
 export {compileAbe as compileAbe}
