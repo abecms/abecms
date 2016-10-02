@@ -10,28 +10,31 @@ var hintAbeJson = false
 
 var loadLocalConfig = (result) => {
   var website = result.root.replace(/\/$/, '')
-  try{
-    var stat = fse.statSync(website)
-    if (stat && stat.isDirectory()) {
-      try{
-        stat = fse.statSync(website + '/abe.json')
-        if (stat) {
-          var json = fse.readJsonSync(website + '/abe.json')
-          result = extend(true, result, json)
-        }
-      }catch(e) {
-        if (!hintAbeJson) {
-          hintAbeJson = true
-          console.log(
-						clc.green('[ Hint ]'),
-						'create abe.json to config',
-						clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
-					)
+  if(website !==''){
+    try{
+      var stat = fse.statSync(website)
+      if (stat && stat.isDirectory()) {
+        try{
+          stat = fse.statSync(website + '/abe.json')
+          if (stat) {
+            var json = fse.readJsonSync(website + '/abe.json')
+            result = extend(true, result, json)
+          }
+        }catch(e) {
+          if (!hintAbeJson) {
+            hintAbeJson = true
+            console.log(
+  						clc.green('[ Hint ]'),
+  						'create abe.json to config',
+  						clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
+  					)
+          }
         }
       }
+    }catch(e){
+      console.log('LoadConfig Error')
+      console.log(e)
     }
-  }catch(e){
-    console.log('LoadConfig Error')
   }
 }
 

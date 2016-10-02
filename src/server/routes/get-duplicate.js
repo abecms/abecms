@@ -1,6 +1,5 @@
 import {
   abeDuplicate,
-  log,
   Hooks
 } from '../../cli'
 

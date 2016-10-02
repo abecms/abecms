@@ -6,8 +6,7 @@ import path from 'path'
 import {
 	FileParser,
 	fileUtils,
-	config,
-	log
+	config
 } from '../../cli'
 
 var result = {}

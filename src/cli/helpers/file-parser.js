@@ -6,9 +6,7 @@ import moment from 'moment'
 import path from 'path'
 
 import {
-	cli
-	,log
-	,save
+	save
 	,folderUtils
 	,fileUtils
 	,fileAttr

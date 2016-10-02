@@ -10,9 +10,7 @@ import {
   ,FileParser
   ,config
   ,fileUtils
-  ,cli
   ,Plugins
-  ,log
 } from '../'
 
 import * as abe from '../'

@@ -10,8 +10,6 @@ import path from 'path'
 
 import {
   config
-  ,cli
-  ,log
   ,Sql
   ,folderUtils
   ,fileUtils

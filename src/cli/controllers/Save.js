@@ -13,7 +13,6 @@ import {
   ,config
   ,fileUtils
   ,fileAttr
-  ,log
   ,dateSlug
   ,Page
   ,getTemplate
@@ -170,7 +169,6 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
             }
           }
 
-          log.duration('save: ' + url.replace(config.root, '') + ' (' + type + ')', ((new Date().getTime() - dateStart.getTime()) / 1000))
           resolve(res)
         }).catch(function(e) {
           console.error('Save.js', e)

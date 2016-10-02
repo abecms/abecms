@@ -7,7 +7,6 @@ import {
   ,fileUtils
   ,folderUtils
   ,save
-  ,log
   ,Hooks
 } from '../../cli'
 

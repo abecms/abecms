@@ -40,7 +40,6 @@ import FileParser from './helpers/file-parser'
 import Create from './Create'
 import fileUtils from './helpers/file-utils'
 import config from './core/config/config'
-import log from './helpers/abe-logs'
 import removeDuplicateAttr from './helpers/abe-remove-duplicate-attr'
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
@@ -94,7 +93,6 @@ export {
 	,escapeTextToRegex
 	,config
 	,getTemplate
-	,log
 	,removeDuplicateAttr
 	,save
 	,Hooks
