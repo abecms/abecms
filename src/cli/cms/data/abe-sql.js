@@ -6,7 +6,7 @@ import {
   Manager,
   FileParser,
   getAttr
-} from '../'
+} from '../../'
 
 export default class Sql {
 

@@ -1,4 +1,3 @@
-import {cli} from '../'
 
 export function getAttr (str, attr) {
   var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( +[a-zA-Z0-9-]*?=|}})')

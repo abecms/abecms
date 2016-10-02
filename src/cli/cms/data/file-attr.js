@@ -7,7 +7,7 @@ import {
   ,dateUnslug
   ,config
   ,Manager
-} from '../'
+} from '../../'
 
 var fullAttr = '-abe-(.+?)(?=\.'
 var captureAttr = '-abe-(.+?)(?=\.'
