@@ -5,7 +5,7 @@ config.set({root: __dirname + '/fixtures'})
 
 var Manager = require('../src/cli').Manager;
 var Plugins = require('../src/cli').Plugins;
-var abeProcess = require('../src/cli/helpers/abe-process').default
+var abeProcess = require('../src/cli').default
 
 describe('Process', function() {
   before( function(done) {
