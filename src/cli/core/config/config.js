@@ -17,7 +17,7 @@ var loadLocalConfig = (result) => {
         stat = fse.statSync(website + '/abe.json')
         if (stat) {
           var json = fse.readJsonSync(website + '/abe.json')
-          var result = extend(true, result, json)
+          result = extend(true, result, json)
         }
       }catch(e) {
         if (!hintAbeJson) {
@@ -30,7 +30,9 @@ var loadLocalConfig = (result) => {
         }
       }
     }
-  }catch(e){}
+  }catch(e){
+    console.log('LoadConfig Error')
+  }
 }
 
 loadLocalConfig(result)
@@ -58,17 +60,6 @@ result.getDefault = (conf) => {
 }
 
 result.get = (conf, file) => {
-  return result.exist(conf, result)
-
-  if(typeof file !== 'undefined' && file !== null && file !== '') {
-    var website = file.replace(result.root, '')
-    website = website.split('/')[0]
-
-    var websiteConf = result.exist(conf, result.websites[website])
-    if(websiteConf !== false) {
-      return websiteConf
-    }
-  }
 
   return result.exist(conf, result)
 }
