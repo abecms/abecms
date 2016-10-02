@@ -5,12 +5,9 @@ import path from 'path'
 import {
   config,
   FileParser,
-  fileUtils,
   folderUtils,
   getSelectTemplateKeys
-} from '../../cli'
-
-import * as redis from '../services/RedisClient'
+} from '../../'
 
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
@@ -33,19 +30,11 @@ class Manager {
   }
 
   getList() {
-    if(config.redis.enable){
-      redis.get().get('list', function(err, reply) {
-        this._list = JSON.parse(reply)
-      })
-    }
 
     return this._list
   }
 
   setList(list) {
-    if(config.redis.enable){
-      redis.get().set('list', JSON.stringify(list))
-    }
     this._list = list
 
     return this
@@ -53,7 +42,7 @@ class Manager {
 
   init() {
     this._whereKeys = []
-    var p = new Promise((resolve, reject) => {
+    var p = new Promise((resolve) => {
       const pathTemplate = path.join(config.root, config.templates.url)
       getSelectTemplateKeys(pathTemplate)
         .then((whereKeys) => {
@@ -75,10 +64,8 @@ class Manager {
   updateList() {
     this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
     this._list.sort(FileParser.predicatBy('date', -1))
-    if(config.redis.enable){
-      redis.get().set('list', JSON.stringify(this._list))
-    }
-
+    console.log('Manager updated')
+    
     return this
   }
 

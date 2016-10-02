@@ -28,7 +28,7 @@ import {
 	ifCond
 } from './handlebars/index'
 
-import Manager from './models/Manager'
+import Manager from './core/manager/Manager'
 import Page from './models/Page'
 import Handlebars from 'handlebars'
 import {getAttr, getEnclosingTags, escapeTextToRegex} from './helpers/regex-helper'
