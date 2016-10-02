@@ -7,8 +7,7 @@ import {
   FileParser,
   config,
   fileUtils,
-  folderUtils,
-  log
+  folderUtils
 } from '../'
 
 let singleton = Symbol()

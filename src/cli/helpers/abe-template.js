@@ -7,8 +7,6 @@ import {
   ,Util
   ,config
   ,fileUtils
-  ,cli
-  ,log
   ,FileParser
   ,escapeTextToRegex
   ,Hooks

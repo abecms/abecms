@@ -68,9 +68,7 @@ function publishNext(published, tt, cb, i = 0) {
                 msg: e + ''
                 , json:json
               })
-              // log.write('publish-all', e)
               console.log(clc.red(e))
-              // log.write('publish-all', 'ERROR on ' + pub.path .replace(config.root, ''))
               console.log('publish-all', 'ERROR on ' + pub.path.replace(config.root, '').replace(config.data.url, ''))
               resolve()
             })
@@ -143,12 +141,10 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
         })
       })
       .catch((e) => {
-        // log.write('publish-all', e)
         console.log('publish-all', e)
       })
 
   } catch(e) {
-    // log.write('publish-all', e)
     console.log('publish-all', e)
   }
 
