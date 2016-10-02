@@ -1,3 +1,4 @@
+import Handlebars from 'handlebars'
 import moment from 'moment'
 import fse from 'fs-extra'
 import clc from 'cli-color'
@@ -7,30 +8,33 @@ import Util from './core/utils/abe-utils'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 
 import {
-	abeImport,
-	printInput,
-	testObj,
 	translate,
 	cleanTab,
 	math,
-	printBlock,
 	notEmpty,
 	printJson,
 	className,
-	listPage,
 	moduloIf,
+	attrAbe,
+	ifIn,
+	ifCond,
+	isTrue,
+	truncate
+} from './cms/templates/index'
+
+import {
+	abeImport,
+	printBlock,
+	printInput,
+	listPage,
 	abeEngine,
 	compileAbe,
-	attrAbe,
 	folders,
-	printConfig,
-	ifIn,
-	ifCond
-} from './handlebars/index'
+	printConfig
+} from './cms/editor/index'
 
 import Manager from './core/manager/Manager'
 import Page from './models/Page'
-import Handlebars from 'handlebars'
 
 import {dateSlug, dateUnslug} from './core/utils/abe-date'
 import Locales from './core/utils/abe-locales'
@@ -47,12 +51,12 @@ import config from './core/config/config'
 
 import {getAttr, getEnclosingTags, escapeTextToRegex} from './cms/data/regex-helper'
 import removeDuplicateAttr from './cms/data/abe-remove-duplicate-attr'
+import Sql from './cms/data/abe-sql'
 
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
-import Sql from './cms/data/abe-sql'
-
 import {save, checkRequired, saveJson} from './controllers/Save'
+
 import abeProcess from './extend/abe-process'
 import Hooks from './extend/abe-hooks'
 import Plugins from './extend/abe-plugins'
@@ -77,7 +81,6 @@ export {
 	,printInput
 	,abeImport
 	,math
-	,testObj
 	,Create
 	,Sql
 	,abeProcess

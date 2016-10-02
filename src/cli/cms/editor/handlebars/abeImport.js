@@ -6,7 +6,7 @@ import {
   Plugins
   ,fileUtils
   ,Hooks
-} from '../../'
+} from '../../../'
 
 export default function abeImport (file, config, ctx) {
   file = Hooks.instance.trigger('beforeImport', file, config, ctx)

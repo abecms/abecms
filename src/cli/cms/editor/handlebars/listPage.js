@@ -1,7 +1,6 @@
 import Handlebars from 'handlebars'
-import math from '../utils/math'
 import moment from 'moment'
-import {Hooks} from '../../'
+import {math, Hooks} from '../../../'
 
 export default function listPage(file, index, text) {
   var res = ''

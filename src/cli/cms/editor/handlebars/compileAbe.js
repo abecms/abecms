@@ -4,7 +4,7 @@ import xss from 'xss'
 
 import {
   config
-} from '../../'
+} from '../../../'
 
 /**
  * Abe handlebar helper, that retrieve text to add to handlebars templating engine
