@@ -312,7 +312,7 @@ export default class FileParser {
         var name1 = entry.name1 ? entry.name1 : ''
         var name2 = entry.name2 ? entry.name2 : ''
 
-        let exclude = config.files.exclude
+        let exclude =  new RegExp(config.files.exclude);
         if(!exclude.test(name1) && !exclude.test(name2) && entry.type1 !== 'directory' && entry.type2 !== 'directory') {
 			    
           if(typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
