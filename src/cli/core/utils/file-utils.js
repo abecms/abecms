@@ -7,7 +7,7 @@ import {
 	fileAttr,
 	FileParser,
 	config
-} from '../'
+} from '../../'
 
 export default class FileUtils {
 

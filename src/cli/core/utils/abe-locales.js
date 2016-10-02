@@ -3,10 +3,10 @@ import clc from 'cli-color'
 import path from 'path'
 
 import {
-	config
-	,fileUtils
-	,FileParser
-} from '../'
+  config,
+  fileUtils,
+  FileParser
+} from '../../'
 
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
