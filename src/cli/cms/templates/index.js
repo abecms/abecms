@@ -50,7 +50,6 @@ export {
 	notEmpty,
 	printJson,
 	translate,
-	times,
-	truncate
+	times
 }
 
