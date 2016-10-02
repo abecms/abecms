@@ -2,7 +2,7 @@ import moment from 'moment'
 import fse from 'fs-extra'
 import clc from 'cli-color'
 
-import fileAttr from './helpers/file-attr'
+import fileAttr from './cms/data/file-attr'
 import Util from './core/utils/abe-utils'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 
@@ -31,7 +31,6 @@ import {
 import Manager from './core/manager/Manager'
 import Page from './models/Page'
 import Handlebars from 'handlebars'
-import {getAttr, getEnclosingTags, escapeTextToRegex} from './helpers/regex-helper'
 
 import {dateSlug, dateUnslug} from './core/utils/abe-date'
 import Locales from './core/utils/abe-locales'
@@ -45,10 +44,13 @@ import {getTemplate} from './helpers/abe-template'
 import Create from './Create'
 
 import config from './core/config/config'
-import removeDuplicateAttr from './helpers/abe-remove-duplicate-attr'
+
+import {getAttr, getEnclosingTags, escapeTextToRegex} from './cms/data/regex-helper'
+import removeDuplicateAttr from './cms/data/abe-remove-duplicate-attr'
+
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
-import Sql from './helpers/abe-sql'
+import Sql from './cms/data/abe-sql'
 
 import {save, checkRequired, saveJson} from './controllers/Save'
 import abeProcess from './extend/abe-process'

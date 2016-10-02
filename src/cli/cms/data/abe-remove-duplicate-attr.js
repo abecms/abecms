@@ -1,6 +1,6 @@
 import {
   getAttr
-} from '../../cli'
+} from '../../'
 
 function recurseDeleteKey(currentLevel, arrayKeyAttr) {
   var currentArray = arrayKeyAttr.slice(0)
