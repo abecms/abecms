@@ -21,7 +21,6 @@ import {
   ,getAttr
   ,Hooks
   ,Plugins
-  ,TimeMesure
 } from '../'
 
 export default class Utils {
@@ -445,7 +444,6 @@ export default class Utils {
 
   static nextDataList(tplPath, jsonPage, match) {
     var p = new Promise((resolve, reject) => {
-      // var t = new TimeMesure()
       if(typeof jsonPage['abe_source'] === 'undefined' || jsonPage['abe_source'] === null) {
         jsonPage['abe_source'] = {}
       }
@@ -459,7 +457,6 @@ export default class Utils {
       case 'request':
         Utils.requestList(obj, tplPath, match, jsonPage)
             .then(() => {
-              // t.duration(match)
               resolve()
             }).catch((e) => {
               console.log('[ERROR] abe-utils.js requestList', e)
@@ -500,7 +497,6 @@ export default class Utils {
 
   static getDataList(tplPath, text, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      // var t = new TimeMesure('getDataList')
 
       var promises = []
       let util = new Utils()
@@ -508,15 +504,12 @@ export default class Utils {
       Array.prototype.forEach.call(matches, (match) => {
         promises.push(Utils.nextDataList(tplPath, jsonPage, match[0]))
       })
-
       Promise.all(promises)
         .then(() => {
-          // t.duration()
           resolve()
         }).catch(function(e) {
           console.error('abe-utils.js getDataList', e)
         })
-      // return filesRequest
     }).catch(function(e) {
       console.error('abe-utils.js getDataList', e)
     })

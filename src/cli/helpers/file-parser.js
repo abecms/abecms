@@ -14,7 +14,6 @@ import {
 	,Hooks
 	,Plugins
   ,Manager
-  ,TimeMesure
 } from '../'
 
 export default class FileParser {
@@ -398,7 +397,6 @@ export default class FileParser {
     var i = 0
 
     files.forEach(function (file) {
-      // var t = new TimeMesure('add files')
       var cleanFile = file
       var json = FileParser.getJson(file.path)
 
@@ -431,7 +429,6 @@ export default class FileParser {
         cleanFile[keyFirst] = json[keyFirst]
       })
       filesArr.push(cleanFile)
-      // t.duration()
     })
 
     var merged = fileUtils.getFilesMerged(filesArr)
