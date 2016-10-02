@@ -49,10 +49,11 @@ import removeDuplicateAttr from './helpers/abe-remove-duplicate-attr'
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
 import Sql from './helpers/abe-sql'
-import abeProcess from './helpers/abe-process'
+
 import {save, checkRequired, saveJson} from './controllers/Save'
-import Hooks from './helpers/abe-hooks'
-import Plugins from './helpers/abe-plugins'
+import abeProcess from './extend/abe-process'
+import Hooks from './extend/abe-hooks'
+import Plugins from './extend/abe-plugins'
 
 
 import getSelectTemplateKeys from './helpers/abe-get-select-template-keys'

@@ -25,12 +25,12 @@ var abeProcess = function(name, args = []) {
   }catch(err) {
     try {
       file = Plugins.instance.getProcess(name)
-      var stats = fse.statSync(file)
+      stats = fse.statSync(file)
       if (stats.isFile()) {
         process.fork(file, args)
       }
     }catch(err) {
-      
+      console.log('process fork failed')
     }
   }
 }

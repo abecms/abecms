@@ -1,14 +1,10 @@
-import fse from 'fs-extra'
-import clc from 'cli-color'
 import extend from 'extend'
 import path from 'path'
 
 import hooksDefault from '../../hooks/hooks'
 
 import {
-  Util
-  ,FileParser
-  ,config
+  config
   ,fileUtils
   ,Plugins
 } from '../'
