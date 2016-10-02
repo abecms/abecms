@@ -6,7 +6,8 @@ import moment from 'moment'
 import path from 'path'
 
 import {
-	save
+	cli
+	,save
 	,folderUtils
 	,fileUtils
 	,fileAttr
@@ -14,7 +15,7 @@ import {
 	,Hooks
 	,Plugins
   ,Manager
-} from '../'
+} from '../../'
 
 export default class FileParser {
 
@@ -273,16 +274,6 @@ export default class FileParser {
           if(file.cleanName === res.json.file) res.json.path = file.path
         })
       }
-	  	// config.workflow.forEach(function (flow) {
-	  	// 	res[flow] = {
-	  	// 		dir: FileParser.changePathEnv(res.publish.dir, flow),
-	  	// 		file: res.publish.file,
-	  	// 		link: res.publish.link,
-	  	// 		path: FileParser.changePathEnv(res.publish.path, flow),
-	  	// 		json: res.json.path
-	  	// 	}
-	  	// })
-// console.log(res)
     }
     return res
   }

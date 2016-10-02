@@ -3,7 +3,7 @@ import slug from 'limax'
 import {
   config,
   fileUtils
-} from '../../cli'
+} from '../../'
 
 function cleanSlug(str) {
 

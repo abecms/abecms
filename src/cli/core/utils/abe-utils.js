@@ -21,7 +21,7 @@ import {
   ,getAttr
   ,Hooks
   ,Plugins
-} from '../'
+} from '../../'
 
 export default class Utils {
 
@@ -504,6 +504,7 @@ export default class Utils {
       Array.prototype.forEach.call(matches, (match) => {
         promises.push(Utils.nextDataList(tplPath, jsonPage, match[0]))
       })
+
       Promise.all(promises)
         .then(() => {
           resolve()
