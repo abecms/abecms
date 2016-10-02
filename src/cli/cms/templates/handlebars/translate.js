@@ -1,4 +1,4 @@
-import {Locales} from '../../'
+import {Locales} from '../../../'
 
 export default function translate(lang, str) {
   var trad = Locales.instance.i18n

@@ -1,6 +1,6 @@
 import sourceAutocomplete   from './sourceAutocomplete'
 import sourceOption   from './sourceOption'
-import {Hooks} from '../../'
+import {Hooks} from '../../../'
 
 /**
  * Print form input based on input data type {Textarea | text | meta | link | image | ...}

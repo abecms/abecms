@@ -1,5 +1,5 @@
 
-import {Sql} from '../../'
+import {Sql} from '../../../'
 
 export default function sourceAttr(val, params) {
   var hiddenVal = val

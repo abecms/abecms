@@ -1,7 +1,7 @@
 import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
-import math from '../../../../cli/handlebars/utils/math'
-import translate from '../../../../cli/handlebars/utils/translate-front'
+import math from '../../../../cli/'
+import translate from '../../../../cli/'
 
 Handlebars.registerHelper('math', math) // HandlebarsJS unique text helper
 Handlebars.registerHelper('i18nAbe', translate) // HandlebarsJS unique text helper

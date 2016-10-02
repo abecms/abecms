@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import abeEngine from '../abe/abeEngine'
+import abeEngine from '../../../'
 
 /**
  * Print properties inside html tag

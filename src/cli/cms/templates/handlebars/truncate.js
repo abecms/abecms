@@ -13,6 +13,4 @@ export default function truncate(str, len) {
     
     return ''
   }
-  
-  return new Handlebars.SafeString (str)
 }
