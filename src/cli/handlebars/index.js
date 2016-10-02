@@ -2,7 +2,7 @@ import Handlebars from 'handlebars'
 import HandlebarsIntl from 'handlebars-intl'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 
-import hooks 		from '../helpers/abe-hooks'
+import hooks 		from '../'
 
 /* Handlebar utilities */
 import attrAbe 		from './utils/attrAbe'
