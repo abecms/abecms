@@ -13,7 +13,7 @@ import {
   Hooks,
   removeDuplicateAttr,
   Manager
-} from '../../cli'
+} from '../../'
 
 var traverseFileSystem = function (currentPath, arr) {
   var res = []

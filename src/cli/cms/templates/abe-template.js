@@ -11,7 +11,7 @@ import {
   ,escapeTextToRegex
   ,Hooks
   ,Plugins
-} from '../../cli'
+} from '../../'
 
 export function addOrder(text) {
   var regAbe = /{{abe[\S\s].*?key=['|"]([\S\s].*?['|"| ]}})/g

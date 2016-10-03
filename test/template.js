@@ -4,8 +4,8 @@ var config = require('../src/cli').config
 config.set({root: __dirname + '/fixtures'})
 
 var getTemplate = require('../src/cli').getTemplate
-var includePartials = require('../src/cli/helpers/abe-template').includePartials
-var getAbeImport = require('../src/cli/helpers/abe-template').getAbeImport
+var includePartials = require('../src/cli/cms/templates/abe-template').includePartials
+var getAbeImport = require('../src/cli/cms/templates/abe-template').getAbeImport
 var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
 
