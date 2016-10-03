@@ -114,7 +114,7 @@ describe('Request', function() {
     chai.expect(res).to.have.length(2);
   });
   it('Sql.executeWhereClause() IN', function() {
-    var request = Sql.handleSqlRequest('select title from ./ where template IN (`homepage`,`test`) AND title=`homepage`', {})
+    var request = Sql.handleSqlRequest('select title from ./ where template IN (`homepage`,`test`)', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res).to.have.length(1);
   });
