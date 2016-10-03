@@ -34,7 +34,7 @@ import {
 } from './cms/editor/index'
 
 import Manager from './core/manager/Manager'
-import Page from './models/Page'
+import Page from './cms/Page'
 
 import {dateSlug, dateUnslug} from './core/utils/abe-date'
 import Locales from './core/utils/abe-locales'
@@ -44,8 +44,8 @@ import folderUtils from './core/utils/folder-utils'
 import slugify from './core/utils/slugify'
 import {cleanSlug} from './core/utils/slugify'
 
-import {getTemplate} from './helpers/abe-template'
-import Create from './Create'
+import {getTemplate} from './cms/templates/abe-template'
+import Create from './cms/Create'
 
 import config from './core/config/config'
 
@@ -62,7 +62,7 @@ import Hooks from './extend/abe-hooks'
 import Plugins from './extend/abe-plugins'
 
 
-import getSelectTemplateKeys from './helpers/abe-get-select-template-keys'
+import getSelectTemplateKeys from './cms/templates/abe-get-select-template-keys'
 
 export {
 	fileAttr

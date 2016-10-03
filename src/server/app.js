@@ -40,8 +40,6 @@ import {
   middleWebsite,
 } from './middlewares'
 
-import * as redis from '../cli/services/RedisClient'
-
 var abePort = null
 
 if(process.env.ROOT) config.set({root: process.env.ROOT.replace(/\/$/, '') + '/'})
@@ -81,10 +79,6 @@ if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
 }
 
 var app = express(opts)
-
-if(config.redis.enable){
-  redis.connect(config.redis.port, config.redis.host)
-}
   
   // Instantiate Singleton Manager (which lists all blog files)
 Manager.instance.init()
