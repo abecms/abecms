@@ -454,12 +454,12 @@ export default class Sql {
     case 'AND':
       isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
       isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isCorrect = isLeftCorrect && isRightCorrect
+      isCorrect = !isLeftCorrect && !isRightCorrect
       break
     case 'OR':
       isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
       isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isCorrect = isLeftCorrect || isRightCorrect
+      isCorrect = !isLeftCorrect || !isRightCorrect
       break
     case 'IN':
       var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
