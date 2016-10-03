@@ -67,24 +67,29 @@ describe('Request', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`article`', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`abe_meta.template`=`article`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
 
     request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`{{abe_meta.template}}`', this.fixture.jsonHomepage)
     res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
     chai.expect(res, '`abe_meta.template`=`{{abe_meta.template}}`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
 
     request = Sql.handleSqlRequest('select title from ./ where `{{abe_meta.template}}`=`{{abe_meta.template}}`', this.fixture.jsonHomepage)
     res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
     chai.expect(res, '`{{abe_meta.template}}`=`{{abe_meta.template}}`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() !=', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template`!=`homepage`', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`abe_meta.template`!=`homepage`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() >', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `priority`>`1`', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`priority`>`1`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() >=', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `priority`>=`1`', {})
@@ -100,21 +105,25 @@ describe('Request', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `priority`<=`1`', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, ' `priority`<=`1`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() LIKE', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template` LIKE `home`', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`abe_meta.template` LIKE `home`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() NOT LIKE', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT LIKE `home`', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`abe_meta.template` NOT LIKE `home`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() AND', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`homepage` AND title=`homepage`', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`abe_meta.template`=`homepage` AND title=`homepage`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() OR', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`homepage` OR `abe_meta.template`=`article`', {})
@@ -125,19 +134,23 @@ describe('Request', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template` IN (`homepage`,`test`)', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`abe_meta.template` IN (`homepage`,`test`)').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
 
     request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template` IN (`{{articles}}`)', this.fixture.jsonHomepage)
     res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
     chai.expect(res, '`abe_meta.template` IN (`{{articles}}`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('Sql.executeWhereClause() NOT IN', function() {
     var request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT IN (`homepage`,`test`)', {})
     var res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
     chai.expect(res, '`abe_meta.template` NOT IN (`homepage`,`test`)').to.have.length(1);
+    chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
 
     request = Sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT IN (`{{articles}}`)', this.fixture.jsonHomepage)
     res = Sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
     chai.expect(res, '`abe_meta.template` NOT IN (`{{articles}}`)').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
 
   /**
