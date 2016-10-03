@@ -1,11 +1,11 @@
 import path from 'path'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
+import limax from 'limax'
 
 import {
   config,
-  Hooks,
-  cleanSlug
+  Hooks
 } from '../../cli'
 
 var route = function(req, res, next){
@@ -52,7 +52,8 @@ var route = function(req, res, next){
       var ext = filename.split('.')
       ext = ext[ext.length - 1]
       var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
-      var cleanFileName = cleanSlug(filename).replace(`.${config.files.templates.extension}`, `${randID}.${ext}`)
+
+      var cleanFileName = limax(filename, {separateNumbers: false}).replace(`.${ext}`, `${randID}.${ext}`)
 
       filePath = path.join(folderFilePath, cleanFileName)
       var createImage = function () {
