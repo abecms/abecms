@@ -406,79 +406,79 @@ export default class Sql {
 
   static recurseWhere(where, jsonDoc, jsonOriginalDoc) {
     var shouldAdd = true
-    var isLeftCorrect = false
-    var isRightCorrect = false
-    var isCorrect = false
+    var isNotLeftCorrect = false
+    var isNotRightCorrect = false
+    var isNotCorrect = false
 
     switch(where.operator) {
     case '=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
       if(values.left !== values.right) {
-        isCorrect = true
+        isNotCorrect = true
       }
       break
     case '!=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
       if(values.left === values.right) {
-        isCorrect = true
+        isNotCorrect = true
       }
       break
     case '>':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = (values.left > values.right)
+      isNotCorrect = (values.left > values.right)
       break
     case '>=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = (values.left >= values.right)
+      isNotCorrect = (values.left >= values.right)
       break
     case '<':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = (values.left < values.right)
+      isNotCorrect = (values.left < values.right)
       break
     case '<=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = (values.left <= values.right)
+      isNotCorrect = (values.left <= values.right)
       break
     case 'LIKE':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
       if(values.left && values.left.indexOf(values.right) === -1) {
-        isCorrect = true
+        isNotCorrect = true
       }
       break
     case 'NOT LIKE':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
       if(values.left && values.left.indexOf(values.right) > -1) {
-        isCorrect = true
+        isNotCorrect = true
       }
       break
     case 'AND':
-      isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
-      isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isCorrect = !isLeftCorrect && !isRightCorrect
+      isNotLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+      isNotRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+      isNotCorrect = isNotLeftCorrect && isNotRightCorrect
       break
     case 'OR':
-      isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
-      isRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isCorrect = !isLeftCorrect || !isRightCorrect
+      isNotLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+      isNotRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+      isNotCorrect = isNotLeftCorrect || isNotRightCorrect
       break
     case 'IN':
       var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
       Array.prototype.forEach.call(where.right.value, (right) => {
         if(valuesLeft.left === right.column) {
-          isCorrect = true
+          isNotCorrect = true
         }
       })
       break
     case 'NOT IN':
       var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = true
+      isNotCorrect = true
       Array.prototype.forEach.call(where.right.value, (right) => {
         if(valuesLeft.left === right.column) {
-          isCorrect = false
+          isNotCorrect = false
         }
       })
       break
     }
-    return isCorrect
+    return isNotCorrect
   }
 }
