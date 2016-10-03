@@ -432,43 +432,35 @@ export default class Sql {
     switch(where.operator) {
     case '=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      if(values.left !== values.right) {
-        isNotCorrect = true
-      }
+      isNotCorrect = !(values.left === values.right)
       break
     case '!=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      if(values.left === values.right) {
-        isNotCorrect = true
-      }
+      isNotCorrect = !(values.left !== values.right)
       break
     case '>':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left > values.right) ? false : true
+      isNotCorrect = !(values.left > values.right)
       break
     case '>=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left >= values.right) ? false : true
+      isNotCorrect = !(values.left >= values.right)
       break
     case '<':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left < values.right) ? false : true
+      isNotCorrect = !(values.left < values.right)
       break
     case '<=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left <= values.right) ? false : true
+      isNotCorrect = !(values.left <= values.right)
       break
     case 'LIKE':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      if(values.left && values.left.indexOf(values.right) === -1) {
-        isNotCorrect = true
-      }
+      isNotCorrect = !(values.left && values.left.indexOf(values.right) > -1)
       break
     case 'NOT LIKE':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      if(values.left && values.left.indexOf(values.right) > -1) {
-        isNotCorrect = true
-      }
+      isNotCorrect = !(values.left && values.left.indexOf(values.right) === -1)
       break
     case 'AND':
       isNotLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
