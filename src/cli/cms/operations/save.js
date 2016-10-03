@@ -18,7 +18,7 @@ import {
   ,getTemplate
   ,Hooks
   ,cleanSlug
-} from '../'
+} from '../../'
 
 export function checkRequired(text, json) {
   var regAbe = /{{abe[\S\s].*?key=['|"]([\S\s].*?['|"| ]}})/g

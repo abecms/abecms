@@ -53,9 +53,9 @@ import {getAttr, getEnclosingTags, escapeTextToRegex} from './cms/data/regex-hel
 import removeDuplicateAttr from './cms/data/abe-remove-duplicate-attr'
 import Sql from './cms/data/abe-sql'
 
-import abeCreate from './helpers/abe-create'
-import abeDuplicate from './helpers/abe-duplicate'
-import {save, checkRequired, saveJson} from './controllers/Save'
+import abeCreate from './cms/operations/abe-create'
+import abeDuplicate from './cms/operations/abe-duplicate'
+import {save, checkRequired, saveJson} from './cms/operations/save'
 
 import abeProcess from './extend/abe-process'
 import Hooks from './extend/abe-hooks'
