@@ -10,7 +10,7 @@ import {
   Hooks,
   removeDuplicateAttr,
   Manager
-} from '../../cli'
+} from '../../'
 
 var create = function(template, pathCreate, name, req, forceJson = {}, duplicate = false) {
   var p = new Promise((resolve, reject) => {

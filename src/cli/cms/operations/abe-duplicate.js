@@ -11,7 +11,7 @@ import {
   config,
   save,
   abeCreate
-} from '../../cli'
+} from '../../'
 
 var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = false) {
   var p = new Promise((resolve, reject) => {
