@@ -373,39 +373,39 @@ export default class Sql {
     var compare
 
     try {
-      value = eval('jsonDoc.' + where.left.column)
+      var variableLeft = where.left.column
+      var checkIfLeftIsAVariable = regexIsVariable.exec(variableLeft)
+      if(typeof checkIfLeftIsAVariable !== 'undefined' && checkIfLeftIsAVariable !== null && checkIfLeftIsAVariable.length > 0) {
+        variableLeft = checkIfLeftIsAVariable[1]
+      }
+      value = eval('jsonDoc.' + variableLeft)
     }catch(e) {
       // console.log('e', e)
     }
     
-
     if(where.operator === 'IN' || where.operator === 'NOT IN') {
-      
       compare = []
       Array.prototype.forEach.call(where.right.value, (right) => {
-        var matchVariable = regexIsVariable.exec(right.column)
-        if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
+        var matchRightVariable = regexIsVariable.exec(right.column)
+        if(typeof matchRightVariable !== 'undefined' && matchRightVariable !== null && matchRightVariable.length > 0) {
           try {
-            var jsonOriginalValues = eval('jsonOriginalDoc.' + matchVariable[1])
+            var jsonOriginalValues = eval('jsonOriginalDoc.' + matchRightVariable[1])
             Array.prototype.forEach.call(jsonOriginalValues, (jsonOriginalValue) => {
               compare.push(eval('jsonOriginalValue.' + where.left.column))
             })
-          }catch(e) {
-            // console.log('e', e)
-          }
+          }catch(e) {}
         }
         else{
           compare.push(right.column)
         }
       })
-    }
-    else {
+    }else {
       compare = where.right.column
-      var matchVariable = regexIsVariable.exec(compare)
+      var matchRightVariable = regexIsVariable.exec(compare)
 
-      if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
+      if(typeof matchRightVariable !== 'undefined' && matchRightVariable !== null && matchRightVariable.length > 0) {
         try {
-          var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
+          var shouldCompare = eval('jsonOriginalDoc.' + matchRightVariable[1])
           if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
             compare = shouldCompare
           }else {
@@ -413,7 +413,6 @@ export default class Sql {
           }
         }catch(e) {
           compare = null
-          // console.log('e', e)
         }
       }
     }
