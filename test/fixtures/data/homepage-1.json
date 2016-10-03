@@ -3,8 +3,20 @@
     "template": "homepage",
 		"link": "/homepage-1.json",
     "status": "publish",
-    "date": "2016-07-11T16:40:41.974Z",
-		"priority":1
+    "date": "2016-07-11T16:40:41.974Z"
 	},
-	"title":"homepage"
+	"title":"homepage",
+	"priority":1,
+	"articles":[
+		{
+			"abe_meta": {
+		    "template": "article",
+				"link": "/article-1.json",
+		    "status": "publish",
+		    "date": "2016-08-11T16:40:41.974Z",
+				"priority":2
+			},
+			"title":"article"
+		}
+	]
 }

@@ -183,53 +183,6 @@ Notes: You can use variables on from like this
 {{abe type='data' key='articles' desc='articles' source="select * from /{{some_json_key}}/{{some_other}}" display="title" editable='true'"}}
 ```
 
-###WHERE
-
-```html
-{{abe type='data' key='articles' desc='articles' source="select * from articles where title='my title'" display="title" editable='true'"}}
-```
-
-(*Only take article if __title__ is "my title"*)
-
-__OPERATOR__
-
-- =
-- !=
-- LIKE
-
-###AND
-
-```html
-{{abe type='data' key='articles' desc='articles' source="select * from articles where template="article" AND title='my title'" display="title" editable='true'"}}
-```
-
-(*Only take article the type of the template is __article__ and the __title__ is "my title"*)
-
-###OR
-
-```
-Not working
-```
-
-###LIMIT
-
-```html
-{{abe type='data' key='articles' desc='articles' source="select * from articles where template="article" AND title='my title' LIMIT 2" display="title" editable='true'"}}
-```
-
-(*Will not add more than __two__ article because of the limit*)
-
-ORDER BY date
-- DESC
-- ASC
-- RANDOM
-
-```html
-{{abe type='data' key='articles' desc='articles' source="select * from articles where template="article" AND title='my title' order by date DESC LIMIT 2" display="title" editable='true'"}}
-```
-
-(*Order by date only*)
-
 ##Use it
 
 ```html
@@ -237,45 +190,6 @@ ORDER BY date
 	<span classs="author">{{this.title}}</span>
 {{/each}}
 ```
-
-> complex json
-
-If you use a complex json data source for example
-
-```json
-{
-	"articles": [
-		{"title":"my title number 1"},
-		{"title":"my title number 1"}
-	]
-}
-```
-
-You request may look like this
-
-```html
-{{abe type='data' key='articles' desc='articles' source="select * from articles where \`articles.title\`='my title number 1'" display="articles.title" editable='true'"}}
-```
-
-notice the use of sql syntax ```\` ``` on ```\`articles.title\` ``` to select title from article object
-
-
-##Dynamic variable select
-
-Select where can have dynamic variable too
-
-we want to use colors value inside sql where select
-First we declare an array of colors (*inline / file / webservice*)
-
-```html
-{{abe type='data' key='colors' desc='Pick a color' source='["red", "green", "yellow"]'}}
-```
-then we select all article with title = colors using ```{{}}``` around variable
-
-```html
-{{abe type='data' key='articles' desc='articles' source="select * from articles where title='{{colors}}'" editable='true'"}}
-```
-(*if the user choose "red" then save the request will look like* __```select * from articles where title='red'```__)
 
 ##Other parameter
 
@@ -298,3 +212,6 @@ will add default content values
 > prefill-quantity="10"
 
 will as many content as the value
+
+
+[More documentation about abe sql](abe-sql.md)
