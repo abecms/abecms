@@ -371,15 +371,10 @@ export default class Sql {
     var value
     var compare
 
-    if((where.left.column === 'template' || where.left.column === 'abe_meta.template')
-      && typeof jsonDoc['abe_meta'] !== 'undefined' && jsonDoc['abe_meta'] !== null) {
-      value = FileParser.getTemplate(jsonDoc['abe_meta'].template)
-    }else {
-      try {
-        value = eval('jsonDoc.' + where.left.column)
-      }catch(e) {
-        // console.log('e', e)
-      }
+    try {
+      value = eval('jsonDoc.' + where.left.column)
+    }catch(e) {
+      // console.log('e', e)
     }
     compare = where.right.column
 
