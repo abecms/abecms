@@ -4,7 +4,7 @@ import slug from 'limax'
 
 import {
   config
-} from './'
+} from '../'
 
 export default class Create {
 
