@@ -367,66 +367,6 @@ export default class Sql {
     return res
   }
 
-  static whereEquals(where, value, compare) {
-    var shouldAdd = true
-    if(where === 'template' || where === 'abe_meta.template') {
-      if(value && value.indexOf('/') > -1 && value !== compare) {
-        shouldAdd = false
-      }else if(value && value.indexOf('/') === -1 && compare && compare.indexOf(value) === -1) {
-        shouldAdd = false
-      }
-    }else {
-      if(value !== compare) { // only none is Array
-        shouldAdd = false
-      }
-    }
-    return shouldAdd
-  }
-
-  static whereNotEquals(where, value, compare, json) {
-    var shouldAdd = true
-    if(where.left === 'template' || where.left === 'abe_meta.template') {
-      if (value && value.indexOf('/') > -1 && value === compare) { 
-        shouldAdd = false 
-      } else if (value && value.indexOf('/') === -1 && compare && compare.indexOf(value) !== -1) { 
-        shouldAdd = false
-      }
-    }else {
-      if(value === compare) { // only none is Array
-        shouldAdd = false
-      }
-    }
-    return shouldAdd
-  }
-
-  static whereLike(where, value, compare, json) {
-    var shouldAdd = true
-    if(where.left === 'template' || where.left === 'abe_meta.template') {
-      if(value && value.indexOf(compare) === -1) {
-        shouldAdd = false
-      }
-    }else {
-      if(value && value.indexOf(compare) === -1) {
-        shouldAdd = false
-      }
-    }
-    return shouldAdd
-  }
-
-  static whereNotLike(where, value, compare, json) {
-    var shouldAdd = true
-    if(where.left === 'template' || where.left === 'abe_meta.template') {
-      if(value && value.indexOf(compare) >= -1) {
-        shouldAdd = false
-      }
-    }else {
-      if(value && value.indexOf(compare) > -1) {
-        shouldAdd = false
-      }
-    }
-    return shouldAdd
-  }
-
   static getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
     var value
     var compare
@@ -473,11 +413,15 @@ export default class Sql {
     switch(where.operator) {
     case '=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = Sql.whereEquals(where.left.column, values.left, values.right)
+      if(values.left !== values.right) {
+        isCorrect = true
+      }
       break
     case '!=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = Sql.whereNotEquals(where.left.column, values.left, values.right)
+      if(values.left === values.right) {
+        isCorrect = true
+      }
       break
     case '>':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
@@ -497,11 +441,15 @@ export default class Sql {
       break
     case 'LIKE':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = Sql.whereLike(where.left.column, values.left, values.right)
+      if(values.left && values.left.indexOf(values.right) === -1) {
+        isCorrect = true
+      }
       break
     case 'NOT LIKE':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isCorrect = Sql.whereNotLike(where.left.column, values.left, values.right)
+      if(values.left && values.left.indexOf(values.right) > -1) {
+        isCorrect = true
+      }
       break
     case 'AND':
       isLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
@@ -516,7 +464,7 @@ export default class Sql {
     case 'IN':
       var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
       Array.prototype.forEach.call(where.right.value, (right) => {
-        if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
+        if(valuesLeft.left === right.column) {
           isCorrect = true
         }
       })
@@ -525,13 +473,12 @@ export default class Sql {
       var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
       isCorrect = true
       Array.prototype.forEach.call(where.right.value, (right) => {
-        if (Sql.whereEquals(where.left.column, valuesLeft.left, right.column)) {
+        if(valuesLeft.left === right.column) {
           isCorrect = false
         }
       })
       break
     }
-
     return isCorrect
   }
 }
