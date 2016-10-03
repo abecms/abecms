@@ -339,7 +339,7 @@ export default class Sql {
       if(limit < maxLimit || maxLimit === -1) {
         if(typeof wheres !== 'undefined' && wheres !== null) {
 
-          if(Sql.recurseWhere(wheres, file.publish, jsonPage)) {
+          if(!Sql.recurseWhere(wheres, file.publish, jsonPage)) {
             var json = JSON.parse(JSON.stringify(file.publish))
             var jsonValues = {}
 
@@ -368,6 +368,7 @@ export default class Sql {
   }
 
   static getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
+    var regexIsVariable = /^{{(.*)}}$/
     var value
     var compare
 
@@ -376,20 +377,44 @@ export default class Sql {
     }catch(e) {
       // console.log('e', e)
     }
-    compare = where.right.column
+    
 
-    var matchVariable = /^{{(.*)}}$/.exec(compare)
-    if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
-      try {
-        var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
-        if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
-          compare = shouldCompare
-        }else {
-          compare = null
+    if(where.operator === 'IN' || where.operator === 'NOT IN') {
+      
+      compare = []
+      Array.prototype.forEach.call(where.right.value, (right) => {
+        var matchVariable = regexIsVariable.exec(right.column)
+        if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
+          try {
+            var jsonOriginalValues = eval('jsonOriginalDoc.' + matchVariable[1])
+            Array.prototype.forEach.call(jsonOriginalValues, (jsonOriginalValue) => {
+              compare.push(eval('jsonOriginalValue.' + where.left.column))
+            })
+          }catch(e) {
+            // console.log('e', e)
+          }
         }
-      }catch(e) {
-        compare = null
-        // console.log('e', e)
+        else{
+          compare.push(right.column)
+        }
+      })
+    }
+    else {
+      compare = where.right.column
+      var matchVariable = regexIsVariable.exec(compare)
+
+      if(typeof matchVariable !== 'undefined' && matchVariable !== null && matchVariable.length > 0) {
+        try {
+          var shouldCompare = eval('jsonOriginalDoc.' + matchVariable[1])
+          if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+            compare = shouldCompare
+          }else {
+            compare = null
+          }
+        }catch(e) {
+          compare = null
+          // console.log('e', e)
+        }
       }
     }
 
@@ -449,7 +474,7 @@ export default class Sql {
     case 'AND':
       isNotLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
       isNotRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = isNotLeftCorrect && isNotRightCorrect
+      isNotCorrect = (isNotLeftCorrect || isNotRightCorrect) ? true : false
       break
     case 'OR':
       isNotLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
@@ -457,19 +482,20 @@ export default class Sql {
       isNotCorrect = isNotLeftCorrect || isNotRightCorrect
       break
     case 'IN':
-      var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      Array.prototype.forEach.call(where.right.value, (right) => {
-        if(valuesLeft.left === right.column) {
-          isNotCorrect = true
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isNotCorrect = true
+      Array.prototype.forEach.call(values.right, (right) => {
+        if(values.left === right) {
+          isNotCorrect = false
         }
       })
       break
     case 'NOT IN':
-      var valuesLeft = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = true
-      Array.prototype.forEach.call(where.right.value, (right) => {
-        if(valuesLeft.left === right.column) {
-          isNotCorrect = false
+      var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+      isNotCorrect = false
+      Array.prototype.forEach.call(values.right, (right) => {
+        if(values.left === right) {
+          isNotCorrect = true
         }
       })
       break
