@@ -7,8 +7,6 @@ import {
   ,Util
   ,config
   ,fileUtils
-  ,cli
-  ,log
   ,FileParser
   ,escapeTextToRegex
   ,Hooks
@@ -59,7 +57,7 @@ export function includePartials(text) {
     var partial = ''
     file = path.join(config.root, config.partials, file)
     if(fileUtils.isFile(file)) {
-      partial = fse.readFileSync(file, 'utf8')
+      partial = includePartials(fse.readFileSync(file, 'utf8'))
     }
     text = text.replace(escapeTextToRegex(abeImport, 'g'), partial)
   })

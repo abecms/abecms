@@ -8,7 +8,6 @@ import {
   getTemplate,
   config,
   save,
-  log,
   abeCreate,
   Hooks
 } from '../../cli'

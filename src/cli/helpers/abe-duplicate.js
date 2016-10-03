@@ -10,8 +10,7 @@ import {
   getTemplate,
   config,
   save,
-  abeCreate,
-  log
+  abeCreate
 } from '../../cli'
 
 var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = false) {

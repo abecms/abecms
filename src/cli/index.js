@@ -1,58 +1,68 @@
-import fileAttr from './helpers/file-attr'
-import Util from './helpers/abe-utils'
-import handlebarsHelperSlugify from 'handlebars-helper-slugify'
+import Handlebars from 'handlebars'
 import moment from 'moment'
 import fse from 'fs-extra'
 import clc from 'cli-color'
 
+import fileAttr from './cms/data/file-attr'
+import Util from './core/utils/abe-utils'
+import handlebarsHelperSlugify from 'handlebars-helper-slugify'
+
 import {
-	abeImport,
-	printInput,
-	testObj,
 	translate,
 	cleanTab,
 	math,
-	printBlock,
 	notEmpty,
 	printJson,
 	className,
-	listPage,
 	moduloIf,
+	attrAbe,
+	ifIn,
+	ifCond,
+	isTrue,
+	truncate
+} from './cms/templates/index'
+
+import {
+	abeImport,
+	printBlock,
+	printInput,
+	listPage,
 	abeEngine,
 	compileAbe,
-	attrAbe,
 	folders,
-	printConfig,
-	ifIn,
-	ifCond
-} from './handlebars/index'
+	printConfig
+} from './cms/editor/index'
 
-import Manager from './models/Manager'
+import Manager from './core/manager/Manager'
 import Page from './models/Page'
-import Handlebars from 'handlebars'
-import {getAttr, getEnclosingTags, escapeTextToRegex} from './helpers/regex-helper'
-import slugify from './helpers/slugify'
-import {dateSlug, dateUnslug} from './helpers/abe-date'
-import {cleanSlug} from './helpers/slugify'
+
+import {dateSlug, dateUnslug} from './core/utils/abe-date'
+import Locales from './core/utils/abe-locales'
+import FileParser from './core/utils/file-parser'
+import fileUtils from './core/utils/file-utils'
+import folderUtils from './core/utils/folder-utils'
+import slugify from './core/utils/slugify'
+import {cleanSlug} from './core/utils/slugify'
+
 import {getTemplate} from './helpers/abe-template'
-import folderUtils from './helpers/folder-utils'
-import FileParser from './helpers/file-parser'
 import Create from './Create'
-import fileUtils from './helpers/file-utils'
-import config from './helpers/abe-config'
-import log from './helpers/abe-logs'
-import removeDuplicateAttr from './helpers/abe-remove-duplicate-attr'
+
+import config from './core/config/config'
+
+import {getAttr, getEnclosingTags, escapeTextToRegex} from './cms/data/regex-helper'
+import removeDuplicateAttr from './cms/data/abe-remove-duplicate-attr'
+import Sql from './cms/data/abe-sql'
+
 import abeCreate from './helpers/abe-create'
 import abeDuplicate from './helpers/abe-duplicate'
-import Sql from './helpers/abe-sql'
-import abeProcess from './helpers/abe-process'
 import {save, checkRequired, saveJson} from './controllers/Save'
-import Hooks from './helpers/abe-hooks'
-import Plugins from './helpers/abe-plugins'
-import Locales from './helpers/abe-locales'
+
+import abeProcess from './extend/abe-process'
+import Hooks from './extend/abe-hooks'
+import Plugins from './extend/abe-plugins'
+
 
 import getSelectTemplateKeys from './helpers/abe-get-select-template-keys'
-import TimeMesure from './helpers/abe-time-mesure'
 
 export {
 	fileAttr
@@ -71,7 +81,6 @@ export {
 	,printInput
 	,abeImport
 	,math
-	,testObj
 	,Create
 	,Sql
 	,abeProcess
@@ -94,7 +103,6 @@ export {
 	,escapeTextToRegex
 	,config
 	,getTemplate
-	,log
 	,removeDuplicateAttr
 	,save
 	,Hooks
@@ -107,7 +115,6 @@ export {
 	,Manager
 	,Page
 	,getSelectTemplateKeys
-	,TimeMesure
 }
 
 export {compileAbe as compileAbe}

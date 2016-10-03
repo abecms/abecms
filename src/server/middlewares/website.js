@@ -18,7 +18,6 @@ import {
   fileUtils,
   folderUtils,
   config,
-  log,
   Page,
   Locales,
   abeProcess,
