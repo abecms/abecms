@@ -91,7 +91,7 @@
   },
   "sessionSecret": "ThIsIsAbE",
   "abeEngine": "../views/template-engine",
-  "defaultPartials": "../../../server/views/partials",
+  "defaultPartials": "../../../../server/views/partials",
   "pluginsPartials": "partials",
   "partials": "templates/partials",
   "custom": "custom",
