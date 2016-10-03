@@ -6,7 +6,6 @@ import {
   FileParser,
   fileUtils,
   config,
-  log,
   Page,
   Locales,
   getTemplate,
@@ -171,7 +170,6 @@ var route = function(req, res, next) {
       res.set('Content-Type', 'text/plain')
       res.send(_text)
     }else {
-      log.duration('load page: ' + _filePath, ((new Date().getTime() - dateStart.getTime()) / 1000))
       res.render(config.abeEngine, EditorVariables)
     }
   }).catch((e) => {

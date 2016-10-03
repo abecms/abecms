@@ -1,5 +1,3 @@
-// ./node_modules/.bin/babel-node src/cli/process/publish-all.js ABE_WEBSITE=/path/to/website
-// ./node_modules/.bin/babel-node src/cli/process/publish-all.js FILEPATH=/path/to/website/path/to/file.html ABE_WEBSITE=/path/to/website
 import path from 'path'
 import {
   config
@@ -8,7 +6,7 @@ import {
   ,folderUtils
   ,save
   ,Hooks
-} from '../../cli'
+} from '../../'
 
 var pConfig = {}
 Array.prototype.forEach.call(process.argv, (item) => {

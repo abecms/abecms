@@ -10,7 +10,6 @@ import {
   getTemplate,
   save,
   config,
-  log,
   Hooks,
   removeDuplicateAttr,
   Manager

@@ -339,7 +339,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
       dir = process.env.ROOT.replace(/\/$/, '')
     }
 
-    const updateJson = spawn('node', ['--harmony', __dirname + '/cli/process/update-json.js', 'ABE_WEBSITE=' + dir])
+    const updateJson = spawn('node', ['--harmony', __dirname + '/cli/cms/data/update-json.js', 'ABE_WEBSITE=' + dir])
 
     updateJson.stdout.on('data', (data) => {
       console.log(clc.cyan('stdout'), data.toString())
