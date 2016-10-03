@@ -445,19 +445,19 @@ export default class Sql {
       break
     case '>':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left > values.right)
+      isNotCorrect = (values.left > values.right) ? false : true
       break
     case '>=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left >= values.right)
+      isNotCorrect = (values.left >= values.right) ? false : true
       break
     case '<':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left < values.right)
+      isNotCorrect = (values.left < values.right) ? false : true
       break
     case '<=':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = (values.left <= values.right)
+      isNotCorrect = (values.left <= values.right) ? false : true
       break
     case 'LIKE':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
@@ -479,7 +479,7 @@ export default class Sql {
     case 'OR':
       isNotLeftCorrect = Sql.recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
       isNotRightCorrect = Sql.recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = isNotLeftCorrect || isNotRightCorrect
+      isNotCorrect = (isNotLeftCorrect && isNotRightCorrect) ? true : false
       break
     case 'IN':
       var values = Sql.getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
