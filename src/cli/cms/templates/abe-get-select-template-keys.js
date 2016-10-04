@@ -54,9 +54,6 @@ var findTemplates = function(templatesPath) {
 
 var recurseWhereVariables = function (where) {
   var ar = []
-
-  // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  // console.log('where', where.left)
   switch(where.operator) {
   case 'AND':
     var arLeft = recurseWhereVariables(where.left)
@@ -71,9 +68,33 @@ var recurseWhereVariables = function (where) {
   case 'IN':
     break
   case 'NOT IN':
+    if(where.left.column.indexOf('{{') > -1) {
+      ar.push(where.left.column.replace(/\{\{(.*?)\}\}/, '$1'))
+    }
+    else{
+      ar.push(where.left.column)
+    }
+
+    where.right.value.forEach(function (value) {
+      if(value.column.indexOf('{{') > -1) {
+        ar.push(value.column.replace(/\{\{(.*?)\}\}/, '$1'))
+      }
+    })
+    
     break
   default:
-    return [where.left.column]
+    if(where.left.column.indexOf('{{') > -1) {
+      ar.push(where.left.column.replace(/\{\{(.*?)\}\}/, '$1'))
+    }
+    else{
+      ar.push(where.left.column)
+    }
+    if(where.right.value && where.right.value.indexOf('{{') > -1) {
+      ar.push(where.right.value.replace(/\{\{(.*?)\}\}/, '$1'))
+    }
+    if(where.right.column && where.right.column.indexOf('{{') > -1) {
+      ar.push(where.right.column.replace(/\{\{(.*?)\}\}/, '$1'))
+    }
     break
   }
 
@@ -91,8 +112,6 @@ var findRequestColumns = function(templatesList) {
 
       Array.prototype.forEach.call(matches, (match) => {
         var obj = Util.getAllAttributes(match[0], {})
-        obj = Util.sanitizeSourceAttribute(obj, {})
-        
         var type = Sql.getSourceType(obj.sourceString)
 
         switch (type) {
