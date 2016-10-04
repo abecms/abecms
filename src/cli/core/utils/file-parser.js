@@ -7,6 +7,7 @@ import path from 'path'
 
 import {
 	cli
+  ,cmsData
 	,save
 	,folderUtils
 	,fileUtils
@@ -267,13 +268,6 @@ export default class FileParser {
       res.draft.path = path.join(res.draft.dir, res.draft.file)
       res.publish.path = path.join(res.publish.dir, res.publish.file)
       res.json.path = path.join(res.json.dir, res.json.file)
-
-      if(!fileUtils.isFile(res.json.path) && folderUtils.isFolder(res.json.dir)) {
-        var files = fileAttr.filterLatestVersion(FileParser.getFiles(res.json.dir), 'draft')
-        Array.prototype.forEach.call(files, (file) => {
-          if(file.cleanName === res.json.file) res.json.path = file.path
-        })
-      }
     }
     return res
   }
@@ -466,7 +460,7 @@ export default class FileParser {
   static deleteFile(filePath) {
     filePath = Hooks.instance.trigger('beforeDeleteFile', filePath)
 
-    var revisions = fileAttr.getVersions(filePath)
+    var revisions = cmsData.revision.getVersions(filePath)
 
     Array.prototype.forEach.call(revisions, (revision) => {
       FileParser.removeFile(revision.path, revision.htmlPath)
