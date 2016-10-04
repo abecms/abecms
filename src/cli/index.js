@@ -50,7 +50,7 @@ import Create from './cms/Create'
 import config from './core/config/config'
 
 import {getAttr, getEnclosingTags, escapeTextToRegex} from './cms/data/regex-helper'
-import removeDuplicateAttr from './cms/data/abe-remove-duplicate-attr'
+
 import Sql from './cms/data/abe-sql'
 
 import abeCreate from './cms/operations/abe-create'
@@ -61,11 +61,14 @@ import abeProcess from './extend/abe-process'
 import Hooks from './extend/abe-hooks'
 import Plugins from './extend/abe-plugins'
 
-
 import getSelectTemplateKeys from './cms/templates/abe-get-select-template-keys'
 
+import * as cmsData from './cms/data'
+
 export {
-	fileAttr
+	cmsData
+
+	,fileAttr
 	,moment
 	,fse
 	,Handlebars
@@ -103,7 +106,6 @@ export {
 	,escapeTextToRegex
 	,config
 	,getTemplate
-	,removeDuplicateAttr
 	,save
 	,Hooks
 	,Plugins

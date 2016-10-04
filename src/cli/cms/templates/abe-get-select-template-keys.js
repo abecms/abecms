@@ -11,7 +11,6 @@ import {
   save,
   config,
   Hooks,
-  removeDuplicateAttr,
   Manager
 } from '../../'
 
