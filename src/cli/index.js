@@ -61,10 +61,12 @@ import Plugins from './extend/abe-plugins'
 
 import * as cmsData from './cms/data'
 import * as cmsTemplate from './cms/templates'
+import * as coreUtils from './core/utils'
 
 export {
 	cmsData
 	,cmsTemplate
+	,coreUtils
 
 	,fileAttr
 	,moment

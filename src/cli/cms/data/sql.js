@@ -2,6 +2,7 @@ import {parse} from 'node-sqlparser'
 import {Promise} from 'es6-promise'
 import path from 'path'
 import {
+  coreUtils,
   config,
   Manager,
   FileParser,
@@ -127,47 +128,6 @@ export function handleSqlRequest(str, jsonPage) {
   }
 }
 
-export function sortByDateDesc(a, b) {
-  var dateA = new Date(a.date)
-  var dateB = new Date(b.date)
-  if(dateA < dateB) {
-    return 1
-  }else if(dateA > dateB) {
-    return -1
-  }
-  return 0
-}
-
-export function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex -= 1
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex]
-    array[currentIndex] = array[randomIndex]
-    array[randomIndex] = temporaryValue
-  }
-
-  return array
-}
-
-export function sortByDateAsc(a, b) {
-  var dateA = new Date(a.date)
-  var dateB = new Date(b.date)
-  if(dateA > dateB) {
-    return 1
-  }else if(dateA < dateB) {
-    return -1
-  }
-  return 0
-}
-
 export function getDataSource(str) {
   var res = str.substring(str.indexOf('source=') + 8, str.length)
 
@@ -229,12 +189,12 @@ export function getFromDirectory(statement, tplPath){
 export function executeOrderByClause(files, orderby){
   if(typeof orderby !== 'undefined' && orderby !== null) {
     if(orderby.column.toLowerCase() === 'random') {
-      shuffle(files)
+      files = coreUtils.sort.shuffle(files)
     }else if(orderby.column.toLowerCase() === 'date') {
       if(orderby.type === 'ASC') {
-        files.sort(sortByDateAsc)
+        files.sort(coreUtils.sort.byDateAsc)
       }else if(orderby.type === 'DESC') {
-        files.sort(sortByDateDesc)
+        files.sort(coreUtils.sort.byDateDesc)
       }
     }
   }
