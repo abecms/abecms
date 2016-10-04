@@ -5,7 +5,6 @@ import {
   coreUtils,
   config,
   Manager,
-  FileParser,
   getAttr
 } from '../../'
 
@@ -213,7 +212,7 @@ export function executeFromClause(statement, pathFromClause){
   var fromDirectory = getFromDirectory(from, pathFromClause)
 
   var list = Manager.instance.getList()
-  var files_array = list.filter((element, index) => {
+  var files_array = list.filter((element) => {
     if(element.publish) {
       if (element.path.indexOf(fromDirectory) > -1) {
         return true
@@ -378,42 +377,42 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
 }
 
 export function recurseWhere(where, jsonDoc, jsonOriginalDoc) {
-  var shouldAdd = true
   var isNotLeftCorrect = false
   var isNotRightCorrect = false
   var isNotCorrect = false
+  var values
 
   switch(where.operator) {
   case '=':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left === values.right)
     break
   case '!=':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left !== values.right)
     break
   case '>':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left > values.right)
     break
   case '>=':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left >= values.right)
     break
   case '<':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left < values.right)
     break
   case '<=':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left <= values.right)
     break
   case 'LIKE':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left && values.left.indexOf(values.right) > -1)
     break
   case 'NOT LIKE':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = !(values.left && values.left.indexOf(values.right) === -1)
     break
   case 'AND':
@@ -427,7 +426,7 @@ export function recurseWhere(where, jsonDoc, jsonOriginalDoc) {
     isNotCorrect = (isNotLeftCorrect && isNotRightCorrect) ? true : false
     break
   case 'IN':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = true
     Array.prototype.forEach.call(values.right, (right) => {
       if(values.left === right) {
@@ -436,7 +435,7 @@ export function recurseWhere(where, jsonDoc, jsonOriginalDoc) {
     })
     break
   case 'NOT IN':
-    var values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
     isNotCorrect = false
     Array.prototype.forEach.call(values.right, (right) => {
       if(values.left === right) {
