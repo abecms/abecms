@@ -1,17 +1,7 @@
-import fse from 'fs-extra'
-import path from 'path'
-import {
-  cli
-  ,FileParser
-  ,fileUtils
-  ,dateUnslug
-  ,config
-  ,Manager
-} from '../../'
+import {dateUnslug} from '../../'
 
 var fullAttr = '-abe-(.+?)(?=\.'
 var captureAttr = '-abe-(.+?)(?=\.'
-var oneAttr = ['[\\|]?', '=(.)*?(?=[\||\\]])']
 
 /**
  * Class Attr
@@ -30,10 +20,10 @@ class Attr {
   }
 
   /**
-   * @return {Object} attributs extracted from string as an object
+   * @return {Object} attributes extracted from string as an object
    */
   extract() {
-    var rex = new RegExp(captureAttr + this.getExtention() + ')')
+    var rex = new RegExp(captureAttr + this.getExtension() + ')')
     if(rex.test(this.str)) {
       var arrAttr = this.str.match(rex)[0].replace('-abe-', '')
       this.val = {'s': arrAttr[0], 'd': dateUnslug(arrAttr.slice(1), this.str)}
@@ -42,41 +32,41 @@ class Attr {
   }
 
   /**
-   * @return {String} str without an attributs
+   * @return {String} str without attributes
    */
   remove() {
-    return this.str.replace(new RegExp(fullAttr + this.getExtention() + ')'), '')
+    return this.str.replace(new RegExp(fullAttr + this.getExtension() + ')'), '')
   }
  
-  getExtention(){
+  getExtension(){
     var ext = this.str.split('.')
     return ext[ext.length - 1]
   }
 
   /**
-   * Insert attributs to the string
+   * Insert attributes to the string
    * @param  {String} string composed of a status (ex: v for validate, d for draft ...) and a date
-   * @return {String} the new string with added attributs
+   * @return {String} the new string with added attributes
    */
   insert(newValues) {
     var strWithoutAttr = this.remove()
-    strWithoutAttr = strWithoutAttr.replace(new RegExp('\\.' + this.getExtention()), '')
-    return strWithoutAttr + '-abe-' + newValues + '.' + this.getExtention()
+    strWithoutAttr = strWithoutAttr.replace(new RegExp('\\.' + this.getExtension()), '')
+    return strWithoutAttr + '-abe-' + newValues + '.' + this.getExtension()
   }
 
 }
 
 /**
  * Class FileAttr
- * Manage string with attributs encoded inside
+ * Manage string with attributes encoded inside
  */
 export default class FileAttr {
 
   /**
-   * Add attributs or modify them if they already exists
+   * Add attributes or modify them if they already exists
    * @param {String} str the string to modify
-   * @param {Object} options object with attributs to add
-   * @return {String} the string with the new attributs
+   * @param {Object} options object with attributes to add
+   * @return {String} the string with the new attributes
    */
   static add(str, options) {
     var attr = new Attr(str)
@@ -84,7 +74,7 @@ export default class FileAttr {
   }
 
   /**
-   * Remove attributs from string
+   * Remove attributes from string
    * @param {String} str the string to modify
    * @return {String} the string modified
    */
@@ -93,15 +83,15 @@ export default class FileAttr {
   }
 
   /**
-   * @param  {String} str the string to get attributs from
-   * @return {object|String} object (all the attributs) if the key is null, if not the value of the atrtibuts
+   * @param  {String} str the string to get attributes from
+   * @return {object|String} object (all the attributes) if the key is null, if not the value of the atrtibuts
    */
   static get(str) {
     return new Attr(str).val
   }
 
   /**
-   * @param  {String} str the string to test attributs from
+   * @param  {String} str the string to test attributes from
    * @return {boolean} true if string has attr
    */
   static test(str) {
