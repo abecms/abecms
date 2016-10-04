@@ -51,8 +51,6 @@ export function includePartials(text) {
   var abeImports = getAbeImport(text)
 
   Array.prototype.forEach.call(abeImports, (abeImport) => {
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('abeImport', abeImport)
     var obj = Util.getAllAttributes(abeImport, {})
 
     var file = obj.file
