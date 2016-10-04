@@ -5,7 +5,7 @@ import {
   fileUtils,
   FileParser,
   Util,
-  Sql,
+  cmsData,
   cleanSlug,
   getTemplate,
   save,
@@ -93,11 +93,11 @@ var findRequestColumns = function(templatesList) {
         var obj = Util.getAllAttributes(match[0], {})
         obj = Util.sanitizeSourceAttribute(obj, {})
         
-        var type = Sql.getSourceType(obj.sourceString)
+        var type = cmsData.sql.getSourceType(obj.sourceString)
 
         switch (type) {
         case 'request':
-          var request = Sql.handleSqlRequest(obj.sourceString, {})
+          var request = cmsData.sql.handleSqlRequest(obj.sourceString, {})
           if(typeof request.columns !== 'undefined' && request.columns !== null) {
             Array.prototype.forEach.call(request.columns, (column) => {
               whereKeys.push(column)

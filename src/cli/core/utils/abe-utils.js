@@ -10,7 +10,7 @@ import path from 'path'
 
 import {
   config
-  ,Sql
+  ,cmsData
   ,folderUtils
   ,fileUtils
   ,FileParser
@@ -305,7 +305,7 @@ export default class Utils {
 
   static requestList(obj, tplPath, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      Sql.executeQuery(tplPath, match, jsonPage)
+      cmsData.sql.executeQuery(tplPath, match, jsonPage)
         .then((data) => {
           if (!jsonPage['abe_source']) {
             jsonPage['abe_source'] = {}
@@ -338,7 +338,7 @@ export default class Utils {
 
   static valueList(obj, match, jsonPage) {
     var p = new Promise((resolve, reject) => {
-      var value = Sql.getDataSource(match)
+      var value = cmsData.sql.getDataSource(match)
 
       if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
         try{
@@ -451,7 +451,7 @@ export default class Utils {
       var obj = Utils.getAllAttributes(match, jsonPage)
       obj = Utils.sanitizeSourceAttribute(obj, jsonPage)
       
-      var type = Sql.getSourceType(obj.sourceString)
+      var type = cmsData.sql.getSourceType(obj.sourceString)
 
       switch (type) {
       case 'request':

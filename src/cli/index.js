@@ -51,8 +51,6 @@ import config from './core/config/config'
 
 import {getAttr, getEnclosingTags, escapeTextToRegex} from './cms/data/regex-helper'
 
-import Sql from './cms/data/abe-sql'
-
 import abeCreate from './cms/operations/abe-create'
 import abeDuplicate from './cms/operations/abe-duplicate'
 import {save, checkRequired, saveJson} from './cms/operations/save'
@@ -85,7 +83,6 @@ export {
 	,abeImport
 	,math
 	,Create
-	,Sql
 	,abeProcess
 	,translate
 	,printBlock
