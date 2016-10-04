@@ -8,7 +8,7 @@ import {
   save,
   config,
   Hooks,
-  removeDuplicateAttr,
+  cmsData,
   Manager
 } from '../../'
 
@@ -29,7 +29,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
         var tpl = templatePath
         var text = getTemplate(tpl)
         if (duplicate) {
-          json = removeDuplicateAttr(text, json)
+          json = cmsData.removeDuplicateAttr(text, json)
         }
         text = Util.removeDataList(text)
         var resHook = Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
