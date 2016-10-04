@@ -67,6 +67,15 @@ export function escapeAbeValuesFromStringRequest(str, jsonPage) {
   return str
 }
 
+/**
+ * analyse and create an object from request sql string
+ *
+ * Example: handleSqlRequest('select title from ./ where `abe_meta.template`=`{{article}}`', {article: "test"})
+ * 
+ * @param  {String} str      Sql string request
+ * @param  {Object} jsonPage json of post
+ * @return {Object}          {type, columns, from, where, string, limit, orderby}
+ */
 export function handleSqlRequest(str, jsonPage) {
   var req = escapeAbeValuesFromStringRequest(str, jsonPage)
   var request = parse(req)
