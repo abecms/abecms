@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import {Promise} from 'es6-promise'
-import Create from './cli/Create'
+import Create from './cli/cms/Create'
 import Builder from './cli/Builder'
 import {config} from './cli'
 import {exec} from 'child_process'
