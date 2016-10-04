@@ -21,7 +21,6 @@ import {
   Page,
   Locales,
   abeProcess,
-  getTemplate,
   Hooks,
   Plugins,
   Handlebars,

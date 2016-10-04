@@ -19,6 +19,8 @@ import translate 	from './handlebars/translate'
 import times 			from './handlebars/times'
 import truncate 	from './handlebars/truncate'
 
+import * as template from './template'
+
 /* Register utilities */
 Handlebars.registerHelper('attrAbe', 		attrAbe)
 Handlebars.registerHelper('className', 	className)
@@ -38,6 +40,7 @@ Handlebars.registerHelper('truncate', 	truncate)
 HandlebarsIntl.registerWith(Handlebars)
 
 export {
+	template,
 	attrAbe,
 	className,
 	cleanTab,

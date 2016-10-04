@@ -6,7 +6,7 @@ import {
   config,
   FileParser,
   folderUtils,
-  getSelectTemplateKeys
+  cmsTemplate
 } from '../../'
 
 let singleton = Symbol()
@@ -44,7 +44,7 @@ class Manager {
     this._whereKeys = []
     var p = new Promise((resolve) => {
       const pathTemplate = path.join(config.root, config.templates.url)
-      getSelectTemplateKeys(pathTemplate)
+      cmsTemplate.template.getSelectTemplateKeys(pathTemplate)
         .then((whereKeys) => {
           this._whereKeys = whereKeys
           this.updateList()

@@ -8,7 +8,7 @@ import {
   config,
   fileUtils,
   fileAttr,
-  getTemplate,
+  cmsTemplate,
   Page
 } from './'
 
@@ -29,7 +29,7 @@ class Builder {
                              .replace('.' + config.files.templates.extension, '.json')
         
         var json = fse.readJsonSync(file.path)
-        var text = getTemplate(json.abe_meta.template)
+        var text = cmsTemplate.template.getTemplate(json.abe_meta.template)
         
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
@@ -43,7 +43,7 @@ class Builder {
       }
       else if(file.path.indexOf('.json') > -1){
         var json = fse.readJsonSync(file.path)
-        var text = getTemplate(json.abe_meta.template)
+        var text = cmsTemplate.template.getTemplate(json.abe_meta.template)
 
         Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {

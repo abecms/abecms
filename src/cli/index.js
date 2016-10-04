@@ -44,7 +44,7 @@ import folderUtils from './core/utils/folder-utils'
 import slugify from './core/utils/slugify'
 import {cleanSlug} from './core/utils/slugify'
 
-import {getTemplate} from './cms/templates/abe-template'
+// import {getTemplate} from './cms/templates/abe-template'
 import Create from './cms/Create'
 
 import config from './core/config/config'
@@ -59,12 +59,12 @@ import abeProcess from './extend/abe-process'
 import Hooks from './extend/abe-hooks'
 import Plugins from './extend/abe-plugins'
 
-import getSelectTemplateKeys from './cms/templates/abe-get-select-template-keys'
-
 import * as cmsData from './cms/data'
+import * as cmsTemplate from './cms/templates'
 
 export {
 	cmsData
+	,cmsTemplate
 
 	,fileAttr
 	,moment
@@ -102,7 +102,6 @@ export {
 	,getEnclosingTags
 	,escapeTextToRegex
 	,config
-	,getTemplate
 	,save
 	,Hooks
 	,Plugins
@@ -113,7 +112,6 @@ export {
 	,dateUnslug
 	,Manager
 	,Page
-	,getSelectTemplateKeys
 }
 
 export {compileAbe as compileAbe}

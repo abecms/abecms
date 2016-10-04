@@ -6,7 +6,6 @@ import {
   FileParser,
   Util,
   cleanSlug,
-  getTemplate,
   config,
   save,
   abeCreate,

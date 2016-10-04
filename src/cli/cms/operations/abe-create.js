@@ -4,7 +4,7 @@ import {
   FileParser,
   Util,
   cleanSlug,
-  getTemplate,
+  cmsTemplate,
   save,
   config,
   Hooks,
@@ -27,7 +27,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
       if(!fileUtils.isFile(tplUrl.json.path)) {
         var json = (forceJson) ? forceJson : {}
         var tpl = templatePath
-        var text = getTemplate(tpl)
+        var text = cmsTemplate.template.getTemplate(tpl)
         if (duplicate) {
           json = cmsData.removeDuplicateAttr(text, json)
         }

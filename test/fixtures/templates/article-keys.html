@@ -1,0 +1,3 @@
+{{abe type='data' key='title' desc='select title' source='select title,abe_meta from ./' editable='false'}}
+{{abe type='data' key='title2' desc='select title' source='select title,abe_meta from ./  where `abe_meta.template` NOT IN (`homepage`,`test`)' editable='false'}}
+{{abe type='data' key='title2' desc='select title' source='select title,abe_meta from ./  where `abe_meta.template` NOT IN (`{{abe_meta.date}}`)' editable='false'}}
