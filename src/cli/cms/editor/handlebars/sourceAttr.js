@@ -1,6 +1,4 @@
 
-import {Sql} from '../../../'
-
 export default function sourceAttr(val, params) {
   var hiddenVal = val
   var selected = ''
