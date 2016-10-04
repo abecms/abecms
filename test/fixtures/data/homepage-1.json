@@ -3,7 +3,8 @@
     "template": "homepage",
 		"link": "/homepage-1.json",
     "status": "publish",
-    "date": "2016-07-11T16:40:41.974Z"
+    "date": "2016-07-11T16:40:41.974Z",
+    "latest": {"date": "2016-07-11T16:40:41.974Z"}
 	},
 	"title":"homepage",
 	"priority":1,
