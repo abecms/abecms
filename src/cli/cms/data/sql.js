@@ -116,11 +116,6 @@ export function handleSqlRequest(str, jsonPage) {
   var where
   if(typeof request.where !== 'undefined' && request.where !== null) {
     where = request.where
-    // where = recurseWhere(request.where)
-    // reconstructSql += 'where '
-    // Array.prototype.forEach.call(where, (w) => {
-    //   reconstructSql += `${w.operator} ${w.left} ${w.compare} ${w.right} `
-    // })
   }
 
   var limit = -1
@@ -206,6 +201,13 @@ export function getFromDirectory(statement, tplPath){
   return pathFromDir
 }
 
+/**
+ * sort array of files from where clause
+ *
+ * @param  {Array} files
+ * @param  {Object} orderby {orderby: {column: 'date'}} | {orderby: {column: 'random', type: 'ASC'}}
+ * @return {Array}         sorted array
+ */
 export function executeOrderByClause(files, orderby){
   if(typeof orderby !== 'undefined' && orderby !== null) {
     if(orderby.column.toLowerCase() === 'random') {
@@ -222,6 +224,15 @@ export function executeOrderByClause(files, orderby){
   return files
 }
 
+/**
+ * Check array of files have path that match path statement
+ *
+ * executeFromClause(['/'], ['/'])
+ *
+ * @param  {Array} statement      paths
+ * @param  {Array} pathFromClause paths
+ * @return {Array}                files
+ */
 export function executeFromClause(statement, pathFromClause){
   var from = sanitizeFromStatement(statement)
 
@@ -244,6 +255,14 @@ export function executeFromClause(statement, pathFromClause){
   return files_array
 }
 
+/**
+ * Execute sql query like to find abe json post that match the query
+ * 
+ * @param  {Array} pathQuery of paths
+ * @param  {String} match     request sql
+ * @param  {Object} jsonPage  json of post
+ * @return {Array}           found object that match
+ */
 export function execQuery(pathQuery, match, jsonPage) {
   var res
   var files
@@ -305,6 +324,18 @@ export function getSourceType(str) {
   return 'other'
 }
 
+/**
+ * return array of post that match sql where statement
+ *
+ * Example: handleSqlRequest('select title from ./ where `abe_meta.template`=`article`', {})
+ *
+ * @param  {Array} files    
+ * @param  {Object} wheres   clause
+ * @param  {Int} maxLimit 
+ * @param  {Array} columns  sql
+ * @param  {Object} jsonPage json post
+ * @return {Array}          of files
+ */
 export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
   var res = []
   var limit = 0
@@ -341,6 +372,14 @@ export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
   return res
 }
 
+/**
+ * Compare where left and where right clause
+ * 
+ * @param  {Object} where           clause
+ * @param  {Object} jsonDoc         json of current post
+ * @param  {Object} jsonOriginalDoc json of post to compare
+ * @return {Object}                 {left: value, right: value}
+ */
 export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
   var regexIsVariable = /^{{(.*)}}$/
   var value
@@ -397,6 +436,17 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
   }
 }
 
+/**
+ * Check where.left value that match where operator (=, !=, >, >=, <, <=, LIKE, NOT LIKE, AND, OR, IN, NOT IN)
+ * if operator AND or OR
+ * Recurse on where.left and where.right sql clause
+ *
+ * 
+ * @param  {Object} where           clause
+ * @param  {Object} jsonDoc         json of current post
+ * @param  {Object} jsonOriginalDoc json of post to compare
+ * @return {Boolean}                 true if not matching | false if matching
+ */
 export function recurseWhere(where, jsonDoc, jsonOriginalDoc) {
   var isNotLeftCorrect = false
   var isNotRightCorrect = false
