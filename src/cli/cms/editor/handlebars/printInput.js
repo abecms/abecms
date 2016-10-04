@@ -17,8 +17,8 @@ export default function printInput () {
               <label class="control-label" for="${params.key}" 
                       ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + params.key + '"' : ''} >
                 ${desc}
-              </label>`,
-    disabled = ''
+              </label>`
+  var disabled = ''
 
   if(typeof params.placeholder === 'undefined' || params.placeholder === null || params.placeholder === 'undefined') {
     params.placeholder = ''
@@ -56,7 +56,7 @@ export default function printInput () {
                     placeholder="${params.placeholder}"`
 
     var multiple = ''
-    var disabled = ''
+    disabled = ''
     if(typeof params['max-length'] === 'undefined' || params['max-length'] === null || params['max-length'] === ''
       || (params['max-length'] > 1 && params.source.length > 0)) {
       multiple = 'multiple'

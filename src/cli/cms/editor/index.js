@@ -1,8 +1,5 @@
 import Handlebars from 'handlebars'
 import HandlebarsIntl from 'handlebars-intl'
-import handlebarsHelperSlugify from 'handlebars-helper-slugify'
-
-import hooks 		from '../../extend/abe-hooks'
 
 /* Handlebar abe */
 import abeEngine 						from './handlebars/abeEngine'
@@ -19,7 +16,6 @@ import sourceAttr 					from './handlebars/sourceAttr'
 import sourceAutocomplete 	from './handlebars/sourceAutocomplete'
 import sourceOption 				from './handlebars/sourceOption'
 
-/* Register abe */
 Handlebars.registerHelper('abeImport', 	abeImport)
 Handlebars.registerHelper('abe', 				compileAbe)
 Handlebars.registerHelper('folders', 		folders)
