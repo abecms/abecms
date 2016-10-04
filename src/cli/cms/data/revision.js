@@ -1,13 +1,9 @@
-import fse from 'fs-extra'
-import path from 'path'
 import {
-  cli
-  ,FileParser
-  ,fileUtils
-  ,dateUnslug
-  ,config
-  ,fileAttr
-  ,Manager
+  FileParser,
+  fileUtils,
+  config,
+  fileAttr,
+  Manager
 } from '../../'
 
 export function getFilesRevision(urls, fileName) {
@@ -60,18 +56,17 @@ export function getFilesRevision(urls, fileName) {
 }
 
 /**
- * Filter and array of file path and return the latest version of those files
- * @param  {Object} urls object with path to file, filename etc ...
- * @param  {String} type (draft|waiting|valid)
- * @return {Object} urls object filtered
+ * Create and array of doc file path containing the versions of this doc
+ * @param  {String} path of a doc
+ * @return {Array} the versions of the doc
  */
 export function getVersions(docPath) {
-  var files = Manager.instance.getList()
-  var fileWithoutExtension = docPath.replace('.' + config.files.templates.extension, '.json')
-
   var result = []
+  var files = Manager.instance.getList()
+  var dataFile = docPath.replace('.' + config.files.templates.extension, '.json')
+
   Array.prototype.forEach.call(files, (file) => {
-    if (file.path.indexOf(fileWithoutExtension) > -1) {
+    if (file.path.indexOf(dataFile) > -1) {
       result = file.revisions
     }
   })
@@ -91,6 +86,7 @@ export function getDocumentRevision(docPath) {
   var result = null
   var documentPath = docPath
   var latest = true
+
   if(fileAttr.test(documentPath)){
     latest = false
     documentPath = fileAttr.delete(documentPath)
