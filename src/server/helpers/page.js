@@ -2,6 +2,7 @@ import mkdirp from 'mkdirp'
 import {
   Util,
   fileAttr,
+  cmsData,
   FileParser,
   fileUtils,
   config,
@@ -26,23 +27,23 @@ var page = function (req, res, next) {
   }
 
   if(typeof filePath !== 'undefined' && filePath !== null) {
+    var jsonPath = null
+    var linkPath = null
 
-    if(!fileAttr.test(filePath)) {
-      var folderFilePath = filePath.split('/')
-      folderFilePath.pop()
-      folderFilePath = fileUtils.pathWithRoot(folderFilePath.join('/'))
-      mkdirp.sync(folderFilePath)
-      var files = FileParser.getFiles(folderFilePath, true, 2)
-      var latest = fileAttr.filterLatestVersion(fileAttr.getFilesRevision(files, filePath), 'draft')
-      if(latest.length) {
-        filePath = latest[0].path
-      }
+    var filePathTest = cmsData.revision.getDocumentRevision(req.query.filePath)
+    if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
+      // filePath = filePathTest.path
+      jsonPath = filePathTest.path
+      linkPath = filePathTest.abe_meta.link
     }
 
-    var tplUrl = FileParser.getFileDataFromUrl(filePath)
-    
+    if(jsonPath === null || !fileUtils.isFile(jsonPath)) { 
+      res.status(404).send('Not found')
+      return
+    } 
+
     if(typeof json === 'undefined' || json === null) {
-      json = FileParser.getJson(tplUrl.json.path)
+      json = FileParser.getJson(jsonPath)
     }
     
     let meta = config.meta.name
@@ -58,7 +59,7 @@ var page = function (req, res, next) {
 
     if (!editor) {
 
-      Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
+      Util.getDataList(fileUtils.removeLast(linkPath), text, json)
         .then(() => {
           var page = new Page(template, text, json, html)
           res.set('Content-Type', 'text/html')

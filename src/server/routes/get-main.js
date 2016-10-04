@@ -7,6 +7,7 @@ import {
   fileUtils,
   config,
   Page,
+  cmsData,
   cmsTemplate,
   Locales,
   Hooks,
@@ -48,7 +49,7 @@ var route = function(req, res, next) {
       var linkPath = null
       isHome = false
 
-      var filePathTest = fileAttr.getDocumentRevision(req.query.filePath)
+      var filePathTest = cmsData.revision.getDocumentRevision(req.query.filePath)
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
         // filePath = filePathTest.path
         jsonPath = filePathTest.path
@@ -74,7 +75,7 @@ var route = function(req, res, next) {
           allDraft = FileParser.getMetas(allDraft, 'draft')
           var breadcrumb = req.params[0].split('/')
           manager.file = {
-            revision: fileAttr.getFilesRevision(allDraft, fileAttr.delete(revisionFilePath))
+            revision: cmsData.revision.getFilesRevision(allDraft, fileAttr.delete(revisionFilePath))
             ,template: breadcrumb
             ,path: (req.query.filePath) ? fileUtils.cleanTplName(req.query.filePath) : ''
           }
