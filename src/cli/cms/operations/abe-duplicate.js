@@ -7,7 +7,6 @@ import {
   Util,
   Manager,
   cleanSlug,
-  getTemplate,
   config,
   save,
   abeCreate

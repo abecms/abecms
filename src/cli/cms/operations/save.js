@@ -15,7 +15,7 @@ import {
   ,fileAttr
   ,dateSlug
   ,Page
-  ,getTemplate
+  ,cmsTemplate
   ,Hooks
   ,cleanSlug
 } from '../../'
@@ -112,7 +112,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     Util.addMetas(tpl, json, type, {}, date, realType)
 
     if(typeof text === 'undefined' || text === null || text === '') {
-      text = getTemplate(fullTpl)
+      text = cmsTemplate.template.getTemplate(fullTpl)
     }
 
     Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)

@@ -28,7 +28,7 @@ describe('Request', function() {
   });
 
   /**
-   * cmsData.sql.getAllAttributes
+   * Util.getAllAttributes
    * 
    */
   it('Util.getAllAttributes()', function(done) {

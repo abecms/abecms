@@ -6,7 +6,7 @@ import {
   fileUtils,
   config,
   Page,
-  getTemplate,
+  cmsTemplate,
   cleanSlug
 } from '../../cli'
 
@@ -54,7 +54,7 @@ var page = function (req, res, next) {
     }else {
       template = req.params[0]
     }
-    var text = getTemplate(template)
+    var text = cmsTemplate.template.getTemplate(template)
 
     if (!editor) {
 

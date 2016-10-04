@@ -4,7 +4,7 @@ import {
   Util,
   fileUtils,
   abeEngine,
-  getTemplate,
+  cmsTemplate,
   FileParser,
   Hooks
 } from '../../cli'
@@ -226,7 +226,7 @@ export function editor(fileName, jsonPath, documentLink) {
       json = FileParser.getJson(jsonPath, 'utf8')
     }
     
-    text = getTemplate(fileName)
+    text = cmsTemplate.template.getTemplate(fileName)
 
     Util.getDataList(fileUtils.removeLast(documentLink), text, json, true)
       .then(() => {

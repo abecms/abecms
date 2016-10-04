@@ -1,5 +1,5 @@
 import removeDuplicateAttr from './remove-duplicate-attr'
-import sql from './sql'
+import * as sql from './sql'
 
 export {
 	removeDuplicateAttr
