@@ -8,7 +8,19 @@ import {
   getAttr
 } from '../../'
 
-export function cleanRequest(str, jsonPage) {
+/**
+ * take a string and json to escape sql character and convert to sql like syntax
+ *
+ * Example: escapeAbeValuesFromStringRequest('select title from ./ where `abe_meta.template`=`{{article}}`', {article: "test"})
+ *
+ * Return string: select title from ___abe_dot______abe_dot______abe___ where  `abe_meta.template`=`test`
+ * 
+ * 
+ * @param  {String} str      raw abe request sql string
+ * @param  {Object} jsonPage json object of post
+ * @return {String}          escaped string
+ */
+export function escapeAbeValuesFromStringRequest(str, jsonPage) {
   var matchFrom = /from .(.*?) /
   var matchVariable = /{{([a-zA-Z]*)}}/
 
@@ -56,7 +68,7 @@ export function cleanRequest(str, jsonPage) {
 }
 
 export function handleSqlRequest(str, jsonPage) {
-  var req = cleanRequest(str, jsonPage)
+  var req = escapeAbeValuesFromStringRequest(str, jsonPage)
   var request = parse(req)
   var reconstructSql = ''
 

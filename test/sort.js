@@ -22,10 +22,10 @@ describe('Sort', function() {
   it('coreUtils.sort.byDateAsc', function() {
   	var list = Manager.instance.getList()
   	list.sort(coreUtils.sort.byDateAsc)
-  	chai.expect(list[0].name).to.contain('homepage');
   	console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
   	console.log('list[0].name', list[0].name, list[0].date)
   	console.log('list[1].name', list[1].name, list[1].date)
+  	chai.expect(list[0].name).to.contain('homepage');
   });
 
   /**
