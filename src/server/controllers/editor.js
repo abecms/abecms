@@ -40,7 +40,7 @@ function add(obj, json, text, util) {
 
 function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) {
   var v = `{{${match}}}`,
-    obj = Util.getAllAttributes(v, json)
+    obj = cmsData.attributes.getAll(v, json)
 
   if(typeof keyArray !== 'undefined' && keyArray !== null) {
     var realKey = obj.key.replace(/[^\.]+?\./, '')
@@ -137,7 +137,7 @@ function addSource(text, json, util) {
   var match
 
   while (match = listReg.exec(text)) {
-    var obj = Util.getAllAttributes(match[0], json)
+    var obj = cmsData.attributes.getAll(match[0], json)
 
     if(obj.editable) {
       obj.value = json[obj.key]

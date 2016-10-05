@@ -25,7 +25,7 @@ function recurseDeleteKey(currentLevel, arrayKeyAttr) {
   })
 }
 
-export default function removeDuplicateAttr(text, json) {
+export function removeDuplicate(text, json) {
   var regAbe = /{{abe[\S\s].*?duplicate=['|"]([\S\s].*?['|"| ]}})/g
   var matches = text.match(regAbe)
   if(typeof matches !== 'undefined' && matches !== null){

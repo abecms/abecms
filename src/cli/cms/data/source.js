@@ -165,7 +165,7 @@ export function nextDataList(tplPath, jsonPage, match) {
       jsonPage['abe_source'] = {}
     }
 
-    var obj = Util.getAllAttributes(match, jsonPage)
+    var obj = cmsData.attributes.getAll(match, jsonPage)
     obj = Util.sanitizeSourceAttribute(obj, jsonPage)
     
     var type = cmsData.sql.getSourceType(obj.sourceString)

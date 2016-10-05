@@ -73,7 +73,7 @@ export function includePartials(text) {
   var abeImports = getAbeImport(text)
 
   Array.prototype.forEach.call(abeImports, (abeImport) => {
-    var obj = Util.getAllAttributes(abeImport, {})
+    var obj = cmsData.attributes.getAll(abeImport, {})
 
     var file = obj.file
     var partial = ''
@@ -225,7 +225,7 @@ export function execRequestColumns(tpl) {
   var ar = []
   var matches = cmsData.regex.getTagAbeTypeRequest(tpl)
   Array.prototype.forEach.call(matches, (match) => {
-    var obj = Util.getAllAttributes(match[0], {})
+    var obj = cmsData.attributes.getAll(match[0], {})
     var type = cmsData.sql.getSourceType(obj.sourceString)
     switch (type) {
     case 'request':
