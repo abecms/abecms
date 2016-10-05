@@ -26,8 +26,8 @@ describe('Request', function() {
    * getAbeImport
    * 
    */
-  it('cmsData.removeDuplicateAttr', function() {
-  	var newJson = cmsData.removeDuplicateAttr(this.fixture.html, this.fixture.json)
+  it('cmsData.values.removeDuplicate', function() {
+  	var newJson = cmsData.values.removeDuplicate(this.fixture.html, this.fixture.json)
   	chai.expect(newJson.title).to.be.undefined;
   });
 });

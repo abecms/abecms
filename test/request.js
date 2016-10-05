@@ -27,11 +27,11 @@ describe('Request', function() {
   });
 
   /**
-   * Util.getAllAttributes
+   * cmsData.attributes.getAll
    * 
    */
-  it('Util.getAllAttributes()', function(done) {
-    var attributes = Util.getAllAttributes(this.fixture.tag, this.fixture.jsonArticle)
+  it('cmsData.attributes.getAll()', function(done) {
+    var attributes = cmsData.attributes.getAll(this.fixture.tag, this.fixture.jsonArticle)
     chai.expect(attributes.sourceString).to.contain('select');
     done();
   });
@@ -173,7 +173,7 @@ describe('Request', function() {
 
     chai.expect(matches[0][0]).to.not.be.null
 
-    var attributes = Util.getAllAttributes(matches[0][0], {})
+    var attributes = cmsData.attributes.getAll(matches[0][0], {})
     chai.expect(matches[0][0]).to.not.be.null
 
     var jsonPage = {}
