@@ -50,3 +50,25 @@ export function getAll(str, json) {
 
   return attrs
 }
+
+
+export function sanitizeSourceAttribute(obj, jsonPage){
+  if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
+    var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
+    if(matches !== null) {
+      Array.prototype.forEach.call(matches, (match) => {
+        var val = match.replace('{{', '')
+        val = val.replace('}}', '')
+        
+        try {
+          val = eval('jsonPage.' + val)
+        }catch(e) {
+          val = ''
+        }
+        obj.sourceString = obj.sourceString.replace(match, val)
+      })
+    }
+  }
+
+  return obj
+}

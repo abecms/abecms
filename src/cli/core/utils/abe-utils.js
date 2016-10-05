@@ -89,31 +89,4 @@ export default class Utils {
     this._key[obj.key] = true // save key for dontHaveKey()
     this._form[obj.tab].item.push(obj)
   }
-
-  static sanitizeSourceAttribute(obj, jsonPage){
-    if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
-      var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
-      if(matches !== null) {
-        Array.prototype.forEach.call(matches, (match) => {
-          var val = match.replace('{{', '')
-          val = val.replace('}}', '')
-          
-          try {
-            val = eval('jsonPage.' + val)
-          }catch(e) {
-            val = ''
-          }
-          obj.sourceString = obj.sourceString.replace(match, val)
-        })
-      }
-    }
-
-    return obj
-  }
-
-  static replaceUnwantedChar(str) {
-    var chars = {'’': '', '\'': '', '"': '', 'Š': 'S', 'š': 's', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B', 'ß': 'Ss', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'œ': 'oe', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ý': 'y', 'þ': 'b', 'ÿ': 'y'}
-    for(var prop in chars) str = str.replace(new RegExp(prop, 'g'), chars[prop])
-    return str
-  }
 }

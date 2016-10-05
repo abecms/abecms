@@ -154,7 +154,7 @@ export function nextDataList(tplPath, jsonPage, match) {
     }
 
     var obj = cmsData.attributes.getAll(match, jsonPage)
-    obj = Util.sanitizeSourceAttribute(obj, jsonPage)
+    obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
     
     var type = cmsData.sql.getSourceType(obj.sourceString)
 
