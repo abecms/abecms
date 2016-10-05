@@ -2,7 +2,6 @@ import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import {Promise} from 'es6-promise'
 import extend from 'extend'
-import strUtils from '../utils/str-utils'
 import on from 'on'
 
 export default class EditorManager {
