@@ -7,7 +7,7 @@ var captureAttr = '-abe-(.+?)(?=\.'
  * Class Attr
  * Work string to manage string attributes key/value
  */
-class Attr {
+export default class Attr {
 
   /**
    * @param  {String} str string to work with
@@ -55,48 +55,3 @@ class Attr {
   }
 
 }
-
-/**
- * Class FileAttr
- * Manage string with attributes encoded inside
- */
-export default class FileAttr {
-
-  /**
-   * Add attributes or modify them if they already exists
-   * @param {String} str the string to modify
-   * @param {Object} options object with attributes to add
-   * @return {String} the string with the new attributes
-   */
-  static add(str, options) {
-    var attr = new Attr(str)
-    return attr.insert(options)
-  }
-
-  /**
-   * Remove attributes from string
-   * @param {String} str the string to modify
-   * @return {String} the string modified
-   */
-  static delete(str) {
-    return new Attr(str).remove()
-  }
-
-  /**
-   * @param  {String} str the string to get attributes from
-   * @return {object|String} object (all the attributes) if the key is null, if not the value of the atrtibuts
-   */
-  static get(str) {
-    return new Attr(str).val
-  }
-
-  /**
-   * @param  {String} str the string to test attributes from
-   * @return {boolean} true if string has attr
-   */
-  static test(str) {
-    var att = new Attr(str).val
-    return (typeof att.s !== 'undefined' && att.s !== null)
-  }
-}
-

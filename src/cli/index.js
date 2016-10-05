@@ -3,7 +3,6 @@ import moment from 'moment'
 import fse from 'fs-extra'
 import clc from 'cli-color'
 
-import fileAttr from './cms/data/file-attr'
 import Util from './core/utils/abe-utils'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 
@@ -66,7 +65,6 @@ export {
 	,cmsTemplate
 	,coreUtils
 
-	,fileAttr
 	,moment
 	,fse
 	,Handlebars

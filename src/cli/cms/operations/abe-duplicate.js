@@ -3,7 +3,6 @@ import {
   Hooks,
   fileUtils,
   FileParser,
-  fileAttr,
   Util,
   Manager,
   cleanSlug,

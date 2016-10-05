@@ -2,7 +2,6 @@ import xss from 'xss'
 import pkg from '../../../package'
 
 import {
-  fileAttr,
   FileParser,
   fileUtils,
   config,
@@ -75,12 +74,12 @@ var route = function(req, res, next) {
           allDraft = FileParser.getMetas(allDraft, 'draft')
           var breadcrumb = req.params[0].split('/')
           manager.file = {
-            revision: cmsData.revision.getFilesRevision(allDraft, fileAttr.delete(revisionFilePath))
+            revision: cmsData.revision.getFilesRevision(allDraft, cmsData.fileAttr.delete(revisionFilePath))
             ,template: breadcrumb
             ,path: (req.query.filePath) ? fileUtils.cleanTplName(req.query.filePath) : ''
           }
           if(manager.file.revision.length > 0){
-            var publishPath = fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
+            var publishPath = cmsData.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
             manager.file.isPublished = fileUtils.isFile(publishPath)
           }
 

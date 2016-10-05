@@ -5,7 +5,6 @@ import moment from 'moment'
 
 import {
 	fileUtils,
-	fileAttr,
 	config
 } from '../../'
 

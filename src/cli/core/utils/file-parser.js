@@ -11,7 +11,6 @@ import {
 	,save
 	,folderUtils
 	,fileUtils
-	,fileAttr
 	,config
 	,Hooks
 	,Plugins
@@ -55,9 +54,9 @@ export default class FileParser {
 
         if(fileUtils.isValidFile(level[i])) {
           var extension = /(\.[\s\S]*)/.exec(level[i])[0]
-          var cleanName = fileAttr.delete(level[i])
+          var cleanName = cmsData.fileAttr.delete(level[i])
           var cleanNameNoExt = fileUtils.removeExtension(cleanName)
-          var fileData = fileAttr.get(level[i])
+          var fileData = cmsData.fileAttr.get(level[i])
 
           var date
           if (fileData.d) {
@@ -79,7 +78,7 @@ export default class FileParser {
           var item = {
             'name': level[i],
             'path': path,
-            'cleanPathName': fileAttr.delete(path),
+            'cleanPathName': cmsData.fileAttr.delete(path),
             'cleanPath': path.replace(base + '/', ''),
             date: date,
             cleanDate: fileDate.format('YYYY/MM/DD HH:MM:ss'),
@@ -147,7 +146,7 @@ export default class FileParser {
     var result = []
 
     Array.prototype.forEach.call(files, (file) => {
-      var val = fileAttr.get(file.path).s
+      var val = cmsData.fileAttr.get(file.path).s
       if(type === null || val === type) result.push(file)
     })
     return result
@@ -241,7 +240,7 @@ export default class FileParser {
       var link = url.replace(config.root, '')
       link = link.split('/')
       link.shift()
-      link = fileAttr.delete('/' + fileUtils.cleanPath(link.join('/')))
+      link = cmsData.fileAttr.delete('/' + fileUtils.cleanPath(link.join('/')))
 
       let draft = config.draft.url
       let publish = config.publish.url
@@ -259,10 +258,10 @@ export default class FileParser {
 
 	  	// set filename draft/json
       res.draft.file = filename
-      res.publish.file = fileAttr.delete(filename)
+      res.publish.file = cmsData.fileAttr.delete(filename)
       res.publish.link = link
       res.json.file = fileUtils.replaceExtension(filename, 'json')
-      res.publish.json = path.join(res.json.dir, fileAttr.delete(res.json.file))
+      res.publish.json = path.join(res.json.dir, cmsData.fileAttr.delete(res.json.file))
 
 	  	// set filename draft/json
       res.draft.path = path.join(res.draft.dir, res.draft.file)
@@ -479,7 +478,7 @@ export default class FileParser {
         var files = FileParser.getFiles(pathDelete, true, 10, new RegExp(`.${config.files.templates.extension}`))
 				
         Array.prototype.forEach.call(files, (item) => {
-          if(fileAttr.delete(item.name) === file) fse.removeSync(item.path)
+          if(cmsData.fileAttr.delete(item.name) === file) fse.removeSync(item.path)
         })
       }
     }

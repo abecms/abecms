@@ -4,7 +4,7 @@ import mkdirp from 'mkdirp'
 import moment from 'moment'
 import path from 'path'
 import {
-	fileAttr,
+	cmsData,
 	FileParser,
 	config
 } from '../../'
@@ -139,7 +139,7 @@ export default class FileUtils {
 
 	/* TODO: put this method in the right helper */
   static cleanTplName(pathClean) {
-    var cleanTplName = fileAttr.delete(pathClean)
+    var cleanTplName = cmsData.fileAttr.delete(pathClean)
     cleanTplName = cleanTplName.replace(config.root, '')
     cleanTplName = cleanTplName.split('/')
     cleanTplName.shift()
@@ -148,7 +148,7 @@ export default class FileUtils {
 
 	/* TODO: Remove this method and replace it with the previous one */
   static cleanFilePath(pathClean) {
-    var cleanFilePath = fileAttr.delete(pathClean)
+    var cleanFilePath = cmsData.fileAttr.delete(pathClean)
     cleanFilePath = cleanFilePath.replace(config.root, '')
     cleanFilePath = cleanFilePath.split('/')
     cleanFilePath.shift()
@@ -205,8 +205,8 @@ export default class FileUtils {
     if(stat){
       var files = FileParser.getFiles(folder, true, 1, new RegExp('\\.' + extension))
       files.forEach(function (fileItem) {
-        var fname = fileAttr.delete(fileItem.cleanPath)
-        var ftype = fileAttr.get(fileItem.cleanPath).s
+        var fname = cmsData.fileAttr.delete(fileItem.cleanPath)
+        var ftype = cmsData.fileAttr.get(fileItem.cleanPath).s
         if(fname === file && ftype === type){
           var fileDraft = fileItem.path.replace(/-abe-./, '-abe-d')
           FileParser.removeFile(fileItem.path, FileParser.changePathEnv(fileItem.path, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
@@ -224,7 +224,7 @@ export default class FileUtils {
     Array.prototype.forEach.call(files, (file) => {
       var cleanFilePath = file.cleanFilePath
 
-      var fileStatusIsPublish = fileAttr.get(file.cleanPath)
+      var fileStatusIsPublish = cmsData.fileAttr.get(file.cleanPath)
       if(typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null && file.abe_meta.status === 'publish') {
         file.abe_meta.status = 'draft'
       }
@@ -238,16 +238,16 @@ export default class FileUtils {
 
       if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
         merged[cleanFilePath] = {
-          name: fileAttr.delete(file.name)
-					, path: fileAttr.delete(file.path)
-					, html: fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-					, htmlPath: path.join(config.root, config.publish.url, path.join('/', fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))))
+          name: cmsData.fileAttr.delete(file.name)
+					, path: cmsData.fileAttr.delete(file.path)
+					, html: cmsData.fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+					, htmlPath: path.join(config.root, config.publish.url, path.join('/', cmsData.fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))))
 					, cleanPathName: file.cleanPathName
 					, cleanPath: file.cleanPath
 					, cleanName: file.cleanName
 					, cleanNameNoExt: file.cleanNameNoExt
 					, cleanFilePath: file.cleanFilePath
-					, filePath: fileAttr.delete(file.filePath)
+					, filePath: cmsData.fileAttr.delete(file.filePath)
 					, revisions: []
         }
       }

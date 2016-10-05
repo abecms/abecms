@@ -12,7 +12,6 @@ import {
   ,cmsData
   ,config
   ,fileUtils
-  ,fileAttr
   ,dateSlug
   ,Page
   ,cmsTemplate
@@ -96,7 +95,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
     let meta = config.meta.name
     json[meta] = extend(json[meta], ext)
-    var date = fileAttr.get(pathIso.jsonPath).d
+    var date = cmsData.fileAttr.get(pathIso.jsonPath).d
 
     if (publishAll) {
       if(typeof json[meta].publish !== 'undefined' && json[meta].publish !== null) {
@@ -156,7 +155,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
           var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text)
           if (isRejectedDoc) {
-            res.reject = fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
+            res.reject = cmsData.fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
           }
           
           Hooks.instance.trigger('afterSave', obj)
@@ -220,8 +219,8 @@ export function saveJson(url, json) {
 
 export function saveHtml(url, html) {
   mkdirp.sync(fileUtils.removeLast(url))
-  if(fileAttr.test(url) && fileAttr.get(url).s !== 'd'){
-    fileUtils.deleteOlderRevisionByType(fileAttr.delete(url), fileAttr.get(url).s)
+  if(cmsData.fileAttr.test(url) && cmsData.fileAttr.get(url).s !== 'd'){
+    fileUtils.deleteOlderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
   }
   fse.writeFileSync(url, html)
 }
@@ -248,8 +247,8 @@ export function dateIso(tplUrl, type = null) {
   }
 
   if(dateISO) {
-    saveJsonFile = fileAttr.add(saveJsonFile, dateISO)
-    saveFile = fileAttr.add(saveFile, dateISO)
+    saveJsonFile = cmsData.fileAttr.add(saveJsonFile, dateISO)
+    saveFile = cmsData.fileAttr.add(saveFile, dateISO)
   }
 
   return {
