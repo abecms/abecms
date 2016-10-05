@@ -1,23 +1,4 @@
 import extend from 'extend'
-import clc from 'cli-color'
-import fse from 'fs-extra'
-import ajaxRequest from 'ajax-request'
-import {Promise} from 'es6-promise'
-import http from 'http' 
-import https from 'https'
-import path from 'path'
-
-import {
-  config
-  ,cmsData
-  ,folderUtils
-  ,fileUtils
-  ,FileParser
-  ,dateSlug
-  ,dateUnslug
-  ,Hooks
-  ,Plugins
-} from '../../'
 
 export default class Utils {
 
