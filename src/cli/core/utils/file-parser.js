@@ -238,7 +238,7 @@ export default class FileParser {
       var filename = fileUtils.filename(url)
       var basePath = dir.replace(config.root, '').split('/')
       var link = url.replace(config.root, '')
-      link = link.split('/')
+      link = link.replace(/^\//, '').split('/')
       link.shift()
       link = cmsData.fileAttr.delete('/' + fileUtils.cleanPath(link.join('/')))
 
