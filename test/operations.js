@@ -26,7 +26,7 @@ describe('Create', function() {
   });
 
   /**
-   * Util.getAllAttributes
+   * cmsOperations.create
    * 
    */
   it('cmsOperations.create()', function(done) {
@@ -46,5 +46,28 @@ describe('Create', function() {
         fse.removeSync(json)
         done()
       }.bind(this));
+  });
+
+  /**
+   * cmsOperations.duplicate
+   * 
+   */
+  it('cmsOperations.duplicate()', function(done) {
+    cmsOperations.duplicate('article-1.html', 'article', '', 'article-2.html', {}, false)
+    .then(function(resSave) {
+      var html = path.join(config.root, config.draft.url, resSave.abe_meta.latest.abeUrl)
+      var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
+      var stat = fse.statSync(html)
+      if (stat) {
+        chai.expect(stat).to.not.be.undefined;
+      }
+      stat = fse.statSync(json)
+      if (stat) {
+        chai.expect(stat).to.not.be.undefined;
+      }
+      fse.removeSync(html)
+      fse.removeSync(json)
+      done()
+    }.bind(this))
   });
 });
