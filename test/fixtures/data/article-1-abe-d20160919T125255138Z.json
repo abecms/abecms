@@ -1,0 +1,14 @@
+{
+	"abe_meta": {
+    "template": "article",
+		"link": "/article-1.json",
+    "status": "draft",
+    "date": "2016-07-19T12:52:55.138Z",
+    "latest": {
+	    "date": "2016-07-19T12:52:55.138Z",
+	    "abeUrl": "/de/destinations/algeria/luxury-algiers-city-guide-abe-d20160919T125255138Z.shtml"
+	  }
+	},
+	"priority":2,
+	"title":"article"
+}
