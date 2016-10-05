@@ -7,7 +7,7 @@ var cmsData = require('../src/cli').cmsData;
 var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
 
-describe('Request', function() {
+describe('attributes', function() {
   before( function(done) {
     Manager.instance.init()
       .then(function () {
@@ -22,12 +22,21 @@ describe('Request', function() {
         
       }.bind(this))
   });
+
   /**
-   * getAbeImport
+   * cmsData.values.removeDuplicate
    * 
    */
   it('cmsData.values.removeDuplicate', function() {
-  	var newJson = cmsData.values.removeDuplicate(this.fixture.html, this.fixture.json)
-  	chai.expect(newJson.title).to.be.undefined;
+    var newJson = cmsData.values.removeDuplicate(this.fixture.html, this.fixture.json)
+    chai.expect(newJson.title).to.be.undefined;
+  });
+
+  /**
+   * cmsData.attributes.sanitizeSourceAttribute
+   * 
+   */
+  it('cmsData.attributes.sanitizeSourceAttribute', function() {
+  	// not sure what it does
   });
 });
