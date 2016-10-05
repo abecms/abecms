@@ -6,6 +6,7 @@ import {
   fileUtils,
   abeEngine,
   cmsData,
+  cmsTemplate,
   config,
   Hooks,
   Manager
@@ -121,7 +122,7 @@ export default class Page {
             var matches = this.template.match(eachSource)
             if(typeof matches !== 'undefined' && matches !== null) {
               Array.prototype.forEach.call(matches, (match) => {
-                this.template = this.template.replace(match, `${match}<!-- [[${keys[i]}]] ${util.encodeAbe(match)} -->`)
+                this.template = this.template.replace(match, `${match}<!-- [[${keys[i]}]] ${cmsTemplate.encodeAbeTagAsComment(match)} -->`)
               })
             }
           }
@@ -220,7 +221,7 @@ export default class Page {
         var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
 
         // je remplace le block dans le texte par ça
-        this.template = this.template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${util.encodeAbe(blockHtml)} -->`)
+        this.template = this.template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${cmsTemplate.encodeAbeTagAsComment(blockHtml)} -->`)
       }
 
       // Pour chaque tag Abe, je mets en forme ce tag avec des data- supplémentaires
