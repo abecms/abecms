@@ -9,7 +9,7 @@ import {
   Util
   ,abeProcess
   ,FileParser
-  ,getAttr
+  ,cmsData
   ,config
   ,fileUtils
   ,fileAttr
@@ -29,12 +29,12 @@ export function checkRequired(text, json) {
     Array.prototype.forEach.call(matches, (match) => {
       if(typeof match !== 'undefined' && match !== null) {
         
-        var keyAttr = getAttr(match, 'key')
-        var requiredAttr = getAttr(match, 'required')
+        var keyAttr = cmsData.regex.getAttr(match, 'key')
+        var requiredAttr = cmsData.regex.getAttr(match, 'required')
         if(requiredAttr === 'true') {
           requiredValue++
 
-          var minAttr = getAttr(match, 'min-length')
+          var minAttr = cmsData.regex.getAttr(match, 'min-length')
           minAttr = (minAttr !== '') ? minAttr : 0
 
           if(typeof json[keyAttr] !== 'undefined' && json[keyAttr] !== null && json[keyAttr] !== '') {

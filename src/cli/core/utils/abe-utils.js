@@ -17,8 +17,6 @@ import {
   ,fileAttr
   ,dateSlug
   ,dateUnslug
-  ,escapeTextToRegex
-  ,getAttr
   ,Hooks
   ,Plugins
 } from '../../'
@@ -104,7 +102,7 @@ export default class Utils {
    * @return {Boolean} true = this is not a block content
    */
   isSingleAbe(str, text){
-    return  !new RegExp('#each(.)+?' + getAttr(str, 'key').split('.')[0]).test(text) &&
+    return  !new RegExp('#each(.)+?' + cmsData.regex.getAttr(str, 'key').split('.')[0]).test(text) &&
             str.indexOf('{{#') < 0 &&
             str.indexOf('#each') < 0 &&
             str.indexOf('{{/') < 0 &&
@@ -118,7 +116,7 @@ export default class Utils {
    * @return {Boolean} true = this is a block content
    */
   isBlockAbe(str) {
-    return str.indexOf('abe') > -1 && getAttr(str, 'key').indexOf('.') > -1
+    return str.indexOf('abe') > -1 && cmsData.regex.getAttr(str, 'key').indexOf('.') > -1
   }
 
   /**
@@ -154,7 +152,7 @@ export default class Utils {
     var matchAbe = block.match(/>\s*\{\{abe .*\}\}/g)
     if(matchAbe){
       for (var i = 0; i < matchAbe.length; i++){
-        var getattr = getAttr(matchAbe[i], 'key').replace('.', '[0]-')
+        var getattr = cmsData.regex.getAttr(matchAbe[i], 'key').replace('.', '[0]-')
         block = block.replace(
           matchAbe[i],
           ' data-abe-' + this.validDataAbe(getattr) + '="'  + getattr + '" >'
@@ -165,7 +163,7 @@ export default class Utils {
     if(matchAbe){
       for (var i = 0; i < matchAbe.length; i++) {
         if(typeof matchAbe !== 'undefined' && matchAbe !== null){
-          var getattr = getAttr(matchAbe[i], 'key').replace('.', '[0]-')
+          var getattr = cmsData.regex.getAttr(matchAbe[i], 'key').replace('.', '[0]-')
           var matchattr = (matchAbe[i].split('=')[0]).trim()
           block = block.replace(
               matchAbe[i],
@@ -214,9 +212,9 @@ export default class Utils {
     }else if(type === 'link') {
       lorem = 'http://www.google.com'
     }else if(type === 'image' || type === 'file') {
-      var width = getAttr(v, 'width')
+      var width = cmsData.regex.getAttr(v, 'width')
       width = (width !== '') ? width : 300
-      var height = getAttr(v, 'height')
+      var height = cmsData.regex.getAttr(v, 'height')
       height = (height !== '') ? height : 300
       lorem = `http://placehold.it/${height}x${width}`
     }else if(type === 'textarea' || type === 'rich') {

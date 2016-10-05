@@ -12,7 +12,6 @@ import pkg from '../../../package'
 import {
   fileAttr,
   save,
-  getAttr, getEnclosingTags, escapeTextToRegex,
   Util,
   FileParser,
   fileUtils,

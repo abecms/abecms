@@ -49,8 +49,6 @@ import Create from './cms/Create'
 
 import config from './core/config/config'
 
-import {getAttr, getEnclosingTags, escapeTextToRegex} from './cms/data/regex-helper'
-
 import abeCreate from './cms/operations/abe-create'
 import abeDuplicate from './cms/operations/abe-duplicate'
 import {save, checkRequired, saveJson} from './cms/operations/save'
@@ -100,9 +98,6 @@ export {
 	,printConfig
 	,ifIn
 	,ifCond
-	,getAttr
-	,getEnclosingTags
-	,escapeTextToRegex
 	,config
 	,save
 	,Hooks
