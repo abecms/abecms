@@ -144,31 +144,6 @@ export default class Utils {
     )
   }
 
-  static addMetas(tpl, json, type, obj = {}, date = null, realType = 'draft') {
-    let meta = config.meta.name
-
-    json[meta] = extend({}, json[meta])
-    var currentDate = (typeof date !== 'undefined' && date !== null && date !== '') ? date : new Date()
-    var abeUrl = (type === 'publish') ? json[meta].link : cmsData.fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
-
-    if(typeof json[meta].date === 'undefined' || json[meta].date === null) {
-      json[meta].date = currentDate
-    }
-    json[meta].latest = {
-      date: currentDate,
-      abeUrl: abeUrl
-    }
-    json[meta].status = realType === 'reject' ? 'draft' : realType
-    if(typeof json[meta][type] === 'undefined' || json[meta][type] === null) {
-      json[meta][type] = JSON.parse(JSON.stringify(obj))
-      json[meta][type].date = currentDate
-      json[meta][type].abeUrl = abeUrl
-    }
-    json[meta][type].latest = JSON.parse(JSON.stringify(obj))
-    json[meta][type].latest.date = currentDate
-    json[meta][type].latest.abeUrl = abeUrl
-  }
-
   static sanitizeSourceAttribute(obj, jsonPage){
     if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
       var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)

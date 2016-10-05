@@ -108,7 +108,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
         date = new Date(date)
       }
     }
-    Util.addMetas(tpl, json, type, {}, date, realType)
+    cmsData.meta.add(tpl, json, type, {}, date, realType)
 
     if(typeof text === 'undefined' || text === null || text === '') {
       text = cmsTemplate.template.getTemplate(fullTpl)
