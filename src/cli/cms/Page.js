@@ -2,7 +2,7 @@ import Handlebars from 'handlebars'
 import fse from 'fs-extra'
 
 import {
-  Util,
+  cmsEditor,
   fileUtils,
   abeEngine,
   cmsData,
@@ -49,7 +49,7 @@ export default class Page {
       this.template = template
       this.HbsTemplatePath = fileUtils.getTemplatePath('hbs/'+templateId+'.hbs')
 
-      let util = new Util()
+      let util = new cmsEditor.form()
 
       abeEngine.instance.content = json
       
@@ -161,7 +161,7 @@ export default class Page {
 
   _updateAbeAsAttribute() {
     var match
-    let util = new Util()
+    let util = new cmsEditor.form()
 
     while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
       if(cmsData.regex.isSingleAbe(match[0], this.template)){
@@ -181,7 +181,7 @@ export default class Page {
 
   _updateAbeAsTag() {
     var match
-    let util = new Util()
+    let util = new cmsEditor.form()
 
     while (match = this.abePattern.exec(this.template)) {
       var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
@@ -207,7 +207,7 @@ export default class Page {
     Array.prototype.forEach.call(blocks, (block) => {
       var key = block.match(/#each (.*)\}\}/)
       key = key[1]
-      let util = new Util()
+      let util = new cmsEditor.form()
       var match
 
       if(!this._onlyHTML) {

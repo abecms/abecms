@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars'
 import HandlebarsIntl from 'handlebars-intl'
+import form from './form'
 
 /* Handlebar abe */
 import abeEngine 						from './handlebars/abeEngine'
@@ -27,6 +28,7 @@ Handlebars.registerHelper('printInput', printInput)
 HandlebarsIntl.registerWith(Handlebars)
 
 export {
+	form,
 	abeEngine,
 	abeImport,
 	compileAbe,

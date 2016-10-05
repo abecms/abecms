@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 import {Promise} from 'es6-promise'
 import path from 'path'
 import {
-  Util
+  cmsEditor
   ,config
   ,fileUtils
   ,cmsData
@@ -221,7 +221,7 @@ export function recurseWhereVariables (where) {
 }
 
 export function execRequestColumns(tpl) {
-  let util = new Util()
+  let util = new cmsEditor.form()
   var ar = []
   var matches = cmsData.regex.getTagAbeTypeRequest(tpl)
   Array.prototype.forEach.call(matches, (match) => {

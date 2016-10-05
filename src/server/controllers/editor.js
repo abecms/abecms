@@ -2,7 +2,7 @@ import {Promise} from 'es6-promise'
 
 import {
   cmsData,
-  Util,
+  cmsEditor,
   fileUtils,
   abeEngine,
   cmsTemplate,
@@ -217,7 +217,7 @@ function orderBlock(util) {
 
 export function editor(fileName, jsonPath, documentLink) {
   let p = new Promise((resolve) => {
-    var util = new Util()
+    var util = new cmsEditor.form()
     var arrayBlock = []
     var text
     var json
