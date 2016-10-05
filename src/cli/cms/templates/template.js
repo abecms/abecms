@@ -266,9 +266,9 @@ export function getSelectTemplateKeys(templatesPath) {
           .then((whereKeys) => {
             resolve(whereKeys)
           },
-          () => {
+          (e) => {
             console.log('findRequestColumns reject')
-            reject()
+            reject(e)
           })
           .catch((e) => {
             console.error('getSelectTemplateKeys', e)

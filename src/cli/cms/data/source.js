@@ -4,8 +4,10 @@ import https from 'https'
 import path from 'path'
 
 import {
-  cmsData
-  ,Util
+  config,
+  cmsData,
+  Util,
+  FileParser
 } from '../../'
 
 export function requestList(obj, tplPath, match, jsonPage) {
