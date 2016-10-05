@@ -5,7 +5,7 @@ import {
   Util,
   cleanSlug,
   cmsTemplate,
-  save,
+  cmsOperations,
   config,
   Hooks,
   cmsData,
@@ -38,7 +38,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
         text = resHook.text
 
         Hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
-        save(filePath, template, json, text, 'draft', null, 'draft')
+        cmsOperations.save.save(filePath, template, json, text, 'draft', null, 'draft')
             .then((resSave) => {
               Manager.instance.updateList()
               filePath = resSave.htmlPath

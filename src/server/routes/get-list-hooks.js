@@ -7,7 +7,6 @@ import {
   Util,
   cleanSlug,
   config,
-  save,
   Hooks,
   Plugins
 } from '../../cli'

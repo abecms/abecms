@@ -4,7 +4,6 @@ import {
   Util,
   cleanSlug,
   config,
-  save,
   cmsOperations,
   Hooks
 } from '../../cli'
