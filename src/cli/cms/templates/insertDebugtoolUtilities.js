@@ -1,7 +1,3 @@
-import {
-  cmsData
-} from '../../'
-
 export default function insertDebugtoolUtilities(text){
   return text.replace(
     /<\/body>/,
