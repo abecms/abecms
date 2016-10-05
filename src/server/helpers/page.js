@@ -58,7 +58,7 @@ var page = function (req, res, next) {
 
     if (!editor) {
 
-      Util.getDataList(fileUtils.removeLast(linkPath), text, json)
+      cmsData.source.getDataList(fileUtils.removeLast(linkPath), text, json)
         .then(() => {
           var page = new Page(template, text, json, html)
           res.set('Content-Type', 'text/html')
@@ -67,7 +67,7 @@ var page = function (req, res, next) {
           console.error(e)
         })
     }else {
-      text = Util.removeDataList(text)
+      text = cmsData.source.removeDataList(text)
       var page = new Page(template, text, json, html)
       res.set('Content-Type', 'text/html')
       res.send(page.html)

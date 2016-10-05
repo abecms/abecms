@@ -132,7 +132,7 @@ export default class Page {
       this._addSource(json)
 
       // We remove the {{abe type=data ...}} from the text 
-      this.template = Util.removeDataList(this.template)
+      this.template = cmsData.source.removeDataList(this.template)
 
       // It's time to replace the [index] by {{@index}} (concerning each blocks)
       this.template = this.template.replace(/\[index\]\./g, '{{@index}}-')

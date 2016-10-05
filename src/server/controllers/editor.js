@@ -229,11 +229,11 @@ export function editor(fileName, jsonPath, documentLink) {
     
     text = cmsTemplate.template.getTemplate(fileName)
 
-    Util.getDataList(fileUtils.removeLast(documentLink), text, json, true)
+    cmsData.source.getDataList(fileUtils.removeLast(documentLink), text, json, true)
       .then(() => {
         addSource(text, json, util)
 
-        text = Util.removeDataList(text)
+        text = cmsData.source.removeDataList(text)
 
         matchAttrAbe(text, json, util, arrayBlock)
         arrayBlock = []
