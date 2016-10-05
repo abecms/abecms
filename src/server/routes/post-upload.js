@@ -14,96 +14,55 @@ var route = function(req, res, next){
 
   var resp = {success: 1}
   var filePath
-  var fstream
   var folderWebPath = '/' + config.upload.image
   folderWebPath = Hooks.instance.trigger('beforeSaveImage', folderWebPath, req)
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
   req.pipe(req.busboy)
-  var hasError = false
+  var finished = false;
   req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-    var ext = filename.split('.')
-    ext = ext[ext.length - 1].toLowerCase()
-    file.fileRead = []
+    var ext = path.extname(filename);
+    var filenameNoExt = path.basename(filename,ext);
+    var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
+    var slug = limax(filenameNoExt, {separateNumbers: false}) + randID + ext
+    
+    filePath = path.join(folderFilePath, slug)
+    resp['filePath'] = path.join(folderWebPath, slug)
 
     var returnErr = function (msg) {
       file.resume()
-      hasError = true
       res.set('Content-Type', 'application/json')
       res.send(JSON.stringify({error: 1, response: msg}))
     }
 
     file.on('limit', function() {
-      returnErr('file to big')
-    })
-
-    file.on('data', function(chunk) {
-      file.fileRead.push(chunk)
+      returnErr('file is too big')
     })
 
     if (mimetype !== 'image/jpeg' && mimetype !== 'image/png' && mimetype !== 'image/svg+xml' && mimetype !== 'video/mp4') {
       returnErr('unauthorized file')
-    } else if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png' && ext !== 'svg' && ext !== 'mp4') {
-      returnErr('not an valid asset')
+    } else if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png' && ext !== '.svg' && ext !== '.mp4') {
+      returnErr('not a valid asset')
     }
 
-    file.on('end', function() {
-      if(hasError) return
-      var ext = filename.split('.')
-      ext = ext[ext.length - 1]
-      var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
+    var fstream = fse.createWriteStream(filePath);
 
-      var cleanFileName = limax(filename, {separateNumbers: false}).replace(`-${ext}`, `${randID}.${ext}`)
-
-      filePath = path.join(folderFilePath, cleanFileName)
-      var createImage = function () {
-        try{
-          var sfStat = fse.statSync(filePath)
-
-          if(sfStat){
-            var nb = filePath.match(/_([0-9]).(jpg|png|gif|svg|mp4)/) 
-            if(nb && nb[1]) filePath = filePath.replace(/_([0-9])\.(jpg|png|gif|svg|mp4)/, `_${parseInt(nb[1]) + 1}.$2`) 
-            else filePath = filePath.replace(/\.(jpg|png|gif|svg|mp4)/, '_1.$1') 
-            createImage()
-          }
-        }
-        catch(e){
-          resp['filePath'] = path.join(folderWebPath, cleanFileName)
-          fstream = fse.createWriteStream(filePath)
-          for (var i = 0; i < file.fileRead.length; i++) {
-            fstream.write(file.fileRead[i])
-          }
-          fstream.on('close', function () {})
-        }
+    fstream.on('finish', function() {
+      if(/\.(jpg|png|gif|svg)/.test(filePath)){
+        resp = Hooks.instance.trigger('afterSaveImage', resp, req)
       }
-
-      createImage()
-    })
-  })
-  req.busboy.on('finish', function() {
-    if(hasError) return
-    var triesAllowed = 6
-    var interval = setInterval(function () {
-      tryUpload()
-    }, 100)
-    var tryUpload = function () {
-      if(triesAllowed-- <= 0) {
-        clearInterval(interval)
-        return
-      }
-      try{
-        var openFile = fse.readFileSync(filePath).toString()
-        if(openFile === '') throw new Error('')
-        clearInterval(interval)
-        if(/\.(jpg|png|gif|svg)/.test(filePath)) resp = Hooks.instance.trigger('afterSaveImage', resp, req) 
+      // Waiting until the entire request has been fully processed
+      if (finished) {
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(resp))
       }
-      catch(e){
-        console.log('post upload finish', e)
-      }
-    }
-    tryUpload()
+    });
+
+    file.pipe(fstream);
+
+  })
+  req.busboy.on('finish', function() {
+    finished = true
   })
 }
 
