@@ -171,7 +171,7 @@ describe('Request', function() {
    */
   it('cmsData.sql.requestList()', function(done) {
     let util = new Util()
-    var matches = util.dataRequest(this.fixture.tag)
+    var matches = cmsData.regex.getTagAbeTypeRequest(this.fixture.tag)
 
     chai.expect(matches[0][0]).to.not.be.null
 

@@ -1,6 +1,7 @@
 import {Promise} from 'es6-promise'
 
 import {
+  cmsData,
   Util,
   fileUtils,
   abeEngine,
@@ -56,7 +57,7 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
       json[obj.key] = add(obj, json, text, util)
     }
 
-  }else if(util.dontHaveKey(obj.key) && util.isSingleAbe(v, text)) {
+  }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
     var realKey = obj.key.replace(/\./g, '-')
     obj.value = json[realKey]
     json[obj.key] = add(obj, json, text, util)
