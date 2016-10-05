@@ -223,7 +223,7 @@ export function recurseWhereVariables (where) {
 export function execRequestColumns(tpl) {
   let util = new Util()
   var ar = []
-  var matches = util.dataRequest(tpl)
+  var matches = cmsData.regex.getTagAbeTypeRequest(tpl)
   Array.prototype.forEach.call(matches, (match) => {
     var obj = Util.getAllAttributes(match[0], {})
     var type = cmsData.sql.getSourceType(obj.sourceString)

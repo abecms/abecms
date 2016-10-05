@@ -163,13 +163,13 @@ export default class Page {
     let util = new Util()
 
     while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
-      if(util.isSingleAbe(match[0], this.template)){
+      if(cmsData.regex.isSingleAbe(match[0], this.template)){
         var more_attr = ''
         var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
         this.template = this.template.replace(
           new RegExp(match[0]),
-          ' data-abe-attr-' + util.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
-          ' data-abe-' + util.validDataAbe(getattr) + '="'  + getattr + '"' +
+          ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
+          ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' +
           more_attr + match[0].replace('}}', ' has-abe=1}}')
         )
       }
@@ -186,7 +186,7 @@ export default class Page {
       var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
       this.template = this.template.replace(
         cmsData.regex.escapeTextToRegex(match[0], 'g'),
-        ' data-abe-' + util.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
+        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
       )
     }
 
@@ -255,15 +255,15 @@ export default class Page {
 
   _insertAbeEach(theMatch, key, lastIndex, util) {
     var matchBlock = theMatch[0]
-    if(util.isEachStatement(matchBlock)) return
-    if(util.isBlockAbe(matchBlock)){
+    if(cmsData.regex.isEachStatement(matchBlock)) return
+    if(cmsData.regex.isBlockAbe(matchBlock)){
       var matchblockattr = (matchBlock.split('=')[0]).trim()
       var getattr = cmsData.regex.getAttr(matchBlock, 'key').replace('.', '[index].')
       var newMatchBlock = ((!this._onlyHTML) ?
                             (/=[\"\']\{\{(.*?)\}\}/g.test(matchBlock) ?
-                                ' data-abe-attr-' + util.validDataAbe(getattr) + '="'  + matchblockattr + '"' :
+                                ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + matchblockattr + '"' :
                                 '') +
-                            ' data-abe-' + util.validDataAbe(getattr) + '="' + getattr + '" ' + matchBlock :
+                            ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="' + getattr + '" ' + matchBlock :
                             matchBlock)
           .replace(new RegExp('(key=[\'|"])' + key + '.', 'g'), '$1' + key + '[index].')
           .replace(/\{\{abe/, '{{abe dictionnary=\'' + key + '\'')
