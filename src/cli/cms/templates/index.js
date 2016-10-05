@@ -21,6 +21,7 @@ import truncate 	from './handlebars/truncate'
 
 import * as template from './template'
 import encodeAbeTagAsComment from './encodeAbeTagAsComment'
+import insertDebugtoolUtilities from './insertDebugtoolUtilities'
 
 /* Register utilities */
 Handlebars.registerHelper('attrAbe', 		attrAbe)
@@ -43,6 +44,7 @@ HandlebarsIntl.registerWith(Handlebars)
 export {
 	template,
 	encodeAbeTagAsComment,
+	insertDebugtoolUtilities,
 	attrAbe,
 	className,
 	cleanTab,
