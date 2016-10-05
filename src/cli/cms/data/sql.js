@@ -413,7 +413,12 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
       }
     })
   }else {
-    compare = where.right.column
+    if(typeof where.right.column !== 'undefined' && where.right.column !== null) {
+      compare = where.right.column
+    }else if(typeof where.right.value !== 'undefined' && where.right.value !== null) {
+      compare = where.right.value
+    }
+
     var matchRightVariable = regexIsVariable.exec(compare)
 
     if(typeof matchRightVariable !== 'undefined' && matchRightVariable !== null && matchRightVariable.length > 0) {
