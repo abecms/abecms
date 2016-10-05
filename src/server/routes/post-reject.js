@@ -1,5 +1,5 @@
 import {
-  save,
+  cmsOperations,
   fileUtils,
   Hooks,
   Manager
@@ -10,7 +10,7 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var p = new Promise((resolve) => {
-    save(
+    cmsOperations.save.save(
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,
       req.body.json,
@@ -26,7 +26,7 @@ var route = function(req, res, next){
   })
 
   p.then((resSave) => {
-    save(
+    cmsOperations.save.save(
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,
       req.body.json,

@@ -43,7 +43,7 @@ function publishNext(published, tt, cb, i = 0) {
       var p = new Promise((resolve, reject) => {
         try {
           
-          save(
+          cmsOperations.save.save(
             pub.path,
             json.abe_meta.template,
             null,
@@ -104,7 +104,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var FileParser = require('../../cli').FileParser
     var fileUtils = require('../../cli').fileUtils
     var folderUtils = require('../../cli').folderUtils
-    var save = require('../../cli').save
+    var cmsOperations = require('../../cli').cmsOperations
     var Manager = require('../../cli').Manager
 
     Manager.instance.init()

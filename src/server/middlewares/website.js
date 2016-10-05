@@ -10,7 +10,6 @@ import xss from 'xss'
 import pkg from '../../../package'
 
 import {
-  save,
   Util,
   FileParser,
   fileUtils,

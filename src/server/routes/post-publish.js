@@ -1,6 +1,6 @@
 import {
   fileUtils,
-  save,
+  cmsOperations,
   cleanSlug,
   Hooks,
   Manager
@@ -12,7 +12,7 @@ var route = function(req, res, next){
 
   var filePath = cleanSlug(req.body.filePath)
   var p = new Promise((resolve) => {
-    save(
+    cmsOperations.save.save(
       fileUtils.getFilePath(filePath),
       req.body.tplPath,
       req.body.json,
@@ -28,7 +28,7 @@ var route = function(req, res, next){
   })
 
   p.then((resSave) => {
-    save(
+    cmsOperations.save.save(
       fileUtils.getFilePath(req.body.filePath),
       req.body.tplPath,
       req.body.json,

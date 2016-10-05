@@ -8,7 +8,7 @@ import path from 'path'
 import {
 	cli
   ,cmsData
-	,save
+	,cmsOperations
 	,folderUtils
 	,fileUtils
 	,config
@@ -440,7 +440,7 @@ export default class FileParser {
         delete json.abe_meta.publish
       }
 
-      save(
+      cmsOperations.save.save(
 	      fileUtils.getFilePath(json.abe_meta.link),
 	      json.abe_meta.template,
 	      json,

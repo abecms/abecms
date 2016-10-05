@@ -48,8 +48,6 @@ import Create from './cms/Create'
 
 import config from './core/config/config'
 
-import {save, checkRequired, saveJson} from './cms/operations/save'
-
 import abeProcess from './extend/abe-process'
 import Hooks from './extend/abe-hooks'
 import Plugins from './extend/abe-plugins'
@@ -95,12 +93,9 @@ export {
 	,ifIn
 	,ifCond
 	,config
-	,save
 	,Hooks
 	,Plugins
 	,Locales
-	,checkRequired
-	,saveJson
 	,dateSlug
 	,dateUnslug
 	,Manager
