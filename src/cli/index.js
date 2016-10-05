@@ -3,7 +3,6 @@ import moment from 'moment'
 import fse from 'fs-extra'
 import clc from 'cli-color'
 
-import Util from './core/utils/abe-utils'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 
 import {
@@ -53,6 +52,7 @@ import Hooks from './extend/abe-hooks'
 import Plugins from './extend/abe-plugins'
 
 import * as cmsData from './cms/data'
+import * as cmsEditor from './cms/editor'
 import * as cmsOperations from './cms/operations'
 import * as cmsTemplate from './cms/templates'
 import * as coreUtils from './core/utils'
@@ -62,12 +62,12 @@ export {
 	,cmsOperations
 	,cmsTemplate
 	,coreUtils
+	,cmsEditor
 
 	,moment
 	,fse
 	,Handlebars
 	,clc
-	,Util
 	,slugify
 	,cleanSlug
 	,FileParser

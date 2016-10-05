@@ -1,6 +1,6 @@
 import extend from 'extend'
 
-export default class Utils {
+export default class Form {
 
   constructor() {
     this._form = {
