@@ -53,7 +53,7 @@ var route = function(req, res, next){
       ext = ext[ext.length - 1]
       var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
 
-      var cleanFileName = limax(filename, {separateNumbers: false}).replace(`.${ext}`, `${randID}.${ext}`)
+      var cleanFileName = limax(filename, {separateNumbers: false}).replace(`-${ext}`, `${randID}.${ext}`)
 
       filePath = path.join(folderFilePath, cleanFileName)
       var createImage = function () {
