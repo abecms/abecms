@@ -1,4 +1,4 @@
-import attr from "./attr";
+import attr from './attr'
 
 /**
  * Class FileAttr

@@ -49,7 +49,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
               console.error(e)
             })
       }else {
-        var json = FileParser.getJson(tplUrl.json.path)
+        json = FileParser.getJson(tplUrl.json.path)
         resolve(json, tplUrl.json.path)
       }
     }else {
@@ -57,7 +57,6 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     }
   }).catch(function(e) {
     console.error(e)
-    reject()
   })
 
   return p

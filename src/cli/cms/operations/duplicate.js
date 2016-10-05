@@ -1,13 +1,8 @@
-import path from 'path'
 import {
   Hooks,
-  fileUtils,
   FileParser,
-  Util,
   Manager,
-  cleanSlug,
   config,
-  save,
   cmsOperations
 } from '../../'
 
