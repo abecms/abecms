@@ -103,7 +103,7 @@ export default class Utils {
         var getattr = cmsData.regex.getAttr(matchAbe[i], 'key').replace('.', '[0]-')
         block = block.replace(
           matchAbe[i],
-          ' data-abe-' + this.validDataAbe(getattr) + '="'  + getattr + '" >'
+          ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" >'
         )
       }
     }
@@ -115,8 +115,8 @@ export default class Utils {
           var matchattr = (matchAbe[i].split('=')[0]).trim()
           block = block.replace(
               matchAbe[i],
-              ' data-abe-attr-' + this.validDataAbe(getattr) + '="'  + matchattr + '"' +
-              ' data-abe-' + this.validDataAbe(getattr) + '="'  + getattr + '" ' + matchAbe[i]
+              ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + matchattr + '"' +
+              ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + matchAbe[i]
             )
             .replace(/\{\{\abe.*?}\}/, '')
         }

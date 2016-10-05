@@ -14,7 +14,9 @@ describe('Request', function() {
       .then(function () {
 
         this.fixture = {
-          article: fse.readFileSync(__dirname + '/fixtures/templates/article-regex.html', 'utf8')
+          articleSingle: fse.readFileSync(__dirname + '/fixtures/templates/article-single-abe.html', 'utf8'),
+          articleEach: fse.readFileSync(__dirname + '/fixtures/templates/article-each-abe.html', 'utf8'),
+          articleRequest: fse.readFileSync(__dirname + '/fixtures/templates/article-request.html', 'utf8')
         }
         done()
         
@@ -25,7 +27,7 @@ describe('Request', function() {
    * cmsData.regex.getAttr
    */
   it('cmsData.regex.getAttr()', function() {
-    var attribute = cmsData.regex.getAttr(this.fixture.article, 'key')
+    var attribute = cmsData.regex.getAttr(this.fixture.articleSingle, 'key')
     chai.assert.equal(attribute, 'title');
   });
 
@@ -33,7 +35,54 @@ describe('Request', function() {
    * cmsData.regex.escapeTextToRegex
    */
   it('cmsData.regex.escapeTextToRegex()', function() {
-    var attribute = cmsData.regex.escapeTextToRegex(this.fixture.article, 'g')
+    var attribute = cmsData.regex.escapeTextToRegex(this.fixture.articleSingle, 'g')
     chai.expect(typeof attribute).to.contain('object');
+  });
+
+  /**
+   * cmsData.regex.isSingleAbe
+   */
+  it('cmsData.regex.isSingleAbe()', function() {
+    var bool = cmsData.regex.isSingleAbe(this.fixture.articleSingle)
+    chai.expect(bool).to.be.true;
+    bool = cmsData.regex.isSingleAbe(this.fixture.articleEach)
+    chai.expect(bool).to.be.false;
+  });
+
+  /**
+   * cmsData.regex.isBlockAbe
+   */
+  it('cmsData.regex.isBlockAbe()', function() {
+    var bool = cmsData.regex.isBlockAbe(this.fixture.articleSingle)
+    chai.expect(bool).to.be.false;
+    bool = cmsData.regex.isBlockAbe(this.fixture.articleEach)
+    chai.expect(bool).to.be.true;
+  });
+
+  /**
+   * cmsData.regex.isEachStatement
+   */
+  it('cmsData.regex.isEachStatement()', function() {
+    var bool = cmsData.regex.isEachStatement(this.fixture.articleSingle)
+    chai.expect(bool).to.be.false;
+    bool = cmsData.regex.isEachStatement(this.fixture.articleEach)
+    chai.expect(bool).to.be.true;
+  });
+
+  /**
+   * cmsData.regex.getTagAbeTypeRequest
+   */
+  it('cmsData.regex.getTagAbeTypeRequest()', function() {
+    var arr = cmsData.regex.getTagAbeTypeRequest(this.fixture.articleSingle)
+    chai.expect(arr[0]).to.be.undefined;
+    var arr = cmsData.regex.getTagAbeTypeRequest(this.fixture.articleRequest)
+    chai.expect(arr[0]).to.not.be.null;
+  });
+
+  /**
+   * cmsData.regex.validDataAbe
+   */
+  it('cmsData.regex.validDataAbe()', function() {
+    // doesn't tested because not sure what it does
   });
 });
