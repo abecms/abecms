@@ -1,4 +1,3 @@
-import extend from 'extend'
 import {
   cmsData
   ,config
@@ -8,7 +7,6 @@ import {
 export function add(tpl, json, type, obj = {}, date = null, realType = 'draft') {
   let meta = config.meta.name
 
-  // json[meta] = extend({}, json[meta])
   var currentDate = (typeof date !== 'undefined' && date !== null && date !== '') ? date : new Date()
   var abeUrl = (type === 'publish') ? json[meta].link : cmsData.fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
 

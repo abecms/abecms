@@ -20,9 +20,9 @@ export default function encodeAbeTagAsComment(block){
   }
   matchAbe = block.match(/( [A-Za-z0-9\-\_]+="*{{.*?}})/g)
   if(matchAbe){
-    for (var i = 0; i < matchAbe.length; i++) {
+    for (i = 0; i < matchAbe.length; i++) {
       if(typeof matchAbe !== 'undefined' && matchAbe !== null){
-        var getattr = cmsData.regex.getAttr(matchAbe[i], 'key').replace('.', '[0]-')
+        getattr = cmsData.regex.getAttr(matchAbe[i], 'key').replace('.', '[0]-')
         var matchattr = (matchAbe[i].split('=')[0]).trim()
         block = block.replace(
             matchAbe[i],

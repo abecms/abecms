@@ -1,23 +1,11 @@
-import extend from 'extend'
-import clc from 'cli-color'
-import fse from 'fs-extra'
-import ajaxRequest from 'ajax-request'
 import {Promise} from 'es6-promise'
 import http from 'http' 
 import https from 'https'
 import path from 'path'
 
 import {
-  config
-  ,cmsData
+  cmsData
   ,Util
-  ,folderUtils
-  ,fileUtils
-  ,FileParser
-  ,dateSlug
-  ,dateUnslug
-  ,Hooks
-  ,Plugins
 } from '../../'
 
 export function requestList(obj, tplPath, match, jsonPage) {
@@ -64,7 +52,7 @@ export function valueList(obj, match, jsonPage) {
         jsonPage['abe_source'][obj.key] = value
       }catch(e){
         jsonPage['abe_source'][obj.key] = null
-        console.log(clc.red(`Error ${value}/is not a valid JSON`),  `\n${e}`)
+        console.log(`Error ${value}/is not a valid JSON`, `\n${e}`)
       }
     }
     resolve()
@@ -127,7 +115,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
               jsonPage['abe_source'][obj.key] = body
             }
           } catch(e) {
-            console.log(clc.red(`Error ${obj.sourceString} is not a valid JSON`),  `\n${e}`)
+            console.log(`Error ${obj.sourceString} is not a valid JSON`, `\n${e}`)
           }
           resolve()
         })
