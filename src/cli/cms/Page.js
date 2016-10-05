@@ -5,8 +5,7 @@ import {
   Util,
   fileUtils,
   abeEngine,
-  getAttr,
-  escapeTextToRegex,
+  cmsData,
   config,
   Hooks,
   Manager
@@ -166,7 +165,7 @@ export default class Page {
     while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
       if(util.isSingleAbe(match[0], this.template)){
         var more_attr = ''
-        var getattr = getAttr(match, 'key').replace(/\./g, '-')
+        var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
         this.template = this.template.replace(
           new RegExp(match[0]),
           ' data-abe-attr-' + util.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
@@ -184,9 +183,9 @@ export default class Page {
     let util = new Util()
 
     while (match = this.abePattern.exec(this.template)) {
-      var getattr = getAttr(match, 'key').replace(/\./g, '-')
+      var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
       this.template = this.template.replace(
-        escapeTextToRegex(match[0], 'g'),
+        cmsData.regex.escapeTextToRegex(match[0], 'g'),
         ' data-abe-' + util.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
       )
     }
@@ -259,7 +258,7 @@ export default class Page {
     if(util.isEachStatement(matchBlock)) return
     if(util.isBlockAbe(matchBlock)){
       var matchblockattr = (matchBlock.split('=')[0]).trim()
-      var getattr = getAttr(matchBlock, 'key').replace('.', '[index].')
+      var getattr = cmsData.regex.getAttr(matchBlock, 'key').replace('.', '[index].')
       var newMatchBlock = ((!this._onlyHTML) ?
                             (/=[\"\']\{\{(.*?)\}\}/g.test(matchBlock) ?
                                 ' data-abe-attr-' + util.validDataAbe(getattr) + '="'  + matchblockattr + '"' :
@@ -292,7 +291,7 @@ export default class Page {
   _encloseAbeTag() {
     var match
     while (match = this.abePattern.exec(this.template)) {
-      this.template = this.template.replace(escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+      this.template = this.template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
     }
 
     return this
@@ -304,8 +303,8 @@ export default class Page {
     var limit = 0
 
     while (match = listReg.exec(this.template)) {
-      var editable = getAttr(match[0], 'editable')
-      var key = getAttr(match[0], 'key')
+      var editable = cmsData.regex.getAttr(match[0], 'editable')
+      var key = cmsData.regex.getAttr(match[0], 'key')
 
       if(typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') {
         json[key] = json[config.source.name][key]

@@ -5,7 +5,7 @@ import {
   coreUtils,
   config,
   Manager,
-  getAttr
+  cmsData
 } from '../../'
 
 /**
@@ -266,7 +266,7 @@ export function executeFromClause(statement, pathFromClause){
 export function execQuery(pathQuery, match, jsonPage) {
   var res
   var files
-  var request = handleSqlRequest(getAttr(match, 'source'), jsonPage)
+  var request = handleSqlRequest(cmsData.regex.getAttr(match, 'source'), jsonPage)
 
   files = executeFromClause(request.from, pathQuery)
   files = executeOrderByClause(files, request.orderby)

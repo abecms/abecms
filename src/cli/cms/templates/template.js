@@ -2,12 +2,10 @@ import fse from 'fs-extra'
 import {Promise} from 'es6-promise'
 import path from 'path'
 import {
-  getAttr
-  ,Util
+  Util
   ,config
   ,fileUtils
   ,cmsData
-  ,escapeTextToRegex
   ,Hooks
 } from '../../'
 
@@ -47,7 +45,7 @@ export function addOrder(text) {
     Array.prototype.forEach.call(matches, (match) => {
       if(typeof match !== 'undefined' && match !== null) {
         
-        var orderAttr = getAttr(match, 'order')
+        var orderAttr = cmsData.regex.getAttr(match, 'order')
 
         if(typeof orderAttr === 'undefined' || orderAttr === null || orderAttr === '') {
           var matchOrder = match.replace(/\}\}$/, ` order='${order}'}}`)
@@ -83,7 +81,7 @@ export function includePartials(text) {
     if(fileUtils.isFile(file)) {
       partial = includePartials(fse.readFileSync(file, 'utf8'))
     }
-    text = text.replace(escapeTextToRegex(abeImport, 'g'), partial)
+    text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
   })
 
   return text
@@ -101,8 +99,8 @@ function translate(text) {
       Array.prototype.forEach.call(splitedMatches, (splitedMatch) => {
         var currentMatch = `{{abe ${splitedMatch}`
         if(/({{abe.*type=[\'|\"]translate.*}})/.test(currentMatch)) {
-          var locale = getAttr(currentMatch, 'locale')
-          var source = getAttr(currentMatch, 'source')
+          var locale = cmsData.regex.getAttr(currentMatch, 'locale')
+          var source = cmsData.regex.getAttr(currentMatch, 'source')
 
           if (locale.indexOf('{{') === -1) {
             locale = `'${locale}'`
@@ -122,7 +120,7 @@ function translate(text) {
           replace = replace.replace(/source=['|"].*?['|"]/, source)
           replace = replace.replace(/{{i18nAbe.*?}}/, `{{{i18nAbe ${locale} ${source}}}}`)
 
-          text = text.replace(escapeTextToRegex(currentMatch, 'g'), replace)
+          text = text.replace(cmsData.regex.escapeTextToRegex(currentMatch, 'g'), replace)
         }
       })
     })

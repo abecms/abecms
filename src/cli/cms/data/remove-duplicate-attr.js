@@ -1,5 +1,5 @@
 import {
-  getAttr
+  cmsData
 } from '../../'
 
 function recurseDeleteKey(currentLevel, arrayKeyAttr) {
@@ -31,7 +31,7 @@ export default function removeDuplicateAttr(text, json) {
   if(typeof matches !== 'undefined' && matches !== null){
 
     Array.prototype.forEach.call(matches, (match) => {
-      var keyAttr = getAttr(match, 'key')
+      var keyAttr = cmsData.regex.getAttr(match, 'key')
 
       if(typeof match !== 'undefined' && match !== null) {
         var arrayKeyAttr = keyAttr.split('.')
