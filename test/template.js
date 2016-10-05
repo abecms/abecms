@@ -14,6 +14,7 @@ describe('Template', function() {
       .then(function () {
         this.fixture = {
           template: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf-8'),
+          articleEach: fse.readFileSync(__dirname + '/fixtures/templates/article-each-abe.html', 'utf-8'),
           templateKeys: fse.readFileSync(__dirname + '/fixtures/templates/article-keys.html', 'utf-8')
         }
         done()
@@ -68,5 +69,23 @@ describe('Template', function() {
     const pathTemplate = path.join(config.root, config.templates.url)
     var ar = cmsTemplate.template.execRequestColumns(this.fixture.templateKeys)
     chai.expect(ar.indexOf('abe_meta.date')).to.be.above(-1);
+  });
+
+  /**
+   * cmsTemplate.insertDebugtoolUtilities
+   * 
+   */
+  it('cmsTemplate.insertDebugtoolUtilities()', function() {
+    var txt = cmsTemplate.insertDebugtoolUtilities('</body>');
+    chai.expect(txt.length).to.above(10);
+  });
+
+  /**
+   * cmsTemplate.encodeAbeTagAsComment
+   * 
+   */
+  it('cmsTemplate.encodeAbeTagAsComment()', function() {
+    var txt = cmsTemplate.encodeAbeTagAsComment(this.fixture.articleEach);
+    chai.expect(txt.indexOf('{')).to.equal(-1);
   });
 });

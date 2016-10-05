@@ -90,26 +90,6 @@ export default class Utils {
     this._form[obj.tab].item.push(obj)
   }
 
-  /**
-   * Add some stuff like style / script before closing </body> tag
-   * @param  {String} text html page
-   * @return {String} text + some sugar stuff added on the fly
-   */
-  insertDebugtoolUtilities(text){
-    return text.replace(
-      /<\/body>/,
-        `<style>
-          body [data-abe]{ transition: box-shadow 600ms ease-in-out; box-shadow: 0; }
-          body .select-border{ border-color: #007CDE; box-shadow: 0 3px 13px #7CBAEF; }
-          body img.display-attr:before { content: attr(alt); }
-          body a.display-attr:before { content: attr(title); }
-          body .display-attr:before { position: absolute; display: block; z-index: 555; font-size: 10px; background-color: rgba(255, 255, 255, 0.75); padding: 2px 5px; color: #5D5D5D; }
-          .hidden-abe{ display: none!important; width: 0px !important; height: 0px!important; position: absolute; left: -10000px; top: -10000px; visibility: hidden;}
-        </style>
-      </body>`
-    )
-  }
-
   static sanitizeSourceAttribute(obj, jsonPage){
     if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
       var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
