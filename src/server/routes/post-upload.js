@@ -19,10 +19,10 @@ var route = function(req, res, next){
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
   req.pipe(req.busboy)
-  var finished = false;
+  var finished = false
   req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-    var ext = path.extname(filename);
-    var filenameNoExt = path.basename(filename,ext);
+    var ext = path.extname(filename)
+    var filenameNoExt = path.basename(filename,ext)
     var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
     var slug = limax(filenameNoExt, {separateNumbers: false}) + randID + ext
     
@@ -45,7 +45,7 @@ var route = function(req, res, next){
       returnErr('not a valid asset')
     }
 
-    var fstream = fse.createWriteStream(filePath);
+    var fstream = fse.createWriteStream(filePath)
 
     fstream.on('finish', function() {
       if(/\.(jpg|png|gif|svg)/.test(filePath)){
@@ -56,9 +56,9 @@ var route = function(req, res, next){
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(resp))
       }
-    });
+    })
 
-    file.pipe(fstream);
+    file.pipe(fstream)
 
   })
   req.busboy.on('finish', function() {
