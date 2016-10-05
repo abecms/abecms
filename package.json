@@ -25,7 +25,7 @@
     "js:engine": "browserify -t babelify src/server/public/scripts/template-engine.js -o src/server/public/scripts/template-engine-compiled.js",
     "build:front": "npm run js:admin && npm run js:engine && npm run sass",
     "build:scripts": "npm run build:front && ./node_modules/.bin/babel --presets es2015,stage-0 -d dist/server src/server/ && ./node_modules/.bin/babel --presets es2015,stage-0 -d dist/cli src/cli/ && npm run mvasset",
-    "compile": "./node_modules/.bin/babel --presets es2015,stage-0 -d dist/ src/",
+    "compile": "./node_modules/.bin/babel --presets es2015,stage-0 -d dist/ src/ && cp -r src/cli/core/config/config.json dist/cli/core/config/config.json",
     "watchdev": "npm run build:front && npm run compile && npm run mvasset && nodemon --debug --exec npm run compile && npm run mvasset --kill-others",
     "startdev": "npm run build:front && npm run compile && npm run mvasset && node src/tasks/nodemon.js & npm run watch --kill-others",
     "startdevOnly": "npm run js:admin && npm run js:engine && node src/tasks/nodemon.js & npm run watch --kill-others",
