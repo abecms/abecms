@@ -8,7 +8,7 @@ import {
   cleanSlug,
   config,
   save,
-  abeCreate
+  cmsOperations
 } from '../../'
 
 var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = false) {
@@ -46,7 +46,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
     }
     Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate)
 
-    var pCreate = abeCreate(template, newPath, name, req, json, (isUpdate) ? false : true)
+    var pCreate = cmsOperations.create(template, newPath, name, req, json, (isUpdate) ? false : true)
     pCreate.then((resSave) => {
       resolve(resSave)
     },

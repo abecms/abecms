@@ -5,14 +5,14 @@ import {
   cleanSlug,
   config,
   save,
-  abeCreate,
+  cmsOperations,
   Hooks
 } from '../../cli'
 
 var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
-  var p = abeCreate(req.query.selectTemplate, req.query.filePath, req.query.tplName, req)
+  var p = cmsOperations.create(req.query.selectTemplate, req.query.filePath, req.query.tplName, req)
 
   p.then((resSave) => {
     var result = {

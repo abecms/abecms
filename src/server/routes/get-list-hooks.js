@@ -8,7 +8,6 @@ import {
   cleanSlug,
   config,
   save,
-  abeCreate,
   Hooks,
   Plugins
 } from '../../cli'

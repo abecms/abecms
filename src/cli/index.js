@@ -48,8 +48,6 @@ import Create from './cms/Create'
 
 import config from './core/config/config'
 
-import abeCreate from './cms/operations/abe-create'
-import abeDuplicate from './cms/operations/abe-duplicate'
 import {save, checkRequired, saveJson} from './cms/operations/save'
 
 import abeProcess from './extend/abe-process'
@@ -57,11 +55,13 @@ import Hooks from './extend/abe-hooks'
 import Plugins from './extend/abe-plugins'
 
 import * as cmsData from './cms/data'
+import * as cmsOperations from './cms/operations'
 import * as cmsTemplate from './cms/templates'
 import * as coreUtils from './core/utils'
 
 export {
 	cmsData
+	,cmsOperations
 	,cmsTemplate
 	,coreUtils
 
@@ -70,8 +70,6 @@ export {
 	,Handlebars
 	,clc
 	,Util
-	,abeCreate
-	,abeDuplicate
 	,slugify
 	,cleanSlug
 	,FileParser
