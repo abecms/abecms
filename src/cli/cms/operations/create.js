@@ -31,7 +31,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
         if (duplicate) {
           json = cmsData.removeDuplicateAttr(text, json)
         }
-        text = Util.removeDataList(text)
+        text = cmsData.source.removeDataList(text)
         var resHook = Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
         filePath = resHook.filePath
         json = resHook.json

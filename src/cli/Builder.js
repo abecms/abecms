@@ -4,6 +4,7 @@ import path from 'path'
 
 import {
   Util,
+  cmsData,
   FileParser,
   config,
   fileUtils,
@@ -31,7 +32,7 @@ class Builder {
         var json = fse.readJsonSync(file.path)
         var text = cmsTemplate.template.getTemplate(json.abe_meta.template)
         
-        Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
+        cmsData.source.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
             var page = new Page(json.abe_meta.template, text, json, true)
             saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
@@ -45,7 +46,7 @@ class Builder {
         var json = fse.readJsonSync(file.path)
         var text = cmsTemplate.template.getTemplate(json.abe_meta.template)
 
-        Util.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
+        cmsData.source.getDataList(fileUtils.removeLast(json.abe_meta.link), text, json)
           .then(() => {
             var page = new Page(json.abe_meta.template, text, json, true)
             saveHtml(path.join(root, dest + json.abe_meta.link), page.html)

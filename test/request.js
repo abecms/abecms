@@ -165,11 +165,10 @@ describe('Request', function() {
   });
 
   /**
-   * cmsData.sql.requestList
+   * cmsData.source.requestList
    * 
    */
-  it('cmsData.sql.requestList()', function(done) {
-    let util = new Util()
+  it('cmsData.source.requestList()', function(done) {
     var matches = cmsData.regex.getTagAbeTypeRequest(this.fixture.tag)
 
     chai.expect(matches[0][0]).to.not.be.null
@@ -178,7 +177,7 @@ describe('Request', function() {
     chai.expect(matches[0][0]).to.not.be.null
 
     var jsonPage = {}
-    Util.requestList(attributes, '', matches[0][0], jsonPage)
+    cmsData.source.requestList(attributes, '', matches[0][0], jsonPage)
       .then(function () {
         chai.expect(jsonPage.abe_source).to.not.be.undefined
         done()

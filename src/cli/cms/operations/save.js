@@ -114,7 +114,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       text = cmsTemplate.template.getTemplate(fullTpl)
     }
 
-    Util.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
+    cmsData.source.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
         .then(() => {
 
           json = Hooks.instance.trigger('afterGetDataListOnSave', json)
