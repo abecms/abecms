@@ -2,7 +2,7 @@ import {
   FileParser,
   fileUtils,
   config,
-  fileAttr,
+  cmsData,
   Manager
 } from '../../'
 
@@ -25,8 +25,8 @@ export function getFilesRevision(urls, fileName) {
 
   var publishVersion = false
   urls.forEach(function (urlObj) {
-    var fileData = fileAttr.get(urlObj.cleanPath)
-    if(fileData.s === 'd' && fileAttr.delete(urlObj.cleanPath) == fileAttr.delete(fileName)) {
+    var fileData = cmsData.fileAttr.get(urlObj.cleanPath)
+    if(fileData.s === 'd' && cmsData.fileAttr.delete(urlObj.cleanPath) == cmsData.fileAttr.delete(fileName)) {
       var currentDate = new Date(urlObj.date)
       if(currentDate.getTime() > publishDate.getTime()) {
         if(!publishVersion && typeof res[res.length - 1] !== 'undefined' && res[res.length - 1] !== null) {
@@ -87,9 +87,9 @@ export function getDocumentRevision(docPath) {
   var documentPath = docPath
   var latest = true
 
-  if(fileAttr.test(documentPath)){
+  if(cmsData.fileAttr.test(documentPath)){
     latest = false
-    documentPath = fileAttr.delete(documentPath)
+    documentPath = cmsData.fileAttr.delete(documentPath)
   }
   var revisions = getVersions(documentPath)
   if (latest && revisions.length >= 0) {

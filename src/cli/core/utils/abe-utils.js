@@ -13,7 +13,6 @@ import {
   ,folderUtils
   ,fileUtils
   ,FileParser
-  ,fileAttr
   ,dateSlug
   ,dateUnslug
   ,Hooks
@@ -150,7 +149,7 @@ export default class Utils {
 
     json[meta] = extend({}, json[meta])
     var currentDate = (typeof date !== 'undefined' && date !== null && date !== '') ? date : new Date()
-    var abeUrl = (type === 'publish') ? json[meta].link : fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
+    var abeUrl = (type === 'publish') ? json[meta].link : cmsData.fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
 
     if(typeof json[meta].date === 'undefined' || json[meta].date === null) {
       json[meta].date = currentDate

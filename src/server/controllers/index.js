@@ -29,7 +29,6 @@ import {
 } from '../routes'
 
 import {
-  fileAttr,
   save,
   Util,
   FileParser,

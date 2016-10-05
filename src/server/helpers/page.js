@@ -1,7 +1,6 @@
 import mkdirp from 'mkdirp'
 import {
   Util,
-  fileAttr,
   cmsData,
   FileParser,
   fileUtils,
