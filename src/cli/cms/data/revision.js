@@ -107,11 +107,7 @@ export function getDocumentRevision(docPath) {
   return result
 }
 
-export function addStatusAndDateToFileName(date, file) {
-  if (date.indexOf(':') > -1 || date.indexOf('-') > -1 || date.indexOf('.') > -1) {
-    console.log('[ WARNING ] you have old file architecture', file)
-    return date
-  }
+export function getStatusAndDateToFileName(date, file) {
   var res = date.substring(0, 4) + '-'
             + date.substring(4, 6) + '-'
             + date.substring(6, 11) + ':'

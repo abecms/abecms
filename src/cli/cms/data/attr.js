@@ -28,7 +28,7 @@ export default class Attr {
     var rex = new RegExp(captureAttr + this.getExtension() + ')')
     if(rex.test(this.str)) {
       var arrAttr = this.str.match(rex)[0].replace('-abe-', '')
-      this.val = {'s': arrAttr[0], 'd': cmsData.revision.addStatusAndDateToFileName(arrAttr.slice(1), this.str)}
+      this.val = {'s': arrAttr[0], 'd': cmsData.revision.getStatusAndDateToFileName(arrAttr.slice(1))}
     }
     return this.val
   }
