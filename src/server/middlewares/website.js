@@ -16,7 +16,6 @@ import {
   folderUtils,
   config,
   Page,
-  Locales,
   abeProcess,
   Hooks,
   Plugins,
