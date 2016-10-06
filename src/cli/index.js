@@ -34,7 +34,6 @@ import {
 import Manager from './core/manager/Manager'
 import Page from './cms/Page'
 
-import {dateSlug, dateUnslug} from './core/utils/abe-date'
 import Locales from './core/utils/abe-locales'
 import FileParser from './core/utils/file-parser'
 import fileUtils from './core/utils/file-utils'
@@ -96,8 +95,6 @@ export {
 	,Hooks
 	,Plugins
 	,Locales
-	,dateSlug
-	,dateUnslug
 	,Manager
 	,Page
 }

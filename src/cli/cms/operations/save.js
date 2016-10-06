@@ -12,7 +12,6 @@ import {
   ,cmsData
   ,config
   ,fileUtils
-  ,dateSlug
   ,Page
   ,cmsTemplate
   ,Hooks
@@ -233,7 +232,7 @@ export function dateIso(tplUrl, type = null) {
   
   switch(type) {
   case 'draft':
-    newDateISO = dateSlug((new Date().toISOString()))
+    newDateISO = cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))
     dateISO = 'd' + newDateISO
     break
   case 'publish':
@@ -241,7 +240,7 @@ export function dateIso(tplUrl, type = null) {
     saveFile = tplUrl.publish.path
     break
   default:
-    newDateISO = dateSlug((new Date().toISOString()))
+    newDateISO = cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))
     dateISO = type[0] + newDateISO
     break
   }
