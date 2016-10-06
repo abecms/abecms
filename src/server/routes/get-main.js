@@ -8,7 +8,7 @@ import {
   Page,
   cmsData,
   cmsTemplate,
-  Locales,
+  coreUtils,
   Hooks,
   Manager
 } from '../../cli'
@@ -148,7 +148,7 @@ var route = function(req, res, next) {
       // tplName: _file,
       json: _json,
       config: config,
-      Locales: Locales.instance.i18n,
+      Locales: coreUtils.locales.instance.i18n,
       manager: manager,
       express: {
         res: res,
