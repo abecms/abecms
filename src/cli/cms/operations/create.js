@@ -2,7 +2,6 @@ import path from 'path'
 import {
   fileUtils,
   FileParser,
-  Util,
   cleanSlug,
   cmsTemplate,
   cmsOperations,

@@ -1,14 +1,13 @@
 import {
   cmsData
   ,config
-  ,dateSlug
 } from '../../'
 
 export function add(tpl, json, type, obj = {}, date = null, realType = 'draft') {
   let meta = config.meta.name
 
   var currentDate = (typeof date !== 'undefined' && date !== null && date !== '') ? date : new Date()
-  var abeUrl = (type === 'publish') ? json[meta].link : cmsData.fileAttr.add(json[meta].link, 'd' + dateSlug(currentDate.toISOString())) + ''
+  var abeUrl = (type === 'publish') ? json[meta].link : cmsData.fileAttr.add(json[meta].link, 'd' + cmsData.revision.removeStatusAndDateFromFileName(currentDate.toISOString())) + ''
 
   if(typeof json[meta].date === 'undefined' || json[meta].date === null) {
     json[meta].date = currentDate

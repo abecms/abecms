@@ -221,7 +221,6 @@ export function recurseWhereVariables (where) {
 }
 
 export function execRequestColumns(tpl) {
-  let util = new cmsEditor.form()
   var ar = []
   var matches = cmsData.regex.getTagAbeTypeRequest(tpl)
   Array.prototype.forEach.call(matches, (match) => {
