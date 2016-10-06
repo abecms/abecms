@@ -6,12 +6,11 @@ import path from 'path'
 import {
   config,
   cmsData,
-  Util,
   FileParser
 } from '../../'
 
 export function requestList(obj, tplPath, match, jsonPage) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     cmsData.sql.executeQuery(tplPath, match, jsonPage)
       .then((data) => {
         if (!jsonPage['abe_source']) {
@@ -44,7 +43,7 @@ export function requestList(obj, tplPath, match, jsonPage) {
 }
 
 export function valueList(obj, match, jsonPage) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     var value = cmsData.sql.getDataSource(match)
 
     if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
@@ -64,7 +63,7 @@ export function valueList(obj, match, jsonPage) {
 }
 
 export function urlList(obj, tplPath, match, jsonPage) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
       var host = obj.sourceString
       host = host.split('/')
@@ -141,7 +140,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
 }
 
 export function fileList(obj, tplPath, match, jsonPage) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     jsonPage['abe_source'][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
     resolve()
   })
@@ -150,7 +149,7 @@ export function fileList(obj, tplPath, match, jsonPage) {
 }
 
 export function nextDataList(tplPath, jsonPage, match) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     if(typeof jsonPage['abe_source'] === 'undefined' || jsonPage['abe_source'] === null) {
       jsonPage['abe_source'] = {}
     }
@@ -203,7 +202,7 @@ export function nextDataList(tplPath, jsonPage, match) {
 }
 
 export function getDataList(tplPath, text, jsonPage) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
 
     var promises = []
     var matches = cmsData.regex.getTagAbeTypeRequest(text)

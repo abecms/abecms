@@ -3,7 +3,6 @@ import Handlebars from 'handlebars'
 import {
   fileUtils,
   FileParser,
-  Util,
   cleanSlug,
   config,
   save,
