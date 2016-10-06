@@ -1,7 +1,7 @@
 {
 	"abe_meta": {
     "template": "article",
-		"link": "/article-1.json",
+		"link": "/article-1.html",
     "status": "publish",
     "date": "2016-08-11T16:40:41.974Z",
     "latest": {"date": "2016-08-11T16:40:41.974Z"}
