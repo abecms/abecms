@@ -344,7 +344,7 @@ export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
     if(limit < maxLimit || maxLimit === -1) {
       if(typeof wheres !== 'undefined' && wheres !== null) {
 
-        if(!recurseWhere(wheres, file.publish, jsonPage)) {
+        if(file.publish && !recurseWhere(wheres, file.publish, jsonPage)) {
           var json = JSON.parse(JSON.stringify(file.publish))
           var jsonValues = {}
 
