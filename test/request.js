@@ -5,7 +5,6 @@ var config = require('../src/cli').config
 config.set({root: __dirname + '/fixtures'})
 
 var cmsData = require('../src/cli').cmsData
-var Util = require('../src/cli').Util
 var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
 

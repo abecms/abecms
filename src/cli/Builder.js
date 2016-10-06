@@ -3,7 +3,6 @@ import {saveHtml} from './cms/operations/save'
 import path from 'path'
 
 import {
-  Util,
   cmsData,
   FileParser,
   config,
