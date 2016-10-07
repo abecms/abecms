@@ -49,7 +49,7 @@ export default class FileParser {
       var pathLevel = dirName + '/' + level[i]
       var isFolder = true
       try {
-        var directory = fse.lstatSync(pathLevel);
+        var directory = fse.lstatSync(pathLevel)
         if (!directory.isDirectory()) {
           isFolder = false
         }
@@ -132,26 +132,26 @@ export default class FileParser {
   static getFolders(folder, flatten, level) {
     var arr = []
     flatten = flatten || false
-    arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), 'folders', flatten, /(.*?)/, level)
+    arr = FileParser.read(folder.replace(/\/$/, ''), folder.replace(/\/$/, ''), 'folders', flatten, /(.*?)/, level)
     return arr
   }
   
   static getFiles(folder, flatten, level, extensions = /(.*?)/, inversePattern = false) {
     var arr = []
     flatten = flatten || false
-    arr = FileParser.read(fileUtils.cleanPath(folder), fileUtils.cleanPath(folder), 'files', flatten, extensions, level, 0, inversePattern)
+    arr = FileParser.read(folder.replace(/\/$/, ''), folder.replace(/\/$/, ''), 'files', flatten, extensions, level, 0, inversePattern)
 
     return arr
   }
 
   static getFilesByType(pathFile, type = null) {
     try {
-      var directory = fse.lstatSync(pathFile);
+      var directory = fse.lstatSync(pathFile)
       if (!directory.isDirectory()) {
         mkdirp.sync(pathFile)
       }
     } catch (e) {
-        mkdirp.sync(pathFile)
+      mkdirp.sync(pathFile)
     }
     var files = FileParser.getFiles(pathFile, true, 20, new RegExp(`.${config.files.templates.extension}`))
 
@@ -165,7 +165,7 @@ export default class FileParser {
   }
   
   static getAssetsFolder(pathAssets = '') {
-    var folder = fileUtils.pathWithRoot(pathAssets)
+    var folder = path.join(config.root, pathAssets.replace(config.root, '')).replace(/\/$/, '')
     var assetsFolders = []
     var flatten = true
     var site = folder
@@ -175,7 +175,7 @@ export default class FileParser {
     var pathAssets = path.join(folder, templates)
 
     try {
-      var directory = fse.lstatSync(pathAssets);
+      var directory = fse.lstatSync(pathAssets)
       if (!directory.isDirectory()) {
         var arr = FileParser.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99)
 
@@ -183,11 +183,11 @@ export default class FileParser {
         Array.prototype.forEach.call(arr, (file) => {
           var folderName = fileUtils.removeExtension(file.path) + assets
           try {
-            var directory = fse.lstatSync(folderName);
+            var directory = fse.lstatSync(folderName)
             if (!directory.isDirectory()) {
               assetsFolders.push(folderName)
             }
-            } catch (e) {
+          } catch (e) {
           }
         })
       }
@@ -214,7 +214,7 @@ export default class FileParser {
     let structure = config.structure.url
     let templates = config.templates.url
     try {
-      var directoryStructure = fse.lstatSync(path.join(site.path, structure));
+      var directoryStructure = fse.lstatSync(path.join(site.path, structure))
       if (!directoryStructure.isDirectory()) {
         site.folders = FileParser.getFolders(path.join(site.path, structure), false)
         result.structure = site.folders
@@ -222,7 +222,7 @@ export default class FileParser {
     } catch (e) {
     }
     try {
-      var directoryTemplate = fse.lstatSync(path.join(site.path, templates));
+      var directoryTemplate = fse.lstatSync(path.join(site.path, templates))
       if (!directoryTemplate.isDirectory()) {
         result.templates = result.templates.concat(FileParser.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
       }
@@ -269,7 +269,7 @@ export default class FileParser {
       var link = url.replace(config.root, '')
       link = link.replace(/^\//, '').split('/')
       link.shift()
-      link = cmsData.fileAttr.delete('/' + fileUtils.cleanPath(link.join('/')))
+      link = cmsData.fileAttr.delete('/' + link.join('/').replace(/\/$/, ''))
 
       let draft = config.draft.url
       let publish = config.publish.url
@@ -305,12 +305,12 @@ export default class FileParser {
     let publish = config.publish.url
     var dest = path.join(config.root, publish)
     try {
-      var directory = fse.lstatSync(dest);
+      var directory = fse.lstatSync(dest)
       if (!directory.isDirectory()) {
         mkdirp.sync(dest)
       }
     } catch (e) {
-        mkdirp.sync(dest)
+      mkdirp.sync(dest)
     }
 
     Array.prototype.forEach.call(publicFolders, (publicFolder) => {
@@ -449,7 +449,7 @@ export default class FileParser {
       filesArr.push(cleanFile)
     })
 
-    var merged = fileUtils.getFilesMerged(filesArr)
+    var merged = cmsData.revision.getFilesMerged(filesArr)
 
     Hooks.instance.trigger('afterGetAllFiles', merged)
     return merged
@@ -517,8 +517,8 @@ export default class FileParser {
       }
     }
 		catch(e){
-      console.log(e)
-    }
+  console.log(e)
+}
   }
 
   static getReference() {
@@ -526,9 +526,9 @@ export default class FileParser {
 
     var refFolder = path.join(config.root, config.reference.url)
     try {
-      var directory = fse.lstatSync(refFolder);
+      var directory = fse.lstatSync(refFolder)
       if (!directory.isDirectory()) {
-        var files = FileParser.read(fileUtils.cleanPath(refFolder), fileUtils.cleanPath(refFolder), 'files', true, /.json/)
+        var files = FileParser.read(refFolder.replace(/\/$/, ''), refFolder.replace(/\/$/, ''), 'files', true, /.json/)
         Array.prototype.forEach.call(files, (file) => {
           var name = file.filePath.replace(file.fileType, '')
           name = name.replace(/\//g, '.')

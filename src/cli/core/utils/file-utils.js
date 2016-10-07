@@ -14,26 +14,6 @@ export default class FileUtils {
   constructor() {}
 
 	/**
-	 * Prepend the path with the root path
-	 * @param  {string} path The path to be prepended
-	 * @return {string}      The path prepended with the root path
-	 */
-  static pathWithRoot(ppath) {
-    if(typeof ppath === 'undefined' || ppath === null || ppath === '') ppath = ''
-    return path.join(config.root, ppath.replace(config.root, '')).replace(/\/$/, '')
-  }
-
-	/**
-	 * [cleanPath remove the trailing slash in the path
-	 * @param  {string} path The path to be cleaned
-	 * @return {string}      The path with no trailing slash
-	 */
-  static cleanPath(cpath) {
-    if(typeof cpath !== 'undefined' && cpath !== null) cpath = cpath.replace(/\/$/, '')
-    return cpath
-  }
-
-	/**
 	 * concatenate strings into a path. Each string being appended with a "/"
 	 * @param  {array} array of strings to be concatenated
 	 * @return {string} path as the result of concatenation
@@ -42,10 +22,10 @@ export default class FileUtils {
     var cpath = ''
     Array.prototype.forEach.call([].slice.call(arguments), (argument) => {
       if(cpath !== '') argument = argument.replace(/^\//, '')
-      if(argument !== '') cpath += FileUtils.cleanPath(argument) + '/'
+      if(argument !== '') cpath += argument.replace(/\/$/, '') + '/'
     })
 
-    cpath = FileUtils.cleanPath(cpath)
+    cpath = cpath.replace(/\/$/, '')
 
     return cpath
   }
@@ -57,7 +37,7 @@ export default class FileUtils {
 	 */
   static removeLast(pathRemove) {
 
-    return pathRemove.substring(0, FileUtils.cleanPath(pathRemove).lastIndexOf('/'))
+    return pathRemove.substring(0, pathRemove.replace(/\/$/, '').lastIndexOf('/'))
   }
 
 	/**
@@ -90,7 +70,7 @@ export default class FileUtils {
 	 */
   static filename(path) {
 
-    return FileUtils.cleanPath(path).substring(FileUtils.cleanPath(path).lastIndexOf('/') + 1)
+    return path.replace(/\/$/, '').substring(path.replace(/\/$/, '').lastIndexOf('/') + 1)
   }
 
 	/**
@@ -214,82 +194,6 @@ export default class FileUtils {
         }
       })
     }
-  }
-  
-  /* TODO: put this method in its right helper */
-  static getFilesMerged(files) {
-    var merged = {}
-    var arMerged = []
-		
-    Array.prototype.forEach.call(files, (file) => {
-      var cleanFilePath = file.cleanFilePath
-
-      var fileStatusIsPublish = cmsData.fileAttr.get(file.cleanPath)
-      if(typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null && file.abe_meta.status === 'publish') {
-        file.abe_meta.status = 'draft'
-      }
-
-      file.html = path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))
-      if (file.abe_meta.status === 'publish') {
-        file.htmlPath = path.join(config.root, config.publish.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-      }else {
-        file.htmlPath = path.join(config.root, config.draft.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-      }
-
-      if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
-        merged[cleanFilePath] = {
-          name: cmsData.fileAttr.delete(file.name)
-					, path: cmsData.fileAttr.delete(file.path)
-					, html: cmsData.fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-					, htmlPath: path.join(config.root, config.publish.url, path.join('/', cmsData.fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))))
-					, cleanPathName: file.cleanPathName
-					, cleanPath: file.cleanPath
-					, cleanName: file.cleanName
-					, cleanNameNoExt: file.cleanNameNoExt
-					, cleanFilePath: file.cleanFilePath
-					, filePath: cmsData.fileAttr.delete(file.filePath)
-					, revisions: []
-        }
-      }
-
-      merged[cleanFilePath].revisions.push(JSON.parse(JSON.stringify(file)))
-    })
-
-    // return merged
-    Array.prototype.forEach.call(Object.keys(merged), (key) => {
-      var revisions = merged[key].revisions
-      revisions.sort(FileParser.predicatBy('date', -1))
-      if(typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
-        merged[key].date = revisions[0].date
-      }
-
-      Array.prototype.forEach.call(revisions, (revision) => {
-				
-        var status = revision.abe_meta.status
-
-        if (status === 'publish') {
-          merged[key][status] = revision
-        }else {
-          merged[key][status] = {}
-        }
-        merged[key][status].path = revision.path
-        merged[key][status].html = revision.html
-        merged[key][status].htmlPath = revision.htmlPath
-        merged[key][status].date = new Date(revision.date)
-        merged[key][status].link = revision.abe_meta.link
-      })
-
-      merged[key].revisions = revisions
-
-      merged[key].date = revisions[0].date
-      merged[key].cleanDate = revisions[0].cleanDate
-      merged[key].duration = revisions[0].duration
-      merged[key].abe_meta = revisions[0].abe_meta
-
-      arMerged.push(merged[key])
-    })
-
-    return arMerged
   }
 
 }

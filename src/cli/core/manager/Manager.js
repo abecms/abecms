@@ -78,12 +78,12 @@ class Manager {
     const pathTemplate = path.join(config.root, config.templates.url, 'hbs')
 
     try {
-      var directory = fse.lstatSync(pathTemplate);
+      var directory = fse.lstatSync(pathTemplate)
       if (!directory.isDirectory()) {
         mkdirp.sync(pathTemplate)
       }
     } catch (e) {
-        mkdirp.sync(pathTemplate)
+      mkdirp.sync(pathTemplate)
     }
 
     fse.readdirSync(pathTemplate).forEach(function (file) {

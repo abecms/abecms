@@ -31,7 +31,7 @@ var middleware = function(req, res, next) {
   if (req.originalUrl === '' || req.originalUrl === '/' || req.originalUrl.indexOf('.') === -1) {
     var pathWebsite = path.join(config.root, config.publish.url, req.originalUrl)
     try {
-      var directory = fse.lstatSync(pathWebsite);
+      var directory = fse.lstatSync(pathWebsite)
       if (!directory.isDirectory()) {
         return next()
       }

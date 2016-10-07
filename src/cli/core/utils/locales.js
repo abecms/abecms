@@ -38,7 +38,7 @@ class Locales {
       var localesFolder = path.join(website, 'locales')
       var stat = fse.statSync(localesFolder)
       if (stat && stat.isDirectory()) {
-        var files = FileParser.read(fileUtils.cleanPath(localesFolder), fileUtils.cleanPath(localesFolder), 'files', true, /\.json/, 0)
+        var files = FileParser.read(localesFolder.replace(/\/$/, ''), localesFolder.replace(/\/$/, ''), 'files', true, /\.json/, 0)
         Array.prototype.forEach.call(files, (file) => {
           var json = fse.readJsonSync(file.path)
           loc[file.name.replace(/\.json/, '')] = json
