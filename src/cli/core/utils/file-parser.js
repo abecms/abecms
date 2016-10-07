@@ -182,31 +182,6 @@ export default class FileParser {
     return assets
   }
 
-  static getProjectFiles() {
-    var site = cmsData.revision.filePathInfos(config.root)
-    var result = {'structure': [], 'templates': []}
-
-    let structure = config.structure.url
-    let templates = config.templates.url
-    try {
-      var directoryStructure = fse.lstatSync(path.join(site.path, structure))
-      if (!directoryStructure.isDirectory()) {
-        site.folders = FileParser.getFolders(path.join(site.path, structure), false)
-        result.structure = site.folders
-      }
-    } catch (e) {
-    }
-    try {
-      var directoryTemplate = fse.lstatSync(path.join(site.path, templates))
-      if (!directoryTemplate.isDirectory()) {
-        result.templates = result.templates.concat(FileParser.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
-      }
-    } catch (e) {
-    }
-
-    return result
-  }
-
   static changePathEnv(pathEnv, change) {
     pathEnv = pathEnv.replace(config.root, '').replace(/^\//, '').split('/')
     pathEnv[0] = change
