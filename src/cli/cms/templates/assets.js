@@ -1,17 +1,11 @@
 import fse from 'fs-extra'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
-import moment from 'moment'
 import path from 'path'
 
 import {
-  cmsData
-  ,cmsOperations
-  ,coreUtils
-  ,FileParser
+  FileParser
   ,config
-  ,Hooks
-  ,Manager
 } from '../../'
 
 export function copy(pathAssets) {

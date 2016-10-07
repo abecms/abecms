@@ -1,5 +1,4 @@
 import fse from 'fs-extra'
-import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import moment from 'moment'
 import path from 'path'
@@ -397,47 +396,6 @@ export default class FileParser {
     })
 
     Manager.instance.updateList()
-  }
-
-  static deleteFileFromName(filePath) {
-    var pathDelete = filePath.split('/')
-    var file = pathDelete.pop()
-    pathDelete = pathDelete.join('/')
-    try{
-      var stat = fse.statSync(pathDelete)
-      if (stat) {
-        var files = FileParser.getFiles(pathDelete, true, 10, new RegExp(`.${config.files.templates.extension}`))
-				
-        Array.prototype.forEach.call(files, (item) => {
-          if(cmsData.fileAttr.delete(item.name) === file) fse.removeSync(item.path)
-        })
-      }
-    }
-		catch(e){
-  console.log(e)
-}
-  }
-
-  static getReference() {
-    var ref = {}
-
-    var refFolder = path.join(config.root, config.reference.url)
-    try {
-      var directory = fse.lstatSync(refFolder)
-      if (directory.isDirectory()) {
-        var files = FileParser.read(refFolder.replace(/\/$/, ''), refFolder.replace(/\/$/, ''), 'files', true, /.json/)
-        Array.prototype.forEach.call(files, (file) => {
-          var name = file.filePath.replace(file.fileType, '')
-          name = name.replace(/\//g, '.')
-          var json = fse.readJsonSync(file.path)
-
-          ref[name] = json
-        })
-      }
-    } catch (e) {
-    }
-
-    return ref
   }
 
   static getJson(pathJson) {
