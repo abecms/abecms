@@ -3,6 +3,7 @@ import {
   FileParser,
   Manager,
   config,
+  cmsData,
   cmsOperations
 } from '../../'
 
@@ -28,7 +29,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
 
         if(typeof revisions !== 'undefined' && revisions !== null
           && typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
-          json = FileParser.getJson(revisions[0].path)
+          json = cmsData.file.get(revisions[0].path)
         }
       }
       
@@ -37,7 +38,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
 
     if (isUpdate) {
       Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
-      FileParser.deleteFile(oldFilePath)
+      cmsOperations.remove.remove(oldFilePath)
     }
     Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate)
 

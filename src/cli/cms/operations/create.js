@@ -2,7 +2,7 @@ import path from 'path'
 import {
   FileParser,
   coreUtils,
-  cmsTemplate,
+  cmsTemplates,
   cmsOperations,
   config,
   Hooks,
@@ -20,12 +20,12 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
 
     if(templatePath !== null && filePath !== null) {
-      var tplUrl = FileParser.getFileDataFromUrl(filePath)
+      var tplUrl = cmsData.file.fromUrl(filePath)
         
       if(!coreUtils.file.exist(tplUrl.json.path)) {
         var json = (forceJson) ? forceJson : {}
         var tpl = templatePath
-        var text = cmsTemplate.template.getTemplate(tpl)
+        var text = cmsTemplates.template.getTemplate(tpl)
         if (duplicate) {
           json = cmsData.values.removeDuplicate(text, json)
         }
@@ -40,14 +40,14 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
             .then((resSave) => {
               Manager.instance.updateList()
               filePath = resSave.htmlPath
-              tplUrl = FileParser.getFileDataFromUrl(filePath)
+              tplUrl = cmsData.file.fromUrl(filePath)
               resolve(resSave.json)
             }).catch(function(e) {
               reject()
               console.error(e)
             })
       }else {
-        json = FileParser.getJson(tplUrl.json.path)
+        json = cmsData.file.get(tplUrl.json.path)
         resolve(json, tplUrl.json.path)
       }
     }else {

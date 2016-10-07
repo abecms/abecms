@@ -6,7 +6,7 @@ import {
   cmsEditor,
   coreUtils,
   abeEngine,
-  cmsTemplate,
+  cmsTemplates,
   FileParser,
   Hooks
 } from '../../cli'
@@ -225,10 +225,10 @@ export function editor(fileName, jsonPath, documentLink) {
 
     json = {}
     if(coreUtils.file.exist(jsonPath)) {
-      json = FileParser.getJson(jsonPath, 'utf8')
+      json = cmsData.file.get(jsonPath, 'utf8')
     }
     
-    text = cmsTemplate.template.getTemplate(fileName)
+    text = cmsTemplates.template.getTemplate(fileName)
 
     cmsData.source.getDataList(path.dirname(documentLink), text, json, true)
       .then(() => {

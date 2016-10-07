@@ -141,7 +141,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
 
 export function fileList(obj, tplPath, match, jsonPage) {
   var p = new Promise((resolve) => {
-    jsonPage['abe_source'][obj.key] = FileParser.getJson(path.join(config.root, obj.sourceString))
+    jsonPage['abe_source'][obj.key] = cmsData.file.get(path.join(config.root, obj.sourceString))
     resolve()
   })
 

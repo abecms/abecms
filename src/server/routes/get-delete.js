@@ -1,15 +1,13 @@
 import {
-  FileParser,
   Hooks,
-  coreUtils
+  cmsOperations
 } from '../../cli'
 
 var route = function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var filePath = coreUtils.slug.clean(req.query.filePath)
-  FileParser.deleteFile(filePath)
+  cmsOperations.remove.remove(req.query.filePath)
 
   var result = {
     success: 1,

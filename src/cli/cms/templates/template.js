@@ -2,11 +2,11 @@ import fse from 'fs-extra'
 import {Promise} from 'es6-promise'
 import path from 'path'
 import {
-  config
-  ,coreUtils
-  ,cmsData
-  ,Hooks
-  ,FileParser
+  config,
+  coreUtils,
+  cmsData,
+  Hooks,
+  FileParser
 } from '../../'
 
 export function findTemplateAndPartialsInFolder (currentPath) {

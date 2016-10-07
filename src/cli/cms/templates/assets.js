@@ -4,12 +4,13 @@ import mkdirp from 'mkdirp'
 import path from 'path'
 
 import {
-  FileParser
-  ,config
+  cmsTemplates,
+  FileParser,
+  config
 } from '../../'
 
 export function copy(pathAssets) {
-  var publicFolders = FileParser.getAssetsFolder(pathAssets)
+  var publicFolders = cmsTemplates.assets.getFolder(pathAssets)
   let publish = config.publish.url
   var dest = path.join(config.root, publish)
   try {
@@ -53,4 +54,36 @@ export function copy(pathAssets) {
   })
 
   return publicFolders
+}
+
+export function getFolder(pathAssets = '') {
+  var folder = path.join(config.root, pathAssets.replace(config.root, '')).replace(/\/$/, '')
+  var assetsFolders = []
+  var flatten = true
+
+  let templates = config.templates.url
+  let assets = config.files.templates.assets
+  pathAssets = path.join(folder, templates)
+
+  try {
+    var directory = fse.lstatSync(pathAssets)
+    if (directory.isDirectory()) {
+      var arr = FileParser.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99)
+
+      // now check if file for folder exist
+      Array.prototype.forEach.call(arr, (file) => {
+        var folderName = file.path.replace(/\..+$/, '') + assets
+        try {
+          var directory = fse.lstatSync(folderName)
+          if (directory.isDirectory()) {
+            assetsFolders.push(folderName)
+          }
+        } catch (e) {
+        }
+      })
+    }
+  } catch (e) {
+  }
+
+  return assetsFolders
 }

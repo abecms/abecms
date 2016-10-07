@@ -5,7 +5,7 @@ import {
   FileParser,
   config,
   Page,
-  cmsTemplate,
+  cmsTemplates,
   coreUtils
 } from '../../cli'
 
@@ -41,7 +41,7 @@ var page = function (req, res, next) {
     } 
 
     if(typeof json === 'undefined' || json === null) {
-      json = FileParser.getJson(jsonPath)
+      json = cmsData.file.get(jsonPath)
     }
     
     let meta = config.meta.name
@@ -53,7 +53,7 @@ var page = function (req, res, next) {
     }else {
       template = req.params[0]
     }
-    var text = cmsTemplate.template.getTemplate(template)
+    var text = cmsTemplates.template.getTemplate(template)
 
     if (!editor) {
 

@@ -36,7 +36,7 @@ function publishNext(published, tt, cb, i = 0) {
   var pub = published.shift()
   if(typeof pub !== 'undefined' && pub !== null) {
     
-    var json = FileParser.getJson(pub.path)
+    var json = cmsData.file.get(pub.path)
     if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
       i++
 
@@ -99,6 +99,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
   try {
     var FileParser = require('../../cli').FileParser
+    var cmsData = require('../../cli').cmsData
     var cmsOperations = require('../../cli').cmsOperations
     var Manager = require('../../cli').Manager
 

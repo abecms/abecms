@@ -49,13 +49,13 @@ import Plugins from './extend/abe-plugins'
 import * as cmsData from './cms/data'
 import * as cmsEditor from './cms/editor'
 import * as cmsOperations from './cms/operations'
-import * as cmsTemplate from './cms/templates'
+import * as cmsTemplates from './cms/templates'
 import * as coreUtils from './core/utils'
 
 export {
 	cmsData
 	,cmsOperations
-	,cmsTemplate
+	,cmsTemplates
 	,coreUtils
 	,cmsEditor
 	,mkdirp

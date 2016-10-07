@@ -3,9 +3,10 @@ import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import path from 'path'
 import {
+  cmsData,
   config,
   FileParser,
-  cmsTemplate
+  cmsTemplates
 } from '../../'
 
 let singleton = Symbol()
@@ -43,7 +44,7 @@ class Manager {
     this._whereKeys = []
     var p = new Promise((resolve) => {
       const pathTemplate = path.join(config.root, config.templates.url)
-      cmsTemplate.template.getSelectTemplateKeys(pathTemplate)
+      cmsTemplates.template.getSelectTemplateKeys(pathTemplate)
         .then((whereKeys) => {
           this._whereKeys = whereKeys
           this.updateList()
@@ -61,7 +62,7 @@ class Manager {
   }
 
   updateList() {
-    this._list = FileParser.getAllFilesWithKeys(this._whereKeys)
+    this._list = cmsData.file.getAllWithKeys(this._whereKeys)
     this._list.sort(FileParser.predicatBy('date', -1))
     console.log('Manager updated')
     
