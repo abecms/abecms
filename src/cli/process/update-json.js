@@ -5,7 +5,6 @@ import {
   config
   ,FileParser
   ,fileUtils
-  ,folderUtils
   ,Hooks
 } from '../../cli'
 

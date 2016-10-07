@@ -12,7 +12,6 @@ import {
 	,fileUtils
 	,config
   ,Hooks
-	,folderUtils
 	,Plugins
   ,Manager
 } from '../../'
@@ -209,7 +208,7 @@ export default class FileParser {
   }
 
   static getProjectFiles() {
-    var site = folderUtils.folderInfos(config.root)
+    var site = cmsData.revision.filePathInfos(config.root)
     var result = {'structure': [], 'templates': []}
 
     let structure = config.structure.url
@@ -408,7 +407,7 @@ export default class FileParser {
   }
 
   static getAllFilesWithKeys(withKeys) {
-    var site = folderUtils.folderInfos(config.root)
+    var site = cmsData.revision.filePathInfos(config.root)
 
     var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
     var filesArr = []

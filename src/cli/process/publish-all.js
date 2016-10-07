@@ -103,7 +103,6 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     var controllers = require('../../server/controllers')
     var FileParser = require('../../cli').FileParser
     var fileUtils = require('../../cli').fileUtils
-    var folderUtils = require('../../cli').folderUtils
     var cmsOperations = require('../../cli').cmsOperations
     var Manager = require('../../cli').Manager
 
