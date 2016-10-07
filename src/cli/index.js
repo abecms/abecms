@@ -36,7 +36,6 @@ import Manager from './core/manager/Manager'
 import Page from './cms/Page'
 
 import FileParser from './core/utils/file-parser'
-import fileUtils from './core/utils/file-utils'
 
 // import {getTemplate} from './cms/templates/abe-template'
 import Create from './cms/Create'
@@ -66,7 +65,6 @@ export {
 	,Handlebars
 	,clc
 	,FileParser
-	,fileUtils
 	,printInput
 	,abeImport
 	,math

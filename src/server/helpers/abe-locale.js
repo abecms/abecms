@@ -5,7 +5,6 @@ import path from 'path'
 
 import {
 	FileParser,
-	fileUtils,
 	config
 } from '../../cli'
 

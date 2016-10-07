@@ -5,7 +5,7 @@ import hooksDefault from '../../hooks/hooks'
 
 import {
   config
-  ,fileUtils
+  ,coreUtils
   ,Plugins
 } from '../'
 
@@ -19,7 +19,7 @@ class Hooks {
   constructor(enforcer) {
     if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
 
-    if(fileUtils.isFile(path.join(config.root, config.hooks.url, 'hooks.js'))){
+    if(coreUtils.file.exist(path.join(config.root, config.hooks.url, 'hooks.js'))){
       var h = require(path.join(config.root, config.hooks.url, 'hooks.js'))
       this.fn = extend(true, hooksDefault, h.default)
     }

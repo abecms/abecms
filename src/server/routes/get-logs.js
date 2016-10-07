@@ -4,14 +4,14 @@ import mkdirp from 'mkdirp'
 
 import {
   FileParser,
-  fileUtils,
+  coreUtils,
   config
 } from '../../cli'
 
 var route = function(req, res){
   var file = path.join(config.root, 'logs', `${req.params[0]}.log`)
   var html = ''
-  if (fileUtils.isFile(file)) {
+  if (coreUtils.file.exist(file)) {
     var commonStyle = 'font-family: arial; font-size: 12px;'
     var shellp = '<span style="color: #18FFFF;'+commonStyle+'"> > ' + req.params[0].replace(/\//g, '') + '</span>'
     var content = fse.readFileSync(file, 'utf8')

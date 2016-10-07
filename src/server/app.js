@@ -13,8 +13,8 @@ import uuid from 'node-uuid'
 
 import {
   config,
+  coreUtils,
   FileParser,
-  fileUtils,
   printInput,
   abeImport,
   testObj,
@@ -71,7 +71,7 @@ var html = exphbs.create({
 })
 
 var opts = {}
-if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
+if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   opts = {
     key: fse.readFileSync( path.join(config.root, 'key.pem')),
     cert: fse.readFileSync( path.join(config.root, 'cert.pem'))
@@ -151,13 +151,13 @@ app.use(express.static(publish))
 // app.use(express.static(publish))
 
 if(config.partials !== '') {
-  if (fileUtils.isFile(path.join(config.root, config.partials))) {
+  if (coreUtils.file.exist(path.join(config.root, config.partials))) {
     app.use(express.static(path.join(config.root, config.partials)))
   }
 }
 
 if(config.custom !== '') {
-  if (fileUtils.isFile(path.join(config.root, config.custom))) {
+  if (coreUtils.file.exist(path.join(config.root, config.custom))) {
     app.use(express.static(path.join(config.root, config.custom)))
   }
 }
@@ -189,7 +189,7 @@ app.use(session({
 
 Hooks.instance.trigger('afterExpress', app, express)
 
-if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
+if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   var server = https.createServer(opts, app)
   server.listen(port, function() {
     console.log(clc.green(`\nserver running at https://localhost:${port}/`))

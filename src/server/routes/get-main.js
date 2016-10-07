@@ -4,7 +4,6 @@ import pkg from '../../../package'
 
 import {
   FileParser,
-  fileUtils,
   config,
   Page,
   cmsData,
@@ -57,7 +56,7 @@ var route = function(req, res, next) {
         linkPath = filePathTest.abe_meta.link
       }
 
-      if(jsonPath === null || !fileUtils.isFile(jsonPath)) { 
+      if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
         res.redirect('/abe/') 
         return 
       } 
@@ -82,7 +81,7 @@ var route = function(req, res, next) {
           }
           if(manager.file.revision.length > 0){
             var publishPath = cmsData.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
-            manager.file.isPublished = fileUtils.isFile(publishPath)
+            manager.file.isPublished = coreUtils.file.exist(publishPath)
           }
 
           resolve({

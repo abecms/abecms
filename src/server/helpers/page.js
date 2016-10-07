@@ -3,7 +3,6 @@ import path from 'path'
 import {
   cmsData,
   FileParser,
-  fileUtils,
   config,
   Page,
   cmsTemplate,
@@ -36,7 +35,7 @@ var page = function (req, res, next) {
       linkPath = filePathTest.abe_meta.link
     }
 
-    if(jsonPath === null || !fileUtils.isFile(jsonPath)) { 
+    if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
       res.status(404).send('Not found')
       return
     } 

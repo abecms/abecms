@@ -4,7 +4,7 @@ import path from 'path'
 import {
   cmsData,
   cmsEditor,
-  fileUtils,
+  coreUtils,
   abeEngine,
   cmsTemplate,
   FileParser,
@@ -224,7 +224,7 @@ export function editor(fileName, jsonPath, documentLink) {
     var json
 
     json = {}
-    if(fileUtils.isFile(jsonPath)) {
+    if(coreUtils.file.exist(jsonPath)) {
       json = FileParser.getJson(jsonPath, 'utf8')
     }
     

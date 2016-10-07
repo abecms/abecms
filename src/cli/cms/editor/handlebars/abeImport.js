@@ -4,7 +4,7 @@ import path from 'path'
 
 import {
   Plugins
-  ,fileUtils
+  ,coreUtils
   ,Hooks
 } from '../../../'
 
@@ -22,7 +22,7 @@ export default function abeImport (file, config, ctx) {
   catch(e){
     pathToPartial = `${defaultPartials}/${file}.html`
   }
-  if (fileUtils.isFile(pathToPartial)) {
+  if (coreUtils.file.exist(pathToPartial)) {
     var html = fse.readFileSync(pathToPartial, 'utf8')
   }else {
     html = ''
@@ -31,7 +31,7 @@ export default function abeImport (file, config, ctx) {
   var pluginsPartials = Plugins.instance.getPartials()
   Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
     var checkFile = path.join(pluginPartials, `${file}.html`)
-    if (fileUtils.isFile(checkFile)) {
+    if (coreUtils.file.exist(checkFile)) {
       html += fse.readFileSync(checkFile, 'utf8')
     }
   })
