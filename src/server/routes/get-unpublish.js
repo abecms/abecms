@@ -1,6 +1,6 @@
 import {
   coreUtils
-  ,FileParser
+  ,cmsOperations
   ,Hooks
 } from '../../cli'
 
@@ -9,7 +9,7 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var filePath = coreUtils.slug.clean(req.query.filePath)
-  FileParser.unpublishFile(filePath)
+  cmsOperations.post.unpublish(filePath)
 
   var result = {
     success: 1,
