@@ -25,9 +25,9 @@ describe('Meta', function() {
    * cmsData.meta.add
    * 
    */
-  it('cmsData.meta.add()', function() {
+  it('cmsData.metas.add()', function() {
     var json = {abe_meta: {link: 'article.html'}};
-    cmsData.meta.add('article', json);
+    cmsData.metas.add('article', json);
     chai.expect(json.abe_meta.date).to.not.be.undefined;
   });
 });

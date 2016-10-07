@@ -4,7 +4,7 @@ var path = require('path');
 var config = require('../src/cli').config
 config.set({root: __dirname + '/fixtures'})
 
-var cmsTemplate = require('../src/cli').cmsTemplate;
+var cmsTemplates = require('../src/cli').cmsTemplates;
 var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
 
@@ -26,8 +26,8 @@ describe('Template', function() {
    * getAbeImport
    * 
    */
-  it('cmsTemplate.template.getStructureAndTemplatesFiles()', function() {
-    var res = cmsTemplate.template.getStructureAndTemplatesFiles()
+  it('cmsTemplates.template.getStructureAndTemplatesFiles()', function() {
+    var res = cmsTemplates.template.getStructureAndTemplatesFiles()
     chai.expect(res.templates.length).to.be.above(1);
   });
 
@@ -35,8 +35,8 @@ describe('Template', function() {
    * getAbeImport
    * 
    */
-  it('cmsTemplate.template.getAbeImport()', function() {
-    var res = cmsTemplate.template.getAbeImport(this.fixture.template)
+  it('cmsTemplates.template.getAbeImport()', function() {
+    var res = cmsTemplates.template.getAbeImport(this.fixture.template)
     chai.expect(res).to.have.length(4);
   });
 
@@ -44,17 +44,17 @@ describe('Template', function() {
    * includePartials
    * 
    */
-  it('cmsTemplate.template.includePartials()', function() {
-    var template = cmsTemplate.template.includePartials(this.fixture.template)
+  it('cmsTemplates.template.includePartials()', function() {
+    var template = cmsTemplates.template.includePartials(this.fixture.template)
     chai.expect(template).to.contain("{{abe type='text' key='title' desc='titre' tab='default'}}");
   });
 
   /**
-   * cmsTemplate.template.getTemplate
+   * cmsTemplates.template.getTemplate
    * 
    */
-  it('cmsTemplate.template.getTemplate()', function() {
-    var template = cmsTemplate.template.getTemplate('article')
+  it('cmsTemplates.template.getTemplate()', function() {
+    var template = cmsTemplates.template.getTemplate('article')
     chai.expect(template).to.contain("{{abe type='text' key='title' desc='titre' tab='default' order='1'}}");
   });
 
@@ -62,9 +62,9 @@ describe('Template', function() {
    * getTemplate
    * 
    */
-  it('cmsTemplate.template.getSelectTemplateKeys()', function() {
+  it('cmsTemplates.template.getSelectTemplateKeys()', function() {
     const pathTemplate = path.join(config.root, config.templates.url)
-    cmsTemplate.template.getSelectTemplateKeys(pathTemplate)
+    cmsTemplates.template.getSelectTemplateKeys(pathTemplate)
       .then((whereKeys) => {
         chai.expect(whereKeys.indexOf('abe_meta.date')).to.be.above(-1);
       })
@@ -74,27 +74,27 @@ describe('Template', function() {
    * getTemplate
    * 
    */
-  it('cmsTemplate.template.execRequestColumns()', function() { // templateKeys
+  it('cmsTemplates.template.execRequestColumns()', function() { // templateKeys
     const pathTemplate = path.join(config.root, config.templates.url)
-    var ar = cmsTemplate.template.execRequestColumns(this.fixture.templateKeys)
+    var ar = cmsTemplates.template.execRequestColumns(this.fixture.templateKeys)
     chai.expect(ar.indexOf('abe_meta.date')).to.be.above(-1);
   });
 
   /**
-   * cmsTemplate.insertDebugtoolUtilities
+   * cmsTemplates.insertDebugtoolUtilities
    * 
    */
-  it('cmsTemplate.insertDebugtoolUtilities()', function() {
-    var txt = cmsTemplate.insertDebugtoolUtilities('</body>');
+  it('cmsTemplates.insertDebugtoolUtilities()', function() {
+    var txt = cmsTemplates.insertDebugtoolUtilities('</body>');
     chai.expect(txt.length).to.above(10);
   });
 
   /**
-   * cmsTemplate.encodeAbeTagAsComment
+   * cmsTemplates.encodeAbeTagAsComment
    * 
    */
-  it('cmsTemplate.encodeAbeTagAsComment()', function() {
-    var txt = cmsTemplate.encodeAbeTagAsComment(this.fixture.articleEach);
+  it('cmsTemplates.encodeAbeTagAsComment()', function() {
+    var txt = cmsTemplates.encodeAbeTagAsComment(this.fixture.articleEach);
     chai.expect(txt.indexOf('{')).to.equal(-1);
   });
 });
