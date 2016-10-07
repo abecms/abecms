@@ -3,9 +3,9 @@ import fse from 'fs-extra'
 
 import {
   FileParser,
-  fileUtils,
   config,
   cmsData,
+  coreUtils,
   Manager
 } from '../../'
 
@@ -18,7 +18,7 @@ export function getFilesRevision(urls, fileName) {
   var publishDate = new Date()
   var json = null
 
-  if(fileUtils.isFile(tplUrl.publish.json)) {
+  if(coreUtils.file.exist(tplUrl.publish.json)) {
     json = FileParser.getJson(tplUrl.publish.json)
     if(typeof json !== 'undefined' && json !== null
       && typeof json[config.meta.name] !== 'undefined' && json[config.meta.name] !== null) {
@@ -48,7 +48,7 @@ export function getFilesRevision(urls, fileName) {
       number = number + 1
 
       var tplUrlObj = FileParser.getFileDataFromUrl(urlObj.path)
-      if(fileUtils.isFile(tplUrlObj.publish.json)) {
+      if(coreUtils.file.exist(tplUrlObj.publish.json)) {
         var jsonObj = FileParser.getJson(tplUrlObj.publish.json)
         urlObj[config.meta.name] = jsonObj[config.meta.name]
       }

@@ -1,6 +1,5 @@
 import path from 'path'
 import {
-  fileUtils,
   FileParser,
   coreUtils,
   cmsTemplate,
@@ -23,7 +22,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     if(templatePath !== null && filePath !== null) {
       var tplUrl = FileParser.getFileDataFromUrl(filePath)
         
-      if(!fileUtils.isFile(tplUrl.json.path)) {
+      if(!coreUtils.file.exist(tplUrl.json.path)) {
         var json = (forceJson) ? forceJson : {}
         var tpl = templatePath
         var text = cmsTemplate.template.getTemplate(tpl)

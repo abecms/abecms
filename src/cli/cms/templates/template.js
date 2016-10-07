@@ -3,7 +3,7 @@ import {Promise} from 'es6-promise'
 import path from 'path'
 import {
   config
-  ,fileUtils
+  ,coreUtils
   ,cmsData
   ,Hooks
 } from '../../'
@@ -77,7 +77,7 @@ export function includePartials(text) {
     var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
-    if(fileUtils.isFile(file)) {
+    if(coreUtils.file.exist(file)) {
       partial = includePartials(fse.readFileSync(file, 'utf8'))
     }
     text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
@@ -140,7 +140,7 @@ export function getTemplate (file) {
     file = file.replace(/\..+$/, '')
   }
   file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
-  if(fileUtils.isFile(file)) {
+  if(coreUtils.file.exist(file)) {
     text = fse.readFileSync(file, 'utf8')
     text = includePartials(text)
     text = translate(text)

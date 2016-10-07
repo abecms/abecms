@@ -87,7 +87,6 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       complete: 0,
       type: type
     }
-
     let meta = config.meta.name
     json[meta] = extend(json[meta], ext)
     var date = cmsData.fileAttr.get(pathIso.jsonPath).d
@@ -103,6 +102,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
         date = new Date(date)
       }
     }
+
     cmsData.meta.add(tpl, json, type, {}, date, realType)
 
     if(typeof text === 'undefined' || text === null || text === '') {

@@ -1,7 +1,7 @@
 import path from 'path'
 import Handlebars from 'handlebars'
 import {
-  fileUtils,
+  coreUtils,
   Hooks
 } from '../../cli'
 
@@ -18,7 +18,7 @@ var route = function(router, req, res, next) {
   })
 
   var page = path.join(__dirname + '/../views/list-url.html')
-  var html = fileUtils.getFileContent(page)
+  var html = coreUtils.file.getContent(page)
 
 
   var template = Handlebars.compile(html, {noEscape: true})

@@ -3,14 +3,14 @@ import fse from 'fs-extra'
 
 import {
   FileParser,
-  fileUtils,
+  coreUtils,
   config
 } from '../../cli'
 
 var route = function(req, res, next){
   var file = path.join(config.root, 'logs', `${req.params[0]}.log`)
   var html = ''
-  if (fileUtils.isFile(file)) {
+  if (coreUtils.file.exist(file)) {
     fse.removeSync(file)
     res.redirect('/abe/delete-logs/')
   }else {

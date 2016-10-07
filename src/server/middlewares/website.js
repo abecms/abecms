@@ -12,7 +12,7 @@ import pkg from '../../../package'
 import {
   Util,
   FileParser,
-  fileUtils,
+  coreUtils,
   config,
   Page,
   abeProcess,
@@ -74,8 +74,8 @@ var middleware = function(req, res, next) {
     var html = ''
 
     var page = path.join(config.root, config.publish.url, req.originalUrl)
-    if (fileUtils.isFile(page)) {
-      html = fileUtils.getFileContent(page)
+    if (coreUtils.file.exist(page)) {
+      html = coreUtils.file.getContent(page)
 
     }else {
       return next()

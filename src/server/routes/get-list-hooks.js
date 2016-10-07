@@ -2,7 +2,7 @@ import path from 'path'
 import Handlebars from 'handlebars'
 import hooksDefault from '../../hooks/hooks'
 import {
-  fileUtils,
+  coreUtils,
   Hooks
 } from '../../cli'
 
@@ -10,7 +10,7 @@ var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
   var page = path.join(__dirname + '/../views/list-hooks.html')
-  var html = fileUtils.getFileContent(page)
+  var html = coreUtils.file.getContent(page)
   var allHooks = []
 
   Array.prototype.forEach.call(Object.keys(hooksDefault), (hook) => {

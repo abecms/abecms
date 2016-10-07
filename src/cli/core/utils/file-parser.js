@@ -6,8 +6,8 @@ import path from 'path'
 
 import {
   cmsData
-	,cmsOperations
-	,fileUtils
+  ,cmsOperations
+	,coreUtils
 	,config
   ,Hooks
   ,Manager
@@ -426,18 +426,18 @@ export default class FileParser {
 
   // TODO : change the signature of this method to removeFile(file)
   static removeFile(file, json) {
-    if(fileUtils.isFile(file)) {
+    if(coreUtils.file.exist(file)) {
       fse.removeSync(file)
     }
 
-    if(fileUtils.isFile(json)) {
+    if(coreUtils.file.exist(json)) {
       fse.removeSync(json)
     }
   }
 
   static unpublishFile(filePath) {
     var tplUrl = FileParser.getFileDataFromUrl(path.join(config.publish.url, filePath))
-    if(fileUtils.isFile(tplUrl.json.path)) {
+    if(coreUtils.file.exist(tplUrl.json.path)) {
       var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)))
       if(typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
         delete json.abe_meta.publish
