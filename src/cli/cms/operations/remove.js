@@ -1,7 +1,8 @@
-import path from 'path'
 import fse from 'fs-extra'
 
 import {
+  FileParser,
+  config,
   Hooks,
   cmsData,
   coreUtils,
