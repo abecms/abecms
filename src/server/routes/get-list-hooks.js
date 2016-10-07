@@ -4,7 +4,6 @@ import hooksDefault from '../../hooks/hooks'
 import {
   fileUtils,
   FileParser,
-  cleanSlug,
   config,
   Hooks,
   Plugins

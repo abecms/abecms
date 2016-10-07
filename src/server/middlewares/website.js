@@ -19,8 +19,7 @@ import {
   abeProcess,
   Hooks,
   Plugins,
-  Handlebars,
-  cleanSlug
+  Handlebars
 } from '../../cli'
 
 import locale from '../helpers/abe-locale'

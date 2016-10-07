@@ -1,6 +1,6 @@
 var chai = require('chai');
 
-var cleanSlug = require('../src/cli').cleanSlug
+var coreUtils = require('../src/cli').coreUtils
 var fse = require('fs-extra')
 var config = require('../src/cli').config
 config.set({root: __dirname + '/fixtures'})
@@ -15,7 +15,7 @@ describe('Url', function() {
    */
   it('configuration file', function() {
     for(var key in urls){
-      chai.assert.equal(cleanSlug(key), urls[key] + config.files.templates.extension, key + 'slugified url did not match')
+      chai.assert.equal(coreUtils.slug.clean(key), urls[key] + config.files.templates.extension, key + 'slugified url did not match')
     }
   });
 

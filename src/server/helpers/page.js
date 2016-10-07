@@ -6,11 +6,11 @@ import {
   config,
   Page,
   cmsTemplate,
-  cleanSlug
+  coreUtils
 } from '../../cli'
 
 var page = function (req, res, next) {
-  var filePath = cleanSlug(req.query.filePath)
+  var filePath = coreUtils.slug.clean(req.query.filePath)
   filePath = fileUtils.getFilePath(filePath)
   var html = (req.query.html) ? true : false
   var json = null

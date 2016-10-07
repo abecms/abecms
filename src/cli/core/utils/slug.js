@@ -5,7 +5,7 @@ import {
   fileUtils
 } from '../../'
 
-function cleanSlug(str) {
+export function clean(str) {
 
   if (typeof str === 'undefined' || str === null) return null
   if (str.indexOf('.') === -1) { // no extension add one
@@ -22,6 +22,3 @@ function slugify(str) {
   str = `${str}.${config.files.templates.extension}`
   return str.toLowerCase()
 }
-
-export {cleanSlug as cleanSlug}
-export default slugify
