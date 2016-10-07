@@ -6,16 +6,14 @@ import {Promise} from 'es6-promise'
 import path from 'path'
 
 import {
-  Util
-  ,abeProcess
+  abeProcess
   ,FileParser
   ,cmsData
   ,config
-  ,fileUtils
   ,Page
   ,cmsTemplate
   ,Hooks
-  ,cleanSlug
+  ,coreUtils
 } from '../../'
 
 export function checkRequired(text, json) {
@@ -53,9 +51,7 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
-  var dateStart = new Date()
-
-  url = cleanSlug(url)
+  url = coreUtils.slug.clean(url)
 
   var p = new Promise((resolve) => {
     var isRejectedDoc = false
@@ -67,7 +63,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       url = Hooks.instance.trigger('afterReject', url)
     }
     var tplUrl = FileParser.getFileDataFromUrl(url)
-    type = type || FileParser.getType(url)
+    type = type || 'draft'
     var pathIso = dateIso(tplUrl, type)
     if(typeof previousSave !== 'undefined' && previousSave !== null){
       pathIso.jsonPath = path.join(config.root, previousSave.jsonPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
@@ -75,7 +71,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     }
 
     if (tplPath.indexOf('.') > -1) {
-      tplPath = fileUtils.removeExtension(tplPath)
+      tplPath = tplPath.replace(/\..+$/, '')
     }
     var tpl = tplPath.replace(config.root, '')
 
@@ -91,7 +87,6 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       complete: 0,
       type: type
     }
-
     let meta = config.meta.name
     json[meta] = extend(json[meta], ext)
     var date = cmsData.fileAttr.get(pathIso.jsonPath).d
@@ -107,13 +102,14 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
         date = new Date(date)
       }
     }
+
     cmsData.meta.add(tpl, json, type, {}, date, realType)
 
     if(typeof text === 'undefined' || text === null || text === '') {
       text = cmsTemplate.template.getTemplate(fullTpl)
     }
 
-    cmsData.source.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
+    cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
         .then(() => {
 
           json = Hooks.instance.trigger('afterGetDataListOnSave', json)
@@ -159,7 +155,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           
           Hooks.instance.trigger('afterSave', obj)
           
-          FileParser.copySiteAssets()
+          cmsTemplate.assets.copy()
 
           if(typeof config.publishAll !== 'undefined' && config.publishAll !== null && config.publishAll === true) {
             if(!publishAll && type === 'publish') {
@@ -191,7 +187,7 @@ export function saveJsonAndHtml(templateId, obj, html) {
 }
 
 export function saveJson(url, json) {
-  mkdirp.sync(fileUtils.removeLast(url))
+  mkdirp.sync(path.dirname(url))
 
   if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
     delete json.abe_source
@@ -217,9 +213,9 @@ export function saveJson(url, json) {
 }
 
 export function saveHtml(url, html) {
-  mkdirp.sync(fileUtils.removeLast(url))
+  mkdirp.sync(path.dirname(url))
   if(cmsData.fileAttr.test(url) && cmsData.fileAttr.get(url).s !== 'd'){
-    fileUtils.deleteOlderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
+    cmsData.revision.deleteOlderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
   }
   fse.writeFileSync(url, html)
 }

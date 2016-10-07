@@ -20,6 +20,7 @@ import times 			from './handlebars/times'
 import truncate 	from './handlebars/truncate'
 
 import * as template from './template'
+import * as assets from './assets'
 import encodeAbeTagAsComment from './encodeAbeTagAsComment'
 import insertDebugtoolUtilities from './insertDebugtoolUtilities'
 
@@ -43,6 +44,7 @@ HandlebarsIntl.registerWith(Handlebars)
 
 export {
 	template,
+	assets,
 	encodeAbeTagAsComment,
 	insertDebugtoolUtilities,
 	attrAbe,

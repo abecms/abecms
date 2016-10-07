@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import {Promise} from 'es6-promise'
 import Create from './cli/cms/Create'
-import Builder from './cli/Builder'
-import {config} from './cli'
 import {exec} from 'child_process'
 import {spawn} from 'child_process'
 import git from 'git-exec'
@@ -29,24 +27,22 @@ var userArgs = process.argv.slice(2)
 var create = new Create()
 var port = program.port
 var interactive = program.interactive
-var pm2Name = program.pname
 var webport = program.webport || 8081
 
 function addPlugin(dir, plugin) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
 			
     var pluginName = plugin.split('/')
     pluginName = pluginName[pluginName.length - 1].split('.')[0]
     var pluginDir = dir + '/plugins/' + pluginName
-    var command = 'git clone ' + plugin + ' ' + pluginDir
 
     try{
-      var stat = fse.statSync(pluginDir)
+      fse.statSync(pluginDir)
       console.log(clc.green('remove plugin'), pluginName)
       fse.removeSync(pluginDir)
     }
-	  catch(e){
-  }
+    catch(e){
+    }
     console.log(clc.green('mkdir'), clc.green(pluginDir))
     mkdirp(pluginDir)
 
@@ -79,7 +75,7 @@ function addPlugin(dir, plugin) {
 
             var json = {}
             var abeJson = dir + '/abe.json'
-				    
+
             try {
               var stat = fse.statSync(abeJson)
               if (stat) {
@@ -120,33 +116,37 @@ function addPlugin(dir, plugin) {
 }
 
 if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
+  var dir
+  var command
+  var cp
+  var plugin
 
   switch(userArgs[0]){
   case 'build':
-    var dir = process.cwd()
+    dir = process.cwd()
     process.chdir(__dirname + '/../')
-    var command = 'ROOT=' + dir +
+    command = 'ROOT=' + dir +
 				' FOLDER=' + (program.folder ? program.folder : 'draft') +
 				' DEST=' + (program.destination ? program.destination : 'tmp') +
 				' FLOW=' + (program.type ? program.type : 'draft') +
 				' npm run build:folder'
     console.log('command : ' + command)
     execPromise.exec(command)
-				.then(function (result) {
+			.then(function (result) {
   var stdout = result.stdout
   var stderr = result.stderr
-  if(stdout) console.log('stdout: ', stdout)
-  if(stderr) console.log('stderr: ', stderr)
+  if(stdout) {console.log('stdout: ', stdout)}
+  if(stderr) {console.log('stderr: ', stderr)}
 })
-		    .fail(function (err) {
-      console.error('ERROR: ', err)
-    })
-		    .progress(function (childProcess) {
-	        // console.log('childProcess.pid: ', childProcess.pid);
-    })
+      .fail(function (err) {
+        console.error('ERROR: ', err)
+      })
+      .progress(function () {
+        
+      })
     break
   case 'create':
-    var dir = userArgs[1]
+    dir = userArgs[1]
     if(process.env.ROOT) {
       dir = process.env.ROOT + userArgs[1]
     }
@@ -157,7 +157,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     }
     break
   case 'serve':
-    var dir = process.cwd()
+    dir = process.cwd()
     if(process.env.ROOT) {
       dir = process.env.ROOT
     }
@@ -167,11 +167,11 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     if (typeof port !== 'undefined' && port !== null) {
       environment.PORT = port
     }
-    var command = 'node --harmony ./dist/server/index.js'
+    command = 'node --harmony ./dist/server/index.js'
 			// if (interactive) command = 'OPENURL=1 ' + command
     process.chdir(__dirname + '/../')
     console.log('website started : ' + dir + (port ? ' on port :' + port : ''))
-    var cp = exec(command,
+    cp = exec(command,
       {
         env: environment
       },
@@ -185,7 +185,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     cp.stdout.pipe(process.stdout)
     break
   case 'list':
-    var dir = process.cwd()
+    dir = process.cwd()
     dir = dir.replace(/\/$/, '')
     pm2.connect((err) => {
       if (err instanceof Error) throw err
@@ -199,115 +199,22 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
       })
     })
     break
-  case 'prod':
-    var dir = process.cwd()
-    if(process.env.ROOT) {
-      dir = process.env.ROOT
-    }
-    dir = dir.replace(/\/$/, '')
-    var abeJson = require(dir + '/abe.json')
-    var processName = abeJson.processName || 'abe'
-    var processPort = abeJson.port || port
-    pm2.connect((err) => {
-      if (err instanceof Error) throw err
-      var start = pm2.start
-
-      pm2.list(function(err, process_list) {
-        var found = false
-
-        Array.prototype.forEach.call(process_list, function(process) {
-          if (process.name === processName) {
-            found = true
-          }
-        })
-
-        var cb = function() {
-          var options = {
-            'name':processName,
-            'nodeArgs':['--harmony'],
-            env: {
-              'WEBPORT:': webport,
-              'PORT': processPort,
-              'ROOT': dir
-            }
-          }
-          console.log('[ pm2 ] start', __dirname + '/server/index.js')
-          pm2.start(
-							__dirname + '/server/index.js',
-							options,
-							function(err, proc) {
-  if (err instanceof Error) throw err
-
-  pm2.list((err, list) => {
-    if (err instanceof Error) throw err
-    Array.prototype.forEach.call(list, (item) => {
-      console.log('[ pm2 ]', '{', '"pid":', item.pid + ',', '"process":', '"' + item.name + '"', '}')
-    })
-    process.exit(0)
-  })
-})
-        }
-
-        if (!found) {
-          cb()
-        }else {
-          console.log('[ pm2 ] stop ', processName)
-          pm2.delete(processName, function(err, proc) {
-            if (err) throw new Error(err)
-            console.log('[ pm2 ]', processName,  'server stopped')
-            cb()
-          })
-        }
-      })
-    })
-    break
   case 'servenodemon':
-    var dir = process.cwd()
-    var command = 'WEBPORT=' + webport + ' ROOT=' + dir + ' npm run startdev --node-args="--debug"'
+    dir = process.cwd()
+    command = 'WEBPORT=' + webport + ' ROOT=' + dir + ' npm run startdev --node-args="--debug"'
     if (interactive) command = 'OPENURL=1 ' + command
     if(port) command = 'PORT=' + port + ' ' + command
     process.chdir(__dirname + '/../')
     console.log('website started : ' + dir + (port ? ' on port :' + port : ''))
-    var cp = exec(command, function (err, out, code) {
-      if (err instanceof Error) throw err
-			  // process.stderr.write(err)
-			  // process.stdout.write(out)
+    cp = exec(command, function (err, out, code) {
+      if (err instanceof Error) {throw err}
       process.exit(code)
     })
     cp.stderr.pipe(process.stderr)
     cp.stdout.pipe(process.stdout)
     break
-  case 'stop':
-    var dir = process.cwd()
-    var abeJson = require(dir + '/abe.json')
-    var processName = abeJson.processName || 'abe'
-    var processPort = abeJson.port || port
-    pm2.connect((err) => {
-      if (err instanceof Error) throw err
-      var start = pm2.start
-
-      pm2.list(function(err, process_list) {
-        var found = false
-
-        Array.prototype.forEach.call(process_list, function(process) {
-          if (process.name === processName) {
-            found = true
-          }
-        })
-
-        if (found) {
-          console.log('[ pm2 ] stop ', processName)
-          pm2.delete(processName, function(err, proc) {
-            if (err) throw new Error(err)
-            console.log('[ pm2 ]', processName,  'server stopped')
-            process.exit(0)
-          })
-        }
-      })
-    })
-    break
   case 'publish-all':
-    var dir = process.cwd()
+    dir = process.cwd()
     var customPath = ''
     if(typeof userArgs[1] !== 'undefined' && userArgs[1] !== null){
       customPath = 'ABE_PATH=' + userArgs[1]
@@ -316,7 +223,6 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
       dir = process.env.ROOT.replace(/\/$/, '')
     }
 
-  		// var command = `node --harmony --debug ./cli/process/publish-all.js ABE_WEBSITE=${dir}`
     const publishAll = spawn('node', ['--harmony', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir, customPath])
 
     publishAll.stdout.on('data', (data) => {
@@ -334,7 +240,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 
     break
   case 'update-json':
-    var dir = process.cwd()
+    dir = process.cwd()
     if(process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }
@@ -356,15 +262,15 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 
     break
   case 'install':
-    var dir = process.cwd()
-    var plugin = userArgs[1]
+    dir = process.cwd()
+    plugin = userArgs[1]
     if(process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }
 
     var json = {}
     var abeJson = dir + '/abe.json'
-	    
+
     try {
       var stat = fse.statSync(abeJson)
       if (stat) {
@@ -388,8 +294,8 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     break
   case 'add':
 			// ROOT=[ PATH TO PROJECT ]/abe-test-os ./node_modules/.bin/babel-node src/index.js add [ GIT PROJECT ]
-    var dir = process.cwd()
-    var plugin = userArgs[1]
+    dir = process.cwd()
+    plugin = userArgs[1]
     if(process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }

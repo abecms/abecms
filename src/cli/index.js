@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import moment from 'moment'
 import fse from 'fs-extra'
+import mkdirp from 'mkdirp'
 import clc from 'cli-color'
 
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
@@ -34,12 +35,7 @@ import {
 import Manager from './core/manager/Manager'
 import Page from './cms/Page'
 
-import Locales from './core/utils/abe-locales'
 import FileParser from './core/utils/file-parser'
-import fileUtils from './core/utils/file-utils'
-import folderUtils from './core/utils/folder-utils'
-import slugify from './core/utils/slugify'
-import {cleanSlug} from './core/utils/slugify'
 
 // import {getTemplate} from './cms/templates/abe-template'
 import Create from './cms/Create'
@@ -62,16 +58,13 @@ export {
 	,cmsTemplate
 	,coreUtils
 	,cmsEditor
+	,mkdirp
 
 	,moment
 	,fse
 	,Handlebars
 	,clc
-	,slugify
-	,cleanSlug
 	,FileParser
-	,folderUtils
-	,fileUtils
 	,printInput
 	,abeImport
 	,math
@@ -94,7 +87,6 @@ export {
 	,config
 	,Hooks
 	,Plugins
-	,Locales
 	,Manager
 	,Page
 }

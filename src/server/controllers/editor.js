@@ -1,9 +1,10 @@
 import {Promise} from 'es6-promise'
+import path from 'path'
 
 import {
   cmsData,
   cmsEditor,
-  fileUtils,
+  coreUtils,
   abeEngine,
   cmsTemplate,
   FileParser,
@@ -223,13 +224,13 @@ export function editor(fileName, jsonPath, documentLink) {
     var json
 
     json = {}
-    if(fileUtils.isFile(jsonPath)) {
+    if(coreUtils.file.exist(jsonPath)) {
       json = FileParser.getJson(jsonPath, 'utf8')
     }
     
     text = cmsTemplate.template.getTemplate(fileName)
 
-    cmsData.source.getDataList(fileUtils.removeLast(documentLink), text, json, true)
+    cmsData.source.getDataList(path.dirname(documentLink), text, json, true)
       .then(() => {
         addSource(text, json, util)
 
@@ -242,14 +243,14 @@ export function editor(fileName, jsonPath, documentLink) {
         if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
           var tpl = json.abe_meta.template.split('/')
           tpl = tpl.pop()
-          json.abe_meta.cleanTemplate = fileUtils.removeExtension(tpl)
+          json.abe_meta.cleanTemplate = tpl.replace(/\..+$/, '')
         }
 
         if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
           var links = json.abe_meta.link.split('/')
           var link = links.pop()
-          json.abe_meta.cleanName = fileUtils.removeExtension(link)
-          json.abe_meta.cleanFilename = fileUtils.removeExtension(links.join('/'))
+          json.abe_meta.cleanName = link.replace(/\..+$/, '')
+          json.abe_meta.cleanFilename = links.join('/').replace(/\..+$/, '')
         }
 
         // HOOKS beforeEditorFormBlocks

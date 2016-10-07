@@ -1,5 +1,5 @@
 
-export default function math(lvalue, operator, rvalue, options) {
+export default function math(lvalue, operator, rvalue) {
   lvalue = parseFloat(lvalue)
   rvalue = parseFloat(rvalue)
         

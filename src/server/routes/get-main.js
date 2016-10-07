@@ -1,14 +1,14 @@
 import xss from 'xss'
+import path from 'path'
 import pkg from '../../../package'
 
 import {
   FileParser,
-  fileUtils,
   config,
   Page,
   cmsData,
   cmsTemplate,
-  Locales,
+  coreUtils,
   Hooks,
   Manager
 } from '../../cli'
@@ -17,15 +17,12 @@ import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 var route = function(req, res, next) {
-  var dateStart = new Date()
-
   if(req.query.filePath){
     var testXSS = xss(req.query.filePath, {
       whiteList: [],
       stripIgnoreTag: true
     })
     if(testXSS !== req.query.filePath){
-      // res.status(400).send('<h1>400 Bad Request</h1>Not a valid URL format');
       res.redirect(`/abe/${req.params[0]}?filePath=${testXSS}`)
       return
     }
@@ -33,8 +30,12 @@ var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var templatePath = fileUtils.getTemplatePath(req.params[0])
-  var filePath = fileUtils.getFilePath(req.query.filePath)
+  var templatePath = req.params[0]
+
+  var filePath = null
+  if(typeof req.query.filePath !== 'undefined' && req.query.filePath !== null) {
+    filePath = path.join(config.root, config.draft.url, req.query.filePath.replace(config.root))
+  }
   var debugJson = (req.query.debugJson && req.query.debugJson == 'true' ) ? true : false
   var debugJsonKey = (req.query.key) ? req.query.key : false
   var debugHtml = (req.query.debugHtml && req.query.debugHtml == 'true' ) ? true : false
@@ -55,7 +56,7 @@ var route = function(req, res, next) {
         linkPath = filePathTest.abe_meta.link
       }
 
-      if(jsonPath === null || !fileUtils.isFile(jsonPath)) { 
+      if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
         res.redirect('/abe/') 
         return 
       } 
@@ -68,7 +69,7 @@ var route = function(req, res, next) {
           FileParser.getAssets() 
 
           var revisionFilePath = FileParser.changePathEnv(filePath, config.draft.url)
-          var dirPath = fileUtils.removeLast(revisionFilePath)
+          var dirPath = path.dirname(revisionFilePath)
           var allDraft = FileParser.getFiles(dirPath, true, 99, new RegExp('\\.' + config.files.templates.extension))
 
           allDraft = FileParser.getMetas(allDraft, 'draft')
@@ -76,11 +77,11 @@ var route = function(req, res, next) {
           manager.file = {
             revision: cmsData.revision.getFilesRevision(allDraft, cmsData.fileAttr.delete(revisionFilePath))
             ,template: breadcrumb
-            ,path: (req.query.filePath) ? fileUtils.cleanTplName(req.query.filePath) : ''
+            ,path: (req.query.filePath) ? path.resolve(req.query.filePath).replace(/^\//, '') : ''
           }
           if(manager.file.revision.length > 0){
             var publishPath = cmsData.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
-            manager.file.isPublished = fileUtils.isFile(publishPath)
+            manager.file.isPublished = coreUtils.file.exist(publishPath)
           }
 
           resolve({
@@ -148,7 +149,7 @@ var route = function(req, res, next) {
       // tplName: _file,
       json: _json,
       config: config,
-      Locales: Locales.instance.i18n,
+      Locales: coreUtils.locales.instance.i18n,
       manager: manager,
       express: {
         res: res,

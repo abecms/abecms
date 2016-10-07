@@ -30,16 +30,12 @@ import {
 
 import {
   FileParser,
-  fileUtils,
-  folderUtils,
   config,
   Page,
-  Locales,
   abeProcess,
   Hooks,
   Plugins,
   Handlebars,
-  cleanSlug
 } from '../../cli'
 
 import locale from '../helpers/abe-locale'

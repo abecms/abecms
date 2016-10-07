@@ -1,6 +1,6 @@
 import {
-  cleanSlug
-  ,FileParser
+  coreUtils
+  ,cmsOperations
   ,Hooks
 } from '../../cli'
 
@@ -8,8 +8,8 @@ var route = function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var filePath = cleanSlug(req.query.filePath)
-  FileParser.unpublishFile(filePath)
+  var filePath = coreUtils.slug.clean(req.query.filePath)
+  cmsOperations.post.unpublish(filePath)
 
   var result = {
     success: 1,
