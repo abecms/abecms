@@ -155,7 +155,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           
           Hooks.instance.trigger('afterSave', obj)
           
-          FileParser.copySiteAssets()
+          cmsTemplate.assets.copy()
 
           if(typeof config.publishAll !== 'undefined' && config.publishAll !== null && config.publishAll === true) {
             if(!publishAll && type === 'publish') {

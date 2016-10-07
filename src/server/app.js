@@ -143,7 +143,7 @@ app.locals.layout = false
 app.use(middleWebsite)
 app.use(express.static(__dirname + '/public'))
 
-FileParser.copySiteAssets()
+cmsTemplate.assets.copy()
 
 var sites = FileParser.getFolders(config.root.replace(/\/$/, ''), false, 0)
 
