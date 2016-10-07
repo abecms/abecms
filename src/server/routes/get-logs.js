@@ -36,7 +36,12 @@ var route = function(req, res, next){
     html += '\n' + '</body>' + '\n' + '</html>'
   }else {
     var pathLog = path.join(config.root, 'logs')
-    if (!folderUtils.isFolder(pathLog)) {
+    try {
+    var directory = fse.lstatSync(pathLog);
+      if (!directory.isDirectory()) {
+        mkdirp.sync(pathLog)
+      }
+    } catch (e) {
       mkdirp.sync(pathLog)
     }
     var files = FileParser.read(pathLog, pathLog, 'files', true, /\.log/, 99)

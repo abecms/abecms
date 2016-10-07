@@ -12,28 +12,9 @@ export default class FolderUtils {
 
   constructor() {}
 
-  static isFolder(path) {
-    try{
-      var stat = fse.statSync(path)
-
-      if (stat && stat.isDirectory()) {
-        return true
-      }
-    }catch(e){
-      return false
-    }
-    return false
-  }
-
   static createFile(path, content = {}) {
     if(path.indexOf('.json') > -1) {
       fse.writeJsonSync(path, content, { space: 2, encoding: 'utf-8' })
-    }
-  }
-
-  static createFolder(path) {
-    if(!FolderUtils.isFolder(path)) {
-      mkdirp.sync(path)
     }
   }
 
