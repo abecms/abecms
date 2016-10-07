@@ -26,7 +26,7 @@ export function unpublish(filePath) {
       null,
       'reject'
     )
-    .then((resSave) => {
+    .then(() => {
       cmsOperations.remove.removeFile(tplUrl.publish.path, tplUrl.publish.json)
       Manager.instance.updateList()
     })

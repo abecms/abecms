@@ -12,8 +12,6 @@ export function getAllWithKeys(withKeys) {
   var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
   var filesArr = []
 
-  var i = 0
-
   files.forEach(function (file) {
     var cleanFile = file
     var json = cmsData.file.get(file.path)

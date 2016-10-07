@@ -1,6 +1,5 @@
 import {
   Hooks,
-  FileParser,
   Manager,
   config,
   cmsData,

@@ -5,8 +5,7 @@ import path from 'path'
 
 import {
   config,
-  cmsData,
-  FileParser
+  cmsData
 } from '../../'
 
 export function requestList(obj, tplPath, match, jsonPage) {

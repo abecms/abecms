@@ -5,11 +5,7 @@ import path from 'path'
 
 import {
   cmsData
-  ,cmsOperations
-	,coreUtils
 	,config
-  ,Hooks
-  ,Manager
 } from '../../'
 
 export default class FileParser {
@@ -76,7 +72,7 @@ export default class FileParser {
 
           if(!flatten) item['folders'] = []
           arr.push(item)
-  		      // push current file name into array to check if siblings folder are assets folder
+          // push current file name into array to check if siblings folder are assets folder
           fileCurrentLevel.push(level[i].replace(/\..+$/, '') + assets)
         }
       }
