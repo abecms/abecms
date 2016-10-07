@@ -5,7 +5,6 @@ import path from 'path'
 import {
   config,
   FileParser,
-  folderUtils,
   cmsTemplate
 } from '../../'
 
@@ -78,8 +77,13 @@ class Manager {
   loadHbsTemplates() {
     const pathTemplate = path.join(config.root, config.templates.url, 'hbs')
 
-    if(!folderUtils.isFolder(pathTemplate)) {
-      mkdirp.sync(pathTemplate)
+    try {
+      var directory = fse.lstatSync(pathTemplate);
+      if (!directory.isDirectory()) {
+        mkdirp.sync(pathTemplate)
+      }
+    } catch (e) {
+        mkdirp.sync(pathTemplate)
     }
 
     fse.readdirSync(pathTemplate).forEach(function (file) {

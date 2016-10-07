@@ -1,8 +1,8 @@
 import path from 'path'
+import fse from 'fs-extra'
 import {
   FileParser,
-  config,
-  folderUtils
+  config
 } from '../'
 
 let singleton = Symbol()
@@ -15,73 +15,114 @@ class Plugins {
     this._plugins = []
     this.fn = []
     var pluginsDir = path.join(config.root, config.plugins.url)
-    if(folderUtils.isFolder(pluginsDir)) {
-      this._plugins = FileParser.getFolders(pluginsDir, true, 0)
-      Array.prototype.forEach.call(this._plugins, (plugin) => {
-        // has hooks
-        var plugHooks = path.join(plugin.path, config.hooks.url)
-        if(folderUtils.isFolder(plugHooks)) {
-          var plugHooksFile = path.join(plugHooks, 'hooks.js')
-          var h = require(plugHooksFile)
-          plugin.hooks = h.default
-        }else {
-          plugin.hooks = null
-        }
-
-        // has partials
-        var plugPartials = path.join(plugin.path, config.pluginsPartials)
-        if(folderUtils.isFolder(plugPartials)) {
-          plugin.partials = plugPartials
-        }else {
-          plugin.partials = null
-        }
-
-        // has templates
-        var plugTemplates = path.join(plugin.path, config.templates.url)
-        if(folderUtils.isFolder(plugTemplates)) {
-          plugin.templates = plugTemplates
-        }else {
-          plugin.templates = null
-        }
-
-        // has process
-        var plugProcess = path.join(plugin.path, 'process')
-        if(folderUtils.isFolder(plugProcess)) {
-          plugin.process = {}
-          var processFiles = FileParser.getFiles(plugProcess, true, 0)
-          Array.prototype.forEach.call(processFiles, (processFile) => {
-            plugin.process[processFile.cleanNameNoExt] = processFile.path
-          })
-        }else {
-          plugin.process = null
-        }
-
-        // has routes
-        var plugRoutes = path.join(plugin.path, 'routes')
-        if(folderUtils.isFolder(plugRoutes)) {
-          plugin.routes = {}
-
-          var gets = path.join(plugRoutes, 'get')
-          if(folderUtils.isFolder(gets)) {
-            var routesGet = FileParser.getFiles(gets, true, 0)
-            Array.prototype.forEach.call(routesGet, (route) => {
-              route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
-            })
-            plugin.routes.get = routesGet
+    try {
+      var directoryPlugins = fse.lstatSync(pluginsDir);
+      if (directoryPlugins.isDirectory()) {
+        
+        this._plugins = FileParser.getFolders(pluginsDir, true, 0)
+        Array.prototype.forEach.call(this._plugins, (plugin) => {
+          // has hooks
+          var plugHooks = path.join(plugin.path, config.hooks.url)
+          try {
+            var directoryHook = fse.lstatSync(plugHooks);
+            if (directoryHook.isDirectory()) {
+              var plugHooksFile = path.join(plugHooks, 'hooks.js')
+              var h = require(plugHooksFile)
+              plugin.hooks = h.default
+            }else {
+              plugin.hooks = null
+            }
+          }catch(e) {
+            plugin.hooks = null
           }
 
-          var posts = path.join(plugRoutes, 'post')
-          if(folderUtils.isFolder(posts)) {
-            var routesPost = FileParser.getFiles(posts, true, 0)
-            Array.prototype.forEach.call(routesPost, (route) => {
-              route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
-            })
-            plugin.routes.post = routesPost
+          // has partials
+          var plugPartials = path.join(plugin.path, config.pluginsPartials)
+          try {
+            var directoryPartials = fse.lstatSync(plugPartials);
+            if (directoryPartials.isDirectory()) {
+              plugin.partials = plugPartials
+            }else {
+              plugin.partials = null
+            }
+          }catch(e) {
+            plugin.partials = null
           }
-        }else {
-          plugin.routes = null
-        }
-      })
+
+          // has templates
+          var plugTemplates = path.join(plugin.path, config.templates.url)
+          try {
+            var directoryTemplates = fse.lstatSync(plugTemplates);
+            if (directoryTemplates.isDirectory()) {
+              plugin.templates = plugTemplates
+            }else {
+              plugin.templates = null
+            }
+          }catch(e) {
+            plugin.templates = null
+          }
+
+          // has process
+          var plugProcess = path.join(plugin.path, 'process')
+          try {
+            var directoryProcess = fse.lstatSync(plugProcess);
+            if (directoryProcess.isDirectory()) {
+              plugin.process = {}
+              var processFiles = FileParser.getFiles(plugProcess, true, 0)
+              Array.prototype.forEach.call(processFiles, (processFile) => {
+                plugin.process[processFile.cleanNameNoExt] = processFile.path
+              })
+            }else {
+              plugin.process = null
+            }
+          }catch(e) {
+            plugin.process = null
+          }
+
+          // has routes
+          var plugRoutes = path.join(plugin.path, 'routes')
+          try {
+            var directoryRoute = fse.lstatSync(plugRoutes);
+            if (directoryRoute.isDirectory()) {
+              plugin.routes = {}
+
+              var gets = path.join(plugRoutes, 'get')
+              try {
+                var directoryGets = fse.lstatSync(gets);
+                if (directoryGets.isDirectory()) {
+                  var routesGet = FileParser.getFiles(gets, true, 0)
+                  Array.prototype.forEach.call(routesGet, (route) => {
+                    route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
+                  })
+                  plugin.routes.get = routesGet
+                }
+              }catch(e) {
+
+              }
+              try {
+                var posts = path.join(plugRoutes, 'post')
+                var directoryPosts = fse.lstatSync(gets);
+                if (directoryPosts.isDirectory()) {
+                  var routesPost = FileParser.getFiles(posts, true, 0)
+                  Array.prototype.forEach.call(routesPost, (route) => {
+                    route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
+                  })
+                  plugin.routes.post = routesPost
+                }
+              }catch(e) {
+
+              }
+            }else {
+              plugin.routes = null
+            }
+          }catch(e) {
+            plugin.routes = null
+          }
+        })
+      
+      }
+    } catch (e) {
+      
     }
   }
 

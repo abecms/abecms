@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import moment from 'moment'
 import fse from 'fs-extra'
+import mkdirp from 'mkdirp'
 import clc from 'cli-color'
 
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
@@ -59,6 +60,7 @@ export {
 	,cmsTemplate
 	,coreUtils
 	,cmsEditor
+	,mkdirp
 
 	,moment
 	,fse
