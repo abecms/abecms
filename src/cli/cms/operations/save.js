@@ -6,14 +6,15 @@ import {Promise} from 'es6-promise'
 import path from 'path'
 
 import {
-  abeProcess
-  ,FileParser
-  ,cmsData
-  ,config
-  ,Page
-  ,cmsTemplate
-  ,Hooks
-  ,coreUtils
+  abeProcess,
+  cmsOperations,
+  FileParser,
+  cmsData,
+  config,
+  Page,
+  cmsTemplates,
+  Hooks,
+  coreUtils
 } from '../../'
 
 export function checkRequired(text, json) {
@@ -62,7 +63,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       realType = 'draft'
       url = Hooks.instance.trigger('afterReject', url)
     }
-    var tplUrl = FileParser.getFileDataFromUrl(url)
+    var tplUrl = cmsData.file.fromUrl(url)
     type = type || 'draft'
     var pathIso = dateIso(tplUrl, type)
     if(typeof previousSave !== 'undefined' && previousSave !== null){
@@ -78,7 +79,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     var fullTpl = path.join(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
 
     if(typeof json === 'undefined' || json === null) {
-      json = FileParser.getJson(tplUrl.json.path)
+      json = cmsData.file.get(tplUrl.json.path)
     }
 
     var ext = {
@@ -103,10 +104,10 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       }
     }
 
-    cmsData.meta.add(tpl, json, type, {}, date, realType)
+    cmsData.metas.add(tpl, json, type, {}, date, realType)
 
     if(typeof text === 'undefined' || text === null || text === '') {
-      text = cmsTemplate.template.getTemplate(fullTpl)
+      text = cmsTemplates.template.getTemplate(fullTpl)
     }
 
     cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
@@ -155,7 +156,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           
           Hooks.instance.trigger('afterSave', obj)
           
-          cmsTemplate.assets.copy()
+          cmsTemplates.assets.copy()
 
           if(typeof config.publishAll !== 'undefined' && config.publishAll !== null && config.publishAll === true) {
             if(!publishAll && type === 'publish') {
@@ -215,7 +216,7 @@ export function saveJson(url, json) {
 export function saveHtml(url, html) {
   mkdirp.sync(path.dirname(url))
   if(cmsData.fileAttr.test(url) && cmsData.fileAttr.get(url).s !== 'd'){
-    cmsData.revision.deleteOlderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
+    cmsOperations.remove.olderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
   }
   fse.writeFileSync(url, html)
 }

@@ -1,18 +1,18 @@
 import path from 'path'
 
 import {
-  cmsOperations
-  ,coreUtils
-  ,config
-  ,Manager
-  ,FileParser
+  cmsData,
+  cmsOperations,
+  coreUtils,
+  config,
+  Manager
 } from '../../'
 
 
 export function unpublish(filePath) {
-  var tplUrl = FileParser.getFileDataFromUrl(path.join(config.publish.url, filePath))
+  var tplUrl = cmsData.file.fromUrl(path.join(config.publish.url, filePath))
   if(coreUtils.file.exist(tplUrl.json.path)) {
-    var json = JSON.parse(JSON.stringify(FileParser.getJson(tplUrl.json.path)))
+    var json = JSON.parse(JSON.stringify(cmsData.file.get(tplUrl.json.path)))
     if(typeof json.abe_meta.publish !== 'undefined' && json.abe_meta.publish !== null) {
       delete json.abe_meta.publish
     }
@@ -27,7 +27,7 @@ export function unpublish(filePath) {
       'reject'
     )
     .then((resSave) => {
-      FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
+      cmsOperations.remove.removeFile(tplUrl.publish.path, tplUrl.publish.json)
       Manager.instance.updateList()
     })
   }

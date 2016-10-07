@@ -14,7 +14,7 @@ import uuid from 'node-uuid'
 import {
   config,
   coreUtils,
-  cmsTemplate,
+  cmsTemplates,
   FileParser,
   printInput,
   abeImport,
@@ -84,7 +84,7 @@ var app = express(opts)
   // Instantiate Singleton Manager (which lists all blog files)
 Manager.instance.init()
 app.set('config', config.getConfigByWebsite())
-app.set('projectFiles', cmsTemplate.template.getStructureAndTemplatesFiles())
+app.set('projectFiles', cmsTemplates.template.getStructureAndTemplatesFiles())
 
 app.use(bodyParser.json({limit: '1gb'}))
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
@@ -143,7 +143,7 @@ app.locals.layout = false
 app.use(middleWebsite)
 app.use(express.static(__dirname + '/public'))
 
-cmsTemplate.assets.copy()
+cmsTemplates.assets.copy()
 
 var sites = FileParser.getFolders(config.root.replace(/\/$/, ''), false, 0)
 

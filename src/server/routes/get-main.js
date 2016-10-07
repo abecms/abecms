@@ -7,7 +7,7 @@ import {
   config,
   Page,
   cmsData,
-  cmsTemplate,
+  cmsTemplates,
   coreUtils,
   Hooks,
   Manager
@@ -64,15 +64,11 @@ var route = function(req, res, next) {
       editor(templatePath, jsonPath, linkPath)
         .then((result) => {
           var manager = {}
-
-          FileParser.getAssetsFolder()
-          FileParser.getAssets() 
-
           var revisionFilePath = FileParser.changePathEnv(filePath, config.draft.url)
           var dirPath = path.dirname(revisionFilePath)
           var allDraft = FileParser.getFiles(dirPath, true, 99, new RegExp('\\.' + config.files.templates.extension))
 
-          allDraft = FileParser.getMetas(allDraft, 'draft')
+          allDraft = cmsData.metas.get(allDraft, 'draft')
           var breadcrumb = req.params[0].split('/')
           manager.file = {
             revision: cmsData.revision.getFilesRevision(allDraft, cmsData.fileAttr.delete(revisionFilePath))
@@ -129,7 +125,7 @@ var route = function(req, res, next) {
     var pageHtml = '' 
     if(typeof _json !== 'undefined' && _json !== null 
       && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) { 
-      var text = cmsTemplate.template.getTemplate(_json.abe_meta.template) 
+      var text = cmsTemplates.template.getTemplate(_json.abe_meta.template) 
       var page = new Page(_json.abe_meta.template, text, _json, false) 
       pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
     } 

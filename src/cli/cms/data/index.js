@@ -6,16 +6,18 @@ import * as regex from './regex'
 import * as sql from './sql'
 import * as source from './source'
 import * as revision from './revision'
-import * as meta from './meta'
+import * as metas from './metas'
+import * as file from './file'
 
 export {
-	values
-	,attributes
-	,attr
-	,fileAttr
-	,sql
-	,source
-	,revision
-	,regex
-	,meta
+	values,
+  attributes,
+  attr,
+  fileAttr,
+  sql,
+  source,
+  revision,
+  regex,
+  metas,
+  file
 }

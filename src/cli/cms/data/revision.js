@@ -12,14 +12,14 @@ import {
 export function getFilesRevision(urls, fileName) {
   var res = []
   var number = 1
-  var tplUrl = FileParser.getFileDataFromUrl(fileName)
+  var tplUrl = cmsData.file.fromUrl(fileName)
   fileName = fileName.split('/')
   fileName = fileName[fileName.length - 1]
   var publishDate = new Date()
   var json = null
 
   if(coreUtils.file.exist(tplUrl.publish.json)) {
-    json = FileParser.getJson(tplUrl.publish.json)
+    json = cmsData.file.get(tplUrl.publish.json)
     if(typeof json !== 'undefined' && json !== null
       && typeof json[config.meta.name] !== 'undefined' && json[config.meta.name] !== null) {
       publishDate = new Date(json[config.meta.name].latest.date)
@@ -47,9 +47,9 @@ export function getFilesRevision(urls, fileName) {
       urlObj.version = number
       number = number + 1
 
-      var tplUrlObj = FileParser.getFileDataFromUrl(urlObj.path)
+      var tplUrlObj = cmsData.file.fromUrl(urlObj.path)
       if(coreUtils.file.exist(tplUrlObj.publish.json)) {
-        var jsonObj = FileParser.getJson(tplUrlObj.publish.json)
+        var jsonObj = cmsData.file.get(tplUrlObj.publish.json)
         urlObj[config.meta.name] = jsonObj[config.meta.name]
       }
       res.push(urlObj)
@@ -212,24 +212,4 @@ export function getFilesMerged(files) {
   })
 
   return arMerged
-}
-
-export function deleteOlderRevisionByType(fileName, type) {
-  var folder = fileName.split('/')
-  var file = folder.pop()
-  var extension = file.replace(/.*?\./, '')
-  folder = folder.join('/')
-  var stat = fse.statSync(folder)
-  if(stat){
-    var files = FileParser.getFiles(folder, true, 1, new RegExp('\\.' + extension))
-    files.forEach(function (fileItem) {
-      var fname = cmsData.fileAttr.delete(fileItem.cleanPath)
-      var ftype = cmsData.fileAttr.get(fileItem.cleanPath).s
-      if(fname === file && ftype === type){
-        var fileDraft = fileItem.path.replace(/-abe-./, '-abe-d')
-        FileParser.removeFile(fileItem.path, FileParser.changePathEnv(fileItem.path, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
-        FileParser.removeFile(fileDraft, FileParser.changePathEnv(fileDraft, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
-      }
-    })
-  }
 }

@@ -6,7 +6,7 @@ import {
   cmsEditor,
   abeEngine,
   cmsData,
-  cmsTemplate,
+  cmsTemplates,
   config,
   Hooks,
   Manager
@@ -117,7 +117,7 @@ export default class Page {
             var matches = this.template.match(eachSource)
             if(typeof matches !== 'undefined' && matches !== null) {
               Array.prototype.forEach.call(matches, (match) => {
-                this.template = this.template.replace(match, `${match}<!-- [[${keys[i]}]] ${cmsTemplate.encodeAbeTagAsComment(match)} -->`)
+                this.template = this.template.replace(match, `${match}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(match)} -->`)
               })
             }
           }
@@ -139,7 +139,7 @@ export default class Page {
       }
 
       // I compile the text
-      var compiledTemplate = Handlebars.compile((!this._onlyHTML) ? cmsTemplate.insertDebugtoolUtilities(this.template) : this.template)
+      var compiledTemplate = Handlebars.compile((!this._onlyHTML) ? cmsTemplates.insertDebugtoolUtilities(this.template) : this.template)
 
       // I create the html page ! yeah !!!
       this.html = compiledTemplate(json, {data: {intl: config.intlData}})
@@ -210,7 +210,7 @@ export default class Page {
         var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
 
         // je remplace le block dans le texte par ça
-        this.template = this.template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${cmsTemplate.encodeAbeTagAsComment(blockHtml)} -->`)
+        this.template = this.template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${cmsTemplates.encodeAbeTagAsComment(blockHtml)} -->`)
       }
 
       // Pour chaque tag Abe, je mets en forme ce tag avec des data- supplémentaires
