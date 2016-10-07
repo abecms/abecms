@@ -16,7 +16,7 @@ class Plugins {
     this.fn = []
     var pluginsDir = path.join(config.root, config.plugins.url)
     try {
-      var directoryPlugins = fse.lstatSync(pluginsDir);
+      var directoryPlugins = fse.lstatSync(pluginsDir)
       if (directoryPlugins.isDirectory()) {
         
         this._plugins = FileParser.getFolders(pluginsDir, true, 0)
@@ -24,7 +24,7 @@ class Plugins {
           // has hooks
           var plugHooks = path.join(plugin.path, config.hooks.url)
           try {
-            var directoryHook = fse.lstatSync(plugHooks);
+            var directoryHook = fse.lstatSync(plugHooks)
             if (directoryHook.isDirectory()) {
               var plugHooksFile = path.join(plugHooks, 'hooks.js')
               var h = require(plugHooksFile)
@@ -39,7 +39,7 @@ class Plugins {
           // has partials
           var plugPartials = path.join(plugin.path, config.pluginsPartials)
           try {
-            var directoryPartials = fse.lstatSync(plugPartials);
+            var directoryPartials = fse.lstatSync(plugPartials)
             if (directoryPartials.isDirectory()) {
               plugin.partials = plugPartials
             }else {
@@ -52,7 +52,7 @@ class Plugins {
           // has templates
           var plugTemplates = path.join(plugin.path, config.templates.url)
           try {
-            var directoryTemplates = fse.lstatSync(plugTemplates);
+            var directoryTemplates = fse.lstatSync(plugTemplates)
             if (directoryTemplates.isDirectory()) {
               plugin.templates = plugTemplates
             }else {
@@ -65,7 +65,7 @@ class Plugins {
           // has process
           var plugProcess = path.join(plugin.path, 'process')
           try {
-            var directoryProcess = fse.lstatSync(plugProcess);
+            var directoryProcess = fse.lstatSync(plugProcess)
             if (directoryProcess.isDirectory()) {
               plugin.process = {}
               var processFiles = FileParser.getFiles(plugProcess, true, 0)
@@ -82,13 +82,13 @@ class Plugins {
           // has routes
           var plugRoutes = path.join(plugin.path, 'routes')
           try {
-            var directoryRoute = fse.lstatSync(plugRoutes);
+            var directoryRoute = fse.lstatSync(plugRoutes)
             if (directoryRoute.isDirectory()) {
               plugin.routes = {}
 
               var gets = path.join(plugRoutes, 'get')
               try {
-                var directoryGets = fse.lstatSync(gets);
+                var directoryGets = fse.lstatSync(gets)
                 if (directoryGets.isDirectory()) {
                   var routesGet = FileParser.getFiles(gets, true, 0)
                   Array.prototype.forEach.call(routesGet, (route) => {
@@ -101,7 +101,7 @@ class Plugins {
               }
               try {
                 var posts = path.join(plugRoutes, 'post')
-                var directoryPosts = fse.lstatSync(gets);
+                var directoryPosts = fse.lstatSync(gets)
                 if (directoryPosts.isDirectory()) {
                   var routesPost = FileParser.getFiles(posts, true, 0)
                   Array.prototype.forEach.call(routesPost, (route) => {

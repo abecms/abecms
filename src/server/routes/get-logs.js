@@ -36,7 +36,7 @@ var route = function(req, res, next){
   }else {
     var pathLog = path.join(config.root, 'logs')
     try {
-    var directory = fse.lstatSync(pathLog);
+      var directory = fse.lstatSync(pathLog)
       if (!directory.isDirectory()) {
         mkdirp.sync(pathLog)
       }
