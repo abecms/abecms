@@ -59,10 +59,10 @@ export default class FileParser {
       var match = (isFolder) ? true : (inversePattern) ? !extensions.test(level[i]) : extensions.test(level[i])
       if((type === 'files' || type === null) && match) {
 
-        if(fileUtils.isValidFile(level[i])) {
+        if(level[i].indexOf('.') > -1) {
           var extension = /(\.[\s\S]*)/.exec(level[i])[0]
           var cleanName = cmsData.fileAttr.delete(level[i])
-          var cleanNameNoExt = fileUtils.removeExtension(cleanName)
+          var cleanNameNoExt = cleanName.replace(/\..+$/, '')
           var fileData = cmsData.fileAttr.get(level[i])
 
           var date
@@ -73,7 +73,9 @@ export default class FileParser {
             date = stat.mtime
           }
           var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
-          var cleanFilePath = fileUtils.cleanFilePath(pathLevel)
+
+
+          var cleanFilePath = cmsData.fileAttr.delete(pathLevel).replace(config.root, '').replace(/^\/?.+?\//, '')
 
           var fileDate = moment(date)
           var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
@@ -102,7 +104,7 @@ export default class FileParser {
           if(!flatten) item['folders'] = []
           arr.push(item)
   		      // push current file name into array to check if siblings folder are assets folder
-          fileCurrentLevel.push(fileUtils.removeExtension(level[i]) + assets)
+          fileCurrentLevel.push(level[i].replace(/\..+$/, '') + assets)
         }
       }
       if(!fileCurrentLevel.includes(level[i]) && match) {
@@ -181,7 +183,7 @@ export default class FileParser {
 
         // now check if file for folder exist
         Array.prototype.forEach.call(arr, (file) => {
-          var folderName = fileUtils.removeExtension(file.path) + assets
+          var folderName = file.path.replace(/\..+$/, '') + assets
           try {
             var directory = fse.lstatSync(folderName)
             if (!directory.isDirectory()) {
@@ -263,8 +265,8 @@ export default class FileParser {
     let extension = config.files.templates.extension
     if(typeof url !== 'undefined' && url !== null) {
 
-      var dir = fileUtils.removeLast(url).replace(config.root, '')
-      var filename = fileUtils.filename(url)
+      var dir = path.dirname(url).replace(config.root, '')
+      var filename = path.basename(url)
       var basePath = dir.replace(config.root, '').split('/')
       var link = url.replace(config.root, '')
       link = link.replace(/^\//, '').split('/')
@@ -289,7 +291,7 @@ export default class FileParser {
       res.draft.file = filename
       res.publish.file = cmsData.fileAttr.delete(filename)
       res.publish.link = link
-      res.json.file = fileUtils.replaceExtension(filename, 'json')
+      res.json.file = filename.replace(`.${config.files.templates.extension}`, '.json')
       res.publish.json = path.join(res.json.dir, cmsData.fileAttr.delete(res.json.file))
 
 	  	// set filename draft/json
@@ -475,7 +477,7 @@ export default class FileParser {
       }
 
       cmsOperations.save.save(
-	      fileUtils.getFilePath(json.abe_meta.link),
+	      path.join(config.root, config.draft.url, json.abe_meta.link.replace(config.root)),
 	      json.abe_meta.template,
 	      json,
 	      '',

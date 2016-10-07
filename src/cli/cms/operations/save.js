@@ -74,7 +74,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     }
 
     if (tplPath.indexOf('.') > -1) {
-      tplPath = fileUtils.removeExtension(tplPath)
+      tplPath = tplPath.replace(/\..+$/, '')
     }
     var tpl = tplPath.replace(config.root, '')
 
@@ -112,7 +112,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       text = cmsTemplate.template.getTemplate(fullTpl)
     }
 
-    cmsData.source.getDataList(fileUtils.removeLast(tplUrl.publish.link), text, json)
+    cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
         .then(() => {
 
           json = Hooks.instance.trigger('afterGetDataListOnSave', json)
@@ -190,7 +190,7 @@ export function saveJsonAndHtml(templateId, obj, html) {
 }
 
 export function saveJson(url, json) {
-  mkdirp.sync(fileUtils.removeLast(url))
+  mkdirp.sync(path.dirname(url))
 
   if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
     delete json.abe_source
@@ -216,7 +216,7 @@ export function saveJson(url, json) {
 }
 
 export function saveHtml(url, html) {
-  mkdirp.sync(fileUtils.removeLast(url))
+  mkdirp.sync(path.dirname(url))
   if(cmsData.fileAttr.test(url) && cmsData.fileAttr.get(url).s !== 'd'){
     fileUtils.deleteOlderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
   }

@@ -22,7 +22,7 @@ var route = function(req, res, next){
     html += '<ul>'
     Array.prototype.forEach.call(files, (item) => {
       html += '<li>'
-      html += '<a href="/abe/delete-logs/' + fileUtils.removeExtension(item.cleanPath) + '">' + item.name + '</a><br />'
+      html += '<a href="/abe/delete-logs/' + item.cleanPath.replace(/\..+$/, '') + '">' + item.name + '</a><br />'
       html += '</li>'
     })
     html += '</ul>'

@@ -1,3 +1,4 @@
+import path from 'path'
 import {
   cmsOperations,
   fileUtils,
@@ -11,7 +12,7 @@ var route = function(req, res, next){
 
   var p = new Promise((resolve) => {
     cmsOperations.save.save(
-      fileUtils.getFilePath(req.body.filePath),
+      path.join(config.root, config.draft.url, req.body.filePath.replace(config.root)),
       req.body.tplPath,
       req.body.json,
       '',
@@ -27,7 +28,7 @@ var route = function(req, res, next){
 
   p.then((resSave) => {
     cmsOperations.save.save(
-      fileUtils.getFilePath(req.body.filePath),
+      path.join(config.root, config.draft.url, req.body.filePath.replace(config.root)),
       req.body.tplPath,
       req.body.json,
       '',
