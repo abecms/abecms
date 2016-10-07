@@ -151,7 +151,7 @@ export default class FileParser {
 
     try {
       var directory = fse.lstatSync(pathAssets)
-      if (!directory.isDirectory()) {
+      if (directory.isDirectory()) {
         var arr = FileParser.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99)
 
         // now check if file for folder exist
@@ -159,7 +159,7 @@ export default class FileParser {
           var folderName = file.path.replace(/\..+$/, '') + assets
           try {
             var directory = fse.lstatSync(folderName)
-            if (!directory.isDirectory()) {
+            if (directory.isDirectory()) {
               assetsFolders.push(folderName)
             }
           } catch (e) {
@@ -244,53 +244,6 @@ export default class FileParser {
       res.json.path = path.join(res.json.dir, res.json.file)
     }
     return res
-  }
-
-  static copySiteAssets(pathAssets) {
-    var publicFolders = FileParser.getAssetsFolder(pathAssets)
-    let publish = config.publish.url
-    var dest = path.join(config.root, publish)
-    try {
-      var directory = fse.lstatSync(dest)
-      if (!directory.isDirectory()) {
-        mkdirp.sync(dest)
-      }
-    } catch (e) {
-      mkdirp.sync(dest)
-    }
-
-    Array.prototype.forEach.call(publicFolders, (publicFolder) => {
-      var res = dircompare.compareSync(publicFolder, dest, {compareSize: true})
-
-      res.diffSet.forEach(function (entry) {
-        var state = {
-          'equal' : '==',
-          'left' : '->',
-          'right' : '<-',
-          'distinct' : '<>'
-        }[entry.state]
-
-        var name1 = entry.name1 ? entry.name1 : ''
-        var name2 = entry.name2 ? entry.name2 : ''
-
-        let exclude =  new RegExp(config.files.exclude)
-        if(!exclude.test(name1) && !exclude.test(name2) && entry.type1 !== 'directory' && entry.type2 !== 'directory') {
-			    
-          if(typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
-            var original = entry.path1
-            var basePath = original.replace(publicFolder, '')
-            var move = path.join(dest, basePath)
-
-            if(entry.type2 === 'missing' || entry.state === 'distinct') {
-              fse.removeSync(move)
-              fse.copySync(original, move)
-            }
-          }
-        }
-      })
-    })
-
-    return publicFolders
   }
 
   static getMetas(arr) {
@@ -471,7 +424,7 @@ export default class FileParser {
     var refFolder = path.join(config.root, config.reference.url)
     try {
       var directory = fse.lstatSync(refFolder)
-      if (!directory.isDirectory()) {
+      if (directory.isDirectory()) {
         var files = FileParser.read(refFolder.replace(/\/$/, ''), refFolder.replace(/\/$/, ''), 'files', true, /.json/)
         Array.prototype.forEach.call(files, (file) => {
           var name = file.filePath.replace(file.fileType, '')
