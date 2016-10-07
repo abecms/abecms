@@ -37,8 +37,6 @@ import Page from './cms/Page'
 import FileParser from './core/utils/file-parser'
 import fileUtils from './core/utils/file-utils'
 import folderUtils from './core/utils/folder-utils'
-import slugify from './core/utils/slugify'
-import {cleanSlug} from './core/utils/slugify'
 
 // import {getTemplate} from './cms/templates/abe-template'
 import Create from './cms/Create'
@@ -66,8 +64,6 @@ export {
 	,fse
 	,Handlebars
 	,clc
-	,slugify
-	,cleanSlug
 	,FileParser
 	,folderUtils
 	,fileUtils

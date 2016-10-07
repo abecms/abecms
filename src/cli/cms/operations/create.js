@@ -2,7 +2,7 @@ import path from 'path'
 import {
   fileUtils,
   FileParser,
-  cleanSlug,
+  coreUtils,
   cmsTemplate,
   cmsOperations,
   config,
@@ -17,7 +17,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
 
     var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ''))
     var filePath = path.join(pathCreate, name)
-    filePath = cleanSlug(filePath)
+    filePath = coreUtils.slug.clean(filePath)
     filePath = fileUtils.getFilePath(filePath)
 
     if(templatePath !== null && filePath !== null) {

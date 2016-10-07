@@ -1,14 +1,13 @@
 import {
   FileParser,
-  Hooks,
-  cleanSlug
+  Hooks
 } from '../../cli'
 
 var route = function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var filePath = cleanSlug(req.query.filePath)
+  var filePath = coreUtils.slug.clean(req.query.filePath)
   var dirPath = FileParser.deleteFile(filePath)
 
   var result = {

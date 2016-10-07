@@ -38,7 +38,6 @@ import {
   Hooks,
   Plugins,
   Handlebars,
-  cleanSlug
 } from '../../cli'
 
 import locale from '../helpers/abe-locale'

@@ -6,8 +6,7 @@ import {Promise} from 'es6-promise'
 import path from 'path'
 
 import {
-  Util
-  ,abeProcess
+  abeProcess
   ,FileParser
   ,cmsData
   ,config
@@ -15,7 +14,7 @@ import {
   ,Page
   ,cmsTemplate
   ,Hooks
-  ,cleanSlug
+  ,coreUtils
 } from '../../'
 
 export function checkRequired(text, json) {
@@ -55,7 +54,7 @@ export function checkRequired(text, json) {
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
   var dateStart = new Date()
 
-  url = cleanSlug(url)
+  url = coreUtils.slug.clean(url)
 
   var p = new Promise((resolve) => {
     var isRejectedDoc = false
