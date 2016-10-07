@@ -1,10 +1,8 @@
 import fse from 'fs-extra'
-import clc from 'cli-color'
 import path from 'path'
 
 import {
   config,
-  fileUtils,
   FileParser
 } from '../../'
 

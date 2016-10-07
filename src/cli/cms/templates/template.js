@@ -2,8 +2,7 @@ import fse from 'fs-extra'
 import {Promise} from 'es6-promise'
 import path from 'path'
 import {
-  cmsEditor
-  ,config
+  config
   ,fileUtils
   ,cmsData
   ,Hooks

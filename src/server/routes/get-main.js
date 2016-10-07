@@ -18,15 +18,12 @@ import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 var route = function(req, res, next) {
-  var dateStart = new Date()
-
   if(req.query.filePath){
     var testXSS = xss(req.query.filePath, {
       whiteList: [],
       stripIgnoreTag: true
     })
     if(testXSS !== req.query.filePath){
-      // res.status(400).send('<h1>400 Bad Request</h1>Not a valid URL format');
       res.redirect(`/abe/${req.params[0]}?filePath=${testXSS}`)
       return
     }
@@ -34,8 +31,12 @@ var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var templatePath = fileUtils.getTemplatePath(req.params[0])
-  var filePath = path.join(config.root, config.draft.url, req.query.filePath.replace(config.root))
+  var templatePath = req.params[0]
+
+  var filePath = null
+  if(typeof req.query.filePath !== 'undefined' && req.query.filePath !== null) {
+    filePath = path.join(config.root, config.draft.url, req.query.filePath.replace(config.root))
+  }
   var debugJson = (req.query.debugJson && req.query.debugJson == 'true' ) ? true : false
   var debugJsonKey = (req.query.key) ? req.query.key : false
   var debugHtml = (req.query.debugHtml && req.query.debugHtml == 'true' ) ? true : false

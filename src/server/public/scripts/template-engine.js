@@ -2,14 +2,12 @@ import {Devtool} from './devtool/Devtool'
 
 import EditorInputs from './modules/EditorInputs'
 import EditorBlock from './modules/EditorBlock'
-import EditorUtils from './modules/EditorUtils'
 import EditorFiles from './modules/EditorFiles'
 import EditorSave from './modules/EditorSave'
 import EditorJson from './modules/EditorJson'
 import EditorManager from './modules/EditorManager'
 import EditorAutocomplete from './modules/EditorAutocomplete'
 import EditorReload from './modules/EditorReload'
-import qs from 'qs'
 
 var htmlTag = document.querySelector('html')
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))

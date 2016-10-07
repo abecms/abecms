@@ -8,7 +8,7 @@ import {
   config
 } from '../../cli'
 
-var route = function(req, res, next){
+var route = function(req, res){
   var file = path.join(config.root, 'logs', `${req.params[0]}.log`)
   var html = ''
   if (fileUtils.isFile(file)) {

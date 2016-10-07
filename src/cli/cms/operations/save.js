@@ -10,7 +10,6 @@ import {
   ,FileParser
   ,cmsData
   ,config
-  ,fileUtils
   ,Page
   ,cmsTemplate
   ,Hooks
@@ -52,8 +51,6 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
-  var dateStart = new Date()
-
   url = coreUtils.slug.clean(url)
 
   var p = new Promise((resolve) => {
@@ -66,7 +63,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       url = Hooks.instance.trigger('afterReject', url)
     }
     var tplUrl = FileParser.getFileDataFromUrl(url)
-    type = type || FileParser.getType(url)
+    type = type || 'draft'
     var pathIso = dateIso(tplUrl, type)
     if(typeof previousSave !== 'undefined' && previousSave !== null){
       pathIso.jsonPath = path.join(config.root, previousSave.jsonPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
@@ -218,7 +215,7 @@ export function saveJson(url, json) {
 export function saveHtml(url, html) {
   mkdirp.sync(path.dirname(url))
   if(cmsData.fileAttr.test(url) && cmsData.fileAttr.get(url).s !== 'd'){
-    fileUtils.deleteOlderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
+    cmsData.revision.deleteOlderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
   }
   fse.writeFileSync(url, html)
 }

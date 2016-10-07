@@ -1,7 +1,7 @@
 import path from 'path'
 import {
   cmsOperations,
-  fileUtils,
+  config,
   Hooks,
   Manager
 } from '../../cli'
