@@ -138,7 +138,7 @@ export function getTemplate (file) {
   file = file.replace(path.join(config.root, config.templates.url), '')
   file = file.replace(config.root, '')
   if (file.indexOf('.') > -1) {
-    file = fileUtils.removeExtension(file)
+    file = file.replace(/\..+$/, '')
   }
   file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
   if(fileUtils.isFile(file)) {

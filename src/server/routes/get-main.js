@@ -1,4 +1,5 @@
 import xss from 'xss'
+import path from 'path'
 import pkg from '../../../package'
 
 import {
@@ -34,7 +35,7 @@ var route = function(req, res, next) {
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var templatePath = fileUtils.getTemplatePath(req.params[0])
-  var filePath = fileUtils.getFilePath(req.query.filePath)
+  var filePath = path.join(config.root, config.draft.url, req.query.filePath.replace(config.root))
   var debugJson = (req.query.debugJson && req.query.debugJson == 'true' ) ? true : false
   var debugJsonKey = (req.query.key) ? req.query.key : false
   var debugHtml = (req.query.debugHtml && req.query.debugHtml == 'true' ) ? true : false
@@ -68,7 +69,7 @@ var route = function(req, res, next) {
           FileParser.getAssets() 
 
           var revisionFilePath = FileParser.changePathEnv(filePath, config.draft.url)
-          var dirPath = fileUtils.removeLast(revisionFilePath)
+          var dirPath = path.dirname(revisionFilePath)
           var allDraft = FileParser.getFiles(dirPath, true, 99, new RegExp('\\.' + config.files.templates.extension))
 
           allDraft = FileParser.getMetas(allDraft, 'draft')
@@ -76,7 +77,7 @@ var route = function(req, res, next) {
           manager.file = {
             revision: cmsData.revision.getFilesRevision(allDraft, cmsData.fileAttr.delete(revisionFilePath))
             ,template: breadcrumb
-            ,path: (req.query.filePath) ? fileUtils.cleanTplName(req.query.filePath) : ''
+            ,path: (req.query.filePath) ? path.resolve(req.query.filePath).replace(/^\//, '') : ''
           }
           if(manager.file.revision.length > 0){
             var publishPath = cmsData.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))

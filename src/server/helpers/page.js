@@ -1,4 +1,5 @@
 import mkdirp from 'mkdirp'
+import path from 'path'
 import {
   cmsData,
   FileParser,
@@ -11,7 +12,7 @@ import {
 
 var page = function (req, res, next) {
   var filePath = coreUtils.slug.clean(req.query.filePath)
-  filePath = fileUtils.getFilePath(filePath)
+  filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
   var html = (req.query.html) ? true : false
   var json = null
   var editor = false
@@ -57,7 +58,7 @@ var page = function (req, res, next) {
 
     if (!editor) {
 
-      cmsData.source.getDataList(fileUtils.removeLast(linkPath), text, json)
+      cmsData.source.getDataList(path.dirname(linkPath), text, json)
         .then(() => {
           var page = new Page(template, text, json, html)
           res.set('Content-Type', 'text/html')

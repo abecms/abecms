@@ -17,7 +17,7 @@ export function clean(str) {
 }
 
 function slugify(str) {
-  str = fileUtils.removeExtension(str)
+  str = str.replace(/\..+$/, '')
   str = slug(str, {separateNumbers: false})
   str = `${str}.${config.files.templates.extension}`
   return str.toLowerCase()

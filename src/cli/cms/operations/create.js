@@ -18,7 +18,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ''))
     var filePath = path.join(pathCreate, name)
     filePath = coreUtils.slug.clean(filePath)
-    filePath = fileUtils.getFilePath(filePath)
+    filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
 
     if(templatePath !== null && filePath !== null) {
       var tplUrl = FileParser.getFileDataFromUrl(filePath)
