@@ -2,11 +2,11 @@ import fse from 'fs-extra'
 import {Promise} from 'es6-promise'
 import path from 'path'
 import {
-  cmsEditor
-  ,config
-  ,fileUtils
+  config
+  ,coreUtils
   ,cmsData
   ,Hooks
+  ,FileParser
 } from '../../'
 
 export function findTemplateAndPartialsInFolder (currentPath) {
@@ -78,7 +78,7 @@ export function includePartials(text) {
     var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
-    if(fileUtils.isFile(file)) {
+    if(coreUtils.file.exist(file)) {
       partial = includePartials(fse.readFileSync(file, 'utf8'))
     }
     text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
@@ -138,10 +138,10 @@ export function getTemplate (file) {
   file = file.replace(path.join(config.root, config.templates.url), '')
   file = file.replace(config.root, '')
   if (file.indexOf('.') > -1) {
-    file = fileUtils.removeExtension(file)
+    file = file.replace(/\..+$/, '')
   }
   file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
-  if(fileUtils.isFile(file)) {
+  if(coreUtils.file.exist(file)) {
     text = fse.readFileSync(file, 'utf8')
     text = includePartials(text)
     text = translate(text)
@@ -286,4 +286,29 @@ export function getSelectTemplateKeys(templatesPath) {
   })
 
   return p
+}
+
+export function getStructureAndTemplatesFiles() {
+  var site = cmsData.revision.filePathInfos(config.root)
+  var result = {'structure': [], 'templates': []}
+
+  let structure = config.structure.url
+  let templates = config.templates.url
+  try {
+    var directoryStructure = fse.lstatSync(path.join(site.path, structure))
+    if (directoryStructure.isDirectory()) {
+      site.folders = FileParser.getFolders(path.join(site.path, structure), false)
+      result.structure = site.folders
+    }
+  } catch (e) {
+  }
+  try {
+    var directoryTemplate = fse.lstatSync(path.join(site.path, templates))
+    if (directoryTemplate.isDirectory()) {
+      result.templates = result.templates.concat(FileParser.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
+    }
+  } catch (e) {
+  }
+
+  return result
 }

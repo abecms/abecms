@@ -13,8 +13,9 @@ import uuid from 'node-uuid'
 
 import {
   config,
+  coreUtils,
+  cmsTemplate,
   FileParser,
-  fileUtils,
   printInput,
   abeImport,
   testObj,
@@ -71,7 +72,7 @@ var html = exphbs.create({
 })
 
 var opts = {}
-if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
+if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   opts = {
     key: fse.readFileSync( path.join(config.root, 'key.pem')),
     cert: fse.readFileSync( path.join(config.root, 'cert.pem'))
@@ -83,7 +84,7 @@ var app = express(opts)
   // Instantiate Singleton Manager (which lists all blog files)
 Manager.instance.init()
 app.set('config', config.getConfigByWebsite())
-app.set('projectFiles', FileParser.getProjectFiles())
+app.set('projectFiles', cmsTemplate.template.getStructureAndTemplatesFiles())
 
 app.use(bodyParser.json({limit: '1gb'}))
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
@@ -142,7 +143,7 @@ app.locals.layout = false
 app.use(middleWebsite)
 app.use(express.static(__dirname + '/public'))
 
-FileParser.copySiteAssets()
+cmsTemplate.assets.copy()
 
 var sites = FileParser.getFolders(config.root.replace(/\/$/, ''), false, 0)
 
@@ -151,13 +152,13 @@ app.use(express.static(publish))
 // app.use(express.static(publish))
 
 if(config.partials !== '') {
-  if (fileUtils.isFile(path.join(config.root, config.partials))) {
+  if (coreUtils.file.exist(path.join(config.root, config.partials))) {
     app.use(express.static(path.join(config.root, config.partials)))
   }
 }
 
 if(config.custom !== '') {
-  if (fileUtils.isFile(path.join(config.root, config.custom))) {
+  if (coreUtils.file.exist(path.join(config.root, config.custom))) {
     app.use(express.static(path.join(config.root, config.custom)))
   }
 }
@@ -189,7 +190,7 @@ app.use(session({
 
 Hooks.instance.trigger('afterExpress', app, express)
 
-if (fileUtils.isFile(path.join(config.root, 'cert.pem'))) {
+if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   var server = https.createServer(opts, app)
   server.listen(port, function() {
     console.log(clc.green(`\nserver running at https://localhost:${port}/`))

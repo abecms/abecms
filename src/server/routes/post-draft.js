@@ -1,6 +1,7 @@
+import path from 'path'
 import {
   cmsOperations,
-  fileUtils,
+  config,
   Hooks,
   Manager
 } from '../../cli'
@@ -9,7 +10,7 @@ var route = function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
   cmsOperations.save.save(
-    fileUtils.getFilePath(req.body.filePath),
+    path.join(config.root, config.draft.url, req.body.filePath.replace(config.root)),
     req.body.tplPath,
     req.body.json,
     '',

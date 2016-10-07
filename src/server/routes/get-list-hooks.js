@@ -2,27 +2,15 @@ import path from 'path'
 import Handlebars from 'handlebars'
 import hooksDefault from '../../hooks/hooks'
 import {
-  fileUtils,
-  FileParser,
-  cleanSlug,
-  config,
-  Hooks,
-  Plugins
+  coreUtils,
+  Hooks
 } from '../../cli'
 
 var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
-  // var urls = []
-  // Array.prototype.forEach.call(routes, function(route) {
-  //   urls.push({
-  //     url: route.route.path,
-  //     method: Object.keys(route.route.methods)[0].toUpperCase(),
-  //     regex: "^\\" + route.route.path.replace(/\*$/, '') + ".*?"
-  //   })
-  // })
 
   var page = path.join(__dirname + '/../views/list-hooks.html')
-  var html = fileUtils.getFileContent(page)
+  var html = coreUtils.file.getContent(page)
   var allHooks = []
 
   Array.prototype.forEach.call(Object.keys(hooksDefault), (hook) => {
@@ -35,7 +23,6 @@ var route = function(req, res, next) {
       back: (matchReturn) ? matchReturn[1].replace(';', '') : 'null'
     })
   })
-  // console.log('Plugins.instance.getHooks()', Plugins.instance.getHooks())
 
   var template = Handlebars.compile(html, {noEscape: true})
   var tmp = template({

@@ -4,8 +4,6 @@ import path from 'path'
 import {
   config
   ,FileParser
-  ,fileUtils
-  ,folderUtils
   ,Hooks
 } from '../../cli'
 
@@ -31,7 +29,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
     allJson = FileParser.getFiles(pConfig.FILEPATH, true, 20, /\.json/)
   }
 
-  var allJson = Hooks.instance.trigger('beforeUpdateJson', allJson)
+  allJson = Hooks.instance.trigger('beforeUpdateJson', allJson)
 
 }else {
   console.log('ABE_WEBSITE is not defined use node process.js ABE_WEBSITE=/pat/to/website')

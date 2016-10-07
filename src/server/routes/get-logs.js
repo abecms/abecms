@@ -4,15 +4,14 @@ import mkdirp from 'mkdirp'
 
 import {
   FileParser,
-  fileUtils,
-  folderUtils,
+  coreUtils,
   config
 } from '../../cli'
 
-var route = function(req, res, next){
+var route = function(req, res){
   var file = path.join(config.root, 'logs', `${req.params[0]}.log`)
   var html = ''
-  if (fileUtils.isFile(file)) {
+  if (coreUtils.file.exist(file)) {
     var commonStyle = 'font-family: arial; font-size: 12px;'
     var shellp = '<span style="color: #18FFFF;'+commonStyle+'"> > ' + req.params[0].replace(/\//g, '') + '</span>'
     var content = fse.readFileSync(file, 'utf8')
@@ -36,7 +35,12 @@ var route = function(req, res, next){
     html += '\n' + '</body>' + '\n' + '</html>'
   }else {
     var pathLog = path.join(config.root, 'logs')
-    if (!folderUtils.isFolder(pathLog)) {
+    try {
+      var directory = fse.lstatSync(pathLog)
+      if (!directory.isDirectory()) {
+        mkdirp.sync(pathLog)
+      }
+    } catch (e) {
       mkdirp.sync(pathLog)
     }
     var files = FileParser.read(pathLog, pathLog, 'files', true, /\.log/, 99)
@@ -45,7 +49,7 @@ var route = function(req, res, next){
     html += '<ul>'
     Array.prototype.forEach.call(files, (item) => {
       html += '<li>'
-      html += '<a href="/abe/logs/' + fileUtils.removeExtension(item.cleanPath) + '">' + item.name + '</a><br />'
+      html += '<a href="/abe/logs/' + item.cleanPath.replace(/\..+$/, '') + '">' + item.name + '</a><br />'
       html += '</li>'
     })
     html += '</ul>'

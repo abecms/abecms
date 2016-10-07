@@ -12,16 +12,13 @@ import pkg from '../../../package'
 import {
   Util,
   FileParser,
-  fileUtils,
-  folderUtils,
+  coreUtils,
   config,
   Page,
-  Locales,
   abeProcess,
   Hooks,
   Plugins,
-  Handlebars,
-  cleanSlug
+  Handlebars
 } from '../../cli'
 
 import locale from '../helpers/abe-locale'
@@ -33,7 +30,12 @@ var middleware = function(req, res, next) {
 
   if (req.originalUrl === '' || req.originalUrl === '/' || req.originalUrl.indexOf('.') === -1) {
     var pathWebsite = path.join(config.root, config.publish.url, req.originalUrl)
-    if (!folderUtils.isFolder(pathWebsite)) {
+    try {
+      var directory = fse.lstatSync(pathWebsite)
+      if (!directory.isDirectory()) {
+        return next()
+      }
+    } catch (e) {
       return next()
     }
     var files = FileParser.getFiles(pathWebsite, true, 0, /(.*?)/)
@@ -72,8 +74,8 @@ var middleware = function(req, res, next) {
     var html = ''
 
     var page = path.join(config.root, config.publish.url, req.originalUrl)
-    if (fileUtils.isFile(page)) {
-      html = fileUtils.getFileContent(page)
+    if (coreUtils.file.exist(page)) {
+      html = coreUtils.file.getContent(page)
 
     }else {
       return next()

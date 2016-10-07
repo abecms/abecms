@@ -1,11 +1,10 @@
 import slug from 'limax'
 
 import {
-  config,
-  fileUtils
+  config
 } from '../../'
 
-function cleanSlug(str) {
+export function clean(str) {
 
   if (typeof str === 'undefined' || str === null) return null
   if (str.indexOf('.') === -1) { // no extension add one
@@ -17,11 +16,8 @@ function cleanSlug(str) {
 }
 
 function slugify(str) {
-  str = fileUtils.removeExtension(str)
+  str = str.replace(/\..+$/, '')
   str = slug(str, {separateNumbers: false})
   str = `${str}.${config.files.templates.extension}`
   return str.toLowerCase()
 }
-
-export {cleanSlug as cleanSlug}
-export default slugify

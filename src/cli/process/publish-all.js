@@ -40,7 +40,7 @@ function publishNext(published, tt, cb, i = 0) {
     if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
       i++
 
-      var p = new Promise((resolve, reject) => {
+      var p = new Promise((resolve) => {
         try {
           
           cmsOperations.save.save(
@@ -82,7 +82,7 @@ function publishNext(published, tt, cb, i = 0) {
     p.then(function () {
       publishNext(published, tt, cb, i++)
     })
-    .catch(function () {
+    .catch(function (e) {
       publishNext(published, tt, cb, i++)
       console.log('error', clc.red(e))
     })
@@ -98,19 +98,12 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   var config = require('../../cli').config
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
   try {
-
-    // require controller to instanciate hooks
-    var controllers = require('../../server/controllers')
     var FileParser = require('../../cli').FileParser
-    var fileUtils = require('../../cli').fileUtils
-    var folderUtils = require('../../cli').folderUtils
     var cmsOperations = require('../../cli').cmsOperations
     var Manager = require('../../cli').Manager
 
     Manager.instance.init()
       .then(() => {
-        var i = 0
-
         var files = Manager.instance.getList()
 
         // var result = []

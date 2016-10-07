@@ -1,8 +1,7 @@
 import path from 'path'
 import {
-  fileUtils,
   FileParser,
-  cleanSlug,
+  coreUtils,
   cmsTemplate,
   cmsOperations,
   config,
@@ -15,15 +14,15 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
   var p = new Promise((resolve, reject) => {
     Hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
-    var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ''))
+    var templatePath = path.join(template.replace(config.root, ''), config.templates.url, `${template}.${config.files.templates.extension}`)
     var filePath = path.join(pathCreate, name)
-    filePath = cleanSlug(filePath)
-    filePath = fileUtils.getFilePath(filePath)
+    filePath = coreUtils.slug.clean(filePath)
+    filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
 
     if(templatePath !== null && filePath !== null) {
       var tplUrl = FileParser.getFileDataFromUrl(filePath)
         
-      if(!fileUtils.isFile(tplUrl.json.path)) {
+      if(!coreUtils.file.exist(tplUrl.json.path)) {
         var json = (forceJson) ? forceJson : {}
         var tpl = templatePath
         var text = cmsTemplate.template.getTemplate(tpl)

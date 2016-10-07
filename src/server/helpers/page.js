@@ -1,17 +1,17 @@
 import mkdirp from 'mkdirp'
+import path from 'path'
 import {
   cmsData,
   FileParser,
-  fileUtils,
   config,
   Page,
   cmsTemplate,
-  cleanSlug
+  coreUtils
 } from '../../cli'
 
 var page = function (req, res, next) {
-  var filePath = cleanSlug(req.query.filePath)
-  filePath = fileUtils.getFilePath(filePath)
+  var filePath = coreUtils.slug.clean(req.query.filePath)
+  filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
   var html = (req.query.html) ? true : false
   var json = null
   var editor = false
@@ -35,7 +35,7 @@ var page = function (req, res, next) {
       linkPath = filePathTest.abe_meta.link
     }
 
-    if(jsonPath === null || !fileUtils.isFile(jsonPath)) { 
+    if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
       res.status(404).send('Not found')
       return
     } 
@@ -57,7 +57,7 @@ var page = function (req, res, next) {
 
     if (!editor) {
 
-      cmsData.source.getDataList(fileUtils.removeLast(linkPath), text, json)
+      cmsData.source.getDataList(path.dirname(linkPath), text, json)
         .then(() => {
           var page = new Page(template, text, json, html)
           res.set('Content-Type', 'text/html')
