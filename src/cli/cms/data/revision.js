@@ -120,3 +120,18 @@ export function getStatusAndDateToFileName(date) {
 export function removeStatusAndDateFromFileName(date) {
   return date.replace(/[-:\.]/g, '')
 }
+
+export function filePathInfos(pathFolder) {
+  var pathArr = pathFolder.split('/')
+  var name = pathArr[pathArr.length - 1]
+
+  var rootArr = config.root.split('/')
+  var website = rootArr[pathArr.length - 1]
+  return {
+    'name': name,
+    'path': pathFolder,
+    'website': website,
+    'cleanPath': fileUtils.cleanPath(pathFolder.replace(config.root, '')),
+    'type': 'folder'
+  }
+}

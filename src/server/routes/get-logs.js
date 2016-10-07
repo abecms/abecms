@@ -5,7 +5,6 @@ import mkdirp from 'mkdirp'
 import {
   FileParser,
   fileUtils,
-  folderUtils,
   config
 } from '../../cli'
 
