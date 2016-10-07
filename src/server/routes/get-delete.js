@@ -1,6 +1,7 @@
 import {
   FileParser,
-  Hooks
+  Hooks,
+  coreUtils
 } from '../../cli'
 
 var route = function(req, res, next){
@@ -8,7 +9,7 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var filePath = coreUtils.slug.clean(req.query.filePath)
-  var dirPath = FileParser.deleteFile(filePath)
+  FileParser.deleteFile(filePath)
 
   var result = {
     success: 1,

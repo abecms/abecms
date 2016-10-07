@@ -1,9 +1,9 @@
 import Handlebars from 'handlebars'
+import path from 'path'
 import fse from 'fs-extra'
 
 import {
   cmsEditor,
-  fileUtils,
   abeEngine,
   cmsData,
   cmsTemplate,
@@ -27,9 +27,6 @@ export default class Page {
    * @return {String} HTML page as string
    */
   constructor(templateId, template, json, onlyHTML = false) {
-    
-    var dateStart = new Date()
-
     // HOOKS beforePageJson
     json = Hooks.instance.trigger('beforePageJson', json)
 
@@ -38,7 +35,7 @@ export default class Page {
         config.files.templates.precompile
       ){
 
-      var template = Handlebars.templates[templateId]
+      template = Handlebars.templates[templateId]
       this.html = template(json, {data: {intl: config.intlData}})
 
       //console.log('precompile')
@@ -47,9 +44,7 @@ export default class Page {
 
       this._onlyHTML = onlyHTML
       this.template = template
-      this.HbsTemplatePath = fileUtils.getTemplatePath('hbs/'+templateId+'.hbs')
-
-      let util = new cmsEditor.form()
+      this.HbsTemplatePath = path.join(config.root, config.templates.url, 'hbs/'+templateId+'.hbs')
 
       abeEngine.instance.content = json
       
@@ -155,14 +150,10 @@ export default class Page {
     }else {
       this.html = Hooks.instance.trigger('afterPageEditorCompile', this.html, json)
     }
-
-    //console.log('result: ' + ((new Date().getTime() - dateStart.getTime()) / 1000))
   }
 
   _updateAbeAsAttribute() {
     var match
-    let util = new cmsEditor.form()
-
     while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
       if(cmsData.regex.isSingleAbe(match[0], this.template)){
         var more_attr = ''
@@ -181,8 +172,6 @@ export default class Page {
 
   _updateAbeAsTag() {
     var match
-    let util = new cmsEditor.form()
-
     while (match = this.abePattern.exec(this.template)) {
       var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
       this.template = this.template.replace(
@@ -254,7 +243,7 @@ export default class Page {
     return blocks
   }
 
-  _insertAbeEach(theMatch, key, lastIndex, util) {
+  _insertAbeEach(theMatch, key, lastIndex) {
     var matchBlock = theMatch[0]
     if(cmsData.regex.isEachStatement(matchBlock)) return
     if(cmsData.regex.isBlockAbe(matchBlock)){
@@ -301,13 +290,13 @@ export default class Page {
   _addSource(json) {
     var listReg = /({{abe.*type=[\'|\"]data.*}})/g
     var match
-    var limit = 0
 
     while (match = listReg.exec(this.template)) {
       var editable = cmsData.regex.getAttr(match[0], 'editable')
       var key = cmsData.regex.getAttr(match[0], 'key')
 
-      if(typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false') {
+      if((typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false')
+        && typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null) {
         json[key] = json[config.source.name][key]
       }
 

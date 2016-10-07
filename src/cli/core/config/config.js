@@ -24,10 +24,10 @@ var loadLocalConfig = (result) => {
           if (!hintAbeJson) {
             hintAbeJson = true
             console.log(
-  						clc.green('[ Hint ]'),
-  						'create abe.json to config',
-  						clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
-  					)
+              clc.green('[ Hint ]'),
+              'create abe.json to config',
+              clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
+            )
           }
         }
       }
@@ -62,7 +62,7 @@ result.getDefault = (conf) => {
   return result[conf]
 }
 
-result.get = (conf, file) => {
+result.get = (conf) => {
 
   return result.exist(conf, result)
 }

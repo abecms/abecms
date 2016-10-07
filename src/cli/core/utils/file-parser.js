@@ -1,18 +1,15 @@
 import fse from 'fs-extra'
-import clc from 'cli-color'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import moment from 'moment'
 import path from 'path'
 
 import {
-	cli
-  ,cmsData
+  cmsData
 	,cmsOperations
 	,fileUtils
 	,config
   ,Hooks
-	,Plugins
   ,Manager
 } from '../../'
 
@@ -20,31 +17,12 @@ export default class FileParser {
 
   constructor() {}
 
-  static getWebsite(path) {
-    var beforeRoot = config.root.split('/')
-    beforeRoot = beforeRoot.pop()
-    var website = beforeRoot
-    return website.split('/')[0]
-  }
-
-  static getTemplate(path) {
-    var file = path.replace(config.root, '')
-    var file = path.replace(config.templates.url, '')
-    return file.replace(/^\//, '')
-  }
-
-  static getType(path) {
-    var folders = path.replace(config.root, '')
-    folders = folders.replace(/^\//, '')
-    return folders.split('/')[0]
-  }
-
   static read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
     var arr = []
     var level = fse.readdirSync(dirName)
     var fileCurrentLevel = []
     let assets = config.files.templates.assets
-  	  
+
     for (var i = 0; i < level.length; i++) {
       var pathLevel = dirName + '/' + level[i]
       var isFolder = true
@@ -72,9 +50,6 @@ export default class FileParser {
             var stat = fse.statSync(pathLevel)
             date = stat.mtime
           }
-          var status = fileData.s ? dirName.replace(config.root, '').replace(/^\//, '').split('/')[0] : 'published'
-
-
           var cleanFilePath = cmsData.fileAttr.delete(pathLevel).replace(config.root, '').replace(/^\/?.+?\//, '')
 
           var fileDate = moment(date)
@@ -92,7 +67,6 @@ export default class FileParser {
             date: date,
             cleanDate: fileDate.format('YYYY/MM/DD HH:MM:ss'),
             duration: duration,
-  						// status: status,
             cleanName: cleanName,
             cleanNameNoExt: cleanNameNoExt,
             cleanFilePath: cleanFilePath,
@@ -170,11 +144,10 @@ export default class FileParser {
     var folder = path.join(config.root, pathAssets.replace(config.root, '')).replace(/\/$/, '')
     var assetsFolders = []
     var flatten = true
-    var site = folder
 
     let templates = config.templates.url
     let assets = config.files.templates.assets
-    var pathAssets = path.join(folder, templates)
+    pathAssets = path.join(folder, templates)
 
     try {
       var directory = fse.lstatSync(pathAssets)
@@ -237,7 +210,7 @@ export default class FileParser {
   static changePathEnv(pathEnv, change) {
     pathEnv = pathEnv.replace(config.root, '').replace(/^\//, '').split('/')
     pathEnv[0] = change
-  	
+
     return path.join(config.root, pathEnv.join('/'))
   }
   
@@ -262,12 +235,10 @@ export default class FileParser {
       }
     }
 
-    let extension = config.files.templates.extension
     if(typeof url !== 'undefined' && url !== null) {
 
       var dir = path.dirname(url).replace(config.root, '')
       var filename = path.basename(url)
-      var basePath = dir.replace(config.root, '').split('/')
       var link = url.replace(config.root, '')
       link = link.replace(/^\//, '').split('/')
       link.shift()
@@ -277,24 +248,22 @@ export default class FileParser {
       let publish = config.publish.url
       let data = config.data.url
 
-      var draftPath = FileParser.changePathEnv(path.join(config.root, dir), draft)
-
       res.root = config.root
 
-	  	// set dir path draft/json
+      // set dir path draft/json
       res.draft.dir = FileParser.changePathEnv(path.join(config.root, dir), draft)
       res.json.dir = FileParser.changePathEnv(path.join(config.root, dir), data)
       res.publish.dir = FileParser.changePathEnv(path.join(config.root, dir), publish)
       res.publish.json = res.json.dir
 
-	  	// set filename draft/json
+      // set filename draft/json
       res.draft.file = filename
       res.publish.file = cmsData.fileAttr.delete(filename)
       res.publish.link = link
       res.json.file = filename.replace(`.${config.files.templates.extension}`, '.json')
       res.publish.json = path.join(res.json.dir, cmsData.fileAttr.delete(res.json.file))
 
-	  	// set filename draft/json
+      // set filename draft/json
       res.draft.path = path.join(res.draft.dir, res.draft.file)
       res.publish.path = path.join(res.publish.dir, res.publish.file)
       res.json.path = path.join(res.json.dir, res.json.file)
@@ -339,7 +308,7 @@ export default class FileParser {
 
             if(entry.type2 === 'missing' || entry.state === 'distinct') {
               fse.removeSync(move)
-              var cp = fse.copySync(original, move)
+              fse.copySync(original, move)
             }
           }
         }
@@ -349,7 +318,7 @@ export default class FileParser {
     return publicFolders
   }
 
-  static getMetas(arr, type) {
+  static getMetas(arr) {
     var res = []
     Array.prototype.forEach.call(arr, (file) => {
       let meta = config.meta.name
@@ -409,8 +378,6 @@ export default class FileParser {
   }
 
   static getAllFilesWithKeys(withKeys) {
-    var site = cmsData.revision.filePathInfos(config.root)
-
     var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
     var filesArr = []
 
@@ -477,18 +444,18 @@ export default class FileParser {
       }
 
       cmsOperations.save.save(
-	      path.join(config.root, config.draft.url, json.abe_meta.link.replace(config.root)),
-	      json.abe_meta.template,
-	      json,
-	      '',
-	      'reject',
-	      null,
-	      'reject'
+        path.join(config.root, config.draft.url, json.abe_meta.link.replace(config.root)),
+        json.abe_meta.template,
+        json,
+        '',
+        'reject',
+        null,
+        'reject'
       )
-	    .then((resSave) => {
-      FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
-      Manager.instance.updateList()
-    })
+      .then((resSave) => {
+        FileParser.removeFile(tplUrl.publish.path, tplUrl.publish.json)
+        Manager.instance.updateList()
+      })
     }
   }
 
@@ -545,23 +512,18 @@ export default class FileParser {
     return ref
   }
 
-  static getJson(pathJson, displayError = true) {
+  static getJson(pathJson) {
     var json = {}
-    // HOOKS beforeGetJson
     pathJson = Hooks.instance.trigger('beforeGetJson', pathJson)
     
     try {
       var stat = fse.statSync(pathJson)
       if (stat) {
-        var json = fse.readJsonSync(pathJson)
-				// var references = FileParser.getReference()
-				// json[config.reference.name] = references
+        json = fse.readJsonSync(pathJson)
       }
     }catch(e) {
-			// if(displayError) console.log(clc.red(`Error loading json ${path}`),  `\n${e}`)
     }
 
-    // HOOKS afterGetJson
     json = Hooks.instance.trigger('afterGetJson', json)
     return json
   }

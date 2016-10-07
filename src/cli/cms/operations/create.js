@@ -15,7 +15,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
   var p = new Promise((resolve, reject) => {
     Hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
-    var templatePath = fileUtils.getTemplatePath(template.replace(config.root, ''))
+    var templatePath = path.join(template.replace(config.root, ''), config.templates.url, `${template}.${config.files.templates.extension}`)
     var filePath = path.join(pathCreate, name)
     filePath = coreUtils.slug.clean(filePath)
     filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))

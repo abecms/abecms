@@ -24,7 +24,6 @@ var route = function(req, res, next) {
     res.send(JSON.stringify(result))
   }).catch(function(e) {
     console.error('[ERROR] get-duplicate.js', e)
-    reject()
   })
 }
 

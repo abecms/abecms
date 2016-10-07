@@ -2,9 +2,6 @@ import path from 'path'
 import Handlebars from 'handlebars'
 import {
   fileUtils,
-  FileParser,
-  config,
-  save,
   Hooks
 } from '../../cli'
 

@@ -1,7 +1,4 @@
 import {
-  fileUtils,
-  FileParser,
-  config,
   cmsOperations,
   Hooks
 } from '../../cli'

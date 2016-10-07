@@ -1,8 +1,7 @@
 import slug from 'limax'
 
 import {
-  config,
-  fileUtils
+  config
 } from '../../'
 
 export function clean(str) {
