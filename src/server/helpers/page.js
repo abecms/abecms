@@ -42,14 +42,13 @@ var page = function (req, res, next) {
     
     let meta = config.meta.name
 
-    var template = ''
-    if(typeof json[meta] !== 'undefined' && json[meta] !== null && json[meta] !== ''
-      && json[meta].template !== 'undefined' && json[meta].template !== null && json[meta].template !== '') {
-      template = json[meta].template
+    var templateId = ''
+    if(json[meta] && json[meta].template) {
+      templateId = json[meta].template
     }else {
-      template = req.params[0]
+      templateId = req.params[0]
     }
-    var text = cmsTemplates.template.getTemplate(template)
+    var text = cmsTemplates.template.getTemplate(templateId)
 
     if (!editor) {
 

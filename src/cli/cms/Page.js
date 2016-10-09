@@ -94,17 +94,15 @@ export default class Page {
 
             var patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g')
             var patAttrSourceMatch = this.template.match(patAttrSource)
-            var patAttrSourceInside = null
-            var patAttrSourceCheck = null
-            var checkEscaped = null
 
             if(patAttrSourceMatch != null) {
-              patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
+              let checkEscapedRegex = /["|'](.*?)["|']/
+              let patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
               Array.prototype.forEach.call(patAttrSourceMatch, (pat) => {
-                patAttrSourceCheck = patAttrSourceInside.exec(pat)
+                let patAttrSourceCheck = patAttrSourceInside.exec(pat)
                 if(patAttrSourceCheck != null) {
-                  var checkEscaped = /["|'](.*?)["|']/
-                  checkEscaped = checkEscaped.exec(patAttrSourceCheck[0])
+                  
+                  let checkEscaped = checkEscapedRegex.exec(patAttrSourceCheck[0])
                   if(checkEscaped != null && checkEscaped.length > 0) {
                     checkEscaped = escape(checkEscaped[1])
                     this.template = this.template.replace(
@@ -199,7 +197,6 @@ export default class Page {
     Array.prototype.forEach.call(blocks, (block) => {
       var key = block.match(/#each (.*)\}\}/)
       key = key[1]
-      let util = new cmsEditor.form()
       var match
 
       if(!this._onlyHTML) {
@@ -269,7 +266,6 @@ export default class Page {
 
   /**
    * add <abe> tag around html tag
-   * @param {String} text html string
    */
   _removeHidden() {
     this.template = this.template.replace(/(\{\{abe.*visible=[\'|\"]false.*\}\})/g, '')
