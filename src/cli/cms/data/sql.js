@@ -112,7 +112,7 @@ export function handleSqlRequest(str, jsonPage) {
   }
   reconstructSql += `from ${JSON.stringify(from)} `
 
-  var where
+  var where = null
   if(request.where != null) {
     where = request.where
   }
@@ -122,7 +122,7 @@ export function handleSqlRequest(str, jsonPage) {
     limit = request.limit[request.limit.length - 1].value
   }
 
-  var orderby
+  var orderby = null
   if(request.orderby != null && request.orderby.length > 0) {
     orderby = {
       column: request.orderby[0].expr.column,
@@ -338,13 +338,15 @@ export function getSourceType(str) {
 export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
   var res = []
   var limit = 0
+  var json = {}
+  var jsonValues = {}
 
   for(let file of files) {
     if(limit < maxLimit || maxLimit === -1) {
       if(wheres != null) {
         if(file.publish && !recurseWhere(wheres, file.publish, jsonPage)) {
-          var json = JSON.parse(JSON.stringify(file.publish))
-          var jsonValues = {}
+          json = JSON.parse(JSON.stringify(file.publish))
+          jsonValues = {}
 
           if(columns != null && columns.length > 0 && columns[0] !== '*') {
             Array.prototype.forEach.call(columns, (column) => {
@@ -379,8 +381,8 @@ export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
  */
 export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
   var regexIsVariable = /^{{(.*)}}$/
-  var value
-  var compare
+  var value = null
+  var compare = null
 
   try {
     var variableLeft = where.left.column
