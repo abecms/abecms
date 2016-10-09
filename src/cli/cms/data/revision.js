@@ -18,8 +18,7 @@ export function getFilesRevision(urls, fileName) {
 
   if(coreUtils.file.exist(tplUrl.publish.json)) {
     json = cmsData.file.get(tplUrl.publish.json)
-    if(typeof json !== 'undefined' && json !== null
-      && typeof json[config.meta.name] !== 'undefined' && json[config.meta.name] !== null) {
+    if(json != null && json[config.meta.name] != null) {
       publishDate = new Date(json[config.meta.name].latest.date)
     }
   }
@@ -30,7 +29,7 @@ export function getFilesRevision(urls, fileName) {
     if(fileData.s === 'd' && cmsData.fileAttr.delete(urlObj.cleanPath) == cmsData.fileAttr.delete(fileName)) {
       var currentDate = new Date(urlObj.date)
       if(currentDate.getTime() > publishDate.getTime()) {
-        if(!publishVersion && typeof res[res.length - 1] !== 'undefined' && res[res.length - 1] !== null) {
+        if(!publishVersion && res[res.length - 1] != null) {
           res[res.length - 1].publishedDate = 'same'
         }
         publishVersion = true
@@ -95,7 +94,7 @@ export function getDocumentRevision(docPath) {
   var revisions = getVersions(documentPath)
   if (latest && revisions.length >= 0) {
     result = revisions[0]
-  }else if (!latest) {
+  } else if (!latest) {
     Array.prototype.forEach.call(revisions, (revision) => {
       if (revision.html === docPath) {
         result = revision
@@ -145,7 +144,7 @@ export function getFilesMerged(files) {
     var cleanFilePath = file.cleanFilePath
 
     var fileStatusIsPublish = cmsData.fileAttr.get(file.cleanPath)
-    if(typeof fileStatusIsPublish.s !== 'undefined' && fileStatusIsPublish.s !== null && file.abe_meta.status === 'publish') {
+    if(fileStatusIsPublish.s != null && file.abe_meta.status === 'publish') {
       file.abe_meta.status = 'draft'
     }
 
@@ -156,19 +155,19 @@ export function getFilesMerged(files) {
       file.htmlPath = path.join(config.root, config.draft.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
     }
 
-    if(typeof merged[cleanFilePath] === 'undefined' || merged[cleanFilePath] === null) {
+    if(merged[cleanFilePath] == null) {
       merged[cleanFilePath] = {
-        name: cmsData.fileAttr.delete(file.name)
-        , path: cmsData.fileAttr.delete(file.path)
-        , html: cmsData.fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-        , htmlPath: path.join(config.root, config.publish.url, path.join('/', cmsData.fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))))
-        , cleanPathName: file.cleanPathName
-        , cleanPath: file.cleanPath
-        , cleanName: file.cleanName
-        , cleanNameNoExt: file.cleanNameNoExt
-        , cleanFilePath: file.cleanFilePath
-        , filePath: cmsData.fileAttr.delete(file.filePath)
-        , revisions: []
+        name: cmsData.fileAttr.delete(file.name),
+        path: cmsData.fileAttr.delete(file.path),
+        html: cmsData.fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))),
+        htmlPath: path.join(config.root, config.publish.url, path.join('/', cmsData.fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))),
+        cleanPathName: file.cleanPathName,
+        cleanPath: file.cleanPath,
+        cleanName: file.cleanName,
+        cleanNameNoExt: file.cleanNameNoExt,
+        cleanFilePath: file.cleanFilePath,
+        filePath: cmsData.fileAttr.delete(file.filePath),
+        revisions: []
       }
     }
 
@@ -179,7 +178,7 @@ export function getFilesMerged(files) {
   Array.prototype.forEach.call(Object.keys(merged), (key) => {
     var revisions = merged[key].revisions
     revisions.sort(coreUtils.sort.predicatBy('date', -1))
-    if(typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
+    if(revisions[0] != null) {
       merged[key].date = revisions[0].date
     }
 

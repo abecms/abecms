@@ -25,15 +25,14 @@ export function escapeAbeValuesFromStringRequest(str, jsonPage) {
   var matchVariable = /{{([a-zA-Z]*)}}/
 
   var matchFromExec = matchFrom.exec(str)
-  if(typeof matchFromExec !== 'undefined' && matchFromExec !== null
-    && typeof matchFromExec[1] !== 'undefined' && matchFromExec[1] !== null) {
+  if(matchFromExec != null && matchFromExec[1] != null) {
 
     var fromMatch
     var toReplace = matchFromExec[1]
     while (fromMatch = matchVariable.exec(toReplace)) {
       try {
         var value = eval('jsonPage.' + fromMatch[1])
-        if(typeof value !== 'undefined' && value !== null) {
+        if(value != null) {
           toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
         }else {
           toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
@@ -83,14 +82,14 @@ export function handleSqlRequest(str, jsonPage) {
 
   // SQL TYPE
   var type = ''
-  if(typeof request.type !== 'undefined' && request.type !== null) {
+  if(request.type != null) {
     type = request.type
   }
   reconstructSql += `${type} `
 
   // SQL COLUMNS
   var columns = []
-  if(typeof request.columns !== 'undefined' && request.columns !== null) {
+  if(request.columns != null) {
     if(request.columns === '*') {
       columns.push('*')
     }else {
@@ -103,7 +102,7 @@ export function handleSqlRequest(str, jsonPage) {
 
   // SQL FROM
   var from = []
-  if(typeof request.from !== 'undefined' && request.from !== null) {
+  if(request.from != null) {
 
     Array.prototype.forEach.call(request.from, (item) => {
       from.push(item.table)
@@ -114,17 +113,17 @@ export function handleSqlRequest(str, jsonPage) {
   reconstructSql += `from ${JSON.stringify(from)} `
 
   var where
-  if(typeof request.where !== 'undefined' && request.where !== null) {
+  if(request.where != null) {
     where = request.where
   }
 
   var limit = -1
-  if(typeof request.limit !== 'undefined' && request.limit !== null) {
+  if(request.limit != null) {
     limit = request.limit[request.limit.length - 1].value
   }
 
   var orderby
-  if(typeof request.orderby !== 'undefined' && request.orderby !== null && request.orderby.length > 0) {
+  if(request.orderby != null && request.orderby.length > 0) {
     orderby = {
       column: request.orderby[0].expr.column,
       type: request.orderby[0].type
@@ -148,7 +147,7 @@ export function getDataSource(str) {
 
   var reg = /([^'"]*=[\s\S]*?}})/g
   var matches = res.match(reg)
-  if(typeof matches !== 'undefined' && matches !== null) {
+  if(matches != null) {
     Array.prototype.forEach.call(matches, (match) => {
       res = res.replace(match, '')
     })
@@ -167,7 +166,7 @@ export function getDataSource(str) {
 export function sanitizeFromStatement(statement){
   var from = ''
 
-  if(typeof statement !== 'undefined' && statement !== null) {
+  if(statement != null) {
     from = statement[0].replace(/___abe_dot___/g, '.')
     from = from.replace(/___abe___/g, '/')
     from = from.replace(/___abe_dash___/g, '-')
@@ -184,7 +183,7 @@ export function sanitizeFromStatement(statement){
  */
 export function getFromDirectory(statement, tplPath){
   var pathFromDir = ''
-  if(typeof tplPath === 'undefined' || tplPath === null || tplPath === ''){
+  if(!tplPath){
     tplPath = '/'
   }
 
@@ -209,7 +208,7 @@ export function getFromDirectory(statement, tplPath){
  * @return {Array}         sorted array
  */
 export function executeOrderByClause(files, orderby){
-  if(typeof orderby !== 'undefined' && orderby !== null) {
+  if(orderby != null) {
     if(orderby.column.toLowerCase() === 'random') {
       files = coreUtils.sort.shuffle(files)
     }else if(orderby.column.toLowerCase() === 'date') {
@@ -342,16 +341,14 @@ export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
 
   for(let file of files) {
     if(limit < maxLimit || maxLimit === -1) {
-      if(typeof wheres !== 'undefined' && wheres !== null) {
-
+      if(wheres != null) {
         if(file.publish && !recurseWhere(wheres, file.publish, jsonPage)) {
           var json = JSON.parse(JSON.stringify(file.publish))
           var jsonValues = {}
 
-          if(typeof columns !== 'undefined' && columns !== null && columns.length > 0 && columns[0] !== '*') {
-            
+          if(columns != null && columns.length > 0 && columns[0] !== '*') {
             Array.prototype.forEach.call(columns, (column) => {
-              if(typeof json[column] !== 'undefined' && json[column] !== null) {
+              if(json[column] != null) {
                 jsonValues[column] = json[column]
               }
             })
@@ -388,7 +385,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
   try {
     var variableLeft = where.left.column
     var checkIfLeftIsAVariable = regexIsVariable.exec(variableLeft)
-    if(typeof checkIfLeftIsAVariable !== 'undefined' && checkIfLeftIsAVariable !== null && checkIfLeftIsAVariable.length > 0) {
+    if(checkIfLeftIsAVariable != null && checkIfLeftIsAVariable.length > 0) {
       variableLeft = checkIfLeftIsAVariable[1]
     }
     value = eval('jsonDoc.' + variableLeft)
@@ -400,7 +397,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
     compare = []
     Array.prototype.forEach.call(where.right.value, (right) => {
       var matchRightVariable = regexIsVariable.exec(right.column)
-      if(typeof matchRightVariable !== 'undefined' && matchRightVariable !== null && matchRightVariable.length > 0) {
+      if(matchRightVariable != null && matchRightVariable.length > 0) {
         try {
           var jsonOriginalValues = eval('jsonOriginalDoc.' + matchRightVariable[1])
           Array.prototype.forEach.call(jsonOriginalValues, (jsonOriginalValue) => {
@@ -412,19 +409,19 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
         compare.push(right.column)
       }
     })
-  }else {
-    if(typeof where.right.column !== 'undefined' && where.right.column !== null) {
+  } else {
+    if(where.right.column != null) {
       compare = where.right.column
-    }else if(typeof where.right.value !== 'undefined' && where.right.value !== null) {
+    } else if(where.right.value != null) {
       compare = where.right.value
     }
 
     var matchRightVariable = regexIsVariable.exec(compare)
 
-    if(typeof matchRightVariable !== 'undefined' && matchRightVariable !== null && matchRightVariable.length > 0) {
+    if(matchRightVariable != null && matchRightVariable.length > 0) {
       try {
         var shouldCompare = eval('jsonOriginalDoc.' + matchRightVariable[1])
-        if(typeof shouldCompare !== 'undefined' && shouldCompare !== null) {
+        if(shouldCompare != null) {
           compare = shouldCompare
         }else {
           compare = null

@@ -20,11 +20,11 @@ export default function printInput () {
               </label>`
   var disabled = ''
 
-  if(typeof params.placeholder === 'undefined' || params.placeholder === null || params.placeholder === 'undefined') {
+  if(!params.placeholder) {
     params.placeholder = ''
   }
 
-  if(typeof params.value === 'undefined' || params.value === null) {
+  if(params.value == null) {
     params.value = ''
   }
 
@@ -43,7 +43,7 @@ export default function printInput () {
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"`
 
-  if(typeof params.source !== 'undefined' && params.source !== null) {
+  if(params.source != null) {
     commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     data-maxlength="${params['max-length']}"
@@ -57,8 +57,7 @@ export default function printInput () {
 
     var multiple = ''
     disabled = ''
-    if(typeof params['max-length'] === 'undefined' || params['max-length'] === null || params['max-length'] === ''
-      || (params['max-length'] > 1 && params.source.length > 0)) {
+    if(params['max-length'] || (params['max-length'] > 1 && params.source.length > 0)) {
       multiple = 'multiple'
     }
     if(params.source.length <= 0) {
@@ -66,8 +65,7 @@ export default function printInput () {
     }
 
     var lastValues
-    if(typeof params.autocomplete !== 'undefined' && params.autocomplete !== null
-       && (params.autocomplete === 'true' || params.autocomplete === 'true')) {
+    if(params.autocomplete != null && params.autocomplete === 'true') {
       if(params.source.indexOf('http') === 0) {
         lastValues = params.source
       }else {

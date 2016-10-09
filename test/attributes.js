@@ -15,6 +15,7 @@ describe('attributes', function() {
         Manager.instance.updateList()
 
         this.fixture = {
+          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
           html: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
           json: fse.readJsonSync(__dirname + '/fixtures/data/article-1.json')
         }
@@ -38,5 +39,15 @@ describe('attributes', function() {
    */
   it('cmsData.attributes.sanitizeSourceAttribute', function() {
   	// not sure what it does
+  });
+
+  /**
+   * cmsData.attributes.getAll
+   * 
+   */
+  it('cmsData.attributes.getAll()', function(done) {
+    var attributes = cmsData.attributes.getAll(this.fixture.tag, this.fixture.jsonArticle)
+    chai.expect(attributes.sourceString).to.contain('select');
+    done();
   });
 });

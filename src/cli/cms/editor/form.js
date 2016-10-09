@@ -23,7 +23,7 @@ export default class Form {
    * @return {[type]}     [description]
    */
   dontHaveKey(key){
-    return typeof this._key[key] === 'undefined' || this._key[key] === null
+    return this._key[key] == null
   }
 
   /**
@@ -65,7 +65,7 @@ export default class Form {
       obj.block = obj.key.split('.')[0]
     }
 
-    if(typeof this._form[obj.tab] === 'undefined' || this._form[obj.tab] === null) this._form[obj.tab] = {item:[]}
+    if(this._form[obj.tab] == null) this._form[obj.tab] = {item:[]}
 
     this._key[obj.key] = true // save key for dontHaveKey()
     this._form[obj.tab].item.push(obj)

@@ -8,8 +8,7 @@ export default function sourceAttr(val, params) {
 
     try {
       var displayVal = eval('val.' + params.display)
-      if(typeof params.display !== 'undefined' && params.display !== null
-        && typeof displayVal !== 'undefined' && displayVal !== null) {
+      if(params.display != null&& displayVal != null) {
         val = displayVal
       }else {
         val = val[Object.keys(val)[0]]
@@ -24,17 +23,16 @@ export default function sourceAttr(val, params) {
       var item = v
       try {
         var displayV = eval('item.' + params.display)
-        if(typeof params.display !== 'undefined' && params.display !== null
-          && typeof displayV !== 'undefined' && displayV !== null) {
+        if(params.display != null && displayV !== null) {
           item = displayV
-        }else {
+        } else {
           if(typeof v === 'string') {
             item = v
-          }else {
+          } else {
             item = v[Object.keys(v)[0]]
           }
         }
-      }catch(e) {
+      } catch(e) {
         item = v[Object.keys(v)[0]]
       }
       

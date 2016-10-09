@@ -73,7 +73,7 @@ var middleware = function(req, res, next) {
 
     var page = path.join(config.root, config.publish.url, req.originalUrl)
     if (coreUtils.file.exist(page)) {
-      html = fse.readFileSync(file, 'utf8')
+      html = fse.readFileSync(page, 'utf8')
     }else {
       return next()
     }

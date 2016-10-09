@@ -38,22 +38,21 @@ export function getAll(str, json) {
   }
 
   attrs.sourceString = attrs.source
-  attrs.source = (typeof attrs.source !== 'undefined' && attrs.source !== null && attrs.source !== '')? 
-    ((typeof json['abe_source'] !== 'undefined' && json['abe_source'] !== null && json['abe_source'] !== '')? 
+  attrs.source = (attrs.source)? 
+    ((json != null && json['abe_source'] != null)? 
       json['abe_source'][attrs.key] : 
       null
     ) : 
     null
-  attrs.editable = (typeof attrs.editable === 'undefined' || attrs.editable === null || attrs.editable === '' || attrs.editable === 'false') ? false : true
+  attrs.editable = (attrs.editable) ? true : false
 
   attrs = Hooks.instance.trigger('afterAbeAttributes', attrs, str, json)
 
   return attrs
 }
 
-
 export function sanitizeSourceAttribute(obj, jsonPage){
-  if(typeof obj.sourceString !== 'undefined' && obj.sourceString !== null && obj.sourceString.indexOf('{{') > -1) {
+  if(obj.sourceString != null && obj.sourceString.indexOf('{{') > -1) {
     var matches = obj.sourceString.match(/({{[a-zA-Z._]+}})/g)
     if(matches !== null) {
       Array.prototype.forEach.call(matches, (match) => {

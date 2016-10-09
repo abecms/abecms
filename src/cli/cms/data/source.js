@@ -22,7 +22,7 @@ export function requestList(obj, tplPath, match, jsonPage) {
           }else {
             jsonPage[obj.key] = data
           }
-        } else if ((typeof jsonPage[obj.key] === 'undefined' || jsonPage[obj.key] === null) && obj.prefill) {
+        } else if ((jsonPage[obj.key] == null) && obj.prefill) {
           if (obj['prefill-quantity'] && obj['max-length']) {
             jsonPage[obj.key] = data.slice(0, (obj['prefill-quantity'] > obj['max-length']) ? obj['max-length'] : obj['prefill-quantity'])
           }else if (obj['prefill-quantity']) {
@@ -75,7 +75,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
       host = host[2].split(':')
 
       var pathSource = obj.sourceString.split('//')
-      if(typeof pathSource[1] !== 'undefined' && pathSource[1] !== null) {
+      if(pathSource[1] != null) {
         pathSource = pathSource[1].split('/')
         pathSource.shift()
         pathSource = '/' + path.join('/')
@@ -84,7 +84,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
       }
       var options = {
         hostname: host[0],
-        port: (typeof host[1] !== 'undefined' && host[1] !== null) ? host[1] : defaultPort,
+        port: (host[1] != null) ? host[1] : defaultPort,
         path: pathSource,
         method: 'GET',
         headers: {
@@ -149,7 +149,7 @@ export function fileList(obj, tplPath, match, jsonPage) {
 
 export function nextDataList(tplPath, jsonPage, match) {
   var p = new Promise((resolve) => {
-    if(typeof jsonPage['abe_source'] === 'undefined' || jsonPage['abe_source'] === null) {
+    if(jsonPage['abe_source'] == null) {
       jsonPage['abe_source'] = {}
     }
 

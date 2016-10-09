@@ -26,16 +26,6 @@ describe('Request', function() {
   });
 
   /**
-   * cmsData.attributes.getAll
-   * 
-   */
-  it('cmsData.attributes.getAll()', function(done) {
-    var attributes = cmsData.attributes.getAll(this.fixture.tag, this.fixture.jsonArticle)
-    chai.expect(attributes.sourceString).to.contain('select');
-    done();
-  });
-
-  /**
    * cmsData.sql.executeQuery
    * 
    */

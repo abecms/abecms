@@ -55,5 +55,4 @@ export default class Attr {
     strWithoutAttr = strWithoutAttr.replace(new RegExp('\\.' + this.getExtension()), '')
     return strWithoutAttr + '-abe-' + newValues + '.' + this.getExtension()
   }
-
 }
