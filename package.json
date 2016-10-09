@@ -75,7 +75,7 @@
     "prompt": "^1.0.0",
     "qs": "^6.0.1",
     "request": "^2.69.0",
-    "watch": "^1.0.1",
+    "watch": "^0.19.2",
     "xss": "^0.2.10"
   },
   "devDependencies": {

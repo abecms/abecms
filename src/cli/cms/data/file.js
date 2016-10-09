@@ -1,5 +1,4 @@
 import path from 'path'
-import mkdirp from 'mkdirp'
 import fse from 'fs-extra'
 import moment from 'moment'
 

@@ -153,15 +153,14 @@ class Plugins {
       var args = [].slice.call(arguments)
       var fn = args.shift()
 
-      if(this._plugins != null) {
+      if(typeof this._plugins !== 'undefined' && this._plugins !== null) {
         Array.prototype.forEach.call(this._plugins, (plugin) => {
-          if(plugin.hooks != null&& plugin.hooks[fn] != null) {
+          if(typeof plugin.hooks !== 'undefined' && plugin.hooks !== null
+            && typeof plugin.hooks[fn] !== 'undefined' && plugin.hooks[fn] !== null) {
             args[0] = plugin.hooks[fn].apply(this, args)
           }
         })
       }
-    } else {
-      args = ['']
     }
 
     return args[0]

@@ -42,19 +42,20 @@ var page = function (req, res, next) {
     
     let meta = config.meta.name
 
-    var templateId = ''
-    if(json[meta] && json[meta].template) {
-      templateId = json[meta].template
+    var template = ''
+    if(typeof json[meta] !== 'undefined' && json[meta] !== null && json[meta] !== ''
+      && json[meta].template !== 'undefined' && json[meta].template !== null && json[meta].template !== '') {
+      template = json[meta].template
     }else {
-      templateId = req.params[0]
+      template = req.params[0]
     }
-    var text = cmsTemplates.template.getTemplate(templateId)
+    var text = cmsTemplates.template.getTemplate(template)
 
     if (!editor) {
 
       cmsData.source.getDataList(path.dirname(linkPath), text, json)
         .then(() => {
-          var page = new Page(templateId, text, json, html)
+          var page = new Page(template, text, json, html)
           res.set('Content-Type', 'text/html')
           res.send(page.html)
         }).catch(function(e) {
@@ -62,7 +63,7 @@ var page = function (req, res, next) {
         })
     }else {
       text = cmsData.source.removeDataList(text)
-      var page = new Page(templateId, text, json, html)
+      var page = new Page(template, text, json, html)
       res.set('Content-Type', 'text/html')
       res.send(page.html)
     }
