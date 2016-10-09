@@ -3,7 +3,7 @@ import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 
 import {
-  FileParser,
+  cmsData,
   coreUtils,
   config
 } from '../../cli'
@@ -43,7 +43,7 @@ var route = function(req, res){
     } catch (e) {
       mkdirp.sync(pathLog)
     }
-    var files = FileParser.read(pathLog, pathLog, 'files', true, /\.log/, 99)
+    var files = cmsData.file.read(pathLog, pathLog, 'files', true, /\.log/, 99)
     html += '<a href="/abe/delete-logs">Go to delete logs</a>'
     html += '<br /><br /><div>Choose to see logs files</div>'
     html += '<ul>'

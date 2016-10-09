@@ -15,7 +15,6 @@ import {
   config,
   coreUtils,
   cmsTemplates,
-  FileParser,
   printInput,
   abeImport,
   testObj,
@@ -144,8 +143,6 @@ app.use(middleWebsite)
 app.use(express.static(__dirname + '/public'))
 
 cmsTemplates.assets.copy()
-
-var sites = FileParser.getFolders(config.root.replace(/\/$/, ''), false, 0)
 
 let publish = path.join(config.root, config.publish.url)
 app.use(express.static(publish))

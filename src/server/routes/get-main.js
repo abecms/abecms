@@ -3,7 +3,6 @@ import path from 'path'
 import pkg from '../../../package'
 
 import {
-  FileParser,
   config,
   Page,
   cmsData,
@@ -64,9 +63,9 @@ var route = function(req, res, next) {
       editor(templatePath, jsonPath, linkPath)
         .then((result) => {
           var manager = {}
-          var revisionFilePath = FileParser.changePathEnv(filePath, config.draft.url)
+          var revisionFilePath = coreUtils.file.changePath(filePath, config.draft.url)
           var dirPath = path.dirname(revisionFilePath)
-          var allDraft = FileParser.getFiles(dirPath, true, 99, new RegExp('\\.' + config.files.templates.extension))
+          var allDraft = cmsData.file.getFiles(dirPath, true, 99, new RegExp('\\.' + config.files.templates.extension))
 
           allDraft = cmsData.metas.get(allDraft, 'draft')
           var breadcrumb = req.params[0].split('/')

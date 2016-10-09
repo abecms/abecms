@@ -1,7 +1,6 @@
 import path from 'path'
 
 import {
-  FileParser,
   config,
   cmsData,
   coreUtils,
@@ -179,7 +178,7 @@ export function getFilesMerged(files) {
   // return merged
   Array.prototype.forEach.call(Object.keys(merged), (key) => {
     var revisions = merged[key].revisions
-    revisions.sort(FileParser.predicatBy('date', -1))
+    revisions.sort(coreUtils.sort.predicatBy('date', -1))
     if(typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
       merged[key].date = revisions[0].date
     }

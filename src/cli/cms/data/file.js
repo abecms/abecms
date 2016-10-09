@@ -1,15 +1,16 @@
 import path from 'path'
 import fse from 'fs-extra'
+import moment from 'moment'
 
 import {
   Hooks,
-  FileParser,
+  coreUtils,
   cmsData,
   config
 } from '../../'
 
 export function getAllWithKeys(withKeys) {
-  var files = FileParser.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
+  var files = cmsData.file.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
   var filesArr = []
 
   files.forEach(function (file) {
@@ -106,9 +107,9 @@ export function fromUrl(url) {
     res.root = config.root
 
     // set dir path draft/json
-    res.draft.dir = FileParser.changePathEnv(path.join(config.root, dir), draft)
-    res.json.dir = FileParser.changePathEnv(path.join(config.root, dir), data)
-    res.publish.dir = FileParser.changePathEnv(path.join(config.root, dir), publish)
+    res.draft.dir = coreUtils.file.changePath(dir, draft)
+    res.json.dir = coreUtils.file.changePath(dir, data)
+    res.publish.dir = coreUtils.file.changePath(dir, publish)
     res.publish.json = res.json.dir
 
     // set filename draft/json
@@ -124,4 +125,143 @@ export function fromUrl(url) {
     res.json.path = path.join(res.json.dir, res.json.file)
   }
   return res
+}
+
+export function getFolders(folder, flatten = false, level) {
+  var arr = []
+  arr = cmsData.file.read(
+    folder.replace(/\/$/, ''), 
+    folder.replace(/\/$/, ''), 
+    'folders', 
+    flatten, 
+    /(.*?)/, 
+    level
+  )
+
+  return arr
+}
+
+export function getFiles(folder, flatten = false, level, extensions = /(.*?)/, inversePattern = false) {
+
+  var arr = []
+  arr = cmsData.file.read(
+    folder.replace(/\/$/, ''),
+    folder.replace(/\/$/, ''), 
+    'files', 
+    flatten, 
+    extensions, 
+    level, 
+    0, 
+    inversePattern
+  )
+
+  return arr
+}
+
+export function getFilesByType(pathFile, type = null) {
+  try {
+    var directory = fse.lstatSync(pathFile)
+    if (!directory.isDirectory()) {
+      mkdirp.sync(pathFile)
+    }
+  } catch (e) {
+    mkdirp.sync(pathFile)
+  }
+  var files = cmsData.file.getFiles(pathFile, true, 20, new RegExp(`.${config.files.templates.extension}`))
+
+  var result = []
+
+  Array.prototype.forEach.call(files, (file) => {
+    var val = cmsData.fileAttr.get(file.path).s
+    if(type === null || val === type) result.push(file)
+  })
+  return result
+}
+
+export function read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
+  var arr = []
+  var level = fse.readdirSync(dirName)
+  var fileCurrentLevel = []
+  let assets = config.files.templates.assets
+
+  for (var i = 0; i < level.length; i++) {
+    var pathLevel = dirName + '/' + level[i]
+    var isFolder = true
+    try {
+      var directory = fse.lstatSync(pathLevel)
+      if (!directory.isDirectory()) {
+        isFolder = false
+      }
+    } catch (e) {
+      isFolder = false
+    }
+    var match = (isFolder) ? true : (inversePattern) ? !extensions.test(level[i]) : extensions.test(level[i])
+    if((type === 'files' || type === null) && match) {
+
+      if(level[i].indexOf('.') > -1) {
+        var extension = /(\.[\s\S]*)/.exec(level[i])[0]
+        var cleanName = cmsData.fileAttr.delete(level[i])
+        var cleanNameNoExt = cleanName.replace(/\..+$/, '')
+        var fileData = cmsData.fileAttr.get(level[i])
+
+        var date
+        if (fileData.d) {
+          date = fileData.d
+        }else {
+          var stat = fse.statSync(pathLevel)
+          date = stat.mtime
+        }
+        var cleanFilePath = cmsData.fileAttr.delete(pathLevel).replace(config.root, '').replace(/^\/?.+?\//, '')
+
+        var fileDate = moment(date)
+        var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
+
+        var filePath = pathLevel.replace(config.root, '')
+        filePath = filePath.split('/')
+        filePath.shift()
+        filePath = filePath.join('/')
+        var item = {
+          'name': level[i],
+          'path': pathLevel,
+          'cleanPathName': cmsData.fileAttr.delete(pathLevel),
+          'cleanPath': pathLevel.replace(base + '/', ''),
+          date: date,
+          cleanDate: fileDate.format('YYYY/MM/DD HH:MM:ss'),
+          duration: duration,
+          cleanName: cleanName,
+          cleanNameNoExt: cleanNameNoExt,
+          cleanFilePath: cleanFilePath,
+          filePath: filePath,
+          'type': 'file',
+          'fileType': extension
+        }
+
+        if(!flatten) item['folders'] = []
+        arr.push(item)
+        // push current file name into array to check if siblings folder are assets folder
+        fileCurrentLevel.push(level[i].replace(/\..+$/, '') + assets)
+      }
+    }
+    if(!fileCurrentLevel.includes(level[i]) && match) {
+      if(isFolder) {
+        if(!flatten) {
+          var index = arr.push({'name': level[i], 'path': pathLevel, 'cleanPath': pathLevel.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
+          if(current < max){
+            arr[index].folders = cmsData.file.read(base, pathLevel, type, flatten, extensions, max, current + 1, inversePattern)
+          }
+        }else {
+          if(type === 'folders' || type === null) {
+            arr.push({'name': level[i], 'path': pathLevel, 'cleanPath': pathLevel.replace(base + '/', ''), 'type': 'folder'})
+          }
+          if(current < max){
+            Array.prototype.forEach.call(cmsData.file.read(base, pathLevel, type, flatten, extensions, max, current + 1, inversePattern), (files) => {
+              arr.push(files)
+            })
+          }
+        }
+      }
+    }
+  }
+
+  return arr
 }

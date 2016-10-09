@@ -7,7 +7,6 @@ import {
   coreUtils,
   abeEngine,
   cmsTemplates,
-  FileParser,
   Hooks
 } from '../../cli'
 

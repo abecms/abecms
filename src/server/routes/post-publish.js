@@ -2,7 +2,6 @@ import path from 'path'
 import {
   config,
   cmsOperations,
-  coreUtils,
   Hooks,
   Manager
 } from '../../cli'
@@ -11,10 +10,9 @@ var route = function(req, res, next){
   Hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var filePath = coreUtils.slug.clean(req.body.filePath)
   var p = new Promise((resolve) => {
     cmsOperations.save.save(
-      path.join(config.root, config.draft.url, filePath.replace(config.root)),
+      path.join(config.root, config.draft.url, req.body.filePath.replace(config.root)),
       req.body.tplPath,
       req.body.json,
       '',

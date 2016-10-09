@@ -98,7 +98,6 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   var config = require('../../cli').config
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
   try {
-    var FileParser = require('../../cli').FileParser
     var cmsData = require('../../cli').cmsData
     var cmsOperations = require('../../cli').cmsOperations
     var Manager = require('../../cli').Manager

@@ -2,7 +2,7 @@ import path from 'path'
 import fse from 'fs-extra'
 
 import {
-  FileParser,
+  cmsData,
   coreUtils,
   config
 } from '../../cli'
@@ -15,7 +15,7 @@ var route = function(req, res, next){
     res.redirect('/abe/delete-logs/')
   }else {
     var pathDelete = path.join(config.root, 'logs')
-    var files = FileParser.read(pathDelete, pathDelete, 'files', true, /\.log/, 99)
+    var files = cmsData.file.read(pathDelete, pathDelete, 'files', true, /\.log/, 99)
 
     html += '<a href="/abe/logs">Go to logs</a>'
     html += '<br /><br /><div>Choose to remove logs files</div>'

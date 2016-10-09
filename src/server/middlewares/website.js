@@ -1,6 +1,5 @@
 import path from 'path'
 import express from 'express'
-import fs from 'fs'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import {minify} from 'html-minifier'
@@ -10,9 +9,8 @@ import xss from 'xss'
 import pkg from '../../../package'
 
 import {
-  Util,
-  FileParser,
   coreUtils,
+  cmsData,
   config,
   Page,
   abeProcess,
@@ -38,9 +36,9 @@ var middleware = function(req, res, next) {
     } catch (e) {
       return next()
     }
-    var files = FileParser.getFiles(pathWebsite, true, 0, /(.*?)/)
+    var files = cmsData.file.getFiles(pathWebsite, true, 0, /(.*?)/)
 
-    var folders = FileParser.getFolders(pathWebsite, true, 0)
+    var folders = cmsData.file.getFolders(pathWebsite, true, 0)
     var html = '<ul>'
     html += '<li><a href="/abe/">abe</abe></li>'
     html += '<br />'
@@ -75,8 +73,7 @@ var middleware = function(req, res, next) {
 
     var page = path.join(config.root, config.publish.url, req.originalUrl)
     if (coreUtils.file.exist(page)) {
-      html = coreUtils.file.getContent(page)
-
+      html = fse.readFileSync(file, 'utf8')
     }else {
       return next()
     }

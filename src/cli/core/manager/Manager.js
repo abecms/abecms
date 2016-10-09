@@ -3,9 +3,9 @@ import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import path from 'path'
 import {
+  coreUtils,
   cmsData,
   config,
-  FileParser,
   cmsTemplates
 } from '../../'
 
@@ -63,7 +63,7 @@ class Manager {
 
   updateList() {
     this._list = cmsData.file.getAllWithKeys(this._whereKeys)
-    this._list.sort(FileParser.predicatBy('date', -1))
+    this._list.sort(coreUtils.sort.predicatBy('date', -1))
     console.log('Manager updated')
     
     return this
