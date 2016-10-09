@@ -1,25 +1,12 @@
 import path from 'path'
-import express from 'express'
 import fse from 'fs-extra'
-import mkdirp from 'mkdirp'
-import {minify} from 'html-minifier'
-import extend from 'extend'
-import * as abe from '../../cli'
-import xss from 'xss'
-import pkg from '../../../package'
 
 import {
   coreUtils,
   cmsData,
   config,
-  Page,
-  abeProcess,
-  Hooks,
-  Plugins,
-  Handlebars
+  Hooks
 } from '../../cli'
-
-import locale from '../helpers/abe-locale'
 
 var middleware = function(req, res, next) {
   if (req.originalUrl.indexOf('/abe/') > -1 || req.originalUrl.indexOf('/plugin/') > -1) {

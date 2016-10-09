@@ -54,7 +54,7 @@ var page = function (req, res, next) {
 
       cmsData.source.getDataList(path.dirname(linkPath), text, json)
         .then(() => {
-          var page = new Page(template, text, json, html)
+          var page = new Page(templateId, text, json, html)
           res.set('Content-Type', 'text/html')
           res.send(page.html)
         }).catch(function(e) {
@@ -62,7 +62,7 @@ var page = function (req, res, next) {
         })
     }else {
       text = cmsData.source.removeDataList(text)
-      var page = new Page(template, text, json, html)
+      var page = new Page(templateId, text, json, html)
       res.set('Content-Type', 'text/html')
       res.send(page.html)
     }
