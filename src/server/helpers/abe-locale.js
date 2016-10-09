@@ -4,7 +4,7 @@ import clc from 'cli-color'
 import path from 'path'
 
 import {
-	config
+  config
 } from '../../cli'
 
 var result = {}
