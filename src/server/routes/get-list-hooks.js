@@ -1,13 +1,13 @@
 import path from 'path'
+import fse from 'fs-extra'
 import Handlebars from 'handlebars'
 import hooksDefault from '../../hooks/hooks'
 import {
-  coreUtils,
   Hooks
 } from '../../cli'
 
 var route = function(req, res, next) {
-  var html
+  var html = ''
 
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
