@@ -94,15 +94,18 @@ export default class Page {
 
             var patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g')
             var patAttrSourceMatch = this.template.match(patAttrSource)
+            var patAttrSourceInside = null
+            var patAttrSourceCheck = null
+            var checkEscaped = null
 
-            if(typeof patAttrSourceMatch !== 'undefined' && patAttrSourceMatch !== null) {
-              var patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
+            if(patAttrSourceMatch != null) {
+              patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
               Array.prototype.forEach.call(patAttrSourceMatch, (pat) => {
-                var patAttrSourceCheck = patAttrSourceInside.exec(pat)
-                if(typeof patAttrSourceCheck !== 'undefined' && patAttrSourceCheck !== null) {
+                patAttrSourceCheck = patAttrSourceInside.exec(pat)
+                if(patAttrSourceCheck != null) {
                   var checkEscaped = /["|'](.*?)["|']/
                   checkEscaped = checkEscaped.exec(patAttrSourceCheck[0])
-                  if(typeof checkEscaped !== 'undefined' && checkEscaped !== null && checkEscaped.length > 0) {
+                  if(checkEscaped != null && checkEscaped.length > 0) {
                     checkEscaped = escape(checkEscaped[1])
                     this.template = this.template.replace(
                       patAttrSourceCheck[0],
@@ -215,12 +218,12 @@ export default class Page {
 
       // Pour chaque tag Abe, je mets en forme ce tag avec des data- supplémentaires
       while (match = this.abePattern.exec(block)) {
-        this._insertAbeEach(match, key, this.eachBlockPattern.lastIndex - block.length, util)
+        this._insertAbeEach(match, key, this.eachBlockPattern.lastIndex - block.length)
       }
 
       // Pour chaque tag Abe attribut de HTML, je mets en forme ce tag avec des data- supplémentaires sur le tag html parent
       while (match = this.abeAsAttributePattern.exec(block)) {
-        this._insertAbeEach(match, key, this.eachBlockPattern.lastIndex - block.length, util)
+        this._insertAbeEach(match, key, this.eachBlockPattern.lastIndex - block.length)
       }  
     })
 

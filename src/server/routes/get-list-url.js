@@ -1,7 +1,7 @@
 import path from 'path'
+import fse from 'fs-extra'
 import Handlebars from 'handlebars'
 import {
-  coreUtils,
   Hooks
 } from '../../cli'
 
@@ -9,7 +9,7 @@ var route = function(router, req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
   var routes = router.stack
   var urls = []
-  var html
+  var html = ''
 
   Array.prototype.forEach.call(routes, function(route) {
     urls.push({
