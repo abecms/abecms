@@ -40,8 +40,6 @@ class Hooks {
       }
 
       args[0] = Plugins.instance.hooks.apply(Plugins.instance, [fn].concat(args))
-    } else {
-      args = ['']
     }
 
     return args[0]

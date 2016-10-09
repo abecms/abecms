@@ -8,3 +8,4 @@ export default function translate(lang, str) {
   }
   return str
 }
+
