@@ -23,3 +23,7 @@ test/templates/hbs/*
 
 # dist
 dist
+
+#config
+abe.json
+plugins/
