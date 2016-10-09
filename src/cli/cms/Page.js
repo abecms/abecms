@@ -3,7 +3,6 @@ import path from 'path'
 import fse from 'fs-extra'
 
 import {
-  cmsEditor,
   abeEngine,
   cmsData,
   cmsTemplates,
