@@ -2,7 +2,6 @@ import mkdirp from 'mkdirp'
 import path from 'path'
 import {
   cmsData,
-  FileParser,
   config,
   Page,
   cmsTemplates,
@@ -10,8 +9,6 @@ import {
 } from '../../cli'
 
 var page = function (req, res, next) {
-  var filePath = coreUtils.slug.clean(req.query.filePath)
-  filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
   var html = (req.query.html) ? true : false
   var json = null
   var editor = false
@@ -24,13 +21,12 @@ var page = function (req, res, next) {
     }
   }
 
-  if(typeof filePath !== 'undefined' && filePath !== null) {
+  if(typeof req.query.filePath !== 'undefined' && req.query.filePath !== null) {
     var jsonPath = null
     var linkPath = null
 
     var filePathTest = cmsData.revision.getDocumentRevision(req.query.filePath)
     if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
-      // filePath = filePathTest.path
       jsonPath = filePathTest.path
       linkPath = filePathTest.abe_meta.link
     }

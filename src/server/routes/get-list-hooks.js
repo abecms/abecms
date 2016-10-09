@@ -7,10 +7,15 @@ import {
 } from '../../cli'
 
 var route = function(req, res, next) {
+  var html
+
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
   var page = path.join(__dirname + '/../views/list-hooks.html')
-  var html = coreUtils.file.getContent(page)
+  if (exist(page)) {
+    html = fse.readFileSync(page, 'utf8')
+  }
+  
   var allHooks = []
 
   Array.prototype.forEach.call(Object.keys(hooksDefault), (hook) => {

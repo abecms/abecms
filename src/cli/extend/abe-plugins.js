@@ -1,7 +1,8 @@
 import path from 'path'
 import fse from 'fs-extra'
+
 import {
-  FileParser,
+  cmsData,
   config
 } from '../'
 
@@ -19,7 +20,7 @@ class Plugins {
       var directoryPlugins = fse.lstatSync(pluginsDir)
       if (directoryPlugins.isDirectory()) {
         
-        this._plugins = FileParser.getFolders(pluginsDir, true, 0)
+        this._plugins = cmsData.file.getFolders(pluginsDir, true, 0)
         Array.prototype.forEach.call(this._plugins, (plugin) => {
           // has hooks
           var plugHooks = path.join(plugin.path, config.hooks.url)
@@ -68,7 +69,7 @@ class Plugins {
             var directoryProcess = fse.lstatSync(plugProcess)
             if (directoryProcess.isDirectory()) {
               plugin.process = {}
-              var processFiles = FileParser.getFiles(plugProcess, true, 0)
+              var processFiles = cmsData.file.getFiles(plugProcess, true, 0)
               Array.prototype.forEach.call(processFiles, (processFile) => {
                 plugin.process[processFile.cleanNameNoExt] = processFile.path
               })
@@ -90,7 +91,7 @@ class Plugins {
               try {
                 var directoryGets = fse.lstatSync(gets)
                 if (directoryGets.isDirectory()) {
-                  var routesGet = FileParser.getFiles(gets, true, 0)
+                  var routesGet = cmsData.file.getFiles(gets, true, 0)
                   Array.prototype.forEach.call(routesGet, (route) => {
                     route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
                   })
@@ -103,7 +104,7 @@ class Plugins {
                 var posts = path.join(plugRoutes, 'post')
                 var directoryPosts = fse.lstatSync(gets)
                 if (directoryPosts.isDirectory()) {
-                  var routesPost = FileParser.getFiles(posts, true, 0)
+                  var routesPost = cmsData.file.getFiles(posts, true, 0)
                   Array.prototype.forEach.call(routesPost, (route) => {
                     route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
                   })

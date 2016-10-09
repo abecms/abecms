@@ -10,6 +10,7 @@ import {
 
 
 export function unpublish(filePath) {
+  var filePath = coreUtils.slug.clean(filePath)
   var tplUrl = cmsData.file.fromUrl(path.join(config.publish.url, filePath))
   if(coreUtils.file.exist(tplUrl.json.path)) {
     var json = JSON.parse(JSON.stringify(cmsData.file.get(tplUrl.json.path)))

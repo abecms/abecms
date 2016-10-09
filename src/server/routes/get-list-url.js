@@ -9,6 +9,8 @@ var route = function(router, req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
   var routes = router.stack
   var urls = []
+  var html
+
   Array.prototype.forEach.call(routes, function(route) {
     urls.push({
       url: route.route.path,
@@ -18,8 +20,9 @@ var route = function(router, req, res, next) {
   })
 
   var page = path.join(__dirname + '/../views/list-url.html')
-  var html = coreUtils.file.getContent(page)
-
+  if (exist(page)) {
+    html = fse.readFileSync(page, 'utf8')
+  }
 
   var template = Handlebars.compile(html, {noEscape: true})
   var tmp = template({

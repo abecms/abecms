@@ -5,8 +5,7 @@ import {
   config,
   coreUtils,
   cmsData,
-  Hooks,
-  FileParser
+  Hooks
 } from '../../'
 
 export function findTemplateAndPartialsInFolder (currentPath) {
@@ -297,7 +296,7 @@ export function getStructureAndTemplatesFiles() {
   try {
     var directoryStructure = fse.lstatSync(path.join(site.path, structure))
     if (directoryStructure.isDirectory()) {
-      site.folders = FileParser.getFolders(path.join(site.path, structure), false)
+      site.folders = cmsData.file.getFolders(path.join(site.path, structure), false)
       result.structure = site.folders
     }
   } catch (e) {
@@ -305,7 +304,7 @@ export function getStructureAndTemplatesFiles() {
   try {
     var directoryTemplate = fse.lstatSync(path.join(site.path, templates))
     if (directoryTemplate.isDirectory()) {
-      result.templates = result.templates.concat(FileParser.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
+      result.templates = result.templates.concat(cmsData.file.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
     }
   } catch (e) {
   }

@@ -4,7 +4,6 @@ import path from 'path'
 
 import {
   cmsData,
-  FileParser,
   config,
   fileAttr,
   cmsTemplates,
@@ -15,10 +14,10 @@ class Builder {
 
   constructor(root, folder, dest, flow){
     this.pathToJson = path.join(root, config.data.url)
-    var files = fileAttr.filterLatestVersion(FileParser.getFiles(this.pathToJson, config.data.url), flow)
+    var files = fileAttr.filterLatestVersion(cmsData.file.getFiles(this.pathToJson, config.data.url), flow)
 
     if(flow === 'publish') {
-      files = FileParser.getFiles(path.join(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
+      files = cmsData.file.getFiles(path.join(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
     }
 
     var build = function (index) {
@@ -58,9 +57,7 @@ class Builder {
     }
 
     build(0)
-
   }
-
 }
 
 if(process.env.ROOT && process.env.FOLDER && process.env.DEST){

@@ -35,8 +35,6 @@ import {
 import Manager from './core/manager/Manager'
 import Page from './cms/Page'
 
-import FileParser from './core/utils/file-parser'
-
 // import {getTemplate} from './cms/templates/abe-template'
 import Create from './cms/Create'
 
@@ -53,42 +51,40 @@ import * as cmsTemplates from './cms/templates'
 import * as coreUtils from './core/utils'
 
 export {
-	cmsData
-	,cmsOperations
-	,cmsTemplates
-	,coreUtils
-	,cmsEditor
-	,mkdirp
-
-	,moment
-	,fse
-	,Handlebars
-	,clc
-	,FileParser
-	,printInput
-	,abeImport
-	,math
-	,Create
-	,abeProcess
-	,translate
-	,printBlock
-	,notEmpty
-	,printJson
-	,className
-	,moduloIf
-	,listPage
-	,abeEngine
-	,attrAbe
-	,folders
-	,cleanTab
-	,printConfig
-	,ifIn
-	,ifCond
-	,config
-	,Hooks
-	,Plugins
-	,Manager
-	,Page
+	cmsData,
+	cmsOperations,
+	cmsTemplates,
+	coreUtils,
+	cmsEditor,
+	mkdirp,
+	moment,
+	fse,
+	Handlebars,
+	clc,
+	printInput,
+	abeImport,
+	math,
+	Create,
+	abeProcess,
+	translate,
+	printBlock,
+	notEmpty,
+	printJson,
+	className,
+	moduloIf,
+	listPage,
+	abeEngine,
+	attrAbe,
+	folders,
+	cleanTab,
+	printConfig,
+	ifIn,
+	ifCond,
+	config,
+	Hooks,
+	Plugins,
+	Manager,
+	Page
 }
 
 export {compileAbe as compileAbe}

@@ -4,8 +4,8 @@ import mkdirp from 'mkdirp'
 import path from 'path'
 
 import {
+  cmsData,
   cmsTemplates,
-  FileParser,
   config
 } from '../../'
 
@@ -68,7 +68,7 @@ export function getFolder(pathAssets = '') {
   try {
     var directory = fse.lstatSync(pathAssets)
     if (directory.isDirectory()) {
-      var arr = FileParser.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99)
+      var arr = cmsData.file.read(pathAssets, pathAssets, 'files', flatten, /(.*?)/, 99)
 
       // now check if file for folder exist
       Array.prototype.forEach.call(arr, (file) => {
