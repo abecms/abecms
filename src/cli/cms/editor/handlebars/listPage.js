@@ -36,8 +36,8 @@ export default function listPage(file, index, text) {
   var workflow = ''
 
   workflow += '<td align="center" class="draft">'
-  if(typeof file.draft !== 'undefined' && file.draft !== null) {
-    if((typeof file.publish === 'undefined' || file.publish === null)
+  if(file.draft != null) {
+    if((file.publish == null)
       || (file.publish && file.publish.date < file.draft.date)) {
       workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="label label-default label-draft">draft</a>`
     }else {
@@ -61,7 +61,7 @@ export default function listPage(file, index, text) {
   res += `<td align="center">
             <div class="row icons-action">`
 
-  if(typeof file.publish !== 'undefined' && file.publish !== null) {
+  if(file.publish != null) {
     res += `<a href="/unpublish/?filePath=${file.abe_meta.link}"
                title="${text.unpublish}"
                class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}">

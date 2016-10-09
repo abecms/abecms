@@ -17,28 +17,25 @@ export function getAllWithKeys(withKeys) {
     var cleanFile = file
     var json = cmsData.file.get(file.path)
 
-    if(typeof json.abe_meta.latest !== 'undefined' && json.abe_meta.latest !== null
-      && typeof json.abe_meta.latest !== 'undefined' && json.abe_meta.latest !== null
-      && typeof json.abe_meta.latest.date !== 'undefined' && json.abe_meta.latest.date !== null) {
+    if(json.abe_meta.latest.date != null) {
       file.date = json.abe_meta.latest.date
     }
 
-    if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+    if(json.abe_meta != null) {
       var date = null
-      if (typeof json.abe_meta.latest !== 'undefined' && json.abe_meta.latest !== null
-        && typeof json.abe_meta.latest.date !== 'undefined' && json.abe_meta.latest.date !== null) {
+      if (json.abe_meta.latest.date != null) {
         date = json.abe_meta.latest.date
-      }else if (typeof json.abe_meta.date !== 'undefined' && json.abe_meta.date !== null) {
+      } else if (json.abe_meta.date != null) {
         date = json.abe_meta.date
       }
       cleanFile.abe_meta = {
-        date: date
-        , type: (typeof json.abe_meta.type !== 'undefined' && json.abe_meta.type !== null) ? json.abe_meta.type : null
-        , link: (typeof json.abe_meta.link !== 'undefined' && json.abe_meta.link !== null) ? json.abe_meta.link : null
-        , template: (typeof json.abe_meta.template !== 'undefined' && json.abe_meta.template !== null) ? json.abe_meta.template : null
-        , status: (typeof json.abe_meta.status !== 'undefined' && json.abe_meta.status !== null) ? json.abe_meta.status : null
-        , cleanName: (typeof json.abe_meta.cleanName !== 'undefined' && json.abe_meta.cleanName !== null) ? json.abe_meta.cleanName : null
-        , cleanFilename: (typeof json.abe_meta.cleanFilename !== 'undefined' && json.abe_meta.cleanFilename !== null) ? json.abe_meta.cleanFilename : null
+        date: date,
+        type: (json.abe_meta.type != null) ? json.abe_meta.type : null,
+        link: (json.abe_meta.link != null) ? json.abe_meta.link : null,
+        template: (json.abe_meta.template != null) ? json.abe_meta.template : null,
+        status: (json.abe_meta.status != null) ? json.abe_meta.status : null,
+        cleanName: (json.abe_meta.cleanName != null) ? json.abe_meta.cleanName : null,
+        cleanFilename: (json.abe_meta.cleanFilename != null) ? json.abe_meta.cleanFilename : null
       }
     }
     Array.prototype.forEach.call(withKeys, (key) => {
@@ -91,7 +88,7 @@ export function fromUrl(url) {
     }
   }
 
-  if(typeof url !== 'undefined' && url !== null) {
+  if(url != null) {
 
     var dir = path.dirname(url).replace(config.root, '')
     var filename = path.basename(url)

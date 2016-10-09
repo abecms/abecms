@@ -10,7 +10,7 @@ function recurseDeleteKey(currentLevel, arrayKeyAttr) {
   }
 
   Array.prototype.forEach.call(currentArray, (key) => {
-    if(typeof currentLevel[key] !== 'undefined' && currentLevel[key] !== null) {
+    if(currentLevel[key] != null) {
       currentLevel = currentLevel[key]
       currentArray.shift()
       recurseDeleteKey(currentLevel, currentArray)
@@ -28,12 +28,12 @@ function recurseDeleteKey(currentLevel, arrayKeyAttr) {
 export function removeDuplicate(text, json) {
   var regAbe = /{{abe[\S\s].*?duplicate=['|"]([\S\s].*?['|"| ]}})/g
   var matches = text.match(regAbe)
-  if(typeof matches !== 'undefined' && matches !== null){
+  if(matches != null){
 
     Array.prototype.forEach.call(matches, (match) => {
       var keyAttr = cmsData.regex.getAttr(match, 'key')
 
-      if(typeof match !== 'undefined' && match !== null) {
+      if(match != null) {
         var arrayKeyAttr = keyAttr.split('.')
         recurseDeleteKey(json, arrayKeyAttr)
       }

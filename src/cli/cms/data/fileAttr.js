@@ -40,7 +40,7 @@ export default class FileAttr {
    */
   static test(str) {
     var att = new attr(str).val
-    return (typeof att.s !== 'undefined' && att.s !== null)
+    return (att.s != null)
   }
 }
 

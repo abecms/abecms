@@ -4,7 +4,7 @@ import abeEngine from './abeEngine'
 export default function printBlock (ctx) {
   var res = ''
 
-  if(typeof ctx[0].block !== 'undefined' && ctx[0].block !== null && ctx[0].block !== '') {
+  if(ctx[0].block != null && ctx[0].block !== '') {
     res += `<div class="form-group">
               <label class="title">${ctx[0].block}</label>
               <div class='single-block well well-sm'>`
@@ -26,7 +26,7 @@ export default function printBlock (ctx) {
     var arrItem = []
     Array.prototype.forEach.call(ctx, (item) => {
       var index = item.key.match(/[^\[\]]+?(?=\])/)
-      if(typeof arrItem[index] === 'undefined' || arrItem[index] === null) {
+      if(arrItem[index] == null) {
         arrItem[index] = []
       }
       arrItem[index].push(item)
@@ -35,7 +35,7 @@ export default function printBlock (ctx) {
     Array.prototype.forEach.call(Object.keys(arrItem), (i) => {
       var key = arrItem[i][0].key.split('[')[0]
       var display = ''
-      if(typeof abeEngine.instance.content[key] === 'undefined' || abeEngine.instance.content[key] === null
+      if(abeEngine.instance.content[key] == null
         || abeEngine.instance.content[key].length === 0) {
         display = 'style="display: none"'
       }

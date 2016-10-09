@@ -12,7 +12,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
 
     var json = {}
     var revisions = []
-    if(typeof oldFilePath !== 'undefined' && oldFilePath !== null) {
+    if(oldFilePath != null) {
       var files = Manager.instance.getList()
       var fileWithoutExtension = oldFilePath.replace('.' + config.files.templates.extension, '')
 
@@ -23,11 +23,10 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
         }
       })
 
-      if(typeof doc.revisions !== 'undefined' && doc.revisions !== null) {
+      if(doc.revisions != null) {
         revisions = doc.revisions
 
-        if(typeof revisions !== 'undefined' && revisions !== null
-          && typeof revisions[0] !== 'undefined' && revisions[0] !== null) {
+        if(revisions != null && revisions[0] != null) {
           json = cmsData.file.get(revisions[0].path)
         }
       }

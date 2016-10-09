@@ -12,7 +12,7 @@ import {
  */
 export default function compileAbe(){
   var content = abeEngine.instance.content
-  if(typeof arguments[0].hash['key'] === 'undefined' || arguments[0].hash['key'] === null) return ''
+  if(arguments[0].hash['key'] == null) return ''
   var key
   var hash
   var value
@@ -29,10 +29,10 @@ export default function compileAbe(){
     catch(e){
       value = ''
     }
-    if(typeof value === 'undefined' || typeof value === 'function' || value === null) {
+    if(typeof value === 'function' || value == null) {
       value = ''
     }
-    if(typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich'){
+    if(hash.type != null && hash.type === 'rich'){
       testXSS = xss(value.replace(/&quot;/g, '"'), {
         'whiteList': config.htmlWhiteList,
         stripIgnoreTag: true
@@ -46,11 +46,11 @@ export default function compileAbe(){
 
   hash = arguments[0].hash
   value = ((content) ? content[hash.key.replace('.', '-')] : hash.key)
-  if(typeof value === 'undefined' || typeof value === 'function' || value === null) {
+  if(typeof value === 'function' || value == null) {
     value = ''
   }
   
-  if(typeof hash.type !== 'undefined' && hash.type !== null && hash.type === 'rich'){
+  if(hash.type != null && hash.type === 'rich'){
     testXSS = xss(value.replace(/&quot;/g, '"'), {
       'whiteList': config.htmlWhiteList,
       stripIgnoreTag: true

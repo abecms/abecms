@@ -5,7 +5,7 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
   }
 
   var id = `level-${index}`
-  if(typeof dataShow !== 'undefined' && dataShow !== null && dataShow !== '') {
+  if(dataShow) {
     id += `-${dataShow}`
   }
   var parent = obj[0] ? obj[0].cleanPath.split('/')[0] : ''
@@ -20,8 +20,7 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
   Array.prototype.forEach.call(obj, (o) => {
     var selected = ''
     var isVisible = false
-    if(typeof links !== 'undefined' && links !== null &&
-      typeof links[index - 1] !== 'undefined' && links[index - 1] !== null) {
+    if(links != null && links[index - 1] != null) {
       if (links[index - 1] === o.name) {
         selected = 'selected="selected"'
         isVisible = true
@@ -29,7 +28,7 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
     }
     res += `<option ${selected} data-level-hide="${index+2}" data-level-show="${index+1}" data-show="${o.name.replace(/\.| |\#/g, '_')}">${o.name}</option>`
 
-    if(typeof o.folders !== 'undefined' && o.folders !== null && o.folders.length > 0) {
+    if(o.folders != null && o.folders.length > 0) {
       sub += recursiveFolder(o.folders, index+1, o.name.replace(/\.| |\#/g, '_'), links, isVisible)
     }
   })
