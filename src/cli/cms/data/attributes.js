@@ -44,7 +44,7 @@ export function getAll(str, json) {
       null
     ) : 
     null
-  attrs.editable = (attrs.editable) ? true : false
+  attrs.editable = (attrs.editable && attrs.editable !== 'false') ? true : false
 
   attrs = Hooks.instance.trigger('afterAbeAttributes', attrs, str, json)
 
