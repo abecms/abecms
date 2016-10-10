@@ -1,8 +1,10 @@
+import fse from 'fs-extra'
 import path from 'path'
 
 import {
   config,
   cmsData,
+  cmsOperations,
   coreUtils,
   Manager
 } from '../../'
@@ -218,14 +220,14 @@ export function deleteOlderRevisionByType(fileName, type) {
   folder = folder.join('/')
   var stat = fse.statSync(folder)
   if(stat){
-    var files = FileParser.getFiles(folder, true, 1, new RegExp('\\.' + extension))
+    var files = cmsData.file.getFiles(folder, true, 1, new RegExp('\\.' + extension))
     files.forEach(function (fileItem) {
       var fname = cmsData.fileAttr.delete(fileItem.cleanPath)
       var ftype = cmsData.fileAttr.get(fileItem.cleanPath).s
       if(fname === file && ftype === type){
         var fileDraft = fileItem.path.replace(/-abe-./, '-abe-d')
-        FileParser.removeFile(fileItem.path, FileParser.changePathEnv(fileItem.path, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
-        FileParser.removeFile(fileDraft, FileParser.changePathEnv(fileDraft, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
+        cmsOperations.remove.removeFile(fileItem.path, coreUtils.file.changePath(fileItem.path, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
+        cmsOperations.remove.removeFile(fileDraft, coreUtils.file.changePath(fileDraft, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
       }
     })
   }
