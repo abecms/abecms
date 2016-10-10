@@ -14,6 +14,7 @@ import clc from 'cli-color'
 
 program
   .version(pkg.version)
+  .option('-v, --version', 'version')
   .option('-p, --port <port>', 'Port on which to listen to (defaults to 8000)', parseInt)
   .option('-i, --interactive', 'open in browser')
   .option('-N, --pname <pname>', 'pm2 server name')
@@ -28,6 +29,11 @@ var create = new Create()
 var port = program.port
 var interactive = program.interactive
 var webport = program.webport || 8081
+
+var vPos = process.argv.indexOf('-v')
+if (vPos > -1) {
+  process.argv[vPos] = '-V'
+}
 
 function addPlugin(dir, plugin) {
   var p = new Promise((resolve) => {
