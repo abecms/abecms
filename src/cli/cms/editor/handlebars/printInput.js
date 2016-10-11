@@ -11,7 +11,6 @@ import {
  */
 export default function printInput () {
   var params = arguments[0]
-
   params = abeExtend.hooks.instance.trigger('beforeEditorInput', params)
   var desc = params.desc + ((params.required) ? ' *' : '')
 
