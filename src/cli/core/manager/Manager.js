@@ -34,6 +34,17 @@ class Manager {
     return this._list
   }
 
+  getListWithStatusOnFolder(status, folder = '') {
+    var list = []
+    folder = path.join(config.root, config.data.url, folder)
+    Array.prototype.forEach.call(this._list, (file) => {
+      if (typeof file[status] !== 'undefined' && file[status] !== null && file.path.indexOf(folder) > -1) {
+        list.push(file)
+      }
+    })
+    return list
+  }
+
   setList(list) {
     this._list = list
 

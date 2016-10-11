@@ -147,7 +147,7 @@ export function fileList(obj, tplPath, match, jsonPage) {
   return p
 }
 
-export function nextDataList(tplPath, jsonPage, match) {
+export function nextDataList(tplPath, jsonPage, match, onlyDynamicSelect) {
   var p = new Promise((resolve) => {
     if(jsonPage['abe_source'] == null) {
       jsonPage['abe_source'] = {}
@@ -160,12 +160,16 @@ export function nextDataList(tplPath, jsonPage, match) {
 
     switch (type) {
     case 'request':
-      requestList(obj, tplPath, match, jsonPage)
-          .then(() => {
-            resolve()
-          }).catch((e) => {
-            console.log('[ERROR] source.js requestList', e)
-          })
+      if (onlyDynamicSelect && obj.editable) {
+        resolve()
+      }else {
+        requestList(obj, tplPath, match, jsonPage)
+            .then(() => {
+              resolve()
+            }).catch((e) => {
+              console.log('[ERROR] source.js requestList', e)
+            })
+      }
       break
     case 'value':
       valueList(obj, match, jsonPage)
@@ -200,13 +204,13 @@ export function nextDataList(tplPath, jsonPage, match) {
   return p
 }
 
-export function getDataList(tplPath, text, jsonPage) {
+export function getDataList(tplPath, text, jsonPage, onlyDynamicSelect = false) {
   var p = new Promise((resolve) => {
 
     var promises = []
     var matches = cmsData.regex.getTagAbeTypeRequest(text)
     Array.prototype.forEach.call(matches, (match) => {
-      promises.push(nextDataList(tplPath, jsonPage, match[0]))
+      promises.push(nextDataList(tplPath, jsonPage, match[0], onlyDynamicSelect))
     })
 
     Promise.all(promises)

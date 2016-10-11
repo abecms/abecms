@@ -270,7 +270,6 @@ export function execQuery(pathQuery, match, jsonPage) {
   files = executeFromClause(request.from, pathQuery)
   files = executeOrderByClause(files, request.orderby)
   res = executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
-
   return res
 }
 
