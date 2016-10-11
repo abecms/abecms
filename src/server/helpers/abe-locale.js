@@ -1,6 +1,5 @@
 import fse from 'fs-extra'
 import extend from 'extend'
-import clc from 'cli-color'
 import path from 'path'
 
 import {

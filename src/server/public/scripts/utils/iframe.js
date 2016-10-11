@@ -1,3 +1,5 @@
+/*global document */
+
 export function IframeDocument (frameId){
   let iframe = document.querySelector(frameId)
   let iframeDocument = iframe.contentDocument || iframe.contentWindow.document
@@ -9,9 +11,9 @@ export function IframeNode (frameId, selector){
 }
 
 function IframeGetComment(frameId, prop, val, meth, nd, useSelf ) {
-  var prop = 'nodeType'
-  var val = 8
-  var meth = null
+  prop = 'nodeType'
+  val = 8
+  meth = null
   var r=[], any= IframeGetComment[val]===true
   nd = nd||IframeDocument(frameId).documentElement
 

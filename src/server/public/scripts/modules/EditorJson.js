@@ -1,3 +1,5 @@
+/*global document, json, window, CONFIG, alert, location */
+
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import {Promise} from 'es6-promise'
@@ -29,14 +31,13 @@ export default class Json {
 
   save(type = 'draft', tplPath = null, filePath = null) {
     this.saving._fire({type: type})
-    var p = new Promise((resolve, reject) => {
+    var p = new Promise((resolve) => {
       if(!this.canSave){
         resolve({})
         this.canSave = true
         return
       }
       var jsonSave = this.data
-      var abe_source = []
 
       if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
         delete json.abe_source
@@ -57,7 +58,7 @@ export default class Json {
           headers: this._headers,
           method: 'post'
         },
-        (code, responseText, request) => {
+        (code, responseText) => {
           try{
             var jsonRes = JSON.parse(responseText)
             if(typeof jsonRes.error !== 'undefined' && jsonRes.error !== null) {

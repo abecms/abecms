@@ -1,3 +1,5 @@
+/*global document */
+
 import on from 'on'
 import Popup from './popup'
 

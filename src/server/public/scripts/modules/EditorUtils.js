@@ -1,3 +1,5 @@
+/*global document, window */
+
 import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
 import math from '../../../../cli/cms/templates/handlebars/math'
@@ -28,7 +30,6 @@ export default class EditorUtils {
     if (visible === 'false' || visible === false) {
       return
     }
-    var dataLink = target.getAttribute('data-id-link')
     var id = target.getAttribute('data-id')
     var nodes = IframeNode('#page-template', '[data-abe-' + id + ']')
 
@@ -71,7 +72,6 @@ export default class EditorUtils {
   }
 
   static getAttr(target) {
-    var dataLink = target.getAttribute('data-id-link')
     var id = target.getAttribute('data-id')
 
     return {
@@ -114,9 +114,10 @@ export default class EditorUtils {
       val = placeholder
     }
 
+    var dataAbeAttr
     switch(input.nodeName.toLowerCase()){
     case 'input':
-      var dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
+      dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
       if(typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
         node.setAttribute(dataAbeAttr, val)
       }else {
@@ -128,7 +129,7 @@ export default class EditorUtils {
       break
     case 'select':
       var key = node.getAttribute('data-abe-' + id)
-      var dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
+      dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
       var dataAbeAttrEscaped = unescape(node.getAttribute('data-abe-attr-escaped'))
       var option = input.querySelector('option:checked')
       if(typeof option !== 'undefined' && option !== null) {

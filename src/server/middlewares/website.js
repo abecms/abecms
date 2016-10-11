@@ -56,7 +56,7 @@ var middleware = function(req, res, next) {
     return res.send(html)
   }else if (req.originalUrl.indexOf('.' + config.files.templates.extension) > -1) {
 
-    var html = ''
+    html = ''
 
     var page = path.join(config.root, config.publish.url, req.originalUrl)
     if (coreUtils.file.exist(page)) {

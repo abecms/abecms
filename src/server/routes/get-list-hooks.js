@@ -4,6 +4,7 @@ import Handlebars from 'handlebars'
 import hooksDefault from '../../hooks/hooks'
 import {
   Hooks
+  ,coreUtils
 } from '../../cli'
 
 var route = function(req, res, next) {
@@ -12,7 +13,7 @@ var route = function(req, res, next) {
   Hooks.instance.trigger('beforeRoute', req, res, next)
 
   var page = path.join(__dirname + '/../views/list-hooks.html')
-  if (exist(page)) {
+  if (coreUtils.file.exist(page)) {
     html = fse.readFileSync(page, 'utf8')
   }
   

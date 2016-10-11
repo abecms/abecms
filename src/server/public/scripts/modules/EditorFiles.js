@@ -1,8 +1,7 @@
+/*global document, FormData, CONFIG, XMLHttpRequest */
+
 import EditorUtils from '../modules/EditorUtils'
-import EditorInputs from '../modules/EditorInputs'
 import {IframeNode} from '../utils/iframe'
-import qs from 'qs'
-import {Promise} from 'es6-promise'
 import on from 'on'
 
 export default class EditorFiles {
@@ -51,7 +50,7 @@ export default class EditorFiles {
         percent.textContent = percentage.toFixed(0) + '%'
       }
     }
-    xhr.onerror = (e) => { console.log('An error occurred while submitting the form. Maybe your file is too big') }
+    xhr.onerror = () => { console.log('An error occurred while submitting the form. Maybe your file is too big') }
     xhr.onload = () => {
       var resp = JSON.parse(xhr.responseText)
       if(resp.error){

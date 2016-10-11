@@ -1,6 +1,7 @@
+/*global document, window */
+
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
-import {Promise} from 'es6-promise'
 import Json from '../modules/EditorJson'
 import {IframeDocument} from '../utils/iframe'
 let singleton = Symbol()
@@ -72,8 +73,6 @@ export default class Reload {
   
   reload() {
     var iframe = document.querySelector('#page-template')
-    var iframeBody = IframeDocument('#page-template').body
-    var scrollTop = iframeBody.scrollTop
     var json = JSON.parse(JSON.stringify(this._json.data))
     
     delete json.abe_source
@@ -87,7 +86,7 @@ export default class Reload {
         body: data,
         method: 'post'
       },
-    (code, responseText, request) => {
+    (code, responseText) => {
       if(typeof responseText !== 'undefined' && responseText !== null) {
         this.inject(responseText)
       }

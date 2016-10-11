@@ -1,3 +1,5 @@
+/*global document, window, alert */
+
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import FolderSelect from './FolderSelect'
@@ -8,11 +10,11 @@ export default class FormCreate {
     this._form = document.querySelector('[data-form-abe-create="true"]')
     if(typeof this._form !== 'undefined' && this._form !== null) {
 
-    	// constantes variables
+      // constantes variables
       this._filePath = ''
       this._ajax = Nanoajax.ajax
 
-    	// constantes variables DOM elements
+      // constantes variables DOM elements
       this._form = document.querySelector('.form-create')
       this._templateName = this._form.querySelector('[data-type-template-abe]')
       this._tplName = this._form.querySelector('[name=tplName]')
@@ -64,12 +66,12 @@ export default class FormCreate {
     }
   }
 
-  _pathChange(e) {
+  _pathChange() {
     this._setFilePath()
     this._canCreate()
   }
 
-  _submit(e) {
+  _submit() {
     this._setFilePath()
   }
 
@@ -139,7 +141,7 @@ export default class FormCreate {
         headers: {},
         method: 'get'
       },
-        (code, responseText, request) => {
+        (code, responseText) => {
           var jsonRes = JSON.parse(responseText)
           if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== 'undefined' && jsonRes.json.abe_meta !== null) {
             window.location.href = window.location.origin + '/abe/' + jsonRes.json.abe_meta.template + '?filePath=' + jsonRes.json.abe_meta.link

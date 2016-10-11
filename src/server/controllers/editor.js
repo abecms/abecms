@@ -42,8 +42,9 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
   var v = `{{${match}}}`,
     obj = cmsData.attributes.getAll(v, json)
 
+  var realKey
   if(typeof keyArray !== 'undefined' && keyArray !== null) {
-    var realKey = obj.key.replace(/[^\.]+?\./, '')
+    realKey = obj.key.replace(/[^\.]+?\./, '')
 
     if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
       obj.keyArray = keyArray
@@ -58,7 +59,7 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
     }
 
   }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
-    var realKey = obj.key.replace(/\./g, '-')
+    realKey = obj.key.replace(/\./g, '-')
     obj.value = json[realKey]
     json[obj.key] = add(obj, json, text, util)
   }
@@ -94,6 +95,7 @@ function each(text, json, util, arrayBlock) {
   var textEach, match
 
   while (textEach = pattEach.exec(text)) {
+    var i
     var keyArray = textEach[0].match(/#each (\n|.)*?\}/)
     keyArray = keyArray[0].slice(6, keyArray[0].length - 1)
 
@@ -107,7 +109,7 @@ function each(text, json, util, arrayBlock) {
 
       if(v.indexOf('abe') > -1){
         if(json[keyArray]){
-          for (var i = 0; i < json[keyArray].length; i++) {
+          for (i = 0; i < json[keyArray].length; i++) {
             addToForm(v, text, json, util, arrayBlock, keyArray, i)
           }
         }else{
@@ -124,7 +126,7 @@ function each(text, json, util, arrayBlock) {
       length = arrayBlock[keyArray][index].length
     }
 
-    for (var i = 0; i < length; i++) {
+    for (i = 0; i < length; i++) {
       for (var j = 0; j < attrArray.length; j++) {
         add(arrayBlock[keyArray][attrArray[j]][i], json, text, util)
       }

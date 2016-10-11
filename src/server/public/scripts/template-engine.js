@@ -1,3 +1,5 @@
+/*global document, window, $ */
+
 import {Devtool} from './devtool/Devtool'
 
 import EditorInputs from './modules/EditorInputs'
@@ -113,6 +115,6 @@ window.abe = {
   editorReload: EditorReload
 }
 
-document.addEventListener('DOMContentLoaded', function(event) {
+document.addEventListener('DOMContentLoaded', function() {
   if(document.querySelector('#page-template')) engine.inject()
 })

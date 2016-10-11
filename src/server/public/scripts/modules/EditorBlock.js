@@ -1,10 +1,11 @@
+/*global document, abe, $, jQuery */
+
 import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import {nextSibling} from '../utils/dom'
 import Color from '../utils/color-picker'
 import Link from '../utils/link-picker'
 import RichText from '../utils/rich-texarea'
 import Json from './EditorJson'
-import EditorInputs from './EditorInputs'
 import EditorUtils from './EditorUtils'
 import on from 'on'
 
@@ -49,7 +50,6 @@ export default class EditorBlock {
       , elem = target
       , parent = null
       , listGroup = null
-      , iframeRefAll = null
       , blockAttr = ''
       , wasFound = false
       , startNumber = 0
@@ -84,7 +84,6 @@ export default class EditorBlock {
         Array.prototype.forEach.call(listGroup.querySelectorAll('[data-block]'), (block) => {
           var currentBlockAttr = block.getAttribute('data-block')
           var nb = parseInt(currentBlockAttr.replace(blockAttr, ''))
-          // iframeRefAll = IframeNode('#page-template', `[data-abe-block="${currentBlockAttr}"]`)
           if(wasFound){
             Array.prototype.forEach.call(listGroup.querySelectorAll('.form-abe'), (el) => {
               el.setAttribute('value', el.value)

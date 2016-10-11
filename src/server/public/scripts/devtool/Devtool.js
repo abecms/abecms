@@ -1,3 +1,5 @@
+/*global document, $, window */
+
 export class Devtool {
 
   constructor() {
@@ -35,12 +37,11 @@ export class Devtool {
   initDevtool(){
     var baseWidth = this.getCookie('editorWidth')
     if(typeof baseWidth !== 'undefined' && baseWidth !== null && baseWidth !== '') {
-      baseWidth = baseWidth
       this.form.width(baseWidth)
       this.form.attr('data-width', baseWidth)
       this.updateBrowserSize()
     }
-    this.ruler.on('mousedown', (e) => {
+    this.ruler.on('mousedown', () => {
       this.body.addClass('resizing')
       var newWidth
       this.body.on('mousemove', (e) => {
@@ -61,11 +62,11 @@ export class Devtool {
       setTimeout(() => { this.body.removeClass('resizing') }, 1000)
     })
 
-    $('.close-engine').on('click', (e) => {
+    $('.close-engine').on('click', () => {
       this.body.removeClass('engine-open')
       this.form.width(0)
     })
-    $('.open-engine').on('click', (e) => {
+    $('.open-engine').on('click', () => {
       this.body.addClass('engine-open')
       this.form.width(this.form.attr('data-width'))
     })

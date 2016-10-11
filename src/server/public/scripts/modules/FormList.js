@@ -1,3 +1,5 @@
+/*global document, $, top */
+
 export default class FormList {
   constructor() {
     // bind button event click
@@ -30,7 +32,7 @@ export default class FormList {
     $.ajax({
       url: document.location.origin + '/save',
       data: data
-    }).done((res) => {
+    }).done(() => {
       top.location.href = top.location.href
     })
   }
