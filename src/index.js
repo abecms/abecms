@@ -226,23 +226,18 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     }
     process.env.DEBUG = 'generate-posts:*'
     var generateArgs = ['--harmony', __dirname + '/cli/process/generate-posts.js', 'ABE_WEBSITE=' + dir]
+    var isHelp = false
     Array.prototype.forEach.call(userArgs, (arg) => {
       if (arg.indexOf('--path=') > -1) {
         generateArgs.push('ABE_PATH=' + arg.split('=')[1])
       }else if (arg.indexOf('--destination=') > -1) {
         generateArgs.push('ABE_DESTINATION=' + arg.split('=')[1])
+      }else if (arg.indexOf('--status=') > -1) {
+        generateArgs.push('ABE_STATUS=' + arg.split('=')[1])
       }
     })
 
     const generate = spawn('node', generateArgs, { shell: true, stdio: 'inherit' })
-
-    // generate.stdout.on('data', (data) => {
-    //   console.log(data.toString().replace(/\n/, ''))
-    // })
-
-    // generate.stderr.on('data', (data) => {
-    //   console.log(data.toString().replace(/\n/, ''))
-    // })
 
     generate.on('close', (code) => {
       console.log(clc.cyan('child process exited with code') + ' ' + code)

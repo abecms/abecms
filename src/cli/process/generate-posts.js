@@ -15,11 +15,11 @@ var config = require('../../cli').config
 var dateStart
 var templatesTexts = {}
 
-function publishNext(published, tt, cb, i = 0) {
-  var pub = published.shift()
+function publishNext(files, tt, cb, i = 0) {
+  var pub = files.shift()
   if(typeof pub !== 'undefined' && pub !== null) {
     
-    var jsonObject = fse.readJsonSync(pub.path)
+    var jsonObject = fse.readJsonSync(pub[processConfig.ABE_STATUS].path)
     i++
     var p = new Promise((resolve) => {
       if(typeof templatesTexts[jsonObject.abe_meta.template] === 'undefined' || templatesTexts[jsonObject.abe_meta.template] === null) {
@@ -48,20 +48,20 @@ function publishNext(published, tt, cb, i = 0) {
           
           obj = abeExtend.hooks.instance.trigger('afterSave', obj)
 
-          trace('('+ getTime() + ') ' + i + ' - ' + pub.path.replace(config.root, '').replace(config.data.url, '') + ' (tpl: ' + jsonObject.abe_meta.template + ')')
+          trace('('+ getTime() + ') ' + i + ' - ' + pub[processConfig.ABE_STATUS].path.replace(config.root, '').replace(config.data.url, '') + ' (tpl: ' + jsonObject.abe_meta.template + ')')
           resolve()
         },
         () => {
-          error('publish-all ERROR on ' + pub.path.replace(config.root, '').replace(config.data.url, ''))
+          error('publish-all ERROR on ' + pub[processConfig.ABE_STATUS].path.replace(config.root, '').replace(config.data.url, ''))
           resolve()
         })
     })
   
     p.then(function () {
-      publishNext(published, tt, cb, i++)
+      publishNext(files, tt, cb, i++)
     })
     .catch(function (e) {
-      publishNext(published, tt, cb, i++)
+      publishNext(files, tt, cb, i++)
       error('error', e)
     })
   }else {
@@ -72,7 +72,9 @@ function publishNext(published, tt, cb, i = 0) {
 function startProcess() {
   log('start publish all at path ' + processConfig.ABE_PATH);
   log('searching for file at ' + config.root);
-  var files = Manager.instance.getListWithStatusOnFolder('publish', processConfig.ABE_PATH)
+  log('seach status: ' + processConfig.ABE_STATUS);
+  log('save to: ' + path.join(config.root, processConfig.ABE_DESTINATION));
+  var files = Manager.instance.getListWithStatusOnFolder(processConfig.ABE_STATUS, processConfig.ABE_PATH)
 
   log('Found ' + files.length + ' to republish')
 
@@ -85,6 +87,7 @@ function startProcess() {
 
 init('generate-posts',
   {
+    ABE_STATUS: 'publish',
     ABE_PATH: '',
     ABE_DESTINATION: 'site'
   })
