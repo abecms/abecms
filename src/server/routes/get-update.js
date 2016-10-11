@@ -1,10 +1,10 @@
 import {
   cmsOperations,
-  Hooks
+  abeExtend
 } from '../../cli'
 
 var route = function(req, res, next) {
-  Hooks.instance.trigger('beforeRoute', req, res, next)
+  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
 
   var p = cmsOperations.duplicate(req.query.oldFilePath, req.query.selectTemplate, req.query.filePath, req.query.tplName, req, true)
 

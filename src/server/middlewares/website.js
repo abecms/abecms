@@ -5,7 +5,7 @@ import {
   coreUtils,
   cmsData,
   config,
-  Hooks
+  abeExtend
 } from '../../cli'
 
 var middleware = function(req, res, next) {
@@ -65,7 +65,7 @@ var middleware = function(req, res, next) {
       return next()
     }
 
-    html = Hooks.instance.trigger('beforePreview', html, req, res, next)
+    html = abeExtend.hooks.instance.trigger('beforePreview', html, req, res, next)
     res.set('Content-Type', 'text/html')
     return res.send(html)
 

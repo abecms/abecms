@@ -3,14 +3,14 @@ import fse from 'fs-extra'
 import Handlebars from 'handlebars'
 import hooksDefault from '../../hooks/hooks'
 import {
-  Hooks
+  abeExtend
   ,coreUtils
 } from '../../cli'
 
 var route = function(req, res, next) {
   var html = ''
 
-  Hooks.instance.trigger('beforeRoute', req, res, next)
+  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
 
   var page = path.join(__dirname + '/../views/list-hooks.html')
   if (coreUtils.file.exist(page)) {

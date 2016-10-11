@@ -8,7 +8,7 @@ import {
   cmsData,
   cmsTemplates,
   coreUtils,
-  Hooks,
+  abeExtend,
   Manager
 } from '../../cli'
 
@@ -26,7 +26,7 @@ var route = function(req, res, next) {
       return
     }
   }
-  Hooks.instance.trigger('beforeRoute', req, res, next)
+  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var templatePath = req.params[0]
@@ -153,7 +153,7 @@ var route = function(req, res, next) {
       abeVersion: pkg.version,
       nonce: '\'nonce-' + res.locals.nonce + '\''
     }
-    EditorVariables = Hooks.instance.trigger('afterVariables', EditorVariables)
+    EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 
     if (debugJson) {
       var dj = _json

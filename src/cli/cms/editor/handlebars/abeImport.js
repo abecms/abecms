@@ -3,13 +3,12 @@ import fse from 'fs-extra'
 import path from 'path'
 
 import {
-  Plugins
-  ,coreUtils
-  ,Hooks
+  coreUtils
+  ,abeExtend
 } from '../../../'
 
 export default function abeImport (file, config, ctx) {
-  file = Hooks.instance.trigger('beforeImport', file, config, ctx)
+  file = abeExtend.hooks.instance.trigger('beforeImport', file, config, ctx)
 
   config = JSON.parse(config)
   let intlData = config.intlData
@@ -28,14 +27,14 @@ export default function abeImport (file, config, ctx) {
     html = ''
   }
 
-  var pluginsPartials = Plugins.instance.getPartials()
+  var pluginsPartials = abeExtend.plugins.instance.getPartials()
   Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
     var checkFile = path.join(pluginPartials, `${file}.html`)
     if (coreUtils.file.exist(checkFile)) {
       html += fse.readFileSync(checkFile, 'utf8')
     }
   })
-  html = Hooks.instance.trigger('afterImport', html, file, config, ctx)
+  html = abeExtend.hooks.instance.trigger('afterImport', html, file, config, ctx)
 
   var template = Handlebars.compile(html)
   var res = new Handlebars.SafeString(template(ctx, {data: {intl: intlData}}))

@@ -4,8 +4,7 @@ var config = require('../src/cli').config
 config.set({root: __dirname + '/fixtures'})
 
 var Manager = require('../src/cli').Manager;
-var Plugins = require('../src/cli').Plugins;
-var abeProcess = require('../src/cli').abeProcess;
+var abeExtend = require('../src/cli').abeExtend;
 
 describe('Process', function() {
   before( function(done) {
@@ -18,21 +17,21 @@ describe('Process', function() {
   });
 
   /**
-   * getRoutes
+   * abeExtend.plugins.instance.getProcess
    * 
    */
-  it('getProcess()', function() {
-    var file = Plugins.instance.getProcess('test')
+  it('abeExtend.plugins.instance.getProcess()', function() {
+    var file = abeExtend.plugins.instance.getProcess('test')
     chai.expect(file).to.not.be.null;
   });
 
 
   /**
-   * Hooks.instance.trigger
+   * abeExtend.process
    * 
    */
-  it('abeProcess', function() {
-    var res = abeProcess('test', [])
+  it('abeExtend.process', function() {
+    var res = abeExtend.process('test', [])
     // chai.assert.equal(res, 'test', 'Hook test failed !')
   });
 });

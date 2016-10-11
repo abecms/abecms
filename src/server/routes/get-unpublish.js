@@ -1,10 +1,10 @@
 import {
   cmsOperations
-  ,Hooks
+  ,abeExtend
 } from '../../cli'
 
 var route = function(req, res, next){
-  Hooks.instance.trigger('beforeRoute', req, res, next)
+  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   cmsOperations.post.unpublish(req.query.filePath)

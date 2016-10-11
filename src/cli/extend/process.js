@@ -3,7 +3,7 @@ import fse from 'fs-extra'
 
 import {
   config
-  ,Plugins
+  ,abeExtend
 } from '../'
 
 function prepend(value, array) {
@@ -24,7 +24,7 @@ var abeProcess = function(name, args = []) {
     }
   }catch(err) {
     try {
-      file = Plugins.instance.getProcess(name)
+      file = abeExtend.plugins.instance.getProcess(name)
       stats = fse.statSync(file)
       if (stats.isFile()) {
         process.fork(file, args)

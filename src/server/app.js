@@ -29,9 +29,8 @@ import {
   moduloIf,
   attrAbe,
   folders,
-  Plugins,
   printConfig,
-  Hooks,
+  abeExtend,
   Manager
 } from '../cli'
 
@@ -130,7 +129,7 @@ if(config.security === true){
 }
 
 var port = (abePort !== null) ? abePort : 3000
-port = Hooks.instance.trigger('beforeExpress', port)
+port = abeExtend.hooks.instance.trigger('beforeExpress', port)
 
 app.set('views', path.join(__dirname, '/templates'))
 app.engine('.html', html.engine)
@@ -159,7 +158,7 @@ if(config.custom !== '') {
   }
 }
 
-var pluginsPartials = Plugins.instance.getPartials()
+var pluginsPartials = abeExtend.plugins.instance.getPartials()
 Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
   app.use(express.static(pluginPartials))
 })
@@ -184,7 +183,7 @@ app.use(session({
   proxy: true
 }))
 
-Hooks.instance.trigger('afterExpress', app, express)
+abeExtend.hooks.instance.trigger('afterExpress', app, express)
 
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   var server = https.createServer(opts, app)

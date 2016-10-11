@@ -1,11 +1,14 @@
 import Handlebars from 'handlebars'
 import moment from 'moment'
-import {math, Hooks} from '../../../'
+import {
+  math
+  ,abeExtend
+} from '../../../'
 
 export default function listPage(file, index, text) {
   var res = ''
 
-  file = Hooks.instance.trigger('beforeListPage', file, index, text)
+  file = abeExtend.hooks.instance.trigger('beforeListPage', file, index, text)
 
   res += '<tr>'
   res += `<td>${math(index, '+', 1)}</td>
@@ -55,7 +58,7 @@ export default function listPage(file, index, text) {
   }
   workflow += '</td>'
 
-  workflow = Hooks.instance.trigger('afterListPageDraft', workflow, file, index, text)
+  workflow = abeExtend.hooks.instance.trigger('afterListPageDraft', workflow, file, index, text)
   res += workflow
 
   res += `<td align="center">
@@ -82,6 +85,6 @@ export default function listPage(file, index, text) {
       </td>
     </tr>`
 
-  res = Hooks.instance.trigger('afterListPage', res, file, index, text)
+  res = abeExtend.hooks.instance.trigger('afterListPage', res, file, index, text)
   return new Handlebars.SafeString(res)
 }

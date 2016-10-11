@@ -1,5 +1,5 @@
 import {
-  Hooks,
+  abeExtend,
   Manager,
   config,
   cmsData,
@@ -8,7 +8,7 @@ import {
 
 var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = false) {
   var p = new Promise((resolve, reject) => {
-    Hooks.instance.trigger('beforeDuplicate', oldFilePath, template, newPath, name, req, isUpdate)
+    abeExtend.hooks.instance.trigger('beforeDuplicate', oldFilePath, template, newPath, name, req, isUpdate)
 
     var json = {}
     var revisions = []
@@ -35,10 +35,10 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
     }
 
     if (isUpdate) {
-      Hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
+      abeExtend.hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
       cmsOperations.remove.remove(oldFilePath)
     }
-    Hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate)
+    abeExtend.hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate)
 
     var pCreate = cmsOperations.create(template, newPath, name, req, json, (isUpdate) ? false : true)
     pCreate.then((resSave) => {

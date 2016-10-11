@@ -2,8 +2,6 @@ import Handlebars from 'handlebars'
 import HandlebarsIntl from 'handlebars-intl'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 
-import hooks 		from '../../extend/abe-hooks'
-
 /* Handlebar utilities */
 import attrAbe 		from './handlebars/attrAbe'
 import className 	from './handlebars/className'

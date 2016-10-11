@@ -1,5 +1,5 @@
 import {
-  Hooks
+  abeExtend
 } from '../../'
 
 /**
@@ -7,7 +7,7 @@ import {
 * @return {Object} parsed attributes
 */
 export function getAll(str, json) {
-  str = Hooks.instance.trigger('beforeAbeAttributes', str, json)
+  str = abeExtend.hooks.instance.trigger('beforeAbeAttributes', str, json)
 
   //This regex analyzes all attributes of a Abe tag 
   var re = /\b([a-z][a-z0-9\-]*)\s*=\s*("([^"]+)"|'([^']+)'|(\S+))/ig
@@ -46,7 +46,7 @@ export function getAll(str, json) {
     null
   attrs.editable = (attrs.editable && attrs.editable !== 'false') ? true : false
 
-  attrs = Hooks.instance.trigger('afterAbeAttributes', attrs, str, json)
+  attrs = abeExtend.hooks.instance.trigger('afterAbeAttributes', attrs, str, json)
 
   return attrs
 }

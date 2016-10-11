@@ -7,7 +7,7 @@ import {
   coreUtils,
   abeEngine,
   cmsTemplates,
-  Hooks
+  abeExtend
 } from '../../cli'
 
 function add(obj, json, text, util) {
@@ -255,12 +255,12 @@ export function editor(fileName, jsonPath, documentLink) {
         }
 
         // HOOKS beforeEditorFormBlocks
-        json = Hooks.instance.trigger('beforeEditorFormBlocks', json)
+        json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json)
 
         var blocks = orderBlock(util)
 
         // HOOKS afterEditorFormBlocks
-        blocks = Hooks.instance.trigger('afterEditorFormBlocks', blocks, json)
+        blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json)
 
         abeEngine.instance.content = json
 

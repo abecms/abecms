@@ -4,14 +4,14 @@ import {
   cmsTemplates,
   cmsOperations,
   config,
-  Hooks,
+  abeExtend,
   cmsData,
   Manager
 } from '../../'
 
 var create = function(template, pathCreate, name, req, forceJson = {}, duplicate = false) {
   var p = new Promise((resolve, reject) => {
-    Hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
+    abeExtend.hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
     var templatePath = path.join(template.replace(config.root, ''), config.templates.url, `${template}.${config.files.templates.extension}`)
     var filePath = path.join(pathCreate, name)
@@ -29,12 +29,12 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
           json = cmsData.values.removeDuplicate(text, json)
         }
         text = cmsData.source.removeDataList(text)
-        var resHook = Hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
+        var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
         filePath = resHook.filePath
         json = resHook.json
         text = resHook.text
 
-        Hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
+        abeExtend.hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
         cmsOperations.save.save(filePath, template, json, text, 'draft', null, 'draft')
             .then((resSave) => {
               Manager.instance.updateList()

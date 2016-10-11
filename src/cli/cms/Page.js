@@ -7,7 +7,7 @@ import {
   cmsData,
   cmsTemplates,
   config,
-  Hooks,
+  abeExtend,
   Manager
 } from '../'
 
@@ -27,7 +27,7 @@ export default class Page {
    */
   constructor(templateId, template, json, onlyHTML = false) {
     // HOOKS beforePageJson
-    json = Hooks.instance.trigger('beforePageJson', json)
+    json = abeExtend.hooks.instance.trigger('beforePageJson', json)
 
     if(typeof Handlebars.templates[templateId] !== 'undefined' && 
         Handlebars.templates[templateId] !== null && 
@@ -146,9 +146,9 @@ export default class Page {
     }
 
     if(this._onlyHTML) {
-      this.html = Hooks.instance.trigger('afterPageSaveCompile', this.html, json)
+      this.html = abeExtend.hooks.instance.trigger('afterPageSaveCompile', this.html, json)
     }else {
-      this.html = Hooks.instance.trigger('afterPageEditorCompile', this.html, json)
+      this.html = abeExtend.hooks.instance.trigger('afterPageEditorCompile', this.html, json)
     }
   }
 
@@ -298,7 +298,7 @@ export default class Page {
         json[key] = json[config.source.name][key]
       }
 
-      json = Hooks.instance.trigger('afterAddSourcePage', json, match[0])
+      json = abeExtend.hooks.instance.trigger('afterAddSourcePage', json, match[0])
     }
   }
 }

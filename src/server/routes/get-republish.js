@@ -1,9 +1,9 @@
 import {
-  abeProcess
+  abeExtend
 } from '../../cli'
 
 var route = function(req, res) {
-  abeProcess('publish-all', [''])
+  abeExtend.process('publish-all', [''])
 
   var result = {
     success: 1

@@ -6,13 +6,12 @@ import {Promise} from 'es6-promise'
 import path from 'path'
 
 import {
-  abeProcess,
   cmsOperations,
   cmsData,
   config,
   Page,
   cmsTemplates,
-  Hooks,
+  abeExtend,
   coreUtils
 } from '../../'
 
@@ -57,10 +56,10 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     var isRejectedDoc = false
     if(type === 'reject'){
       isRejectedDoc = true
-      url = Hooks.instance.trigger('beforeReject', url)
+      url = abeExtend.hooks.instance.trigger('beforeReject', url)
       type = 'draft'
       realType = 'draft'
-      url = Hooks.instance.trigger('afterReject', url)
+      url = abeExtend.hooks.instance.trigger('afterReject', url)
     }
     var tplUrl = cmsData.file.fromUrl(url)
     type = type || 'draft'
@@ -112,7 +111,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
     cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
         .then(() => {
 
-          json = Hooks.instance.trigger('afterGetDataListOnSave', json)
+          json = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', json)
           for(var prop in json){
             if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
               var valuesAreEmpty = true
@@ -144,7 +143,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
             }
           }
 
-          obj = Hooks.instance.trigger('beforeSave', obj)
+          obj = abeExtend.hooks.instance.trigger('beforeSave', obj)
 
           obj.json.content[meta].complete = checkRequired(text, obj.json.content)
 
@@ -153,15 +152,9 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
             res.reject = cmsData.fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
           }
           
-          Hooks.instance.trigger('afterSave', obj)
+          abeExtend.hooks.instance.trigger('afterSave', obj)
           
           cmsTemplates.assets.copy()
-
-          if(typeof config.publishAll !== 'undefined' && config.publishAll !== null && config.publishAll === true) {
-            if(!publishAll && type === 'publish') {
-              abeProcess('publish-all', [`FILEPATH=${json.abe_meta.link}`])
-            }
-          }
 
           resolve(res)
         }).catch(function(e) {
