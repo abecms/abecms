@@ -1,4 +1,5 @@
-import Handlebars from 'handlebars'
+/*global document */
+
 import FormCreate from './modules/FormCreate'
 import FormList from './modules/FormList'
 
@@ -24,4 +25,4 @@ class Admin {
   }
 }
 
-var admin = new Admin()
+new Admin()

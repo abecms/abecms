@@ -1,12 +1,5 @@
 import express from 'express'
-import fs from 'fs'
-import fse from 'fs-extra'
-import mkdirp from 'mkdirp'
-import {minify} from 'html-minifier'
-import extend from 'extend'
 import * as abe from '../../cli'
-import xss from 'xss'
-import pkg from '../../../package'
 import {
   getCreate
   ,getDuplicate
@@ -29,16 +22,10 @@ import {
 } from '../routes'
 
 import {
-  config,
-  Page,
-  abeProcess,
   Hooks,
   Plugins,
   Handlebars,
 } from '../../cli'
-
-import locale from '../helpers/abe-locale'
-import pageHelper from '../helpers/page'
 
 var router = express.Router()
 Hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)

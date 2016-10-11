@@ -1,3 +1,5 @@
+/*global document, CONFIG, window, json, alert, location */
+
 import {IframeNode} from '../utils/iframe'
 import EditorUtils from './EditorUtils'
 import Json from '../modules/EditorJson'
@@ -97,7 +99,7 @@ export default class EditorSave {
     })
   }
 
-  savePage(type, tplName = null, filePath = null) {
+  savePage(type) {
     var target = document.querySelector(`[data-action="${type}"]`)
     this.serializeForm()
     target.classList.add('loading')
@@ -118,9 +120,6 @@ export default class EditorSave {
           var getParams = window.location.search.slice(1).split('&')
           getParams.forEach(function (getParam) {
             var param = getParam.split('=')
-            if(param[0] === 'tplName'){
-              tplNameParam += param[1]
-            }
             if(param[0] === 'filePath'){
               if(param[1].indexOf('-abe-') > -1){
                 filePathParam += CONFIG.TPLNAME
@@ -133,7 +132,6 @@ export default class EditorSave {
           var ext = filePathParam.split('.')
           ext = ext[ext.length - 1]
           filePathParam = filePathParam.replace(new RegExp('-abe-(.+?)(?=\.' + ext + ')'), '')
-          var reloadUrl = top.location.protocol + '//' + window.location.host + window.location.pathname + tplNameParam + filePathParam + top.location.hash
           
           target.classList.remove('loading')
           target.classList.remove('done')
@@ -149,7 +147,7 @@ export default class EditorSave {
    * Listen form submit and save page template 
    * @return {void}
    */
-  _formSubmit(target) {
+  _formSubmit() {
     this._abeForm.addEventListener('submit', (e) => {
       e.preventDefault()
       this.savePage(this._saveType)
@@ -219,7 +217,6 @@ export default class EditorSave {
         }
         form.value = value
 
-        var dataIdLink = form.getAttribute('data-id-link')
         var node = IframeNode('#page-template', '[data-abe-' + id.replace(/\[([0-9]*)\]/g, '$1') + ']')[0]
         EditorUtils.formToHtml(node, form)
       }

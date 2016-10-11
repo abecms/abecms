@@ -1,3 +1,5 @@
+/*global document, CONFIG */
+
 export default class FolderSelect {
   constructor() {
     
@@ -17,10 +19,9 @@ export default class FolderSelect {
 
   /**
    * bind event for select page create
-   * @param  {[type]} e [description]
    * @return {[type]}   [description]
    */
-  _changeSelects(e) {
+  _changeSelects() {
     var templateName = this._select.value.replace(/\.[^/.]+$/, '')
     console.log('_changeSelects', templateName)
     this._formCreate.setAttribute('action', CONFIG.URL + templateName)

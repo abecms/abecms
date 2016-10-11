@@ -1,3 +1,5 @@
+/*global document */
+
 export default class FolderSelect {
   constructor() {
     
@@ -26,12 +28,9 @@ export default class FolderSelect {
   _changeSelectsCreate(e) {
     let selectedOption = e.currentTarget.querySelector('option:checked')
 
-    let website = this._selectsWebsite.querySelector('option:checked').value 
-
     let dataShow = selectedOption.getAttribute('data-show')
-  			,levelShow = selectedOption.getAttribute('data-level-show')
+        ,levelShow = selectedOption.getAttribute('data-level-show')
         ,levelHide = selectedOption.getAttribute('data-level-hide')
-  			,levels
 
     if(typeof levelShow !== 'undefined' && levelShow !== null && levelShow !== '') {
       this._showSubLevels(levelShow, dataShow)

@@ -1,10 +1,10 @@
+/*global document */
+
 import EditorUtils from '../modules/EditorUtils'
 import Json from '../modules/EditorJson'
-import Save from '../modules/EditorSave'
-import {IframeNode, IframeCommentNode} from '../utils/iframe'
+import {IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'
-import qs from 'qs'
 import on from 'on'
 
 export default class EditorAutocomplete {
@@ -115,7 +115,7 @@ export default class EditorAutocomplete {
     this.onReload._fire()
   }
 
-  _documentClick(e) {
+  _documentClick() {
     if(this._visible && !this._canSelect) {
       if(typeof this._divWrapper.parentNode !== 'undefined' && this._divWrapper.parentNode !== null) {
         this._hide()
@@ -227,7 +227,7 @@ export default class EditorAutocomplete {
             cors: true,
             method: 'get'
           },
-          (code, responseText, request) => {
+          (code, responseText) => {
             this._showAutocomplete(JSON.parse(responseText), target, val)
           })
       }else {
@@ -312,7 +312,7 @@ export default class EditorAutocomplete {
     this._startAutocomplete(e.currentTarget)
   }
 
-  _blur(e) {
+  _blur() {
     this._canSelect = false
     this._currentInput = null
     this._hide()

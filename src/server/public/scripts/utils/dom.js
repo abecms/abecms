@@ -1,3 +1,5 @@
+/*global document */
+
 export function nextSibling(parent, ele) {
   var next
   var found = false

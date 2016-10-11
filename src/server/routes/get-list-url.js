@@ -3,6 +3,7 @@ import fse from 'fs-extra'
 import Handlebars from 'handlebars'
 import {
   Hooks
+  ,coreUtils
 } from '../../cli'
 
 var route = function(router, req, res, next) {
@@ -20,7 +21,7 @@ var route = function(router, req, res, next) {
   })
 
   var page = path.join(__dirname + '/../views/list-url.html')
-  if (exist(page)) {
+  if (coreUtils.file.exist(page)) {
     html = fse.readFileSync(page, 'utf8')
   }
 

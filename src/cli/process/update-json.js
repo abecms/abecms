@@ -23,7 +23,7 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   pConfig.FILEPATH = path.join(config.root, config.data.url, pConfig.FILEPATH ? pConfig.FILEPATH.replace(config.root) : '')
   
   allJson = cmsData.file.getFiles(pConfig.FILEPATH, true, 20, /\.json/)
-  allJson = Hooks.instance.trigger('beforeUpdateJson', allJson)
+  Hooks.instance.trigger('beforeUpdateJson', allJson)
 
 }else {
   console.log('ABE_WEBSITE is not defined use node process.js ABE_WEBSITE=/pat/to/website')

@@ -1,3 +1,5 @@
+/*global document, top, $, location, confirm, window */
+
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import {Promise} from 'es6-promise'
@@ -63,7 +65,7 @@ export default class EditorManager {
       url: href,
       method: 'get'
     },
-      (code, responseText, request) => {
+      () => {
         this.remove._fire(target.parentNode.parentNode.parentNode)
       })
   }
@@ -78,7 +80,7 @@ export default class EditorManager {
       url: href,
       method: 'get'
     },
-      (code, responseText, request) => {
+      () => {
         var labels = target.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
         var p = target.parentNode.parentNode.parentNode.querySelector('.label-published')
         Array.prototype.forEach.call(labels, (label) => {
@@ -102,7 +104,7 @@ export default class EditorManager {
       url: document.location.origin + target.getAttribute('data-href'),
       method: 'get'
     },
-      (code, responseText, request) => {
+      (code, responseText) => {
         var res = JSON.parse(responseText)
         var routePath = (typeof dataPage !== 'undefined' && dataPage !== null) ? dataPage : ''
         res.port = res.port === 80 ? '' : ':' + res.port
@@ -110,7 +112,7 @@ export default class EditorManager {
       })
   }
 
-  _bindEvents(e) {
+  _bindEvents() {
     Array.prototype.forEach.call(this._managerTabs, (managerTab) => {
       managerTab.addEventListener('click', this._handleBtnManagerTabClick)
     })
@@ -148,7 +150,7 @@ export default class EditorManager {
         url: document.location.origin + '/abe/republish',
         method: 'get'
       },
-        (code, responseText, request) => {
+        () => {
           
         })
   }
@@ -158,7 +160,7 @@ export default class EditorManager {
   }
 
   _save(website, json, path) {
-    var p = new Promise((resolve, reject) => {
+    var p = new Promise((resolve) => {
       var toSave = qs.stringify({
         website: website,
         json: json
@@ -169,8 +171,7 @@ export default class EditorManager {
           url: document.location.origin + path + '?' + toSave,
           method: 'get'
         },
-        (code, responseText, request) => {
-          // this.data = JSON.parse(responseText).json
+        () => {
 
           resolve()
         })
@@ -181,7 +182,6 @@ export default class EditorManager {
 
   _dotStringToJson(str, value) {
     var keys = str.split('.')
-    var value = value
     var objStrStart = ''
     var objStrEnd = ''
     Array.prototype.forEach.call(keys, (key) => {
@@ -225,7 +225,7 @@ export default class EditorManager {
     if(typeof blockElement !== 'undefined' && blockElement !== null) blockElement.classList.add('visible')
   }
 
-  _btnManagerClick(e) {
+  _btnManagerClick() {
     if(this._manager.classList.contains('visible')) {
       this._manager.classList.remove('visible')
     }else {

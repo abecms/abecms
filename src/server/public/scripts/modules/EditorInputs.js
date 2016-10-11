@@ -1,12 +1,12 @@
+/*global document */
+
 import EditorUtils from '../modules/EditorUtils'
 import Json from '../modules/EditorJson'
-import Save from '../modules/EditorSave'
 import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
 import RichText from '../utils/rich-texarea'
 import Color from '../utils/color-picker'
 import Link from '../utils/link-picker'
-import qs from 'qs'
 import on from 'on'
 
 export default class EditorInputs {
@@ -149,8 +149,9 @@ export default class EditorInputs {
     var attr = EditorUtils.getAttr(target)
 
     if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
+      var lastValues
       if(count > maxLength) {
-        var lastValues = JSON.parse(target.getAttribute('last-values'))
+        lastValues = JSON.parse(target.getAttribute('last-values'))
 
         Array.prototype.forEach.call(optionsChecked, function(optionChecked) {
           var unselect = true
@@ -173,7 +174,7 @@ export default class EditorInputs {
           }
         })
       }else {
-        var lastValues = '['
+        lastValues = '['
         Array.prototype.forEach.call(optionsChecked, function(optionChecked) {
           if(optionChecked.value !== '') {
             if(optionChecked.value.indexOf('{') > -1 || optionChecked.value.indexOf('[') > -1) {
