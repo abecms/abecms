@@ -22,14 +22,13 @@ import {
 } from '../routes'
 
 import {
-  Hooks,
-  Plugins,
+  abeExtend,
   Handlebars,
 } from '../../cli'
 
 var router = express.Router()
-Hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
-Hooks.instance.trigger('beforeAddRoute', router)
+abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
+abeExtend.hooks.instance.trigger('beforeAddRoute', router)
 
 router.get('/abe/logs*', getLogs)
 router.get('/abe/delete-logs*', getDeleteLogs)
@@ -51,7 +50,7 @@ router.get('/abe/list-url*', function (req, res, next) {
 })
 router.get('/abe/list-hooks*', getListHooks)
 
-var routes = Plugins.instance.getRoutes()
+var routes = abeExtend.plugins.instance.getRoutes()
 Array.prototype.forEach.call(routes, (route) => {
   if(typeof route.get !== 'undefined' && route.get !== null) {
     Array.prototype.forEach.call(route.get, (routeGet) => {
@@ -90,6 +89,6 @@ Array.prototype.forEach.call(routes, (route) => {
 })
 router.get('/abe*', getMain)
 
-Hooks.instance.trigger('afterAddRoute', router)
+abeExtend.hooks.instance.trigger('afterAddRoute', router)
 
 export default router

@@ -4,7 +4,7 @@ import fse from 'fs-extra'
 import moment from 'moment'
 
 import {
-  Hooks,
+  abeExtend,
   coreUtils,
   cmsData,
   config
@@ -48,13 +48,13 @@ export function getAllWithKeys(withKeys) {
 
   var merged = cmsData.revision.getFilesMerged(filesArr)
 
-  Hooks.instance.trigger('afterGetAllFiles', merged)
+  abeExtend.hooks.instance.trigger('afterGetAllFiles', merged)
   return merged
 }
 
 export function get(pathJson) {
   var json = {}
-  pathJson = Hooks.instance.trigger('beforeGetJson', pathJson)
+  pathJson = abeExtend.hooks.instance.trigger('beforeGetJson', pathJson)
   
   try {
     var stat = fse.statSync(pathJson)
@@ -64,7 +64,7 @@ export function get(pathJson) {
   }catch(e) {
   }
 
-  json = Hooks.instance.trigger('afterGetJson', json)
+  json = abeExtend.hooks.instance.trigger('afterGetJson', json)
   return json
 }
 

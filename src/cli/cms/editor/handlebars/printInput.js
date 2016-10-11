@@ -1,6 +1,8 @@
 import sourceAutocomplete   from './sourceAutocomplete'
 import sourceOption   from './sourceOption'
-import {Hooks} from '../../../'
+import {
+  abeExtend
+} from '../../../'
 
 /**
  * Print form input based on input data type {Textarea | text | meta | link | image | ...}
@@ -10,7 +12,7 @@ import {Hooks} from '../../../'
 export default function printInput () {
   var params = arguments[0]
 
-  params = Hooks.instance.trigger('beforeEditorInput', params)
+  params = abeExtend.hooks.instance.trigger('beforeEditorInput', params)
   var desc = params.desc + ((params.required) ? ' *' : '')
 
   var res = `<div class="form-group">
@@ -208,7 +210,7 @@ export default function printInput () {
 
   res += '</div>'
 
-  res = Hooks.instance.trigger('afterEditorInput', res, params)
+  res = abeExtend.hooks.instance.trigger('afterEditorInput', res, params)
 
   return res
 }

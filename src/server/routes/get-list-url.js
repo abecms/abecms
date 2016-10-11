@@ -2,12 +2,12 @@ import path from 'path'
 import fse from 'fs-extra'
 import Handlebars from 'handlebars'
 import {
-  Hooks
+  abeExtend
   ,coreUtils
 } from '../../cli'
 
 var route = function(router, req, res, next) {
-  Hooks.instance.trigger('beforeRoute', req, res, next)
+  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   var routes = router.stack
   var urls = []
   var html = ''

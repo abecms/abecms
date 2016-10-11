@@ -5,7 +5,7 @@ import {
   config,
   coreUtils,
   cmsData,
-  Hooks
+  abeExtend
 } from '../../'
 
 export function findTemplateAndPartialsInFolder (currentPath) {
@@ -132,7 +132,7 @@ export function getTemplate (file) {
   var text = ''
 
   // HOOKS beforeGetTemplate
-  file = Hooks.instance.trigger('beforeGetTemplate', file)
+  file = abeExtend.hooks.instance.trigger('beforeGetTemplate', file)
 
   file = file.replace(path.join(config.root, config.templates.url), '')
   file = file.replace(config.root, '')
@@ -150,7 +150,7 @@ export function getTemplate (file) {
   }
 
   // HOOKS afterGetTemplate
-  text = Hooks.instance.trigger('afterGetTemplate', text)
+  text = abeExtend.hooks.instance.trigger('afterGetTemplate', text)
 
   return text
 }

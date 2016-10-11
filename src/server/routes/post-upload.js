@@ -5,17 +5,17 @@ import limax from 'limax'
 
 import {
   config,
-  Hooks
+  abeExtend
 } from '../../cli'
 
 var route = function(req, res, next){
-  Hooks.instance.trigger('beforeRoute', req, res, next)
+  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var resp = {success: 1}
   var filePath
   var folderWebPath = '/' + config.upload.image
-  folderWebPath = Hooks.instance.trigger('beforeSaveImage', folderWebPath, req)
+  folderWebPath = abeExtend.hooks.instance.trigger('beforeSaveImage', folderWebPath, req)
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
   req.pipe(req.busboy)
@@ -49,7 +49,7 @@ var route = function(req, res, next){
 
     fstream.on('finish', function() {
       if(/\.(jpg|png|gif|svg)/.test(filePath)){
-        resp = Hooks.instance.trigger('afterSaveImage', resp, req)
+        resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
       }
       // Waiting until the entire request has been fully processed
       if (finished) {

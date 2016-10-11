@@ -3,7 +3,7 @@ var chai = require('chai');
 var config = require('../src/cli').config
 config.set({root: __dirname + '/fixtures'})
 
-var Hooks = require('../src/cli').Hooks;
+var abeExtend = require('../src/cli').abeExtend;
 var Plugins = require('../src/cli').Plugins;
 var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
@@ -19,20 +19,20 @@ describe('Plugin', function() {
   });
 
   /**
-   * getRoutes
+   * abeExtend.plugins.instance
    * 
    */
-  it('getRoutes()', function() {
-    var routes = Plugins.instance.getRoutes()
+  it('abeExtend.plugins.instance.getRoutes()', function() {
+    var routes = abeExtend.plugins.instance.getRoutes()
     chai.expect(routes[0].get).to.have.length(1);
   });
 
   /**
-   * Hooks.instance.trigger
+   * abeExtend.hooks.instance.trigger
    * 
    */
-  it('Hooks.instance.trigger', function() {
-    var res = Hooks.instance.trigger('afterEditorInput')
+  it('abeExtend.hooks.instance.trigger', function() {
+    var res = abeExtend.hooks.instance.trigger('afterEditorInput')
     chai.assert.equal(res, 'test', 'Hook test failed !')
   });
 });

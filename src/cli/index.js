@@ -40,15 +40,12 @@ import Create from './cms/Create'
 
 import config from './core/config/config'
 
-import abeProcess from './extend/abe-process'
-import Hooks from './extend/abe-hooks'
-import Plugins from './extend/abe-plugins'
-
 import * as cmsData from './cms/data'
 import * as cmsEditor from './cms/editor'
 import * as cmsOperations from './cms/operations'
 import * as cmsTemplates from './cms/templates'
 import * as coreUtils from './core/utils'
+import * as abeExtend from './extend'
 
 export {
 	cmsData,
@@ -56,6 +53,7 @@ export {
 	cmsTemplates,
 	coreUtils,
 	cmsEditor,
+	abeExtend,
 	mkdirp,
 	moment,
 	fse,
@@ -65,7 +63,6 @@ export {
 	abeImport,
 	math,
 	Create,
-	abeProcess,
 	translate,
 	printBlock,
 	notEmpty,
@@ -81,8 +78,6 @@ export {
 	ifIn,
 	ifCond,
 	config,
-	Hooks,
-	Plugins,
 	Manager,
 	Page
 }

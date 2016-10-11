@@ -6,7 +6,7 @@ import hooksDefault from '../../hooks/hooks'
 import {
   config
   ,coreUtils
-  ,Plugins
+  ,abeExtend
 } from '../'
 
 import * as abe from '../'
@@ -39,7 +39,7 @@ class Hooks {
         args[0] = this.fn[fn].apply(this, args)
       }
 
-      args[0] = Plugins.instance.hooks.apply(Plugins.instance, [fn].concat(args))
+      args[0] = abeExtend.plugins.instance.hooks.apply(abeExtend.plugins.instance, [fn].concat(args))
     } else {
       args = ['']
     }

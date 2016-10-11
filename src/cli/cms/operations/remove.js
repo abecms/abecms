@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 
 import {
   config,
-  Hooks,
+  abeExtend,
   cmsData,
   coreUtils,
   cmsOperations,
@@ -12,7 +12,7 @@ import {
 
 export function remove(filePath) {
   filePath = coreUtils.slug.clean(filePath)
-  filePath = Hooks.instance.trigger('beforeDeleteFile', filePath)
+  filePath = abeExtend.hooks.instance.trigger('beforeDeleteFile', filePath)
 
   var revisions = cmsData.revision.getVersions(filePath)
 
