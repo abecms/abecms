@@ -219,27 +219,32 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     cp.stderr.pipe(process.stderr)
     cp.stdout.pipe(process.stdout)
     break
-  case 'publish-all':
+  case 'generate-posts':
     dir = process.cwd()
-    var customPath = ''
-    if(typeof userArgs[1] !== 'undefined' && userArgs[1] !== null){
-      customPath = 'ABE_PATH=' + userArgs[1]
-    }
     if(process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }
-
-    const publishAll = spawn('node', ['--harmony', __dirname + '/cli/process/publish-all.js', 'ABE_WEBSITE=' + dir, customPath])
-
-    publishAll.stdout.on('data', (data) => {
-      console.log(data.toString().replace(/\n/, ''))
+    process.env.DEBUG = 'generate-posts:*'
+    var generateArgs = ['--harmony', __dirname + '/cli/process/generate-posts.js', 'ABE_WEBSITE=' + dir]
+    Array.prototype.forEach.call(userArgs, (arg) => {
+      if (arg.indexOf('--path=') > -1) {
+        generateArgs.push('ABE_PATH=' + arg.split('=')[1])
+      }else if (arg.indexOf('--destination=') > -1) {
+        generateArgs.push('ABE_DESTINATION=' + arg.split('=')[1])
+      }
     })
 
-    publishAll.stderr.on('data', (data) => {
-      console.log(data.toString().replace(/\n/, ''))
-    })
+    const generate = spawn('node', generateArgs, { shell: true, stdio: 'inherit' })
 
-    publishAll.on('close', (code) => {
+    // generate.stdout.on('data', (data) => {
+    //   console.log(data.toString().replace(/\n/, ''))
+    // })
+
+    // generate.stderr.on('data', (data) => {
+    //   console.log(data.toString().replace(/\n/, ''))
+    // })
+
+    generate.on('close', (code) => {
       console.log(clc.cyan('child process exited with code') + ' ' + code)
       process.exit(0)
     })
