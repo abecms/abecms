@@ -304,7 +304,10 @@ export function getStructureAndTemplatesFiles() {
   try {
     var directoryTemplate = fse.lstatSync(path.join(site.path, templates))
     if (directoryTemplate.isDirectory()) {
-      result.templates = result.templates.concat(cmsData.file.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
+      var resultTemplates = result.templates.concat(cmsData.file.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
+      result.templates = resultTemplates.filter(function (resultTemplate) {
+        return resultTemplate.path.indexOf(config.partials) < 0
+      })
     }
   } catch (e) {
   }
