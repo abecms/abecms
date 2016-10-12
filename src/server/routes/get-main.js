@@ -141,6 +141,7 @@ var route = function(req, res, next) {
       hasBlock: _hasBlock,
       form: _form,
       urlToSaveFile: _filePath,
+      folderToSaveFile: (_filePath) ? path.dirname(_filePath) : '',
       // tplName: _file,
       json: _json,
       config: config,

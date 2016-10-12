@@ -19,6 +19,7 @@ import {
   ,getUnpublish
   ,getDelete
   ,postUpload
+  ,postSqlRequest
 } from '../routes'
 
 import {
@@ -35,6 +36,7 @@ router.get('/abe/delete-logs*', getDeleteLogs)
 router.get('/abe/create*', getCreate)
 router.get('/abe/duplicate*', getDuplicate)
 router.get('/abe/update*', getUpdate)
+router.post('/abe/sql-request*', postSqlRequest)
 router.post('/page/*', postPage)
 router.get('/page/*', getPage)
 router.post('/publish', postPublish)

@@ -73,6 +73,17 @@ export default function printInput () {
         lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
       }
       res += '<div class="autocomplete-result-wrapper">'
+      if(params.autocomplete != null && params.autocomplete === 'true') {
+        res += `<div class="autocomplete-refresh" value=''
+          data-autocomplete-refresh="true"
+          data-autocomplete-refresh-sourcestring="${params.sourceString}"
+          data-autocomplete-refresh-prefill-quantity="${params['prefill-quantity']}"
+          data-autocomplete-refresh-key="${params.key}"
+          data-autocomplete-data-display="${params.display}"
+          >
+          <span class="glyphicon glyphicon-refresh"></span>
+        </div>`
+      }
       Array.prototype.forEach.call(params.value, (val) => {
         res += sourceAutocomplete(val, params)
       })
