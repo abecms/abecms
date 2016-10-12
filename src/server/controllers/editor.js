@@ -231,7 +231,7 @@ export function editor(fileName, jsonPath, documentLink) {
     
     text = cmsTemplates.template.getTemplate(fileName)
 
-    cmsData.source.getDataList(path.dirname(documentLink), text, json, true)
+    cmsData.source.getDataList(path.dirname(documentLink), text, json)
       .then(() => {
         addSource(text, json, util)
 
