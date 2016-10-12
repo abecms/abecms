@@ -13,7 +13,7 @@ var route = function(req, res, next){
   var key = req.body.key
   var jsonPage = (req.body.json) ? JSON.parse(JSON.stringify(req.body.json)) : {}
 
-  delete jsonPage[key]
+  jsonPage[key] = null
 
   var request = `{{abe type="data" key="${key}" source="${sourceString}" prefill="true" prefill-quantity='${prefillQuantity}' editable="true"}}`
   var obj = cmsData.attributes.getAll(request, jsonPage)
