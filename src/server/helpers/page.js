@@ -1,4 +1,3 @@
-import mkdirp from 'mkdirp'
 import path from 'path'
 import {
   cmsData,

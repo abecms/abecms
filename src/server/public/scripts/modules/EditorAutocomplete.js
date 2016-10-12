@@ -6,6 +6,7 @@ import {IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'
 import on from 'on'
+import qs from 'qs'
 
 export default class EditorAutocomplete {
   constructor() {
@@ -21,9 +22,11 @@ export default class EditorAutocomplete {
     this._handleRemove = this._remove.bind(this)
     this._handleDocumentClick = this._documentClick.bind(this)
     this._handleSelectValue = this._selectValue.bind(this)
+    this._handleRefresh = this._refresh.bind(this)
 
     this._autocompletesRemove = [].slice.call(document.querySelectorAll('[data-autocomplete-remove=true]'))
     this._autocompletes = [].slice.call(document.querySelectorAll('[data-autocomplete=true]'))
+    this._autocompletesRefresh = [].slice.call(document.querySelectorAll('[data-autocomplete-refresh=true]'))
 
     this._currentInput = null
     this._divWrapper = document.createElement('div')
@@ -40,6 +43,11 @@ export default class EditorAutocomplete {
 
     Array.prototype.forEach.call(this._autocompletesRemove, (autocompleteRemove) => {
       autocompleteRemove.addEventListener('click', this._handleRemove)
+    })
+
+    Array.prototype.forEach.call(this._autocompletesRefresh, (autocompletesRefresh) => {
+      autocompletesRefresh.removeEventListener('click', this._handleRefresh)
+      autocompletesRefresh.addEventListener('click', this._handleRefresh)
     })
 
     Array.prototype.forEach.call(this._autocompletes, (autocomplete) => {
@@ -123,8 +131,28 @@ export default class EditorAutocomplete {
     }
   }
 
+  _add(display, value, json, autocompleteResultWrapper) {
+    var deepval = this._deep_value_array(json, display)
+
+    if(typeof deepval !== 'undefined' && deepval !== null && deepval !== '') {
+      var div = document.createElement('div')
+      div.classList.add('autocomplete-result')
+      div.setAttribute('data-parent-id', this._currentInput.getAttribute('data-id'))
+      div.setAttribute('value', value.replace(/&quote;/g, '\''))
+      div.innerHTML = `${this._deep_value_array(json, display)}`
+
+      var remove = document.createElement('span')
+      remove.classList.add('glyphicon', 'glyphicon-remove')
+      remove.setAttribute('data-autocomplete-remove', 'true')
+      remove.addEventListener('click', this._handleRemove)
+      div.appendChild(remove)
+
+      autocompleteResultWrapper.appendChild(div)
+    }
+  }
+
   _select(target) {
-    var val = JSON.parse(target.getAttribute('data-value').replace(/&quote;/g, '\''))
+    var json = JSON.parse(target.getAttribute('data-value').replace(/&quote;/g, '\''))
     var maxLength = this._currentInput.getAttribute('data-maxlength')
     if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
       maxLength = parseInt(maxLength)
@@ -133,23 +161,9 @@ export default class EditorAutocomplete {
         return
       }
     }
-    var display = target.getAttribute('data-display')
-    var div = document.createElement('div')
-    div.classList.add('autocomplete-result')
-    div.setAttribute('data-parent-id', this._currentInput.getAttribute('data-id'))
-    div.setAttribute('value', target.getAttribute('data-value').replace(/&quote;/g, '\''))
-    div.innerHTML = `${this._deep_value_array(val, display)}`
 
-    var resWrapper = this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper')
-
-    var remove = document.createElement('span')
-    remove.classList.add('glyphicon', 'glyphicon-remove')
-    remove.setAttribute('data-autocomplete-remove', 'true')
-    remove.addEventListener('click', this._handleRemove)
-    div.appendChild(remove)
-
-    resWrapper.appendChild(div)
-
+    this._add(target.getAttribute('data-display'), target.getAttribute('data-value'), json,
+    this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper'))
     this._saveData()
 
   }
@@ -243,6 +257,43 @@ export default class EditorAutocomplete {
     if(e.keyCode !== 13) {
       this._startAutocomplete(e.currentTarget)
     }
+  }
+
+  _refresh(e) {
+    var target = e.currentTarget
+    
+    var autocompleteResultWrapper = target.parentNode.parentNode.querySelector('.autocomplete-result-wrapper')
+    var autocompleteResult = autocompleteResultWrapper.querySelectorAll('.autocomplete-result')
+    Array.prototype.forEach.call(autocompleteResult, (autocompleteResult) => {
+      autocompleteResult.parentNode.removeChild(autocompleteResult)
+    })
+
+    var jsonPost = JSON.parse(JSON.stringify(json))
+    delete jsonPost.abe_source
+    this._currentInput = target.parentNode.parentNode.querySelector('input')
+    var display = target.getAttribute('data-autocomplete-data-display')
+    var body = qs.stringify({
+      sourceString: target.getAttribute('data-autocomplete-refresh-sourcestring'),
+      prefillQuantity: target.getAttribute('data-autocomplete-refresh-prefill-quantity'),
+      key: target.getAttribute('data-autocomplete-refresh-key'),
+      folder: CONFIG.FOLDERPATH,
+      json: jsonPost
+    })
+
+    this._ajax(
+      {
+        url: '/abe/sql-request',
+        body: body,
+        cors: true,
+        method: 'post'
+      },
+    (code, responseText) => {
+      var items = JSON.parse(responseText)
+      Array.prototype.forEach.call(items, function(item) {
+        this._add(display, JSON.stringify(item), item, autocompleteResultWrapper)
+      }.bind(this))
+      this._saveData()
+    })
   }
 
   _keyDown(e) {

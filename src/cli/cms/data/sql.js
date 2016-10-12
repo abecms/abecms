@@ -263,14 +263,13 @@ export function executeFromClause(statement, pathFromClause){
  * @return {Array}           found object that match
  */
 export function execQuery(pathQuery, match, jsonPage) {
-  var res
   var files
   var request = handleSqlRequest(cmsData.regex.getAttr(match, 'source'), jsonPage)
 
   files = executeFromClause(request.from, pathQuery)
+  files = executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
   files = executeOrderByClause(files, request.orderby)
-  res = executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
-  return res
+  return files
 }
 
 export function executeQuerySync(pathQuerySync, match, jsonPage) {

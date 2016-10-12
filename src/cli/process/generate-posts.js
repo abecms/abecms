@@ -70,10 +70,10 @@ function publishNext(files, tt, cb, i = 0) {
 }
 
 function startProcess() {
-  log('start publish all at path ' + processConfig.ABE_PATH);
-  log('searching for file at ' + config.root);
-  log('seach status: ' + processConfig.ABE_STATUS);
-  log('save to: ' + path.join(config.root, processConfig.ABE_DESTINATION));
+  log('start publish all at path ' + processConfig.ABE_PATH)
+  log('searching for file at ' + config.root)
+  log('seach status: ' + processConfig.ABE_STATUS)
+  log('save to: ' + path.join(config.root, processConfig.ABE_DESTINATION))
   var files = Manager.instance.getListWithStatusOnFolder(processConfig.ABE_STATUS, processConfig.ABE_PATH)
 
   log('Found ' + files.length + ' to republish')
