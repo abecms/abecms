@@ -16,6 +16,7 @@ import recursivePrintConfig from './handlebars/recursivePrintConfig'
 import sourceAttr 					from './handlebars/sourceAttr'
 import sourceAutocomplete 	from './handlebars/sourceAutocomplete'
 import sourceOption 				from './handlebars/sourceOption'
+import raw 									from './handlebars/raw'
 
 Handlebars.registerHelper('abeImport', 	abeImport)
 Handlebars.registerHelper('abe', 				compileAbe)
@@ -24,6 +25,7 @@ Handlebars.registerHelper('listPage', 	listPage)
 Handlebars.registerHelper('printBlock', printBlock)
 Handlebars.registerHelper('printConfig',printConfig)
 Handlebars.registerHelper('printInput', printInput)
+Handlebars.registerHelper('raw', raw)
 
 HandlebarsIntl.registerWith(Handlebars)
 
@@ -41,6 +43,7 @@ export {
 	recursivePrintConfig,
 	sourceAttr,
 	sourceAutocomplete,
-	sourceOption
+	sourceOption,
+	raw
 }
 

@@ -70,6 +70,9 @@ export default class Page {
         // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
         this._encloseAbeTag()
       }
+      else {
+        this._removeHandlebarsRawFromHtml()
+      }
 
       // je rajoute les index pour chaque bloc lié à un each
       this._indexEachBlocks()
@@ -281,6 +284,15 @@ export default class Page {
     while (match = this.abePattern.exec(this.template)) {
       this.template = this.template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
     }
+
+    return this
+  }
+
+  /**
+   * remove {{{{raw}}}}{{{{/raw}}}} from html
+   */
+  _removeHandlebarsRawFromHtml() {
+    this.template = this.template.replace(/\{\{\{\{\/?raw\}\}\}\}/g, '')
 
     return this
   }
