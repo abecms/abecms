@@ -25,11 +25,13 @@ var route = function(req, res, next){
     var filenameNoExt = path.basename(filename,ext)
     var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
     var slug = limax(filenameNoExt, {separateNumbers: false}) + randID + ext
+    var hasSentHeader = false
     
     filePath = path.join(folderFilePath, slug)
     resp['filePath'] = path.join(folderWebPath, slug)
 
     var returnErr = function (msg) {
+      hasSentHeader = true
       file.resume()
       res.set('Content-Type', 'application/json')
       res.send(JSON.stringify({error: 1, response: msg}))
@@ -48,6 +50,7 @@ var route = function(req, res, next){
     var fstream = fse.createWriteStream(filePath)
 
     fstream.on('finish', function() {
+      if(hasSentHeader) return
       if(/\.(jpg|png|gif|svg)/.test(filePath)){
         resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
       }
