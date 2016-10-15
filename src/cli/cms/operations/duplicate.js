@@ -14,7 +14,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
     var revisions = []
     if(oldFilePath != null) {
       var files = Manager.instance.getList()
-      var fileWithoutExtension = oldFilePath.replace('.' + config.files.templates.extension, '')
+      var fileWithoutExtension = oldFilePath.replace('.' + config.files.templates.extension, '.json')
 
       var doc = null
       Array.prototype.forEach.call(files, (file) => {
