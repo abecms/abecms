@@ -65,8 +65,7 @@ export function getFilesRevision(urls, fileName) {
 export function getVersions(docPath) {
   var result = []
   var files = Manager.instance.getList()
-  var dataFile = docPath.replace('.' + config.files.templates.extension, '.json')
-
+  var dataFile = path.join(config.data.url, docPath.replace('.' + config.files.templates.extension, '.json'))
   Array.prototype.forEach.call(files, (file) => {
     if (file.path.indexOf(dataFile) > -1) {
       result = file.revisions
