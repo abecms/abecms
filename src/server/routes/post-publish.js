@@ -13,7 +13,7 @@ var route = function(req, res, next){
     req.body.filePath, 
     req.body.tplPath,
     req.body.json
-  );
+  )
 
   p.then((result) => {
     res.set('Content-Type', 'application/json')
