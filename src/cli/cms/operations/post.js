@@ -56,19 +56,19 @@ export function publish(filePath, tplPath, json) {
           Manager.instance.updateList()
           resolve(result)
         }).catch(function(e) {
-          console.error('post-publish.js', e)
+          console.error('post.js', e)
           var result = {
             success: 0,
-            error: 'post-publish error'
+            error: 'publish error'
           }
           abeExtend.hooks.instance.trigger('afterPublish', result)
           resolve(result)
         })
     }).catch(function(e) {
-      console.error('post-publish.js', e)
+      console.error('post.js', e)
       var result = {
         success: 0,
-        error: 'post-publish error'
+        error: 'publish error'
       }
       abeExtend.hooks.instance.trigger('afterPublish', result)
       resolve(result)
@@ -103,4 +103,62 @@ export function unpublish(filePath) {
       Manager.instance.updateList()
     })
   }
+}
+
+export function reject(filePath, tplPath, json) {
+  abeExtend.hooks.instance.trigger('beforeReject', filePath)
+  
+  var p = new Promise((resolve) => {
+    cmsOperations.save.save(
+      path.join(config.root, config.draft.url, filePath.replace(config.root)),
+      tplPath,
+      json,
+      '',
+      'draft',
+      null,
+      'reject')
+      .then(() => {
+        resolve()
+      }).catch(function(e) {
+        console.error(e)
+      })
+  })
+
+  p.then((resSave) => {
+    cmsOperations.save.save(
+      path.join(config.root, config.draft.url, filePath.replace(config.root)),
+      tplPath,
+      json,
+      '',
+      'reject',
+      resSave,
+      'reject')
+      .then((resSave) => {
+        var result
+        if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
+          result = {
+            success: 0,
+            error: resSave.error
+          }
+        } else if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
+          result = resSave
+        } else if(typeof resSave.json !== 'undefined' && resSave.json !== null){
+          result = {
+            success: 1,
+            json: resSave.json
+          }
+        }
+        abeExtend.hooks.instance.trigger('afterReject', result)
+        Manager.instance.updateList()
+        resolve(result)
+      })
+  }).catch(function(e) {
+    console.error(e)
+    var result = {
+      success: 0,
+      error: 'reject error'
+    }
+    abeExtend.hooks.instance.trigger('afterReject', result)
+    resolve(result)
+  }) 
 }
