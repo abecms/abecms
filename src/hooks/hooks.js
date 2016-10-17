@@ -29,6 +29,22 @@ var hooks = {
     return path
   },
 
+  /***************** publish *****************/
+  beforePublish: (json, filePath, tplPath, abe) => {
+    return json
+  },
+  afterPublish: (result, abe) => {
+    return result
+  },
+
+  /***************** unpublish *****************/
+  beforeUnpublish: (filePath, abe) => {
+    return filePath
+  },
+  afterUnpublish: (path, json, abe) => {
+    return path
+  },
+
   /***************** create *****************/
   beforeCreate: (filePath, template, path, name, req, forceJson, abe) => {
     return filePath
