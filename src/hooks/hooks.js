@@ -89,12 +89,6 @@ var hooks = {
   afterSave: (obj, abe) => {
     return obj
   },
-  beforeReject: (url, abe) => {
-    return url
-  },
-  afterReject: (url, abe) => {
-    return url
-  },
   beforeSaveImage: (folderWebPath, req, abe) => {
     return folderWebPath
   },
