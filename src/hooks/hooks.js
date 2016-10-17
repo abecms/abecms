@@ -30,6 +30,14 @@ var hooks = {
   },
 
   /***************** publish *****************/
+  beforeReject: (json, filePath, tplPath, abe) => {
+    return json
+  },
+  afterReject: (result, abe) => {
+    return result
+  },
+
+  /***************** publish *****************/
   beforePublish: (json, filePath, tplPath, abe) => {
     return json
   },
