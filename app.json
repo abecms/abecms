@@ -1,7 +1,0 @@
-{
-  "name": "AbeJS sample",
-  "description": "AbeJS : A barebones Node.js app using Express 4",
-  "repository": "https://github.com/AdFabConnect/abejs",
-  "logo": "https://node-js-sample.herokuapp.com/node.png",
-  "keywords": ["abejs","cms","node", "express", "static"]
-}

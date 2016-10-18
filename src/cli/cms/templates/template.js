@@ -287,24 +287,23 @@ export function getSelectTemplateKeys(templatesPath) {
   return p
 }
 
-export function getStructureAndTemplatesFiles() {
+export function getStructureAndTemplates() {
   var site = cmsData.revision.filePathInfos(config.root)
   var result = {'structure': [], 'templates': []}
 
-  let structure = config.structure.url
-  let templates = config.templates.url
+  let structure = path.join(site.path, config.structure.url)
+  let templates = path.join(site.path, config.templates.url)
   try {
-    var directoryStructure = fse.lstatSync(path.join(site.path, structure))
+    var directoryStructure = fse.lstatSync(structure)
     if (directoryStructure.isDirectory()) {
-      site.folders = cmsData.file.getFolders(path.join(site.path, structure), false)
-      result.structure = site.folders
+      result.structure = cmsData.file.getFolders(structure, false)
     }
   } catch (e) {
   }
   try {
-    var directoryTemplate = fse.lstatSync(path.join(site.path, templates))
+    var directoryTemplate = fse.lstatSync(templates)
     if (directoryTemplate.isDirectory()) {
-      var resultTemplates = result.templates.concat(cmsData.file.getFiles(path.join(site.path, templates), true, 10, new RegExp(`.${config.files.templates.extension}`)))
+      var resultTemplates = result.templates.concat(cmsData.file.getFiles(templates, true, 10, new RegExp(`.${config.files.templates.extension}`)))
       result.templates = resultTemplates.filter(function (resultTemplate) {
         return resultTemplate.path.indexOf(config.partials) < 0
       })

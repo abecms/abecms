@@ -105,7 +105,7 @@ var route = function(req, res, next) {
       files: Manager.instance.getList()
     }
 
-    manager.list = req.app.get('projectFiles')
+    manager.list = Manager.instance.getStructureAndTemplates()
     manager.editConfig = req.app.get('config')
     manager.config = JSON.stringify(config)
     
