@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
+import events from 'events'
 import path from 'path'
 import watch from 'watch'
 import {
@@ -32,8 +33,10 @@ class Manager {
 
   init() {
     this._pathTemplate = path.join(config.root, config.templates.url)
+    this._pathStructure = path.join(config.root, config.structure.url)
+    this._watchersStart()
+
     var p = new Promise((resolve) => {
-      this._watchersStart()
       this.getKeysFromSelect()
         .then(() => {
           resolve()
@@ -51,16 +54,39 @@ class Manager {
   }
 
   _watchersStart() {
-    this._watchTemplate = watch.createMonitor(this._pathTemplate, (monitor) => {
+    this.events = {
+      template: new events.EventEmitter(),
+      structure: new events.EventEmitter()
+    }
+
+    this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
       monitor.on("created", (f, stat) => {
         this.getKeysFromSelect()
+        this.events.template.emit('update')
       })
       monitor.on("changed", (f, curr, prev) => {
         this.getKeysFromSelect()
+        this.events.template.emit('update')
         
       })
       monitor.on("removed", (f, stat) => {
         this.getKeysFromSelect()
+        this.events.template.emit('update')
+      })
+    })
+
+    this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
+      monitor.on("created", (f, stat) => {
+        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+        console.log('here', this.events.structure)
+        this.events.structure.emit('update')
+      })
+      monitor.on("changed", (f, curr, prev) => {
+        this.events.structure.emit('update')
+        
+      })
+      monitor.on("removed", (f, stat) => {
+        this.events.structure.emit('update')
       })
     })
   }
