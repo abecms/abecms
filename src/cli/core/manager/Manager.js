@@ -55,8 +55,8 @@ class Manager {
 
   _watchersStart() {
     this.events = {
-      template: new events.EventEmitter(),
-      structure: new events.EventEmitter()
+      template: new events.EventEmitter(0),
+      structure: new events.EventEmitter(0)
     }
 
     this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
