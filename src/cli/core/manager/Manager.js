@@ -36,6 +36,7 @@ class Manager {
     this._pathStructure = path.join(config.root, config.structure.url)
     this._watchersStart()
 
+    this.updateStructureAndTemplates()
     var p = new Promise((resolve) => {
       this.getKeysFromSelect()
         .then(() => {
@@ -62,28 +63,33 @@ class Manager {
     this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
       monitor.on("created", (f, stat) => {
         this.getKeysFromSelect()
+        this.updateStructureAndTemplates()
         this.events.template.emit('update')
       })
       monitor.on("changed", (f, curr, prev) => {
         this.getKeysFromSelect()
+        this.updateStructureAndTemplates()
         this.events.template.emit('update')
         
       })
       monitor.on("removed", (f, stat) => {
         this.getKeysFromSelect()
+        this.updateStructureAndTemplates()
         this.events.template.emit('update')
       })
     })
 
     this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
       monitor.on("created", (f, stat) => {
+        this.updateStructureAndTemplates()
         this.events.structure.emit('update')
       })
       monitor.on("changed", (f, curr, prev) => {
+        this.updateStructureAndTemplates()
         this.events.structure.emit('update')
-        
       })
       monitor.on("removed", (f, stat) => {
+        this.updateStructureAndTemplates()
         this.events.structure.emit('update')
       })
     })
@@ -109,6 +115,15 @@ class Manager {
     return p
   }
 
+  getStructureAndTemplates() {
+
+    return this._structureAndTemplates;
+  }
+
+  updateStructureAndTemplates() {
+    this._structureAndTemplates = cmsTemplates.template.getStructureAndTemplates()
+  }
+
   getList() {
 
     return this._list
@@ -122,6 +137,7 @@ class Manager {
         list.push(file)
       }
     })
+
     return list
   }
 

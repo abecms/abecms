@@ -80,14 +80,7 @@ var app = express(opts)
   
   // Instantiate Singleton Manager (which lists all blog files)
 Manager.instance.init()
-Manager.instance.events.template.on('update', () => {
-  app.set('projectFiles', cmsTemplates.template.getStructureAndTemplatesFiles())
-})
-Manager.instance.events.structure.on('update', () => {
-  app.set('projectFiles', cmsTemplates.template.getStructureAndTemplatesFiles())
-})
 app.set('config', config.getConfigByWebsite())
-app.set('projectFiles', cmsTemplates.template.getStructureAndTemplatesFiles())
 
 app.use(bodyParser.json({limit: '1gb'}))
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
