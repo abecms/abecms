@@ -73,7 +73,8 @@ export default function printInput () {
         lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
       }
       res += '<div class="autocomplete-result-wrapper">'
-      if(params.autocomplete != null && params.autocomplete === 'true') {
+      if(params.autocomplete != null && params.autocomplete === 'true'
+        && params.prefill === 'true') {
         res += `<div class="autocomplete-refresh" value=''
           data-autocomplete-refresh="true"
           data-autocomplete-refresh-sourcestring="${params.sourceString}"
