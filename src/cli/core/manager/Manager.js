@@ -2,6 +2,7 @@ import Handlebars from 'handlebars'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import path from 'path'
+import watch from 'watch'
 import {
   coreUtils,
   cmsData,
@@ -29,6 +30,61 @@ class Manager {
     return this[singleton]
   }
 
+  init() {
+    this._pathTemplate = path.join(config.root, config.templates.url)
+    var p = new Promise((resolve) => {
+      this._watchersStart()
+      this.getKeysFromSelect()
+        .then(() => {
+          resolve()
+        },
+        (e) => {
+          console.log('Manager.init', e)
+          resolve()
+        })
+        .catch((e) => {
+          console.log('Manager.init', e)
+        })
+    })
+
+    return p
+  }
+
+  _watchersStart() {
+    this._watchTemplate = watch.createMonitor(this._pathTemplate, (monitor) => {
+      monitor.on("created", (f, stat) => {
+        this.getKeysFromSelect()
+      })
+      monitor.on("changed", (f, curr, prev) => {
+        this.getKeysFromSelect()
+        
+      })
+      monitor.on("removed", (f, stat) => {
+        this.getKeysFromSelect()
+      })
+    })
+  }
+
+  getKeysFromSelect() {
+    this._whereKeys = []
+    var p = new Promise((resolve) => {
+      cmsTemplates.template.getSelectTemplateKeys(this._pathTemplate)
+        .then((whereKeys) => {
+          this._whereKeys = whereKeys
+          this.updateList()
+          resolve()
+        },
+        (e) => {
+          console.log('Manager.getKeysFromSelect', e)
+        })
+        .catch((e) => {
+          console.log('Manager.getKeysFromSelect', e)
+        })
+    })
+
+    return p
+  }
+
   getList() {
 
     return this._list
@@ -49,27 +105,6 @@ class Manager {
     this._list = list
 
     return this
-  }
-
-  init() {
-    this._whereKeys = []
-    var p = new Promise((resolve) => {
-      const pathTemplate = path.join(config.root, config.templates.url)
-      cmsTemplates.template.getSelectTemplateKeys(pathTemplate)
-        .then((whereKeys) => {
-          this._whereKeys = whereKeys
-          this.updateList()
-          resolve()
-        },
-        (e) => {
-          console.log('Manager._init', e)
-        })
-        .catch((e) => {
-          console.log('Manager._init', e)
-        })
-    })
-
-    return p
   }
 
   updateList() {
