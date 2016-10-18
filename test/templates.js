@@ -26,8 +26,8 @@ describe('Template', function() {
    * getAbeImport
    * 
    */
-  it('cmsTemplates.template.getStructureAndTemplatesFiles()', function() {
-    var res = cmsTemplates.template.getStructureAndTemplatesFiles()
+  it('cmsTemplates.template.getStructureAndTemplates()', function() {
+    var res = cmsTemplates.template.getStructureAndTemplates()
     chai.expect(res.templates.length).to.be.above(1);
   });
 
