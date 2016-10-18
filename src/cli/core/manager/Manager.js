@@ -61,18 +61,18 @@ class Manager {
     }
 
     this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
-      monitor.on("created", (f, stat) => {
+      monitor.on('created', (f, stat) => {
         this.getKeysFromSelect()
         this.updateStructureAndTemplates()
         this.events.template.emit('update')
       })
-      monitor.on("changed", (f, curr, prev) => {
+      monitor.on('changed', (f, curr, prev) => {
         this.getKeysFromSelect()
         this.updateStructureAndTemplates()
         this.events.template.emit('update')
         
       })
-      monitor.on("removed", (f, stat) => {
+      monitor.on('removed', (f, stat) => {
         this.getKeysFromSelect()
         this.updateStructureAndTemplates()
         this.events.template.emit('update')
@@ -80,15 +80,15 @@ class Manager {
     })
 
     this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
-      monitor.on("created", (f, stat) => {
+      monitor.on('created', (f, stat) => {
         this.updateStructureAndTemplates()
         this.events.structure.emit('update')
       })
-      monitor.on("changed", (f, curr, prev) => {
+      monitor.on('changed', (f, curr, prev) => {
         this.updateStructureAndTemplates()
         this.events.structure.emit('update')
       })
-      monitor.on("removed", (f, stat) => {
+      monitor.on('removed', (f, stat) => {
         this.updateStructureAndTemplates()
         this.events.structure.emit('update')
       })
@@ -117,7 +117,7 @@ class Manager {
 
   getStructureAndTemplates() {
 
-    return this._structureAndTemplates;
+    return this._structureAndTemplates
   }
 
   updateStructureAndTemplates() {

@@ -53,8 +53,8 @@ var route = function(req, res, next){
       if(/\.(jpg|png|gif|svg)/.test(filePath)){
         resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
       }
-        res.set('Content-Type', 'application/json')
-        res.send(JSON.stringify(resp))
+      res.set('Content-Type', 'application/json')
+      res.send(JSON.stringify(resp))
     })
 
     file.pipe(fstream)
