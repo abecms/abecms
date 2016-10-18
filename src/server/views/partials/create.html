@@ -1,6 +1,13 @@
 
     <div class="panel panel-default">
-      <div class="panel-heading">{{@root.text.new_file}}</div>
+      <div class="panel-heading">
+        <h1>
+          <small class="accor-manager-header-title">Abe</small>
+          {{#unless isHome}}
+            <a class="btn btn-primary pull-right btn-new" href="/abe/">New</a>
+          {{/unless}}
+        </h1>
+      </div>
       <div class="panel-body">
         <form class="form-horizontal form-create" method="get" action="" data-form-abe-create="true">
           
@@ -11,13 +18,14 @@
 
           <div class="">
             <div class="">
+              {{#if isHome}}
               <button type="submit" class="btn btn-primary" date-abe-create="true">{{@root.text.create}}</button>
-              {{#unless isHome}}
+              {{else}}
               <br /><br />
               <button type="submit" class="btn btn-primary" date-abe-update="true">update</button>
               <br /><br />
               <button type="submit" class="btn btn-primary" date-abe-duplicate="true">duplicate</button>
-              {{/unless}}
+              {{/if}}
             </div>
           </div>
 
