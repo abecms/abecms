@@ -19,7 +19,6 @@ var route = function(req, res, next){
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
   req.pipe(req.busboy)
-  var finished = false
   req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
     var ext = path.extname(filename)
     var filenameNoExt = path.basename(filename,ext)
@@ -54,18 +53,11 @@ var route = function(req, res, next){
       if(/\.(jpg|png|gif|svg)/.test(filePath)){
         resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
       }
-      // Waiting until the entire request has been fully processed
-      if (finished) {
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(resp))
-      }
     })
 
     file.pipe(fstream)
-
-  })
-  req.busboy.on('finish', function() {
-    finished = true
   })
 }
 
