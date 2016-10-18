@@ -77,8 +77,6 @@ class Manager {
 
     this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
       monitor.on("created", (f, stat) => {
-        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-        console.log('here', this.events.structure)
         this.events.structure.emit('update')
       })
       monitor.on("changed", (f, curr, prev) => {
