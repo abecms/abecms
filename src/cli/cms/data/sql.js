@@ -334,6 +334,7 @@ export function getSourceType(str) {
  * @return {Array}          of files
  */
 export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
+  if(typeof wheres === 'undefined' || wheres === null) return files
   var res = []
   var limit = 0
   var json = {}
