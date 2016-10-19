@@ -34,14 +34,14 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
       delete json.abe_meta
     }
 
-    if (isUpdate) {
-      abeExtend.hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
-      cmsOperations.remove.remove(oldFilePath)
-    }
     abeExtend.hooks.instance.trigger('afterDuplicate', json, oldFilePath, template, newPath, name, req, isUpdate)
 
     var pCreate = cmsOperations.create(template, newPath, name, req, json, (isUpdate) ? false : true)
     pCreate.then((resSave) => {
+      if (isUpdate) {
+        abeExtend.hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
+        cmsOperations.remove.remove(oldFilePath)
+      }
       resolve(resSave)
     },
     () => {
