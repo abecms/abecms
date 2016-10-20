@@ -178,25 +178,26 @@ export function getFilesMerged(files) {
   // return merged
   Array.prototype.forEach.call(Object.keys(merged), (key) => {
     var revisions = merged[key].revisions
+
     revisions.sort(coreUtils.sort.predicatBy('date', -1))
     if(revisions[0] != null) {
       merged[key].date = revisions[0].date
     }
-
     Array.prototype.forEach.call(revisions, (revision) => {
-      
       var status = revision.abe_meta.status
-
-      if (status === 'publish') {
-        merged[key][status] = revision
-      }else {
-        merged[key][status] = {}
+      if(typeof merged[key][status] === 'undefined' || merged[key][status] === null) {
+        if (status === 'publish') {
+          merged[key][status] = revision
+        }else {
+          merged[key][status] = {}
+        }
+        merged[key][status].path = revision.path
+        merged[key][status].html = revision.html
+        merged[key][status].htmlPath = revision.htmlPath
+        merged[key][status].date = new Date(revision.date)
+        merged[key][status].cleanDate = revision.cleanDate
+        merged[key][status].link = revision.abe_meta.link
       }
-      merged[key][status].path = revision.path
-      merged[key][status].html = revision.html
-      merged[key][status].htmlPath = revision.htmlPath
-      merged[key][status].date = new Date(revision.date)
-      merged[key][status].link = revision.abe_meta.link
     })
 
     merged[key].revisions = revisions
