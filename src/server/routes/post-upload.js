@@ -20,7 +20,7 @@ var route = function(req, res, next){
   mkdirp.sync(folderFilePath)
   req.pipe(req.busboy)
   req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-    var ext = path.extname(filename)
+    var ext = path.extname(filename).toLowerCase()
     var filenameNoExt = path.basename(filename,ext)
     var randID = '-' + (((1+Math.random())*0x100000)|0).toString(16).substring(2)
     var slug = limax(filenameNoExt, {separateNumbers: false}) + randID + ext
