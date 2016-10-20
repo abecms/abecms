@@ -154,16 +154,16 @@ export default class FormCreate {
 
   _btnDuplicateManagerClick(e) {
     e.preventDefault()
-    this._submit('duplicate', e.srcElement)
+    this._submit('duplicate', e.target)
   }
 
   _btnUpdateManagerClick(e) {
     e.preventDefault()
-    this._submit('update', e.srcElement)
+    this._submit('update', e.target)
   }
 
   _btnCreateManagerClick(e) {
     e.preventDefault()
-    this._submit('create', e.srcElement)
+    this._submit('create', e.target)
   }
 }
