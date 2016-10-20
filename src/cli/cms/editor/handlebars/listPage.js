@@ -42,19 +42,19 @@ export default function listPage(file, index, text) {
   if(file.draft != null) {
     if((file.publish == null)
       || (file.publish && file.publish.date < file.draft.date)) {
-      workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="label label-default label-draft">draft</a>`
+      workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="label label-default label-draft" title="${file.draft.cleanDate}">draft</a>`
     }else {
-      workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="hidden label label-default label-draft">draft</a>`
+      workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.draft.html}" class="hidden label label-default label-draft" title="${file.draft.cleanDate}">draft</a>`
     }
   }else {
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft">draft</a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.abe_meta.link}" class="hidden label label-default label-draft" title="${file.cleanDate}">draft</a>`
   }
 
   workflow += '</td>'
   workflow += '<td align="center" class="publish">'
 
   if (file.publish){
-    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.publish.html}" class="checkmark label-published">&#10004;</a>`
+    workflow += `<a href="/abe/${file.abe_meta.template}?filePath=${file.publish.html}" class="checkmark label-published" title="${file.publish.cleanDate}">&#10004;</a>`
   }
   workflow += '</td>'
 
@@ -67,7 +67,8 @@ export default function listPage(file, index, text) {
   if(file.publish != null) {
     res += `<a href="/unpublish/?filePath=${file.abe_meta.link}"
                title="${text.unpublish}"
-               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}">
+               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}"
+               title="unpublish">
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
@@ -76,7 +77,8 @@ export default function listPage(file, index, text) {
              title="${text.delete}"
              class="icon"
              data-delete="true"
-             data-text="${text.confirmDelete} ${file.abe_meta.link}">
+             data-text="${text.confirmDelete} ${file.abe_meta.link}"
+             title="remove">
             <span class="glyphicon glyphicon-trash"></span>
           </a>`
 
