@@ -18,15 +18,8 @@ var abeProcess = function(name, args = []) {
   args = prepend(`ABE_WEBSITE=${config.root}`, args)
   args = prepend(`ABEJS_PATH=${__dirname}/../../../dist`, args)
 
-  let lockFile = path.join(config.root, `abe-process-${name}.lock`)
-  try {
-    var stats = fse.statSync(lockFile)
-    if (stats.isFile()) {
-      console.log(`cannot start process ${name} already running`)
-      return false
-    }
-  }catch(err) {
-    fs.writeFileSync(lockFile, '', {encoding: 'utf8'})
+  if (!abeExtend.lock.create(name)) {
+    return false
   }
 
   var proc
@@ -50,7 +43,7 @@ var abeProcess = function(name, args = []) {
 
   if(typeof proc !== 'undefined' && proc !== null) {
     proc.on('message', function( msg ) {
-      fs.unlinkSync(lockFile)
+      abeExtend.lock.remove(name)
       proc.kill()
     });
     return true
