@@ -1,6 +1,6 @@
 {
   "name": "abe-cli",
-  "version": "2.5.15",
+  "version": "2.5.19",
   "description": "Abe command line tool",
   "main": "src/server/app.js",
   "repository": {
@@ -89,7 +89,7 @@
     "eslint": "^3.6.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.2",
-    "node-sass": "^3.6.0",
+    "node-sass": "^3.7.0",
     "nodemon": "^1.8.1",
     "parallelshell": "^2.0.0",
     "watchify": "^3.4.0"

@@ -25,36 +25,38 @@
 
   <!-- *************** form edit *************** -->
   {{#if form}}
-    <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
-      <div class="display-status">
-        current status : {{@root.json.abe_meta.status}}
-      </div>
-
-      <ul class="nav nav-tabs" role="tablist">
-        {{#each form}}
-          <li role="presentation" class="{{#if @first}}active{{/if}}">
-            <a href="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
-              {{@key}}
-            </a>
-          </li>
-        {{/each}}
-      </ul>
-      <div class="tab-content">
-      {{#each form}}
-        <div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="{{cleanTab @key}}">
-          {{#each this}}
-            <div class="{{cleanTab @key}}">
-            {{{printBlock this}}}
-            </div>
-          {{/each}}
-          <small class="text-muted">* Required</small>
+    <div class="abeform-wrapper">
+      <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
+        <div class="display-status">
+          current status : {{@root.json.abe_meta.status}}
         </div>
-      {{/each}}
-      </div>
-      <button type='submit' class='hidden' data-action="draft"></button>
-      <span class="abe-version">abe@{{abeVersion}}</span>
-      {{abeImport 'engine-more' manager.config this}}
-    </form><!-- *************** /end form edit *************** -->
+
+        <ul class="nav nav-tabs" role="tablist">
+          {{#each form}}
+            <li role="presentation" class="{{#if @first}}active{{/if}}">
+              <a href="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
+                {{@key}}
+              </a>
+            </li>
+          {{/each}}
+        </ul>
+        <div class="tab-content">
+        {{#each form}}
+          <div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="{{cleanTab @key}}">
+            {{#each this}}
+              <div class="{{cleanTab @key}}">
+              {{{printBlock this}}}
+              </div>
+            {{/each}}
+            <small class="text-muted">* Required</small>
+          </div>
+        {{/each}}
+        </div>
+        <button type='submit' class='hidden' data-action="draft"></button>
+        <span class="abe-version">abe@{{abeVersion}}</span>
+        {{abeImport 'engine-more' manager.config this}}
+      </form><!-- *************** /end form edit *************** -->
+    </div>
   {{/if}}
   <div class="close-engine">
     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

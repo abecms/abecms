@@ -150,8 +150,11 @@ export default class EditorManager {
         url: document.location.origin + '/abe/republish',
         method: 'get'
       },
-        () => {
-          
+        (e, responseText) => {
+          var response = JSON.parse(responseText)
+          if (response.success !== 1) {
+            alert(response.msg)
+          }
         })
   }
 
