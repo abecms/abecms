@@ -45,6 +45,8 @@ if(config.port) abePort = config.port
 if(process.env.PORT) abePort = process.env.PORT
 config.set({webport: process.env.WEBPORT ? process.env.WEBPORT : 8081})
 
+abeExtend.lock.deleteAll() // delete all process .lock when abe start
+
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 var html = exphbs.create({

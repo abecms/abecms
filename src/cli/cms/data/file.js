@@ -20,13 +20,14 @@ export function getAllWithKeys(withKeys) {
 
     if(json.abe_meta.latest.date != null) {
       file.date = json.abe_meta.latest.date
+      file.cleanDate = moment(json.abe_meta.latest.date).format('YYYY/MM/DD HH:MM:ss')
     }
 
     if(json.abe_meta != null) {
       var date = null
-      if (json.abe_meta.latest.date != null) {
+      if (json.abe_meta.latest.date !== null) {
         date = json.abe_meta.latest.date
-      } else if (json.abe_meta.date != null) {
+      } else if (json.abe_meta.date !== null) {
         date = json.abe_meta.date
       }
       cleanFile.abe_meta = {
