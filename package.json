@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "ajax-request": "^1.2.1",
+    "babel-polyfill": "^6.16.0",
     "babel-register": "^6.16.3",
     "body-parser": "^1.14.1",
     "child-process-promise": "^2.1.3",
