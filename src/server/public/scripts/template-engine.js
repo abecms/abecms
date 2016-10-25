@@ -45,8 +45,8 @@ class Engine {
       })
     })
 
-    var abeReady = new Event('abeReady');
-    document.dispatchEvent(abeReady);
+    var abeReady = new Event('abeReady')
+    document.dispatchEvent(abeReady)
   }
 
   inject() {
