@@ -168,7 +168,9 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 export function saveJsonAndHtml(templateId, obj, html) {
   var page = new Page(templateId, html, obj.json.content, true)
 
-  saveHtml(obj.html.path, page.html)
+  if (obj.json.content.abe_meta.status === 'publish') {
+    saveHtml(obj.html.path, page.html)
+  }
   saveJson(obj.json.path, obj.json.content)
 
   return {

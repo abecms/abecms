@@ -140,6 +140,7 @@ export function reject(filePath, tplPath, json) {
               error: resSave.error
             }
           } else if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
+            resSave.success = 1
             result = resSave
           } else if(typeof resSave.json !== 'undefined' && resSave.json !== null){
             result = {
