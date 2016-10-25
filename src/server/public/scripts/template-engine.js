@@ -44,6 +44,9 @@ class Engine {
         'autoWidth': false
       })
     })
+
+    var abeReady = new Event('abeReady');
+    document.dispatchEvent(abeReady);
   }
 
   inject() {
@@ -107,6 +110,7 @@ class Engine {
 
 var engine = new Engine()
 window.abe = {
+  save: engine._save,
   json: engine.json,
   inputs: engine._inputs,
   files: engine._files,
