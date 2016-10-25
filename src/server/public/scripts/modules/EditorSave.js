@@ -3,13 +3,17 @@
 import {IframeNode} from '../utils/iframe'
 import EditorUtils from './EditorUtils'
 import Json from '../modules/EditorJson'
+import on from 'on'
 
 export default class EditorSave {
   constructor() {
     this._json = Json.instance
     this._saveType = 'draft'
 
+    this.onFileSaved = on(this)
+
     this._abeForm = document.querySelector('#abeForm')
+    this._abeDisplayStatus = document.querySelector('[data-display-status]')
     this._abeFormSubmit = document.querySelector('#abeForm button[type=submit]')
 
     this._handleSubmitClick = this._submitClick.bind(this)
@@ -137,7 +141,11 @@ export default class EditorSave {
           target.classList.remove('done')
           target.removeAttribute('disabled')
 
-          if(result.success === 1) location.reload()
+          this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
+          if(result.success === 1) {
+            json = result.json
+          }
+          this.onFileSaved._fire()
         }).catch(function(e) {
           console.error(e)
         })
