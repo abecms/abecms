@@ -3,7 +3,7 @@ import {
 } from '../../cli'
 
 var route = function(req, res) {
-	var result
+  var result
   if (abeExtend.process('publish-all', [''])) {
 	  result = {
 	    success: 1,

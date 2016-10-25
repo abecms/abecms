@@ -45,7 +45,7 @@ var abeProcess = function(name, args = []) {
     proc.on('message', function( msg ) {
       abeExtend.lock.remove(name)
       proc.kill()
-    });
+    })
     return true
   }
 
