@@ -65,10 +65,10 @@ export default class Json {
               alert(jsonRes.error)
               return
             }
-            if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-              location.reload()
-              return
-            }
+            // if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
+            //   location.reload()
+            //   return
+            // }
             this.data = jsonRes.json
           }
           catch(e){

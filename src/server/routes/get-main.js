@@ -50,7 +50,6 @@ var route = function(req, res, next) {
 
       var filePathTest = cmsData.revision.getDocumentRevision(req.query.filePath)
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
-        // filePath = filePathTest.path
         jsonPath = filePathTest.path
         linkPath = filePathTest.abe_meta.link
       }
@@ -58,31 +57,11 @@ var route = function(req, res, next) {
       if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
         res.redirect('/abe/') 
         return 
-      } 
+      }
 
       editor(templatePath, jsonPath, linkPath)
         .then((result) => {
-          var manager = {}
-          var revisionFilePath = coreUtils.file.changePath(filePath, config.draft.url)
-          var dirPath = path.dirname(revisionFilePath)
-          var allDraft = cmsData.file.getFiles(dirPath, true, 99, new RegExp('\\.' + config.files.templates.extension))
-
-          allDraft = cmsData.metas.get(allDraft, 'draft')
-          var breadcrumb = req.params[0].split('/')
-          manager.file = {
-            revision: cmsData.revision.getFilesRevision(allDraft, cmsData.fileAttr.delete(revisionFilePath))
-            ,template: breadcrumb
-            ,path: (req.query.filePath) ? path.resolve(req.query.filePath).replace(/^\//, '') : ''
-          }
-          if(manager.file.revision.length > 0){
-            var publishPath = cmsData.fileAttr.delete(manager.file.revision[0].path.replace(new RegExp(`/${config.draft.url}/`), `/${config.publish.url}/`))
-            manager.file.isPublished = coreUtils.file.exist(publishPath)
-          }
-
-          resolve({
-            obj: result,
-            manager: manager
-          })
+          resolve(result)
         }).catch(function(e) {
           console.error(e)
         })
@@ -97,9 +76,8 @@ var route = function(req, res, next) {
   })
 
   p.then((result) => {
-    var obj = result.obj
-    var manager = result.manager
-    // let tplUrl = result.tplUrl
+    var obj = result
+    var manager = {}
   
     manager.home = {
       files: Manager.instance.getList()
