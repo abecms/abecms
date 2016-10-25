@@ -32,17 +32,11 @@ describe('Create', function() {
   it('cmsOperations.create()', function(done) {
     cmsOperations.create('article', '', 'article-2.html', {query: ''}, this.fixture.jsonArticle, false)
       .then(function(resSave) {
-        var html = path.join(config.root, config.draft.url, resSave.abe_meta.latest.abeUrl)
         var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
-        var stat = fse.statSync(html)
+        var stat = fse.statSync(json)
         if (stat) {
           chai.expect(stat).to.not.be.undefined;
         }
-        stat = fse.statSync(json)
-        if (stat) {
-          chai.expect(stat).to.not.be.undefined;
-        }
-        fse.removeSync(html)
         fse.removeSync(json)
         done()
       }.bind(this));
@@ -55,17 +49,11 @@ describe('Create', function() {
   it('cmsOperations.duplicate()', function(done) {
     cmsOperations.duplicate('article-1.html', 'article', '', 'article-2.html', {}, false)
     .then(function(resSave) {
-      var html = path.join(config.root, config.draft.url, resSave.abe_meta.latest.abeUrl)
       var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
-      var stat = fse.statSync(html)
+      var stat = fse.statSync(json)
       if (stat) {
         chai.expect(stat).to.not.be.undefined;
       }
-      stat = fse.statSync(json)
-      if (stat) {
-        chai.expect(stat).to.not.be.undefined;
-      }
-      fse.removeSync(html)
       fse.removeSync(json)
       done()
     }.bind(this))

@@ -143,7 +143,7 @@ export default class EditorSave {
 
           this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
           if(result.success === 1) {
-            json = result.json
+            window.json = result.json
           }
           this.onFileSaved._fire()
         }).catch(function(e) {

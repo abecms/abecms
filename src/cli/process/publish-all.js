@@ -130,8 +130,8 @@ if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
           }
           dateStart = (Math.round((new Date().getTime() - dateStart.getTime()) / 1000 / 60 * 100)) / 100
           console.log('publish process finished in ' + clc.green(dateStart) + 'm')
-          process.send('finished');
-          process.exit(0);
+          process.send('finished')
+          process.exit(0)
         })
       })
       .catch((e) => {
