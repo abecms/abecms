@@ -106,6 +106,7 @@ export function unpublish(filePath) {
 }
 
 export function reject(filePath, tplPath, json) {
+  abeExtend.hooks.instance.trigger('beforeReject', filePath)
   var p = new Promise((resolve, reject) => {
     var p1 = new Promise((resolve) => {
       cmsOperations.save.save(
