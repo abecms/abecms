@@ -145,7 +145,9 @@ cmsTemplates.assets.copy()
 
 let publish = path.join(config.root, config.publish.url)
 app.use(express.static(publish))
-// app.use(express.static(publish))
+
+// This static path is mandatory for relative path to statics in templates
+app.use('/abe', express.static(publish));
 
 if(config.partials !== '') {
   if (coreUtils.file.exist(path.join(config.root, config.partials))) {
