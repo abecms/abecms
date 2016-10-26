@@ -9,10 +9,7 @@ var abeExtend = require('../../cli').abeExtend
 var Manager = require('../../cli').Manager
 var cmsData = require('../../cli').cmsData
 var cmsTemplates = require('../../cli').cmsTemplates
-
 var config = require('../../cli').config
-
-var dateStart
 var templatesTexts = {}
 
 function publishNext(files, tt, cb, i = 0) {
