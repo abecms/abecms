@@ -53,7 +53,7 @@ export default class Json {
 
       this._ajax(
         {
-          url: document.location.origin + '/' + type,
+          url: document.location.origin + '/abe/' + type,
           body: toSave,
           headers: this._headers,
           method: 'post'

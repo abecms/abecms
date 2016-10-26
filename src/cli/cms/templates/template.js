@@ -146,7 +146,7 @@ export function getTemplate (file) {
     text = translate(text)
     text = addOrder(text)
   }else {
-    text = `[ ERROR ] template ${config.templates.url} doesn't exist anymore`
+    text = `[ ERROR ] template ${file + '.' + config.files.templates.extension} doesn't exist anymore`
   }
 
   // HOOKS afterGetTemplate
