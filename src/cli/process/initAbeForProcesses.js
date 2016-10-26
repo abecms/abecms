@@ -18,7 +18,7 @@ export function getTime() {
 }
 
 export function init(processName, conf) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
 
     log = debug(processName + ':log')
     log.color = 2
@@ -43,11 +43,11 @@ export function init(processName, conf) {
       abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 
       Manager.instance.init()
-	      .then(()=> {
+      .then(()=> {
         dateStart = moment()
         resolve()
       })
-	      .catch((e) => {
+      .catch((e) => {
         error('publish-all' + e)
       })
     }else {
