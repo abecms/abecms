@@ -276,7 +276,6 @@ export default class EditorAutocomplete {
       sourceString: target.getAttribute('data-autocomplete-refresh-sourcestring'),
       prefillQuantity: target.getAttribute('data-autocomplete-refresh-prefill-quantity'),
       key: target.getAttribute('data-autocomplete-refresh-key'),
-      folder: CONFIG.FOLDERPATH,
       json: jsonPost
     })
 
