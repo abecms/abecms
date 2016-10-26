@@ -65,7 +65,7 @@ export default function listPage(file, index, text) {
             <div class="row icons-action">`
 
   if(file.publish != null) {
-    res += `<a href="/unpublish/?filePath=${file.abe_meta.link}"
+    res += `<a href="/abe/unpublish/?filePath=${file.abe_meta.link}"
                title="${text.unpublish}"
                class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}"
                title="unpublish">
@@ -73,7 +73,7 @@ export default function listPage(file, index, text) {
             </a>`
   }
       
-  res += `<a href="/delete/?filePath=${file.abe_meta.link}"
+  res += `<a href="/abe/delete/?filePath=${file.abe_meta.link}"
              title="${text.delete}"
              class="icon"
              data-delete="true"

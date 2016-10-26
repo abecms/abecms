@@ -43,7 +43,7 @@ export default class EditorFiles {
 
     formData.append('uploadfile', file)
     var xhr = new XMLHttpRequest()
-    xhr.open('post', '/upload/?baseUrl=' + CONFIG.FILEPATH + '&input=' + target.outerHTML, true)
+    xhr.open('post', '/abe/upload/?baseUrl=' + CONFIG.FILEPATH + '&input=' + target.outerHTML, true)
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
         var percentage = (e.loaded / e.total) * 100
