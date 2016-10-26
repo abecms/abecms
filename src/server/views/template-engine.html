@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-config='{"URL":"{{abeUrl}}","TPLPATH":"{{templatePath}}","TPLNAME":"{{tplName}}","FILEPATH":"{{urlToSaveFile}}","FOLDERPATH":"{{folderToSaveFile}}"}'
+<html data-config='{"URL":"{{abeUrl}}","TPLPATH":"{{@root.json.abe_meta.template}}","TPLNAME":"{{tplName}}","FILEPATH":"{{@root.json.abe_meta.link}}"}'
       data-json='{{{printJson json 1}}}'
       data-Locales='{{{printJson Locales}}}' >
   <head>

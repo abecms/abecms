@@ -228,7 +228,7 @@ export function editor(fileName, jsonPath, documentLink) {
     if(coreUtils.file.exist(jsonPath)) {
       json = cmsData.file.get(jsonPath, 'utf8')
     }
-    
+
     text = cmsTemplates.template.getTemplate(fileName)
 
     cmsData.source.getDataList(path.dirname(documentLink), text, json)
@@ -241,18 +241,18 @@ export function editor(fileName, jsonPath, documentLink) {
         arrayBlock = []
         each(text, json, util, arrayBlock)
 
-        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-          var tpl = json.abe_meta.template.split('/')
-          tpl = tpl.pop()
-          json.abe_meta.cleanTemplate = tpl.replace(/\..+$/, '')
-        }
+        // if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+        //   var tpl = json.abe_meta.template.split('/')
+        //   tpl = tpl.pop()
+        //   json.abe_meta.cleanTemplate = tpl.replace(/\..+$/, '')
+        // }
 
-        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-          var links = json.abe_meta.link.split('/')
-          var link = links.pop()
-          json.abe_meta.cleanName = link.replace(/\..+$/, '')
-          json.abe_meta.cleanFilename = links.join('/').replace(/\..+$/, '')
-        }
+        // if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+        //   var links = json.abe_meta.link.split('/')
+        //   var link = links.pop()
+        //   json.abe_meta.cleanName = link.replace(/\..+$/, '')
+        //   json.abe_meta.cleanFilename = links.join('/').replace(/\..+$/, '')
+        // }
 
         // HOOKS beforeEditorFormBlocks
         json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json)

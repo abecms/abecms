@@ -44,8 +44,8 @@ router.get('/abe/republish', getRepublish)
 router.post('/abe/reject', postReject)
 router.post('/abe/draft', postDraft)
 router.get('/abe/save-config', getSaveConfig)
-router.get('/abe/unpublish', getUnpublish)
-router.get('/abe/delete', getDelete)
+router.get('/abe/unpublish*', getUnpublish)
+router.get('/abe/delete*', getDelete)
 router.post('/abe/upload/*', postUpload)
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
@@ -90,6 +90,7 @@ Array.prototype.forEach.call(routes, (route) => {
   }
 })
 router.get('/abe*', getMain)
+// router.get('/abe*', getMain)
 
 abeExtend.hooks.instance.trigger('afterAddRoute', router)
 

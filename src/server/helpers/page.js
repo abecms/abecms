@@ -20,11 +20,13 @@ var page = function (req, res, next) {
     }
   }
 
-  if(typeof req.query.filePath !== 'undefined' && req.query.filePath !== null) {
+  var filepath = req.originalUrl.replace('/abe/page', '')
+  
+  if(typeof filepath !== 'undefined' && filepath !== null) {
     var jsonPath = null
     var linkPath = null
 
-    var filePathTest = cmsData.revision.getDocumentRevision(req.query.filePath)
+    var filePathTest = cmsData.revision.getDocumentRevision(filepath)
     if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
       jsonPath = filePathTest.path
       linkPath = filePathTest.abe_meta.link

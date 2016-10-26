@@ -7,7 +7,7 @@
         {{#if isHome}}
         <option value="{{cleanPath}}" clean-value="{{website}}">{{cleanPath}}</option>
         {{else}}
-          {{#ifCond @root.json.abe_meta.cleanTemplate cleanNameNoExt}}
+          {{#ifCond @root.json.abe_meta.template cleanNameNoExt}}
           <option value="{{cleanPath}}" clean-value="{{website}}" selected="selected">{{cleanPath}}</option>
           {{else}}
           <option value="{{cleanPath}}" clean-value="{{website}}">{{cleanPath}}</option>

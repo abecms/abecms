@@ -113,30 +113,7 @@ export default class EditorSave {
         .then((result) => {
           target.classList.add('done')
           // this._populateFromJson(this._json.data)
-          if(result.success === 1) {
-            CONFIG.TPLNAME = result.json.abe_meta.latest.abeUrl
-            if(CONFIG.TPLNAME[0] === '/') CONFIG.TPLNAME = CONFIG.TPLNAME.slice(1)
-          }
 
-          var tplNameParam = '?tplName='
-          var filePathParam = '&filePath='
-
-          var getParams = window.location.search.slice(1).split('&')
-          getParams.forEach(function (getParam) {
-            var param = getParam.split('=')
-            if(param[0] === 'filePath'){
-              if(param[1].indexOf('-abe-') > -1){
-                filePathParam += CONFIG.TPLNAME
-              }
-              else{
-                filePathParam += param[1]
-              }
-            }
-          })
-          var ext = filePathParam.split('.')
-          ext = ext[ext.length - 1]
-          filePathParam = filePathParam.replace(new RegExp('-abe-(.+?)(?=\.' + ext + ')'), '')
-          
           target.classList.remove('loading')
           target.classList.remove('done')
           target.removeAttribute('disabled')
