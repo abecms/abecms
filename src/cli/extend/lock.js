@@ -1,11 +1,7 @@
-import process from 'child_process'
 import path from 'path'
 import fs from 'fs'
 
-import {
-  config
-  ,abeExtend
-} from '../'
+import {config} from '../'
 
 export function create(name) {
   let lockFile = path.join(config.root, `abe-process-${name}.lock`)
