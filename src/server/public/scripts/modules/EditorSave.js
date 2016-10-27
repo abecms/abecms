@@ -145,6 +145,11 @@ export default class EditorSave {
           if(result.success === 1) {
             window.json = result.json
           }
+          var formWrapper = document.querySelector('#abeForm')
+          Array.prototype.forEach.call(formWrapper.classList, (classStr) => {
+            if(classStr.indexOf('status-') > -1) formWrapper.classList.remove(classStr)
+          })
+          formWrapper.classList.add('status-' + result.json.abe_meta.status)
           this.onFileSaved._fire()
         }).catch(function(e) {
           console.error(e)
