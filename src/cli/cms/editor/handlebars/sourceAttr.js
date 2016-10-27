@@ -40,7 +40,7 @@ export default function sourceAttr(val, params) {
         && typeof item === 'object' && Object.prototype.toString.call(item) === '[object Array]') {
         
         Array.prototype.forEach.call(item, (i) => {
-          if(val.includes(i)) {
+          if(val.indexOf(i) >= 0) {
             selected = 'selected="selected"'
           }
         })

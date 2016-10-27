@@ -86,7 +86,7 @@ var route = function(req, res, next) {
     
     var _hasBlock = (obj) ? obj.hasBlock : false
     var _hasSingleBlock = (obj) ? obj.hasSingleBlock : false
-    var _template = (filePath) ? '/page/' + req.params[0] + `?filePath=${filePath}` : false
+    var _template = (filePath) ? '/abe/page/' + req.params[0] + `?filePath=${req.query.filePath}` : false
     var _form = (obj) ? obj.form : false
     var _json = (obj) ? obj.json : false
     var _text = (obj) ? obj.text : false
