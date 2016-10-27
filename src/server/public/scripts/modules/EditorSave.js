@@ -123,7 +123,7 @@ export default class EditorSave {
             window.json = result.json
           }
           var formWrapper = document.querySelector('#abeForm')
-          formWrapper.classList.forEach(function (classStr) {
+          Array.prototype.forEach.call(formWrapper.classList, (classStr) => {
             if(classStr.indexOf('status-') > -1) formWrapper.classList.remove(classStr)
           })
           formWrapper.classList.add('status-' + result.json.abe_meta.status)

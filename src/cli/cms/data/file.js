@@ -241,7 +241,7 @@ export function read(base, dirName, type, flatten, extensions = /(.*?)/, max = 9
         fileCurrentLevel.push(level[i].replace(/\..+$/, '') + assets)
       }
     }
-    if(!fileCurrentLevel.includes(level[i]) && match) {
+    if(!fileCurrentLevel.indexOf(level[i]) >= 0 && match) {
       if(isFolder) {
         if(!flatten) {
           var index = arr.push({'name': level[i], 'path': pathLevel, 'cleanPath': pathLevel.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
