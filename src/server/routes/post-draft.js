@@ -1,9 +1,6 @@
-import path from 'path'
 import {
   cmsOperations,
-  config,
-  abeExtend,
-  Manager
+  abeExtend
 } from '../../cli'
 
 var route = function(req, res, next){
