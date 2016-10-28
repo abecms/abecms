@@ -1,7 +1,8 @@
 <!-- *************** right iframe preview *************** -->
 <div class="no-gutter half-view iframe-wrapper">
-  {{#if template}}
-  <iframe id="page-template" data-iframe-src="{{template}}" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+  {{#if isHome}}
+  {{else}}
+  <iframe id="page-template" data-iframe-src="/abe/page/{{@root.json.abe_meta.link}}" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
   {{/if}}
   <div class="browser-size"></div>
   <div class="ruler-over"></div>

@@ -49,7 +49,7 @@ export function checkRequired(text, json) {
   return Math.round((requiredValue > 0) ? complete * 100 / requiredValue : 100)
 }
 
-export function save(url, tplPath, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
+export function save(url, tplPath = null, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
   url = coreUtils.slug.clean(url)
 
   var p = new Promise((resolve) => {
@@ -69,16 +69,17 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
       pathIso.htmlPath = path.join(config.root, previousSave.htmlPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
     }
 
-    if (tplPath.indexOf('.') > -1) {
-      tplPath = tplPath.replace(/\..+$/, '')
-    }
-    var tpl = tplPath.replace(config.root, '')
-
-    var fullTpl = path.join(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
-
     if(typeof json === 'undefined' || json === null) {
       json = cmsData.file.get(tplUrl.json.path)
     }
+
+    if (tplPath == null) {
+      tplPath = json.abe_meta.template
+    }else if (tplPath.indexOf('.') > -1) {
+      tplPath = tplPath.replace(/\..+$/, '')
+    }
+    var tpl = tplPath.replace(config.root, '')
+    var fullTpl = path.join(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
 
     var ext = {
       template: tpl.replace(/^\/+/, ''),
@@ -110,7 +111,6 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
 
     cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
         .then(() => {
-
           json = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', json)
           for(var prop in json){
             if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
@@ -151,7 +151,7 @@ export function save(url, tplPath, json = null, text = '', type = '', previousSa
           if (isRejectedDoc) {
             res.reject = cmsData.fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
           }
-          
+
           abeExtend.hooks.instance.trigger('afterSave', obj)
           
           cmsTemplates.assets.copy()

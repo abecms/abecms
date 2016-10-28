@@ -4,8 +4,6 @@ import getDuplicate from './get-duplicate'
 import getUpdate from './get-update'
 import getListUrl from './get-list-url'
 import getListHooks from './get-list-hooks'
-import getLogs from './get-logs'
-import getDeleteLogs from './get-delete-logs'
 import getPage from './get-page'
 import postPage from './post-page'
 import postPublish from './post-publish'
@@ -25,8 +23,6 @@ export {
 	,getListHooks
 	,getDuplicate
 	,getUpdate
-	,getLogs
-	,getDeleteLogs
 	,getPage
 	,postPage
 	,postPublish

@@ -9,9 +9,11 @@ import {
 var route = function(req, res, next){
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
+
+  var filePath = req.originalUrl.replace('/abe/reject', '')
   
   var p = cmsOperations.post.reject(
-    req.body.filePath, 
+    filePath, 
     req.body.tplPath,
     req.body.json
   )
