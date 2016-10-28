@@ -39,6 +39,7 @@ var route = function(req, res, next) {
   var linkPath = null
   var templatePath = null
   var fileName = null
+  var folderPath = null
 
   let p = new Promise((resolve) => {
 
@@ -46,6 +47,10 @@ var route = function(req, res, next) {
       fileName = filePath.split('/')
       fileName = fileName[fileName.length-1]
       fileName = fileName.replace(`.${config.files.templates.extension}`, '')
+
+      folderPath = filePath.split('/')
+      folderPath.pop()
+      folderPath = folderPath.join('/')
 
       isHome = false
 
@@ -119,6 +124,7 @@ var route = function(req, res, next) {
       templatePath: req.params[0],
       template: _template,
       filename: fileName,
+      folderPath: folderPath,
       hasSingleBlock: _hasSingleBlock,
       hasBlock: _hasBlock,
       form: _form,

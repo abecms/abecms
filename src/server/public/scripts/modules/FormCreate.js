@@ -134,6 +134,7 @@ export default class FormCreate {
       values[input.getAttribute('name')] = input.value
     })
     var toSave = qs.stringify(values)
+
     this._ajax(
       {
         url: document.location.origin + '/abe/' + type + '/?' + toSave,
