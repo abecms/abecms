@@ -38,10 +38,15 @@ var route = function(req, res, next) {
   var jsonPath = null
   var linkPath = null
   var templatePath = null
+  var fileName = null
 
   let p = new Promise((resolve) => {
 
     if(filePath != null) {
+      fileName = filePath.split('/')
+      fileName = fileName[fileName.length-1]
+      fileName = fileName.replace(`.${config.files.templates.extension}`, '')
+
       isHome = false
 
       var filePathTest = cmsData.revision.getDocumentRevision(filePath)
@@ -113,6 +118,7 @@ var route = function(req, res, next) {
       text: locale,
       templatePath: req.params[0],
       template: _template,
+      filename: fileName,
       hasSingleBlock: _hasSingleBlock,
       hasBlock: _hasBlock,
       form: _form,
