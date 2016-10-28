@@ -15,6 +15,7 @@ import getUnpublish from './get-unpublish'
 import getDelete from './get-delete'
 import postUpload from './post-upload'
 import postSqlRequest from './post-sql-request'
+import writeJson from './write-json'
 
 export {
 	getMain
@@ -33,5 +34,6 @@ export {
 	,getUnpublish
 	,getDelete
 	,postUpload
-	,postSqlRequest
+	,postSqlRequest,
+	writeJson
 }

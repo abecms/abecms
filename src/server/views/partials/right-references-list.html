@@ -1,0 +1,26 @@
+{{#if manager.home}}
+<div class="manager-tab references-files visible">
+    <div class="page-header">
+      <div class="text-uppercase">
+        edit references
+      </div>
+    </div>
+    <div class="references-files-wrapper">
+      <ul class="list-group">
+        {{#each manager.home.references}}
+        <li class="list-group-item" data-error="0" data-href="{{@root.config.reference.url}}/{{name}}" data-ref-json='{{printJson data}}'>
+          {{name}}
+        </li>
+        {{/each}}
+        </ul>
+        <div class="display-json-wrapper">
+          <textarea class="form-control display-json"></textarea>
+          <div class="text-saved">✔ saved</div>
+          <div class="json-error">
+            &nbsp;
+          </div>
+        </div>
+    </div>
+  <br />
+</div>
+{{/if}}

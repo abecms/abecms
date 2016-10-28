@@ -10,6 +10,7 @@ import EditorJson from './modules/EditorJson'
 import EditorManager from './modules/EditorManager'
 import EditorAutocomplete from './modules/EditorAutocomplete'
 import EditorReload from './modules/EditorReload'
+import EditorReferences from './modules/EditorReferences'
 
 var htmlTag = document.querySelector('html')
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
@@ -31,6 +32,7 @@ class Engine {
     this._manager = new EditorManager()
     this._autocomplete = new EditorAutocomplete()
     this._dev = new Devtool()
+    this.reference = new EditorReferences()
 
     this.json = EditorJson.instance
 
