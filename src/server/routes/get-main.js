@@ -1,5 +1,4 @@
 import xss from 'xss'
-import path from 'path'
 import pkg from '../../../package'
 
 import {
@@ -34,7 +33,6 @@ var route = function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var debugJson = false
   var isHome = true
   var jsonPath = null
   var linkPath = null
@@ -140,7 +138,7 @@ var route = function(req, res, next) {
     }
     EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 
-    if (filePath != null && filePath.indexOf(`.json`) > -1) {
+    if (filePath != null && filePath.indexOf('.json') > -1) {
       res.set('Content-Type', 'application/json')
       res.send(JSON.stringify(_json))
     }else {
