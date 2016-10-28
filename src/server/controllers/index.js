@@ -4,10 +4,8 @@ import {
   getCreate
   ,getDuplicate
   ,getUpdate
-  ,getLogs
   ,getListUrl
   ,getListHooks
-  ,getDeleteLogs
   ,getMain
   ,getPage
   ,postPage
@@ -31,8 +29,6 @@ var router = express.Router()
 abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 abeExtend.hooks.instance.trigger('beforeAddRoute', router)
 
-router.get('/abe/logs*', getLogs)
-router.get('/abe/delete-logs*', getDeleteLogs)
 router.get('/abe/create*', getCreate)
 router.get('/abe/duplicate*', getDuplicate)
 router.get('/abe/update*', getUpdate)
