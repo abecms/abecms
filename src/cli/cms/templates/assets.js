@@ -38,7 +38,7 @@ export function copy(pathAssets) {
 
       let exclude =  new RegExp(config.files.exclude)
       if(!exclude.test(name1) && !exclude.test(name2) && entry.type1 !== 'directory' && entry.type2 !== 'directory') {
-        
+
         if(typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
           var original = entry.path1
           var basePath = original.replace(publicFolder, '')
@@ -72,7 +72,7 @@ export function getFolder(pathAssets = '') {
 
       // now check if file for folder exist
       Array.prototype.forEach.call(arr, (file) => {
-        var folderName = file.path.replace(/\..+$/, '') + assets
+        var folderName = file.path.replace(path.extname(file.path), '') + assets
         try {
           var directory = fse.lstatSync(folderName)
           if (directory.isDirectory()) {
