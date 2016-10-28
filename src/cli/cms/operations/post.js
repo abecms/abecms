@@ -9,6 +9,37 @@ import {
   Manager
 } from '../../'
 
+export function draft(filePath, tplPath, json, workflow = 'draft', type = 'draft') {
+  var p = new Promise((resolve, reject) => {
+    abeExtend.hooks.instance.trigger('beforeDraft', json, filePath, tplPath)
+    cmsOperations.save.save(
+      path.join(config.root, config.draft.url, filePath.replace(config.root)),
+      tplPath,
+      json,
+      '',
+      workflow,
+      null,
+      type)
+      .then((resSave) => {
+        var result
+        if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
+          result = {error: resSave.error}
+        }else if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
+          result = resSave
+        }else if(typeof resSave.json !== 'undefined' && resSave.json !== null){
+          Manager.instance.updateList()
+          result = {
+            success: 1,
+            json: resSave.json
+          }
+        }
+        resolve(result)
+      })
+    })
+
+  return p
+}
+
 export function publish(filePath, tplPath, json) {
   var p = new Promise((resolve, reject) => {
     abeExtend.hooks.instance.trigger('beforePublish', json, filePath, tplPath)
