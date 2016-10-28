@@ -4,10 +4,8 @@ import {
   getCreate
   ,getDuplicate
   ,getUpdate
-  ,getLogs
   ,getListUrl
   ,getListHooks
-  ,getDeleteLogs
   ,getMain
   ,getPage
   ,postPage
@@ -31,21 +29,19 @@ var router = express.Router()
 abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 abeExtend.hooks.instance.trigger('beforeAddRoute', router)
 
-router.get('/abe/logs*', getLogs)
-router.get('/abe/delete-logs*', getDeleteLogs)
 router.get('/abe/create*', getCreate)
 router.get('/abe/duplicate*', getDuplicate)
 router.get('/abe/update*', getUpdate)
 router.post('/abe/sql-request*', postSqlRequest)
 router.post('/abe/page/*', postPage)
 router.get('/abe/page/*', getPage)
-router.post('/abe/publish', postPublish)
+router.post('/abe/publish*', postPublish)
 router.get('/abe/republish', getRepublish)
-router.post('/abe/reject', postReject)
-router.post('/abe/draft', postDraft)
+router.post('/abe/reject*', postReject)
+router.post('/abe/draft*', postDraft)
 router.get('/abe/save-config', getSaveConfig)
-router.get('/abe/unpublish', getUnpublish)
-router.get('/abe/delete', getDelete)
+router.get('/abe/unpublish*', getUnpublish)
+router.get('/abe/delete*', getDelete)
 router.post('/abe/upload/*', postUpload)
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
@@ -90,6 +86,7 @@ Array.prototype.forEach.call(routes, (route) => {
   }
 })
 router.get('/abe*', getMain)
+// router.get('/abe*', getMain)
 
 abeExtend.hooks.instance.trigger('afterAddRoute', router)
 

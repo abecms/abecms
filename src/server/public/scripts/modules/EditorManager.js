@@ -122,7 +122,10 @@ export default class EditorManager {
     Array.prototype.forEach.call(this._btnVisitSite, (btnVisitSite) => {
       btnVisitSite.addEventListener('click', this._handleBtnVisitClick)
     })
-    this._btnManager.addEventListener('click', this._handleBtnManagerClick)
+
+    if (this._btnManager != null) {
+      this._btnManager.addEventListener('click', this._handleBtnManagerClick)
+    }
     
     if(typeof this._btnRepublish !== 'undefined' && this._btnRepublish !== null) {
       this._btnRepublish.addEventListener('click', this._handleBtnRepublishClick)

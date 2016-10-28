@@ -9,10 +9,13 @@ var route = function(req, res, next){
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
+  var filePath = req.originalUrl.replace('/abe/publish', '')
+  var json = req.body.json
+
   var p = cmsOperations.post.publish(
-    req.body.filePath, 
-    req.body.tplPath,
-    req.body.json
+    filePath, 
+    json.abe_meta.template,
+    json
   )
 
   p.then((result) => {

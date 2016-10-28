@@ -63,8 +63,8 @@ export default class Reload {
     str = template(json)
     doc.open() 
     doc.write(str) 
-    doc.close() 
-     
+    doc.close()
+
     setTimeout(function () { 
       var iframeDoc = IframeDocument('#page-template') 
       if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
