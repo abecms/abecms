@@ -9,33 +9,26 @@ import {
 var route = function(req, res, next){
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
-  cmsOperations.save.save(
-    path.join(config.root, config.draft.url, req.body.filePath.replace(config.root)),
-    req.body.tplPath,
-    req.body.json,
-    '',
-    'draft',
-    null,
-    'draft')
-    .then((resSave) => {
-      if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
-        res.set('Content-Type', 'application/json')
-        res.send(JSON.stringify({error: resSave.error}))
-      }
-      var result
-      if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
-        result = resSave
-      }
-      if(typeof resSave.json !== 'undefined' && resSave.json !== null){
-        Manager.instance.updateList()
-        result = {
-          success: 1,
-          json: resSave.json
-        }
-      }
-      res.set('Content-Type', 'application/json')
-      res.send(JSON.stringify(result))
-    })
+
+  var filePath = req.originalUrl.replace('/abe/draft', '')
+  var json = req.body.json
+
+  var p = cmsOperations.post.draft(
+    filePath, 
+    json.abe_meta.template,
+    json
+  )
+
+  p.then((result) => {
+    res.set('Content-Type', 'application/json')
+    res.send(JSON.stringify(result))
+  },
+  (result) => {
+    res.set('Content-Type', 'application/json')
+    res.send(JSON.stringify(result))
+  }).catch(function(e) {
+    console.error('[ERROR] post-draft.js', e)
+  })
 }
 
 export default route

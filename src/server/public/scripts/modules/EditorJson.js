@@ -43,9 +43,10 @@ export default class Json {
         delete json.abe_source
       }
 
+      tplPath = (tplPath != null) ? tplPath : CONFIG.TPLPATH
+      filePath = (filePath != null) ? filePath : CONFIG.FILEPATH
+
       var toSave = qs.stringify({
-        tplPath: (tplPath) ? tplPath : CONFIG.TPLPATH,
-        filePath: (filePath) ? filePath : CONFIG.FILEPATH,
         json: jsonSave
       })
 
@@ -53,7 +54,7 @@ export default class Json {
 
       this._ajax(
         {
-          url: document.location.origin + '/abe/' + type,
+          url: document.location.origin + '/abe/' + type + filePath,
           body: toSave,
           headers: this._headers,
           method: 'post'
