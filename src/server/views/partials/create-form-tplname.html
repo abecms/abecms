@@ -5,7 +5,7 @@
     {{#if isHome}}
     <input class="form-control" type="text" name="tplName" id="tplName" placeholder="{{@root.text.file}}.{{config.files.templates.extension}}" />
     {{else}}
-    <input class="form-control" type="text" name="tplName" value="{{json.abe_meta.cleanName}}" id="tplName" placeholder="{{@root.text.file}}.{{config.files.templates.extension}}" />
+    <input class="form-control" type="text" name="tplName" value="{{@root.filename}}" id="tplName" placeholder="{{@root.text.file}}.{{config.files.templates.extension}}" />
     {{/if}}
   </div>
 </div>
