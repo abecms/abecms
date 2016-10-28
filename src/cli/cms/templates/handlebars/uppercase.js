@@ -3,8 +3,8 @@
  */
 export default function lowercase(str) {
   if(typeof str === 'undefined' || str === null){
-    return '';
+    return ''
   } else {
-    return str.toUpperCase();
+    return str.toUpperCase()
   }
 }
