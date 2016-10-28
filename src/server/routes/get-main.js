@@ -140,7 +140,7 @@ var route = function(req, res, next) {
     }
     EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 
-    if (filePath.indexOf(`.json`) > -1) {
+    if (filePath != null && filePath.indexOf(`.json`) > -1) {
       res.set('Content-Type', 'application/json')
       res.send(JSON.stringify(_json))
     }else {
