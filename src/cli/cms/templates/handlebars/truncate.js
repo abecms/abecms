@@ -5,7 +5,7 @@ export default function truncate(str, len) {
 
       return new_str +'...'
     } else {
-      return str;
+      return str
     }
   } else {
     

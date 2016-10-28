@@ -35,7 +35,7 @@ export function draft(filePath, tplPath, json, workflow = 'draft', type = 'draft
         }
         resolve(result)
       })
-    })
+  })
 
   return p
 }
