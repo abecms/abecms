@@ -34,10 +34,11 @@ var route = function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
+  var debugJson = false
   var isHome = true
   var jsonPath = null
   var linkPath = null
-  var templatePath = null
+  var template = null
   var fileName = null
   var folderPath = null
 
@@ -45,8 +46,7 @@ var route = function(req, res, next) {
 
     if(filePath != null) {
       fileName = filePath.split('/')
-      fileName = fileName[fileName.length-1]
-      fileName = fileName.replace(`.${config.files.templates.extension}`, '')
+      fileName = fileName[fileName.length-1].replace(`.${config.files.templates.extension}`, '')
 
       folderPath = filePath.split('/')
       folderPath.pop()
@@ -58,7 +58,7 @@ var route = function(req, res, next) {
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
         jsonPath = filePathTest.path
         linkPath = filePathTest.abe_meta.link
-        templatePath = filePathTest.abe_meta.template
+        template = filePathTest.abe_meta.template
       }
 
       if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
@@ -66,7 +66,7 @@ var route = function(req, res, next) {
         return 
       }
 
-      editor(templatePath, jsonPath, linkPath)
+      editor(template, jsonPath, linkPath)
         .then((result) => {
           resolve(result)
         }).catch(function(e) {
@@ -96,7 +96,7 @@ var route = function(req, res, next) {
     
     var _hasBlock = (obj) ? obj.hasBlock : false
     var _hasSingleBlock = (obj) ? obj.hasSingleBlock : false
-    var _template = (filePath) ? '/abe/page/' + req.params[0] + `?filePath=${req.query.filePath}` : false
+    var _preview = (filePath) ? '/abe/page/' + req.params[0] + `?filePath=${req.query.filePath}` : false
     var _form = (obj) ? obj.form : false
     var _json = (obj) ? obj.json : false
     var _text = (obj) ? obj.text : false
@@ -121,8 +121,7 @@ var route = function(req, res, next) {
       abeUrl: '/abe/',
       test: JSON.stringify(locale),
       text: locale,
-      templatePath: req.params[0],
-      template: _template,
+      preview: _preview,
       filename: fileName,
       folderPath: folderPath,
       hasSingleBlock: _hasSingleBlock,
@@ -141,7 +140,12 @@ var route = function(req, res, next) {
     }
     EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 
-    res.render(config.abeEngine, EditorVariables)
+    if (filePath.indexOf(`.json`) > -1) {
+      res.set('Content-Type', 'application/json')
+      res.send(JSON.stringify(_json))
+    }else {
+      res.render(config.abeEngine, EditorVariables)
+    }
   }).catch((e) => {
     console.log('error', e)
   })
