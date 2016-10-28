@@ -144,7 +144,7 @@ export default class FormCreate {
         (code, responseText) => {
           var jsonRes = JSON.parse(responseText)
           if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== 'undefined' && jsonRes.json.abe_meta !== null) {
-            window.location.href = window.location.origin + '/abe/' + jsonRes.json.abe_meta.template + '?filePath=' + jsonRes.json.abe_meta.link
+            window.location.href = window.location.origin + '/abe' + jsonRes.json.abe_meta.link
           }else {
             alert('error')
             btn.classList.remove('disable')
