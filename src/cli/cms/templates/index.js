@@ -16,6 +16,8 @@ import printJson 	from './handlebars/printJson'
 import translate 	from './handlebars/translate'
 import times 			from './handlebars/times'
 import truncate 	from './handlebars/truncate'
+import lowercase 	from './handlebars/lowercase'
+import uppercase 	from './handlebars/uppercase'
 
 import * as template from './template'
 import * as assets from './assets'
@@ -37,6 +39,8 @@ Handlebars.registerHelper('printJson', 	printJson)
 Handlebars.registerHelper('i18nAbe', 		translate)
 Handlebars.registerHelper('times', 			times)
 Handlebars.registerHelper('truncate', 	truncate)
+Handlebars.registerHelper('lowercase', 	lowercase)
+Handlebars.registerHelper('uppercase', 	uppercase)
 
 HandlebarsIntl.registerWith(Handlebars)
 
@@ -52,6 +56,8 @@ export {
 	ifIn,
 	isTrue,
 	truncate,
+	lowercase,
+	uppercase,
 	math,
 	moduloIf,
 	notEmpty,

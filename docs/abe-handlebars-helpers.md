@@ -37,8 +37,35 @@ template.html
 {{{{/raw}}}}
 ```
 
-Everything inside raw bloc will be compiled client side and as the reload attribut is on the json that will be used is the one client side (not the one saved inside a json file)
-when a new item will be added or removed from abe form *objs* inside the json file won't have changed but as it compiled on the client after reloading the iframe myArray will contains as much item as there is on objs each bloc
+Everything inside raw block will be compiled client side and as the reload attribute is on the json that will be used is the one client side (not the one saved inside a json file)
+when a new item will be added or removed from abe form *objs* inside the json file won't have changed but as it compiled on the client after reloading the iframe myArray will contains as much item as there is on objs each block
+
+## lowercase
+
+### Example
+
+```html
+{{lowercase 'my Text IS THERE'}}
+```
+Result : 'my text is there'
+
+###Description
+
+This helper... lowercases your text.
+
+## uppercase
+
+### Example
+
+```html
+{{uppercase 'my Text IS THERE'}}
+```
+
+Result : 'MY TEXT IS THERE'
+
+###Description
+
+This helper... uppercases your text.
 
 ## truncate
 
