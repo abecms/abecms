@@ -291,21 +291,27 @@ export function getStructureAndTemplates() {
   var site = cmsData.revision.filePathInfos(config.root)
   var result = {'structure': [], 'templates': []}
 
-  let structure = path.join(site.path, config.structure.url)
-  let templates = path.join(site.path, config.templates.url)
+  const pathStructure = path.join(site.path, config.structure.url)
+  const pathTemplates = path.join(site.path, config.templates.url)
   try {
-    var directoryStructure = fse.lstatSync(structure)
+    let directoryStructure = fse.lstatSync(pathStructure)
     if (directoryStructure.isDirectory()) {
-      result.structure = cmsData.file.getFolders(structure, false)
+      result.structure = cmsData.file.getFolders(pathStructure, false)
     }
   } catch (e) {
   }
   try {
-    var directoryTemplate = fse.lstatSync(templates)
+    let directoryTemplate = fse.lstatSync(pathTemplates)
     if (directoryTemplate.isDirectory()) {
-      var resultTemplates = result.templates.concat(cmsData.file.getFiles(templates, true, 10, new RegExp(`.${config.files.templates.extension}`)))
-      result.templates = resultTemplates.filter(function (resultTemplate) {
-        return resultTemplate.path.indexOf(config.partials) < 0
+      let extension = '.' + config.files.templates.extension
+      let resultTemplates = []
+      let templatePaths = coreUtils.file.getFilesSync(pathTemplates, true, extension)
+      Array.prototype.forEach.call(templatePaths, (templatePath) => {
+        let additionalPath = path.dirname(templatePath).replace(pathTemplates,'')
+        if(additionalPath !== '') additionalPath = additionalPath.substring(1)
+        let name = path.join(additionalPath,path.basename(templatePath,extension))
+        let template = {'path':templatePath, 'cleanPath':templatePath, 'cleanNameNoExt':name}
+        result.templates.push(template)
       })
     }
   } catch (e) {
