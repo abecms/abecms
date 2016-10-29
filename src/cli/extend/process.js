@@ -1,7 +1,5 @@
 import process from 'child_process'
 import fse from 'fs-extra'
-import path from 'path'
-import fs from 'fs'
 
 import {
   config
@@ -42,7 +40,7 @@ var abeProcess = function(name, args = []) {
   }
 
   if(typeof proc !== 'undefined' && proc !== null) {
-    proc.on('message', function( msg ) {
+    proc.on('message', function(msg) {
       abeExtend.lock.remove(name)
       proc.kill()
     })
