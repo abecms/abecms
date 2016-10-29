@@ -41,13 +41,91 @@ export function getContent(pathFile) {
 }
 
 /**
+ * synchronous fse walker to get folders with recursive option
+ * @param  {String}  dirname   dir path
+ * @param  {Boolean} recursive do we recurse in the subfolders
+ * @param  {String}  filterExt extension or ''
+ * @return {array}             array of pathfiles
+ */
+export function getFoldersSync(dirname, recursive = true) {
+  let items = []
+  fse.readdirSync(dirname).map(function(fileName) {
+    let pathFile = path.join(dirname, fileName)
+    let stat = fse.statSync(pathFile)
+    if (stat.isDirectory()) {
+      items.push(pathFile)
+      if (recursive) {
+        let filesInDir = coreUtils.file.getFoldersSync(pathFile, recursive)
+        items = items.concat(filesInDir)
+      }
+    }
+  })
+
+  return items
+}
+
+/**
+ * Promisified fse walker to get folders with recursive option
+ * @param  {String}  dirname   dir path
+ * @param  {Boolean} recursive do we recurse in the subfolders
+ * @param  {String}  filterExt extension or ''
+ * @return {array}             array of pathfiles
+ */
+export function getFoldersAsync(dirname, recursive = true) {
+  let items = []
+  return fse.readdirAsync(dirname).map(function(fileName) {
+    let pathFile = path.join(dirname, fileName)
+    return fse.statAsync(pathFile).then(function(stat) {
+      if (stat.isDirectory()) {
+        items.push(pathFile)
+        if (recursive) {
+          return coreUtils.file.getFoldersAsync(pathFile, recursive, filterExt).then(function(filesInDir) {
+            items = items.concat(filesInDir)
+          })
+        }
+      }
+      return
+    })
+  }).then(function() {
+    return items
+  })
+}
+
+/**
+ * synchronous fse walker with recursive and extension options
+ * @param  {String}  dirname   dir path
+ * @param  {Boolean} recursive do we recurse in the subfolders
+ * @param  {String}  filterExt extension or ''
+ * @return {array}             array of pathfiles
+ */
+export function getFilesSync(dirname, recursive = true, filterExt = '') {
+  let items = []
+  fse.readdirSync(dirname).map(function(fileName) {
+    let pathFile = path.join(dirname, fileName)
+    let stat = fse.statSync(pathFile)
+    if (stat.isFile()) {
+      let extFile = path.extname(fileName)
+      if (filterExt === '' || extFile === filterExt) {
+        items.push(pathFile)
+      }
+    }
+    if (stat.isDirectory() && recursive) {
+      let filesInDir = coreUtils.file.getFilesSync(pathFile, recursive, filterExt)
+      items = items.concat(filesInDir)
+    }
+  })
+
+  return items
+}
+
+/**
  * Promisified fse walker with recursive and extension options
  * @param  {String}  dirname   dir path
  * @param  {Boolean} recursive do we recurse in the subfolders
  * @param  {String}  filterExt extension or ''
  * @return {array}             array of pathfiles
  */
-export function getFiles(dirname, recursive=true, filterExt = '') {
+export function getFilesAsync(dirname, recursive = true, filterExt = '') {
   let items = []
   return fse.readdirAsync(dirname).map(function(fileName) {
     let pathFile = path.join(dirname, fileName)
