@@ -2,6 +2,7 @@ import path from 'path'
 import fse from 'fs-extra'
 
 import {
+  coreUtils,
   cmsData,
   config
 } from '../'
@@ -69,9 +70,9 @@ class Plugins {
             var directoryProcess = fse.lstatSync(plugProcess)
             if (directoryProcess.isDirectory()) {
               plugin.process = {}
-              var processFiles = cmsData.file.getFiles(plugProcess, true, 0)
+              let processFiles = coreUtils.file.getFilesSync(plugProcess, false)
               Array.prototype.forEach.call(processFiles, (processFile) => {
-                plugin.process[processFile.cleanNameNoExt] = processFile.path
+                plugin.process[path.basename(processFile, '.js')] = processFile
               })
             }else {
               plugin.process = null
@@ -91,27 +92,33 @@ class Plugins {
               try {
                 var directoryGets = fse.lstatSync(gets)
                 if (directoryGets.isDirectory()) {
-                  var routesGet = cmsData.file.getFiles(gets, true, 0)
-                  Array.prototype.forEach.call(routesGet, (route) => {
-                    route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
+                  let routesGet = []
+                  let routePaths = coreUtils.file.getFilesSync(gets, false)
+                  Array.prototype.forEach.call(routePaths, (route) => {
+                    let pathUrl = `/abe/plugin/${plugin.name}/${path.basename(route, '.js')}*`
+                    let routeObject = {'path':route, 'routePath':pathUrl}
+                    routesGet.push(routeObject)
                   })
                   plugin.routes.get = routesGet
                 }
               }catch(e) {
-
+                plugin.routes.get = null
               }
               try {
-                var posts = path.join(plugRoutes, 'post')
-                var directoryPosts = fse.lstatSync(gets)
+                let posts = path.join(plugRoutes, 'post')
+                let directoryPosts = fse.lstatSync(gets)
                 if (directoryPosts.isDirectory()) {
-                  var routesPost = cmsData.file.getFiles(posts, true, 0)
-                  Array.prototype.forEach.call(routesPost, (route) => {
-                    route.routePath = `/abe/plugin/${plugin.name}/${route.name.replace('.js', '')}*`
+                  let routesPost = []
+                  let routePaths = coreUtils.file.getFilesSync(posts, false)
+                  Array.prototype.forEach.call(routePaths, (route) => {
+                    let pathUrl = `/abe/plugin/${plugin.name}/${path.basename(route, '.js')}*`
+                    let routeObject = {'path':route, 'routePath' : pathUrl}
+                    routesPost.push(routeObject)
                   })
                   plugin.routes.post = routesPost
                 }
               }catch(e) {
-
+                plugin.routes.post = null
               }
             }else {
               plugin.routes = null
