@@ -8,28 +8,13 @@ import {
   abeExtend
 } from '../../'
 
-export function findTemplateAndPartialsInFolder (currentPath) {
-  var res = []
-  var files = fse.readdirSync(currentPath)
-  for (var i in files) {
-    var currentFile = currentPath + '/' + files[i]
-    var stats = fse.statSync(currentFile)
-    if (stats.isFile()) {
-      if (currentFile.indexOf('.' + config.files.templates.extension) > -1) {
-        res.push(currentFile)
-      }
-    }
-    else if (stats.isDirectory()) {
-      res = res.concat(findTemplateAndPartialsInFolder(currentFile))
-    }
-  }
-  return res
-}
-
-export function getTemplateAndPartials(templatesPath) {
+export function getTemplatesAndPartials(templatesPath) {
   var p = new Promise((resolve) => {
-    let templatesList = findTemplateAndPartialsInFolder(templatesPath)
-    resolve(templatesList)
+    const extension = '.' + config.files.templates.extension
+    return coreUtils.file.getFilesAsync(templatesPath, true, extension)
+      .then(function(files){
+        return resolve(files)
+      })
   })
 
   return p
@@ -258,7 +243,7 @@ export function findRequestColumns(templatesList) {
 
 export function getSelectTemplateKeys(templatesPath) {
   var p = new Promise((resolve, reject) => {
-    return getTemplateAndPartials(templatesPath)
+    return getTemplatesAndPartials(templatesPath)
       .then((templatesList) => {
         return findRequestColumns(templatesList)
           .then((whereKeys) => {

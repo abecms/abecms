@@ -136,7 +136,7 @@ export function getFilesAsync(dirname, recursive = true, filterExt = '') {
         return 
       }
       if (recursive) {
-        return coreUtils.file.getFiles(pathFile, recursive, filterExt).then(function(filesInDir) {
+        return coreUtils.file.getFilesAsync(pathFile, recursive, filterExt).then(function(filesInDir) {
           items = items.concat(filesInDir)
         })
       }
