@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 import extend from 'extend'
 import mkdirp from 'mkdirp'
 import xss from 'xss'
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import path from 'path'
 
 import {

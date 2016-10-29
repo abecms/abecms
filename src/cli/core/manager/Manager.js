@@ -79,20 +79,26 @@ class Manager {
       })
     })
 
-    this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
-      monitor.on('created', (f, stat) => {
-        this.updateStructureAndTemplates()
-        this.events.structure.emit('update')
+    try {
+      fse.accessSync(this._pathStructure, fse.F_OK);
+      this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
+        monitor.on('created', (f, stat) => {
+          this.updateStructureAndTemplates()
+          this.events.structure.emit('update')
+        })
+        monitor.on('changed', (f, curr, prev) => {
+          this.updateStructureAndTemplates()
+          this.events.structure.emit('update')
+        })
+        monitor.on('removed', (f, stat) => {
+          this.updateStructureAndTemplates()
+          this.events.structure.emit('update')
+        })
       })
-      monitor.on('changed', (f, curr, prev) => {
-        this.updateStructureAndTemplates()
-        this.events.structure.emit('update')
-      })
-      monitor.on('removed', (f, stat) => {
-        this.updateStructureAndTemplates()
-        this.events.structure.emit('update')
-      })
-    })
+    } catch (e) {
+        console.log('the directory ' + this._pathStructure + ' does not exist')
+    }
+    
   }
 
   getKeysFromSelect() {

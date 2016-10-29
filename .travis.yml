@@ -1,3 +1,6 @@
+os:
+  - linux
+  - osx
 language: node_js
 node_js:
   - "4"
@@ -11,4 +14,3 @@ install:
 script:
   - npm run test-coveralls
   - npm run lint
-
