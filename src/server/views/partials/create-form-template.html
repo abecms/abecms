@@ -5,12 +5,12 @@
       <option></option>
       {{#each manager.list.templates}}
         {{#if isHome}}
-        <option value="{{cleanPath}}" clean-value="{{website}}">{{cleanPath}}</option>
+        <option value="{{cleanPath}}" clean-value="{{website}}">{{cleanNameNoExt}}</option>
         {{else}}
           {{#ifCond @root.json.abe_meta.template cleanNameNoExt}}
-          <option value="{{cleanPath}}" clean-value="{{website}}" selected="selected">{{cleanPath}}</option>
+          <option value="{{cleanPath}}" clean-value="{{website}}" selected="selected">{{cleanNameNoExt}}</option>
           {{else}}
-          <option value="{{cleanPath}}" clean-value="{{website}}">{{cleanPath}}</option>
+          <option value="{{cleanPath}}" clean-value="{{website}}">{{cleanNameNoExt}}</option>
           {{/ifCond}}
         {{/if}}
       {{/each}}
