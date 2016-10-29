@@ -1,5 +1,5 @@
 import mkdirp from 'mkdirp'
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import slug from 'limax' 
 
 import {

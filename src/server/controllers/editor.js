@@ -1,4 +1,4 @@
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import path from 'path'
 
 import {

@@ -2,7 +2,7 @@
 
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import extend from 'extend'
 import on from 'on'
 

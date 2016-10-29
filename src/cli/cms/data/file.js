@@ -177,6 +177,45 @@ export function getFilesByType(pathFile, type = null) {
   return result
 }
 
+export function getFileObject(elt, pathLevel, base) {
+  var cleanName = cmsData.fileAttr.delete(elt)
+  var cleanNameNoExt = cleanName.replace(/\..+$/, '')
+  var fileData = cmsData.fileAttr.get(elt)
+
+  var date
+  if (fileData.d) {
+    date = fileData.d
+  }else {
+    var stat = fse.statSync(pathLevel)
+    date = stat.mtime
+  }
+  var cleanFilePath = cmsData.fileAttr.delete(pathLevel).replace(config.root, '').replace(/^\/?.+?\//, '')
+
+  var fileDate = moment(date)
+  var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
+
+  var filePath = pathLevel.replace(config.root, '')
+  filePath = filePath.split('/')
+  filePath.shift()
+  filePath = filePath.join('/')
+  var item = {
+    'name': elt,
+    'path': pathLevel,
+    'cleanPathName': cmsData.fileAttr.delete(pathLevel),
+    'cleanPath': pathLevel.replace(base + '/', ''),
+    'date': date,
+    'cleanDate': fileDate.format('YYYY/MM/DD HH:MM:ss'),
+    'duration': duration,
+    'cleanName': cleanName,
+    'cleanNameNoExt': cleanNameNoExt,
+    'cleanFilePath': cleanFilePath,
+    'filePath': filePath,
+    'type': 'file'
+  }
+
+  return item
+}
+
 export function read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
   var arr = []
   var level = fse.readdirSync(dirName)
@@ -198,43 +237,7 @@ export function read(base, dirName, type, flatten, extensions = /(.*?)/, max = 9
     if((type === 'files' || type === null) && match) {
 
       if(level[i].indexOf('.') > -1) {
-        var extension = /(\.[\s\S]*)/.exec(level[i])[0]
-        var cleanName = cmsData.fileAttr.delete(level[i])
-        var cleanNameNoExt = cleanName.replace(/\..+$/, '')
-        var fileData = cmsData.fileAttr.get(level[i])
-
-        var date
-        if (fileData.d) {
-          date = fileData.d
-        }else {
-          var stat = fse.statSync(pathLevel)
-          date = stat.mtime
-        }
-        var cleanFilePath = cmsData.fileAttr.delete(pathLevel).replace(config.root, '').replace(/^\/?.+?\//, '')
-
-        var fileDate = moment(date)
-        var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
-
-        var filePath = pathLevel.replace(config.root, '')
-        filePath = filePath.split('/')
-        filePath.shift()
-        filePath = filePath.join('/')
-        var item = {
-          'name': level[i],
-          'path': pathLevel,
-          'cleanPathName': cmsData.fileAttr.delete(pathLevel),
-          'cleanPath': pathLevel.replace(base + '/', ''),
-          date: date,
-          cleanDate: fileDate.format('YYYY/MM/DD HH:MM:ss'),
-          duration: duration,
-          cleanName: cleanName,
-          cleanNameNoExt: cleanNameNoExt,
-          cleanFilePath: cleanFilePath,
-          filePath: filePath,
-          'type': 'file',
-          'fileType': extension
-        }
-
+        var item = cmsData.file.getFileObject(level[i], pathLevel, item)
         if(!flatten) item['folders'] = []
         arr.push(item)
         // push current file name into array to check if siblings folder are assets folder
@@ -244,13 +247,28 @@ export function read(base, dirName, type, flatten, extensions = /(.*?)/, max = 9
     if(!fileCurrentLevel.indexOf(level[i]) >= 0 && match) {
       if(isFolder) {
         if(!flatten) {
-          var index = arr.push({'name': level[i], 'path': pathLevel, 'cleanPath': pathLevel.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
+          var index = arr.push(
+            {
+              'name': level[i],
+              'path': pathLevel,
+              'cleanPath': pathLevel.replace(base + '/', ''),
+              'folders': [],
+              'type': 'folder'
+            }
+          ) - 1
           if(current < max){
             arr[index].folders = cmsData.file.read(base, pathLevel, type, flatten, extensions, max, current + 1, inversePattern)
           }
         }else {
           if(type === 'folders' || type === null) {
-            arr.push({'name': level[i], 'path': pathLevel, 'cleanPath': pathLevel.replace(base + '/', ''), 'type': 'folder'})
+            arr.push(
+              {
+                'name': level[i],
+                'path': pathLevel,
+                'cleanPath': pathLevel.replace(base + '/', ''),
+                'type': 'folder'
+              }
+            )
           }
           if(current < max){
             Array.prototype.forEach.call(cmsData.file.read(base, pathLevel, type, flatten, extensions, max, current + 1, inversePattern), (files) => {

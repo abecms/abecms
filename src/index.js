@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import Create from './cli/cms/Create'
 import {exec} from 'child_process'
 import {spawn} from 'child_process'

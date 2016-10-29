@@ -2,7 +2,7 @@
 
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import on from 'on'
 let singleton = Symbol()
 let singletonEnforcer = Symbol()

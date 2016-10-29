@@ -1,8 +1,10 @@
-import fse from 'fs-extra'
+import Promise from 'bluebird'
 import path from 'path'
+var fse = Promise.promisifyAll(require('fs-extra'))
 
 import {
-  config
+  config,
+  coreUtils
 } from '../../'
 
 export function exist(pathFile) {
@@ -36,4 +38,34 @@ export function getContent(pathFile) {
     }
   }
   return res
+}
+
+/**
+ * Promisified fse walker with recursive and extension options
+ * @param  {String}  dirname   dir path
+ * @param  {Boolean} recursive do we recurse in the subfolders
+ * @param  {String}  filterExt extension or ''
+ * @return {array}             array of pathfiles
+ */
+export function getFiles(dirname, recursive=true, filterExt = '') {
+  let items = [];
+  return fse.readdirAsync(dirname).map(function(fileName) {
+    let pathFile = path.join(dirname, fileName)
+    return fse.statAsync(pathFile).then(function(stat) {
+      if (stat.isFile()) {
+        let extFile = path.extname(fileName)
+        if (filterExt === '' || extFile === filterExt) {
+          return items.push(pathFile)
+        }
+        return 
+      }
+      if (recursive) {
+        return coreUtils.file.getFiles(pathFile, recursive, filterExt).then(function(filesInDir) {
+            items = items.concat(filesInDir);
+        })
+      }
+    })
+  }).then(function() {
+    return items
+  })
 }

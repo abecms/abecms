@@ -1,5 +1,5 @@
 import fse from 'fs-extra'
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import path from 'path'
 import {
   config,
@@ -258,9 +258,9 @@ export function findRequestColumns(templatesList) {
 
 export function getSelectTemplateKeys(templatesPath) {
   var p = new Promise((resolve, reject) => {
-    getTemplateAndPartials(templatesPath)
+    return getTemplateAndPartials(templatesPath)
       .then((templatesList) => {
-        findRequestColumns(templatesList)
+        return findRequestColumns(templatesList)
           .then((whereKeys) => {
             resolve(whereKeys)
           },
