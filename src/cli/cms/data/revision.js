@@ -1,10 +1,8 @@
-import fse from 'fs-extra'
 import path from 'path'
 
 import {
   config,
   cmsData,
-  cmsOperations,
   coreUtils,
   Manager
 } from '../../'
