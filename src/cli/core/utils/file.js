@@ -48,7 +48,7 @@ export function getContent(pathFile) {
  * @return {array}             array of pathfiles
  */
 export function getFiles(dirname, recursive=true, filterExt = '') {
-  let items = [];
+  let items = []
   return fse.readdirAsync(dirname).map(function(fileName) {
     let pathFile = path.join(dirname, fileName)
     return fse.statAsync(pathFile).then(function(stat) {
@@ -61,7 +61,7 @@ export function getFiles(dirname, recursive=true, filterExt = '') {
       }
       if (recursive) {
         return coreUtils.file.getFiles(pathFile, recursive, filterExt).then(function(filesInDir) {
-            items = items.concat(filesInDir);
+          items = items.concat(filesInDir)
         })
       }
     })

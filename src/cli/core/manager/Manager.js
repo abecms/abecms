@@ -80,7 +80,7 @@ class Manager {
     })
 
     try {
-      fse.accessSync(this._pathStructure, fse.F_OK);
+      fse.accessSync(this._pathStructure, fse.F_OK)
       this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
         monitor.on('created', (f, stat) => {
           this.updateStructureAndTemplates()
@@ -96,7 +96,7 @@ class Manager {
         })
       })
     } catch (e) {
-        console.log('the directory ' + this._pathStructure + ' does not exist')
+      console.log('the directory ' + this._pathStructure + ' does not exist')
     }
     
   }
