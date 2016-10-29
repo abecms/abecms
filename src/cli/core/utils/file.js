@@ -14,8 +14,6 @@ export function exist(pathFile) {
   }catch(e){
     return false
   }
-
-  return false
 }
 
 export function changePath(pathEnv, change) {
@@ -79,7 +77,7 @@ export function getFoldersAsync(dirname, recursive = true) {
       if (stat.isDirectory()) {
         items.push(pathFile)
         if (recursive) {
-          return coreUtils.file.getFoldersAsync(pathFile, recursive, filterExt).then(function(filesInDir) {
+          return coreUtils.file.getFoldersAsync(pathFile, recursive).then(function(filesInDir) {
             items = items.concat(filesInDir)
           })
         }
