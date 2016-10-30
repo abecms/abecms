@@ -22,7 +22,7 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
   Array.prototype.forEach.call(obj, (o) => {
     let selected = ''
     let isVisible = false
-    let name = path.basename(path)
+    let name = path.basename(o.path)
     if(links != null && links[index - 1] != null) {
       if (links[index - 1] === name) {
         selected = 'selected="selected"'
