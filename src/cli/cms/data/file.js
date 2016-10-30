@@ -65,7 +65,7 @@ export function getAllWithKeys(withKeys) {
 }
 
 export function get(pathJson) {
-  var json = {}
+  let json
   pathJson = abeExtend.hooks.instance.trigger('beforeGetJson', pathJson)
   
   try {
@@ -74,6 +74,7 @@ export function get(pathJson) {
       json = fse.readJsonSync(pathJson)
     }
   }catch(e) {
+    json = {}
   }
 
   json = abeExtend.hooks.instance.trigger('afterGetJson', json)
