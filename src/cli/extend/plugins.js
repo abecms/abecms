@@ -3,7 +3,6 @@ import fse from 'fs-extra'
 
 import {
   coreUtils,
-  cmsData,
   config
 } from '../'
 
@@ -21,7 +20,7 @@ class Plugins {
       var directoryPlugins = fse.lstatSync(pluginsDir)
       if (directoryPlugins.isDirectory()) {
         
-        this._plugins = cmsData.file.getFolders(pluginsDir, true, 0)
+        this._plugins = coreUtils.file.getFoldersSync(pluginsDir, false)
         Array.prototype.forEach.call(this._plugins, (plugin) => {
           // has hooks
           var plugHooks = path.join(plugin.path, config.hooks.url)
