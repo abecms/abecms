@@ -126,20 +126,6 @@ export function fromUrl(url) {
   return res
 }
 
-export function getFolders(folder, flatten = false, level) {
-  var arr = []
-  arr = cmsData.file.read(
-    folder.replace(/\/$/, ''), 
-    folder.replace(/\/$/, ''), 
-    'folders', 
-    flatten, 
-    /(.*?)/, 
-    level
-  )
-
-  return arr
-}
-
 export function getFiles(folder, flatten = false, level, extensions = /(.*?)/, inversePattern = false) {
 
   var arr = []

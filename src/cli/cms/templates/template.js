@@ -273,21 +273,12 @@ export function getSelectTemplateKeys(templatesPath) {
 }
 
 export function getStructureAndTemplates() {
-  var site = cmsData.revision.filePathInfos(config.root)
-  var result = {'structure': [], 'templates': []}
-
-  const pathStructure = path.join(site.path, config.structure.url)
-  const pathTemplates = path.join(site.path, config.templates.url)
-  try {
-    let directoryStructure = fse.lstatSync(pathStructure)
-    if (directoryStructure.isDirectory()) {
-      result.structure = cmsData.file.getFolders(pathStructure, false)
-    }
-  } catch (e) {
-  }
-
+  const pathStructure = path.join(config.root, config.structure.url)
+  const pathTemplates = path.join(config.root, config.templates.url)
   const extension = '.' + config.files.templates.extension
-  let resultTemplates = []
+  let result = {'structure': [], 'templates': []}
+
+  result.structure = coreUtils.file.getFoldersSync(pathStructure, true)
   let templatePaths = coreUtils.file.getFilesSync(pathTemplates, true, extension)
   Array.prototype.forEach.call(templatePaths, (templatePath) => {
     let additionalPath = path.dirname(templatePath).replace(pathTemplates,'')

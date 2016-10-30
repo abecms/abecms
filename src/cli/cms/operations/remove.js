@@ -40,7 +40,7 @@ export function olderRevisionByType(filePath, type) {
   const file = path.basename(filePath)
   const extension = path.extname(filePath)
 
-  const files = coreUtils.file.getFiles(folder, false, extension)
+  const files = coreUtils.file.getFilesSync(folder, false, extension)
   Array.prototype.forEach.call(files, (fileItem) => {
     const fname = cmsData.fileAttr.delete(fileItem)
     const ftype = cmsData.fileAttr.get(fileItem).s

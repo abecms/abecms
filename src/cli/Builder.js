@@ -3,6 +3,7 @@ import {saveHtml} from './cms/operations/save'
 import path from 'path'
 
 import {
+  coreUtils,
   cmsData,
   config,
   fileAttr,
@@ -13,36 +14,25 @@ import {
 class Builder {
 
   constructor(root, folder, dest, flow){
-    this.pathToJson = path.join(root, config.data.url)
-    var files = fileAttr.filterLatestVersion(cmsData.file.getFiles(this.pathToJson, config.data.url), flow)
+    const dataExtension = '.json'
+    const templateExtension = '.' + config.files.templates.extension
+    const pathToJson = path.join(root, config.data.url)
+
+    let files = fileAttr.filterLatestVersion(coreUtils.file.getFilesSync(this.pathToJson, true, dataExtension), flow)
 
     if(flow === 'publish') {
-      files = cmsData.file.getFiles(path.join(root, config.publish.url), new RegExp('.' + config.files.templates.extension))
+      files = coreUtils.file.getFilesSync(path.join(root, config.publish.url), true, templateExtension)
     }
 
-    var build = function (index) {
-      var file = files[index]
-      if(file.path.indexOf('.' + config.files.templates.extension) > -1){
-        file.path = file.path.replace(config.publish.url, config.data.url)
-                             .replace('.' + config.files.templates.extension, '.json')
-        
-        var json = fse.readJsonSync(file.path)
-        var text = cmsTemplates.template.getTemplate(json.abe_meta.template)
-        
-        cmsData.source.getDataList(path.dirname(json.abe_meta.link), text, json)
-          .then(() => {
-            var page = new Page(json.abe_meta.template, text, json, true)
-            saveHtml(path.join(root, dest + json.abe_meta.link), page.html)
-            if(files[index + 1]) build(index + 1)
-          }).catch(function(e) {
-            console.error(e)
-            if(files[index + 1]) build(index + 1)
-          })
+    const build = function (index) {
+      let file = files[index]
+      if(file.indexOf(templateExtension) > -1){
+        file = file.replace(config.publish.url, config.data.url).replace(templateExtension, dataExtension)
       }
-      else if(file.path.indexOf('.json') > -1){
-        var json = fse.readJsonSync(file.path)
-        var text = cmsTemplates.template.getTemplate(json.abe_meta.template)
-
+      if(file.indexOf(dataExtension) > -1){
+        const json = fse.readJsonSync(file)
+        const text = cmsTemplates.template.getTemplate(json.abe_meta.template)
+        
         cmsData.source.getDataList(path.dirname(json.abe_meta.link), text, json)
           .then(() => {
             var page = new Page(json.abe_meta.template, text, json, true)

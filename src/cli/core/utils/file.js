@@ -52,11 +52,11 @@ export function getFoldersSync(dirname, recursive = true) {
       let pathFile = path.join(dirname, fileName)
       let stat = fse.statSync(pathFile)
       if (stat.isDirectory()) {
-        items.push(pathFile)
+        let directory = {'path':pathFile, 'folders':[]}
         if (recursive) {
-          let filesInDir = coreUtils.file.getFoldersSync(pathFile, recursive)
-          items = items.concat(filesInDir)
+          directory.folders = coreUtils.file.getFoldersSync(pathFile, recursive)
         }
+        items.push(directory)
       }
     })
 
@@ -80,11 +80,15 @@ export function getFoldersAsync(dirname, recursive = true) {
     let pathFile = path.join(dirname, fileName)
     return fse.statAsync(pathFile).then(function(stat) {
       if (stat.isDirectory()) {
-        items.push(pathFile)
+        let directory = {'path':pathFile, 'folders':[]}
+        
         if (recursive) {
           return coreUtils.file.getFoldersAsync(pathFile, recursive).then(function(filesInDir) {
-            items = items.concat(filesInDir)
+            directory.folders = filesInDir
+            items.push(directory)
           })
+        } else {
+          items.push(directory)
         }
       }
       return
