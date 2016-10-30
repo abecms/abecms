@@ -165,7 +165,6 @@ export function getFileObject(pathFile) {
   const extension = '.json'
 
   const name = path.basename(pathFile)
-  const nameNoExt = path.basename(pathFile, extension)
   const relativePath = pathFile.replace(pathData + '/', '')
 
   const parentName = cmsData.fileAttr.delete(name)
@@ -187,7 +186,6 @@ export function getFileObject(pathFile) {
   
   let fileObject = {
     'name': name,
-    'cleanNameNoExt': nameNoExt,
     'path': pathFile,
     'cleanPath': relativePath,
     'filePath': relativePath,
