@@ -284,7 +284,7 @@ export function getStructureAndTemplates() {
     let additionalPath = path.dirname(templatePath).replace(pathTemplates,'')
     if(additionalPath !== '') additionalPath = additionalPath.substring(1)
     let name = path.join(additionalPath,path.basename(templatePath,extension))
-    let template = {'path':templatePath, 'cleanPath':templatePath, 'name':name}
+    let template = {'path':templatePath, 'name':name}
     result.templates.push(template)
   })
 

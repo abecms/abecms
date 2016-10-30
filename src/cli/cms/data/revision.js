@@ -140,7 +140,7 @@ export function getFilesMerged(files) {
   var arMerged = []
   
   Array.prototype.forEach.call(files, (file) => {
-    var cleanFilePath = file.cleanFilePath
+    var parentRelativePath = file.parentRelativePath
 
     var fileStatusIsPublish = cmsData.fileAttr.get(file.cleanPath)
     if(fileStatusIsPublish.s != null && file.abe_meta.status === 'publish') {
@@ -154,22 +154,21 @@ export function getFilesMerged(files) {
       file.htmlPath = path.join(config.root, config.draft.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
     }
 
-    if(merged[cleanFilePath] == null) {
-      merged[cleanFilePath] = {
+    if(merged[parentRelativePath] == null) {
+      merged[parentRelativePath] = {
         name: cmsData.fileAttr.delete(file.name),
         path: cmsData.fileAttr.delete(file.path),
         html: cmsData.fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))),
         htmlPath: path.join(config.root, config.publish.url, path.join('/', cmsData.fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))),
-        cleanPathName: file.cleanPathName,
         cleanPath: file.cleanPath,
         cleanName: file.cleanName,
-        cleanFilePath: file.cleanFilePath,
+        parentRelativePath: file.parentRelativePath,
         filePath: cmsData.fileAttr.delete(file.filePath),
         revisions: []
       }
     }
 
-    merged[cleanFilePath].revisions.push(JSON.parse(JSON.stringify(file)))
+    merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(file)))
   })
 
   // return merged

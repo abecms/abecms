@@ -168,7 +168,6 @@ export function getFileObject(pathFile) {
   const relativePath = pathFile.replace(pathData + '/', '')
 
   const parentName = cmsData.fileAttr.delete(name)
-  const parentPath = cmsData.fileAttr.delete(pathFile)
   const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
 
   const fileData = cmsData.fileAttr.get(name)
@@ -193,8 +192,7 @@ export function getFileObject(pathFile) {
     'cleanDate': fileDate.format('YYYY/MM/DD HH:MM:ss'),
     'duration': duration,
     'cleanName': parentName,
-    'cleanPathName': parentPath,
-    'cleanFilePath': parentRelativePath
+    'parentRelativePath': parentRelativePath
   }
 
   return fileObject
