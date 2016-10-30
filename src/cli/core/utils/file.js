@@ -47,19 +47,24 @@ export function getContent(pathFile) {
  */
 export function getFoldersSync(dirname, recursive = true) {
   let items = []
-  fse.readdirSync(dirname).map(function(fileName) {
-    let pathFile = path.join(dirname, fileName)
-    let stat = fse.statSync(pathFile)
-    if (stat.isDirectory()) {
-      items.push(pathFile)
-      if (recursive) {
-        let filesInDir = coreUtils.file.getFoldersSync(pathFile, recursive)
-        items = items.concat(filesInDir)
+  try{
+    fse.readdirSync(dirname).map(function(fileName) {
+      let pathFile = path.join(dirname, fileName)
+      let stat = fse.statSync(pathFile)
+      if (stat.isDirectory()) {
+        items.push(pathFile)
+        if (recursive) {
+          let filesInDir = coreUtils.file.getFoldersSync(pathFile, recursive)
+          items = items.concat(filesInDir)
+        }
       }
-    }
-  })
+    })
 
-  return items
+    return items
+  } catch(e) {
+
+    return items
+  }
 }
 
 /**
@@ -98,22 +103,27 @@ export function getFoldersAsync(dirname, recursive = true) {
  */
 export function getFilesSync(dirname, recursive = true, filterExt = '') {
   let items = []
-  fse.readdirSync(dirname).map(function(fileName) {
-    let pathFile = path.join(dirname, fileName)
-    let stat = fse.statSync(pathFile)
-    if (stat.isFile()) {
-      let extFile = path.extname(fileName)
-      if (filterExt === '' || extFile === filterExt) {
-        items.push(pathFile)
+  try {
+    fse.readdirSync(dirname).map(function(fileName) {
+      let pathFile = path.join(dirname, fileName)
+      let stat = fse.statSync(pathFile)
+      if (stat.isFile()) {
+        let extFile = path.extname(fileName)
+        if (filterExt === '' || extFile === filterExt) {
+          items.push(pathFile)
+        }
       }
-    }
-    if (stat.isDirectory() && recursive) {
-      let filesInDir = coreUtils.file.getFilesSync(pathFile, recursive, filterExt)
-      items = items.concat(filesInDir)
-    }
-  })
+      if (stat.isDirectory() && recursive) {
+        let filesInDir = coreUtils.file.getFilesSync(pathFile, recursive, filterExt)
+        items = items.concat(filesInDir)
+      }
+    })
 
-  return items
+    return items
+  } catch (e) {
+
+    return items
+  }
 }
 
 /**

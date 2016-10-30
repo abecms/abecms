@@ -285,22 +285,17 @@ export function getStructureAndTemplates() {
     }
   } catch (e) {
   }
-  try {
-    let directoryTemplate = fse.lstatSync(pathTemplates)
-    if (directoryTemplate.isDirectory()) {
-      let extension = '.' + config.files.templates.extension
-      let resultTemplates = []
-      let templatePaths = coreUtils.file.getFilesSync(pathTemplates, true, extension)
-      Array.prototype.forEach.call(templatePaths, (templatePath) => {
-        let additionalPath = path.dirname(templatePath).replace(pathTemplates,'')
-        if(additionalPath !== '') additionalPath = additionalPath.substring(1)
-        let name = path.join(additionalPath,path.basename(templatePath,extension))
-        let template = {'path':templatePath, 'cleanPath':templatePath, 'cleanNameNoExt':name}
-        result.templates.push(template)
-      })
-    }
-  } catch (e) {
-  }
+
+  const extension = '.' + config.files.templates.extension
+  let resultTemplates = []
+  let templatePaths = coreUtils.file.getFilesSync(pathTemplates, true, extension)
+  Array.prototype.forEach.call(templatePaths, (templatePath) => {
+    let additionalPath = path.dirname(templatePath).replace(pathTemplates,'')
+    if(additionalPath !== '') additionalPath = additionalPath.substring(1)
+    let name = path.join(additionalPath,path.basename(templatePath,extension))
+    let template = {'path':templatePath, 'cleanPath':templatePath, 'cleanNameNoExt':name}
+    result.templates.push(template)
+  })
 
   return result
 }
