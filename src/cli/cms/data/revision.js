@@ -163,7 +163,6 @@ export function getFilesMerged(files) {
         cleanPathName: file.cleanPathName,
         cleanPath: file.cleanPath,
         cleanName: file.cleanName,
-        cleanNameNoExt: file.cleanNameNoExt,
         cleanFilePath: file.cleanFilePath,
         filePath: cmsData.fileAttr.delete(file.filePath),
         revisions: []
