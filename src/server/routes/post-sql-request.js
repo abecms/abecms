@@ -20,7 +20,9 @@ var route = function(req, res, next){
   
   cmsData.source.requestList(obj, folder, request, jsonPage)
     .then(() => {
-      return res.send(jsonPage[key])
+
+      res.set('Content-Type', 'application/json')
+      res.send(JSON.stringify(jsonPage[key]))
     })
 }
 
