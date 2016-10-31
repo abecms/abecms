@@ -5,11 +5,12 @@
         edit references
       </div>
     </div>
+    {{{{raw}}}}
     <div class="references-files-wrapper">
       <ul class="list-group">
-        {{#each references}}
-        <li class="list-group-item" data-error="0" data-href="{{@root.config.reference.url}}/{{@key}}" data-ref-json='{{printJson this}}'>
-          {{@key}}
+        {{#each reference}}
+        <li class="list-group-item" data-error="0" data-href='{{@key}}' data-ref-json='{{printJson this}}'>
+          
         </li>
         {{/each}}
         </ul>
@@ -21,6 +22,7 @@
           </div>
         </div>
     </div>
+    {{{{/raw}}}}
   <br />
 </div>
 {{/if}}
