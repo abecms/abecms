@@ -8,7 +8,8 @@ import {
   coreUtils,
   cmsData,
   config,
-  cmsTemplates
+  cmsTemplates,
+  cmsReference
 } from '../../'
 
 let singleton = Symbol()
@@ -34,6 +35,7 @@ class Manager {
   init() {
     this._pathTemplate = path.join(config.root, config.templates.url)
     this._pathStructure = path.join(config.root, config.structure.url)
+    this._pathReference = path.join(config.root, config.reference.url)
     this._pathData = path.join(config.root, config.data.url)
     this._watchersStart()
 
@@ -58,7 +60,8 @@ class Manager {
   _watchersStart() {
     this.events = {
       template: new events.EventEmitter(0),
-      structure: new events.EventEmitter(0)
+      structure: new events.EventEmitter(0),
+      reference: new events.EventEmitter(0),
     }
 
     try {
@@ -105,6 +108,27 @@ class Manager {
       console.log('the directory ' + this._pathStructure + ' does not exist')
     }
     
+    try {
+      fse.accessSync(this._pathReference, fse.F_OK)
+      this._watchReferenceFolder = watch.createMonitor(this._pathReference, (monitor) => {
+        monitor.on('created', (f, stat) => {
+          this.updateReferences(f)
+          this.events.reference.emit('update')
+        })
+        monitor.on('changed', (f, curr, prev) => {
+          this.updateReferences(f)
+          this.events.reference.emit('update')
+          
+        })
+        monitor.on('removed', (f, stat) => {
+          this.updateReferences()
+          this.events.reference.emit('update')
+        })
+      })
+    } catch (e) {
+      console.log('the directory ' + this._pathReference + ' does not exist')
+    }
+    
   }
 
   getKeysFromSelect() {
@@ -134,6 +158,19 @@ class Manager {
 
   updateStructureAndTemplates() {
     this._structureAndTemplates = cmsTemplates.template.getStructureAndTemplates()
+  }
+
+  getReferences() {
+    if(typeof this._references === 'undefined' || this._references === null) this.updateReferences()
+    return this._references
+  }
+
+  updateReferences(referenceName) {
+    var references = cmsReference.reference.getFiles()
+    if(referenceName && references[referenceName]) this._references[referenceName] = references[referenceName]
+    else this._references = references
+    
+    return this
   }
 
   getList() {
