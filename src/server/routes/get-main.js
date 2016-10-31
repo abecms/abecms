@@ -85,8 +85,7 @@ var route = function(req, res, next) {
     var manager = {}
   
     manager.home = {
-      files: Manager.instance.getList(),
-      references: Manager.instance.getReferences()
+      files: Manager.instance.getList()
     }
 
     manager.list = Manager.instance.getStructureAndTemplates()

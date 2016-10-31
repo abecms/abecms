@@ -1,9 +1,6 @@
 /*global document, FormData, CONFIG, XMLHttpRequest */
 
 import Nanoajax from 'nanoajax'
-import EditorUtils from '../modules/EditorUtils'
-import {IframeNode} from '../utils/iframe'
-import on from 'on'
 import qs from 'qs'
 
 export default class EditorFiles {
@@ -12,7 +9,19 @@ export default class EditorFiles {
     this.referenceLinks = document.querySelectorAll('[data-ref-json]')
     this.textArea = document.querySelector('.display-json')
     this.jsonError = document.querySelector('.json-error')
+    this.referenceTabButton = document.querySelector('[data-manager-show="references-files"]')
     if(this.referenceLinks) this.rebind()
+
+      this._ajax(
+      {
+        url: `/abe/reference/`,
+        body: '',
+        cors: true,
+        method: 'get'
+      },
+      (code, responseText) => {
+        console.log(responseText)
+      })
   }
 
   rebind() {
@@ -32,6 +41,10 @@ export default class EditorFiles {
         }
         this.displayReference(e.target)
       })
+    })
+
+    this.textArea.addEventListener('blur', () => {
+      this.save()
     })
 
     this.textArea.addEventListener('blur', () => {
@@ -58,7 +71,7 @@ export default class EditorFiles {
     if(isValidJson){
       this._ajax(
       {
-        url: `/abe/write-json/`,
+        url: `/abe/reference/`,
         body: data,
         cors: true,
         method: 'post'

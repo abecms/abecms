@@ -7,9 +7,9 @@
     </div>
     <div class="references-files-wrapper">
       <ul class="list-group">
-        {{#each manager.home.references}}
-        <li class="list-group-item" data-error="0" data-href="{{@root.config.reference.url}}/{{name}}" data-ref-json='{{printJson data}}'>
-          {{name}}
+        {{#each references}}
+        <li class="list-group-item" data-error="0" data-href="{{@root.config.reference.url}}/{{@key}}" data-ref-json='{{printJson this}}'>
+          {{@key}}
         </li>
         {{/each}}
         </ul>

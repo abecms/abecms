@@ -44,6 +44,7 @@ import * as cmsData from './cms/data'
 import * as cmsEditor from './cms/editor'
 import * as cmsOperations from './cms/operations'
 import * as cmsTemplates from './cms/templates'
+import * as cmsReference from './cms/reference'
 import * as coreUtils from './core/utils'
 import * as abeExtend from './extend'
 
@@ -51,6 +52,7 @@ export {
 	cmsData,
 	cmsOperations,
 	cmsTemplates,
+	cmsReference,
 	coreUtils,
 	cmsEditor,
 	abeExtend,
