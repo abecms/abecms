@@ -103,6 +103,7 @@ export function getDocumentRevision(docPath) {
       result = revisions[0]
     }
   }
+
   return result
 }
 
@@ -135,24 +136,11 @@ export function filePathInfos(pathFolder) {
   }
 }
 
-export function getFilesMerged(files) {
-  var merged = {}
-  var arMerged = []
+export function mergeRevisions(files) {
+  let merged = {}
   
   Array.prototype.forEach.call(files, (file) => {
-    var parentRelativePath = file.parentRelativePath
-
-    var fileStatusIsPublish = cmsData.fileAttr.get(file.cleanPath)
-    if(fileStatusIsPublish.s != null && file.abe_meta.status === 'publish') {
-      file.abe_meta.status = 'draft'
-    }
-
-    file.html = path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))
-    if (file.abe_meta.status === 'publish') {
-      file.htmlPath = path.join(config.root, config.publish.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-    }else {
-      file.htmlPath = path.join(config.root, config.draft.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-    }
+    const parentRelativePath = file.parentRelativePath
 
     if(merged[parentRelativePath] == null) {
       merged[parentRelativePath] = {
@@ -167,11 +155,15 @@ export function getFilesMerged(files) {
         revisions: []
       }
     }
-
     merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(file)))
   })
 
-  // return merged
+  return merged
+}
+
+export function sortRevisions(merged) {
+  let sortedArray = []
+
   Array.prototype.forEach.call(Object.keys(merged), (key) => {
     var revisions = merged[key].revisions
 
@@ -203,8 +195,14 @@ export function getFilesMerged(files) {
     merged[key].duration = revisions[0].duration
     merged[key].abe_meta = revisions[0].abe_meta
 
-    arMerged.push(merged[key])
+    sortedArray.push(merged[key])
   })
 
-  return arMerged
+  return sortedArray
+}
+
+export function getFilesMerged(files) {
+  const revisions = cmsData.revision.mergeRevisions(files)
+
+  return cmsData.revision.sortRevisions(revisions)
 }

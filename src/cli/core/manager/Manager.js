@@ -36,6 +36,7 @@ class Manager {
     this._pathTemplate = path.join(config.root, config.templates.url)
     this._pathStructure = path.join(config.root, config.structure.url)
     this._pathReference = path.join(config.root, config.reference.url)
+    this._pathData = path.join(config.root, config.data.url)
     this._watchersStart()
 
     this.updateStructureAndTemplates()
@@ -193,6 +194,54 @@ class Manager {
     this._list = list
 
     return this
+  }
+
+  addPostInList(pathFile){
+    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
+    const json = cmsData.file.get(pathFile)
+    let merged = {}
+    let rev = []
+    let revision = cmsData.file.getFileObject(pathFile)
+
+    revision = cmsData.file.getAbeMeta(revision, json)
+    Array.prototype.forEach.call(this._whereKeys, (key) => {
+      var keyFirst = key.split('.')[0]
+      revision[keyFirst] = json[keyFirst]
+    })
+    rev.push(revision)
+    merged = cmsData.revision.mergeRevisions(rev)
+    const sortedResult = cmsData.revision.sortRevisions(merged)
+    this._list.push(sortedResult[0])
+    this._list.sort(coreUtils.sort.predicatBy('date', -1))
+  }
+
+  updatePostInList(pathFile){
+    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
+    const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
+    if(found.length > 0){
+      const index = found[0]
+      const json = cmsData.file.get(pathFile)
+      let merged = {}
+      merged[parentRelativePath] = this._list[index]
+      let revision = cmsData.file.getFileObject(pathFile)
+      revision = cmsData.file.getAbeMeta(revision, json)
+      Array.prototype.forEach.call(this._whereKeys, (key) => {
+        var keyFirst = key.split('.')[0]
+        revision[keyFirst] = json[keyFirst]
+      })
+      merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(revision)))
+      const sortedResult = cmsData.revision.sortRevisions(merged)          
+      this._list[index] = sortedResult[0]
+      this._list.sort(coreUtils.sort.predicatBy('date', -1))
+    }
+  }
+
+  removePostInList(pathFile){
+    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
+    const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
+    if(found.length > 0){
+      console.log('ok found')
+    }
   }
 
   updateList() {

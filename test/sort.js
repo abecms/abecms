@@ -42,6 +42,6 @@ describe('Sort', function() {
   it('coreUtils.sort.shuffle', function() {
   	var list = Manager.instance.getList()
   	var shuffled = coreUtils.sort.shuffle(list)
-  	chai.expect(shuffled[0].name).to.be.oneOf(['article-1.json', 'homepage-1.json']);
+  	chai.expect(shuffled[0].name).to.be.oneOf(['article-2.json', 'article-1.json', 'homepage-1.json']);
   });
 });
