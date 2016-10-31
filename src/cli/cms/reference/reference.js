@@ -23,6 +23,6 @@ export function getFiles(name = '') {
 
 export function saveFile(url, json) {
   fse.writeJson(url, JSON.parse(json), function (err) {
-    if(err) console.log("saveFile reference error: ", err)
+    if(err) console.log('saveFile reference error: ', err)
   })
 }
