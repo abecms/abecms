@@ -13,11 +13,10 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
   var p = new Promise((resolve, reject) => {
     abeExtend.hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
-    var templatePath = path.join(template.replace(config.root, ''), config.templates.url, `${template}.${config.files.templates.extension}`)
+    var templatePath = path.join(config.root, config.templates.url, `${template}.${config.files.templates.extension}`)
     var filePath = path.join(pathCreate, name)
     filePath = coreUtils.slug.clean(filePath)
     filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
-
     if(templatePath !== null && filePath !== null) {
       var tplUrl = cmsData.file.fromUrl(filePath)
         
@@ -36,15 +35,15 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
 
         abeExtend.hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
         cmsOperations.save.save(filePath, template, json, text, 'draft', null, 'draft')
-            .then((resSave) => {
-              Manager.instance.updateList()
-              filePath = resSave.htmlPath
-              tplUrl = cmsData.file.fromUrl(filePath)
-              resolve(resSave.json)
-            }).catch(function(e) {
-              reject()
-              console.error(e)
-            })
+          .then((resSave) => {
+            Manager.instance.addPostInList(resSave.jsonPath)
+            filePath = resSave.htmlPath
+            tplUrl = cmsData.file.fromUrl(filePath)
+            resolve(resSave.json)
+          }).catch(function(e) {
+            reject()
+            console.error(e)
+          })
       }else {
         json = cmsData.file.get(tplUrl.json.path)
         resolve(json, tplUrl.json.path)

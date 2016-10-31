@@ -21,7 +21,7 @@ export function remove(filePath) {
     cmsOperations.remove.removeFile(revision.path, revision.htmlPath)
   })
 
-  Manager.instance.updateList()
+  Manager.instance.removePostInList(filePath)
 }
 
 export function removeFile(file, json) {
