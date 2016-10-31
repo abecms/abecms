@@ -11,12 +11,19 @@ import {
 } from '../../'
 
 export function getAbeMeta(fileObject, json) {
+  const fileStatusIsPublish = cmsData.fileAttr.get(fileObject.cleanPath)
+
   if(json.abe_meta.latest.date != null) {
     fileObject.date = json.abe_meta.latest.date
     fileObject.cleanDate = moment(json.abe_meta.latest.date).format('YYYY/MM/DD HH:MM:ss')
   }
 
   if(json.abe_meta != null) {
+    if (json.abe_meta.status === 'publish') {
+      fileObject.htmlPath = path.join(config.root, config.publish.url, path.join('/', fileObject.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+    }else {
+      fileObject.htmlPath = path.join(config.root, config.draft.url, path.join('/', fileObject.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
+    }
     var date = null
     if (json.abe_meta.latest.date !== null) {
       date = json.abe_meta.latest.date
@@ -28,9 +35,12 @@ export function getAbeMeta(fileObject, json) {
       type: (json.abe_meta.type != null) ? json.abe_meta.type : null,
       link: (json.abe_meta.link != null) ? json.abe_meta.link : null,
       template: (json.abe_meta.template != null) ? json.abe_meta.template : null,
-      status: (json.abe_meta.status != null) ? json.abe_meta.status : null,
       cleanName: (json.abe_meta.cleanName != null) ? json.abe_meta.cleanName : null,
-      cleanFilename: (json.abe_meta.cleanFilename != null) ? json.abe_meta.cleanFilename : null
+      cleanFilename: (json.abe_meta.cleanFilename != null) ? json.abe_meta.cleanFilename : null,
+      status: (json.abe_meta.status != null) ? json.abe_meta.status : null
+    }
+    if(fileStatusIsPublish.s != null && json.abe_meta.status === 'publish') {
+      fileObject.abe_meta.status = 'draft'
     }
   }
 
@@ -45,9 +55,8 @@ export function getAllWithKeys(withKeys) {
   let filesArr = []
 
   Array.prototype.forEach.call(files, (pathFile) => {
-    let fileObject = cmsData.file.getFileObject(pathFile)
     const json = cmsData.file.get(pathFile)
-
+    let fileObject = cmsData.file.getFileObject(pathFile)
     fileObject = cmsData.file.getAbeMeta(fileObject, json)
     
     Array.prototype.forEach.call(withKeys, (key) => {
@@ -163,6 +172,7 @@ export function getFilesByType(pathFile, type = null) {
 export function getFileObject(pathFile) {
   const pathData = path.join(config.root, config.data.url)
   const extension = '.json'
+  const templateExtension = '.' + config.files.templates.extension
 
   const name = path.basename(pathFile)
   const relativePath = pathFile.replace(pathData + '/', '')
@@ -182,6 +192,8 @@ export function getFileObject(pathFile) {
 
   const fileDate = moment(date)
   const duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
+
+  const htmlUrl = path.join('/', relativePath.replace(extension, templateExtension))
   
   let fileObject = {
     'name': name,
@@ -192,7 +204,8 @@ export function getFileObject(pathFile) {
     'cleanDate': fileDate.format('YYYY/MM/DD HH:MM:ss'),
     'duration': duration,
     'cleanName': parentName,
-    'parentRelativePath': parentRelativePath
+    'parentRelativePath': parentRelativePath,
+    'html': htmlUrl
   }
 
   return fileObject

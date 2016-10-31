@@ -1,0 +1,14 @@
+{
+	"abe_meta": {
+    "template": "article",
+		"link": "/0-1/article-2.html",
+    "status": "draft",
+    "date": "2016-07-19T12:52:55.138Z",
+    "latest": {
+	    "date": "2016-07-19T12:52:55.138Z",
+	    "abeUrl": "/0-1/article-2-abe-d20160920T125255138Z.shtml"
+	  }
+	},
+	"priority":2,
+	"title":"article 2"
+}
