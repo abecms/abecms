@@ -1,4 +1,4 @@
-
+{{#if form}}
 <div class="no-gutter half-view form-wrapper status-{{@root.json.abe_meta.status}}" data-width="33%">
   <!-- *************** btn toolbar *************** -->
   <div class="toolbar">  
@@ -24,7 +24,7 @@
   </div><!-- *************** /end btn toolbar *************** -->
 
   <!-- *************** form edit *************** -->
-  {{#if form}}
+  
     <div class="abeform-wrapper">
       <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
         <div class="display-status">
@@ -57,8 +57,9 @@
         {{abeImport 'engine-more' manager.config this}}
       </form><!-- *************** /end form edit *************** -->
     </div>
-  {{/if}}
+  
   <div class="close-engine">
     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
   </div>
 </div>
+{{/if}}

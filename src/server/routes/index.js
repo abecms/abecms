@@ -15,6 +15,8 @@ import getUnpublish from './get-unpublish'
 import getDelete from './get-delete'
 import postUpload from './post-upload'
 import postSqlRequest from './post-sql-request'
+import postReference from './post-reference'
+import getReference from './get-reference'
 
 export {
 	getMain
@@ -33,5 +35,7 @@ export {
 	,getUnpublish
 	,getDelete
 	,postUpload
-	,postSqlRequest
+	,postSqlRequest,
+	postReference,
+	getReference
 }
