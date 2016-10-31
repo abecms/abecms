@@ -6,18 +6,18 @@
  * @return {Array}       the filtered array
  */
 export function filter(arr, key, value) {
-  var result = [];
-  var i = 0;
-  var len = arr.length;
+  var result = []
+  var i = 0
+  var len = arr.length
 
   for (; i < len; i += 1) {
-    var elt = arr[i];
+    var elt = arr[i]
 
     if (elt[key] == value) {
-      result.push(element);
+      result.push(element)
     }
   }
-  return result;
+  return result
 }
 
 /**
@@ -28,16 +28,16 @@ export function filter(arr, key, value) {
  * @return {Array}       the filtered array of indexes
  */
 export function find(arr, key, value) {
-  var result = [];
-  var i = 0;
-  var len = arr.length;
+  var result = []
+  var i = 0
+  var len = arr.length
 
   for (; i < len; i += 1) {
-    var elt = arr[i];
+    var elt = arr[i]
 
     if (elt[key] == value) {
-      result.push(i);
+      result.push(i)
     }
   }
-  return result;
+  return result
 }
