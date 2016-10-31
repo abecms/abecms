@@ -38,7 +38,7 @@ var middleware = function(req, res, next) {
     if(typeof folders !== 'undefined' && folders !== null) {
       Array.prototype.forEach.call(folders, (folder) => {
         var url = folder.path.replace(path.join(config.root,config.publish.url), '')
-        html += '<li><a href="' + url + '">/' + path.basename(folder) + '</a></li>'
+        html += '<li><a href="' + url + '">/' + path.basename(folder.path) + '</a></li>'
       })
     }
     if(typeof files !== 'undefined' && files !== null) {
