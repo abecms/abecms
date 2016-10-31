@@ -286,7 +286,5 @@ to launch your blog using Abe, under Linux or Mac, you have to set an Environmen
 
 ```$ ROOT=/my_path_to_the_blog npm run startdev ```
 
-Other environment variables are available (like PORT for defining a listening port for ABE and WEBPORT for your blog port)
-
 =======
 # abe-test-plugin
