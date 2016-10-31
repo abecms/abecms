@@ -23,9 +23,8 @@ var middleware = function(req, res, next) {
     } catch (e) {
       return next()
     }
-    var files = cmsData.file.getFiles(pathWebsite, true, 0, /(.*?)/)
-
-    var folders = cmsData.file.getFolders(pathWebsite, true, 0)
+    var files = coreUtils.file.getFilesSync(pathWebsite, false)
+    var folders = coreUtils.file.getFoldersSync(pathWebsite, false)
     var html = '<ul>'
     html += '<li><a href="/abe/">abe</abe></li>'
     html += '<br />'
@@ -37,17 +36,15 @@ var middleware = function(req, res, next) {
     }
 
     if(typeof folders !== 'undefined' && folders !== null) {
-       
       Array.prototype.forEach.call(folders, (folder) => {
-        var url = folder.path.replace(config.root, '').replace(config.publish.url, '')
-        html += '<li><a href="' + url + '">/' + folder.cleanPath + '</a></li>'
+        var url = folder.path.replace(path.join(config.root,config.publish.url), '')
+        html += '<li><a href="' + url + '">/' + path.basename(folder) + '</a></li>'
       })
-
     }
     if(typeof files !== 'undefined' && files !== null) {
       Array.prototype.forEach.call(files, (file) => {
-        var url = file.path.replace(config.root, '').replace(config.publish.url, '')
-        html += '<li><a href="' + url + '">' + file.cleanPath + '</a></li>'
+        var url = file.replace(path.join(config.root,config.publish.url), '')
+        html += '<li><a href="' + url + '">' + path.basename(file) + '</a></li>'
       })
     }
     html += '</ul>'

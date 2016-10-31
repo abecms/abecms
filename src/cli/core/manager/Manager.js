@@ -61,39 +61,50 @@ class Manager {
       structure: new events.EventEmitter(0)
     }
 
-    this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
-      monitor.on('created', (f, stat) => {
-        this.getKeysFromSelect()
-        this.updateStructureAndTemplates()
-        this.events.template.emit('update')
+    try {
+      fse.accessSync(this._pathTemplate, fse.F_OK)
+      this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
+        monitor.on('created', (f, stat) => {
+          this.getKeysFromSelect()
+          this.updateStructureAndTemplates()
+          this.events.template.emit('update')
+        })
+        monitor.on('changed', (f, curr, prev) => {
+          this.getKeysFromSelect()
+          this.updateStructureAndTemplates()
+          this.events.template.emit('update')
+          
+        })
+        monitor.on('removed', (f, stat) => {
+          this.getKeysFromSelect()
+          this.updateStructureAndTemplates()
+          this.events.template.emit('update')
+        })
       })
-      monitor.on('changed', (f, curr, prev) => {
-        this.getKeysFromSelect()
-        this.updateStructureAndTemplates()
-        this.events.template.emit('update')
-        
-      })
-      monitor.on('removed', (f, stat) => {
-        this.getKeysFromSelect()
-        this.updateStructureAndTemplates()
-        this.events.template.emit('update')
-      })
-    })
+    } catch (e) {
+      console.log('the directory ' + this._pathTemplate + ' does not exist')
+    }
 
-    this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
-      monitor.on('created', (f, stat) => {
-        this.updateStructureAndTemplates()
-        this.events.structure.emit('update')
+    try {
+      fse.accessSync(this._pathStructure, fse.F_OK)
+      this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
+        monitor.on('created', (f, stat) => {
+          this.updateStructureAndTemplates()
+          this.events.structure.emit('update')
+        })
+        monitor.on('changed', (f, curr, prev) => {
+          this.updateStructureAndTemplates()
+          this.events.structure.emit('update')
+        })
+        monitor.on('removed', (f, stat) => {
+          this.updateStructureAndTemplates()
+          this.events.structure.emit('update')
+        })
       })
-      monitor.on('changed', (f, curr, prev) => {
-        this.updateStructureAndTemplates()
-        this.events.structure.emit('update')
-      })
-      monitor.on('removed', (f, stat) => {
-        this.updateStructureAndTemplates()
-        this.events.structure.emit('update')
-      })
-    })
+    } catch (e) {
+      console.log('the directory ' + this._pathStructure + ' does not exist')
+    }
+    
   }
 
   getKeysFromSelect() {

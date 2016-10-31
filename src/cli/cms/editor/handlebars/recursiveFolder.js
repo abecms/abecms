@@ -1,3 +1,5 @@
+import path from 'path'
+
 export default function recursiveFolder(obj, index = 1, dataShow = '', links = null, visible = false) {
   var classHidden = ''
   if(index > 1 && !visible) {
@@ -8,7 +10,7 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
   if(dataShow) {
     id += `-${dataShow}`
   }
-  var parent = obj[0] ? obj[0].cleanPath.split('/')[0] : ''
+  var parent = obj[0] ? obj[0].path.split('/')[0] : ''
   var res = `<div class="form-group level-${index} ${classHidden}" data-parent="${parent}" data-shown="${dataShow}">
     <label for="${id}" class="col-sm-5 control-label">Level ${index}</label>
     <div class="col-sm-7">
@@ -18,18 +20,19 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
   var sub = ''
 
   Array.prototype.forEach.call(obj, (o) => {
-    var selected = ''
-    var isVisible = false
+    let selected = ''
+    let isVisible = false
+    let name = path.basename(o.path)
     if(links != null && links[index - 1] != null) {
-      if (links[index - 1] === o.name) {
+      if (links[index - 1] === name) {
         selected = 'selected="selected"'
         isVisible = true
       }
     }
-    res += `<option ${selected} data-level-hide="${index+2}" data-level-show="${index+1}" data-show="${o.name.replace(/\.| |\#/g, '_')}">${o.name}</option>`
+    res += `<option ${selected} data-level-hide="${index+2}" data-level-show="${index+1}" data-show="${name.replace(/\.| |\#/g, '_')}">${name}</option>`
 
     if(o.folders != null && o.folders.length > 0) {
-      sub += recursiveFolder(o.folders, index+1, o.name.replace(/\.| |\#/g, '_'), links, isVisible)
+      sub += recursiveFolder(o.folders, index+1, name.replace(/\.| |\#/g, '_'), links, isVisible)
     }
   })
 

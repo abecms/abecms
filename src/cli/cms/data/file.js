@@ -10,51 +10,62 @@ import {
   config
 } from '../../'
 
+export function getAbeMeta(fileObject, json) {
+  if(json.abe_meta.latest.date != null) {
+    fileObject.date = json.abe_meta.latest.date
+    fileObject.cleanDate = moment(json.abe_meta.latest.date).format('YYYY/MM/DD HH:MM:ss')
+  }
+
+  if(json.abe_meta != null) {
+    var date = null
+    if (json.abe_meta.latest.date !== null) {
+      date = json.abe_meta.latest.date
+    } else if (json.abe_meta.date !== null) {
+      date = json.abe_meta.date
+    }
+    fileObject.abe_meta = {
+      date: date,
+      type: (json.abe_meta.type != null) ? json.abe_meta.type : null,
+      link: (json.abe_meta.link != null) ? json.abe_meta.link : null,
+      template: (json.abe_meta.template != null) ? json.abe_meta.template : null,
+      status: (json.abe_meta.status != null) ? json.abe_meta.status : null,
+      cleanName: (json.abe_meta.cleanName != null) ? json.abe_meta.cleanName : null,
+      cleanFilename: (json.abe_meta.cleanFilename != null) ? json.abe_meta.cleanFilename : null
+    }
+  }
+
+  return fileObject
+}
+
 export function getAllWithKeys(withKeys) {
-  var files = cmsData.file.getFiles(path.join(config.root, config.data.url), true, 99, /\.json/)
-  var filesArr = []
+  const pathData = path.join(config.root, config.data.url)
+  const extension = '.json'
+  const files = coreUtils.file.getFilesSync(pathData, true, extension)
 
-  files.forEach(function (file) {
-    var cleanFile = file
-    var json = cmsData.file.get(file.path)
+  let filesArr = []
 
-    if(json.abe_meta.latest.date != null) {
-      file.date = json.abe_meta.latest.date
-      file.cleanDate = moment(json.abe_meta.latest.date).format('YYYY/MM/DD HH:MM:ss')
-    }
+  Array.prototype.forEach.call(files, (pathFile) => {
+    let fileObject = cmsData.file.getFileObject(pathFile)
+    const json = cmsData.file.get(pathFile)
 
-    if(json.abe_meta != null) {
-      var date = null
-      if (json.abe_meta.latest.date !== null) {
-        date = json.abe_meta.latest.date
-      } else if (json.abe_meta.date !== null) {
-        date = json.abe_meta.date
-      }
-      cleanFile.abe_meta = {
-        date: date,
-        type: (json.abe_meta.type != null) ? json.abe_meta.type : null,
-        link: (json.abe_meta.link != null) ? json.abe_meta.link : null,
-        template: (json.abe_meta.template != null) ? json.abe_meta.template : null,
-        status: (json.abe_meta.status != null) ? json.abe_meta.status : null,
-        cleanName: (json.abe_meta.cleanName != null) ? json.abe_meta.cleanName : null,
-        cleanFilename: (json.abe_meta.cleanFilename != null) ? json.abe_meta.cleanFilename : null
-      }
-    }
+    fileObject = cmsData.file.getAbeMeta(fileObject, json)
+    
     Array.prototype.forEach.call(withKeys, (key) => {
       var keyFirst = key.split('.')[0]
-      cleanFile[keyFirst] = json[keyFirst]
+      fileObject[keyFirst] = json[keyFirst]
     })
-    filesArr.push(cleanFile)
+
+    filesArr.push(fileObject)
   })
 
   var merged = cmsData.revision.getFilesMerged(filesArr)
-
   abeExtend.hooks.instance.trigger('afterGetAllFiles', merged)
+
   return merged
 }
 
 export function get(pathJson) {
-  var json = {}
+  let json
   pathJson = abeExtend.hooks.instance.trigger('beforeGetJson', pathJson)
   
   try {
@@ -63,6 +74,7 @@ export function get(pathJson) {
       json = fse.readJsonSync(pathJson)
     }
   }catch(e) {
+    json = {}
   }
 
   json = abeExtend.hooks.instance.trigger('afterGetJson', json)
@@ -126,38 +138,10 @@ export function fromUrl(url) {
   return res
 }
 
-export function getFolders(folder, flatten = false, level) {
-  var arr = []
-  arr = cmsData.file.read(
-    folder.replace(/\/$/, ''), 
-    folder.replace(/\/$/, ''), 
-    'folders', 
-    flatten, 
-    /(.*?)/, 
-    level
-  )
-
-  return arr
-}
-
-export function getFiles(folder, flatten = false, level, extensions = /(.*?)/, inversePattern = false) {
-
-  var arr = []
-  arr = cmsData.file.read(
-    folder.replace(/\/$/, ''),
-    folder.replace(/\/$/, ''), 
-    'files', 
-    flatten, 
-    extensions, 
-    level, 
-    0, 
-    inversePattern
-  )
-
-  return arr
-}
-
 export function getFilesByType(pathFile, type = null) {
+  const extension = '.' + config.files.templates.extension
+  let result = []
+  
   try {
     var directory = fse.lstatSync(pathFile)
     if (!directory.isDirectory()) {
@@ -166,101 +150,50 @@ export function getFilesByType(pathFile, type = null) {
   } catch (e) {
     mkdirp.sync(pathFile)
   }
-  var files = cmsData.file.getFiles(pathFile, true, 20, new RegExp(`.${config.files.templates.extension}`))
-
-  var result = []
+  const files = coreUtils.file.getFilesSync(pathFile, true, extension)
 
   Array.prototype.forEach.call(files, (file) => {
-    var val = cmsData.fileAttr.get(file.path).s
+    var val = cmsData.fileAttr.get(file).s
     if(type === null || val === type) result.push(file)
   })
+
   return result
 }
 
-export function read(base, dirName, type, flatten, extensions = /(.*?)/, max = 99, current = 0, inversePattern = false) {
-  var arr = []
-  var level = fse.readdirSync(dirName)
-  var fileCurrentLevel = []
-  let assets = config.files.templates.assets
+export function getFileObject(pathFile) {
+  const pathData = path.join(config.root, config.data.url)
+  const extension = '.json'
 
-  for (var i = 0; i < level.length; i++) {
-    var pathLevel = dirName + '/' + level[i]
-    var isFolder = true
-    try {
-      var directory = fse.lstatSync(pathLevel)
-      if (!directory.isDirectory()) {
-        isFolder = false
-      }
-    } catch (e) {
-      isFolder = false
-    }
-    var match = (isFolder) ? true : (inversePattern) ? !extensions.test(level[i]) : extensions.test(level[i])
-    if((type === 'files' || type === null) && match) {
+  const name = path.basename(pathFile)
+  const relativePath = pathFile.replace(pathData + '/', '')
 
-      if(level[i].indexOf('.') > -1) {
-        var extension = /(\.[\s\S]*)/.exec(level[i])[0]
-        var cleanName = cmsData.fileAttr.delete(level[i])
-        var cleanNameNoExt = cleanName.replace(/\..+$/, '')
-        var fileData = cmsData.fileAttr.get(level[i])
+  const parentName = cmsData.fileAttr.delete(name)
+  const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
 
-        var date
-        if (fileData.d) {
-          date = fileData.d
-        }else {
-          var stat = fse.statSync(pathLevel)
-          date = stat.mtime
-        }
-        var cleanFilePath = cmsData.fileAttr.delete(pathLevel).replace(config.root, '').replace(/^\/?.+?\//, '')
+  const fileData = cmsData.fileAttr.get(name)
 
-        var fileDate = moment(date)
-        var duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
-
-        var filePath = pathLevel.replace(config.root, '')
-        filePath = filePath.split('/')
-        filePath.shift()
-        filePath = filePath.join('/')
-        var item = {
-          'name': level[i],
-          'path': pathLevel,
-          'cleanPathName': cmsData.fileAttr.delete(pathLevel),
-          'cleanPath': pathLevel.replace(base + '/', ''),
-          date: date,
-          cleanDate: fileDate.format('YYYY/MM/DD HH:MM:ss'),
-          duration: duration,
-          cleanName: cleanName,
-          cleanNameNoExt: cleanNameNoExt,
-          cleanFilePath: cleanFilePath,
-          filePath: filePath,
-          'type': 'file',
-          'fileType': extension
-        }
-
-        if(!flatten) item['folders'] = []
-        arr.push(item)
-        // push current file name into array to check if siblings folder are assets folder
-        fileCurrentLevel.push(level[i].replace(/\..+$/, '') + assets)
-      }
-    }
-    if(!fileCurrentLevel.indexOf(level[i]) >= 0 && match) {
-      if(isFolder) {
-        if(!flatten) {
-          var index = arr.push({'name': level[i], 'path': pathLevel, 'cleanPath': pathLevel.replace(base + '/', ''), 'folders': [], 'type': 'folder'}) - 1
-          if(current < max){
-            arr[index].folders = cmsData.file.read(base, pathLevel, type, flatten, extensions, max, current + 1, inversePattern)
-          }
-        }else {
-          if(type === 'folders' || type === null) {
-            arr.push({'name': level[i], 'path': pathLevel, 'cleanPath': pathLevel.replace(base + '/', ''), 'type': 'folder'})
-          }
-          if(current < max){
-            Array.prototype.forEach.call(cmsData.file.read(base, pathLevel, type, flatten, extensions, max, current + 1, inversePattern), (files) => {
-              arr.push(files)
-            })
-          }
-        }
-      }
-    }
+  let date
+  if (fileData.d) {
+    date = fileData.d
+  }else {
+    const stat = fse.statSync(pathFile)
+    date = stat.mtime
   }
 
-  return arr
+  const fileDate = moment(date)
+  const duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
+  
+  let fileObject = {
+    'name': name,
+    'path': pathFile,
+    'cleanPath': relativePath,
+    'filePath': relativePath,
+    'date': date,
+    'cleanDate': fileDate.format('YYYY/MM/DD HH:MM:ss'),
+    'duration': duration,
+    'cleanName': parentName,
+    'parentRelativePath': parentRelativePath
+  }
+
+  return fileObject
 }

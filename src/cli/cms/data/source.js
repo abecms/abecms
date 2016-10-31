@@ -1,4 +1,4 @@
-import {Promise} from 'es6-promise'
+import {Promise} from 'bluebird'
 import http from 'http' 
 import https from 'https'
 import path from 'path'
