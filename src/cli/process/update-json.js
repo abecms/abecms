@@ -3,7 +3,7 @@
 import path from 'path'
 import {
   config,
-  cmsData,
+  coreUtils,
   abeExtend
 } from '../../cli'
 
@@ -17,12 +17,11 @@ Array.prototype.forEach.call(process.argv, (item) => {
 
 if(typeof pConfig.ABE_WEBSITE !== 'undefined' && pConfig.ABE_WEBSITE !== null) {
   if(pConfig.ABE_WEBSITE) config.set({root: pConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
-
-  var allJson
-
   pConfig.FILEPATH = path.join(config.root, config.data.url, pConfig.FILEPATH ? pConfig.FILEPATH.replace(config.root) : '')
+  const extension = '.json'
+  let allJson
   
-  allJson = cmsData.file.getFiles(pConfig.FILEPATH, true, 20, /\.json/)
+  allJson = coreUtils.file.getFilesSync(pConfig.FILEPATH, true, extension)
   abeExtend.hooks.instance.trigger('beforeUpdateJson', allJson)
 
 }else {

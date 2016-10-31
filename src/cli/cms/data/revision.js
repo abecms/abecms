@@ -1,10 +1,8 @@
-import fse from 'fs-extra'
 import path from 'path'
 
 import {
   config,
   cmsData,
-  cmsOperations,
   coreUtils,
   Manager
 } from '../../'
@@ -142,7 +140,7 @@ export function getFilesMerged(files) {
   var arMerged = []
   
   Array.prototype.forEach.call(files, (file) => {
-    var cleanFilePath = file.cleanFilePath
+    var parentRelativePath = file.parentRelativePath
 
     var fileStatusIsPublish = cmsData.fileAttr.get(file.cleanPath)
     if(fileStatusIsPublish.s != null && file.abe_meta.status === 'publish') {
@@ -156,23 +154,21 @@ export function getFilesMerged(files) {
       file.htmlPath = path.join(config.root, config.draft.url, path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
     }
 
-    if(merged[cleanFilePath] == null) {
-      merged[cleanFilePath] = {
+    if(merged[parentRelativePath] == null) {
+      merged[parentRelativePath] = {
         name: cmsData.fileAttr.delete(file.name),
         path: cmsData.fileAttr.delete(file.path),
         html: cmsData.fileAttr.delete(path.join('/', file.filePath.replace(/\.json/, `.${config.files.templates.extension}`))),
         htmlPath: path.join(config.root, config.publish.url, path.join('/', cmsData.fileAttr.delete(file.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))),
-        cleanPathName: file.cleanPathName,
         cleanPath: file.cleanPath,
         cleanName: file.cleanName,
-        cleanNameNoExt: file.cleanNameNoExt,
-        cleanFilePath: file.cleanFilePath,
+        parentRelativePath: file.parentRelativePath,
         filePath: cmsData.fileAttr.delete(file.filePath),
         revisions: []
       }
     }
 
-    merged[cleanFilePath].revisions.push(JSON.parse(JSON.stringify(file)))
+    merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(file)))
   })
 
   // return merged
@@ -211,27 +207,4 @@ export function getFilesMerged(files) {
   })
 
   return arMerged
-}
-
-export function deleteOlderRevisionByType(fileName, type) {
-  var folder = fileName.split('/')
-  var file = folder.pop()
-  var extension = file.replace(/.*?\./, '')
-  folder = folder.join('/')
-  try {
-    var stat = fse.statSync(folder)
-    if(stat){
-      var files = cmsData.file.getFiles(folder, true, 1, new RegExp('\\.' + extension))
-      files.forEach(function (fileItem) {
-        var fname = cmsData.fileAttr.delete(fileItem.cleanPath)
-        var ftype = cmsData.fileAttr.get(fileItem.cleanPath).s
-        if(fname === file && ftype === type){
-          var fileDraft = fileItem.path.replace(/-abe-./, '-abe-d')
-          cmsOperations.remove.removeFile(fileItem.path, coreUtils.file.changePath(fileItem.path, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
-          cmsOperations.remove.removeFile(fileDraft, coreUtils.file.changePath(fileDraft, config.data.url).replace(new RegExp('\\.' + extension), '.json'))
-        }
-      })
-    }
-  }catch(e) {
-  }
 }

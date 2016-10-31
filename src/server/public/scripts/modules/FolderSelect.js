@@ -62,7 +62,7 @@ export default class FolderSelect {
       level.classList.add('hidden')
       
       // console.log([].slice.call(document.querySelectorAll(`[data-shown=${dataShow}][data-parent=${level1selected}]`)))
-      var childs = [].slice.call(document.querySelectorAll(`[data-shown=${dataShow}][data-parent=${level1selected}]`))
+      var childs = [].slice.call(document.querySelectorAll(`[data-shown=${dataShow}]`))
       if(childs) {
         childs.forEach(function (child) {
           var options = [].slice.call(child.querySelectorAll('option'))
