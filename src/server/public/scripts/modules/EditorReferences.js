@@ -1,4 +1,4 @@
-/*global document, FormData, CONFIG, XMLHttpRequest */
+/*global document */
 
 import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'
@@ -8,9 +8,9 @@ export default class EditorFiles {
   constructor() {
     this._ajax = Nanoajax.ajax
     this.referenceTabButton = document.querySelector('[data-manager-show="references-files"]')
-    this.referenceTabButton.addEventListener('click', (e) => {
+    this.referenceTabButton.addEventListener('click', () => {
       this._ajax({
-        url: `/abe/reference/`,
+        url: '/abe/reference/',
         body: '',
         cors: true,
         method: 'get'
@@ -37,12 +37,12 @@ export default class EditorFiles {
     Array.prototype.forEach.call(this.referenceLinks, (referenceLink) => {
       referenceLink.addEventListener('click', (e) => {
         e.preventDefault()
-        this.textArea.style.opacity = 1;
+        this.textArea.style.opacity = 1
         Array.prototype.forEach.call(this.referenceLinks, (referenceLink) => {
           this.textArea.classList.remove('error')
           this.jsonError.style.opacity = 0
           referenceLink.classList.remove('active')
-        });
+        })
         e.target.classList.add('active')
         if(parseInt(e.target.getAttribute('data-error')) === 1) {
           this.textArea.classList.add('error')
@@ -74,12 +74,12 @@ export default class EditorFiles {
     }
     if(isValidJson){
       this._ajax({
-        url: `/abe/reference/`,
+        url: '/abe/reference/',
         body: data,
         cors: true,
         method: 'post'
       },
-      (code, responseText) => {
+      () => {
         this.textArea.classList.add('saved')
         setTimeout(() => {
           this.textArea.classList.remove('saved')
