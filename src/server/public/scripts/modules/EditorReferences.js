@@ -24,10 +24,6 @@ export default class EditorFiles {
         this.textArea = document.querySelector('.display-json')
         this.jsonError = document.querySelector('.json-error')
         if(!this.referenceLinks) return
-        Array.prototype.forEach.call(this.referenceLinks, (referenceLink) => {
-          var dataHref = referenceLink.getAttribute('data-href').split('/')
-          referenceLink.textContent = dataHref[dataHref.length - 1]
-        })
         this.rebind()
       })
     })
