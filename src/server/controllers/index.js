@@ -18,7 +18,8 @@ import {
   ,getDelete
   ,postUpload
   ,postSqlRequest
-  ,writeJson
+  ,postReference
+  ,getReference
 } from '../routes'
 
 import {
@@ -43,8 +44,9 @@ router.post('/abe/draft*', postDraft)
 router.get('/abe/save-config', getSaveConfig)
 router.get('/abe/unpublish*', getUnpublish)
 router.get('/abe/delete*', getDelete)
+router.get('/abe/reference/*', getReference)
 router.post('/abe/upload/*', postUpload)
-router.post('/abe/write-json/*', writeJson)
+router.post('/abe/reference/*', postReference)
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
 })

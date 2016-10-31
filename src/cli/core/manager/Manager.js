@@ -8,7 +8,8 @@ import {
   coreUtils,
   cmsData,
   config,
-  cmsTemplates
+  cmsTemplates,
+  cmsReference
 } from '../../'
 
 let singleton = Symbol()
@@ -130,7 +131,7 @@ class Manager {
   }
 
   updateReferences() {
-    this._references = cmsData.reference.getFiles()
+    this._references = cmsReference.reference.getFiles()
     
     return this
   }
