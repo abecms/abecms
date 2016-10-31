@@ -26,7 +26,6 @@ describe('cmsReference', function() {
   it('cmsReference.reference.saveFile()', function() {
   	var json = cmsReference.reference.getFiles();
     var ref1 = json[jsonPath]['ref1'];
-    console.log(json[jsonPath]['ref1'])
     cmsReference.reference.saveFile(jsonPath, JSON.stringify(json[jsonPath]));
     chai.expect(json[jsonPath]['ref1']).to.equal('ref1');
   });
