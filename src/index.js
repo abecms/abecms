@@ -18,7 +18,6 @@ program
   .option('-p, --port <port>', 'Port on which to listen to (defaults to 8000)', parseInt)
   .option('-i, --interactive', 'open in browser')
   .option('-N, --pname <pname>', 'pm2 server name')
-  .option('-w, --webport <webport>', 'website port')
   .option('-f, --folder <folder>', '--folder draft|sites')
   .option('-t, --type <type>', '--type draft|other')
   .option('-d, --destination <destination>', '--destination folder')
@@ -28,7 +27,6 @@ var userArgs = process.argv.slice(2)
 var create = new Create()
 var port = program.port
 var interactive = program.interactive
-var webport = program.webport || 8081
 
 var vPos = process.argv.indexOf('-v')
 if (vPos > -1) {
@@ -169,7 +167,6 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     }
     var environment = process.env
     environment.ROOT = dir
-    environment.WEBPORT = webport
     if (typeof port !== 'undefined' && port !== null) {
       environment.PORT = port
     }
@@ -207,7 +204,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     break
   case 'servenodemon':
     dir = process.cwd()
-    command = 'WEBPORT=' + webport + ' ROOT=' + dir + ' npm run startdev --node-args="--debug"'
+    command = 'ROOT=' + dir + ' npm run startdev --node-args="--debug"'
     if (interactive) command = 'OPENURL=1 ' + command
     if(port) command = 'PORT=' + port + ' ' + command
     process.chdir(__dirname + '/../')
