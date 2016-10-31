@@ -27,7 +27,7 @@ export function draft(filePath, tplPath, json, workflow = 'draft', type = 'draft
         }else if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
           result = resSave
         }else if(typeof resSave.json !== 'undefined' && resSave.json !== null){
-          Manager.instance.updateList()
+          Manager.instance.updatePostInList(resSave.jsonPath)
           result = {
             success: 1,
             json: resSave.json
@@ -84,7 +84,7 @@ export function publish(filePath, tplPath, json) {
             }
           }
           abeExtend.hooks.instance.trigger('afterPublish', result)
-          Manager.instance.updateList()
+          Manager.instance.updatePostInList(resSave.jsonPath)
           resolve(result)
         }).catch(function(e) {
           console.error('post.js', e)
@@ -128,10 +128,10 @@ export function unpublish(filePath) {
       null,
       'reject'
     )
-    .then(() => {
+    .then((resSave) => {
       cmsOperations.remove.removeFile(tplUrl.publish.path, tplUrl.publish.json)
       abeExtend.hooks.instance.trigger('afterUnpublish', tplUrl.publish.path, tplUrl.publish.json)
-      Manager.instance.updateList()
+      Manager.instance.updatePostInList(resSave.jsonPath)
     })
   }
 }
@@ -181,7 +181,7 @@ export function reject(filePath, tplPath, json) {
             }
           }
           abeExtend.hooks.instance.trigger('afterReject', result)
-          Manager.instance.updateList()
+          Manager.instance.updatePostInList(resSave.jsonPath)
           resolve(result)
         })
     }).catch(function(e) {
