@@ -79,24 +79,25 @@ export default class EditorAutocomplete {
       }
     }
 
-    if(typeof nodeComments !== 'undefined' && nodeComments !== null && nodeComments.length > 0) {
-      var results = [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result'))
-      var json = this._json.data
-    
-      json[id] = []
-      Array.prototype.forEach.call(results, (result) => {
-        var value = result.getAttribute('value')
-        if(value !== '') {
-          if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
-            json[id].push(JSON.parse(value))
-          }else {
-            json[id].push(value)
-          }
+    var results = [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result'))
+    var json = this._json.data
+  
+    json[id] = []
+    Array.prototype.forEach.call(results, (result) => {
+      var value = result.getAttribute('value')
+      if(value !== '') {
+        if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
+          json[id].push(JSON.parse(value))
+        }else {
+          json[id].push(value)
         }
-      })
+      }
+    })
 
-      this._json.data = json
-
+    this._json.data = json
+    
+    if(typeof nodeComments !== 'undefined' && nodeComments !== null && nodeComments.length > 0) {
+      
       try {
         Array.prototype.forEach.call(nodeComments, (nodeComment) => {
           var blockHtml = unescape(nodeComment.textContent.replace(/\[\[([\S\s]*?)\]\]/, '')).replace(/\[0\]-/g, '[0]-')
