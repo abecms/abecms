@@ -1,27 +1,36 @@
 /*global document, FormData, CONFIG, XMLHttpRequest */
 
+import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 
 export default class EditorFiles {
   constructor() {
     this._ajax = Nanoajax.ajax
-    this.referenceLinks = document.querySelectorAll('[data-ref-json]')
-    this.textArea = document.querySelector('.display-json')
-    this.jsonError = document.querySelector('.json-error')
     this.referenceTabButton = document.querySelector('[data-manager-show="references-files"]')
-    if(this.referenceLinks) this.rebind()
-
-      this._ajax(
-      {
+    this.referenceTabButton.addEventListener('click', (e) => {
+      this._ajax({
         url: `/abe/reference/`,
         body: '',
         cors: true,
         method: 'get'
-      },
-      (code, responseText) => {
-        console.log(responseText)
+      }, (code, responseText) => {
+        var resp = JSON.parse(responseText)
+        var referenceListHtml = document.querySelector('.references-files-wrapper')
+        var template = Handlebars.compile(referenceListHtml.innerHTML)
+        var compiled = template(resp)
+        referenceListHtml.innerHTML = compiled
+        this.referenceLinks = document.querySelectorAll('[data-ref-json]')
+        this.textArea = document.querySelector('.display-json')
+        this.jsonError = document.querySelector('.json-error')
+        if(!this.referenceLinks) return
+        Array.prototype.forEach.call(this.referenceLinks, (referenceLink) => {
+          var dataHref = referenceLink.getAttribute('data-href').split('/')
+          referenceLink.textContent = dataHref[dataHref.length - 1]
+        })
+        this.rebind()
       })
+    })
   }
 
   rebind() {
@@ -42,11 +51,6 @@ export default class EditorFiles {
         this.displayReference(e.target)
       })
     })
-
-    this.textArea.addEventListener('blur', () => {
-      this.save()
-    })
-
     this.textArea.addEventListener('blur', () => {
       this.save()
     })
@@ -69,8 +73,7 @@ export default class EditorFiles {
       selectedElement.setAttribute('data-error', 1)
     }
     if(isValidJson){
-      this._ajax(
-      {
+      this._ajax({
         url: `/abe/reference/`,
         body: data,
         cors: true,
@@ -93,5 +96,4 @@ export default class EditorFiles {
     this.textArea.value = JSON.stringify(JSON.parse(element.getAttribute('data-ref-json')), null, '\t')
     this.textArea.setAttribute('data-file', element.getAttribute('data-href'))
   }
-
 }
