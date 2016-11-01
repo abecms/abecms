@@ -178,7 +178,7 @@ export function getFileObject(pathFile) {
   const relativePath = pathFile.replace(pathData + '/', '')
 
   const parentName = cmsData.fileAttr.delete(name)
-  const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
+  const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(pathData + '/', '')
 
   const fileData = cmsData.fileAttr.get(name)
 

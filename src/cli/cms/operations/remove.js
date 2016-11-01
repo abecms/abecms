@@ -12,7 +12,6 @@ import {
 
 
 export function remove(filePath) {
-  filePath = coreUtils.slug.clean(filePath)
   filePath = abeExtend.hooks.instance.trigger('beforeDeleteFile', filePath)
 
   var revisions = cmsData.revision.getVersions(filePath)
@@ -21,7 +20,7 @@ export function remove(filePath) {
     cmsOperations.remove.removeFile(revision.path, revision.htmlPath)
   })
 
-  Manager.instance.removePostInList(filePath)
+  Manager.instance.removePostFromList(filePath)
 }
 
 export function removeFile(file, json) {
