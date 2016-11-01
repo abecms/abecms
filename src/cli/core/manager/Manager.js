@@ -196,8 +196,12 @@ class Manager {
     return this
   }
 
+  /**
+   * When a new post is created, this method is called so that the manager updates the list with this new item
+   * @param {String} pathFile The full path to the post
+   */
   addPostInList(pathFile){
-    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
+    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + '/', '')
     const json = cmsData.file.get(pathFile)
     let merged = {}
     let rev = []
@@ -215,8 +219,12 @@ class Manager {
     this._list.sort(coreUtils.sort.predicatBy('date', -1))
   }
 
+  /**
+   * When a post is modified, this method is called so that the manager updates the list with the updated item
+   * @param {String} pathFile The full path to the post
+   */
   updatePostInList(pathFile){
-    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
+    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + '/', '')
     const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
     if(found.length > 0){
       const index = found[0]
@@ -236,14 +244,23 @@ class Manager {
     }
   }
 
-  removePostInList(pathFile){
-    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(config.root, '').replace(/^\/?.+?\//, '')
-    const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
-    if(found.length > 0){
-      console.log('ok found')
-    }
+  /**
+   * When a post is deleted, this method is called so that the manager updates the list with the removed item
+   * @param {String} pathFile The full path to the post
+   */
+  removePostFromList(pathFile){
+    let parentRelativePath = cmsData.fileAttr.delete(pathFile)
+    parentRelativePath = (pathFile.indexOf('/') === 0) ? parentRelativePath.substring(1):parentRelativePath
+    parentRelativePath = parentRelativePath.replace('.' + config.files.templates.extension, '.json')
+
+    this._list = coreUtils.array.removeByAttr(this._list, 'parentRelativePath', parentRelativePath)
   }
 
+  /**
+   * This method loads all posts into an array with values used in "select" statements from templates
+   * + abe_meta data
+   * @return {Array} Array of objects representing the posts including their revisions
+   */
   updateList() {
     this._list = cmsData.file.getAllWithKeys(this._whereKeys)
     this._list.sort(coreUtils.sort.predicatBy('date', -1))
