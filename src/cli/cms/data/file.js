@@ -15,7 +15,7 @@ export function getAbeMeta(fileObject, json) {
 
   if(json.abe_meta.latest.date != null) {
     fileObject.date = json.abe_meta.latest.date
-    fileObject.cleanDate = moment(json.abe_meta.latest.date).format('YYYY/MM/DD HH:MM:ss')
+    fileObject.cleanDate = moment(json.abe_meta.latest.date).format('YYYY/MM/DD HH:mm:ss')
   }
 
   if(json.abe_meta != null) {
@@ -201,7 +201,7 @@ export function getFileObject(pathFile) {
     'cleanPath': relativePath,
     'filePath': relativePath,
     'date': date,
-    'cleanDate': fileDate.format('YYYY/MM/DD HH:MM:ss'),
+    'cleanDate': fileDate.format('YYYY/MM/DD HH:mm:ss'),
     'duration': duration,
     'cleanName': parentName,
     'parentRelativePath': parentRelativePath,

@@ -247,12 +247,12 @@ export function editor(fileName, jsonPath, documentLink) {
         //   json.abe_meta.cleanTemplate = tpl.replace(/\..+$/, '')
         // }
 
-        // if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-        //   var links = json.abe_meta.link.split('/')
-        //   var link = links.pop()
-        //   json.abe_meta.cleanName = link.replace(/\..+$/, '')
-        //   json.abe_meta.cleanFilename = links.join('/').replace(/\..+$/, '')
-        // }
+        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
+          var links = json.abe_meta.link.split('/')
+          var link = links.pop()
+          json.abe_meta.cleanName = link.replace(/\..+$/, '')
+          json.abe_meta.cleanFilename = links.join('/').replace(/\..+$/, '')
+        }
 
         // HOOKS beforeEditorFormBlocks
         json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json)
