@@ -165,35 +165,35 @@ export function sortRevisions(merged) {
   let sortedArray = []
 
   Array.prototype.forEach.call(Object.keys(merged), (key) => {
-    var revisions = merged[key].revisions
-
+    let revisions = merged[key].revisions
     revisions.sort(coreUtils.sort.predicatBy('date', -1))
-    if(revisions[0] != null) {
-      merged[key].date = revisions[0].date
-    }
-    Array.prototype.forEach.call(revisions, (revision) => {
-      var status = revision.abe_meta.status
-      if(typeof merged[key][status] === 'undefined' || merged[key][status] === null) {
-        if (status === 'publish') {
-          merged[key][status] = revision
-        }else {
-          merged[key][status] = {}
-        }
-        merged[key][status].path = revision.path
-        merged[key][status].html = revision.html
-        merged[key][status].htmlPath = revision.htmlPath
-        merged[key][status].date = new Date(revision.date)
-        merged[key][status].cleanDate = revision.cleanDate
-        merged[key][status].link = revision.abe_meta.link
-      }
-    })
-
     merged[key].revisions = revisions
 
-    merged[key].date = revisions[0].date
-    merged[key].cleanDate = revisions[0].cleanDate
-    merged[key].duration = revisions[0].duration
-    merged[key].abe_meta = revisions[0].abe_meta
+    if(revisions[0] != null) {
+      merged[key].date = revisions[0].date
+      merged[key].cleanDate = revisions[0].cleanDate
+      merged[key].duration = revisions[0].duration
+      merged[key].abe_meta = revisions[0].abe_meta
+    }
+
+    let newStatuses = []
+    Array.prototype.forEach.call(revisions, (revision) => {
+      const revisionStatus = revision.abe_meta.status
+
+      if(typeof revisionStatus !== 'undefined' && revisionStatus !== null && revisionStatus != '') {
+        if(!(revisionStatus in newStatuses)) {
+          merged[key][revisionStatus] = {}
+          merged[key][revisionStatus].path = revision.path
+          merged[key][revisionStatus].html = revision.html
+          merged[key][revisionStatus].htmlPath = revision.htmlPath
+          merged[key][revisionStatus].date = revision.date
+          merged[key][revisionStatus].cleanDate = revision.cleanDate
+          merged[key][revisionStatus].link = revision.abe_meta.link
+
+          newStatuses[revisionStatus] = true
+        }
+      }
+    })
 
     sortedArray.push(merged[key])
   })
