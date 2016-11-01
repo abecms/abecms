@@ -182,7 +182,11 @@ export function sortRevisions(merged) {
 
       if(typeof revisionStatus !== 'undefined' && revisionStatus !== null && revisionStatus != '') {
         if(!(revisionStatus in newStatuses)) {
-          merged[key][revisionStatus] = {}
+          if (revisionStatus === 'publish') {
+            merged[key][revisionStatus] = revision
+          }else {
+            merged[key][revisionStatus] = {}
+          }
           merged[key][revisionStatus].path = revision.path
           merged[key][revisionStatus].html = revision.html
           merged[key][revisionStatus].htmlPath = revision.htmlPath
