@@ -197,44 +197,36 @@ class Manager {
   }
 
   /**
-   * When a post is modified, this method is called so that the manager updates the list with the updated item
+   * When a post is modified or created, this method is called so that the manager updates the list with the updated/new item
    * @param {String} pathFile The full path to the post
    */
   updatePostInList(pathFile){
     const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + '/', '')
     const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
+    const json = cmsData.file.get(pathFile)
+    let merged = {}
+    let revision = cmsData.file.getFileObject(pathFile)
+    revision = cmsData.file.getAbeMeta(revision, json)
+    Array.prototype.forEach.call(this._whereKeys, (key) => {
+      var keyFirst = key.split('.')[0]
+      revision[keyFirst] = json[keyFirst]
+    })
+
     if(found.length > 0){
       const index = found[0]
-      const json = cmsData.file.get(pathFile)
-      let merged = {}
       merged[parentRelativePath] = this._list[index]
-      let revision = cmsData.file.getFileObject(pathFile)
-      revision = cmsData.file.getAbeMeta(revision, json)
-      Array.prototype.forEach.call(this._whereKeys, (key) => {
-        var keyFirst = key.split('.')[0]
-        revision[keyFirst] = json[keyFirst]
-      })
       merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(revision)))
       const sortedResult = cmsData.revision.sortRevisions(merged)          
       this._list[index] = sortedResult[0]
-      this._list.sort(coreUtils.sort.predicatBy('date', -1))
     } else {
-      const json = cmsData.file.get(pathFile)
-      let merged = {}
       let rev = []
-      let revision = cmsData.file.getFileObject(pathFile)
-
-      revision = cmsData.file.getAbeMeta(revision, json)
-      Array.prototype.forEach.call(this._whereKeys, (key) => {
-        var keyFirst = key.split('.')[0]
-        revision[keyFirst] = json[keyFirst]
-      })
       rev.push(revision)
       merged = cmsData.revision.mergeRevisions(rev)
       const sortedResult = cmsData.revision.sortRevisions(merged)
       this._list.push(sortedResult[0])
-      this._list.sort(coreUtils.sort.predicatBy('date', -1))
     }
+
+    this._list.sort(coreUtils.sort.predicatBy('date', -1))
   }
 
   /**
