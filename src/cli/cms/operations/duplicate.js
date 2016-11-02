@@ -1,3 +1,5 @@
+import path from 'path'
+
 import {
   abeExtend,
   Manager,
@@ -12,6 +14,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
 
     var json = {}
     var revisions = []
+    var newFilePath = path.join(newPath, name) + '.' + config.files.templates.extension
     if(oldFilePath != null) {
       var files = Manager.instance.getList()
       var fileWithoutExtension = oldFilePath.replace('.' + config.files.templates.extension, '.json')
@@ -38,7 +41,7 @@ var duplicate = function(oldFilePath, template, newPath, name, req, isUpdate = f
 
     var pCreate = cmsOperations.create(template, newPath, name, req, json, (isUpdate) ? false : true)
     pCreate.then((resSave) => {
-      if (isUpdate) {
+      if (isUpdate && oldFilePath !== newFilePath) {
         abeExtend.hooks.instance.trigger('beforeUpdate', json, oldFilePath, template, newPath, name, req, isUpdate)
         cmsOperations.remove.remove(oldFilePath)
       }

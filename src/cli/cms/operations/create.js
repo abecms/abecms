@@ -36,7 +36,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
         abeExtend.hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
         cmsOperations.save.save(filePath, template, json, text, 'draft', null, 'draft')
           .then((resSave) => {
-            Manager.instance.addPostInList(resSave.jsonPath)
+            Manager.instance.updatePostInList(resSave.jsonPath)
             filePath = resSave.htmlPath
             tplUrl = cmsData.file.fromUrl(filePath)
             resolve(resSave.json)
