@@ -53,4 +53,94 @@ describe("Helpers", function () {
             chai.expect(rendered).to.eql(expected);
         });
     });
+    describe("isTrue", function () {
+        it('properly eval ==', function() {
+            var value1 = 'str1',
+                operator = '==',
+                value2 = 'str1',
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = true;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval ==', function() {
+            var value1 = 'str1',
+                operator = '==',
+                value2 = 'str2',
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = false;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval ===', function() {
+            var value1 = '1',
+                operator = '===',
+                value2 = 1,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = false;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval <', function() {
+            var value1 = 1,
+                operator = '<',
+                value2 = 10,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = true;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval <=', function() {
+            var value1 = 10,
+                operator = '<=',
+                value2 = 10,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = true;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval &&', function() {
+            var value1 = null,
+                operator = '&&',
+                value2 = 10,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = false;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval &&', function() {
+            var value1 = [],
+                operator = '&&',
+                value2 = 10,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = false;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval &&', function() {
+            var value1 = {"var":"1"},
+                operator = '&&',
+                value2 = {"other":"1"},
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = true;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval ||', function() {
+            var value1 = null,
+                operator = '||',
+                value2 = 10,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = true;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval ||', function() {
+            var value1 = [],
+                operator = '||',
+                value2 = null,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = false;
+            chai.expect(rendered).to.eql(expected);
+        });
+        it('properly eval ||', function() {
+            var value1 = false,
+                operator = '||',
+                value2 = 4,
+                rendered = Handlebars.helpers.isTrue(value1, operator, value2),
+                expected = true;
+            chai.expect(rendered).to.eql(expected);
+        });
+    });
 });
