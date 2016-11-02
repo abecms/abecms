@@ -71,6 +71,7 @@ export default class Json {
             //   return
             // }
             this.data = jsonRes.json
+            location.reload()
           }
           catch(e){
             alert('The following error happened : \n' + e + '\n if it persist, reload your web page tab.')
