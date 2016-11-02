@@ -17,7 +17,8 @@ describe('Manager', function() {
 
         this.fixture = {
           tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
-          jsonArticle: fse.readJsonSync(__dirname + '/fixtures/files/article-4.json')
+          jsonArticle: fse.readJsonSync(__dirname + '/fixtures/files/article-4.json'),
+          jsonArticle1: fse.readJsonSync(__dirname + '/fixtures/data/article-1.json')
         }
         done()
         
@@ -65,7 +66,7 @@ describe('Manager', function() {
     chai.assert.equal(list.length, 1, 'failed !')
   });
 
-  it('addPostInList()', function(done) {
+  it('updatePostInList() with new post', function(done) {
     const len = Manager.instance.getList().length
     cmsOperations.create('article', '', 'article-4.html', {query: ''}, this.fixture.jsonArticle, false)
       .then(function(resSave) {
