@@ -7,7 +7,7 @@ import getListHooks from './get-list-hooks'
 import getPage from './get-page'
 import postPage from './post-page'
 import postPublish from './post-publish'
-import getRepublish from './get-republish'
+import getGeneratePost from './get-generate-posts'
 import postReject from './post-reject'
 import postDraft from './post-draft'
 import getSaveConfig from './get-save-config'
@@ -28,7 +28,7 @@ export {
 	,getPage
 	,postPage
 	,postPublish
-	,getRepublish
+	,getGeneratePost
 	,postReject
 	,postDraft
 	,getSaveConfig

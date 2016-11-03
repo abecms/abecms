@@ -28,8 +28,7 @@
     "compile": "./node_modules/.bin/babel --presets es2015,stage-0 -d dist/ src/ && cp -r src/cli/core/config/config.json dist/cli/core/config/config.json",
     "watchdev": "npm run build:front && npm run compile && npm run mvasset && nodemon --debug --exec npm run compile && npm run mvasset --kill-others",
     "startdev": "npm run build:front && npm run compile && npm run mvasset && node src/tasks/nodemon.js & npm run watch --kill-others",
-    "startdevOnly": "npm run js:admin && npm run js:engine && node src/tasks/nodemon.js & npm run watch --kill-others",
-    "build:folder": "node --harmony dist/cli/Builder.js"
+    "startdevOnly": "npm run js:admin && npm run js:engine && node src/tasks/nodemon.js & npm run watch --kill-others"
   },
   "author": "Adfab Connect",
   "license": "ISC",

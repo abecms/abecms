@@ -48,7 +48,7 @@ export function init(processName, conf) {
         resolve()
       })
       .catch((e) => {
-        error('publish-all' + e)
+        error(processName + ' ' + e)
       })
     }else {
       error('ABE_WEBSITE is not defined use node process.js ABE_WEBSITE=/pat/to/website')
