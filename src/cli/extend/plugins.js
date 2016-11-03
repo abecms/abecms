@@ -22,6 +22,7 @@ class Plugins {
         
         this._plugins = coreUtils.file.getFoldersSync(pluginsDir, false)
         Array.prototype.forEach.call(this._plugins, (plugin) => {
+          var name = plugin.path.replace(pluginsDir + '/', '')
           // has hooks
           var plugHooks = path.join(plugin.path, config.hooks.url)
           try {
@@ -94,7 +95,7 @@ class Plugins {
                   let routesGet = []
                   let routePaths = coreUtils.file.getFilesSync(gets, false)
                   Array.prototype.forEach.call(routePaths, (route) => {
-                    let pathUrl = `/abe/plugin/${plugin.name}/${path.basename(route, '.js')}*`
+                    let pathUrl = `/abe/plugin/${name}/${path.basename(route, '.js')}*`
                     let routeObject = {'path':route, 'routePath':pathUrl}
                     routesGet.push(routeObject)
                   })
@@ -110,7 +111,7 @@ class Plugins {
                   let routesPost = []
                   let routePaths = coreUtils.file.getFilesSync(posts, false)
                   Array.prototype.forEach.call(routePaths, (route) => {
-                    let pathUrl = `/abe/plugin/${plugin.name}/${path.basename(route, '.js')}*`
+                    let pathUrl = `/abe/plugin/${name}/${path.basename(route, '.js')}*`
                     let routeObject = {'path':route, 'routePath' : pathUrl}
                     routesPost.push(routeObject)
                   })
