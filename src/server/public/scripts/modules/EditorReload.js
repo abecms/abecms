@@ -54,24 +54,26 @@ export default class Reload {
 
   inject(str) { 
     var iframe = document.querySelector('#page-template') 
-    var iframeBody = IframeDocument('#page-template').body 
-    var scrollTop = iframeBody.scrollTop 
- 
-    var doc = iframe.contentWindow.document 
-    str = str.replace(/<\/head>/, '<base href="/" /></head>') 
-    var template = Handlebars.compile(str, {noEscape: true})
-    str = template(json)
-    doc.open() 
-    doc.write(str) 
-    doc.close()
+    iframe.onload = function() {
+      var iframeBody = IframeDocument('#page-template').body 
+      var scrollTop = iframeBody.scrollTop 
 
-    setTimeout(function () { 
-      var iframeDoc = IframeDocument('#page-template') 
-      if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
-        && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
-        iframeDoc.body.scrollTop = scrollTop 
-      } 
-    }, 1000) 
+      var doc = iframe.contentWindow.document 
+      str = str.replace(/<\/head>/, '<base href="/" /></head>') 
+      var template = Handlebars.compile(str, {noEscape: true})
+      str = template(json)
+      doc.open() 
+      doc.write(str) 
+      doc.close()
+
+      setTimeout(function () { 
+        var iframeDoc = IframeDocument('#page-template') 
+        if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
+          && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
+          iframeDoc.body.scrollTop = scrollTop 
+        } 
+      }, 1000) 
+    }
   }
   
   reload() {
