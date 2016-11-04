@@ -49,7 +49,7 @@ function publishNext(files, tt, cb, i = 0) {
           resolve()
         },
         () => {
-          error('publish-all ERROR on ' + pub[processConfig.ABE_STATUS].path.replace(config.root, '').replace(config.data.url, ''))
+          error('generate-posts ERROR on ' + pub[processConfig.ABE_STATUS].path.replace(config.root, '').replace(config.data.url, ''))
           resolve()
         })
     })

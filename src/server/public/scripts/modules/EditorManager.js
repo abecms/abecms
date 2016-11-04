@@ -21,7 +21,7 @@ export default class EditorManager {
     this._btnSaveConfig = document.querySelectorAll('[data-save-config]')
 
     // button manager
-    this._btnRepublish = document.querySelector('[data-republish]')
+    this._btnGeneratePosts = document.querySelector('[data-generate-posts]')
     this._btnCloseManager = document.querySelector('.close-manager')
     this._btnManager = document.querySelector('.btn-manager')
     this._btnVisitSite = document.querySelectorAll('.btn-visit-site')
@@ -31,7 +31,7 @@ export default class EditorManager {
     this._btnUnpublishFile = [].slice.call(document.querySelectorAll('[data-unpublish="true"]'))
 
     // event handlers
-    this._handleBtnRepublishClick = this._btnRepublishClick.bind(this)
+    this._handleBtnGeneratePostsClick = this._btnGeneratePostsClick.bind(this)
     this._handleBtnCloseManagerClick = this._btnCloseManagerClick.bind(this)
     this._handleBtnManagerTabClick = this._btnManagerTabClick.bind(this)
     this._handleBtnManagerClick = this._btnManagerClick.bind(this)
@@ -127,8 +127,8 @@ export default class EditorManager {
       this._btnManager.addEventListener('click', this._handleBtnManagerClick)
     }
     
-    if(typeof this._btnRepublish !== 'undefined' && this._btnRepublish !== null) {
-      this._btnRepublish.addEventListener('click', this._handleBtnRepublishClick)
+    if(typeof this._btnGeneratePosts !== 'undefined' && this._btnGeneratePosts !== null) {
+      this._btnGeneratePosts.addEventListener('click', this._handleBtnGeneratePostsClick)
     }
 
     if(typeof this._btnCloseManager !== 'undefined' && this._btnCloseManager !== null) {
@@ -144,13 +144,13 @@ export default class EditorManager {
     })
   }
 
-  _btnRepublishClick(e) {
+  _btnGeneratePostsClick(e) {
     e.preventDefault()
-    this._btnRepublish.querySelector('[data-not-clicked]').className = 'hidden'
-    this._btnRepublish.querySelector('[data-clicked]').className = ''
+    this._btnGeneratePosts.querySelector('[data-not-clicked]').className = 'hidden'
+    this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
     this._ajax(
       {
-        url: document.location.origin + '/abe/republish',
+        url: document.location.origin + '/abe/generate-posts',
         method: 'get'
       },
         (e, responseText) => {

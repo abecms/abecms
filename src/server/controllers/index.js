@@ -10,7 +10,7 @@ import {
   ,getPage
   ,postPage
   ,postPublish
-  ,getRepublish
+  ,getGeneratePost
   ,postReject
   ,postDraft
   ,getSaveConfig
@@ -38,7 +38,7 @@ router.post('/abe/sql-request*', postSqlRequest)
 router.post('/abe/page/*', postPage)
 router.get('/abe/page/*', getPage)
 router.post('/abe/publish*', postPublish)
-router.get('/abe/republish', getRepublish)
+router.get('/abe/generate-posts', getGeneratePost)
 router.post('/abe/reject*', postReject)
 router.post('/abe/draft*', postDraft)
 router.get('/abe/save-config', getSaveConfig)

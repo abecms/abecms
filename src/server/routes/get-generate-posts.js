@@ -4,15 +4,15 @@ import {
 
 var route = function(req, res) {
   var result
-  if (abeExtend.process('publish-all', [''])) {
+  if (abeExtend.process('generate-posts', [''])) {
     result = {
       success: 1,
-      msg: 'publish all is running'
+      msg: 'generate-posts is running'
     }
   }else {
     result = {
       success: 0,
-      msg: 'cannot run process sitemap, because an other one is already running'
+      msg: 'cannot run process generate-posts, because an other one is already running'
     }
   }
   res.set('Content-Type', 'application/json')
