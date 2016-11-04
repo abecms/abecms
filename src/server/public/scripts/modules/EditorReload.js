@@ -53,10 +53,11 @@ export default class Reload {
   }
 
   inject(str) { 
-    var iframe = document.querySelector('#page-template') 
-    iframe.onload = function() {
+    var iframe = document.querySelector('#page-template')
+    
+    var initIframe = function () {
       var iframeBody = IframeDocument('#page-template').body 
-      var scrollTop = iframeBody.scrollTop 
+      var scrollTop = iframeBody.scrollTop
 
       var doc = iframe.contentWindow.document 
       str = str.replace(/<\/head>/, '<base href="/" /></head>') 
@@ -72,8 +73,11 @@ export default class Reload {
           && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
           iframeDoc.body.scrollTop = scrollTop 
         } 
-      }, 1000) 
+      }, 1000)
     }
+
+    if(IframeDocument('#page-template').body) initIframe()
+    else iframe.onload = initIframe;
   }
   
   reload() {
