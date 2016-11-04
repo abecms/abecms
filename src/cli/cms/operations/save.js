@@ -50,8 +50,6 @@ export function checkRequired(text, json) {
 }
 
 export function save(url, tplPath = null, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
-  url = coreUtils.slug.clean(url)
-
   var p = new Promise((resolve) => {
     var isRejectedDoc = false
     if(type === 'reject'){

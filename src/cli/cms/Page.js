@@ -126,8 +126,6 @@ export default class Page {
           }
         }
       }
-     
-      this._addSource(json)
 
       // We remove the {{abe type=data ...}} from the text 
       this.template = cmsData.source.removeDataList(this.template)
@@ -295,22 +293,5 @@ export default class Page {
     this.template = this.template.replace(/\{\{\{\{\/?raw\}\}\}\}/g, '')
 
     return this
-  }
-
-  _addSource(json) {
-    var listReg = /({{abe.*type=[\'|\"]data.*}})/g
-    var match
-
-    while (match = listReg.exec(this.template)) {
-      var editable = cmsData.regex.getAttr(match[0], 'editable')
-      var key = cmsData.regex.getAttr(match[0], 'key')
-
-      if((typeof editable === 'undefined' || editable === null || editable === '' || editable === 'false')
-        && typeof json[config.source.name] !== 'undefined' && json[config.source.name] !== null) {
-        json[key] = json[config.source.name][key]
-      }
-
-      json = abeExtend.hooks.instance.trigger('afterAddSourcePage', json, match[0])
-    }
   }
 }
