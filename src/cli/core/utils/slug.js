@@ -1,4 +1,5 @@
 import slug from 'limax'
+import path from 'path'
 
 import {
   config
@@ -7,7 +8,7 @@ import {
 export function clean(str) {
 
   if (typeof str === 'undefined' || str === null) return null
-  str = str.split('/')
+  str = str.split(path.sep)
   str[str.length - 1] = slugify(decodeURIComponent(str[str.length - 1]))
   return str.join('/')
 }

@@ -16,7 +16,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     var templatePath = path.join(config.root, config.templates.url, `${template}.${config.files.templates.extension}`)
     var filePath = path.join(pathCreate, name)
     filePath = coreUtils.slug.clean(filePath)
-    filePath = path.join(config.root, config.draft.url, filePath.replace(config.root))
+    filePath = path.join(config.root, config.draft.url, filePath.replace(config.root,''))
     if(templatePath !== null && filePath !== null) {
       var tplUrl = cmsData.file.fromUrl(filePath)
         
