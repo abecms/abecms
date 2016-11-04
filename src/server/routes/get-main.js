@@ -112,7 +112,12 @@ var route = function(req, res, next) {
       var page = new Page(_json.abe_meta.template, text, _json, false) 
       pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
     }
-
+    
+    var editorWidth = '33%'
+    req.headers && req.headers.cookie.split(';').forEach(function(cookie) {
+      var parts = cookie.match(/(.*?)=(.*)$/)
+      if(parts[1] === 'editorWidth') editorWidth = parts[2]
+    })
     var EditorVariables = {
       pageHtml: pageHtml,
       isHome: isHome,
@@ -134,7 +139,8 @@ var route = function(req, res, next) {
         req: req
       },
       abeVersion: pkg.version,
-      nonce: '\'nonce-' + res.locals.nonce + '\''
+      nonce: '\'nonce-' + res.locals.nonce + '\'',
+      editorWidth: editorWidth
     }
     EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 
