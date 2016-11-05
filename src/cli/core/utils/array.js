@@ -6,15 +6,15 @@
  * @return {Array}       the filtered array
  */
 export function filter(arr, attr, value) {
-  var result = []
-  var i = 0
-  var len = arr.length
+  const len = arr.length
+  let result = []
+  let i = 0
 
   for (; i < len; i += 1) {
-    var elt = arr[i]
+    let elt = arr[i]
 
     if (elt[attr] == value) {
-      result.push(element)
+      result.push(elt)
     }
   }
   return result
@@ -28,12 +28,12 @@ export function filter(arr, attr, value) {
  * @return {Array}       the filtered array of indexes
  */
 export function find(arr, attr, value) {
-  var result = []
-  var i = 0
-  var len = arr.length
+  const len = arr.length
+  let result = []
+  let i = 0
 
   for (; i < len; i += 1) {
-    var elt = arr[i]
+    let elt = arr[i]
 
     if (elt[attr] == value) {
       result.push(i)
@@ -50,7 +50,7 @@ export function find(arr, attr, value) {
  * @return {Array}       the array with corresponding objects removed
  */
 export function removeByAttr(arr, attr, value){
-  var i = arr.length
+  let i = arr.length
   while (i--){
     if(  
       arr[i] && 
