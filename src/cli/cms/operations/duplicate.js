@@ -19,10 +19,9 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
     if(oldPostUrl != null) {
       const files = Manager.instance.getList()
       const oldPostDataPath = path.join(config.root, config.data.url, oldPostUrl.replace('.' + config.files.templates.extension, '.json'))
-console.log(oldPostDataPath)
       let posts = []
       posts = coreUtils.array.filter(files, 'path', oldPostDataPath)
-console.log(posts)
+
       if(posts.length > 0 && posts[0].revisions != null) {
         revisions = posts[0].revisions
         if(revisions != null && revisions[0] != null) {
