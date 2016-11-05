@@ -9,40 +9,44 @@ import {
   Manager
 } from '../../'
 
-const create = function(templateId, pathCreate, name, req, forceJson = {}, duplicate = false) {
-  const p = new Promise((resolve, reject) => {
-    abeExtend.hooks.instance.trigger('beforeCreate', templateId, pathCreate, name, req, forceJson)
+var create = function(template, pathCreate, name, req, forceJson = {}, duplicate = false) {
+  var p = new Promise((resolve, reject) => {
+    abeExtend.hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
-    const templatePath = path.join(config.root, config.templates.url, `${templateId}.${config.files.templates.extension}`)
-    let postDataPath = path.join(pathCreate, name)
-    postDataPath = coreUtils.slug.clean(postDataPath)
-    postDataPath = path.join(config.root, config.data.url, postDataPath)
-
-    if(templatePath !== null && postDataPath !== null) {
-      if(!coreUtils.file.exist(postDataPath)) {
-        let postData = (forceJson) ? forceJson : {}
-        let template = cmsTemplates.template.getTemplate(templatePath)
+    var templatePath = path.join(config.root, config.templates.url, `${template}.${config.files.templates.extension}`)
+    var filePath = path.join(pathCreate, name)
+    filePath = coreUtils.slug.clean(filePath)
+    filePath = path.join(config.root, config.draft.url, filePath.replace(config.root,''))
+    if(templatePath !== null && filePath !== null) {
+      var tplUrl = cmsData.file.fromUrl(filePath)
+        
+      if(!coreUtils.file.exist(tplUrl.json.path)) {
+        var json = (forceJson) ? forceJson : {}
+        var tpl = templatePath
+        var text = cmsTemplates.template.getTemplate(tpl)
         if (duplicate) {
-          postData = cmsData.values.removeDuplicate(template, postData)
+          json = cmsData.values.removeDuplicate(text, json)
         }
-        template = cmsData.source.removeDataList(template)
-        var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', postDataPath, req.query, postData, template)
-        postDataPath = resHook.filePath
-        postData = resHook.json
-        template = resHook.text
+        text = cmsData.source.removeDataList(text)
+        var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', filePath, req.query, json, text)
+        filePath = resHook.filePath
+        json = resHook.json
+        text = resHook.text
 
-        abeExtend.hooks.instance.trigger('afterCreate', postData, template, pathCreate, name, req, forceJson)
-        cmsOperations.save.save(postDataPath, templateId, postData, template, 'draft', null, 'draft')
+        abeExtend.hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
+        cmsOperations.save.save(filePath, template, json, text, 'draft', null, 'draft')
           .then((resSave) => {
             Manager.instance.updatePostInList(resSave.jsonPath)
+            filePath = resSave.htmlPath
+            tplUrl = cmsData.file.fromUrl(filePath)
             resolve(resSave.json)
           }).catch(function(e) {
             reject()
             console.error(e)
           })
       }else {
-        postData = cmsData.file.get(postDataPath)
-        resolve(postData, postDataPath)
+        json = cmsData.file.get(tplUrl.json.path)
+        resolve(json, tplUrl.json.path)
       }
     }else {
       reject()
