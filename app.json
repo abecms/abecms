@@ -1,0 +1,7 @@
+{
+  "name": "Abejs Demo",
+  "description": "A basic demo",
+  "repository": "https://github.com/abejs/demo",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "express", "static", "abejs", "cms"]
+}
