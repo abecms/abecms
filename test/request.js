@@ -2,7 +2,7 @@ var chai = require('chai');
 var path = require('path');
 
 var config = require('../src/cli').config
-config.set({root: __dirname + '/fixtures'})
+config.set({root: path.join(__dirname,'fixtures')})
 
 var cmsData = require('../src/cli').cmsData
 var Manager = require('../src/cli').Manager;

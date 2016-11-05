@@ -113,12 +113,15 @@ export function fromUrl(url) {
 
   if(url != null) {
 
-    var dir = path.dirname(url).replace(config.root, '')
-    var filename = path.basename(url)
-    var link = url.replace(config.root, '')
-    link = link.replace(/^\//, '').split('/')
-    link.shift()
-    link = cmsData.fileAttr.delete('/' + link.join('/').replace(/\/$/, ''))
+    const dir = path.dirname(url).replace(config.root, '')
+    const filename = path.basename(url)
+    const pathDraft = path.join(config.root,config.draft.url,path.sep)
+    const pathPublish = path.join(config.root,config.publish.url,path.sep)
+    
+    let link = url.replace(pathDraft, '')
+    link = link.replace(pathPublish, '')
+    link = link.replace(path.sep, '/')
+    link = cmsData.fileAttr.delete('/'+link)
 
     let draft = config.draft.url
     let publish = config.publish.url

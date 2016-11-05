@@ -2,7 +2,7 @@ var chai = require('chai');
 var path = require('path');
 
 var config = require('../src/cli').config
-config.set({root: __dirname + '/fixtures/'})
+config.set({root: path.join(__dirname,'fixtures')})
 
 var cmsOperations = require('../src/cli').cmsOperations
 var Manager = require('../src/cli').Manager;
@@ -16,9 +16,9 @@ describe('Create', function() {
         Manager.instance.updateList()
 
         this.fixture = {
-          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
-          jsonArticle: fse.readJsonSync(__dirname + '/fixtures/files/article-4.json'),
-          jsonHomepage: fse.readJsonSync(__dirname + '/fixtures/data/homepage-1.json')
+          tag: fse.readFileSync(path.join(__dirname, 'fixtures/templates/article.html'), 'utf8'),
+          jsonArticle: fse.readJsonSync(path.join(__dirname, '/fixtures/files/article-4.json')),
+          jsonHomepage: fse.readJsonSync(path.join(__dirname, '/fixtures/data/homepage-1.json'))
         }
         done()
         
@@ -33,6 +33,7 @@ describe('Create', function() {
     cmsOperations.create('article', '', 'article-2.html', {query: ''}, this.fixture.jsonArticle, false)
       .then(function(resSave) {
         var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
+        console.log(json)
         var stat = fse.statSync(json)
         if (stat) {
           chai.expect(stat).to.not.be.undefined;
