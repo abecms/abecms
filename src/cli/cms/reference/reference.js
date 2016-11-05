@@ -15,7 +15,7 @@ export function getFiles(name = '') {
   else {
     const files = coreUtils.file.getFilesSync(pathToReferences, true, '.json')
     Array.prototype.forEach.call(files, (pathFile) => {
-      var fileName = pathFile.split('/')
+      var fileName = pathFile.split(path.sep)
       res[fileName[fileName.length - 1]] = cmsData.file.get(pathFile)
     })
   }
