@@ -1,3 +1,4 @@
+import path from 'path'
 import xss from 'xss'
 import pkg from '../../../package'
 
@@ -43,15 +44,10 @@ var route = function(req, res, next) {
   let p = new Promise((resolve) => {
 
     if(filePath != null) {
-      fileName = filePath.split('/')
-      fileName = fileName[fileName.length-1].replace(`.${config.files.templates.extension}`, '')
-
-      folderPath = filePath.split('/')
-      folderPath.pop()
-      folderPath = folderPath.join('/')
+      fileName = path.basename(filePath)
+      folderPath = path.dirname(filePath)
 
       isHome = false
-
       var filePathTest = cmsData.revision.getDocumentRevision(filePath)
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
         jsonPath = filePathTest.path

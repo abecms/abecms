@@ -66,7 +66,6 @@ export function save(url, tplPath = null, json = null, text = '', type = '', pre
       pathIso.jsonPath = path.join(config.root, previousSave.jsonPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
       pathIso.htmlPath = path.join(config.root, previousSave.htmlPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
     }
-
     if(typeof json === 'undefined' || json === null) {
       json = cmsData.file.get(tplUrl.json.path)
     }
@@ -218,7 +217,6 @@ export function dateIso(tplUrl, type = null) {
   var dateISO
   var saveJsonFile = tplUrl.json.path
   var saveFile = tplUrl['draft'].path
-  
   switch(type) {
   case 'draft':
     newDateISO = cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))

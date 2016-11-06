@@ -17,9 +17,8 @@ export function exist(pathFile) {
 }
 
 export function changePath(pathEnv, change) {
-  pathEnv = pathEnv.replace(config.root, '').replace(/^\//, '').split('/')
+  pathEnv = pathEnv.split(path.sep).join('/').replace(config.root, '').replace(/^\//, '').split('/')
   pathEnv[0] = change
-
   return path.join(config.root, pathEnv.join('/'))
 }
 

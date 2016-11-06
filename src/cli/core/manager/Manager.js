@@ -201,7 +201,7 @@ class Manager {
    * @param {String} pathFile The full path to the post
    */
   updatePostInList(pathFile){
-    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + '/', '')
+    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + path.sep, '')
     const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
     const json = cmsData.file.get(pathFile)
     let merged = {}
@@ -235,9 +235,8 @@ class Manager {
    */
   removePostFromList(pathFile){
     let parentRelativePath = cmsData.fileAttr.delete(pathFile)
-    parentRelativePath = (pathFile.indexOf('/') === 0) ? parentRelativePath.substring(1):parentRelativePath
+    parentRelativePath = (pathFile.indexOf(path.sep) === 0) ? parentRelativePath.substring(1):parentRelativePath
     parentRelativePath = parentRelativePath.replace('.' + config.files.templates.extension, '.json')
-
     this._list = coreUtils.array.removeByAttr(this._list, 'parentRelativePath', parentRelativePath)
   }
 

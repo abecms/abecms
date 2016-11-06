@@ -112,7 +112,6 @@ export function fromUrl(url) {
   }
 
   if(url != null) {
-
     const dir = path.dirname(url).replace(config.root, '')
     const filename = path.basename(url)
     const pathDraft = path.join(config.root,config.draft.url,path.sep)
@@ -120,7 +119,7 @@ export function fromUrl(url) {
     
     let link = url.replace(pathDraft, '')
     link = link.replace(pathPublish, '')
-    link = link.replace(path.sep, '/')
+    link = link.replace(new RegExp('\\' + path.sep, 'g'), '/')
     link = cmsData.fileAttr.delete('/'+link)
 
     let draft = config.draft.url
@@ -178,10 +177,10 @@ export function getFileObject(pathFile) {
   const templateExtension = '.' + config.files.templates.extension
 
   const name = path.basename(pathFile)
-  const relativePath = pathFile.replace(pathData + '/', '')
+  const relativePath = pathFile.replace(pathData + path.sep, '')
 
   const parentName = cmsData.fileAttr.delete(name)
-  const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(pathData + '/', '')
+  const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(pathData + path.sep, '')
 
   const fileData = cmsData.fileAttr.get(name)
 
