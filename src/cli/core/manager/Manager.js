@@ -202,6 +202,8 @@ class Manager {
    */
   updatePostInList(pathFile){
     const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + path.sep, '')
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('parentRelativePath', parentRelativePath)
     const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
     const json = cmsData.file.get(pathFile)
     let merged = {}

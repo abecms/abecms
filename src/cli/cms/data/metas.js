@@ -25,3 +25,16 @@ export function add(json, type, date = null) {
   json[meta][type].latest.date = currentDate
   json[meta][type].latest.abeUrl = abeUrl
 }
+
+
+export function create(json, template, url) {
+  let meta = config.meta.name
+  if (json[meta] == null) {
+    json[meta] = {}
+  }
+
+  json[meta].template = template
+  json[meta].link = url
+
+  return json
+}
