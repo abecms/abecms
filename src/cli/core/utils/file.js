@@ -4,6 +4,7 @@ var fse = Promise.promisifyAll(require('fs-extra'))
 
 import {
   config,
+  cmsData,
   coreUtils
 } from '../../'
 
@@ -158,4 +159,44 @@ export function getFilesAsync(dirname, recursive = true, filterExt = '') {
   }).then(function() {
     return items
   })
+}
+
+/**
+ * Return the date of the revision
+ * @param  {String}  revisionPath   url of the post revision
+ * @return {Date}    date           Date object
+ */
+export function getDate(revisionPath) {
+  var date = cmsData.fileAttr.get(revisionPath).d
+
+    if(typeof date === 'undefined' || date === null || date === '') {
+      date = new Date()
+    }else {
+      date = new Date(date)
+    }
+
+    return date
+}
+
+/**
+ * 
+ * @param  {String}  revisionPath   url of the post revision
+ * @return {Date}    date           Date object
+ */
+export function addDateIsoToRevisionPath(revisionPath, type) {
+  var newDateISO
+  var dateISO
+  var saveJsonFile = revisionPath
+
+  if (type === 'publish') {
+    return revisionPath
+  }
+  
+  dateISO = type[0] + cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))
+  
+  if(dateISO) {
+    saveJsonFile = cmsData.fileAttr.add(saveJsonFile, dateISO)
+  }
+
+  return saveJsonFile
 }

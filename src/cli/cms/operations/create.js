@@ -34,7 +34,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
         text = resHook.text
 
         abeExtend.hooks.instance.trigger('afterCreate', json, text, pathCreate, name, req, forceJson)
-        cmsOperations.save.save(filePath, template, json, text, 'draft', null, 'draft')
+        cmsOperations.save.save(filePath, template, json, text, 'draft')
           .then((resSave) => {
             Manager.instance.updatePostInList(resSave.jsonPath)
             filePath = resSave.htmlPath

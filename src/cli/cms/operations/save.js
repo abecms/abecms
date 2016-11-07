@@ -49,115 +49,85 @@ export function checkRequired(text, json) {
   return Math.round((requiredValue > 0) ? complete * 100 / requiredValue : 100)
 }
 
-export function save(url, tplPath = null, json = null, text = '', type = '', previousSave = null, realType = 'draft', publishAll = false) {
-  var p = new Promise((resolve) => {
-    var isRejectedDoc = false
-    if(type === 'reject'){
-      isRejectedDoc = true
-      url = abeExtend.hooks.instance.trigger('beforeReject', url)
-      type = 'draft'
-      realType = 'draft'
-      url = abeExtend.hooks.instance.trigger('afterReject', url)
-    }
-    var tplUrl = cmsData.file.fromUrl(url)
-    type = type || 'draft'
-    var pathIso = dateIso(tplUrl, type)
-    if(typeof previousSave !== 'undefined' && previousSave !== null){
-      pathIso.jsonPath = path.join(config.root, previousSave.jsonPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
-      pathIso.htmlPath = path.join(config.root, previousSave.htmlPath.replace(config.root, '')).replace(/-abe-d/, `-abe-${realType[0]}`)
-    }
+export function save(url, template, json, text = '', type = '') {
+  // var p = new Promise((resolve) => {
+    // var tplUrl = cmsData.file.fromUrl(url)
+    // var pathIso = dateIso(tplUrl.json.path, type)
 
-    if(typeof json === 'undefined' || json === null) {
-      json = cmsData.file.get(tplUrl.json.path)
-    }
+    // if (tplPath == null) {
+    //   tplPath = json.abe_meta.template
+    // }else if (tplPath.indexOf('.') > -1) {
+    //   tplPath = tplPath.replace(/\..+$/, '')
+    // }
+    // var tpl = tplPath.replace(config.root, '')
+    // var fullTpl = path.join(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
 
-    if (tplPath == null) {
-      tplPath = json.abe_meta.template
-    }else if (tplPath.indexOf('.') > -1) {
-      tplPath = tplPath.replace(/\..+$/, '')
-    }
-    var tpl = tplPath.replace(config.root, '')
-    var fullTpl = path.join(config.root, config.templates.url, tpl) + '.' + config.files.templates.extension
+    // var ext = {
+    //   template: tpl.replace(/^\/+/, ''),
+    //   link: tplUrl.publish.link,
+    //   complete: 0,
+    //   type: type
+    // }
+    // let meta = config.meta.name
+    // json[meta] = extend(json[meta], ext)
+    // var date = cmsData.fileAttr.get(pathIso).d
 
-    var ext = {
-      template: tpl.replace(/^\/+/, ''),
-      link: tplUrl.publish.link,
-      complete: 0,
-      type: type
-    }
-    let meta = config.meta.name
-    json[meta] = extend(json[meta], ext)
-    var date = cmsData.fileAttr.get(pathIso.jsonPath).d
+    // if(typeof date === 'undefined' || date === null || date === '') {
+    //   date = new Date()
+    // }else {
+    //   date = new Date(date)
+    // }
 
-    if (publishAll) {
-      if(typeof json[meta].publish !== 'undefined' && json[meta].publish !== null) {
-        date = json[meta].publish.date
+    // cmsData.metas.add(tpl, json, type, {}, date)
+
+    // if(typeof text === 'undefined' || text === null || text === '') {
+    //   text = cmsTemplates.template.getTemplate(fullTpl)
+    // }
+
+    // cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
+    //     .then(() => {
+          // json = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', json)
+          // for(var prop in json){
+          //   if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
+          //     var valuesAreEmpty = true
+          //     json[prop].forEach(function (element) {
+          //       for(var p in element) {
+          //         if(element[p] !== ''){
+          //           valuesAreEmpty = false
+          //         }
+          //       }
+          //     })
+          //     if(valuesAreEmpty){
+          //       delete json[prop]
+          //     }
+          //   }
+          // }
+
+
+  var p = new Promise((resolve, reject) => {
+    var obj = {
+      type:type,
+      template:{
+        path: fullTpl
+      },
+      html: {
+        path:path.join(config.root, config.publish.url, json.abe_meta.link)
+      },
+      json: {
+        content: json,
+        path: pathIso
       }
-    }else {
-      if(typeof date === 'undefined' || date === null || date === '') {
-        date = new Date()
-      }else {
-        date = new Date(date)
-      }
     }
 
-    cmsData.metas.add(tpl, json, type, {}, date, realType)
+    obj = abeExtend.hooks.instance.trigger('beforeSave', obj)
 
-    if(typeof text === 'undefined' || text === null || text === '') {
-      text = cmsTemplates.template.getTemplate(fullTpl)
-    }
+    // obj.json.content[meta].complete = checkRequired(text, obj.json.content)
 
-    cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
-        .then(() => {
-          json = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', json)
-          for(var prop in json){
-            if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
-              var valuesAreEmpty = true
-              json[prop].forEach(function (element) {
-                for(var p in element) {
-                  if(element[p] !== ''){
-                    valuesAreEmpty = false
-                  }
-                }
-              })
-              if(valuesAreEmpty){
-                delete json[prop]
-              }
-            }
-          }
+    var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text)
 
-          var obj = {
-            publishAll:publishAll,
-            type:type,
-            template:{
-              path: fullTpl
-            },
-            html: {
-              path:pathIso.htmlPath
-            },
-            json: {
-              content: json,
-              path: pathIso.jsonPath
-            }
-          }
+    abeExtend.hooks.instance.trigger('afterSave', obj)
 
-          obj = abeExtend.hooks.instance.trigger('beforeSave', obj)
-
-          obj.json.content[meta].complete = checkRequired(text, obj.json.content)
-
-          var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text)
-          if (isRejectedDoc) {
-            res.reject = cmsData.fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
-          }
-
-          abeExtend.hooks.instance.trigger('afterSave', obj)
-          
-          cmsTemplates.assets.copy()
-
-          resolve(res)
-        }).catch(function(e) {
-          console.error('Save.js', e)
-        })
+    resolve(res)
   })
 
   return p
@@ -207,40 +177,25 @@ export function saveJson(url, json) {
 
 export function saveHtml(url, html) {
   mkdirp.sync(path.dirname(url))
-  if(cmsData.fileAttr.test(url) && cmsData.fileAttr.get(url).s !== 'd'){
-    cmsOperations.remove.olderRevisionByType(cmsData.fileAttr.delete(url), cmsData.fileAttr.get(url).s)
-  }
   fse.writeFileSync(url, html)
+
+  return true
 }
 
-export function dateIso(tplUrl, type = null) {
+export function dateIso(revisionPath, type = null) {
   var newDateISO
   var dateISO
-  var saveJsonFile = tplUrl.json.path
-  var saveFile = tplUrl['draft'].path
-  
-  switch(type) {
-  case 'draft':
-    newDateISO = cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))
-    dateISO = 'd' + newDateISO
-    break
-  case 'publish':
-    saveJsonFile = tplUrl.publish.json
-    saveFile = tplUrl.publish.path
-    break
-  default:
-    newDateISO = cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))
-    dateISO = type[0] + newDateISO
-    break
+  var saveJsonFile = revisionPath
+
+  if (type === 'publish') {
+    return revisionPath
   }
 
+  dateISO = type[0] + cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))
+  
   if(dateISO) {
     saveJsonFile = cmsData.fileAttr.add(saveJsonFile, dateISO)
-    saveFile = cmsData.fileAttr.add(saveFile, dateISO)
   }
 
-  return {
-    jsonPath: saveJsonFile,
-    htmlPath: saveFile
-  }
+  return saveJsonFile
 }
