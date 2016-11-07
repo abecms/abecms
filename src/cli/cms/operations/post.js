@@ -12,7 +12,7 @@ import {
 } from '../../'
 
 export function draft(filePath, json, workflow = 'draft') {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     abeExtend.hooks.instance.trigger('beforeDraft', json, filePath)
 
     var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
@@ -25,14 +25,14 @@ export function draft(filePath, json, workflow = 'draft') {
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
 
-      json['abe_meta'].complete = cmsOperations.save.checkRequired(template, json)
+      json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
 
       // var page = new Page(json.abe_meta.template, template, json, true)
       var result
       if (!cmsOperations.save.saveJson(revisionPath, json)) {
         result = {
           success: 0,
-          error: "cannot json save file"
+          error: 'cannot json save file'
         }
       }else {
         Manager.instance.updatePostInList(revisionPath)
@@ -49,19 +49,19 @@ export function draft(filePath, json, workflow = 'draft') {
 }
 
 export function publish(filePath, json) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     abeExtend.hooks.instance.trigger('beforePublish', json, filePath)
 
     var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
     var postPath = path.join(config.root, config.publish.url, filePath)
     // revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
-    cmsData.metas.add(json, "publish")
+    cmsData.metas.add(json, 'publish')
 
     var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
-      json['abe_meta'].complete = cmsOperations.save.checkRequired(template, json)
+      json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
 
       var page = new Page(json.abe_meta.template, template, json, true)
       
@@ -69,13 +69,13 @@ export function publish(filePath, json) {
       if (!cmsOperations.save.saveHtml(postPath, page.html)) {
         result = {
           success: 0,
-          error: "cannot html save file"
+          error: 'cannot html save file'
         }
       }else {
         if (!cmsOperations.save.saveJson(revisionPath, json)) {
           result = {
             success: 0,
-            error: "cannot json save file"
+            error: 'cannot json save file'
           }
         }else {
           Manager.instance.updatePostInList(revisionPath)
@@ -107,7 +107,7 @@ export function unpublish(filePath) {
       var p = draft(
         filePath, 
         json,
-        "draft"
+        'draft'
       )
 
       p.then((result) => {
@@ -129,21 +129,21 @@ export function unpublish(filePath) {
 export function reject(filePath, json) {
   abeExtend.hooks.instance.trigger('beforeReject', filePath)
 
-  var p = new Promise((resolve, reject) => {
-      if(json.abe_meta.publish != null) {
-        delete json.abe_meta.publish
-      }
-      var p2 = draft(
+  var p = new Promise((resolve) => {
+    if(json.abe_meta.publish != null) {
+      delete json.abe_meta.publish
+    }
+    var p2 = draft(
         filePath, 
         json,
-        "draft"
+        'draft'
       )
-      p2.then((result) => {
-        abeExtend.hooks.instance.trigger('afterReject', result)
-        resolve(result)
-      }).catch(function(e) {
-        console.error('[ERROR] reject.js', e)
-      })
+    p2.then((result) => {
+      abeExtend.hooks.instance.trigger('afterReject', result)
+      resolve(result)
+    }).catch(function(e) {
+      console.error('[ERROR] reject.js', e)
+    })
   })
 
   return p

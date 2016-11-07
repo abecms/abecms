@@ -5,12 +5,11 @@ import {
   cmsOperations,
   config,
   abeExtend,
-  cmsData,
-  Manager
+  cmsData
 } from '../../'
 
 var create = function(template, pathCreate, name, req, forceJson = {}, duplicate = false) {
-  var p = new Promise((resolve, reject) => {
+  var p = new Promise((resolve) => {
     abeExtend.hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
     var postUrl = path.join(pathCreate, name)
@@ -28,12 +27,12 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
       var templateText = cmsTemplates.template.getTemplate(template)
       json = cmsData.values.removeDuplicate(templateText, json)
     }
-    var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', filePath, req.query, json)
+    abeExtend.hooks.instance.trigger('beforeFirstSave', filePath, req.query, json)
 
     var p2 = cmsOperations.post.draft(
       postUrl,
       json,
-      "draft"
+      'draft'
     )
     p2.then((result) => {
       abeExtend.hooks.instance.trigger('afterCreate', result)

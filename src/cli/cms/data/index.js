@@ -8,6 +8,7 @@ import * as source from './source'
 import * as revision from './revision'
 import * as metas from './metas'
 import * as file from './file'
+import * as utils from './utils'
 
 export {
 	values,
@@ -19,5 +20,6 @@ export {
   revision,
   regex,
   metas,
-  file
+  file,
+  utils
 }

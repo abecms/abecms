@@ -168,13 +168,13 @@ export function getFilesAsync(dirname, recursive = true, filterExt = '') {
 export function getDate(revisionPath) {
   var date = cmsData.fileAttr.get(revisionPath).d
 
-    if(typeof date === 'undefined' || date === null || date === '') {
-      date = new Date()
-    }else {
-      date = new Date(date)
-    }
+  if(typeof date === 'undefined' || date === null || date === '') {
+    date = new Date()
+  }else {
+    date = new Date(date)
+  }
 
-    return date
+  return date
 }
 
 /**
@@ -183,7 +183,6 @@ export function getDate(revisionPath) {
  * @return {Date}    date           Date object
  */
 export function addDateIsoToRevisionPath(revisionPath, type) {
-  var newDateISO
   var dateISO
   var saveJsonFile = revisionPath
 
