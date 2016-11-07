@@ -144,11 +144,12 @@ describe('cmsOperations', function() {
   it('cmsOperations.duplicate() update', function(done) {
     cmsOperations.duplicate('article-1.html', 'article', '', 'article-1.html', {}, true)
     .then(function(resSave) {
-      var json = path.join(config.root, config.data.url, resSave.abe_meta.link.replace('.html', '.json'))
+      var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
       var stat = fse.statSync(json)
       if (stat) {
         chai.expect(stat).to.not.be.undefined;
       }
+      fse.removeSync(json)
       done()
     }.bind(this))
   });
