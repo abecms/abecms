@@ -12,7 +12,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
   var p = new Promise((resolve) => {
     abeExtend.hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
-    var postUrl = path.join(pathCreate, name)
+    var postUrl = path.join('/', pathCreate, name)
     postUrl = coreUtils.slug.clean(postUrl)
 
     var filePath = path.join(config.root, config.draft.url, postUrl)
