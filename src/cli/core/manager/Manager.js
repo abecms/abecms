@@ -216,7 +216,11 @@ class Manager {
       const index = found[0]
       merged[parentRelativePath] = this._list[index]
       merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(revision)))
-      const sortedResult = cmsData.revision.sortRevisions(merged)          
+      const sortedResult = cmsData.revision.sortRevisions(merged)
+      // Does the publish version has been removed (in the case of unpublish) ? 
+      if(sortedResult[0]['publish'] && !coreUtils.file.exist(sortedResult[0]['publish']['path'])){
+        delete sortedResult[0]['publish']
+      }
       this._list[index] = sortedResult[0]
     } else {
       let rev = []

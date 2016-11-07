@@ -107,56 +107,56 @@ export function save(url, tplPath = null, json = null, text = '', type = '', pre
     }
 
     cmsData.source.getDataList(path.dirname(tplUrl.publish.link), text, json)
-        .then(() => {
-          json = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', json)
-          for(var prop in json){
-            if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
-              var valuesAreEmpty = true
-              json[prop].forEach(function (element) {
-                for(var p in element) {
-                  if(element[p] !== ''){
-                    valuesAreEmpty = false
-                  }
-                }
-              })
-              if(valuesAreEmpty){
-                delete json[prop]
+    .then(() => {
+      json = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', json)
+      for(var prop in json){
+        if(typeof json[prop] === 'object' && Array.isArray(json[prop]) && json[prop].length === 1){
+          var valuesAreEmpty = true
+          json[prop].forEach(function (element) {
+            for(var p in element) {
+              if(element[p] !== ''){
+                valuesAreEmpty = false
               }
             }
+          })
+          if(valuesAreEmpty){
+            delete json[prop]
           }
+        }
+      }
 
-          var obj = {
-            publishAll:publishAll,
-            type:type,
-            template:{
-              path: fullTpl
-            },
-            html: {
-              path:pathIso.htmlPath
-            },
-            json: {
-              content: json,
-              path: pathIso.jsonPath
-            }
-          }
+      var obj = {
+        publishAll:publishAll,
+        type:type,
+        template:{
+          path: fullTpl
+        },
+        html: {
+          path:pathIso.htmlPath
+        },
+        json: {
+          content: json,
+          path: pathIso.jsonPath
+        }
+      }
 
-          obj = abeExtend.hooks.instance.trigger('beforeSave', obj)
+      obj = abeExtend.hooks.instance.trigger('beforeSave', obj)
 
-          obj.json.content[meta].complete = checkRequired(text, obj.json.content)
+      obj.json.content[meta].complete = checkRequired(text, obj.json.content)
 
-          var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text)
-          if (isRejectedDoc) {
-            res.reject = cmsData.fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
-          }
+      var res = saveJsonAndHtml(tpl.replace(/^\/+/, ''), obj, text)
+      if (isRejectedDoc) {
+        res.reject = cmsData.fileAttr.delete(url).replace(path.join(config.root, config.draft.url), '')
+      }
 
-          abeExtend.hooks.instance.trigger('afterSave', obj)
-          
-          cmsTemplates.assets.copy()
+      abeExtend.hooks.instance.trigger('afterSave', obj)
+      
+      cmsTemplates.assets.copy()
 
-          resolve(res)
-        }).catch(function(e) {
-          console.error('Save.js', e)
-        })
+      resolve(res)
+    }).catch(function(e) {
+      console.error('save.js', e.stack)
+    })
   })
 
   return p

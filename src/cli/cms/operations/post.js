@@ -55,7 +55,7 @@ export function publish(filePath, tplPath, json) {
         .then(() => {
           resolve()
         }).catch(function(e) {
-          console.error(e)
+          console.error(e.stack)
         })
     })
 
@@ -150,7 +150,7 @@ export function reject(filePath, tplPath, json) {
         .then((resSave) => {
           resolve()
         }).catch(function(e) {
-          console.error(e)
+          console.error(e.stack)
         })
     })
 
@@ -184,7 +184,7 @@ export function reject(filePath, tplPath, json) {
           resolve(result)
         })
     }).catch(function(e) {
-      console.error(e)
+      console.error(e.stack)
       var result = {
         success: 0,
         error: 'reject error'
