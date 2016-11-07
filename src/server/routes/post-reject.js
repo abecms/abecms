@@ -11,7 +11,6 @@ var route = function(req, res, next){
   
   var p = cmsOperations.post.reject(
     filePath, 
-    req.body.tplPath,
     req.body.json
   )
 

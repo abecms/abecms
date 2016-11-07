@@ -65,16 +65,4 @@ describe('Manager', function() {
     chai.assert.equal(list[0].name, 'article-2.json', 'failed !')
     chai.assert.equal(list.length, 1, 'failed !')
   });
-
-  it('updatePostInList() with new post', function(done) {
-    const len = Manager.instance.getList().length
-    cmsOperations.create('article', '', 'article-4.html', {query: ''}, this.fixture.jsonArticle, false)
-      .then(function(resSave) {
-        const json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
-        const list = Manager.instance.getList()
-        fse.removeSync(json)
-        chai.assert.equal(list.length, len + 1, 'failed !')
-        done()
-      }.bind(this));
-  });
 });

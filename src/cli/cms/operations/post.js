@@ -11,9 +11,9 @@ import {
   Manager
 } from '../../'
 
-export function draft(filePath, tplPath, json, workflow = 'draft') {
+export function draft(filePath, json, workflow = 'draft') {
   var p = new Promise((resolve, reject) => {
-    abeExtend.hooks.instance.trigger('beforeDraft', json, filePath, tplPath)
+    abeExtend.hooks.instance.trigger('beforeDraft', json, filePath)
 
     var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
     revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
@@ -48,9 +48,9 @@ export function draft(filePath, tplPath, json, workflow = 'draft') {
   return p
 }
 
-export function publish(filePath, tplPath, json) {
+export function publish(filePath, json) {
   var p = new Promise((resolve, reject) => {
-    abeExtend.hooks.instance.trigger('beforePublish', json, filePath, tplPath)
+    abeExtend.hooks.instance.trigger('beforePublish', json, filePath)
 
     var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
     var postPath = path.join(config.root, config.publish.url, filePath)
@@ -61,7 +61,6 @@ export function publish(filePath, tplPath, json) {
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
-
       json['abe_meta'].complete = cmsOperations.save.checkRequired(template, json)
 
       var page = new Page(json.abe_meta.template, template, json, true)
@@ -96,32 +95,38 @@ export function publish(filePath, tplPath, json) {
 export function unpublish(filePath) {
   abeExtend.hooks.instance.trigger('beforeUnpublish', filePath)
 
-  var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
-  var postPath = path.join(config.root, config.publish.url, filePath)
-  if(coreUtils.file.exist(revisionPath)) {
-    var json = JSON.parse(JSON.stringify(cmsData.file.get(revisionPath)))
-    if(json.abe_meta.publish != null) {
-      delete json.abe_meta.publish
+  var p = new Promise((resolve, reject) => {
+    var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
+    var postPath = path.join(config.root, config.publish.url, filePath)
+    if(coreUtils.file.exist(revisionPath)) {
+      var json = JSON.parse(JSON.stringify(cmsData.file.get(revisionPath)))
+      if(json.abe_meta.publish != null) {
+        delete json.abe_meta.publish
+      }
+
+      var p = draft(
+        filePath, 
+        json,
+        "draft"
+      )
+
+      p.then((result) => {
+        cmsOperations.remove.removeFile(revisionPath, postPath)
+        abeExtend.hooks.instance.trigger('afterUnpublish', revisionPath, postPath)
+        var newRevisionPath = path.join(config.root, config.data.url, result.json.abe_meta.latest.abeUrl.replace(`.${config.files.templates.extension}`, '.json'))
+        Manager.instance.updatePostInList(newRevisionPath)
+        resolve(result)
+      }).catch(function(e) {
+        console.error('[ERROR] unpublish', e)
+        reject()
+      })
     }
+  })
 
-    var p = draft(
-      filePath, 
-      json.abe_meta.template,
-      json,
-      "draft"
-    )
-
-    p.then((result) => {
-      cmsOperations.remove.removeFile(revisionPath, postPath)
-      abeExtend.hooks.instance.trigger('afterUnpublish', revisionPath, postPath)
-      Manager.instance.updatePostInList(revisionPath.replace(new RegExp('\\/', 'g'), path.sep))
-    }).catch(function(e) {
-      console.error('[ERROR] unpublish', e)
-    })
-  }
+  return p
 }
 
-export function reject(filePath, tplPath, json) {
+export function reject(filePath, json) {
   abeExtend.hooks.instance.trigger('beforeReject', filePath)
 
   var p = new Promise((resolve, reject) => {
@@ -130,7 +135,6 @@ export function reject(filePath, tplPath, json) {
       }
       var p2 = draft(
         filePath, 
-        json.abe_meta.template,
         json,
         "draft"
       )
@@ -138,7 +142,7 @@ export function reject(filePath, tplPath, json) {
         abeExtend.hooks.instance.trigger('afterReject', result)
         resolve(result)
       }).catch(function(e) {
-        console.error('[ERROR] post-publish.js', e)
+        console.error('[ERROR] reject.js', e)
       })
   })
 

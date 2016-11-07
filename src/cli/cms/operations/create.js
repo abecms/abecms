@@ -25,13 +25,13 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
       if(json.abe_meta.publish != null) {
         delete json.abe_meta.publish
       }
-      json = cmsData.values.removeDuplicate(text, json)
+      var templateText = cmsTemplates.template.getTemplate(template)
+      json = cmsData.values.removeDuplicate(templateText, json)
     }
     var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', filePath, req.query, json)
 
     var p2 = cmsOperations.post.draft(
-      postUrl, 
-      json.abe_meta.template,
+      postUrl,
       json,
       "draft"
     )
