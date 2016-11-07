@@ -12,7 +12,6 @@ var route = function(req, res, next){
 
   var p = cmsOperations.post.draft(
     filePath, 
-    json.abe_meta.template,
     json
   )
 

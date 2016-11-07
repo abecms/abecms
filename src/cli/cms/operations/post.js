@@ -2,106 +2,89 @@ import path from 'path'
 
 import {
   cmsData,
+  Page,
   cmsOperations,
+  cmsTemplates,
   coreUtils,
   config,
   abeExtend,
   Manager
 } from '../../'
 
-export function draft(filePath, tplPath, json, workflow = 'draft', type = 'draft') {
-  var p = new Promise((resolve, reject) => {
-    abeExtend.hooks.instance.trigger('beforeDraft', json, filePath, tplPath)
-    cmsOperations.save.save(
-      path.join(config.root, config.draft.url, filePath.replace(config.root)),
-      tplPath,
-      json,
-      '',
-      workflow,
-      null,
-      type)
-      .then((resSave) => {
-        var result
-        if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
-          result = {error: resSave.error}
-        }else if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
-          result = resSave
-        }else if(typeof resSave.json !== 'undefined' && resSave.json !== null){
-          Manager.instance.updatePostInList(resSave.jsonPath)
-          result = {
-            success: 1,
-            json: resSave.json
-          }
+export function draft(filePath, json, workflow = 'draft') {
+  var p = new Promise((resolve) => {
+    abeExtend.hooks.instance.trigger('beforeDraft', json, filePath)
+
+    var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
+    revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
+    var date = coreUtils.file.getDate(revisionPath)
+    cmsData.metas.add(json, workflow, date)
+
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+
+    cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
+    .then(() => {
+
+      json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
+
+      // var page = new Page(json.abe_meta.template, template, json, true)
+      var result
+      if (!cmsOperations.save.saveJson(revisionPath, json)) {
+        result = {
+          success: 0,
+          error: 'cannot json save file'
         }
-        resolve(result)
-      })
+      }else {
+        Manager.instance.updatePostInList(revisionPath)
+        result = {
+          success: 1,
+          json: json
+        }
+      }
+      resolve(result)
+    })
   })
 
   return p
 }
 
-export function publish(filePath, tplPath, json) {
-  var p = new Promise((resolve, reject) => {
-    abeExtend.hooks.instance.trigger('beforePublish', json, filePath, tplPath)
-    var p1 = new Promise((resolve) => {
-      cmsOperations.save.save(
-        path.join(config.root, config.draft.url, filePath.replace(config.root)),
-        tplPath,
-        json,
-        '',
-        'draft',
-        null,
-        'publish')
-        .then(() => {
-          resolve()
-        }).catch(function(e) {
-          console.error(e.stack)
-        })
-    })
+export function publish(filePath, json) {
+  var p = new Promise((resolve) => {
+    abeExtend.hooks.instance.trigger('beforePublish', json, filePath)
 
-    p1.then((resSave) => {
-      cmsOperations.save.save(
-        path.join(config.root, config.draft.url, filePath.replace(config.root)),
-        tplPath,
-        json,
-        '',
-        'publish',
-        resSave,
-        'publish')
-        .then((resSave) => {
-          var result
-          if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
-            result = {
-              success: 0,
-              error: resSave.error
-            }
-          } else if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
-            result = resSave
-          } else if(typeof resSave.json !== 'undefined' && resSave.json !== null){
-            result = {
-              success: 1,
-              json: resSave.json
-            }
-          }
-          abeExtend.hooks.instance.trigger('afterPublish', result)
-          Manager.instance.updatePostInList(resSave.jsonPath)
-          resolve(result)
-        }).catch(function(e) {
-          console.error('post.js', e)
-          var result = {
+    var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
+    var postPath = path.join(config.root, config.publish.url, filePath)
+    // revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
+    cmsData.metas.add(json, 'publish')
+
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+
+    cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
+    .then(() => {
+      json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
+
+      var page = new Page(json.abe_meta.template, template, json, true)
+      
+      var result
+      if (!cmsOperations.save.saveHtml(postPath, page.html)) {
+        result = {
+          success: 0,
+          error: 'cannot html save file'
+        }
+      }else {
+        if (!cmsOperations.save.saveJson(revisionPath, json)) {
+          result = {
             success: 0,
-            error: 'publish error'
+            error: 'cannot json save file'
           }
-          abeExtend.hooks.instance.trigger('afterPublish', result)
-          resolve(result)
-        })
-    }).catch(function(e) {
-      console.error('post.js', e)
-      var result = {
-        success: 0,
-        error: 'publish error'
+        }else {
+          Manager.instance.updatePostInList(revisionPath)
+          result = {
+            success: 1,
+            json: json
+          }
+        }
       }
-      abeExtend.hooks.instance.trigger('afterPublish', result)
       resolve(result)
     })
   })
@@ -111,86 +94,55 @@ export function publish(filePath, tplPath, json) {
 
 export function unpublish(filePath) {
   abeExtend.hooks.instance.trigger('beforeUnpublish', filePath)
-  var tplUrl = cmsData.file.fromUrl(path.join(config.publish.url, filePath))
-  if(coreUtils.file.exist(tplUrl.json.path)) {
-    var json = JSON.parse(JSON.stringify(cmsData.file.get(tplUrl.json.path)))
+
+  var p = new Promise((resolve, reject) => {
+    var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
+    var postPath = path.join(config.root, config.publish.url, filePath)
+    if(coreUtils.file.exist(revisionPath)) {
+      var json = JSON.parse(JSON.stringify(cmsData.file.get(revisionPath)))
+      if(json.abe_meta.publish != null) {
+        delete json.abe_meta.publish
+      }
+
+      var p = draft(
+        filePath, 
+        json,
+        'draft'
+      )
+
+      p.then((result) => {
+        cmsOperations.remove.removeFile(revisionPath, postPath)
+        abeExtend.hooks.instance.trigger('afterUnpublish', revisionPath, postPath)
+        var newRevisionPath = path.join(config.root, config.data.url, result.json.abe_meta.latest.abeUrl.replace(`.${config.files.templates.extension}`, '.json'))
+        Manager.instance.updatePostInList(newRevisionPath)
+        resolve(result)
+      }).catch(function(e) {
+        console.error('[ERROR] unpublish', e)
+        reject()
+      })
+    }
+  })
+
+  return p
+}
+
+export function reject(filePath, json) {
+  abeExtend.hooks.instance.trigger('beforeReject', filePath)
+
+  var p = new Promise((resolve) => {
     if(json.abe_meta.publish != null) {
       delete json.abe_meta.publish
     }
-
-    cmsOperations.save.save(
-      path.join(config.root, config.draft.url, json.abe_meta.link.replace(config.root)),
-      json.abe_meta.template,
-      json,
-      '',
-      'reject',
-      null,
-      'reject'
-    )
-    .then((resSave) => {
-      cmsOperations.remove.removeFile(tplUrl.publish.path, tplUrl.publish.json)
-      abeExtend.hooks.instance.trigger('afterUnpublish', tplUrl.publish.path, tplUrl.publish.json)
-      Manager.instance.updatePostInList(resSave.jsonPath)
-    })
-  }
-}
-
-export function reject(filePath, tplPath, json) {
-  abeExtend.hooks.instance.trigger('beforeReject', filePath)
-  var p = new Promise((resolve, reject) => {
-    var p1 = new Promise((resolve) => {
-      cmsOperations.save.save(
-        path.join(config.root, config.draft.url, filePath.replace(config.root)),
-        tplPath,
+    var p2 = draft(
+        filePath, 
         json,
-        '',
-        'draft',
-        null,
-        'reject')
-        .then((resSave) => {
-          resolve()
-        }).catch(function(e) {
-          console.error(e.stack)
-        })
-    })
-
-    p1.then((resSave) => {
-      cmsOperations.save.save(
-        path.join(config.root, config.draft.url, filePath.replace(config.root)),
-        tplPath,
-        json,
-        '',
-        'reject',
-        resSave,
-        'reject')
-        .then((resSave) => {
-          var result
-          if(typeof resSave.error !== 'undefined' && resSave.error !== null  ){
-            result = {
-              success: 0,
-              error: resSave.error
-            }
-          } else if(typeof resSave.reject !== 'undefined' && resSave.reject !== null){
-            resSave.success = 1
-            result = resSave
-          } else if(typeof resSave.json !== 'undefined' && resSave.json !== null){
-            result = {
-              success: 1,
-              json: resSave.json
-            }
-          }
-          abeExtend.hooks.instance.trigger('afterReject', result)
-          Manager.instance.updatePostInList(resSave.jsonPath)
-          resolve(result)
-        })
-    }).catch(function(e) {
-      console.error(e.stack)
-      var result = {
-        success: 0,
-        error: 'reject error'
-      }
+        'draft'
+      )
+    p2.then((result) => {
       abeExtend.hooks.instance.trigger('afterReject', result)
       resolve(result)
+    }).catch(function(e) {
+      console.error('[ERROR] reject.js', e)
     })
   })
 

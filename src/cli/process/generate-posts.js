@@ -28,13 +28,11 @@ function publishNext(files, tt, cb, i = 0) {
           jsonObject = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', jsonObject)
 
           var obj = {
-            publishAll:true,
             type: jsonObject.abe_meta.status,
             json: {
               content: jsonObject
             }
           }
-          obj = abeExtend.hooks.instance.trigger('beforeSave', obj)
 
           var page = new Page(obj.json.content.abe_meta.template, templatesTexts[jsonObject.abe_meta.template], obj.json.content, true)
 

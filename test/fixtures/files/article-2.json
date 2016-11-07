@@ -1,0 +1,11 @@
+{
+	"abe_meta": {
+    "template": "article-single-abe",
+		"link": "/article-2.html",
+    "status": "publish",
+    "date": "2016-11-11T16:40:41.974Z",
+    "latest": {"date": "2016-11-11T16:40:41.974Z"}
+	},
+	"priority":2,
+	"title":"article 2"
+}

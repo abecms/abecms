@@ -27,7 +27,16 @@ describe('Meta', function() {
    */
   it('cmsData.metas.add()', function() {
     var json = {abe_meta: {link: 'article.html'}};
-    cmsData.metas.add('article', json);
+    cmsData.metas.add(json, 'draft');
     chai.expect(json.abe_meta.date).to.not.be.undefined;
+  });
+
+  /**
+   * cmsData.meta.create
+   * 
+   */
+  it('cmsData.metas.create()', function() {
+    var json = cmsData.metas.create({}, 'draft', 'test.html');
+    chai.expect(json.abe_meta.link).to.not.be.undefined;
   });
 });

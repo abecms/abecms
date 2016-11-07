@@ -57,7 +57,7 @@ export default class Reload {
     var sibling = currentIframe.nextElementSibling
     var parent = sibling.parentNode
     var iframe = document.createElement('iframe')
-    var scrollTop = (IframeDocument('#page-template').body) ? IframeDocument('#page-template').body.scrollTop : 0;
+    var scrollTop = (IframeDocument('#page-template').body) ? IframeDocument('#page-template').body.scrollTop : 0
 
     parent.classList.add('reloading')
 
@@ -89,7 +89,7 @@ export default class Reload {
     }
 
     currentIframe.remove()
-    parent.insertBefore(iframe, sibling);
+    parent.insertBefore(iframe, sibling)
   }
   
   reload() {
