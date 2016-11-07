@@ -24,10 +24,6 @@ describe('cmsOperations', function() {
       }.bind(this))
   });
 
-  /**
-   * cmsOperations.create
-   * 
-   */
   it('cmsOperations.create()', function(done) {
     cmsOperations.create('article', '', 'article-2.html', {query: ''}, JSON.parse(JSON.stringify(this.fixture.jsonArticle)), false)
       .then(function(resSave) {
@@ -132,10 +128,6 @@ describe('cmsOperations', function() {
       }.bind(this));
   });
 
-  /**
-   * cmsOperations.duplicate
-   * 
-   */
   it('cmsOperations.duplicate()', function(done) {
     cmsOperations.duplicate('article-1.html', 'article', '', 'article-2.html', {}, false)
     .then(function(resSave) {
@@ -145,6 +137,18 @@ describe('cmsOperations', function() {
         chai.expect(stat).to.not.be.undefined;
       }
       fse.removeSync(json)
+      done()
+    }.bind(this))
+  });
+
+  it('cmsOperations.duplicate() update', function(done) {
+    cmsOperations.duplicate('article-1.html', 'article', '', 'article-1.html', {}, true)
+    .then(function(resSave) {
+      var json = path.join(config.root, config.data.url, resSave.abe_meta.link.replace('.html', '.json'))
+      var stat = fse.statSync(json)
+      if (stat) {
+        chai.expect(stat).to.not.be.undefined;
+      }
       done()
     }.bind(this))
   });

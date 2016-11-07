@@ -110,7 +110,7 @@ var route = function(req, res, next) {
     }
     
     var editorWidth = '33%'
-    req.headers && req.headers.cookie.split(';').forEach(function(cookie) {
+    req.headers && req.headers.cookie && req.headers.cookie.split(';').forEach(function(cookie) {
       var parts = cookie.match(/(.*?)=(.*)$/)
       if(parts[1] === 'editorWidth') editorWidth = parts[2]
     })
