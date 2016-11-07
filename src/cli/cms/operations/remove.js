@@ -20,7 +20,7 @@ export function remove(filePath) {
     cmsOperations.remove.removeFile(revision.path, revision.htmlPath)
   })
 
-  Manager.instance.removePostFromList(filePath)
+  Manager.instance.removePostFromList(filePath.replace(new RegExp('\\/', 'g'), path.sep))
 }
 
 export function removeFile(file, json) {

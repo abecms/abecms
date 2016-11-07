@@ -1,3 +1,4 @@
+import path from 'path'
 import xss from 'xss'
 import pkg from '../../../package'
 
@@ -43,15 +44,10 @@ var route = function(req, res, next) {
   let p = new Promise((resolve) => {
 
     if(filePath != null) {
-      fileName = filePath.split('/')
-      fileName = fileName[fileName.length-1].replace(`.${config.files.templates.extension}`, '')
-
-      folderPath = filePath.split('/')
-      folderPath.pop()
-      folderPath = folderPath.join('/')
+      fileName = path.basename(filePath)
+      folderPath = path.dirname(filePath)
 
       isHome = false
-
       var filePathTest = cmsData.revision.getDocumentRevision(filePath)
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
         jsonPath = filePathTest.path
@@ -112,7 +108,12 @@ var route = function(req, res, next) {
       var page = new Page(_json.abe_meta.template, text, _json, false) 
       pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
     }
-
+    
+    var editorWidth = '33%'
+    req.headers && req.headers.cookie.split(';').forEach(function(cookie) {
+      var parts = cookie.match(/(.*?)=(.*)$/)
+      if(parts[1] === 'editorWidth') editorWidth = parts[2]
+    })
     var EditorVariables = {
       pageHtml: pageHtml,
       isHome: isHome,
@@ -134,7 +135,8 @@ var route = function(req, res, next) {
         req: req
       },
       abeVersion: pkg.version,
-      nonce: '\'nonce-' + res.locals.nonce + '\''
+      nonce: '\'nonce-' + res.locals.nonce + '\'',
+      editorWidth: editorWidth
     }
     EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 

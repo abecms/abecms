@@ -1,7 +1,9 @@
 var chai = require('chai');
+var path = require('path');
 var fse = require('fs-extra');
+
 var config = require('../src/cli').config
-config.set({root: __dirname + '/fixtures'})
+config.set({root: path.join(__dirname,'fixtures')})
 
 var Manager = require('../src/cli').Manager;
 var coreUtils = require('../src/cli').coreUtils

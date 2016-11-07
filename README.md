@@ -1,4 +1,5 @@
 [![Develop Branch Build Status](https://travis-ci.org/AdFabConnect/abejs.svg)](https://travis-ci.org/AdFabConnect/abejs)
+[![Build status](https://ci.appveyor.com/api/projects/status/dv6yt84497wseuxc?svg=true)](https://ci.appveyor.com/project/gregorybesson/abejs)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/AdFabConnect/abejs/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AdFabConnect/abejs/)
 [![Coverage Status](https://coveralls.io/repos/github/AdFabConnect/abejs/badge.svg?branch=master)](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c)
@@ -9,6 +10,11 @@
 # Abe, A better engine
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
+
+# Demo
+Deploy your own Abe demo on Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/abejs/demo)
 
 # Presentation
 I've designed this CMS because I wanted to simplify and optimize the way we're creating content. Wordpress is way too complex for what it does. Welcome to ABE (A Better Engine) : This CMS will make you create content in a snap and publish it on the web in no time !

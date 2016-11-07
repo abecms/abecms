@@ -53,36 +53,49 @@ export default class Reload {
   }
 
   inject(str) { 
-    var iframe = document.querySelector('#page-template')
+    var currentIframe = document.querySelector('#page-template')
+    var sibling = currentIframe.nextElementSibling
+    var parent = sibling.parentNode
+    var iframe = document.createElement('iframe')
+    var scrollTop = (IframeDocument('#page-template').body) ? IframeDocument('#page-template').body.scrollTop : 0;
+
+    parent.classList.add('reloading')
+
+    iframe.id = 'page-template'
+    iframe.src = 'about:blank'
+    iframe.sandbox = 'allow-same-origin allow-scripts allow-popups allow-forms'
+    iframe.setAttribute('data-iframe-src', document.querySelector('#page-template').getAttribute('data-iframe-src'))
     
     var initIframe = function () {
-      var iframeBody = IframeDocument('#page-template').body 
-      var scrollTop = iframeBody.scrollTop
-
       var doc = iframe.contentWindow.document 
       str = str.replace(/<\/head>/, '<base href="/" /></head>') 
       var template = Handlebars.compile(str, {noEscape: true})
       str = template(json)
-      doc.open() 
+      doc.open('text/html', 'replace') 
       doc.write(str) 
       doc.close()
 
       setTimeout(function () { 
         var iframeDoc = IframeDocument('#page-template') 
-        if(typeof iframeDoc !== 'undefined' && iframeDoc !== null 
-          && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
+        if(typeof iframeDoc !== 'undefined' && iframeDoc !== null && typeof iframeDoc.body !== 'undefined' && iframeDoc.body !== null) { 
           iframeDoc.body.scrollTop = scrollTop 
         } 
       }, 1000)
     }
 
-    if(IframeDocument('#page-template').body) initIframe()
-    else iframe.onload = initIframe;
+    iframe.onload = function () {
+      initIframe()
+      setTimeout(function () { parent.classList.remove('reloading') }, 350)
+    }
+
+    currentIframe.remove()
+    parent.insertBefore(iframe, sibling);
   }
   
   reload() {
     var iframe = document.querySelector('#page-template')
     var json = JSON.parse(JSON.stringify(this._json.data))
+    iframe.parentNode.classList.add('reloading')
     
     delete json.abe_source
     var data = qs.stringify({
