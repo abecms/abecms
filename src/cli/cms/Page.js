@@ -29,6 +29,8 @@ export default class Page {
     // HOOKS beforePageJson
     json = abeExtend.hooks.instance.trigger('beforePageJson', json)
 
+    abeEngine.instance.content = json
+      
     if(typeof Handlebars.templates[templateId] !== 'undefined' && 
         Handlebars.templates[templateId] !== null && 
         config.files.templates.precompile
@@ -45,8 +47,6 @@ export default class Page {
       this.template = template
       this.HbsTemplatePath = path.join(config.root, config.templates.url, 'hbs/'+templateId+'.hbs')
 
-      abeEngine.instance.content = json
-      
       // This pattern finds all abe tags which are not enclosed in a html tag attribute
       // it finds this one: <title>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</title>
       // it excludes this one: <meta name="description" content='{{abe type="text" key="meta_description" desc="Meta description" tab="Meta" order="4100"}}"/> 
