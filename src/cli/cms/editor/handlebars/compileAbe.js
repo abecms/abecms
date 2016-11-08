@@ -27,6 +27,7 @@ export default function compileAbe(){
       value = content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key
     }
     catch(e){
+      console.log(e.stack)
       value = ''
     }
     if(typeof value === 'function' || value == null) {
