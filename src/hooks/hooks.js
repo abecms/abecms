@@ -76,11 +76,10 @@ var hooks = {
   },
 
   /***************** save *****************/
-  beforeFirstSave: (filePath, req, json, text, abe) => {
+  beforeFirstSave: (postUrl, req, json, abe) => {
     return {
-      filePath: filePath,
-      json: json,
-      text: text
+      postUrl: postUrl,
+      json: json
     }
   },
   beforeSave: (obj, abe) => {

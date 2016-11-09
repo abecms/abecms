@@ -15,8 +15,6 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     var postUrl = path.join('/', pathCreate, name)
     postUrl = coreUtils.slug.clean(postUrl)
 
-    var filePath = path.join(config.root, config.draft.url, postUrl)
-
     var json = (forceJson) ? forceJson : {}
     json = cmsData.metas.create(json, template, postUrl)
 
@@ -27,7 +25,9 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
       var templateText = cmsTemplates.template.getTemplate(template)
       json = cmsData.values.removeDuplicate(templateText, json)
     }
-    abeExtend.hooks.instance.trigger('beforeFirstSave', filePath, req.query, json)
+    var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', postUrl, req.query, json)
+    postUrl = resHook.postUrl
+    json = resHook.json
 
     var p2 = cmsOperations.post.draft(
       postUrl,
