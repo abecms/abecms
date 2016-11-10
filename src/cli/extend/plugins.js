@@ -1,5 +1,12 @@
+import {spawn} from 'child_process'
+import {Promise} from 'bluebird'
 import path from 'path'
 import fse from 'fs-extra'
+import clc from 'cli-color'
+import mkdirp from 'mkdirp'
+import git from 'git-exec'
+import which from 'which'
+const npm = which.sync('npm')
 
 import {
   coreUtils,
@@ -198,6 +205,100 @@ class Plugins {
     })
 
     return routes
+  }
+
+  add(dir, plugin) {
+    var p = new Promise((resolve) => {
+        
+      var pluginName = plugin.split('/')
+      pluginName = pluginName[pluginName.length - 1].split('.')[0]
+      var pluginDir = path.join(dir, 'plugins', pluginName)
+
+      try{
+        fse.statSync(pluginDir)
+        console.log(clc.green('remove plugin'), pluginName)
+        fse.removeSync(pluginDir)
+      }
+      catch(e){
+      }
+      console.log(clc.green('mkdir'), clc.green(pluginDir))
+      mkdirp(pluginDir)
+
+      git.clone(plugin, pluginDir, function(repo) {
+        if (repo !== null) {
+          try {
+            console.log(clc.green('cd'), clc.green(pluginDir))
+            process.chdir(pluginDir)
+
+            console.log(clc.green('spawn'), clc.cyan('npm install'))
+            // const npmInstall = spawn('npm', ['install', pluginDir]);
+            const npmInstall = spawn(npm, ['install'])
+
+            npmInstall.stdout.on('data', (data) => {
+              var str = data.toString(), lines = str.split(/(\r?\n)/g)
+              for (var i=0; i<lines.length; i++) {
+                console.log(str)
+              }
+            })
+
+            npmInstall.stderr.on('data', (data) => {
+              var str = data.toString(), lines = str.split(/(\r?\n)/g)
+              for (var i=0; i<lines.length; i++) {
+                console.log(str)
+              }
+            })
+
+            npmInstall.on('close', (code) => {
+              console.log(clc.cyan('child process exited with code'), code)
+
+              var json = {}
+              var abeJson = dir + '/abe.json'
+
+              try {
+                var stat = fse.statSync(abeJson)
+                if (stat) {
+                  json = fse.readJsonSync(abeJson)
+                }
+              }catch(e) {
+                console.log(e)
+                console.log(clc.cyan('no abe.json creating'), abeJson)
+              }
+
+              if(typeof json.dependencies === 'undefined' || json.dependencies === null) {
+                json.dependencies = [plugin]
+              }else {
+                var found = false
+                Array.prototype.forEach.call(json.dependencies, (plugged) => {
+                  if (plugin === plugged) {
+                    found = true
+                  }
+                })
+                if (!found) {
+                  json.dependencies.push(plugin)
+                }
+              }
+
+              fse.writeJsonSync(abeJson, json, { space: 2, encoding: 'utf-8' })
+              resolve()
+            })
+
+            npmInstall.on('error', (err) => {
+              console.log(clc.red('cannot install npm dependencies for'), pluginDir)
+              console.log(err)
+              resolve(err)
+            })
+          } catch (err) {
+            console.log(clc.cyan('chdir'), err)
+            resolve(err)
+          }
+        } else {
+          console.log(clc.red('clone error'))
+          resolve(err)
+        }
+      })
+    })
+
+    return p
   }
 }
 
