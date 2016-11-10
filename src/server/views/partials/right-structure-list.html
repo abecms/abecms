@@ -1,0 +1,15 @@
+{{#if manager.home}}
+<div class="manager-tab structure-folders">
+    <div class="page-header">
+      <div class="text-uppercase">
+        edit structure
+      </div>
+    </div>
+    <div class="structure-editor">
+    	<input type="hidden" class="structure-json" value="{{removeRootPath @root.manager.list.structure @root.manager.config 'printJson'}}">
+	    <input type="text" class="form-control folder-name" value="" placeholder="folder name" data-folder="" disabled="disabled">
+	    <div class="structure-wrapper"></div>
+    </div>
+  <br />
+</div>
+{{/if}}

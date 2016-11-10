@@ -1,0 +1,68 @@
+.structure-editor{
+	display: inline-block;
+}
+.folder-name{
+	transition: all 350ms ease-in-out;
+	display: inline-block;
+	width: 100%;
+	opacity: 1;
+	&[disabled]{
+		opacity: 0.4;
+	}
+	&.error{
+		border-color: red;
+	}
+}
+.structure-folder{
+	margin: 5px;
+	position: relative;
+	> span:hover{
+    cursor: pointer;
+	}
+	.glyphicon-chevron-right{
+		transition: all 100ms ease-in-out;
+		font-size: 10px;
+	}
+	&.open{
+		> span .glyphicon-chevron-right{
+	    transform: rotate(45deg);
+		}
+		&:before{
+	    background: #eee;
+	    content: " ";
+	    position: absolute;
+	    bottom: 3px;
+	    left: 6px;
+	    width: 1px;
+	    height: calc(100% - 34px);
+		}
+	}
+	.structure-folder{
+		margin-left: 20px;
+	}
+	.glyphicon-remove-circle,
+	.glyphicon-plus-sign{
+		transition: all 100ms ease-in-out;
+    font-size: 15px;
+    opacity: 0.5;
+    &:hover{
+    	opacity: 1;
+    }
+	}
+	.structure-tool{
+		display: inline-block;
+		transition: all 100ms ease-in-out;
+    opacity: 0;
+    padding: 0px 5px;
+		&:hover{
+			opacity: 1;
+    }
+	}
+	.glyphicon-remove-circle{
+		color: #ff1371;
+    margin-left: 5px;
+	}
+	.glyphicon-plus-sign{
+		color: #47b8e0;
+	}
+}

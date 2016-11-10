@@ -17,6 +17,7 @@ import postUpload from './post-upload'
 import postSqlRequest from './post-sql-request'
 import postReference from './post-reference'
 import getReference from './get-reference'
+import postStructure from './post-structure'
 
 export {
 	getMain
@@ -37,5 +38,6 @@ export {
 	,postUpload
 	,postSqlRequest,
 	postReference,
-	getReference
+	getReference,
+	postStructure
 }

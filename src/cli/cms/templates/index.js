@@ -18,6 +18,7 @@ import times 			from './handlebars/times'
 import truncate 	from './handlebars/truncate'
 import lowercase 	from './handlebars/lowercase'
 import uppercase 	from './handlebars/uppercase'
+import removeRootPath 	from './handlebars/removeRootPath'
 
 import * as template from './template'
 import * as assets from './assets'
@@ -41,6 +42,7 @@ Handlebars.registerHelper('times', 			times)
 Handlebars.registerHelper('truncate', 	truncate)
 Handlebars.registerHelper('lowercase', 	lowercase)
 Handlebars.registerHelper('uppercase', 	uppercase)
+Handlebars.registerHelper('removeRootPath', 	removeRootPath)
 
 HandlebarsIntl.registerWith(Handlebars)
 
@@ -63,6 +65,7 @@ export {
 	notEmpty,
 	printJson,
 	translate,
-	times
+	times,
+	removeRootPath
 }
 

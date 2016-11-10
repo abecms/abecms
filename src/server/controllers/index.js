@@ -20,6 +20,7 @@ import {
   ,postSqlRequest
   ,postReference
   ,getReference
+  ,postStructure
 } from '../routes'
 
 import {
@@ -47,6 +48,7 @@ router.get('/abe/delete*', getDelete)
 router.get('/abe/reference/*', getReference)
 router.post('/abe/upload/*', postUpload)
 router.post('/abe/reference/*', postReference)
+router.post('/abe/structure/*', postStructure)
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
 })
