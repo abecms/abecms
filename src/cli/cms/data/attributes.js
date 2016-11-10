@@ -30,6 +30,7 @@ export function getAll(str, json) {
     type: 'text',
     value: '',
     file: '',
+    precontribution: false,
     visible: true
   }
   

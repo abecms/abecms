@@ -204,6 +204,36 @@ export function recurseWhereVariables (where) {
   return ar
 }
 
+export function findRequestColumns(templatesList) {
+  var whereKeys = []
+  var p = new Promise((resolve) => {
+    Array.prototype.forEach.call(templatesList, (file) => {
+      // var template = fse.readFileSync(file, 'utf8')
+      whereKeys = whereKeys.concat(execRequestColumns(file.template))
+    })
+    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
+    resolve(whereKeys)
+  })
+
+  return p
+}
+
+export function getTemplatesTexts(templatesList) {
+  var templates = []
+  var p = new Promise((resolve) => {
+    Array.prototype.forEach.call(templatesList, (file) => {
+      var template = fse.readFileSync(file, 'utf8')
+      templates.push({
+        path: file,
+        template: template
+      })
+    })
+    resolve(templates)
+  })
+
+  return p
+}
+
 export function execRequestColumns(tpl) {
   var ar = []
   var matches = cmsData.regex.getTagAbeTypeRequest(tpl)
@@ -227,18 +257,15 @@ export function execRequestColumns(tpl) {
   return ar
 }
 
-export function findRequestColumns(templatesList) {
-  var whereKeys = []
-  var p = new Promise((resolve) => {
-    Array.prototype.forEach.call(templatesList, (file) => {
-      var template = fse.readFileSync(file, 'utf8')
-      whereKeys = whereKeys.concat(execRequestColumns(template))
-    })
-    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
-    resolve(whereKeys)
+export function getAbePrecontributionAttributes(templatesList) {
+  var ar = []
+  var matches = cmsData.regex.getTagAbePrecontribution(tpl)
+  Array.prototype.forEach.call(matches, (match) => {
+    var obj = cmsData.attributes.getAll(match[0], {})
+    ar.push(obj)
   })
 
-  return p
+  return ar
 }
 
 export function getSelectTemplateKeys(templatesPath) {

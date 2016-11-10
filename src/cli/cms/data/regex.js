@@ -69,6 +69,21 @@ export function getTagAbeTypeRequest(text) {
   return matches
 }
 
+/**
+ * Test if a string contains string key from {{#each}} block statement
+ * @param  {String}  str string to test
+ * @return {Boolean} true = this is a block content
+ */
+export function getTagAbePrecontribution(text) {
+  let listReg = /({{abe.*precontribution=[\'|\"].*}})/g
+  var matches = []
+  var match
+  while (match = listReg.exec(text)) {
+    matches.push(match)
+  }
+  return matches
+}
+
 export function validDataAbe(str){
   return str.replace(/\[([0-9]*)\]/g, '$1')
 }

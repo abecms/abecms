@@ -134,18 +134,59 @@ class Manager {
   getKeysFromSelect() {
     this._whereKeys = []
     var p = new Promise((resolve) => {
-      cmsTemplates.template.getSelectTemplateKeys(this._pathTemplate)
-        .then((whereKeys) => {
-          this._whereKeys = whereKeys
-          this.updateList()
-          resolve()
+
+      cmsTemplates.template.getTemplatesAndPartials(this._pathTemplate)
+      .then((templatesList) => {
+
+        cmsTemplates.template.getTemplatesTexts(templatesList)
+        .then((templatesText) => {
+
+          cmsTemplates.template.findRequestColumns(templatesText)
+          .then((whereKeys) => {
+            this._whereKeys = cmsTemplates.template.findRequestColumns(templatesText)
+            console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+            console.log('this._whereKeys', this._whereKeys)
+            this.updateList()
+            resolve()
+          },
+          (e) => { console.log('Manager.getKeysFromSelect', e) })
+          .catch((e) => { console.log('Manager.getKeysFromSelect', e) })
         },
-        (e) => {
-          console.log('Manager.getKeysFromSelect', e)
-        })
-        .catch((e) => {
-          console.log('Manager.getKeysFromSelect', e)
-        })
+        (e) => { console.log('Manager.getKeysFromSelect', e) })
+        .catch((e) => { console.log('Manager.getKeysFromSelect', e) })
+
+        // cmsTemplates.template.findRequestColumns(templatesList)
+        // .then((whereKeys) => {
+        //   this._whereKeys = whereKeys
+
+        //   cmsTemplates.template.createPrecontributionForm(templatesList)
+        //   .then((whereKeys) => {
+        //     this._whereKeys = whereKeys
+        //     this.updateList()
+        //     resolve()
+        //   },
+        //   (e) => { console.log('Manager.getKeysFromSelect', e) })
+        //   .catch((e) => { console.log('Manager.getKeysFromSelect', e) })
+        // },
+        // (e) => { console.log('Manager.getKeysFromSelect', e) })
+        // .catch((e) => { console.log('Manager.getKeysFromSelect', e) })
+
+      },
+      (e) => { console.log('Manager.getKeysFromSelect', e) })
+      .catch((e) => { console.log('Manager.getKeysFromSelect', e) })
+
+      // cmsTemplates.template.getSelectTemplateKeys(this._pathTemplate)
+      //   .then((whereKeys) => {
+      //     this._whereKeys = whereKeys
+      //     this.updateList()
+      //     resolve()
+      //   },
+      //   (e) => {
+      //     console.log('Manager.getKeysFromSelect', e)
+      //   })
+      //   .catch((e) => {
+      //     console.log('Manager.getKeysFromSelect', e)
+      //   })
     })
 
     return p
