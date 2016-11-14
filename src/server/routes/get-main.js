@@ -158,9 +158,8 @@ var route = function(req, res, next) {
 
   p.then((obj) => {
     var precontrib = Manager.instance.getPrecontribution()
-    var precontribForm = new Page("", precontrib.template, obj.json, false) 
 
-    editor(precontrib.template, {}, "")
+    editor(precontrib.template, obj.json, "")
       .then((resultPrecontrib) => {
         EditorVariables.resultPrecontrib = resultPrecontrib
         renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
