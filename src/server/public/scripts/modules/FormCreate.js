@@ -18,13 +18,8 @@ export default class FormCreate {
       this._form = document.querySelector('.form-create')
 
       this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'))
-      // this._formInputs = this._formInputs.concat([].slice.call(this._form.querySelectorAll('select')))
 
-      // this._templateName = this._form.querySelector('[data-type-template-abe]')
-      // this._tplName = this._form.querySelector('[name=tplName]')
       this._submitBtn = this._form.querySelector('button[type=submit]')
-      // this._inputs = [].slice.call(this._form.querySelectorAll('input[type=text]'))
-      // this._selects = [].slice.call(this._form.querySelectorAll('select[id*="level-"]'))
 
       // // constantes methodes
       // this._handlePathChange = this._pathChange.bind(this)
