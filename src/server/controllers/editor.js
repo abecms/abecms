@@ -186,9 +186,9 @@ function orderBlock(util) {
 
     var formBlockOrdered = {}
     var arKeys = Object.keys(formBlockTab).sort((a,b) => {
-      if(formBlockTab[a][0].order < formBlockTab[b][0].order) {
+      if(parseFloat(formBlockTab[a][0].order) < parseFloat(formBlockTab[b][0].order)) {
         return -1
-      }else if(formBlockTab[a][0].order > formBlockTab[b][0].order) {
+      }else if(parseFloat(formBlockTab[a][0].order) > parseFloat(formBlockTab[b][0].order)) {
         return 1
       }
       return 0
@@ -202,9 +202,9 @@ function orderBlock(util) {
 
   var formTabsOrdered = {}
   var arKeysTabs = Object.keys(formBlock).sort((a,b) => {
-    if(formBlock[a][Object.keys(formBlock[a])[0]][0].order < formBlock[b][Object.keys(formBlock[b])[0]][0].order) {
+    if(parseFloat(formBlock[a][Object.keys(formBlock[a])[0]][0].order) < parseFloat(formBlock[b][Object.keys(formBlock[b])[0]][0].order)) {
       return -1
-    }else if(formBlock[a][Object.keys(formBlock[a])[0]][0].order > formBlock[b][Object.keys(formBlock[b])[0]][0].order) {
+    }else if(parseFloat(formBlock[a][Object.keys(formBlock[a])[0]][0].order) > parseFloat(formBlock[b][Object.keys(formBlock[b])[0]][0].order)) {
       return 1
     }
     return 0
@@ -217,20 +217,11 @@ function orderBlock(util) {
   return formTabsOrdered
 }
 
-export function editor(fileName, jsonPath, documentLink) {
+export function editor(text, json, documentLink) {
   let p = new Promise((resolve) => {
     var util = new cmsEditor.form()
     var arrayBlock = []
-    var text
-    var json
-
-    json = {}
-    if(coreUtils.file.exist(jsonPath)) {
-      json = cmsData.file.get(jsonPath, 'utf8')
-    }
-
-    text = cmsTemplates.template.getTemplate(fileName)
-
+    
     cmsData.source.getDataList(path.dirname(documentLink), text, json)
       .then(() => {
         addSource(text, json, util)

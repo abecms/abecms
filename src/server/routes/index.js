@@ -1,5 +1,5 @@
 import getMain from './get-main'
-import getCreate from './get-create'
+import postCreate from './post-create'
 import getDuplicate from './get-duplicate'
 import getUpdate from './get-update'
 import getListUrl from './get-list-url'
@@ -20,7 +20,7 @@ import getReference from './get-reference'
 
 export {
 	getMain
-	,getCreate
+	,postCreate
 	,getListUrl
 	,getListHooks
 	,getDuplicate

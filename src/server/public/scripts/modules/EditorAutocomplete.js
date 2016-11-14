@@ -178,6 +178,16 @@ export default class EditorAutocomplete {
     var first = true
 
     this._divWrapper.innerHTML = ''
+    if (display.indexOf('{{') > -1) {
+      var deepDisplay = display.replace('{{', '').replace('}}', '').split('.')
+      display = deepDisplay.pop()
+      deepDisplay = deepDisplay.join('.')
+      try {
+        sources = eval('sources.' + deepDisplay)
+      }catch(e) {
+
+      }
+    }
     if(typeof sources !== 'undefined' && sources !== null) {
       if(typeof sources === 'object' && Object.prototype.toString.call(sources) === '[object Object]') {
         sources = [sources]
@@ -210,7 +220,9 @@ export default class EditorAutocomplete {
     if(this._visible) {
       this._visible = false
       this._shouldBeVisible = false
-      this._divWrapper.parentNode.removeChild(this._divWrapper)
+      if (this._divWrapper != null && this._divWrapper.parentNode) {
+        this._divWrapper.parentNode.removeChild(this._divWrapper)
+      }
     }
   }
 

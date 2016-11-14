@@ -12,9 +12,8 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
   }
   var parent = obj[0] ? obj[0].path.split('/')[0] : ''
   var res = `<div class="form-group level-${index} ${classHidden}" data-parent="${parent}" data-shown="${dataShow}">
-    <label for="${id}" class="col-sm-5 control-label">Level ${index}</label>
-    <div class="col-sm-7">
-      <select data-show-hide-sub-folder="true" id="${id}" class="form-control">
+    <label for="${id}" class="control-label">Level ${index}</label>
+      <select data-precontrib="true" data-slug="true" data-slug-type="path" data-show-hide-sub-folder="true" id="${id}" class="form-control">
         <option data-level-hide="${index+1}"></option>`
 
   var sub = ''
@@ -37,7 +36,6 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
   })
 
   res += `</select>
-    </div>
   </div>`
 
   res += sub

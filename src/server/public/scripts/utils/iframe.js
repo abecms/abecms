@@ -2,12 +2,16 @@
 
 export function IframeDocument (frameId){
   let iframe = document.querySelector(frameId)
-  let iframeDocument = iframe.contentDocument || iframe.contentWindow.document
+  let iframeDocument = iframe != null ? iframe.contentDocument || iframe.contentWindow.document : null
   return iframeDocument
 }
 
 export function IframeNode (frameId, selector){
-  return IframeDocument(frameId).querySelectorAll(selector.replace(/\[([0-9]*)\]/g, '$1'))
+  var iframe = IframeDocument(frameId)
+  if (iframe) {
+    return iframe.querySelectorAll(selector.replace(/\[([0-9]*)\]/g, '$1'))
+  }
+  return []
 }
 
 function IframeGetComment(frameId, prop, val, meth, nd, useSelf ) {
@@ -15,6 +19,8 @@ function IframeGetComment(frameId, prop, val, meth, nd, useSelf ) {
   val = 8
   meth = null
   var r=[], any= IframeGetComment[val]===true
+  var iframe = IframeDocument(frameId)
+  if (iframe == null) return []
   nd = nd||IframeDocument(frameId).documentElement
 
   if(nd.constructor===Array){

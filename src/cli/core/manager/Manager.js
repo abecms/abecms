@@ -128,24 +128,33 @@ class Manager {
     } catch (e) {
       console.log('the directory ' + this._pathReference + ' does not exist')
     }
-    
   }
 
   getKeysFromSelect() {
     this._whereKeys = []
     var p = new Promise((resolve) => {
-      cmsTemplates.template.getSelectTemplateKeys(this._pathTemplate)
-        .then((whereKeys) => {
-          this._whereKeys = whereKeys
-          this.updateList()
-          resolve()
+
+      cmsTemplates.template.getTemplatesAndPartials(this._pathTemplate)
+      .then((templatesList) => {
+
+        return cmsTemplates.template.getTemplatesTexts(templatesList)
+        .then((templatesText) => {
+
+          return cmsTemplates.template.getAbeRequestWhereKeysFromTemplates(templatesText)
+          .then((whereKeys) => {
+            this._whereKeys = whereKeys
+            this._precontribution = cmsTemplates.template.getAbePrecontributionAttributesFromTemplates(templatesText)
+            this.updateList()
+            resolve()
+          },
+          (e) => { console.log('Reject: Manager.findRequestColumns', e) })
+          .catch((e) => { console.log('Error: Manager.findRequestColumns', e) })
         },
-        (e) => {
-          console.log('Manager.getKeysFromSelect', e)
-        })
-        .catch((e) => {
-          console.log('Manager.getKeysFromSelect', e)
-        })
+        (e) => { console.log('Reject: Manager.getTemplatesTexts', e) })
+        .catch((e) => { console.log('Error: Manager.getTemplatesTexts', e) })
+      },
+      (e) => { console.log('Manager.getKeysFromSelect', e) })
+      .catch((e) => { console.log('Manager.getKeysFromSelect', e) })
     })
 
     return p
@@ -163,6 +172,10 @@ class Manager {
   getReferences() {
     if(typeof this._references === 'undefined' || this._references === null) this.updateReferences()
     return this._references
+  }
+
+  getPrecontribution() {
+    return this._precontribution
   }
 
   updateReferences(referenceName) {

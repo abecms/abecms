@@ -39,6 +39,9 @@ export default function printInput () {
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
+                    data-precontrib="${params.precontrib}"
+                    data-slug="${params.slug}"
+                    data-slug-type="${params.slugType}"
                     data-display="${params.display}"
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
@@ -48,6 +51,9 @@ export default function printInput () {
     commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     data-maxlength="${params['max-length']}"
+                    data-precontrib="${params.precontrib}"
+                    data-slug="${params.slug}"
+                    data-slug-type="${params.slugType}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
@@ -93,8 +99,11 @@ export default function printInput () {
     }else {
       lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
       res += `<select ${multiple} ${disabled} ${commonParams} class="${inputClass}"
-                        last-values='${lastValues}'>
-              <option value=''></option>`
+                        last-values='${lastValues}'>`
+
+      if (!params.required) {
+        res += `<option value=''></option>`
+      }
 
       if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
         Array.prototype.forEach.call(params.source, (val) => {
@@ -114,6 +123,9 @@ export default function printInput () {
                     maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
+                    data-precontrib="${params.precontrib}"
+                    data-slug="${params.slug}"
+                    data-slug-type="${params.slugType}"
                     data-required="${params.required}"
                     data-display="${params.display}"
                     data-visible="${params.visible}"

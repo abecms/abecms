@@ -1,19 +1,17 @@
 <div class="form-group">
-  <label for="selectTemplate" class="col-sm-5 control-label">{{@root.text.template}}</label>
-  <div class="col-sm-7">
-    <select class="form-control" id="selectTemplate" name="selectTemplate" data-type-template-abe="true">
-      <option></option>
-      {{#each manager.list.templates}}
-        {{#if isHome}}
-        <option value="{{name}}" clean-value="{{website}}">{{name}}</option>
+  <label for="selectTemplate" class="control-label">{{@root.text.template}} *</label>
+  <select class="form-control" id="selectTemplate" data-id="selectTemplate" data-required="true" name="selectTemplate" data-type-template-abe="true">
+    <option></option>
+    {{#each manager.list.templates}}
+      {{#if isHome}}
+      <option value="{{name}}" clean-value="{{website}}">{{name}}</option>
+      {{else}}
+        {{#ifCond @root.json.abe_meta.template name}}
+        <option value="{{name}}" clean-value="{{website}}" selected="selected">{{name}}</option>
         {{else}}
-          {{#ifCond @root.json.abe_meta.template name}}
-          <option value="{{name}}" clean-value="{{website}}" selected="selected">{{name}}</option>
-          {{else}}
-          <option value="{{name}}" clean-value="{{website}}">{{name}}</option>
-          {{/ifCond}}
-        {{/if}}
-      {{/each}}
-    </select>
-  </div>
+        <option value="{{name}}" clean-value="{{website}}">{{name}}</option>
+        {{/ifCond}}
+      {{/if}}
+    {{/each}}
+  </select>
 </div>
