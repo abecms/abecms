@@ -40,10 +40,13 @@ export default class EditorSave {
    * @return {Object} json
    */
   serializeForm() {
-    var inputs = [].slice.call(document.getElementById('abeForm').querySelectorAll('input'))
-    var selects = [].slice.call(document.getElementById('abeForm').querySelectorAll('select'))
+    var abeForm = document.getElementById('abeForm')
+    if (abeForm == null) return
+      
+    var inputs = [].slice.call(abeForm.querySelectorAll('input'))
+    var selects = [].slice.call(abeForm.querySelectorAll('select'))
     inputs = inputs.concat(selects)
-    var textareas = [].slice.call(document.getElementById('abeForm').querySelectorAll('textarea'))
+    var textareas = [].slice.call(abeForm.querySelectorAll('textarea'))
     inputs = inputs.concat(textareas)
 
     this._json.data = json

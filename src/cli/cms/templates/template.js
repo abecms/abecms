@@ -204,20 +204,6 @@ export function recurseWhereVariables (where) {
   return ar
 }
 
-export function findRequestColumns(templatesList) {
-  var whereKeys = []
-  var p = new Promise((resolve) => {
-    Array.prototype.forEach.call(templatesList, (file) => {
-      // var template = fse.readFileSync(file, 'utf8')
-      whereKeys = whereKeys.concat(execRequestColumns(file.template))
-    })
-    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
-    resolve(whereKeys)
-  })
-
-  return p
-}
-
 export function getTemplatesTexts(templatesList) {
   var templates = []
   var p = new Promise((resolve) => {
@@ -257,46 +243,35 @@ export function execRequestColumns(tpl) {
   return ar
 }
 
-export function getAbePrecontributionAttributes(templatesList) {
-  var ar = []
-  var matches = cmsData.regex.getTagAbePrecontribution(tpl)
-  Array.prototype.forEach.call(matches, (match) => {
-    var obj = cmsData.attributes.getAll(match[0], {})
-    ar.push(obj)
-  })
-
-  return ar
-}
-
-export function getSelectTemplateKeys(templatesPath) {
-  var p = new Promise((resolve, reject) => {
-    return getTemplatesAndPartials(templatesPath)
-      .then((templatesList) => {
-        return findRequestColumns(templatesList)
-          .then((whereKeys) => {
-            resolve(whereKeys)
-          },
-          (e) => {
-            console.log('findRequestColumns reject')
-            reject(e)
-          })
-          .catch((e) => {
-            console.error('getSelectTemplateKeys', e)
-            reject()
-          })
-      },
-      () => {
-        console.log('getTemplateAndPartials reject')
-        reject()
-      })
-      .catch((e) => {
-        console.error('getSelectTemplateKeys', e)
-        reject()
-      })
-
+export function getAbeRequestWhereKeysFromTemplates(templatesList) {
+  var whereKeys = []
+  var p = new Promise((resolve) => {
+    Array.prototype.forEach.call(templatesList, (file) => {
+      whereKeys = whereKeys.concat(execRequestColumns(file.template))
+    })
+    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
+    resolve(whereKeys)
   })
 
   return p
+}
+
+export function getAbePrecontributionAttributesFromTemplates(templatesList) {
+  var ar = []
+  var precontributionTemplate = ""
+  Array.prototype.forEach.call(templatesList, (file) => {
+    var matches = cmsData.regex.getTagAbePrecontribution(file.template)
+    Array.prototype.forEach.call(matches, (match) => {
+      var obj = cmsData.attributes.getAll(match[0], {})
+      ar.push(obj)
+      precontributionTemplate += match[0] + "\n"
+    })
+  })
+
+  return {
+    fields: ar,
+    template: precontributionTemplate
+  }
 }
 
 export function getStructureAndTemplates() {

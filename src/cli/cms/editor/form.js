@@ -56,7 +56,9 @@ export default class Form {
       type: 'text',
       value: '',
       visible: true,
-      precontribution: false
+      precontrib: false,
+      slug: false,
+      slugType: false
     }
 
     obj = extend(true, defaultValues, obj)
@@ -66,7 +68,7 @@ export default class Form {
       obj.block = obj.key.split('.')[0]
     }
 
-    if (obj.precontribution === 'true') {
+    if (obj.precontrib === 'true') {
       obj.tab = 'Precontribution'
     }
     

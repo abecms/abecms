@@ -1,5 +1,10 @@
+{{#each this.resultPrecontrib.form}}
+  {{#each this}}
+    {{{printBlock this}}}
+  {{/each}}
+{{/each}}
 
-<div class="form-group">
+<!-- <div class="form-group">
   <label for="tplName" class="col-sm-5 control-label">{{@root.text.name}}</label>
   <div class="col-sm-7">
     {{#if isHome}}
@@ -8,4 +13,4 @@
     <input class="form-control" type="text" name="tplName" value="{{@root.filename}}" id="tplName" placeholder="{{@root.text.file}}.{{config.files.templates.extension}}" />
     {{/if}}
   </div>
-</div>
+</div> -->

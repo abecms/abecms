@@ -6,7 +6,12 @@ import {
 var route = function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
 
-  var p = cmsOperations.create(req.query.selectTemplate, req.query.filePath, req.query.tplName, req)
+  var filepath = req.originalUrl.replace('/abe/create', '')
+  var folderName = filepath.split('/')
+  var postName = folderName.pop()
+  folderName = folderName.join('/')
+
+  var p = cmsOperations.create(req.body.selectTemplate, folderName, postName, req, req.body)
 
   p.then((resSave) => {
     var result = {

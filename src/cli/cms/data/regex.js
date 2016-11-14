@@ -75,7 +75,7 @@ export function getTagAbeTypeRequest(text) {
  * @return {Boolean} true = this is a block content
  */
 export function getTagAbePrecontribution(text) {
-  let listReg = /({{abe.*precontribution=[\'|\"].*}})/g
+  let listReg = /({{abe.*precontrib=[\'|\"].*}})/g
   var matches = []
   var match
   while (match = listReg.exec(text)) {
