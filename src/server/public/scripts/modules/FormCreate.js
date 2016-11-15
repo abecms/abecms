@@ -141,7 +141,11 @@ export default class FormCreate {
         if (value.indexOf('{') > -1) {
           try {
             var jsonValue = JSON.parse(value)
-            value = jsonValue[slug]
+            if (slug) {
+              value = jsonValue[slug]
+            }else {
+              value = jsonValue
+            }
           }catch(e) {
             value = value
           }
@@ -193,10 +197,6 @@ export default class FormCreate {
     this._canCreate()
   }
 
-  // _submit() {
-  //   this._setFilePath()
-  // }
-
   /**
    * check if select page create are not empty
    * @return {Boolean} true|false
@@ -245,35 +245,6 @@ export default class FormCreate {
 
     return path
   }
-
-  // _submit(type, btn) {
-  //   if(btn.classList.contains('disable')) return
-  //   btn.classList.add('disable')
-  //   var inputs = [].slice.call(document.querySelectorAll('.form-create input'))
-  //   inputs = inputs.concat([].slice.call(document.querySelectorAll('.form-create select')))
-  //   var values = {}
-  //   Array.prototype.forEach.call(inputs, (input) => {
-  //     values[input.getAttribute('name')] = input.value
-  //   })
-  //   var toSave = qs.stringify(values)
-
-  //   this._ajax(
-  //     {
-  //       url: document.location.origin + '/abe/' + type + '/?' + toSave,
-  //       body: toSave,
-  //       headers: {},
-  //       method: 'get'
-  //     },
-  //       (code, responseText) => {
-  //         var jsonRes = JSON.parse(responseText)
-  //         if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== 'undefined' && jsonRes.json.abe_meta !== null) {
-  //           window.location.href = window.location.origin + '/abe' + jsonRes.json.abe_meta.link
-  //         }else {
-  //           alert('error')
-  //           btn.classList.remove('disable')
-  //         }
-  //       })
-  // }
 
   _btnDuplicateManagerClick(e) {
     e.preventDefault()

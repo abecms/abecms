@@ -278,7 +278,7 @@ export function getAbePrecontributionAttributesFromTemplates(templatesList) {
 
   Array.prototype.forEach.call(Object.keys(ar), (key) => {
     fields.push(ar[key])
-    precontributionTemplate += ar[key].match.replace('}}', ' precontribTemplates="' + ar[key].precontribTemplates.join(',') + '"}}') + "\n"
+    precontributionTemplate += ar[key].match.replace(/\}\}$/, ' precontribTemplates="' + ar[key].precontribTemplates.join(',') + '"}}') + "\n"
   })
 
   if (precontributionTemplate === "") { // should always have a filename at least
