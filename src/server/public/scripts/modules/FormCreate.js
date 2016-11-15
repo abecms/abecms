@@ -23,6 +23,7 @@ export default class FormCreate {
       this._submitBtn = this._form.querySelector('button[type=submit]')
 
       this._selectTemplate = this._form.querySelector('[data-id="selectTemplate"]')
+      this._showHideSelect(this._selectTemplate)
       this._handleBtnSelectTemplate = this._btnSelectTemplate.bind(this)
 
       // // constantes methodes
@@ -72,8 +73,8 @@ export default class FormCreate {
     }
   }
 
-  _btnSelectTemplate(e) {
-    this._selectedTemplate = e.currentTarget.value
+  _showHideSelect(target) {
+    this._selectedTemplate = target.value
     Array.prototype.forEach.call(this._precontribTemplate, (input) => {
       var linkedTpl = input.getAttribute('data-precontrib-templates').split(',')
       var found = false
@@ -89,6 +90,10 @@ export default class FormCreate {
         input.style.display = 'none'
       }
     })
+  }
+
+  _btnSelectTemplate(e) {
+    this._showHideSelect(e.currentTarget)
   }
 
   _submit(type, target) {
