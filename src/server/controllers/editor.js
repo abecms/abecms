@@ -246,12 +246,12 @@ export function editor(text, json, documentLink) {
         }
 
         // HOOKS beforeEditorFormBlocks
-        json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json)
+        json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json, text)
 
         var blocks = orderBlock(util)
 
         // HOOKS afterEditorFormBlocks
-        blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json)
+        blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json, text)
 
         abeEngine.instance.content = json
 
