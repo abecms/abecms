@@ -211,8 +211,12 @@ function orderBlock(util) {
   })
 
   Array.prototype.forEach.call(arKeysTabs, (arKeysTab) => {
-    formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
+    if (arKeysTab !== 'Precontribution') {
+      formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
+    }
   })
+
+  formTabsOrdered['Precontribution'] = formBlock['Precontribution']
 
   return formTabsOrdered
 }
@@ -228,15 +232,14 @@ export function editor(text, json, documentLink) {
 
         text = cmsData.source.removeDataList(text)
 
+        var matches = cmsData.regex.getTagAbePrecontribution(text)
+        if (matches.length === 0) {
+          text = `${text}\n{{abe type='text' key='abe_filename' desc='Name' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}`
+        }
+
         matchAttrAbe(text, json, util, arrayBlock)
         arrayBlock = []
         each(text, json, util, arrayBlock)
-
-        // if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-        //   var tpl = json.abe_meta.template.split('/')
-        //   tpl = tpl.pop()
-        //   json.abe_meta.cleanTemplate = tpl.replace(/\..+$/, '')
-        // }
 
         if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
           var links = json.abe_meta.link.split('/')

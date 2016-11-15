@@ -268,6 +268,12 @@ export function getAbePrecontributionAttributesFromTemplates(templatesList) {
     })
   })
 
+  if (precontributionTemplate === "") { // should always have a filename at least
+    precontributionTemplate = `{{abe type='text' key='abe_filename' desc='Name' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}`
+    var obj = cmsData.attributes.getAll(precontributionTemplate, {})
+    ar.push(obj)
+  }
+
   return {
     fields: ar,
     template: precontributionTemplate
