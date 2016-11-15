@@ -73,12 +73,12 @@ export default class FormCreate {
   }
 
   _btnSelectTemplate(e) {
-    var selectedTemplate = e.currentTarget.value
+    this._selectedTemplate = e.currentTarget.value
     Array.prototype.forEach.call(this._precontribTemplate, (input) => {
       var linkedTpl = input.getAttribute('data-precontrib-templates').split(',')
       var found = false
       Array.prototype.forEach.call(linkedTpl, (tpl) => {
-        if (tpl === selectedTemplate) {
+        if (tpl === this._selectedTemplate) {
           found = true
         }
       })
@@ -97,6 +97,21 @@ export default class FormCreate {
     var postPath = ""
     var isValid = true
     Array.prototype.forEach.call(this._formInputs, (input) => {
+      var isPrecontribForTpl = true;
+      var found = false;
+      var linkedTpl = input.parentNode.getAttribute('data-precontrib-templates')
+      if(linkedTpl){
+        linkedTpl = linkedTpl.split(',')
+        Array.prototype.forEach.call(linkedTpl, (tpl) => {
+          if (tpl === this._selectedTemplate) {
+            found = true
+          }
+        })
+      }
+      else{
+        found = true;
+      }
+      if(!found) isPrecontribForTpl = false;
       input.parentNode.classList.remove('error')
       var autocomplete = input.getAttribute('data-autocomplete') == "true" ? true : false
       var slug = input.getAttribute('data-slug')
@@ -153,7 +168,7 @@ export default class FormCreate {
         values[input.getAttribute('data-id')] = value
       }
 
-      if (value !== "") {
+      if (value !== "" && isPrecontribForTpl) {
         switch(slugType) {
           case "path":
             postPath += value + "/"
@@ -164,7 +179,7 @@ export default class FormCreate {
           default:
             break
         }
-      }else if(required) {
+      }else if(required && isPrecontribForTpl) {
         input.parentNode.classList.add('has-error')
         isValid = false
       }
