@@ -14,6 +14,10 @@
   .form-create {
     padding: 0px 20px;
 
+    [data-precontrib-templates] {
+      display: none;
+    }
+
     .form-group {
       margin-bottom: 0px;
     }

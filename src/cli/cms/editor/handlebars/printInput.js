@@ -14,7 +14,7 @@ export default function printInput () {
   params = abeExtend.hooks.instance.trigger('beforeEditorInput', params)
   var desc = params.desc + ((params.required) ? ' *' : '')
 
-  var res = `<div class="form-group">
+  var res = `<div class="form-group" data-precontrib-templates="${params.precontribTemplates}">
               <label class="control-label" for="${params.key}" 
                       ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + params.key + '"' : ''} >
                 ${desc}
@@ -40,6 +40,7 @@ export default function printInput () {
                     tabIndex="${params.order}"
                     data-required="${params.required}"
                     data-precontrib="${params.precontrib}"
+                    
                     data-slug="${params.slug}"
                     data-slug-type="${params.slugType}"
                     data-display="${params.display}"

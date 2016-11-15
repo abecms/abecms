@@ -18,8 +18,12 @@ export default class FormCreate {
       this._form = document.querySelector('.form-create')
 
       this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'))
+      this._precontribTemplate = [].slice.call(this._form.querySelectorAll('[data-precontrib-templates]'))
 
       this._submitBtn = this._form.querySelector('button[type=submit]')
+
+      this._selectTemplate = this._form.querySelector('[data-id="selectTemplate"]')
+      this._handleBtnSelectTemplate = this._btnSelectTemplate.bind(this)
 
       // // constantes methodes
       // this._handlePathChange = this._pathChange.bind(this)
@@ -63,6 +67,28 @@ export default class FormCreate {
     if(typeof this._form !== 'undefined' && this._form !== null) {
       this._form.addEventListener('submit', this._handleSubmit)
     }
+    if(typeof this._selectTemplate !== 'undefined' && this._selectTemplate !== null) {
+      this._selectTemplate.addEventListener('change', this._handleBtnSelectTemplate)
+    }
+  }
+
+  _btnSelectTemplate(e) {
+    var selectedTemplate = e.currentTarget.value
+    Array.prototype.forEach.call(this._precontribTemplate, (input) => {
+      var linkedTpl = input.getAttribute('data-precontrib-templates').split(',')
+      var found = false
+      Array.prototype.forEach.call(linkedTpl, (tpl) => {
+        if (tpl === selectedTemplate) {
+          found = true
+        }
+      })
+
+      if (found) {
+        input.style.display = 'block'
+      }else {
+        input.style.display = 'none'
+      }
+    })
   }
 
   _submit(type, target) {
@@ -73,10 +99,12 @@ export default class FormCreate {
     Array.prototype.forEach.call(this._formInputs, (input) => {
       input.parentNode.classList.remove('error')
       var autocomplete = input.getAttribute('data-autocomplete') == "true" ? true : false
-      // var precontrib = input.getAttribute('data-precontrib') == "true" ? true : false
       var slug = input.getAttribute('data-slug')
       var slugType = input.getAttribute('data-slug-type')
       var required = input.getAttribute('data-required') == "true" ? true : false
+      if (input.parentNode.parentNode.style.display === 'none') {
+        required = false
+      }
       var value = input.value
 
       if (slug != "false") {
@@ -113,7 +141,11 @@ export default class FormCreate {
         if (value.indexOf('{') > -1) {
           try {
             var jsonValue = JSON.parse(value)
-            value = jsonValue[slug]
+            if (slug) {
+              value = jsonValue[slug]
+            }else {
+              value = jsonValue
+            }
           }catch(e) {
             value = value
           }
@@ -165,10 +197,6 @@ export default class FormCreate {
     this._canCreate()
   }
 
-  // _submit() {
-  //   this._setFilePath()
-  // }
-
   /**
    * check if select page create are not empty
    * @return {Boolean} true|false
@@ -217,35 +245,6 @@ export default class FormCreate {
 
     return path
   }
-
-  // _submit(type, btn) {
-  //   if(btn.classList.contains('disable')) return
-  //   btn.classList.add('disable')
-  //   var inputs = [].slice.call(document.querySelectorAll('.form-create input'))
-  //   inputs = inputs.concat([].slice.call(document.querySelectorAll('.form-create select')))
-  //   var values = {}
-  //   Array.prototype.forEach.call(inputs, (input) => {
-  //     values[input.getAttribute('name')] = input.value
-  //   })
-  //   var toSave = qs.stringify(values)
-
-  //   this._ajax(
-  //     {
-  //       url: document.location.origin + '/abe/' + type + '/?' + toSave,
-  //       body: toSave,
-  //       headers: {},
-  //       method: 'get'
-  //     },
-  //       (code, responseText) => {
-  //         var jsonRes = JSON.parse(responseText)
-  //         if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== 'undefined' && jsonRes.json.abe_meta !== null) {
-  //           window.location.href = window.location.origin + '/abe' + jsonRes.json.abe_meta.link
-  //         }else {
-  //           alert('error')
-  //           btn.classList.remove('disable')
-  //         }
-  //       })
-  // }
 
   _btnDuplicateManagerClick(e) {
     e.preventDefault()
