@@ -209,7 +209,10 @@ export function getTemplatesTexts(templatesList) {
   var p = new Promise((resolve) => {
     Array.prototype.forEach.call(templatesList, (file) => {
       var template = fse.readFileSync(file, 'utf8')
+      template = includePartials(template)
+      var name = file.replace(path.join(config.root, config.templates.url, path.sep), '').replace(`.${config.files.templates.extension}`, '')
       templates.push({
+        name: name,
         path: file,
         template: template
       })
@@ -257,25 +260,35 @@ export function getAbeRequestWhereKeysFromTemplates(templatesList) {
 }
 
 export function getAbePrecontributionAttributesFromTemplates(templatesList) {
-  var ar = []
+  var ar = {}
+  var fields = []
   var precontributionTemplate = ""
   Array.prototype.forEach.call(templatesList, (file) => {
     var matches = cmsData.regex.getTagAbePrecontribution(file.template)
     Array.prototype.forEach.call(matches, (match) => {
       var obj = cmsData.attributes.getAll(match[0], {})
-      ar.push(obj)
-      precontributionTemplate += match[0] + "\n"
+      if (ar[obj.key] == null) {
+        ar[obj.key] = obj
+        ar[obj.key].precontribTemplates = []
+      }
+      ar[obj.key].precontribTemplates.push(file.name)
+      ar[obj.key].match = match[0]
     })
+  })
+
+  Array.prototype.forEach.call(Object.keys(ar), (key) => {
+    fields.push(ar[key])
+    precontributionTemplate += ar[key].match.replace('}}', ' precontribTemplates="' + ar[key].precontribTemplates.join(',') + '"}}') + "\n"
   })
 
   if (precontributionTemplate === "") { // should always have a filename at least
     precontributionTemplate = `{{abe type='text' key='abe_filename' desc='Name' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}`
     var obj = cmsData.attributes.getAll(precontributionTemplate, {})
-    ar.push(obj)
+    fields.push(obj)
   }
 
   return {
-    fields: ar,
+    fields: fields,
     template: precontributionTemplate
   }
 }
