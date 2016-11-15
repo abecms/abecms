@@ -246,6 +246,14 @@ export default class EditorAutocomplete {
       }
       var dataVal = target.getAttribute('data-value').replace(/&quote;/g, '\'')
 
+      if(dataVal.indexOf('{{') > -1){
+        var match
+        while (match = /\{\{(.*?)\}\}/.exec(dataVal)) {
+          var selector = document.querySelector('[data-id="' + match[1] + '"]')
+          if(selector != null) dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value);
+        }
+      }
+
       if (dataVal.indexOf('http') === 0) {
         this._ajax(
           {
