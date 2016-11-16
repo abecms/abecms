@@ -26,11 +26,6 @@ export default class FormCreate {
       this._showHideSelect(this._selectTemplate)
       this._handleBtnSelectTemplate = this._btnSelectTemplate.bind(this)
 
-      // // constantes methodes
-      // this._handlePathChange = this._pathChange.bind(this)
-      // this._handleCanCreate = this._canCreate.bind(this)
-      // this._handleSubmit = this._submit.bind(this)
-
       // // manager update btn
       this._btnCreate = document.querySelector('[date-abe-create]')
       this._btnUpdate = document.querySelector('[date-abe-update]')
@@ -41,17 +36,12 @@ export default class FormCreate {
 
       // // init modules
       new FolderSelect()
-      // new TemplateSelect()
 
       this._bindEvents() 
     }
   }
 
   _bindEvents() {
-    // this._inputs.forEach((input) => { input.addEventListener('keyup', this._handleCanCreate) })
-    // this._inputs.forEach((input) => { input.addEventListener('blur', this._handleCanCreate) })
-    // this._selects.forEach((select) => { select.addEventListener('change', this._handlePathChange) })
-
     if(typeof this._btnUpdate !== 'undefined' && this._btnUpdate !== null) {
       this._btnUpdate.addEventListener('click', this._handleBtnUpdateManagerClick) // click update metadata
     }
@@ -61,10 +51,6 @@ export default class FormCreate {
     if(typeof this._btnDuplicate !== 'undefined' && this._btnDuplicate !== null) {
       this._btnDuplicate.addEventListener('click', this._handleBtnDuplicateManagerClick) // click duplicate content
     }
-
-    // if(typeof this._templateName !== 'undefined' && this._templateName !== null) {
-    //   this._templateName.addEventListener('submit', this._handleCanCreate)
-    // }
     if(typeof this._form !== 'undefined' && this._form !== null) {
       this._form.addEventListener('submit', this._handleSubmit)
     }

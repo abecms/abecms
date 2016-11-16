@@ -251,7 +251,13 @@ export function executeFromClause(statement, pathFromClause){
     }
     return false
   })
-  return files_array
+
+  var publishedValue = []
+  Array.prototype.forEach.call(files_array, (file) => {
+    publishedValue.push(file.publish)
+  })
+
+  return publishedValue
 }
 
 /**
@@ -343,8 +349,8 @@ export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
   for(let file of files) {
     if(limit < maxLimit || maxLimit === -1) {
       if(wheres != null) {
-        if(file.publish && !recurseWhere(wheres, file.publish, jsonPage)) {
-          json = JSON.parse(JSON.stringify(file.publish))
+        if(!recurseWhere(wheres, file, jsonPage)) {
+          json = JSON.parse(JSON.stringify(file))
           jsonValues = {}
 
           if(columns != null && columns.length > 0 && columns[0] !== '*') {

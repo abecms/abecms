@@ -2,13 +2,22 @@
 export default function sourceAttr(val, params) {
   var hiddenVal = val
   var selected = ''
+  var display = params.display
+
+  if (display.indexOf('{{') > -1) {
+    display = display.replace('{{', '').replace('}}', '')
+    if (display.indexOf('.') > -1) {
+      display = display.split('.')
+      display = display[display.length - 1]
+    }
+  }
 
   if(typeof hiddenVal === 'object' && Object.prototype.toString.call(hiddenVal) === '[object Object]') {
     hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, '&apos;')
 
     try {
-      var displayVal = eval('val.' + params.display)
-      if(params.display != null&& displayVal != null) {
+      var displayVal = eval('val.' + display)
+      if(display != null&& displayVal != null) {
         val = displayVal
       }else {
         val = val[Object.keys(val)[0]]
@@ -22,8 +31,8 @@ export default function sourceAttr(val, params) {
     Array.prototype.forEach.call(params.value, (v) => {
       var item = v
       try {
-        var displayV = eval('item.' + params.display)
-        if(params.display != null && displayV !== null) {
+        var displayV = eval('item.' + display)
+        if(display != null && displayV !== null) {
           item = displayV
         } else {
           if(typeof v === 'string') {
