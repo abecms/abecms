@@ -11,12 +11,12 @@ import {
 export function addFolder(folderPath) {
   mkdirp(path.join(config.root, folderPath), function (err) {
     if (err) console.error(err)
-  });
+  })
   return folderPath
 }
 
 export function removeFolder(folderPath) {
-  execPromise.exec("rm -rf " + path.join(config.root, folderPath)).then(function (result) {
+  execPromise.exec('rm -rf ' + path.join(config.root, folderPath)).then(function (result) {
     var stdout = result.stdout
     var stderr = result.stderr
     if(stdout) console.log('stdout: ', stdout)

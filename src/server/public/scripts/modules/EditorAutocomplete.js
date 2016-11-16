@@ -250,7 +250,7 @@ export default class EditorAutocomplete {
         var match
         while (match = /\{\{(.*?)\}\}/.exec(dataVal)) {
           var selector = document.querySelector('[data-id="' + match[1] + '"]')
-          if(selector != null) dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value);
+          if(selector != null) dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value)
         }
       }
 

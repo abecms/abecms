@@ -57,7 +57,7 @@ export default class Form {
       value: '',
       visible: true,
       precontrib: false,
-      precontribTemplates: "",
+      precontribTemplates: '',
       slug: false,
       slugType: false
     }

@@ -98,12 +98,12 @@ export default class FormCreate {
 
   _submit(type, target) {
     var values = {}
-    var postName = ""
-    var postPath = ""
+    var postName = ''
+    var postPath = ''
     var isValid = true
     Array.prototype.forEach.call(this._formInputs, (input) => {
-      var isPrecontribForTpl = true;
-      var found = false;
+      var isPrecontribForTpl = true
+      var found = false
       var linkedTpl = input.parentNode.getAttribute('data-precontrib-templates')
       if(linkedTpl){
         linkedTpl = linkedTpl.split(',')
@@ -114,45 +114,45 @@ export default class FormCreate {
         })
       }
       else{
-        found = true;
+        found = true
       }
-      if(!found) isPrecontribForTpl = false;
+      if(!found) isPrecontribForTpl = false
       input.parentNode.classList.remove('error')
-      var autocomplete = input.getAttribute('data-autocomplete') == "true" ? true : false
+      var autocomplete = input.getAttribute('data-autocomplete') == 'true' ? true : false
       var slug = input.getAttribute('data-slug')
       var slugType = input.getAttribute('data-slug-type')
-      var required = input.getAttribute('data-required') == "true" ? true : false
+      var required = input.getAttribute('data-required') == 'true' ? true : false
       if (input.parentNode.parentNode.style.display === 'none') {
         required = false
       }
       var value = input.value
 
-      if (slug != "false") {
-        if (slug == "true") {
+      if (slug != 'false') {
+        if (slug == 'true') {
           slug = true
         }
       }else {
         slug = false
       }
-      input.getAttribute('data-slug') !== "false"
-        ? (input.getAttribute('data-slug') == "true")
+      input.getAttribute('data-slug') !== 'false'
+        ? (input.getAttribute('data-slug') == 'true')
           ? input.getAttribute('data-slug') : true
         : false
 
       if (autocomplete) {
         var results = input.parentNode.querySelectorAll('.autocomplete-result')
-        var autocompleteValue = ""
+        var autocompleteValue = ''
         values[input.getAttribute('data-id')] = []
         Array.prototype.forEach.call(results, (result) => {
-          var resultValue = result.getAttribute("value")
+          var resultValue = result.getAttribute('value')
           // autocompleteValue = result.getAttribute("value")
           if (resultValue.indexOf('{') > -1) {
             try {
               var jsonValue = JSON.parse(resultValue)
-              value += (autocompleteValue !== "") ? "-" + jsonValue[slug] : jsonValue[slug]
+              value += (autocompleteValue !== '') ? '-' + jsonValue[slug] : jsonValue[slug]
               values[input.getAttribute('data-id')].push(jsonValue)
             }catch(e) {
-              value += (autocompleteValue !== "") ? "-" + autocompleteValue : autocompleteValue
+              value += (autocompleteValue !== '') ? '-' + autocompleteValue : autocompleteValue
               values[input.getAttribute('data-id')].push(value)
             }
           }
@@ -173,16 +173,16 @@ export default class FormCreate {
         values[input.getAttribute('data-id')] = value
       }
 
-      if (value !== "" && isPrecontribForTpl) {
+      if (value !== '' && isPrecontribForTpl) {
         switch(slugType) {
-          case "path":
-            postPath += value + "/"
-            break
-          case "name":
-            postName += (postName !== "") ? "-" + value : value
-            break
-          default:
-            break
+        case 'path':
+          postPath += value + '/'
+          break
+        case 'name':
+          postName += (postName !== '') ? '-' + value : value
+          break
+        default:
+          break
         }
       }else if(required && isPrecontribForTpl) {
         input.parentNode.classList.add('has-error')

@@ -1,6 +1,5 @@
 /*global document */
 
-import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 
@@ -22,7 +21,7 @@ export default class EditorStructures {
     var folder = document.createElement('div')
     if(hidden && hidden !== '') folder.classList.add(hidden)
     folder.classList.add('structure-folder')
-    folder.setAttribute('data-path', path.replace(/\/+$/, "") + '/')
+    folder.setAttribute('data-path', path.replace(/\/+$/, '') + '/')
     folder.setAttribute('data-level', level)
     folder.setAttribute('data-daddy', daddy)
 
@@ -31,8 +30,8 @@ export default class EditorStructures {
                 ${folderName} 
                 <div class="structure-tool">
                   <span class="glyphicon glyphicon-plus folder-action" data-init="0" data-action="add" aria-hidden="true"></span>`
-    if(level !== 0) html += `<span class="glyphicon glyphicon-minus folder-action" data-init="0" data-action="remove" aria-hidden="true"></span>`
-    html += `</div>`
+    if(level !== 0) html += '<span class="glyphicon glyphicon-minus folder-action" data-init="0" data-action="remove" aria-hidden="true"></span>'
+    html += '</div>'
     span.innerHTML = html
     folder.appendChild(span)
 
@@ -60,7 +59,7 @@ export default class EditorStructures {
   }
 
   bindArrow(arrow) {
-    arrow.addEventListener('click', (e) => {
+    arrow.addEventListener('click', () => {
       this.toggleFolder(arrow.parentNode.parentNode)
     })
   }
