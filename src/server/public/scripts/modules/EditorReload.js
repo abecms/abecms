@@ -94,28 +94,30 @@ export default class Reload {
   
   reload() {
     var iframe = document.querySelector('#page-template')
-    var json = JSON.parse(JSON.stringify(this._json.data))
-    iframe.parentNode.classList.add('reloading')
-    
-    delete json.abe_source
-    var data = qs.stringify({
-      json: json
-    })
+    if (iframe != null) {
+      var json = JSON.parse(JSON.stringify(this._json.data))
+      iframe.parentNode.classList.add('reloading')
+      
+      delete json.abe_source
+      var data = qs.stringify({
+        json: json
+      })
 
-    this._ajax(
-      {
-        url: iframe.getAttribute('data-iframe-src'),
-        body: data,
-        method: 'post'
-      },
-    (code, responseText) => {
-      if(typeof responseText !== 'undefined' && responseText !== null) {
-        var template = Handlebars.compile(responseText, {noEscape: true})
-        responseText = template(json)
-        this.inject(responseText)
-      }
-        
-      return
-    })
+      this._ajax(
+        {
+          url: iframe.getAttribute('data-iframe-src'),
+          body: data,
+          method: 'post'
+        },
+      (code, responseText) => {
+        if(typeof responseText !== 'undefined' && responseText !== null) {
+          var template = Handlebars.compile(responseText, {noEscape: true})
+          responseText = template(json)
+          this.inject(responseText)
+        }
+          
+        return
+      })
+    }
   }
 }

@@ -16,12 +16,15 @@ export default class EditorUtils {
     let formAbes = document.querySelectorAll('.form-abe')
 
     Array.prototype.forEach.call(formAbes, (formAbe) => {
-      var hide = IframeNode('#page-template', '[data-if-empty-clear="' + formAbe.getAttribute('data-id') + '"]')[0]
-      if(typeof hide !== 'undefined' && hide !== null) {
-        if (formAbe.value === '') {
-          hide.style.display = 'none'
-        }else {
-          hide.style.display = ''
+      var hide = IframeNode('#page-template', '[data-if-empty-clear="' + formAbe.getAttribute('data-id') + '"]')
+      if (hide != null) {
+        hide = hide[0]
+        if(typeof hide !== 'undefined' && hide !== null) {
+          if (formAbe.value === '') {
+            hide.style.display = 'none'
+          }else {
+            hide.style.display = ''
+          }
         }
       }
     })

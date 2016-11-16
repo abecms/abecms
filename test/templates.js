@@ -15,6 +15,7 @@ describe('Template', function() {
         this.fixture = {
           template: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf-8'),
           articleEach: fse.readFileSync(__dirname + '/fixtures/templates/article-each-abe.html', 'utf-8'),
+          articlePrecontrib: fse.readFileSync(__dirname + '/fixtures/templates/article-precontribution.html', 'utf-8'),
           templateKeys: fse.readFileSync(__dirname + '/fixtures/templates/article-keys.html', 'utf-8')
         }
         done()
@@ -59,15 +60,23 @@ describe('Template', function() {
   });
 
   /**
-   * getTemplate
+   * cmsTemplates.template.getAbeRequestWhereKeysFromTemplates
    * 
    */
-  it('cmsTemplates.template.getSelectTemplateKeys()', function() {
-    const pathTemplate = path.join(config.root, config.templates.url)
-    cmsTemplates.template.getSelectTemplateKeys(pathTemplate)
+  it('cmsTemplates.template.getAbeRequestWhereKeysFromTemplates()', function() {
+    cmsTemplates.template.getAbeRequestWhereKeysFromTemplates([{template: this.fixture.template}])
       .then((whereKeys) => {
-        chai.expect(whereKeys.indexOf('abe_meta.date')).to.be.above(-1);
+        chai.expect(whereKeys.length).to.equal(2);
       })
+  });
+
+  /**
+   * cmsTemplates.template.getAbePrecontributionAttributesFromTemplates
+   * 
+   */
+  it('cmsTemplates.template.getAbePrecontributionAttributesFromTemplates()', function() {
+    var precontrib = cmsTemplates.template.getAbePrecontributionAttributesFromTemplates([{template: this.fixture.articlePrecontrib}])
+    chai.expect(precontrib.fields.length).to.equal(1);
   });
 
   /**

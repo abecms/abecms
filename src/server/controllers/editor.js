@@ -186,9 +186,9 @@ function orderBlock(util) {
 
     var formBlockOrdered = {}
     var arKeys = Object.keys(formBlockTab).sort((a,b) => {
-      if(formBlockTab[a][0].order < formBlockTab[b][0].order) {
+      if(parseFloat(formBlockTab[a][0].order) < parseFloat(formBlockTab[b][0].order)) {
         return -1
-      }else if(formBlockTab[a][0].order > formBlockTab[b][0].order) {
+      }else if(parseFloat(formBlockTab[a][0].order) > parseFloat(formBlockTab[b][0].order)) {
         return 1
       }
       return 0
@@ -202,50 +202,44 @@ function orderBlock(util) {
 
   var formTabsOrdered = {}
   var arKeysTabs = Object.keys(formBlock).sort((a,b) => {
-    if(formBlock[a][Object.keys(formBlock[a])[0]][0].order < formBlock[b][Object.keys(formBlock[b])[0]][0].order) {
+    if(parseFloat(formBlock[a][Object.keys(formBlock[a])[0]][0].order) < parseFloat(formBlock[b][Object.keys(formBlock[b])[0]][0].order)) {
       return -1
-    }else if(formBlock[a][Object.keys(formBlock[a])[0]][0].order > formBlock[b][Object.keys(formBlock[b])[0]][0].order) {
+    }else if(parseFloat(formBlock[a][Object.keys(formBlock[a])[0]][0].order) > parseFloat(formBlock[b][Object.keys(formBlock[b])[0]][0].order)) {
       return 1
     }
     return 0
   })
 
   Array.prototype.forEach.call(arKeysTabs, (arKeysTab) => {
-    formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
+    if (arKeysTab !== 'Precontribution') {
+      formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
+    }
   })
+
+  formTabsOrdered['Precontribution'] = formBlock['Precontribution']
 
   return formTabsOrdered
 }
 
-export function editor(fileName, jsonPath, documentLink) {
+export function editor(text, json, documentLink) {
   let p = new Promise((resolve) => {
     var util = new cmsEditor.form()
     var arrayBlock = []
-    var text
-    var json
-
-    json = {}
-    if(coreUtils.file.exist(jsonPath)) {
-      json = cmsData.file.get(jsonPath, 'utf8')
-    }
-
-    text = cmsTemplates.template.getTemplate(fileName)
-
+    
     cmsData.source.getDataList(path.dirname(documentLink), text, json)
       .then(() => {
         addSource(text, json, util)
 
         text = cmsData.source.removeDataList(text)
 
+        var matches = cmsData.regex.getTagAbePrecontribution(text)
+        if (matches.length === 0) {
+          text = `${text}\n{{abe type='text' key='abe_filename' desc='Name' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}`
+        }
+
         matchAttrAbe(text, json, util, arrayBlock)
         arrayBlock = []
         each(text, json, util, arrayBlock)
-
-        // if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-        //   var tpl = json.abe_meta.template.split('/')
-        //   tpl = tpl.pop()
-        //   json.abe_meta.cleanTemplate = tpl.replace(/\..+$/, '')
-        // }
 
         if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
           var links = json.abe_meta.link.split('/')
@@ -255,12 +249,12 @@ export function editor(fileName, jsonPath, documentLink) {
         }
 
         // HOOKS beforeEditorFormBlocks
-        json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json)
+        json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json, text)
 
         var blocks = orderBlock(util)
 
         // HOOKS afterEditorFormBlocks
-        blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json)
+        blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json, text)
 
         abeEngine.instance.content = json
 

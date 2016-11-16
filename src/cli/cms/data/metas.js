@@ -6,7 +6,8 @@ import {
 export function add(json, type, date = null) {
   let meta = config.meta.name
   var currentDate = (date != null && date !== '') ? date : new Date()
-  var abeUrl = (type === 'publish') ? json[meta].link : cmsData.fileAttr.add(json[meta].link, 'd' + cmsData.revision.removeStatusAndDateFromFileName(currentDate.toISOString())) + ''
+  var prefixStatus = type[0]
+  var abeUrl = (type === 'publish') ? json[meta].link : cmsData.fileAttr.add(json[meta].link, prefixStatus + cmsData.revision.removeStatusAndDateFromFileName(currentDate.toISOString())) + ''
 
   if(json[meta].date == null) {
     json[meta].date = currentDate

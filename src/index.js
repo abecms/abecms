@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 import {Promise} from 'bluebird'
 import Create from './cli/cms/Create'
+import plugins from './cli/extend/plugins'
 import {exec} from 'child_process'
 import {spawn} from 'child_process'
-import git from 'git-exec'
 import execPromise from 'child-process-promise'
 import mkdirp from 'mkdirp'
 import fse from 'fs-extra'
+import path from 'path'
 import program from 'commander'
 import pkg from '../package'
 import pm2 from 'pm2'
@@ -32,92 +33,6 @@ var interactive = program.interactive
 var vPos = process.argv.indexOf('-v')
 if (vPos > -1) {
   process.argv[vPos] = '-V'
-}
-
-function addPlugin(dir, plugin) {
-  var p = new Promise((resolve) => {
-			
-    var pluginName = plugin.split('/')
-    pluginName = pluginName[pluginName.length - 1].split('.')[0]
-    var pluginDir = dir + '/plugins/' + pluginName
-
-    try{
-      fse.statSync(pluginDir)
-      console.log(clc.green('remove plugin'), pluginName)
-      fse.removeSync(pluginDir)
-    }
-    catch(e){
-    }
-    console.log(clc.green('mkdir'), clc.green(pluginDir))
-    mkdirp(pluginDir)
-
-    git.clone(plugin, pluginDir, function(repo) {
-      if (repo !== null) {
-        try {
-          console.log(clc.green('cd'), clc.green(pluginDir))
-          process.chdir(pluginDir)
-
-          console.log(clc.green('spawn'), clc.cyan('npm install'))
-					// const npmInstall = spawn('npm', ['install', pluginDir]);
-          const npmInstall = spawn('npm', ['install'])
-
-          npmInstall.stdout.on('data', (data) => {
-            var str = data.toString(), lines = str.split(/(\r?\n)/g)
-            for (var i=0; i<lines.length; i++) {
-              console.log(str)
-            }
-          })
-
-          npmInstall.stderr.on('data', (data) => {
-            var str = data.toString(), lines = str.split(/(\r?\n)/g)
-            for (var i=0; i<lines.length; i++) {
-              console.log(str)
-            }
-          })
-
-          npmInstall.on('close', (code) => {
-            console.log(clc.cyan('child process exited with code'), code)
-
-            var json = {}
-            var abeJson = dir + '/abe.json'
-
-            try {
-              var stat = fse.statSync(abeJson)
-              if (stat) {
-                json = fse.readJsonSync(abeJson)
-              }
-            }catch(e) {
-              console.log(e)
-              console.log(clc.cyan('no abe.json creating'), abeJson)
-            }
-
-            if(typeof json.dependencies === 'undefined' || json.dependencies === null) {
-              json.dependencies = [plugin]
-            }else {
-              var found = false
-              Array.prototype.forEach.call(json.dependencies, (plugged) => {
-                if (plugin === plugged) {
-                  found = true
-                }
-              })
-              if (!found) {
-                json.dependencies.push(plugin)
-              }
-            }
-
-            fse.writeJsonSync(abeJson, json, { space: 2, encoding: 'utf-8' })
-            resolve()
-          })
-        } catch (err) {
-          console.log(clc.cyan('chdir'), err)
-        }
-      } else {
-        console.log(clc.red('clone error'))
-      }
-    })
-  })
-
-  return p
 }
 
 if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
@@ -265,7 +180,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     var ps = []
     if(typeof json.dependencies !== 'undefined' || json.dependencies !== null) {
       Array.prototype.forEach.call(json.dependencies, (plugged) => {
-        ps.push(addPlugin(dir, plugged))
+        ps.push(plugins.instance.add(dir, plugged))
       })
     }
 			
@@ -275,7 +190,6 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 })
     break
   case 'add':
-			// ROOT=[ PATH TO PROJECT ]/abe-test-os ./node_modules/.bin/babel-node src/index.js add [ GIT PROJECT ]
     dir = process.cwd()
     plugin = userArgs[1]
     if(process.env.ROOT) {
@@ -284,8 +198,8 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
 
     if(typeof dir !== 'undefined' && dir !== null) {
       if(typeof plugin !== 'undefined' && plugin !== null) {
-        addPlugin(dir, plugin)
-						.then(function() {
+        plugins.instance.add(dir, plugin)
+					.then(function() {
   process.exit(0) 
 })
       }else {

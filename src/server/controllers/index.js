@@ -1,9 +1,9 @@
 import express from 'express'
 import * as abe from '../../cli'
 import {
-  getCreate
-  ,getDuplicate
-  ,getUpdate
+  postCreate
+  ,postDuplicate
+  ,postUpdate
   ,getListUrl
   ,getListHooks
   ,getMain
@@ -32,9 +32,9 @@ var router = express.Router()
 abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 abeExtend.hooks.instance.trigger('beforeAddRoute', router)
 
-router.get('/abe/create*', getCreate)
-router.get('/abe/duplicate*', getDuplicate)
-router.get('/abe/update*', getUpdate)
+router.post('/abe/create*', postCreate)
+router.post('/abe/duplicate*', postDuplicate)
+router.post('/abe/update*', postUpdate)
 router.post('/abe/sql-request*', postSqlRequest)
 router.post('/abe/page/*', postPage)
 router.get('/abe/page/*', getPage)

@@ -1,7 +1,7 @@
 import getMain from './get-main'
-import getCreate from './get-create'
-import getDuplicate from './get-duplicate'
-import getUpdate from './get-update'
+import postCreate from './post-create'
+import postDuplicate from './post-duplicate'
+import postUpdate from './post-update'
 import getListUrl from './get-list-url'
 import getListHooks from './get-list-hooks'
 import getPage from './get-page'
@@ -21,11 +21,11 @@ import postStructure from './post-structure'
 
 export {
 	getMain
-	,getCreate
+	,postCreate
 	,getListUrl
 	,getListHooks
-	,getDuplicate
-	,getUpdate
+	,postDuplicate
+	,postUpdate
 	,getPage
 	,postPage
 	,postPublish

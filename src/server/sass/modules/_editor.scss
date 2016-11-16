@@ -10,6 +10,25 @@
   cursor: pointer;
 }
 
+.manager-wrapper {
+  .form-create {
+    padding: 0px 20px;
+
+    [data-precontrib-templates] {
+      display: none;
+    }
+
+    .form-group {
+      margin-bottom: 0px;
+    }
+
+    select,
+    input {
+      height: 30px;
+    }
+  }
+}
+
 .form-wrapper{
   padding-top: 45px;
   width: 33%;

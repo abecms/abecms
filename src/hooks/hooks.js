@@ -76,7 +76,7 @@ var hooks = {
   },
 
   /***************** save *****************/
-  beforeFirstSave: (postUrl, req, json, abe) => {
+  beforeFirstSave: (postUrl, body, json, abe) => {
     return {
       postUrl: postUrl,
       json: json
@@ -135,10 +135,10 @@ var hooks = {
   afterAbeAttributes: (obj, str, json, abe) => {
     return obj
   },
-  beforeEditorFormBlocks: (json, abe) => {
+  beforeEditorFormBlocks: (json, text, abe) => {
     return json
   },
-  afterEditorFormBlocks: (blocks, json, abe) => {
+  afterEditorFormBlocks: (blocks, json, text, abe) => {
     return blocks
   },
   beforeListPage: (file, index, text) => {

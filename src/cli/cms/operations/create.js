@@ -25,7 +25,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
       var templateText = cmsTemplates.template.getTemplate(template)
       json = cmsData.values.removeDuplicate(templateText, json)
     }
-    var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', postUrl, req.query, json)
+    var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', postUrl, req.body, json)
     postUrl = resHook.postUrl
     json = resHook.json
 

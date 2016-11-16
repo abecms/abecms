@@ -55,7 +55,11 @@ export default class Form {
       tab: 'default',
       type: 'text',
       value: '',
-      visible: true
+      visible: true,
+      precontrib: false,
+      precontribTemplates: "",
+      slug: false,
+      slugType: false
     }
 
     obj = extend(true, defaultValues, obj)
@@ -65,6 +69,10 @@ export default class Form {
       obj.block = obj.key.split('.')[0]
     }
 
+    if (obj.precontrib === 'true') {
+      obj.tab = 'Precontribution'
+    }
+    
     if(this._form[obj.tab] == null) this._form[obj.tab] = {item:[]}
 
     this._key[obj.key] = true // save key for dontHaveKey()

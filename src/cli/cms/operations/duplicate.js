@@ -1,4 +1,5 @@
 import path from 'path'
+import extend from 'extend'
 
 import {
   abeExtend,
@@ -15,7 +16,7 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
 
     let json = {}
     let revisions = []
-    const newPostUrl = path.join(newPath, name)
+    const newPostUrl = path.join(newPath, coreUtils.slug.clean(name))
     if(oldPostUrl != null) {
       const files = Manager.instance.getList()
       const oldPostDataPath = path.join(config.root, config.data.url, oldPostUrl.replace('.' + config.files.templates.extension, '.json'))
@@ -26,6 +27,8 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
         revisions = posts[0].revisions
         if(revisions != null && revisions[0] != null) {
           json = cmsData.file.get(revisions[0].path)
+          json = extend(true, json, req.body)
+
           delete json.abe_meta
         }
       }

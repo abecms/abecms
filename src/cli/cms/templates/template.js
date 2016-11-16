@@ -204,6 +204,25 @@ export function recurseWhereVariables (where) {
   return ar
 }
 
+export function getTemplatesTexts(templatesList) {
+  var templates = []
+  var p = new Promise((resolve) => {
+    Array.prototype.forEach.call(templatesList, (file) => {
+      var template = fse.readFileSync(file, 'utf8')
+      template = includePartials(template)
+      var name = file.replace(path.join(config.root, config.templates.url, path.sep), '').replace(`.${config.files.templates.extension}`, '')
+      templates.push({
+        name: name,
+        path: file,
+        template: template
+      })
+    })
+    resolve(templates)
+  })
+
+  return p
+}
+
 export function execRequestColumns(tpl) {
   var ar = []
   var matches = cmsData.regex.getTagAbeTypeRequest(tpl)
@@ -227,12 +246,11 @@ export function execRequestColumns(tpl) {
   return ar
 }
 
-export function findRequestColumns(templatesList) {
+export function getAbeRequestWhereKeysFromTemplates(templatesList) {
   var whereKeys = []
   var p = new Promise((resolve) => {
     Array.prototype.forEach.call(templatesList, (file) => {
-      var template = fse.readFileSync(file, 'utf8')
-      whereKeys = whereKeys.concat(execRequestColumns(template))
+      whereKeys = whereKeys.concat(execRequestColumns(file.template))
     })
     whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
     resolve(whereKeys)
@@ -241,35 +259,38 @@ export function findRequestColumns(templatesList) {
   return p
 }
 
-export function getSelectTemplateKeys(templatesPath) {
-  var p = new Promise((resolve, reject) => {
-    return getTemplatesAndPartials(templatesPath)
-      .then((templatesList) => {
-        return findRequestColumns(templatesList)
-          .then((whereKeys) => {
-            resolve(whereKeys)
-          },
-          (e) => {
-            console.log('findRequestColumns reject')
-            reject(e)
-          })
-          .catch((e) => {
-            console.error('getSelectTemplateKeys', e)
-            reject()
-          })
-      },
-      () => {
-        console.log('getTemplateAndPartials reject')
-        reject()
-      })
-      .catch((e) => {
-        console.error('getSelectTemplateKeys', e)
-        reject()
-      })
-
+export function getAbePrecontributionAttributesFromTemplates(templatesList) {
+  var ar = {}
+  var fields = []
+  var precontributionTemplate = ""
+  Array.prototype.forEach.call(templatesList, (file) => {
+    var matches = cmsData.regex.getTagAbePrecontribution(file.template)
+    Array.prototype.forEach.call(matches, (match) => {
+      var obj = cmsData.attributes.getAll(match[0], {})
+      if (ar[obj.key] == null) {
+        ar[obj.key] = obj
+        ar[obj.key].precontribTemplates = []
+      }
+      ar[obj.key].precontribTemplates.push(file.name)
+      ar[obj.key].match = match[0]
+    })
   })
 
-  return p
+  Array.prototype.forEach.call(Object.keys(ar), (key) => {
+    fields.push(ar[key])
+    precontributionTemplate += ar[key].match.replace(/\}\}$/, ' precontribTemplates="' + ar[key].precontribTemplates.join(',') + '"}}') + "\n"
+  })
+
+  if (precontributionTemplate === "") { // should always have a filename at least
+    precontributionTemplate = `{{abe type='text' key='abe_filename' desc='Name' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}`
+    var obj = cmsData.attributes.getAll(precontributionTemplate, {})
+    fields.push(obj)
+  }
+
+  return {
+    fields: fields,
+    template: precontributionTemplate
+  }
 }
 
 export function getStructureAndTemplates() {
