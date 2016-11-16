@@ -11,7 +11,7 @@ export default class EditorStructures {
     this.structureWrapper = document.querySelector('.structure-wrapper')
     this.folderName = document.querySelector('input.folder-name')
 
-    var lvl_0 = this.createFolder('structure/', 0, '', 'main', '')
+    var lvl_0 = this.createFolder('structure/', 0, '', 'structure', '')
 
     this.createStructure(lvl_0, this.datas)
     this.structureWrapper.appendChild(lvl_0)
@@ -27,13 +27,13 @@ export default class EditorStructures {
     folder.setAttribute('data-daddy', daddy)
 
     var span = document.createElement('span')
-    span.innerHTML = `<span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
-                      ${folderName}
-                      <div class="structure-tool">
-                        <span class="glyphicon glyphicon-plus-sign folder-action" data-init="0" data-action="add" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon-remove-circle folder-action" data-init="0" data-action="remove" aria-hidden="true"></span>
-                      </div>
-                      `
+    var html = `<span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
+                ${folderName} 
+                <div class="structure-tool">
+                  <span class="glyphicon glyphicon-plus folder-action" data-init="0" data-action="add" aria-hidden="true"></span>`
+    if(level !== 0) html += `<span class="glyphicon glyphicon-minus folder-action" data-init="0" data-action="remove" aria-hidden="true"></span>`
+    html += `</div>`
+    span.innerHTML = html
     folder.appendChild(span)
 
     this.bindArrow(span.querySelector('.arrow'))

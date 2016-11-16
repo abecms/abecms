@@ -1,5 +1,19 @@
 .structure-editor{
 	display: inline-block;
+	.help-info{
+		transition: all 150ms ease-in-out;
+		font-size: 11px;
+		color: #e6e6e6;
+		padding: 2px;
+		span{
+			color: #ccc;
+		}
+	}
+	[disabled="disabled"]{
+		~ .help-info{
+			opacity: 0.1;
+		}
+	}
 }
 .folder-name{
 	transition: all 350ms ease-in-out;
@@ -40,10 +54,9 @@
 	.structure-folder{
 		margin-left: 20px;
 	}
-	.glyphicon-remove-circle,
-	.glyphicon-plus-sign{
+	.glyphicon-minus,
+	.glyphicon-plus{
 		transition: all 100ms ease-in-out;
-    font-size: 15px;
     opacity: 0.5;
     &:hover{
     	opacity: 1;
@@ -58,11 +71,18 @@
 			opacity: 1;
     }
 	}
-	.glyphicon-remove-circle{
-		color: #ff1371;
-    margin-left: 5px;
+	.glyphicon-minus{
+    // margin-left: 5px;
+    font-size: 15px;
+    &:hover{
+    	color: #ff1371;
+    }
 	}
-	.glyphicon-plus-sign{
-		color: #47b8e0;
+	.glyphicon-plus{
+		font-size: 13px;
+    transform: translate3d(0, -1px, 0);
+    &:hover{
+    	color: #47b8e0;
+    }
 	}
 }

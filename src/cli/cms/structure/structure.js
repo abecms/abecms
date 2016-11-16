@@ -1,5 +1,4 @@
 import path from 'path'
-import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import execPromise from 'child-process-promise'
 
