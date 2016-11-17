@@ -204,7 +204,7 @@ export default class FormCreate {
       breadcrumbsHtml += '</li>'
     })
     breadcrumbsHtml += '<span>.' + CONFIG.EXTENSION + '</span>'
-    this._previewPostPath.innerHTML = breadcrumbsHtml
+    this._previewPostPath.innerHTML = '<span>URL : </span>' + breadcrumbsHtml
 
     return {
       isValid: isValid,

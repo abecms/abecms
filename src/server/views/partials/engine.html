@@ -45,7 +45,6 @@
           <div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="{{cleanTab @key}}">
             {{#ifCond @key 'slug'}}
               <div class="form-create" data-form-abe-create="true">
-                <div data-post-path-preview="true" class="breadcrumb"></div>
                 
                 {{&folders @root.manager.list.structure 1 @root.json.abe_meta.link @root.text}}
                 {{abeImport 'create-form-template' @root.manager.config @root}}
@@ -54,10 +53,12 @@
                 <input class="form-control" type="hidden" name="oldFilePath" data-id="oldFilePath" id="oldFilePath" value="{{@root.json.abe_meta.link}}" />  
                 <div class="">
                   <div class="">
-                  <button type="submit" class="btn btn-primary" date-abe-update="true">update</button>
                   <button type="submit" class="btn btn-primary" date-abe-duplicate="true">duplicate</button>
+                  <button type="submit" class="btn btn-primary" date-abe-update="true">update</button>
                   </div>
                 </div>
+
+                <div data-post-path-preview="true" class="breadcrumb"></div>
 
               </div>
             {{else}}

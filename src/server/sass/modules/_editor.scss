@@ -34,22 +34,37 @@
     input {
       height: 30px;
     }
-    .breadcrumb{
-      font-size: 12px;
-      >li{
-        &+li{
-          &:before{
-            display: inline-block;
-            padding: 0 1px;
-            width: 6px;
-          }
-          span{
-          }
+  }
+}
+
+.form-create {
+  .breadcrumb{
+    font-size: 12px;
+    margin-top: 20px;
+    >li{
+      &+li{
+        &:before{
+          display: inline-block;
+          padding: 0 1px;
+          width: 6px;
+        }
+        span{
         }
       }
     }
-    [date-abe-create="true"]{
-      margin-top: 20px;
+  }
+  [date-abe-create="true"]{
+    margin-top: 20px;
+  }
+}
+
+.tab-pane{
+  &#slug{
+    .btn-primary{
+      width: 100%;
+      + .btn-primary {
+        margin-top: 20px;
+      }
     }
   }
 }
