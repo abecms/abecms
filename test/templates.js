@@ -13,6 +13,7 @@ describe('Template', function() {
     Manager.instance.init()
       .then(function () {
         this.fixture = {
+          slug: fse.readFileSync(__dirname + '/fixtures/templates/slug.html', 'utf-8'),
           template: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf-8'),
           articleEach: fse.readFileSync(__dirname + '/fixtures/templates/article-each-abe.html', 'utf-8'),
           articlePrecontrib: fse.readFileSync(__dirname + '/fixtures/templates/article-precontribution.html', 'utf-8'),
@@ -60,23 +61,39 @@ describe('Template', function() {
   });
 
   /**
-   * cmsTemplates.template.getAbeRequestWhereKeysFromTemplates
+   * cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist
    * 
    */
-  it('cmsTemplates.template.getAbeRequestWhereKeysFromTemplates()', function() {
-    cmsTemplates.template.getAbeRequestWhereKeysFromTemplates([{template: this.fixture.template}])
-      .then((whereKeys) => {
-        chai.expect(whereKeys.length).to.equal(2);
-      })
+  it('cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist()', function() {
+    var text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist("")
+    chai.expect(text).to.be.equal(`{{abe type="slug" source="{{name}}"}}\n`);
   });
 
   /**
-   * cmsTemplates.template.getAbePrecontributionAttributesFromTemplates
+   * cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist
    * 
    */
-  it('cmsTemplates.template.getAbePrecontributionAttributesFromTemplates()', function() {
-    var precontrib = cmsTemplates.template.getAbePrecontributionAttributesFromTemplates([{template: this.fixture.articlePrecontrib}])
-    chai.expect(precontrib.fields.length).to.equal(1);
+  it('cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist()', function() {
+    var text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist("")
+    chai.expect(text).to.be.equal(`{{abe type='text' key='name' desc='Name' required="true" tab="slug" visible="false"}}\n`);
+  });
+
+  /**
+   * cmsTemplates.template.getAbePrecontribFromTemplates
+   * 
+   */
+  it('cmsTemplates.template.getAbePrecontribFromTemplates()', function() {
+    var precontrib = cmsTemplates.template.getAbePrecontribFromTemplates([{name: 'slug', template: this.fixture.slug}])
+    chai.expect(precontrib.fields[0]).to.not.be.undefined;
+  });
+
+  /**
+   * cmsTemplates.template.getAbeSlugFromTemplates
+   * 
+   */
+  it('cmsTemplates.template.getAbeSlugFromTemplates()', function() {
+    var slug = cmsTemplates.template.getAbeSlugFromTemplates([{name: 'slug', template: this.fixture.slug}])
+    chai.expect(slug.slug).to.not.be.undefined;
   });
 
   /**
