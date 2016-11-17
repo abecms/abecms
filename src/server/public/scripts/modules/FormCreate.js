@@ -9,6 +9,7 @@ export default class FormCreate {
   constructor(parentForm) {
     this._form = parentForm
     if(typeof this._form !== 'undefined' && this._form !== null) {
+      this._isSaving = false
 
       // constantes variables
       this._ajax = Nanoajax.ajax
@@ -215,7 +216,10 @@ export default class FormCreate {
     var res = this._setSlug(true)
     var toSave = qs.stringify(res.values)
 
-    if (res.isValid) {
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('this._isSaving', this._isSaving)
+    if (res.isValid && !this._isSaving) {
+      this._isSaving = true
       this._ajax(
         {
           url: document.location.origin + '/abe/' + type + '/' + res.postPath,
@@ -224,8 +228,9 @@ export default class FormCreate {
           method: 'post'
         },
           (code, responseText) => {
+            this._isSaving = false
             var jsonRes = JSON.parse(responseText)
-            if (jsonRes.success == 1 && typeof jsonRes.json.abe_meta !== 'undefined' && jsonRes.json.abe_meta !== null) {
+            if (jsonRes.success == 1 && jsonRes.json != null && jsonRes.json.abe_meta != null) {
               window.location.href = window.location.origin + '/abe' + jsonRes.json.abe_meta.link
             }else {
               alert('error')
