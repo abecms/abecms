@@ -8,7 +8,7 @@ export default function recursiveFolder(obj, index = 1, dataShow = '', links = n
 
   var id = `level-${index}`
   if(dataShow) {
-    id += `-${dataShow}`
+    // id += `-${dataShow}`
   }
   var parent = obj[0] ? obj[0].path.split('/')[0] : ''
   var res = `<div class="form-group level-${index} ${classHidden}" data-parent="${parent}" data-shown="${dataShow}">

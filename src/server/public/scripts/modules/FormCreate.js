@@ -97,6 +97,12 @@ export default class FormCreate {
     if (this._selectedTemplate != null && this._selectedTemplate != '') {
 
       Array.prototype.forEach.call(this._formInputs, function(input) {
+        if (input.getAttribute('data-slug-type') == 'path') {
+          if (input.parentNode.classList.contains('hidden')) {
+            return
+          }
+        }
+
         var parentNode = input.parentNode
         if (parentNode.getAttribute('data-precontrib-templates') == null) {
           parentNode = input.parentNode.parentNode
@@ -208,6 +214,10 @@ export default class FormCreate {
   _submit(type) {
     var res = this._setSlug(true)
     var toSave = qs.stringify(res.values)
+
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('res', res)
+    return
 
     if (res.isValid) {
       this._ajax(
