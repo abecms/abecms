@@ -215,10 +215,6 @@ export default class FormCreate {
     var res = this._setSlug(true)
     var toSave = qs.stringify(res.values)
 
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('res', res)
-    return
-
     if (res.isValid) {
       this._ajax(
         {
