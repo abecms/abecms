@@ -254,13 +254,18 @@ export function editor(text, json, documentLink, precontrib = false) {
           json.abe_meta.cleanFilename = links.join('/').replace(/\..+$/, '')
         }
 
-        // HOOKS beforeEditorFormBlocks
-        json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json, text)
+        if (!precontrib) {
+          // HOOKS beforeEditorFormBlocks
+          json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json, text)
+        }
 
         var blocks = orderBlock(util)
 
-        // HOOKS afterEditorFormBlocks
-        blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json, text)
+
+        if (!precontrib) {
+          // HOOKS afterEditorFormBlocks
+          blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json, text)
+        }
 
         abeEngine.instance.content = json
 
