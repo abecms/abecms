@@ -132,7 +132,7 @@ export default class FormCreate {
             if (value.indexOf('{') > -1) {
               try {
                 var jsonValue = JSON.parse(value)
-                values[id].push(jsonValue)
+                values[id] = [jsonValue]
 
                 if (required && values[id].length == 0) {
                   isValid = false
