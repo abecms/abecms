@@ -12,7 +12,7 @@
           
           {{&setVariable "precontrib" "true"}}
 
-          {{&folders @root.manager.list.structure 1 null}}
+          {{&folders @root.manager.list.structure 1 null @root.text}}
           {{abeImport 'create-form-template' @root.manager.config @root}}
           {{abeImport 'create-form-tplname' @root.manager.config @root}}
 
