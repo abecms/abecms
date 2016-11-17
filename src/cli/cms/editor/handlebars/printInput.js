@@ -13,17 +13,11 @@ export default function printInput () {
   var params = arguments[0]
   params = abeExtend.hooks.instance.trigger('beforeEditorInput', params)
 
-  var dataId = params.key
-  if (dataId.indexOf('/') > -1) {
-    dataId = dataId.split('/')
-    dataId = dataId[dataId.length - 1]
-  }
-
   var desc = params.desc + ((params.required) ? ' *' : '')
 
   var res = `<div class="form-group" data-precontrib-templates="${params.precontribTemplate}">
-              <label class="control-label" for="${dataId}" 
-                      ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + dataId + '"' : ''} >
+              <label class="control-label" for="${params.key}" 
+                      ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + params.key + '"' : ''} >
                 ${desc}
               </label>`
   var disabled = ''
@@ -39,8 +33,8 @@ export default function printInput () {
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
   var inputClass = 'form-control form-abe'
-  var commonParams = `id="${dataId}"
-                    data-id="${dataId}"
+  var commonParams = `id="${params.key}"
+                    data-id="${params.key}"
                     value="${params.value}"
                     maxlength="${params['max-length']}"
                     reload="${params.reload}"
@@ -52,8 +46,8 @@ export default function printInput () {
                     placeholder="${params.placeholder}"`
 
   if(params.source != null) {
-    commonParams = `id="${dataId}"
-                    data-id="${dataId}"
+    commonParams = `id="${params.key}"
+                    data-id="${params.key}"
                     data-maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
@@ -86,7 +80,7 @@ export default function printInput () {
           data-autocomplete-refresh="true"
           data-autocomplete-refresh-sourcestring="${params.sourceString}"
           data-autocomplete-refresh-prefill-quantity="${params['prefill-quantity']}"
-          data-autocomplete-refresh-key="${dataId}"
+          data-autocomplete-refresh-key="${params.key}"
           data-autocomplete-data-display="${params.display}"
           >
           <span class="glyphicon glyphicon-refresh"></span>
@@ -119,8 +113,8 @@ export default function printInput () {
 
     }
   }else if (params.type.indexOf('rich') >= 0){
-    commonParams = `id="${dataId}"
-                    data-id="${dataId}"
+    commonParams = `id="${params.key}"
+                    data-id="${params.key}"
                     maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
@@ -190,7 +184,7 @@ export default function printInput () {
             </div>`
   }
   else if (params.type.indexOf('file') >= 0){
-    res += `<input class="form-control" ${commonParams} name="${dataId}" type="file" />
+    res += `<input class="form-control" ${commonParams} name="${params.key}" type="file" />
             <span class="percent"></span>
             <input type="text" ${commonParams} class="${inputClass} hidden" />`
   }
@@ -212,7 +206,7 @@ export default function printInput () {
               </div>
               <input type="text" ${commonParams} class="${inputClass} image-input" />
               <div class="upload-wrapper">
-                <input class="form-control" ${commonParams} name="${dataId}" type="file" title="upload an image"/>
+                <input class="form-control" ${commonParams} name="${params.key}" type="file" title="upload an image"/>
                 <span class="percent">
                   <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
                 </span>

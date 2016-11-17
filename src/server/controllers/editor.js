@@ -21,7 +21,7 @@ function add(obj, json, text, util) {
     if(typeof json[key] !== 'undefined' && json[key] !== null &&
        typeof json[key][index] !== 'undefined' && json[key][index] !== null &&
        typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
-      obj.value = json[getKey(key)][index][prop]
+      obj.value = json[getDataIdWithNoSlash(key)][index][prop]
     }else if(typeof value !== 'undefined' && value !== null && value !== '') {
       if(typeof json[key] === 'undefined' || json[key] === null){
         json[key] = []
@@ -33,12 +33,14 @@ function add(obj, json, text, util) {
     }
   }
 
+  obj.key = getDataIdWithNoSlash(obj.key)
+
   util.add(obj)
 
   return value
 }
 
-function getKey(key) {
+function getDataIdWithNoSlash(key) {
   var trueKey = key
   if (trueKey.indexOf('/') > -1) {
     trueKey = trueKey.split('/')
@@ -63,17 +65,15 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
       insertAbeEach(obj, text, json, util, arrayBlock)
 
     }else if(util.dontHaveKey(obj.key)) {
-      obj.value = json[getKey(obj.key)]
-      json[getKey(obj.key)] = add(obj, json, text, util)
+      obj.value = json[getDataIdWithNoSlash(obj.key)]
+      json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
     }
 
   }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
     realKey = obj.key.replace(/\./g, '-')
-    obj.value = json[getKey(realKey)]
-    json[getKey(obj.key)] = add(obj, json, text, util)
+    obj.value = json[getDataIdWithNoSlash(realKey)]
+    json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
   }
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  console.log(getKey(obj.key), json[getKey(obj.key)])
 }
 
 function matchAttrAbe(text, json, util, arrayBlock) {
@@ -153,10 +153,10 @@ function addSource(text, json, util) {
     var obj = cmsData.attributes.getAll(match[0], json)
 
     if(obj.editable) {
-      obj.value = json[getKey(obj.key)]
+      obj.value = json[getDataIdWithNoSlash(obj.key)]
       add(obj, json, text, util)
     }else {
-      json[getKey(obj.key)] = obj.source
+      json[getDataIdWithNoSlash(obj.key)] = obj.source
     }
   }
 }

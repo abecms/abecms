@@ -159,7 +159,7 @@ var route = function(req, res, next) {
 
   p.then((obj) => {
     var precontrib = Manager.instance.getPrecontribution()
-    editor(precontrib.template, {}, "", true)
+    editor(precontrib.template, obj.json, "", true)
       .then((resultPrecontrib) => {
         EditorVariables.resultPrecontrib = resultPrecontrib
         renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
