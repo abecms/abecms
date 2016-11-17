@@ -56,7 +56,7 @@ export default class Form {
       type: 'text',
       value: '',
       visible: true,
-      precontribTemplate: ""
+      precontribTemplate: ''
     }
 
     obj = extend(true, defaultValues, obj)

@@ -290,7 +290,7 @@ export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
 
 export function getAbePrecontribFromTemplates(templatesList) {
   var fields = []
-  var precontributionTemplate = ""
+  var precontributionTemplate = ''
   Array.prototype.forEach.call(templatesList, (file) => {
     var templateText = setAbePrecontribDefaultValueIfDoesntExist(file.template)
 

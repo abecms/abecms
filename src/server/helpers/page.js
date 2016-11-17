@@ -7,7 +7,7 @@ import {
   coreUtils
 } from '../../cli'
 
-var page = function (req, res, next) {
+var page = function (req, res) {
   var html = (req.query.html) ? true : false
   var json = null
   var editor = false

@@ -1,12 +1,11 @@
-/*global document */
 
 export default class FolderSelect {
-  constructor() {
-    
+  constructor(form) {
+    this._form = form
     // constante variable
-    this._selectTemplate = document.querySelector('#selectTemplate')
-    this._selectsWebsite = document.querySelector('#level-1')
-    this._selectsCreate = [].slice.call(document.querySelectorAll('select[id*="level-"]'))
+    this._selectTemplate = this._form.querySelector('#selectTemplate')
+    this._selectsWebsite = this._form.querySelector('#level-1')
+    this._selectsCreate = [].slice.call(this._form.querySelectorAll('select[id*="level-"]'))
 
     // constante methode
     this._handleChangeSelectsCreate = this._changeSelectsCreate.bind(this)
@@ -41,7 +40,7 @@ export default class FolderSelect {
   }
 
   _hideSubLevels(i) {
-    var levels = [].slice.call(document.querySelectorAll('.level-' + i))
+    var levels = [].slice.call(this._form.querySelectorAll('.level-' + i))
     while(levels.length > 0){
       levels.forEach((level) => {
         var options = [].slice.call(level.querySelectorAll('option'))
@@ -51,18 +50,16 @@ export default class FolderSelect {
         })
         level.classList.add('hidden')
       })
-      levels = [].slice.call(document.querySelectorAll('.level-' + i++))
+      levels = [].slice.call(this._form.querySelectorAll('.level-' + i++))
     }
   }
 
   _showSubLevels(i, dataShow) {
-    var levels = [].slice.call(document.querySelectorAll('.level-' + i))
-    var level1selected = document.querySelector('.level-1 select').value
+    var levels = [].slice.call(this._form.querySelectorAll('.level-' + i))
     levels.forEach((level) => {
       level.classList.add('hidden')
       
-      // console.log([].slice.call(document.querySelectorAll(`[data-shown=${dataShow}][data-parent=${level1selected}]`)))
-      var childs = [].slice.call(document.querySelectorAll(`[data-shown=${dataShow}]`))
+      var childs = [].slice.call(this._form.querySelectorAll(`[data-shown=${dataShow}]`))
       if(childs) {
         childs.forEach(function (child) {
           var options = [].slice.call(child.querySelectorAll('option'))

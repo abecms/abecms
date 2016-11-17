@@ -1,4 +1,4 @@
-/*global document, top, $, location, confirm, window */
+/*global document, top, $, location, confirm, window, alert */
 
 import Nanoajax from 'nanoajax'
 import qs from 'qs'

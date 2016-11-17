@@ -1,4 +1,4 @@
-/*global document */
+/*global document, json */
 
 import EditorUtils from '../modules/EditorUtils'
 import Json from '../modules/EditorJson'
@@ -250,7 +250,7 @@ export default class EditorAutocomplete {
         var match
         while (match = /\{\{(.*?)\}\}/.exec(dataVal)) {
           var selector = target.form.querySelector('[data-id="' + match[1] + '"]')
-          if(selector != null) dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value);
+          if(selector != null) dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value)
         }
       }
 

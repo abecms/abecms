@@ -1,4 +1,4 @@
-/*global document, window, $ */
+/*global document, window, $, Event */
 
 import {Devtool} from './devtool/Devtool'
 

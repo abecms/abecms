@@ -3,7 +3,6 @@ import fse from 'fs-extra'
 
 import {
   coreUtils,
-  cmsData,
   config,
   abeExtend
 } from '../../cli'

@@ -97,7 +97,7 @@ export default function printInput () {
                         last-values='${lastValues}'>`
 
       if (!params.required) {
-        res += `<option value=''></option>`
+        res += '<option value=\'\'></option>'
       }
 
       if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {

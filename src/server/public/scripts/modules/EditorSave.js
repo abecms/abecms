@@ -1,4 +1,4 @@
-/*global document, CONFIG, window, json, alert, location */
+/*global document, window, json, alert */
 
 import {IframeNode} from '../utils/iframe'
 import EditorUtils from './EditorUtils'

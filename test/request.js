@@ -43,6 +43,15 @@ describe('Request', function() {
   });
 
   /**
+   * cmsData.sql.keepOnlyPublishedPost
+   * 
+   */
+  it('cmsData.sql.keepOnlyPublishedPost()', function() {
+    var res = cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList())
+    chai.expect(res).to.have.length(2);
+  });
+
+  /**
    * cmsData.sql.executeFromClause
    * 
    */

@@ -13,7 +13,7 @@ export default function printBlock (ctx, obj) {
               <label class="title">${ctx[0].block}</label>
               <div class='single-block well well-sm'>`
     Array.prototype.forEach.call(ctx, (item) => {
-      if (precontrib) item.value = ""
+      if (precontrib) item.value = ''
       res += printInput(item)
     })
     res += '</div></div>'
@@ -55,7 +55,7 @@ export default function printBlock (ctx, obj) {
                 <div id="${key}${i}" class="collapse" >
                 `
       Array.prototype.forEach.call(arrItem[i], (item) => {
-        if (precontrib) item.value = ""
+        if (precontrib) item.value = ''
         res += printInput(item)
       })
       res += '</div></div>'
@@ -65,7 +65,7 @@ export default function printBlock (ctx, obj) {
           </div>
         </div>`
   }else {
-    if (precontrib) ctx[0].value = ""
+    if (precontrib) ctx[0].value = ''
     res += printInput(ctx[0])
   }
   return res

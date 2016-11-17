@@ -4,7 +4,6 @@ import path from 'path'
 import {
   cmsData,
   cmsEditor,
-  coreUtils,
   abeEngine,
   cmsTemplates,
   abeExtend

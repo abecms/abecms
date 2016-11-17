@@ -1,10 +1,9 @@
-/*global document, window, alert */
+/*global document, window, alert, slugs, CONFIG */
 
 import limax from 'limax'
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import FolderSelect from './FolderSelect'
-import TemplateSelect from './TemplateSelect'
 
 export default class FormCreate {
   constructor(parentForm) {
@@ -34,7 +33,7 @@ export default class FormCreate {
       this._handleBlurEvent = this._blurEvent.bind(this)
 
       // // init modules
-      new FolderSelect()
+      new FolderSelect(this._form)
 
       this._bindEvents()
 
@@ -64,7 +63,7 @@ export default class FormCreate {
     }.bind(this))
   }
 
-  _blurEvent(e) {
+  _blurEvent() {
     this._setSlug(false)
   }
 
@@ -93,10 +92,9 @@ export default class FormCreate {
 
   _setSlug(showErrors) {
     var values = {}
-    var postName = ""
-    var postPath = ""
+    var postPath = ''
     var isValid = true
-    if (this._selectedTemplate != null && this._selectedTemplate != "") {
+    if (this._selectedTemplate != null && this._selectedTemplate != '') {
 
       Array.prototype.forEach.call(this._formInputs, function(input) {
         var parentNode = input.parentNode
@@ -108,16 +106,15 @@ export default class FormCreate {
         input.parentNode.classList.remove('error')
         if (linkedTpl == null || linkedTpl == this._selectedTemplate) {
           var id = input.getAttribute('data-id')
-          var autocomplete = input.getAttribute('data-autocomplete') == "true" ? true : false
-          var required = input.getAttribute('data-required') == "true" ? true : false
+          var autocomplete = input.getAttribute('data-autocomplete') == 'true' ? true : false
+          var required = input.getAttribute('data-required') == 'true' ? true : false
           var value = input.value
 
           if (autocomplete) {
             var results = input.parentNode.querySelectorAll('.autocomplete-result')
-            var autocompleteValue = ""
             values[id] = []
             Array.prototype.forEach.call(results, function(result) {
-              var resultValue = result.getAttribute("value")
+              var resultValue = result.getAttribute('value')
               if (resultValue.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(resultValue)
@@ -146,7 +143,7 @@ export default class FormCreate {
               }
             }else {
               values[id] = value
-              if (required && values[id] == "") {
+              if (required && values[id] == '') {
                 isValid = false
                 if(showErrors) parentNode.classList.add('has-error')
               }
@@ -154,7 +151,6 @@ export default class FormCreate {
           }
         }
       }.bind(this))
-      var filePath = postPath + postName
 
       var slug = slugs[this._selectedTemplate]
       var slugMatches = slug.match(/{{.*?}}/g)
@@ -171,10 +167,9 @@ export default class FormCreate {
         }
       }.bind(this))
 
-      var postPath = ""
       var slugPaths = document.querySelectorAll('[data-slug-type=path]')
       Array.prototype.forEach.call(slugPaths, function(slugPath) {
-        if (slugPath.value != null && slugPath.value != "") {
+        if (slugPath.value != null && slugPath.value != '') {
           postPath += slugPath.value + '/'
         }
       })
@@ -183,22 +178,22 @@ export default class FormCreate {
       isValid = false
     }
 
-    var breadcrumbs = postPath.split('/');
-    var breadcrumbsHtml = "";
+    var breadcrumbs = postPath.split('/')
+    var breadcrumbsHtml = ''
     Array.prototype.forEach.call(breadcrumbs, function(breadcrumb) {
       var breadcrumbNames = breadcrumb.split('-')
-      breadcrumbsHtml += '<li>';
+      breadcrumbsHtml += '<li>'
       Array.prototype.forEach.call(breadcrumbNames, function(breadcrumbName) {
-        if (breadcrumbName == "" && showErrors) {
-          breadcrumbsHtml += '<a href="#" class="btn-danger">...</a>-';
+        if (breadcrumbName == '' && showErrors) {
+          breadcrumbsHtml += '<a href="#" class="btn-danger">...</a>-'
         }else {
-          breadcrumbsHtml += '<a href="#">' + breadcrumbName + '</a>-';
+          breadcrumbsHtml += '<a href="#">' + breadcrumbName + '</a>-'
         }
       }.bind(this))
       breadcrumbsHtml = breadcrumbsHtml.replace(/-$/, '')
-      breadcrumbsHtml += '</li>';
+      breadcrumbsHtml += '</li>'
     })
-    breadcrumbsHtml += '<span>.' + CONFIG.EXTENSION + '</span>';
+    breadcrumbsHtml += '<span>.' + CONFIG.EXTENSION + '</span>'
     this._previewPostPath.innerHTML = breadcrumbsHtml
 
     return {
@@ -208,7 +203,7 @@ export default class FormCreate {
     }
   }
 
-  _submit(type, target) {
+  _submit(type) {
     var res = this._setSlug(true)
     var toSave = qs.stringify(res.values)
 
@@ -226,7 +221,6 @@ export default class FormCreate {
               window.location.href = window.location.origin + '/abe' + jsonRes.json.abe_meta.link
             }else {
               alert('error')
-              btn.classList.remove('disable')
             }
           })
     }
