@@ -93,7 +93,7 @@
   "abeEngine": "../views/template-engine",
   "defaultPartials": "../../../../server/views/partials",
   "pluginsPartials": "partials",
-  "partials": "templates/partials",
+  "partials": "partials",
   "custom": "custom",
   "siteUrl": false,
   "sitePort": false
