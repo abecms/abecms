@@ -260,7 +260,7 @@ export function getAbeRequestWhereKeysFromTemplates(templatesList) {
 }
 
 export function setAbeSlugDefaultValueIfDoesntExist(templateText) {
-  var matches = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
+  var matches = cmsData.regex.getTagAbeWithType(templateText, 'slug')
   if(matches == null || matches[0] == null) {
     templateText = `{{abe type="slug" source="{{name}}"}}\n${templateText}`
   }
@@ -292,7 +292,11 @@ export function getAbePrecontribFromTemplates(templatesList) {
   var fields = []
   var precontributionTemplate = ''
   Array.prototype.forEach.call(templatesList, (file) => {
-    var templateText = setAbePrecontribDefaultValueIfDoesntExist(file.template)
+    var slugMatch = cmsData.regex.getTagAbeWithType(file.template, 'slug')
+    var templateText = file.template
+    if(slugMatch == null || slugMatch[0] == null) {
+      templateText = setAbePrecontribDefaultValueIfDoesntExist(file.template)
+    }
 
     var matchesTabSlug = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
     Array.prototype.forEach.call(matchesTabSlug, (match) => {

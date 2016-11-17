@@ -154,18 +154,20 @@ export default class FormCreate {
 
       var slug = slugs[this._selectedTemplate]
       var slugMatches = slug.match(/{{.*?}}/g)
-      Array.prototype.forEach.call(slugMatches, function(slugMatch) {
-        var cleanSlugMath = slugMatch.replace('{{', '').replace('}}', '')
-        try {
-          var valueSlug = eval('values.' + cleanSlugMath)
-          valueSlug = limax(valueSlug, {separateNumbers: false})
-          slug = slug.replace(slugMatch, valueSlug)
-        }catch(e) {
-          slug = slug.replace(slugMatch, '')
-          isValid = false
-          console.error('error on create', e)
-        }
-      }.bind(this))
+      if (slugMatches !== null) {
+        Array.prototype.forEach.call(slugMatches, function(slugMatch) {
+          var cleanSlugMath = slugMatch.replace('{{', '').replace('}}', '')
+          try {
+            var valueSlug = eval('values.' + cleanSlugMath)
+            valueSlug = limax(valueSlug, {separateNumbers: false})
+            slug = slug.replace(slugMatch, valueSlug)
+          }catch(e) {
+            slug = slug.replace(slugMatch, '')
+            isValid = false
+            console.error('error on create', e)
+          }
+        }.bind(this))
+      }
 
       var slugPaths = document.querySelectorAll('[data-slug-type=path]')
       Array.prototype.forEach.call(slugPaths, function(slugPath) {
