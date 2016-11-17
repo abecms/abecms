@@ -1,14 +1,19 @@
 import printInput from './printInput'
 import abeEngine from './abeEngine'
 
-export default function printBlock (ctx) {
+export default function printBlock (ctx, obj) {
   var res = ''
+  var precontrib = false
+  if (obj.data.root.precontrib != null && obj.data.root.precontrib === 'true') {
+    precontrib = true
+  }
 
   if(ctx[0].block != null && ctx[0].block !== '') {
     res += `<div class="form-group">
               <label class="title">${ctx[0].block}</label>
               <div class='single-block well well-sm'>`
     Array.prototype.forEach.call(ctx, (item) => {
+      if (precontrib) item.value = ""
       res += printInput(item)
     })
     res += '</div></div>'
@@ -50,6 +55,7 @@ export default function printBlock (ctx) {
                 <div id="${key}${i}" class="collapse" >
                 `
       Array.prototype.forEach.call(arrItem[i], (item) => {
+        if (precontrib) item.value = ""
         res += printInput(item)
       })
       res += '</div></div>'
@@ -59,6 +65,7 @@ export default function printBlock (ctx) {
           </div>
         </div>`
   }else {
+    if (precontrib) ctx[0].value = ""
     res += printInput(ctx[0])
   }
   return res
