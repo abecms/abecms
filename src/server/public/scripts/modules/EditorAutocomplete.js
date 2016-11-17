@@ -133,14 +133,14 @@ export default class EditorAutocomplete {
   }
 
   _add(display, value, json, autocompleteResultWrapper) {
-    var deepval = this._deep_value_array(json, display)
+    // var deepval = this._deep_value_array(json, display)
 
-    if(typeof deepval !== 'undefined' && deepval !== null && deepval !== '') {
+    // if(typeof deepval !== 'undefined' && deepval !== null && deepval !== '') {
       var div = document.createElement('div')
       div.classList.add('autocomplete-result')
       div.setAttribute('data-parent-id', this._currentInput.getAttribute('data-id'))
       div.setAttribute('value', value.replace(/&quote;/g, '\''))
-      div.innerHTML = `${this._deep_value_array(json, display)}`
+      div.innerHTML = display
 
       var remove = document.createElement('span')
       remove.classList.add('glyphicon', 'glyphicon-remove')
@@ -149,7 +149,7 @@ export default class EditorAutocomplete {
       div.appendChild(remove)
 
       autocompleteResultWrapper.appendChild(div)
-    }
+    // }
   }
 
   _select(target) {
@@ -163,8 +163,12 @@ export default class EditorAutocomplete {
       }
     }
 
-    this._add(target.getAttribute('data-display'), target.getAttribute('data-value'), json,
-    this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper'))
+    this._add(
+      target.getAttribute('data-display'),
+      target.getAttribute('data-value'),
+      json,
+      this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper')
+    )
     this._saveData()
 
   }
@@ -175,44 +179,78 @@ export default class EditorAutocomplete {
 
   _showAutocomplete(sources, target, val) {
     var display = target.getAttribute('data-display')
-    var first = true
 
-    this._divWrapper.innerHTML = ''
-    if (display.indexOf('{{') > -1) {
-      var deepDisplay = display.replace('{{', '').replace('}}', '').split('.')
-      display = deepDisplay.pop()
-      deepDisplay = deepDisplay.join('.')
-      try {
-        sources = eval('sources.' + deepDisplay)
-      }catch(e) {
-
+    var variables = []
+    var displayValues = display
+    var match
+    while(match = /\{\{(.*?)\}\}/g.exec(displayValues)) {
+      if (match != null && match[1] != null) {
+        variables.push({
+          replace: match[0],
+          value: match[1]
+        })
+        displayValues = displayValues.replace('{{' + match[1] + '}}', "")
       }
     }
+
+    this._divWrapper.innerHTML = ""
+    var deepValues = []
+    var first = true
     if(typeof sources !== 'undefined' && sources !== null) {
-      if(typeof sources === 'object' && Object.prototype.toString.call(sources) === '[object Object]') {
-        sources = [sources]
-      }
-      Array.prototype.forEach.call(sources, (source) => {
-        var sourceVal = this._deep_value_array(source, display)
+      var i = 0
+      Array.prototype.forEach.call(variables, (variable) => {
+        var trueJson = sources
         
-        if(typeof sourceVal !== 'undefined' && sourceVal !== null) {
-          sourceVal = sourceVal.toLowerCase()
-          if(sourceVal.indexOf(val) > -1) {
-            var div = document.createElement('div')
-            div.addEventListener('mousedown', this._handleSelectValue)
-            div.setAttribute('data-value', JSON.stringify(source))
-            div.setAttribute('data-display', display)
-            if(first) {
-              div.classList.add('selected')
+        var splittedDiplay = variable.value.split('.')
+        while(Object.prototype.toString.call(trueJson) === '[object Object]') {
+          Array.prototype.forEach.call(Object.keys(trueJson), (key) => {
+            if (key === splittedDiplay[0]) {
+              trueJson = trueJson[key]
+              splittedDiplay.shift()
+
+              variables[i].value = splittedDiplay.join('.')
             }
-            first = false
-            div.innerHTML = sourceVal.replace(val, `<span class="select">${val}</span>`)
-            this._divWrapper.appendChild(div)
-          }
-          
+          })
         }
+
+        if (Object.prototype.toString.call(trueJson) === '[object Array]') {
+          var j = 0
+          Array.prototype.forEach.call(trueJson, (item) => {
+            if (deepValues[j] == null) {
+              deepValues[j] = {replace: []}
+            }
+            try {
+              var val = eval('item.' + variables[i].value)
+              deepValues[j].replace.push({key: variables[i].replace, value: val})
+              deepValues[j].value = item
+            }catch(e) {
+              console.log(e)
+            }
+            j++
+          })
+        }
+
+        i++
+      })
+
+      Array.prototype.forEach.call(deepValues, (item) => {
+        var displayName = display
+        Array.prototype.forEach.call(item.replace, (replace) => {
+          displayName = displayName.replace(new RegExp(replace.key, 'g'), replace.value)
+        })
+        var div = document.createElement('div')
+        div.addEventListener('mousedown', this._handleSelectValue)
+        div.setAttribute('data-value', JSON.stringify(item.value))
+        div.setAttribute('data-display', displayName)
+        if(first) {
+          div.classList.add('selected')
+        }
+        first = false
+        div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), `<span class="select">$1</span>`)
+        this._divWrapper.appendChild(div)
       })
     }
+    
     this._show(target)
   }
 

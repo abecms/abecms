@@ -165,13 +165,13 @@ export default class FormCreate {
         Array.prototype.forEach.call(slugMatches, function(slugMatch) {
           var cleanSlugMath = slugMatch.replace('{{', '').replace('}}', '')
           try {
-            var valueSlug = eval('values.' + cleanSlugMath)
+            var valueSlug = eval('values.' + cleanSlugMath) + ""
             valueSlug = limax(valueSlug, {separateNumbers: false})
             slug = slug.replace(slugMatch, valueSlug)
           }catch(e) {
             slug = slug.replace(slugMatch, '')
             isValid = false
-            console.error('error on create', e)
+            // console.error('error on create', e.stack)
           }
         }.bind(this))
       }

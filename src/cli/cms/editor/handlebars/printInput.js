@@ -29,7 +29,7 @@ export default function printInput () {
   if(params.value == null) {
     params.value = ''
   }
-
+  
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
   var inputClass = 'form-control form-abe'
