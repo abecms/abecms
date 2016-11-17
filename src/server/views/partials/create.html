@@ -3,35 +3,24 @@
       <div class="panel-heading">
         <h1>
           <small class="accor-manager-header-title">Abe</small>
-          {{#unless isHome}}
-            <a class="btn btn-primary pull-right btn-new" href="/abe/">New</a>
-          {{/unless}}
         </h1>
       </div>
       <div class="panel-body">
-        <form class="form-horizontal form-create" method="get" action="" data-form-abe-create="true">
+
+        <form class="form-create" data-form-abe-create="true">
+          <div data-post-path-preview="true" class="breadcrumb"></div>
           
-          {{abeImport 'create-form-folder' manager.config this}}
-          {{abeImport 'create-form-template' manager.config this}}
-          {{abeImport 'create-form-tplname' manager.config this}}
-          {{abeImport 'create-form-addons' manager.config this}}
+          {{abeImport 'create-form-folder' @root.manager.config @root}}
+          {{abeImport 'create-form-template' @root.manager.config @root}}
+          {{abeImport 'create-form-tplname' @root.manager.config @root}}
+          {{abeImport 'create-form-addons' @root.manager.config @root}}
 
           <div class="">
             <div class="">
-              {{#if isHome}}
               <button type="submit" class="btn btn-primary" date-abe-create="true">{{@root.text.create}}</button>
-              {{else}}
-              <br /><br />
-              <button type="submit" class="btn btn-primary" date-abe-update="true">update</button>
-              <br /><br />
-              <button type="submit" class="btn btn-primary" date-abe-duplicate="true">duplicate</button>
-              {{/if}}
             </div>
           </div>
 
-          <input class="form-control" type="hidden" name="filePath" data-id="filePath" id="filePath" value="{{@root.folderPath}}" />
-          <input class="form-control" type="hidden" name="oldFilePath" data-id="oldFilePath" id="oldFilePath" value="{{json.abe_meta.link}}" />
-          
         </form>
       </div>
     </div>

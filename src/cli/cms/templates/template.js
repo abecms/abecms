@@ -259,33 +259,51 @@ export function getAbeRequestWhereKeysFromTemplates(templatesList) {
   return p
 }
 
-export function getAbePrecontributionAttributesFromTemplates(templatesList) {
-  var ar = {}
+export function setAbeSlugDefaultValueIfDoesntExist(templateText) {
+  var matches = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
+  if(matches == null || matches[0] == null) {
+    templateText = `{{abe type="slug" source="{{name}}"}}\n${templateText}`
+  }
+
+  return templateText
+}
+
+export function getAbeSlugFromTemplates(templatesList) {
+  var slugs = {}
+  Array.prototype.forEach.call(templatesList, (file) => {
+    var templateText = setAbeSlugDefaultValueIfDoesntExist(file.template)
+    var matchesSlug = cmsData.regex.getTagAbeWithType(templateText, 'slug')
+    var obj = cmsData.attributes.getAll(matchesSlug[0], {})
+    slugs[file.name] = obj.sourceString
+  })
+  return slugs
+}
+
+export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
+  var matches = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
+  if(matches == null || matches[0] == null) {
+    templateText = `{{abe type='text' key='name' desc='Name' required="true" tab="slug" visible="false"}}\n${templateText}`
+  }
+
+  return templateText
+}
+
+export function getAbePrecontribFromTemplates(templatesList) {
   var fields = []
   var precontributionTemplate = ""
   Array.prototype.forEach.call(templatesList, (file) => {
-    var matches = cmsData.regex.getTagAbePrecontribution(file.template)
-    Array.prototype.forEach.call(matches, (match) => {
-      var obj = cmsData.attributes.getAll(match[0], {})
-      if (ar[obj.key] == null) {
-        ar[obj.key] = obj
-        ar[obj.key].precontribTemplates = []
-      }
-      ar[obj.key].precontribTemplates.push(file.name)
-      ar[obj.key].match = match[0]
+    var templateText = setAbePrecontribDefaultValueIfDoesntExist(file.template)
+
+    var matchesTabSlug = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
+    Array.prototype.forEach.call(matchesTabSlug, (match) => {
+      fields.push(cmsData.attributes.getAll(match, {}))
+      var tag = match.replace(/\}\}$/, ' precontribTemplate="' + file.name + '"}}')
+      tag = tag.replace(/(key=[\'|\"])(.*?)([\'|\"])/, '$1/' + file.name + '/$2$3')
+      precontributionTemplate += `${tag}\n`
     })
   })
 
-  Array.prototype.forEach.call(Object.keys(ar), (key) => {
-    fields.push(ar[key])
-    precontributionTemplate += ar[key].match.replace(/\}\}$/, ' precontribTemplates="' + ar[key].precontribTemplates.join(',') + '"}}') + "\n"
-  })
-
-  if (precontributionTemplate === "") { // should always have a filename at least
-    precontributionTemplate = `{{abe type='text' key='abe_filename' desc='Name' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}`
-    var obj = cmsData.attributes.getAll(precontributionTemplate, {})
-    fields.push(obj)
-  }
+  precontributionTemplate = addOrder(precontributionTemplate)
 
   return {
     fields: fields,

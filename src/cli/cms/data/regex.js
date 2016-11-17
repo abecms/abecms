@@ -70,16 +70,25 @@ export function getTagAbeTypeRequest(text) {
 }
 
 /**
- * Test if a string contains string key from {{#each}} block statement
- * @param  {String}  str string to test
- * @return {Boolean} true = this is a block content
  */
-export function getTagAbePrecontribution(text) {
-  let listReg = /({{abe.*precontrib=[\'|\"].*}})/g
+export function getTagAbeWithType(text, type) {
+  var listReg = new RegExp(`({{abe.*type=[\\'|\\"]${type}.*}})`, 'g')
   var matches = []
   var match
   while (match = listReg.exec(text)) {
-    matches.push(match)
+    matches.push(match[0])
+  }
+  return matches
+}
+
+/**
+ */
+export function getTagAbeWithTab(text, tab) {
+  var listReg = new RegExp(`({{abe.*tab=[\\'|\\"]${tab}.*}})`, 'g')
+  var matches = []
+  var match
+  while (match = listReg.exec(text)) {
+    matches.push(match[0])
   }
   return matches
 }

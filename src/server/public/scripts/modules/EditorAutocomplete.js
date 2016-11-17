@@ -249,7 +249,7 @@ export default class EditorAutocomplete {
       if(dataVal.indexOf('{{') > -1){
         var match
         while (match = /\{\{(.*?)\}\}/.exec(dataVal)) {
-          var selector = document.querySelector('[data-id="' + match[1] + '"]')
+          var selector = target.form.querySelector('[data-id="' + match[1] + '"]')
           if(selector != null) dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value);
         }
       }

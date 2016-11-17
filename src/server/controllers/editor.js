@@ -21,7 +21,7 @@ function add(obj, json, text, util) {
     if(typeof json[key] !== 'undefined' && json[key] !== null &&
        typeof json[key][index] !== 'undefined' && json[key][index] !== null &&
        typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
-      obj.value = json[key][index][prop]
+      obj.value = json[getKey(key)][index][prop]
     }else if(typeof value !== 'undefined' && value !== null && value !== '') {
       if(typeof json[key] === 'undefined' || json[key] === null){
         json[key] = []
@@ -36,6 +36,15 @@ function add(obj, json, text, util) {
   util.add(obj)
 
   return value
+}
+
+function getKey(key) {
+  var trueKey = key
+  if (trueKey.indexOf('/') > -1) {
+    trueKey = trueKey.split('/')
+    trueKey = trueKey[trueKey.length - 1]
+  }
+  return trueKey
 }
 
 function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) {
@@ -54,15 +63,17 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
       insertAbeEach(obj, text, json, util, arrayBlock)
 
     }else if(util.dontHaveKey(obj.key)) {
-      obj.value = json[obj.key]
-      json[obj.key] = add(obj, json, text, util)
+      obj.value = json[getKey(obj.key)]
+      json[getKey(obj.key)] = add(obj, json, text, util)
     }
 
   }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
     realKey = obj.key.replace(/\./g, '-')
-    obj.value = json[realKey]
-    json[obj.key] = add(obj, json, text, util)
+    obj.value = json[getKey(realKey)]
+    json[getKey(obj.key)] = add(obj, json, text, util)
   }
+  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+  console.log(getKey(obj.key), json[getKey(obj.key)])
 }
 
 function matchAttrAbe(text, json, util, arrayBlock) {
@@ -142,10 +153,10 @@ function addSource(text, json, util) {
     var obj = cmsData.attributes.getAll(match[0], json)
 
     if(obj.editable) {
-      obj.value = json[obj.key]
+      obj.value = json[getKey(obj.key)]
       add(obj, json, text, util)
     }else {
-      json[obj.key] = obj.source
+      json[getKey(obj.key)] = obj.source
     }
   }
 }
@@ -211,17 +222,13 @@ function orderBlock(util) {
   })
 
   Array.prototype.forEach.call(arKeysTabs, (arKeysTab) => {
-    if (arKeysTab !== 'Precontribution') {
-      formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
-    }
+    formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
   })
-
-  formTabsOrdered['Precontribution'] = formBlock['Precontribution']
 
   return formTabsOrdered
 }
 
-export function editor(text, json, documentLink) {
+export function editor(text, json, documentLink, precontrib = false) {
   let p = new Promise((resolve) => {
     var util = new cmsEditor.form()
     var arrayBlock = []
@@ -232,9 +239,9 @@ export function editor(text, json, documentLink) {
 
         text = cmsData.source.removeDataList(text)
 
-        var matches = cmsData.regex.getTagAbePrecontribution(text)
-        if (matches.length === 0) {
-          text = `${text}\n{{abe type='text' key='abe_filename' desc='Name' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}`
+        if (!precontrib) {
+          text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(text)
+          text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(text)
         }
 
         matchAttrAbe(text, json, util, arrayBlock)

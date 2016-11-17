@@ -102,6 +102,7 @@ var route = function(req, res, next) {
   var folderPath = null
 
   var EditorVariables = {
+      slugs: Manager.instance.getSlugs(),
       express: {
         res: res,
         req: req
@@ -158,8 +159,7 @@ var route = function(req, res, next) {
 
   p.then((obj) => {
     var precontrib = Manager.instance.getPrecontribution()
-
-    editor(precontrib.template, obj.json, "")
+    editor(precontrib.template, {}, "", true)
       .then((resultPrecontrib) => {
         EditorVariables.resultPrecontrib = resultPrecontrib
         renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)

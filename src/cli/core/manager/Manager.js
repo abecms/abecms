@@ -143,7 +143,8 @@ class Manager {
           return cmsTemplates.template.getAbeRequestWhereKeysFromTemplates(templatesText)
           .then((whereKeys) => {
             this._whereKeys = whereKeys
-            this._precontribution = cmsTemplates.template.getAbePrecontributionAttributesFromTemplates(templatesText)
+            this._slugs = cmsTemplates.template.getAbeSlugFromTemplates(templatesText)
+            this._precontribution = cmsTemplates.template.getAbePrecontribFromTemplates(templatesText)
             this.updateList()
             resolve()
           },
@@ -176,6 +177,10 @@ class Manager {
 
   getPrecontribution() {
     return this._precontribution
+  }
+
+  getSlugs() {
+    return this._slugs
   }
 
   updateReferences(referenceName) {

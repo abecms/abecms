@@ -43,12 +43,33 @@
         <div class="tab-content">
         {{#each form}}
           <div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="{{cleanTab @key}}">
-            {{#each this}}
-              <div class="{{cleanTab @key}}">
-              {{{printBlock this}}}
+            {{#ifCond @key 'slug'}}
+              <div class="form-create" data-form-abe-create="true">
+                <div data-post-path-preview="true" class="breadcrumb"></div>
+                
+                {{abeImport 'create-form-folder' @root.manager.config @root}}
+                {{abeImport 'create-form-template' @root.manager.config @root}}
+                {{abeImport 'create-form-tplname' @root.manager.config @root}}
+                {{abeImport 'create-form-addons' @root.manager.config @root}}
+
+                <input class="form-control" type="hidden" name="oldFilePath" data-id="oldFilePath" id="oldFilePath" value="{{@root.json.abe_meta.link}}" />  
+                <div class="">
+                  <div class="">
+                  <button type="submit" class="btn btn-primary" date-abe-update="true">update</button>
+                  <button type="submit" class="btn btn-primary" date-abe-duplicate="true">duplicate</button>
+                  </div>
+                </div>
+
               </div>
-            {{/each}}
-            <small class="text-muted">* Required</small>
+            {{else}}
+              {{#each this}}
+                <div class="{{cleanTab @key}}">
+                {{{printBlock this}}}
+                </div>
+              {{/each}}
+            {{/ifCond}}
+
+              <small class="text-muted">* Required</small>       
           </div>
         {{/each}}
         </div>

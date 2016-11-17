@@ -21,6 +21,7 @@ j = unescape(j)
 j = j.replace(/\%27/g, '\'')
 window.json = JSON.parse(j)
 window.Locales = JSON.parse(htmlTag.getAttribute('data-locales'))
+window.slugs = JSON.parse(htmlTag.getAttribute('data-slugs'))
 
 class Engine {
 

@@ -10,9 +10,17 @@
   cursor: pointer;
 }
 
+.breadcrumb>li {
+  word-break: break-all;
+}
+
 .manager-wrapper {
   .form-create {
     padding: 0px 20px;
+
+    .autocomplete-result .glyphicon.glyphicon-remove {
+      display: inline-block;
+    }
 
     [data-precontrib-templates] {
       display: none;
