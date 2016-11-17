@@ -178,7 +178,8 @@ export default class FormCreate {
 
       var slugPaths = document.querySelectorAll('[data-slug-type=path]')
       Array.prototype.forEach.call(slugPaths, function(slugPath) {
-        if (slugPath.value != null && slugPath.value != '') {
+        var isStructureFolder = (slugPath.parentNode.getAttribute('data-shown') != null);
+        if (slugPath.value != null && slugPath.value != '' && (isStructureFolder && !slugPath.parentNode.classList.contains('hidden'))) {
           postPath += slugPath.value + '/'
         }
       })
@@ -194,9 +195,9 @@ export default class FormCreate {
       breadcrumbsHtml += '<li>'
       Array.prototype.forEach.call(breadcrumbNames, function(breadcrumbName) {
         if (breadcrumbName == '' && showErrors) {
-          breadcrumbsHtml += '<a href="#" class="btn-danger">...</a>-'
+          breadcrumbsHtml += '<span class="btn-danger">...</span>-'
         }else {
-          breadcrumbsHtml += '<a href="#">' + breadcrumbName + '</a>-'
+          breadcrumbsHtml += '<span>' + breadcrumbName + '</span>-'
         }
       }.bind(this))
       breadcrumbsHtml = breadcrumbsHtml.replace(/-$/, '')

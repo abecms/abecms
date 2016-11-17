@@ -47,7 +47,7 @@
               <div class="form-create" data-form-abe-create="true">
                 <div data-post-path-preview="true" class="breadcrumb"></div>
                 
-                {{&folders @root.manager.list.structure 1 @root.json.abe_meta.link}}
+                {{&folders @root.manager.list.structure 1 @root.json.abe_meta.link @root.text}}
                 {{abeImport 'create-form-template' @root.manager.config @root}}
                 {{abeImport 'create-form-tplname' @root.manager.config @root}}
 

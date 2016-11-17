@@ -34,6 +34,23 @@
     input {
       height: 30px;
     }
+    .breadcrumb{
+      font-size: 12px;
+      >li{
+        &+li{
+          &:before{
+            display: inline-block;
+            padding: 0 1px;
+            width: 6px;
+          }
+          span{
+          }
+        }
+      }
+    }
+    [date-abe-create="true"]{
+      margin-top: 20px;
+    }
   }
 }
 
