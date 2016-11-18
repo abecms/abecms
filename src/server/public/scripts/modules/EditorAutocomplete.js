@@ -220,6 +220,8 @@ export default class EditorAutocomplete {
               splittedDiplay.shift()
 
               variables[i].value = splittedDiplay.join('.')
+            }else {
+              trueJson = []
             }
           })
         }
@@ -228,31 +230,29 @@ export default class EditorAutocomplete {
           var j = 0
           Array.prototype.forEach.call(trueJson, (item) => {
             var sourceVal = ""
-            var replace = []
+            var replace = ""
             var sourceDisplay = display
             if (Object.prototype.toString.call(item) === '[object Object]') {
               try {
                 var sourceValCheck = eval('item.' + variables[i].value)
-                if (sourceValCheck.indexOf(val) > -1) {
-                  replace.push({key: variables[i].replace, value: sourceValCheck})
-                  sourceVal = item
-                  sourceDisplay = sourceValCheck
-                }
+                replace = {key: variables[i].replace, value: sourceValCheck}
+                sourceVal = item
+                sourceDisplay = sourceValCheck
               }catch(e) {
                 console.log(e)
               }
             }else {
-              if (item.indexOf(val) > -1) {
-                sourceVal = item
-              }
+              sourceVal = item
             }
             if (sourceVal != "") {
               if (deepValues[j] == null) {
                 deepValues[j] = {
-                  replace: replace,
+                  replace: [replace],
                   value: typeof sourceVal == 'string' ? [sourceVal] : sourceVal,
                   display: (display == null || display == "null") ? sourceVal : display
                 }
+              }else {
+                deepValues[j].replace.push(replace)
               }
               j++
             }
@@ -267,16 +267,18 @@ export default class EditorAutocomplete {
         Array.prototype.forEach.call(item.replace, (replace) => {
           displayName = displayName.replace(new RegExp(replace.key, 'g'), replace.value)
         })
-        var div = document.createElement('div')
-        div.addEventListener('mousedown', this._handleSelectValue)
-        div.setAttribute('data-value', JSON.stringify(item.value))
-        div.setAttribute('data-display', displayName)
-        if(first) {
-          div.classList.add('selected')
+        if (displayName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+          var div = document.createElement('div')
+          div.addEventListener('mousedown', this._handleSelectValue)
+          div.setAttribute('data-value', JSON.stringify(item.value))
+          div.setAttribute('data-display', displayName)
+          if(first) {
+            div.classList.add('selected')
+          }
+          first = false
+          div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), `<span class="select">$1</span>`)
+          this._divWrapper.appendChild(div)
         }
-        first = false
-        div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), `<span class="select">$1</span>`)
-        this._divWrapper.appendChild(div)
       })
     }
     
@@ -317,7 +319,9 @@ export default class EditorAutocomplete {
         var match
         while (match = /\{\{(.*?)\}\}/.exec(dataVal)) {
           var selector = target.form.querySelector('[data-id="' + match[1] + '"]')
-          if(selector != null) dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value)
+          if(selector != null) {
+            dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value)
+          }
         }
       }
 
