@@ -152,7 +152,8 @@ export default class EditorSave {
     if (this._saveType !== 'draft' && this._saveType !== 'reject') {
       this._abeFormRequired()
     }else {
-      this._abeFormSubmit.click()
+      this.savePage(this._saveType)
+      // this._abeFormSubmit.click()
     }
   }
 
@@ -164,6 +165,15 @@ export default class EditorSave {
       var input = formGroup.querySelector('[data-required=true]')
       if(typeof input !== 'undefined' && input !== null) {
         var required = input.getAttribute('data-required')
+
+        var precontrib = formGroup.getAttribute('data-precontrib-templates')
+
+        if (precontrib != null && precontrib != "") {
+          if (precontrib != "json.abe_meta.template") {
+            return
+          }
+        }
+
         var autocomplete = input.getAttribute('data-autocomplete')
         if(typeof autocomplete !== 'undefined' && autocomplete !== null && (autocomplete === 'true' || autocomplete === true)) {
           var countValue = input.parentNode.querySelectorAll('.autocomplete-result')
@@ -185,7 +195,8 @@ export default class EditorSave {
     })
 
     if (valid) {
-      this._abeFormSubmit.click()
+      this.savePage(this._saveType)
+      // this._abeFormSubmit.click()
     }else {
       alert('Required fields are missing')
     }

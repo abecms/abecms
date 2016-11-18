@@ -59,7 +59,7 @@ export default function printInput () {
 
     var multiple = ''
     disabled = ''
-    if(params['max-length'] || (params['max-length'] > 1 && params.source.length > 0)) {
+    if(params['max-length'] == null && params.source.length > 0 || (params['max-length'] > 1 && params.source.length > 0)) {
       multiple = 'multiple'
     }
     if(params.source.length <= 0) {

@@ -183,14 +183,23 @@ export default class EditorAutocomplete {
     var variables = []
     var displayValues = display
     var match
+    var isVariable = false
     while(match = /\{\{(.*?)\}\}/g.exec(displayValues)) {
       if (match != null && match[1] != null) {
+        isVariable = true
         variables.push({
           replace: match[0],
           value: match[1]
         })
         displayValues = displayValues.replace('{{' + match[1] + '}}', "")
       }
+    }
+
+    if (!isVariable) {
+      variables.push({
+        replace: displayValues,
+        value: displayValues
+      })
     }
 
     this._divWrapper.innerHTML = ""

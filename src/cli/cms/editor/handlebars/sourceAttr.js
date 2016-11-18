@@ -1,3 +1,66 @@
+function replaceSourceAttr(variables, currentValue, valueToReplace) {
+  Array.prototype.forEach.call(variables, (variable) => {
+    var variableToUse = variable.value
+    if (variableToUse.indexOf('.') > -1) {
+      var checkMatch = variableToUse.split('.')
+      var found = false
+      while(!found) {
+        try {
+          var isFound = eval('currentValue.' + checkMatch[0])
+          if (isFound != null) {
+            variableToUse = checkMatch.join('.')
+            found = true
+          }else {
+            checkMatch.shift()
+            if (checkMatch.length === 0) {
+              variableToUse = ""
+              found = true
+            }
+          }
+        }catch(e) {
+          checkMatch.shift()
+          if (checkMatch.length === 0) {
+            variableToUse = ""
+            found = true
+          }
+        }
+      }
+    }
+
+    if (variableToUse != null && variableToUse != "") {
+      try {
+        var replaceVal = eval('currentValue.' + variableToUse)
+        valueToReplace = valueToReplace.replace(new RegExp(variable.replace, 'g'), replaceVal)
+      }catch(e) {
+
+      }
+    }
+  })
+
+  return valueToReplace
+}
+
+function isSelected(currentValue, values) {
+  var isEqual = true
+  if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
+    Array.prototype.forEach.call(values, (value) => {
+      Array.prototype.forEach.call(Object.keys(value), (key) => {
+        if (currentValue[key] != null && currentValue[key] != value[key]) {
+          isEqual = false
+        }
+      })
+    })
+  }else {
+    isEqual = false
+    Array.prototype.forEach.call(values, (value) => {
+      if (currentValue == value) {
+        isEqual = true
+      }
+    })
+  }
+
+  return isEqual
+}
 
 export default function sourceAttr(val, params) {
   var hiddenVal = val
@@ -11,11 +74,6 @@ export default function sourceAttr(val, params) {
   while(match = /\{\{(.*?)\}\}/g.exec(displayValues)) {
     if (match != null && match[1] != null) {
       isVariable = true
-      // var lastMatch = match[1]
-      // if (lastMatch.indexOf('.') > -1) {
-      //   var lastMatch = lastMatch.split('.')
-      //   lastMatch = lastMatch[lastMatch.length - 1]
-      // }
       variables.push({
         replace: match[0],
         value: match[1]
@@ -31,47 +89,33 @@ export default function sourceAttr(val, params) {
     })
   }
 
-  var val = display
-  if(typeof params.value === 'object' && Object.prototype.toString.call(params.value) === '[object Array]') {
-    Array.prototype.forEach.call(params.value, (v) => {
-      Array.prototype.forEach.call(variables, (variable) => {
-        var variableToUse = variable.value
-        if (variableToUse.indexOf('.') > -1) {
-          var checkMatch = variableToUse.split('.')
-          var found = false
-          while(!found) {
-            try {
-              var isFound = eval('v.' + checkMatch[0])
-              if (isFound != null) {
-                variableToUse = checkMatch.join('.')
-                found = true
-              }else {
-                checkMatch.shift()
-                if (checkMatch.length === 0) {
-                  variableToUse = ""
-                  found = true
-                }
-              }
-            }catch(e) {
-              checkMatch.shift()
-              if (checkMatch.length === 0) {
-                variableToUse = ""
-                found = true
-              }
-            }
-          }
-        }
+  if (params.key === 'articles') {
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('params', params)
+    console.log('val', val)
+  }
 
-        if (variableToUse != null && variableToUse != "") {
-          try {
-            var replaceVal = eval('v.' + variableToUse)
-            val = val.replace(new RegExp(variable.replace, 'g'), replaceVal)
-          }catch(e) {
-
-          }
-        }
-      })
+  var obectToValue = display
+  // var replaceValue = params.value
+  var replaceValue = val
+  if(typeof replaceValue === 'object' && Object.prototype.toString.call(replaceValue) === '[object Object]') {
+    hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, '&apos;')
+    val = replaceSourceAttr(variables, replaceValue, obectToValue)
+    if (isSelected(replaceValue, params.value)) {
+      selected = 'selected="selected"'
+    }
+  }else if(typeof replaceValue === 'object' && Object.prototype.toString.call(replaceValue) === '[object Array]') {
+    Array.prototype.forEach.call(replaceValue, (currentValue) => {
+      obectToValue = replaceSourceAttr(variables, currentValue, obectToValue)
     })
+    if (isSelected(replaceValue, params.value)) {
+      selected = 'selected="selected"'
+    }
+    val = obectToValue
+  }else {
+    if (isSelected(replaceValue, params.value)) {
+      selected = 'selected="selected"'
+    }
   }
 
   // if (variables.length === 0) {
