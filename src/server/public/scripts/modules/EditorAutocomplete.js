@@ -265,7 +265,9 @@ export default class EditorAutocomplete {
       Array.prototype.forEach.call(deepValues, (item) => {
         var displayName = item.display
         Array.prototype.forEach.call(item.replace, (replace) => {
-          displayName = displayName.replace(new RegExp(replace.key, 'g'), replace.value)
+          if (replace != null && replace != "") {
+            displayName = displayName.replace(new RegExp(replace.key, 'g'), replace.value)
+          }
         })
         if (displayName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
           var div = document.createElement('div')
