@@ -221,8 +221,10 @@ function orderBlock(util) {
   })
 
   Array.prototype.forEach.call(arKeysTabs, (arKeysTab) => {
-    formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
+    if(arKeysTab !== 'slug') formTabsOrdered[arKeysTab] = formBlock[arKeysTab]
   })
+
+  formTabsOrdered['slug'] = formBlock['slug']
 
   return formTabsOrdered
 }
