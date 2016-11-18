@@ -92,6 +92,7 @@ export default function printInput () {
       res += '</div>'
       res += `<input value="" autocomplete="off" data-value='${lastValues}' type="text" ${disabled} ${commonParams} class="${inputClass}" />`
     }else {
+
       lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
       res += `<select ${multiple} ${disabled} ${commonParams} class="${inputClass}"
                         last-values='${lastValues}'>`
@@ -99,7 +100,7 @@ export default function printInput () {
       if (!params.required) {
         res += '<option value=\'\'></option>'
       }
-
+      
       if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
         Array.prototype.forEach.call(params.source, (val) => {
           res += sourceOption(val, params)

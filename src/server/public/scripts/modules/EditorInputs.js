@@ -148,7 +148,7 @@ export default class EditorInputs {
     var count = optionsChecked.length
     var attr = EditorUtils.getAttr(target)
 
-    if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
+    if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '' && !isNaN(maxLength)) {
       var lastValues
       if(count > maxLength) {
         lastValues = JSON.parse(target.getAttribute('last-values'))

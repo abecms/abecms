@@ -1,7 +1,7 @@
 function replaceSourceAttr(variables, currentValue, valueToReplace) {
   Array.prototype.forEach.call(variables, (variable) => {
     var variableToUse = variable.value
-    if (variableToUse.indexOf('.') > -1) {
+    if (variableToUse != null && variableToUse.indexOf('.') > -1) {
       var checkMatch = variableToUse.split('.')
       var found = false
       while(!found) {
@@ -34,6 +34,8 @@ function replaceSourceAttr(variables, currentValue, valueToReplace) {
       }catch(e) {
 
       }
+    }else {
+      valueToReplace = currentValue
     }
   })
 
@@ -41,17 +43,20 @@ function replaceSourceAttr(variables, currentValue, valueToReplace) {
 }
 
 function isSelected(currentValue, values) {
-  var isEqual = true
-  if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
+  var isEqual = false
+  if(typeof currentValue === 'object' && Object.prototype.toString.call(currentValue) === '[object Object]') {
     Array.prototype.forEach.call(values, (value) => {
+      var checkAllEqual = false
       Array.prototype.forEach.call(Object.keys(value), (key) => {
-        if (currentValue[key] != null && currentValue[key] != value[key]) {
-          isEqual = false
+        if (currentValue[key] != null && currentValue[key] == value[key] && checkAllEqual == false) {
+          checkAllEqual = true
         }
       })
+      if (checkAllEqual) {
+        isEqual = true
+      }
     })
   }else {
-    isEqual = false
     Array.prototype.forEach.call(values, (value) => {
       if (currentValue == value) {
         isEqual = true
@@ -89,22 +94,18 @@ export default function sourceAttr(val, params) {
     })
   }
 
-  if (params.key === 'articles') {
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('params', params)
-    console.log('val', val)
-  }
-
   var obectToValue = display
   // var replaceValue = params.value
   var replaceValue = val
   if(typeof replaceValue === 'object' && Object.prototype.toString.call(replaceValue) === '[object Object]') {
     hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, '&apos;')
     val = replaceSourceAttr(variables, replaceValue, obectToValue)
+
     if (isSelected(replaceValue, params.value)) {
       selected = 'selected="selected"'
     }
   }else if(typeof replaceValue === 'object' && Object.prototype.toString.call(replaceValue) === '[object Array]') {
+    hiddenVal = JSON.stringify(hiddenVal).replace(/'/g, '&apos;')
     Array.prototype.forEach.call(replaceValue, (currentValue) => {
       obectToValue = replaceSourceAttr(variables, currentValue, obectToValue)
     })

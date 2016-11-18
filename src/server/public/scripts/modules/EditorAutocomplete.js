@@ -196,10 +196,12 @@ export default class EditorAutocomplete {
     }
 
     if (!isVariable) {
-      variables.push({
-        replace: displayValues,
-        value: displayValues
-      })
+      if (display != null) {
+        variables.push({
+          replace: display,
+          value: display
+        })
+      }
     }
 
     this._divWrapper.innerHTML = ""
@@ -225,17 +227,35 @@ export default class EditorAutocomplete {
         if (Object.prototype.toString.call(trueJson) === '[object Array]') {
           var j = 0
           Array.prototype.forEach.call(trueJson, (item) => {
-            if (deepValues[j] == null) {
-              deepValues[j] = {replace: []}
+            var sourceVal = ""
+            var replace = []
+            var sourceDisplay = display
+            if (Object.prototype.toString.call(item) === '[object Object]') {
+              try {
+                var sourceValCheck = eval('item.' + variables[i].value)
+                if (sourceValCheck.indexOf(val) > -1) {
+                  replace.push({key: variables[i].replace, value: sourceValCheck})
+                  sourceVal = item
+                  sourceDisplay = sourceValCheck
+                }
+              }catch(e) {
+                console.log(e)
+              }
+            }else {
+              if (item.indexOf(val) > -1) {
+                sourceVal = item
+              }
             }
-            try {
-              var val = eval('item.' + variables[i].value)
-              deepValues[j].replace.push({key: variables[i].replace, value: val})
-              deepValues[j].value = item
-            }catch(e) {
-              console.log(e)
+            if (sourceVal != "") {
+              if (deepValues[j] == null) {
+                deepValues[j] = {
+                  replace: replace,
+                  value: typeof sourceVal == 'string' ? [sourceVal] : sourceVal,
+                  display: (display == null || display == "null") ? sourceVal : display
+                }
+              }
+              j++
             }
-            j++
           })
         }
 
@@ -243,7 +263,7 @@ export default class EditorAutocomplete {
       })
 
       Array.prototype.forEach.call(deepValues, (item) => {
-        var displayName = display
+        var displayName = item.display
         Array.prototype.forEach.call(item.replace, (replace) => {
           displayName = displayName.replace(new RegExp(replace.key, 'g'), replace.value)
         })
