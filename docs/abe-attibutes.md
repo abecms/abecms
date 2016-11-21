@@ -15,16 +15,16 @@ are always required for all content type
 
 ## <a name="abe-type"></a>Type of abe content
 
-- [text](abe-text.md)
-- [image](abe-image.md)
-- [textarea](abe-textarea.md)
-- [translate](abe-translate.md)
-- [import](abe-import.md)
-- [file](abe-file.md)
-- [rich](abe-rich.md)
-- [link](abe-link.md)
-- [data](abe-data.md)
-- [slug](abe-slug.md)
+- [text](types/abe-text.md)
+- [image](types/abe-image.md)
+- [textarea](types/abe-textarea.md)
+- [translate](types/abe-translate.md)
+- [import](types/abe-import.md)
+- [file](types/abe-file.md)
+- [rich](types/abe-rich.md)
+- [link](types/abe-link.md)
+- [data](types/abe-data.md)
+- [slug](types/abe-slug.md)
 
 ## Other attributes
 
