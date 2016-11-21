@@ -40,7 +40,6 @@ import {
 
 var abePort = null
 
-if(process.env.ROOT) config.set({root: process.env.ROOT.replace(/\/$/, '') + '/'})
 if(config.port) abePort = config.port
 if(process.env.PORT) abePort = process.env.PORT
 

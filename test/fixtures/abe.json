@@ -1,4 +1,8 @@
 {
+  "plugins": [
+    "test@1.0.0",
+    "testnew"
+  ],
   "upload": {
     "image": "unitimage"
   }

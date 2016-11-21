@@ -165,7 +165,7 @@ export default class FormCreate {
         Array.prototype.forEach.call(slugMatches, function(slugMatch) {
           var cleanSlugMath = slugMatch.replace('{{', '').replace('}}', '')
           try {
-            var valueSlug = eval('values.' + cleanSlugMath) + ""
+            var valueSlug = eval('values.' + cleanSlugMath) + ''
             valueSlug = limax(valueSlug, {separateNumbers: false})
             slug = slug.replace(slugMatch, valueSlug)
           }catch(e) {
@@ -178,7 +178,7 @@ export default class FormCreate {
 
       var slugPaths = document.querySelectorAll('[data-slug-type=path]')
       Array.prototype.forEach.call(slugPaths, function(slugPath) {
-        var isStructureFolder = (slugPath.parentNode.getAttribute('data-shown') != null);
+        var isStructureFolder = (slugPath.parentNode.getAttribute('data-shown') != null)
         if (slugPath.value != null && slugPath.value != '' && (isStructureFolder && !slugPath.parentNode.classList.contains('hidden'))) {
           postPath += slugPath.value + '/'
         }

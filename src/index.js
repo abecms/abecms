@@ -94,7 +94,7 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
       {
         env: environment
       },
-				function (err, out, code) {
+			function (err, out, code) {
   if (err instanceof Error) throw err
   process.stderr.write(err)
   process.stdout.write(out)
@@ -165,48 +165,21 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
       dir = process.env.ROOT.replace(/\/$/, '')
     }
 
-    var json = {}
-    var abeJson = dir + '/abe.json'
-
-    try {
-      var stat = fse.statSync(abeJson)
-      if (stat) {
-        json = fse.readJsonSync(abeJson)
-      }
-    }catch(e) {
-      console.log(clc.cyan('no config'), abeJson)
+    if(typeof plugin !== 'undefined' && plugin !== null) {
+      plugins.instance.install(dir, plugin)
+    } else {
+      plugins.instance.install(dir)
     }
-
-    var ps = []
-    if(typeof json.dependencies !== 'undefined' || json.dependencies !== null) {
-      Array.prototype.forEach.call(json.dependencies, (plugged) => {
-        ps.push(plugins.instance.add(dir, plugged))
-      })
-    }
-			
-    Promise.all(ps)
-				.then(function() {
-  process.exit(0) 
-})
     break
-  case 'add':
+  case 'uninstall':
     dir = process.cwd()
     plugin = userArgs[1]
     if(process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }
 
-    if(typeof dir !== 'undefined' && dir !== null) {
-      if(typeof plugin !== 'undefined' && plugin !== null) {
-        plugins.instance.add(dir, plugin)
-					.then(function() {
-  process.exit(0) 
-})
-      }else {
-        console.log(clc.red('Error: no project path specified'))
-      }
-    }else {
-      console.log(clc.red('Error: no project path specified'))
+    if(typeof plugin !== 'undefined' && plugin !== null) {
+      plugins.instance.uninstall(dir, plugin)
     }
     break
   default:

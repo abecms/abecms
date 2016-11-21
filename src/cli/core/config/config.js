@@ -1,23 +1,27 @@
 import fse from 'fs-extra'
 import clc from 'cli-color'
 import extend from 'extend'
+import path from 'path'
 
 import config from './config.json'
 
 var result = config
-result.root = result.root.replace(/\/$/, '')
+result.root = process.cwd()
+if(process.env.ROOT) {
+  result.root = process.env.ROOT.replace(/\/$/, '')
+}
+
 var hintAbeJson = false
 
 var loadLocalConfig = (result) => {
-  var website = result.root.replace(/\/$/, '')
-  if(website !==''){
+  if(result.root !==''){
     try{
-      var stat = fse.statSync(website)
+      var stat = fse.statSync(result.root)
       if (stat && stat.isDirectory()) {
         try{
-          stat = fse.statSync(website + '/abe.json')
+          stat = fse.statSync(path.join(result.root,'abe.json'))
           if (stat) {
-            var json = fse.readJsonSync(website + '/abe.json')
+            var json = fse.readJsonSync(path.join(result.root,'abe.json'))
             result = extend(true, result, json)
           }
         }catch(e) {
@@ -25,7 +29,7 @@ var loadLocalConfig = (result) => {
             hintAbeJson = true
             console.log(
               clc.green('[ Hint ]'),
-              'create abe.json to config',
+              'you can create a specific config file named abe.json to customize your abe install',
               clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
             )
           }
@@ -58,6 +62,37 @@ result.exist = (conf, json) => {
   }
 }
 
+result.localConfigExist = () => {
+  if(result.root !==''){
+    try{
+      var stat = fse.statSync(result.root)
+      if (stat && stat.isDirectory()) {
+        try{
+          stat = fse.statSync(path.join(result.root,'abe.json'))
+          if (stat) {
+            return true
+          }
+        }catch(e) {
+          return false
+        }
+      }
+    }catch(e){
+      
+      return false
+    }
+  }
+
+  return false
+}
+
+result.getLocalConfig = () => {
+  if (result.localConfigExist()){
+    return fse.readJsonSync(path.join(result.root,'abe.json'))
+  } else {
+    return {}
+  }
+}
+
 result.getDefault = (conf) => {
   return result[conf]
 }
@@ -72,10 +107,10 @@ result.set = (json) => {
   loadLocalConfig(result)
 }
 
-result.save = (website, json) => {
+result.save = (json) => {
   extend(true, result, json)
 
-  var confPath = result.root.replace(/\/$/, '') + '/abe.json'
+  var confPath = path.join(result.root,'abe.json')
   fse.writeJsonSync(confPath, json, { space: 2, encoding: 'utf-8' })
 }
 

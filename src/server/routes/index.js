@@ -17,25 +17,27 @@ import postUpload from './post-upload'
 import postSqlRequest from './post-sql-request'
 import postReference from './post-reference'
 import getReference from './get-reference'
+import getPaginate from './get-paginate'
 
 export {
-	getMain
-	,postCreate
-	,getListUrl
-	,getListHooks
-	,postDuplicate
-	,postUpdate
-	,getPage
-	,postPage
-	,postPublish
-	,getGeneratePost
-	,postReject
-	,postDraft
-	,getSaveConfig
-	,getUnpublish
-	,getDelete
-	,postUpload
-	,postSqlRequest,
+	getMain,
+	postCreate,
+	getListUrl,
+	getListHooks,
+	postDuplicate,
+	postUpdate,
+	getPage,
+	postPage,
+	postPublish,
+	getGeneratePost,
+	postReject,
+	postDraft,
+	getSaveConfig,
+	getUnpublish,
+	getDelete,
+	postUpload,
+	postSqlRequest,
 	postReference,
-	getReference
+	getReference,
+	getPaginate
 }

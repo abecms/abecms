@@ -168,8 +168,8 @@ export default class EditorSave {
 
         var precontrib = formGroup.getAttribute('data-precontrib-templates')
 
-        if (precontrib != null && precontrib != "") {
-          if (precontrib != "json.abe_meta.template") {
+        if (precontrib != null && precontrib != '') {
+          if (precontrib != 'json.abe_meta.template') {
             return
           }
         }

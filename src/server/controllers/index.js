@@ -20,6 +20,7 @@ import {
   ,postSqlRequest
   ,postReference
   ,getReference
+  ,getPaginate
 } from '../routes'
 
 import {
@@ -31,6 +32,7 @@ var router = express.Router()
 abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 abeExtend.hooks.instance.trigger('beforeAddRoute', router)
 
+router.get('/abe/paginate', getPaginate)
 router.post('/abe/create*', postCreate)
 router.post('/abe/duplicate*', postDuplicate)
 router.post('/abe/update*', postUpdate)

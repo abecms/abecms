@@ -13,21 +13,21 @@ function replaceSourceAttr(variables, currentValue, valueToReplace) {
           }else {
             checkMatch.shift()
             if (checkMatch.length === 0) {
-              variableToUse = ""
+              variableToUse = ''
               found = true
             }
           }
         }catch(e) {
           checkMatch.shift()
           if (checkMatch.length === 0) {
-            variableToUse = ""
+            variableToUse = ''
             found = true
           }
         }
       }
     }
 
-    if (variableToUse != null && variableToUse != "") {
+    if (variableToUse != null && variableToUse != '') {
       try {
         var replaceVal = eval('currentValue.' + variableToUse)
         valueToReplace = valueToReplace.replace(new RegExp(variable.replace, 'g'), replaceVal)
@@ -83,7 +83,7 @@ export default function sourceAttr(val, params) {
         replace: match[0],
         value: match[1]
       })
-      displayValues = displayValues.replace('{{' + match[1] + '}}', "")
+      displayValues = displayValues.replace('{{' + match[1] + '}}', '')
     }
   }
 

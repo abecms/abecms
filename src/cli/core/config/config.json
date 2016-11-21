@@ -4,9 +4,6 @@
   "intlData": {
     "locales": "en-US"
   },
-  "plugins": {
-    "url":"plugins"
-  },
   "templates": {
     "url": "templates"
   },

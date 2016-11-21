@@ -1,3 +1,411 @@
+* [[`f0b8f0bacd`](https://github.com/AdFabConnect/abejs/commit/f0b8f0bacd)] - **bug**: add watch partials forlder since enhancement (nicolaslabbe) 
+
+## [2.7.8] - 2016-11-18
+* [[`bd1e4a8c6d`](https://github.com/AdFabConnect/abejs/commit/bd1e4a8c6d)] - **fix**: bug autocomplete (nicolaslabbe) 
+* [[`727f6a5474`](https://github.com/AdFabConnect/abejs/commit/727f6a5474)] - **fix**: bug autocomplete (nicolaslabbe) 
+* [[`9c8356108c`](https://github.com/AdFabConnect/abejs/commit/9c8356108c)] - **enhancement**: select autocomplete (nicolaslabbe) 
+* [[`b853a022cf`](https://github.com/AdFabConnect/abejs/commit/b853a022cf)] - Merged branch master into master (nicolaslabbe) 
+* [[`21686b8bf8`](https://github.com/AdFabConnect/abejs/commit/21686b8bf8)] - **fix**: autocomplete after precontribution enhancement (nicolaslabbe) 
+
+## [2.7.7] - 2016-11-18
+
+## [2.7.6] - 2016-11-18
+
+## [2.7.5] - 2016-11-18
+* [[`b2a603df0a`](https://github.com/AdFabConnect/abejs/commit/b2a603df0a)] - **enhancement**: Add gig mimetype to upload files (gregorybesson) 
+* [[`b213dddb89`](https://github.com/AdFabConnect/abejs/commit/b213dddb89)] - Merged branch master into master (nicolaslabbe) 
+* [[`cdc98122e6`](https://github.com/AdFabConnect/abejs/commit/cdc98122e6)] - **enhancement**: look & feel precontrib (wonknu10) 
+* [[`6507abc0c1`](https://github.com/AdFabConnect/abejs/commit/6507abc0c1)] - Merged branch master into master (nicolaslabbe) 
+* [[`5f11f38cfa`](https://github.com/AdFabConnect/abejs/commit/5f11f38cfa)] - **enhancement**: autcomplete multiple display (nicolaslabbe) 
+
+## [2.7.4] - 2016-11-17
+* [[`98e2501fde`](https://github.com/AdFabConnect/abejs/commit/98e2501fde)] - **fix**: unit test for partials (wonknu10) 
+* [[`fa6f7181b2`](https://github.com/AdFabConnect/abejs/commit/fa6f7181b2)] - **fix**: abe-locale with config to override default value (wonknu10) 
+
+## [2.7.3] - 2016-11-17
+* [[`dbd5017098`](https://github.com/AdFabConnect/abejs/commit/dbd5017098)] - **refactoring**: moving partials inside root folder (wonknu10) 
+* [[`cac32e9661`](https://github.com/AdFabConnect/abejs/commit/cac32e9661)] - **bug**: precontrib plugin (nicolaslabbe) 
+* [[`0952eef7ee`](https://github.com/AdFabConnect/abejs/commit/0952eef7ee)] - **fix**: bug lock create when saving (nicolaslabbe) 
+* [[`bd41b84094`](https://github.com/AdFabConnect/abejs/commit/bd41b84094)] - **bug**: remove return (nicolaslabbe) 
+* [[`c6a999af0d`](https://github.com/AdFabConnect/abejs/commit/c6a999af0d)] - **fix**: bug leve-1 level-2 (nicolaslabbe) 
+* [[`21b9bbfbc7`](https://github.com/AdFabConnect/abejs/commit/21b9bbfbc7)] - **fix**: bug precontribution 33 (nicolaslabbe) 
+* [[`5ff82a3159`](https://github.com/AdFabConnect/abejs/commit/5ff82a3159)] - **fix**: precontribution 33 (nicolaslabbe) 
+* [[`5f12f591ae`](https://github.com/AdFabConnect/abejs/commit/5f12f591ae)] - **refactoring**: precontribution 33 (nicolaslabbe) 
+* [[`46c1b56916`](https://github.com/AdFabConnect/abejs/commit/46c1b56916)] - **fix**: UT #33 (nicolaslabbe) 
+* [[`a87f839271`](https://github.com/AdFabConnect/abejs/commit/a87f839271)] - **enhancement**: precontribution 33 (nicolaslabbe) 
+* [[`e58be0e4c7`](https://github.com/AdFabConnect/abejs/commit/e58be0e4c7)] - **enhancement**: precontribution 33 (nicolaslabbe) 
+* [[`ffc493083a`](https://github.com/AdFabConnect/abejs/commit/ffc493083a)] - **refactor**: precontrib (nicolaslabbe) 
+* [[`3d58fe80d0`](https://github.com/AdFabConnect/abejs/commit/3d58fe80d0)] - **fix**: sql request where no where attribute (nicolaslabbe) 
+* [[`85655519dc`](https://github.com/AdFabConnect/abejs/commit/85655519dc)] - **fix**: manager update selected template (nicolaslabbe) 
+* [[`87159f2c6d`](https://github.com/AdFabConnect/abejs/commit/87159f2c6d)] - **fix**: precontrib handlebars variable inside string & id level folder (wonknu10) 
+* [[`5bf7e4101a`](https://github.com/AdFabConnect/abejs/commit/5bf7e4101a)] - **fix**: precontrib (same tag in diffrentes templates) (wonknu10) 
+* [[`8538893784`](https://github.com/AdFabConnect/abejs/commit/8538893784)] - Merged branch master into master (wonknu10) 
+* [[`a2a0cd5a8e`](https://github.com/AdFabConnect/abejs/commit/a2a0cd5a8e)] - **feature**: precontrib for template (nicolaslabbe) 
+* [[`38a91bc0f7`](https://github.com/AdFabConnect/abejs/commit/38a91bc0f7)] - Merged branch master into master (nicolaslabbe) 
+* [[`e7f847a409`](https://github.com/AdFabConnect/abejs/commit/e7f847a409)] - **feature**: precontrib for templates (nicolaslabbe) 
+
+## [2.7.2] - 2016-11-15
+* [[`e839e75503`](https://github.com/AdFabConnect/abejs/commit/e839e75503)] - **fix**: duplicate new file name is not slugified (wonknu10) 
+* [[`3864a14401`](https://github.com/AdFabConnect/abejs/commit/3864a14401)] - hide folder if no structure on precontrib (nicolaslabbe) 
+
+## [2.7.1] - 2016-11-15
+
+## [2.7.0] - 2016-11-15
+* [[`e6d53b6301`](https://github.com/AdFabConnect/abejs/commit/e6d53b6301)] - add abe precontrib doc (nicolaslabbe) 
+* [[`0067ae59bd`](https://github.com/AdFabConnect/abejs/commit/0067ae59bd)] - Merged branch master into master (nicolaslabbe) 
+* [[`1758a31bf7`](https://github.com/AdFabConnect/abejs/commit/1758a31bf7)] - default precontrib (nicolaslabbe) 
+* [[`a92ebbacd9`](https://github.com/AdFabConnect/abejs/commit/a92ebbacd9)] - Fake build (gregorybesson) 
+* [[`070f82695d`](https://github.com/AdFabConnect/abejs/commit/070f82695d)] - fix hook abe (nicolaslabbe) 
+* [[`c0b7e33a98`](https://github.com/AdFabConnect/abejs/commit/c0b7e33a98)] - **bug**: precontrib editor variable (nicolaslabbe) 
+* [[`0dcc554541`](https://github.com/AdFabConnect/abejs/commit/0dcc554541)] - **Feature**: precontrib bug update and duplicate (nicolaslabbe) 
+* [[`2980fc3751`](https://github.com/AdFabConnect/abejs/commit/2980fc3751)] - Merged precontrib into master (nicolaslabbe) 
+* [[`23f1687fa7`](https://github.com/AdFabConnect/abejs/commit/23f1687fa7)] - **feature**: precontrib (nicolaslabbe) 
+* [[`4b73fdb22b`](https://github.com/AdFabConnect/abejs/commit/4b73fdb22b)] - Merged master into precontrib (nicolaslabbe) 
+
+## [2.6.9] - 2016-11-10
+* [[`e27d9ce82e`](https://github.com/AdFabConnect/abejs/commit/e27d9ce82e)] - Merged branch master into master (nicolaslabbe) 
+* [[`b1ff134883`](https://github.com/AdFabConnect/abejs/commit/b1ff134883)] - **fix**: abe install on windows (nicolaslabbe) 
+* [[`e72c9bbed2`](https://github.com/AdFabConnect/abejs/commit/e72c9bbed2)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (wonknu10) 
+* [[`51344ef48e`](https://github.com/AdFabConnect/abejs/commit/51344ef48e)] - Feature precontrib (nicolaslabbe) 
+* [[`a08d6895f3`](https://github.com/AdFabConnect/abejs/commit/a08d6895f3)] - **Fix**: abeUrl with status prefix (nicolaslabbe) 
+
+## [2.6.8] - 2016-11-9
+* [[`7af6620c4c`](https://github.com/AdFabConnect/abejs/commit/7af6620c4c)] - **fix**: hook beforefirstsave, filepath is never used (wonknu10) 
+
+## [2.6.7] - 2016-11-8
+* [[`fee529b089`](https://github.com/AdFabConnect/abejs/commit/fee529b089)] - **fix**: json is not updt when abe attribut inside bloc each has reload=true (wonknu10) 
+* [[`f64c6ed10f`](https://github.com/AdFabConnect/abejs/commit/f64c6ed10f)] - missing error log inside handlebar abe helper (wonknu10) 
+* [[`52d1c6c1ed`](https://github.com/AdFabConnect/abejs/commit/52d1c6c1ed)] - Merge pull request #25 from AdFabConnect/refactor_save_action (Labbé nicolas) 
+* [[`6ed093d266`](https://github.com/AdFabConnect/abejs/commit/6ed093d266)] - **Bug**: url absolute (nicolaslabbe) 
+* [[`c89a077b75`](https://github.com/AdFabConnect/abejs/commit/c89a077b75)] - **UT**: fix operations (nicolaslabbe) 
+* [[`ae2dd42ce6`](https://github.com/AdFabConnect/abejs/commit/ae2dd42ce6)] - Merge remote-tracking branch 'refs/remotes/origin/master' (nicolaslabbe) 
+* [[`260c629c43`](https://github.com/AdFabConnect/abejs/commit/260c629c43)] - **UT**: refactor save (nicolaslabbe) 
+
+## [2.6.6] - 2016-11-7
+* [[`6da4337995`](https://github.com/AdFabConnect/abejs/commit/6da4337995)] - **fix**: update file + UT + other bugs (gregorybesson) 
+* [[`ba0eeac087`](https://github.com/AdFabConnect/abejs/commit/ba0eeac087)] - **UT**: cms operations (nicolaslabbe) 
+* [[`8aca564167`](https://github.com/AdFabConnect/abejs/commit/8aca564167)] - refactor unpublis (nicolaslabbe) 
+
+## [2.6.5] - 2016-11-7
+* [[`bcef172ee9`](https://github.com/AdFabConnect/abejs/commit/bcef172ee9)] - Merge remote-tracking branch 'refs/remotes/origin/master' (nicolaslabbe) 
+* [[`5a74115bc8`](https://github.com/AdFabConnect/abejs/commit/5a74115bc8)] - **refactor**: save (nicolaslabbe) 
+* [[`7fb6c55c1a`](https://github.com/AdFabConnect/abejs/commit/7fb6c55c1a)] - win build status (Greg Besson) 
+* [[`a10e79e3ef`](https://github.com/AdFabConnect/abejs/commit/a10e79e3ef)] - **fix**: outdated dependencies (gregorybesson) 
+* [[`45f3da7882`](https://github.com/AdFabConnect/abejs/commit/45f3da7882)] - heroku button (Greg Besson) 
+* [[`f00a9a0cbc`](https://github.com/AdFabConnect/abejs/commit/f00a9a0cbc)] - **fix**: Windows filesystem (gregorybesson) 
+* [[`43463a34e4`](https://github.com/AdFabConnect/abejs/commit/43463a34e4)] - heroku deployment (gregorybesson) 
+* [[`7f643067c8`](https://github.com/AdFabConnect/abejs/commit/7f643067c8)] - fix UT config on Windows (gregorybesson) 
+* [[`489b9907b9`](https://github.com/AdFabConnect/abejs/commit/489b9907b9)] - **fix**: Windows create/duplicate post (gregorybesson) 
+* [[`05df009db1`](https://github.com/AdFabConnect/abejs/commit/05df009db1)] - **fix**: reverting to previous version b/c refactoring in progress from nlabbe (gregorybesson) 
+* [[`542b3679b4`](https://github.com/AdFabConnect/abejs/commit/542b3679b4)] - **fix**: linting (gregorybesson) 
+* [[`82a86735b4`](https://github.com/AdFabConnect/abejs/commit/82a86735b4)] - **fix**: linting (gregorybesson) 
+* [[`ad4939b631`](https://github.com/AdFabConnect/abejs/commit/ad4939b631)] - **fix**: windows bug getting file paths (gregorybesson) 
+* [[`a9f4321b2e`](https://github.com/AdFabConnect/abejs/commit/a9f4321b2e)] - **refactoring**: Add CI on windows (gregorybesson) 
+* [[`e389aea9aa`](https://github.com/AdFabConnect/abejs/commit/e389aea9aa)] - Merged branch master into master (wonknu10) 
+* [[`6a1b158330`](https://github.com/AdFabConnect/abejs/commit/6a1b158330)] - **fix**: iframe onload in firefox && retrieve cookie editor width server (wonknu10) 
+* [[`a775e9eab0`](https://github.com/AdFabConnect/abejs/commit/a775e9eab0)] - **Refactor**: remove slugify url on save because create alread do it (nicolaslabbe) 
+* [[`04e0b60804`](https://github.com/AdFabConnect/abejs/commit/04e0b60804)] - **Refactor**: remove Page._addSource because requestList do the same if request is editable (nicolaslabbe) 
+* [[`85242da082`](https://github.com/AdFabConnect/abejs/commit/85242da082)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (Mikael Lharidon) 
+* [[`13de0b21a4`](https://github.com/AdFabConnect/abejs/commit/13de0b21a4)] - **fix**: Under Windows Abe wasn't able to parse structure dir (Mikael Lharidon) 
+* [[`02f1a312dc`](https://github.com/AdFabConnect/abejs/commit/02f1a312dc)] - **fix**: Windows bug (Mikael Lharidon) 
+
+## [2.6.4] - 2016-11-4
+* [[`cc6caa8277`](https://github.com/AdFabConnect/abejs/commit/cc6caa8277)] - test if iframe is loaded if not init onload event (wonknu10) 
+
+## [2.6.3] - 2016-11-4
+
+## [2.6.2] - 2016-11-4
+* [[`6253c16a5b`](https://github.com/AdFabConnect/abejs/commit/6253c16a5b)] - Merged branch master into master (nicolaslabbe) 
+* [[`6609a1bab9`](https://github.com/AdFabConnect/abejs/commit/6609a1bab9)] - remove publish-all / update-json and now use generate-post (nicolaslabbe) 
+* [[`4c6624a488`](https://github.com/AdFabConnect/abejs/commit/4c6624a488)] - **fix**: iframe onload event before inject iframe (wonknu10) 
+
+## [2.6.1] - 2016-11-3
+* [[`12fb759a60`](https://github.com/AdFabConnect/abejs/commit/12fb759a60)] - **bug**: 2.6.0 plugin url getFoldersSync (nicolaslabbe) 
+
+## [2.6.0] - 2016-11-3
+* [[`30a426f137`](https://github.com/AdFabConnect/abejs/commit/30a426f137)] - isTrue HBS helper tested (gregorybesson) 
+* [[`6cfb010e18`](https://github.com/AdFabConnect/abejs/commit/6cfb010e18)] - **fix**: update was not working properly (gregorybesson) 
+* [[`a00f3dbfae`](https://github.com/AdFabConnect/abejs/commit/a00f3dbfae)] - **fix**: update was not working properly (gregorybesson) 
+* [[`f4ef59df19`](https://github.com/AdFabConnect/abejs/commit/f4ef59df19)] - editor reload for v2.6.0 (nicolaslabbe) 
+* [[`5a20086eaa`](https://github.com/AdFabConnect/abejs/commit/5a20086eaa)] - fix CI on OSX (gregorybesson) 
+* [[`c945dfd13b`](https://github.com/AdFabConnect/abejs/commit/c945dfd13b)] - **refactoring**: atomic remove object from Manager list (gregorybesson) 
+* [[`46dcf2b94e`](https://github.com/AdFabConnect/abejs/commit/46dcf2b94e)] - fix UT (gregorybesson) 
+* [[`c1064f7107`](https://github.com/AdFabConnect/abejs/commit/c1064f7107)] - **fix**: lint (gregorybesson) 
+* [[`352554fbce`](https://github.com/AdFabConnect/abejs/commit/352554fbce)] - **fix**: wrong date + wrong revisions in Manager files (gregorybesson) 
+* [[`beada9b665`](https://github.com/AdFabConnect/abejs/commit/beada9b665)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`c825726a39`](https://github.com/AdFabConnect/abejs/commit/c825726a39)] - **refactoring**: removing dead code (gregorybesson) 
+* [[`552101e079`](https://github.com/AdFabConnect/abejs/commit/552101e079)] - Merge pull request #21 from AdFabConnect/reference-editor (Greg Besson) 
+* [[`2d0a061fef`](https://github.com/AdFabConnect/abejs/commit/2d0a061fef)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs into reference-editor (wonknu10) 
+* [[`429a0d501a`](https://github.com/AdFabConnect/abejs/commit/429a0d501a)] - **fix**: lint (gregorybesson) 
+* [[`49f328640e`](https://github.com/AdFabConnect/abejs/commit/49f328640e)] - **fix**: UT (gregorybesson) 
+* [[`307302db85`](https://github.com/AdFabConnect/abejs/commit/307302db85)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`51cb957186`](https://github.com/AdFabConnect/abejs/commit/51cb957186)] - **refactoring**: UT + incremental update of the list in Manager FIRST PART (gregorybesson) 
+* [[`7482d1c298`](https://github.com/AdFabConnect/abejs/commit/7482d1c298)] - remove log (wonknu10) 
+* [[`ff987f017c`](https://github.com/AdFabConnect/abejs/commit/ff987f017c)] - reference editor - lint && unit test (wonknu10) 
+* [[`e1b53fe264`](https://github.com/AdFabConnect/abejs/commit/e1b53fe264)] - lint reference editor (wonknu10) 
+* [[`f1bcc6fc9e`](https://github.com/AdFabConnect/abejs/commit/f1bcc6fc9e)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs into reference-editor (wonknu10) 
+* [[`8c3a140a9f`](https://github.com/AdFabConnect/abejs/commit/8c3a140a9f)] - refactor reference editor (wonknu10) 
+* [[`3ff50b1524`](https://github.com/AdFabConnect/abejs/commit/3ff50b1524)] - **refactoring**: Remove any reference to WEBPORT #12 (nicolaslabbe) 
+* [[`0a069937ea`](https://github.com/AdFabConnect/abejs/commit/0a069937ea)] - **bug**: \[Refill feature\] Bug on reload after a refill #19 (nicolaslabbe) 
+* [[`a1b69c41a8`](https://github.com/AdFabConnect/abejs/commit/a1b69c41a8)] - **bug**: missing res.sent mine type (nicolaslabbe) 
+* [[`d04667229c`](https://github.com/AdFabConnect/abejs/commit/d04667229c)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs into reference-editor (wonknu10) 
+* [[`0fd50e9b95`](https://github.com/AdFabConnect/abejs/commit/0fd50e9b95)] - **bug**: Path must be a string use folder.path instead of folder (nicolaslabbe) 
+* [[`7deabd4b88`](https://github.com/AdFabConnect/abejs/commit/7deabd4b88)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs into reference-editor (wonknu10) 
+* [[`37b38bd5c2`](https://github.com/AdFabConnect/abejs/commit/37b38bd5c2)] - zip cleanup reference feature (wonknu10) 
+* [[`e748129a79`](https://github.com/AdFabConnect/abejs/commit/e748129a79)] - **refactoring**: removing dead code (gregorybesson) 
+* [[`9f8ab87a5e`](https://github.com/AdFabConnect/abejs/commit/9f8ab87a5e)] - **fix**: structure display (gregorybesson) 
+* [[`527c72dab3`](https://github.com/AdFabConnect/abejs/commit/527c72dab3)] - **refactoring**: removing cleanNameNoExt from the code (gregorybesson) 
+* [[`00725d593b`](https://github.com/AdFabConnect/abejs/commit/00725d593b)] - **fix**: linting (gregorybesson) 
+* [[`830b487661`](https://github.com/AdFabConnect/abejs/commit/830b487661)] - **refactoring**: at last, cmsData getFiles() and read() have been killed. SoC (gregorybesson) 
+* [[`de94f88def`](https://github.com/AdFabConnect/abejs/commit/de94f88def)] - refactoring; uses coreUtils.file.getFilesSync (gregorybesson) 
+* [[`88fa0f375b`](https://github.com/AdFabConnect/abejs/commit/88fa0f375b)] - refactoring; uses coreUtils.file.getFilesSync (gregorybesson) 
+* [[`5e2b93ac58`](https://github.com/AdFabConnect/abejs/commit/5e2b93ac58)] - refactoring; remove.js uses coreUtils.file.getFilesSync (gregorybesson) 
+* [[`930790a3d3`](https://github.com/AdFabConnect/abejs/commit/930790a3d3)] - refactoring; refining template.js (gregorybesson) 
+* [[`a1f32ae6fb`](https://github.com/AdFabConnect/abejs/commit/a1f32ae6fb)] - **fix**: lint (gregorybesson) 
+* [[`24a602a687`](https://github.com/AdFabConnect/abejs/commit/24a602a687)] - refactoring; refining getStructureAndTemplates (gregorybesson) 
+* [[`e89f078988`](https://github.com/AdFabConnect/abejs/commit/e89f078988)] - **refactoring**: plugins do use core sync getFiles (gregorybesson) 
+* [[`c1e414fb58`](https://github.com/AdFabConnect/abejs/commit/c1e414fb58)] - **fix**: linting (gregorybesson) 
+* [[`a20d6f8635`](https://github.com/AdFabConnect/abejs/commit/a20d6f8635)] - **refactoring**: Parsing files and directories is a core feature (gregorybesson) 
+* [[`16cfcff994`](https://github.com/AdFabConnect/abejs/commit/16cfcff994)] - **fix**: linting (gregorybesson) 
+* [[`9558c1d896`](https://github.com/AdFabConnect/abejs/commit/9558c1d896)] - **fix**: linting (gregorybesson) 
+* [[`07f85dbf71`](https://github.com/AdFabConnect/abejs/commit/07f85dbf71)] - **refactoring**: change lib promise to adopt bluebird + asynhcornous getFiles in coreUtils (gregorybesson) 
+* [[`a05f1c2660`](https://github.com/AdFabConnect/abejs/commit/a05f1c2660)] - **refactoring**: UT done now on node4, 5, 6 & 7 (gregorybesson) 
+* [[`8f9eebf9eb`](https://github.com/AdFabConnect/abejs/commit/8f9eebf9eb)] - bug move assets (nicolaslabbe) 
+* [[`e229ade60f`](https://github.com/AdFabConnect/abejs/commit/e229ade60f)] - **fix**: editor is visible on page editing when hitting manager button (wonknu10) 
+* [[`7fce2e1bd6`](https://github.com/AdFabConnect/abejs/commit/7fce2e1bd6)] - editor for json references (wonknu10) 
+* [[`604b53381b`](https://github.com/AdFabConnect/abejs/commit/604b53381b)] - Merged branch master into master (nicolaslabbe) 
+* [[`40cc426d69`](https://github.com/AdFabConnect/abejs/commit/40cc426d69)] - change url abe (nicolaslabbe) 
+* [[`b212c30934`](https://github.com/AdFabConnect/abejs/commit/b212c30934)] - Update abe-handlebars-helpers.md (Greg Besson) 
+* [[`b0befef706`](https://github.com/AdFabConnect/abejs/commit/b0befef706)] - **fix**: linting (gregorybesson) 
+* [[`d41ae86d5d`](https://github.com/AdFabConnect/abejs/commit/d41ae86d5d)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`563ef7182b`](https://github.com/AdFabConnect/abejs/commit/563ef7182b)] - **features**: 2 new HBS helpers available - lowercase and uppercase (gregorybesson) 
+* [[`7b5fbfccce`](https://github.com/AdFabConnect/abejs/commit/7b5fbfccce)] - bug post page reload (/abe/post/*) (nicolaslabbe) 
+* [[`c89dcf5394`](https://github.com/AdFabConnect/abejs/commit/c89dcf5394)] - **refactor**: url /abe/ (nicolaslabbe) 
+* [[`3606af2546`](https://github.com/AdFabConnect/abejs/commit/3606af2546)] - **bug**: filePath != null (nicolaslabbe) 
+* [[`73b8dca25a`](https://github.com/AdFabConnect/abejs/commit/73b8dca25a)] - **bug**: editor html (nicolaslabbe) 
+* [[`75e460e50c`](https://github.com/AdFabConnect/abejs/commit/75e460e50c)] - **bug**: duplicate (nicolaslabbe) 
+* [[`76f6e45955`](https://github.com/AdFabConnect/abejs/commit/76f6e45955)] - **bug**: duplicate filename (nicolaslabbe) 
+* [[`e190d84ae6`](https://github.com/AdFabConnect/abejs/commit/e190d84ae6)] - **refactor**: remove logs + bug: on create (nicolaslabbe) 
+* [[`59e7815c85`](https://github.com/AdFabConnect/abejs/commit/59e7815c85)] - Merge remote-tracking branch 'refs/remotes/origin/master' (nicolaslabbe) 
+* [[`7de1681bca`](https://github.com/AdFabConnect/abejs/commit/7de1681bca)] - **fix**: Compatibility with Node 4.* : \[TypeError: fileCurrentLevel.includes is not a function\] (gregorybesson) 
+* [[`e08268eb88`](https://github.com/AdFabConnect/abejs/commit/e08268eb88)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`4712307e7e`](https://github.com/AdFabConnect/abejs/commit/4712307e7e)] - **fix**: Missing lib which generate a bug when under Node v4.* (gregorybesson) 
+
+## [2.5.25] - 2016-10-27
+* [[`8b56e2d17c`](https://github.com/AdFabConnect/abejs/commit/8b56e2d17c)] - **fix**: FireFox - button remove bloc each not working (wonknu10) 
+
+## [2.5.24] - 2016-10-27
+* [[`add38e7dd1`](https://github.com/AdFabConnect/abejs/commit/add38e7dd1)] - **fix**: missing /abe/ in url path (wonknu10) 
+* [[`c492ab8363`](https://github.com/AdFabConnect/abejs/commit/c492ab8363)] - Merged branch master into master (nicolaslabbe) 
+* [[`6ae83d9c1b`](https://github.com/AdFabConnect/abejs/commit/6ae83d9c1b)] - change all abe url (nicolaslabbe) 
+
+## [2.5.23] - 2016-10-26
+* [[`7bd93e7dfb`](https://github.com/AdFabConnect/abejs/commit/7bd93e7dfb)] - **fix**: css class status after save don't update (wonknu10) 
+* [[`ecf81aba98`](https://github.com/AdFabConnect/abejs/commit/ecf81aba98)] - **fix**: lint (gregorybesson) 
+* [[`b6a5829a95`](https://github.com/AdFabConnect/abejs/commit/b6a5829a95)] - **bug**: manager close icon not displaying (nicolaslabbe) 
+* [[`f3f35b12ef`](https://github.com/AdFabConnect/abejs/commit/f3f35b12ef)] - **feature**: abe url under /abe/ (nicolaslabbe) 
+
+## [2.5.22] - 2016-10-25
+* [[`b8ce329b72`](https://github.com/AdFabConnect/abejs/commit/b8ce329b72)] - patch on delete (nicolaslabbe) 
+
+## [2.5.21] - 2016-10-25
+
+## [2.5.20] - 2016-10-25
+* [[`42be777385`](https://github.com/AdFabConnect/abejs/commit/42be777385)] - **fix**: linting (gregorybesson) 
+* [[`35fd3e688b`](https://github.com/AdFabConnect/abejs/commit/35fd3e688b)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`b68ae8803b`](https://github.com/AdFabConnect/abejs/commit/b68ae8803b)] - fix lint + test (nicolaslabbe) 
+* [[`3b09fadecb`](https://github.com/AdFabConnect/abejs/commit/3b09fadecb)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`3da7022484`](https://github.com/AdFabConnect/abejs/commit/3da7022484)] - **fix**: relative static files in Abe are now accepted (gregorybesson) 
+* [[`7c5d193ec7`](https://github.com/AdFabConnect/abejs/commit/7c5d193ec7)] - refactor save (nicolaslabbe) 
+* [[`e013378e2a`](https://github.com/AdFabConnect/abejs/commit/e013378e2a)] - **fix**: coveralls bug due to missing lib (gregorybesson) 
+* [[`2e8f58e059`](https://github.com/AdFabConnect/abejs/commit/2e8f58e059)] - **fix**: coveralls bug due to missing lib (gregorybesson) 
+* [[`76c752aa2a`](https://github.com/AdFabConnect/abejs/commit/76c752aa2a)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`5cf811598c`](https://github.com/AdFabConnect/abejs/commit/5cf811598c)] - **fix**: package.json fixes (gregorybesson) 
+* [[`c642ba55e9`](https://github.com/AdFabConnect/abejs/commit/c642ba55e9)] - **bug**: Status DRAFT displayed in the manager (nicolaslabbe) 
+
+## [2.5.19] - 2016-10-20
+* [[`3a14847def`](https://github.com/AdFabConnect/abejs/commit/3a14847def)] - Merged branch master into master (nicolaslabbe) 
+
+## [2.5.18] - 2016-10-20
+* [[`1013c2844f`](https://github.com/AdFabConnect/abejs/commit/1013c2844f)] - **bug**: remove .lock file when abe restart to unlock processes (nicolaslabbe) 
+* [[`97115021c9`](https://github.com/AdFabConnect/abejs/commit/97115021c9)] - **fix**: FireFox srcElement not working #17 (wonknu10) 
+* [[`6325056e87`](https://github.com/AdFabConnect/abejs/commit/6325056e87)] - Merged branch master into master (wonknu10) 
+* [[`dab606430a`](https://github.com/AdFabConnect/abejs/commit/dab606430a)] - **fix**: editor scrollbar not working (window 7 / Firefox) (wonknu10) 
+
+## [2.5.17] - 2016-10-20
+* [[`36e6c1dfee`](https://github.com/AdFabConnect/abejs/commit/36e6c1dfee)] - Merged branch master into master (nicolaslabbe) 
+* [[`e02f0b2035`](https://github.com/AdFabConnect/abejs/commit/e02f0b2035)] - **bug**: process fork lock file (nicolaslabbe) 
+* [[`e641b0e296`](https://github.com/AdFabConnect/abejs/commit/e641b0e296)] - **fix**: allow file upload with uppercase extensions (wonknu10) 
+* [[`1a86cff162`](https://github.com/AdFabConnect/abejs/commit/1a86cff162)] - Merged branch master into master (wonknu10) 
+* [[`e9c22bffbf`](https://github.com/AdFabConnect/abejs/commit/e9c22bffbf)] - Node version 4 added (gregorybesson) 
+
+## [2.5.16] - 2016-10-19
+* [[`5136378556`](https://github.com/AdFabConnect/abejs/commit/5136378556)] - Merged branch master into master (wonknu10) 
+* [[`da00c4d547`](https://github.com/AdFabConnect/abejs/commit/da00c4d547)] - **fix**: reject page not working (wonknu10) 
+* [[`b1fdb8e111`](https://github.com/AdFabConnect/abejs/commit/b1fdb8e111)] - Merged branch master into master (nicolaslabbe) 
+* [[`8a8b52880c`](https://github.com/AdFabConnect/abejs/commit/8a8b52880c)] - **bug**: Update fonction KO (v 2.5.15) (nicolaslabbe) 
+
+## [2.5.15] - 2016-10-19
+* [[`beef905b8c`](https://github.com/AdFabConnect/abejs/commit/beef905b8c)] - **fix**: sql without where clause always return an empty result (wonknu10) 
+* [[`113fbc0f0a`](https://github.com/AdFabConnect/abejs/commit/113fbc0f0a)] - **fix**: new button available in the manager (gregorybesson) 
+* [[`4a5b494719`](https://github.com/AdFabConnect/abejs/commit/4a5b494719)] - UT fix (gregorybesson) 
+* [[`93e9a7a617`](https://github.com/AdFabConnect/abejs/commit/93e9a7a617)] - linting (gregorybesson) 
+* [[`fd73879e4d`](https://github.com/AdFabConnect/abejs/commit/fd73879e4d)] - **refactoring**: SoC - The manager is the one responsible of the Abe env (gregorybesson) 
+* [[`e5393a2cde`](https://github.com/AdFabConnect/abejs/commit/e5393a2cde)] - fix #7 (gregorybesson) 
+* [[`7cdd5aa96e`](https://github.com/AdFabConnect/abejs/commit/7cdd5aa96e)] - force add structure (nicolaslabbe) 
+* [[`5f0748fe77`](https://github.com/AdFabConnect/abejs/commit/5f0748fe77)] - fix ut but possible memory leaks (nicolaslabbe) 
+* [[`ce2d56f93d`](https://github.com/AdFabConnect/abejs/commit/ce2d56f93d)] - remove console logs (nicolaslabbe) 
+* [[`3e1e2e7119`](https://github.com/AdFabConnect/abejs/commit/3e1e2e7119)] - watch structure folder (nicolaslabbe) 
+
+## [2.5.14] - 2016-10-18
+* [[`f3adac77dc`](https://github.com/AdFabConnect/abejs/commit/f3adac77dc)] - **Bug**: template not update (nicolaslabbe) 
+* [[`139fece0c1`](https://github.com/AdFabConnect/abejs/commit/139fece0c1)] - **bug**: prefill (nicolaslabbe) 
+* [[`641f012252`](https://github.com/AdFabConnect/abejs/commit/641f012252)] - auto deploy on Heroku (gregorybesson) 
+* [[`17b91734b1`](https://github.com/AdFabConnect/abejs/commit/17b91734b1)] - **fix**: fix linting (gregorybesson) 
+
+## [2.5.13] - 2016-10-17
+* [[`64dc818057`](https://github.com/AdFabConnect/abejs/commit/64dc818057)] - **refactoring**: Reject action put in the lib (gregorybesson) 
+* [[`5926db146e`](https://github.com/AdFabConnect/abejs/commit/5926db146e)] - **refactoring**: Reject action put in the lib (gregorybesson) 
+* [[`72dc975863`](https://github.com/AdFabConnect/abejs/commit/72dc975863)] - **refactoring**: Publish action returns to the lib (gregorybesson) 
+* [[`ce82d121fa`](https://github.com/AdFabConnect/abejs/commit/ce82d121fa)] - **fix**: improper json found in case when the same name of document did exist in mny place (/data/index.json and /data/anotherdir/index.json) (gregorybesson) 
+
+## [2.5.12] - 2016-10-13
+* [[`b0e21e6a0c`](https://github.com/AdFabConnect/abejs/commit/b0e21e6a0c)] - **fix**: upload image when file is to big - header was sent two time (wonknu10) 
+* [[`d93bbfdfa0`](https://github.com/AdFabConnect/abejs/commit/d93bbfdfa0)] - **fix**: rm duplicate handlebars helper doc (wonknu10) 
+
+## [2.5.11] - 2016-10-13
+* [[`261c712da7`](https://github.com/AdFabConnect/abejs/commit/261c712da7)] - **feature**: handlebarsJS helper raw (ommit compile server side) (wonknu10) 
+
+## [2.5.10] - 2016-10-12
+* [[`56a78de90f`](https://github.com/AdFabConnect/abejs/commit/56a78de90f)] - **bug**: prefill auto (nicolaslabbe) 
+
+## [2.5.9] - 2016-10-12
+* [[`9028e02272`](https://github.com/AdFabConnect/abejs/commit/9028e02272)] - Merged branch master into master (nicolaslabbe) 
+* [[`7c751378c3`](https://github.com/AdFabConnect/abejs/commit/7c751378c3)] - **feature**: prefill reload front (nicolaslabbe) 
+
+## [2.5.8] - 2016-10-12
+* [[`35d769d428`](https://github.com/AdFabConnect/abejs/commit/35d769d428)] - don't display partials inside templates list (wonknu10) 
+* [[`b4fec490f6`](https://github.com/AdFabConnect/abejs/commit/b4fec490f6)] - **bug**: datarequest (nicolaslabbe) 
+* [[`caa2926379`](https://github.com/AdFabConnect/abejs/commit/caa2926379)] - **feature**: add new process (nicolaslabbe) 
+* [[`ea705bbe33`](https://github.com/AdFabConnect/abejs/commit/ea705bbe33)] - **feature**: add new process to abe-cli (nicolaslabbe) 
+* [[`345f91d3bc`](https://github.com/AdFabConnect/abejs/commit/345f91d3bc)] - Merged branch master into master (nicolaslabbe) 
+* [[`08afa20ad6`](https://github.com/AdFabConnect/abejs/commit/08afa20ad6)] - **feature**: processes generate (nicolaslabbe) 
+* [[`6b23d7d5c7`](https://github.com/AdFabConnect/abejs/commit/6b23d7d5c7)] - unmerged file (wonknu10) 
+* [[`48675a00b6`](https://github.com/AdFabConnect/abejs/commit/48675a00b6)] - **refactoring**: process, hooks, plugins (nicolaslabbe) 
+* [[`dc6b63070c`](https://github.com/AdFabConnect/abejs/commit/dc6b63070c)] - **refactoring**: lint (nicolaslabbe) 
+
+## [2.5.7] - 2016-10-11
+* [[`f2b2604ca8`](https://github.com/AdFabConnect/abejs/commit/f2b2604ca8)] - fix error on reject status (gregorybesson) 
+* [[`5dcd2bcbf2`](https://github.com/AdFabConnect/abejs/commit/5dcd2bcbf2)] - missing function readded... (gregorybesson) 
+* [[`1825120b47`](https://github.com/AdFabConnect/abejs/commit/1825120b47)] - you can request abe version with -v (gregorybesson) 
+
+## [2.5.6] - 2016-10-10
+
+## [2.5.5] - 2016-10-10
+* [[`bd9e46b965`](https://github.com/AdFabConnect/abejs/commit/bd9e46b965)] - fix a miserable error removing functions... which is mandatory (gregorybesson) 
+* [[`9ab122777b`](https://github.com/AdFabConnect/abejs/commit/9ab122777b)] - fix attributes test (gregorybesson) 
+
+## [2.5.4] - 2016-10-9
+* [[`d6c4e630db`](https://github.com/AdFabConnect/abejs/commit/d6c4e630db)] - exclusions in git and npm (gregorybesson) 
+* [[`85a8aa1dc5`](https://github.com/AdFabConnect/abejs/commit/85a8aa1dc5)] - back to normal (gregorybesson) 
+* [[`a8bb1b93f9`](https://github.com/AdFabConnect/abejs/commit/a8bb1b93f9)] - ***Revert*** "to stable version" (gregorybesson) 
+* [[`1195ed15bd`](https://github.com/AdFabConnect/abejs/commit/1195ed15bd)] - **refactoring**: fix bugs + linting (gregorybesson) 
+* [[`e79fdef2cd`](https://github.com/AdFabConnect/abejs/commit/e79fdef2cd)] - **refactoring**: linting (gregorybesson) 
+* [[`722e6584f9`](https://github.com/AdFabConnect/abejs/commit/722e6584f9)] - **refactoring**: version + linting (gregorybesson) 
+* [[`d9514167af`](https://github.com/AdFabConnect/abejs/commit/d9514167af)] - **refactoring**: bug fixing and linting (gregorybesson) 
+* [[`a65f2c536e`](https://github.com/AdFabConnect/abejs/commit/a65f2c536e)] - **refactoring**: object test + fix (gregorybesson) 
+* [[`f4829166d1`](https://github.com/AdFabConnect/abejs/commit/f4829166d1)] - **refactoring**: FileParser refactored into logical packages (gregorybesson) 
+* [[`39b560211c`](https://github.com/AdFabConnect/abejs/commit/39b560211c)] - **refactoring**: dead code (gregorybesson) 
+* [[`2b9986eab7`](https://github.com/AdFabConnect/abejs/commit/2b9986eab7)] - **refactoring**: linting (gregorybesson) 
+* [[`1fbf321409`](https://github.com/AdFabConnect/abejs/commit/1fbf321409)] - **refactoring**: cmsData (gregorybesson) 
+* [[`675e71bc7d`](https://github.com/AdFabConnect/abejs/commit/675e71bc7d)] - **refactoring**: cmsData (gregorybesson) 
+* [[`2f2c412444`](https://github.com/AdFabConnect/abejs/commit/2f2c412444)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`1fc2c9c9d8`](https://github.com/AdFabConnect/abejs/commit/1fc2c9c9d8)] - **refactoring**: unpublish (nicolaslabbe) 
+* [[`439767e0e5`](https://github.com/AdFabConnect/abejs/commit/439767e0e5)] - **refactoring**: fileparser copyasset -> asset.copy (nicolaslabbe) 
+* [[`2575abd763`](https://github.com/AdFabConnect/abejs/commit/2575abd763)] - **refactoring**: getProjectFiles + UT (nicolaslabbe) 
+* [[`375b66318a`](https://github.com/AdFabConnect/abejs/commit/375b66318a)] - **refactoring**: almost kill file-utils -> renamed as file (nicolaslabbe) 
+* [[`4669239c75`](https://github.com/AdFabConnect/abejs/commit/4669239c75)] - **refactoring**: lint (nicolaslabbe) 
+* [[`cf6f6f0e2c`](https://github.com/AdFabConnect/abejs/commit/cf6f6f0e2c)] - **refactoring**: fileutils (nicolaslabbe) 
+* [[`3a2c7ab03e`](https://github.com/AdFabConnect/abejs/commit/3a2c7ab03e)] - **refactoring**: remove concatpath (nicolaslabbe) 
+* [[`db4e0d98ef`](https://github.com/AdFabConnect/abejs/commit/db4e0d98ef)] - **refactoring**: remove folderUtils (nicolaslabbe) 
+* [[`f639117e28`](https://github.com/AdFabConnect/abejs/commit/f639117e28)] - **refactoring**: remove folderUtils (nicolaslabbe) 
+* [[`e0892aca88`](https://github.com/AdFabConnect/abejs/commit/e0892aca88)] - **refactoring**: lint (nicolaslabbe) 
+* [[`76ee4216d1`](https://github.com/AdFabConnect/abejs/commit/76ee4216d1)] - **refactoring**: locales (nicolaslabbe) 
+* [[`521651ea59`](https://github.com/AdFabConnect/abejs/commit/521651ea59)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`6ab8ac08cf`](https://github.com/AdFabConnect/abejs/commit/6ab8ac08cf)] - fix UT (nicolaslabbe) 
+* [[`469e753ed9`](https://github.com/AdFabConnect/abejs/commit/469e753ed9)] - **refactoring**: UT revisions (nicolaslabbe) 
+* [[`46e766ea91`](https://github.com/AdFabConnect/abejs/commit/46e766ea91)] - **refactoring**:  (nicolaslabbe) 
+
+## [2.5.3] - 2016-10-6
+* [[`2c560fcaf3`](https://github.com/AdFabConnect/abejs/commit/2c560fcaf3)] - **fix**: - (gregorybesson) 
+* [[`0b2bf92d10`](https://github.com/AdFabConnect/abejs/commit/0b2bf92d10)] - **fix**: limax BC break + refactoring to better handle file saving (gregorybesson) 
+* [[`51d53a5e94`](https://github.com/AdFabConnect/abejs/commit/51d53a5e94)] - replace dash with dot in image filename (wonknu10) 
+* [[`3925ecf5fd`](https://github.com/AdFabConnect/abejs/commit/3925ecf5fd)] - **refactoring**: kill abe-util (nicolaslabbe) 
+* [[`91e05886ac`](https://github.com/AdFabConnect/abejs/commit/91e05886ac)] - **refactoring**: lint abe-util (nicolaslabbe) 
+* [[`271bd58596`](https://github.com/AdFabConnect/abejs/commit/271bd58596)] - **refactoring**: remove replaceUnwantedChar from abe-util (nicolaslabbe) 
+* [[`434e7349e2`](https://github.com/AdFabConnect/abejs/commit/434e7349e2)] - **refactoring**: some linting (nicolaslabbe) 
+* [[`83288c406a`](https://github.com/AdFabConnect/abejs/commit/83288c406a)] - **refactoring**: remove getallattribute from from abe-util (nicolaslabbe) 
+* [[`194c7cf136`](https://github.com/AdFabConnect/abejs/commit/194c7cf136)] - **refactoring**: remove source from abe-util (nicolaslabbe) 
+* [[`d1844cf4d6`](https://github.com/AdFabConnect/abejs/commit/d1844cf4d6)] - **refactoring**: insertDebugtoolUtilities + UT (nicolaslabbe) 
+* [[`880c093825`](https://github.com/AdFabConnect/abejs/commit/880c093825)] - **refactoring**: encodeAbe + UT (nicolaslabbe) 
+* [[`273a12a6b3`](https://github.com/AdFabConnect/abejs/commit/273a12a6b3)] - **refactoring**: meta + UT (nicolaslabbe) 
+* [[`14cf1683ba`](https://github.com/AdFabConnect/abejs/commit/14cf1683ba)] - **refactoring**: save (nicolaslabbe) 
+* [[`9899dff719`](https://github.com/AdFabConnect/abejs/commit/9899dff719)] - **refactoring**: lint create and duplicate (nicolaslabbe) 
+* [[`51840e66e1`](https://github.com/AdFabConnect/abejs/commit/51840e66e1)] - **refactoring**: UT duplicate (nicolaslabbe) 
+* [[`81eefde412`](https://github.com/AdFabConnect/abejs/commit/81eefde412)] - **refactoring**: UT create (nicolaslabbe) 
+* [[`02e9e00230`](https://github.com/AdFabConnect/abejs/commit/02e9e00230)] - **refactoring**: duplicate and create (nicolaslabbe) 
+* [[`d8c47faa61`](https://github.com/AdFabConnect/abejs/commit/d8c47faa61)] - remove unused (nicolaslabbe) 
+
+## [2.5.2] - 2016-10-5
+* [[`9b8ac76b0f`](https://github.com/AdFabConnect/abejs/commit/9b8ac76b0f)] - move config.json (nicolaslabbe) 
+
+## [2.5.1] - 2016-10-5
+
+## [2.5.0] - 2016-10-5
+* [[`06a208bc72`](https://github.com/AdFabConnect/abejs/commit/06a208bc72)] - bug on compare (nicolaslabbe) 
+* [[`d63ed2a507`](https://github.com/AdFabConnect/abejs/commit/d63ed2a507)] - remove strutil (nicolaslabbe) 
+* [[`4bc6dd6bcd`](https://github.com/AdFabConnect/abejs/commit/4bc6dd6bcd)] - **refactoring**: UT fileattr (nicolaslabbe) 
+* [[`ba793da4ff`](https://github.com/AdFabConnect/abejs/commit/ba793da4ff)] - **refactoring**: fileattr (nicolaslabbe) 
+* [[`1741bfc81f`](https://github.com/AdFabConnect/abejs/commit/1741bfc81f)] - refactoring; UT regex (nicolaslabbe) 
+* [[`9112207f30`](https://github.com/AdFabConnect/abejs/commit/9112207f30)] - **refactoring**: cms data regex utils (nicolaslabbe) 
+* [[`e26152e45a`](https://github.com/AdFabConnect/abejs/commit/e26152e45a)] - **refactoring**: cms data regex (nicolaslabbe) 
+* [[`3af0a6b958`](https://github.com/AdFabConnect/abejs/commit/3af0a6b958)] - **refactoring**: linting (gregorybesson) 
+* [[`27727b11de`](https://github.com/AdFabConnect/abejs/commit/27727b11de)] - **refactoring**: linting (gregorybesson) 
+* [[`64aac09b4a`](https://github.com/AdFabConnect/abejs/commit/64aac09b4a)] - **refactoring**: linting (gregorybesson) 
+* [[`991ce7fe5e`](https://github.com/AdFabConnect/abejs/commit/991ce7fe5e)] - revisions (nicolaslabbe) 
+* [[`6412ce121c`](https://github.com/AdFabConnect/abejs/commit/6412ce121c)] - change readme github double (nicolaslabbe) 
+* [[`4667cb701e`](https://github.com/AdFabConnect/abejs/commit/4667cb701e)] - comment sql method (nicolaslabbe) 
+* [[`49cb05d6d7`](https://github.com/AdFabConnect/abejs/commit/49cb05d6d7)] - fix bug sort on build (nicolaslabbe) 
+* [[`99a2daad51`](https://github.com/AdFabConnect/abejs/commit/99a2daad51)] - inverse logs for build fail (nicolaslabbe) 
+* [[`4e769efa4e`](https://github.com/AdFabConnect/abejs/commit/4e769efa4e)] - add comment sort.js (nicolaslabbe) 
+* [[`e2a49fb84b`](https://github.com/AdFabConnect/abejs/commit/e2a49fb84b)] - more losgs (nicolaslabbe) 
+* [[`74ce58b43b`](https://github.com/AdFabConnect/abejs/commit/74ce58b43b)] - add log because build fail on travis but not locally (nicolaslabbe) 
+* [[`12a351f22b`](https://github.com/AdFabConnect/abejs/commit/12a351f22b)] - lint sql.js (nicolaslabbe) 
+* [[`91ed9cdbfa`](https://github.com/AdFabConnect/abejs/commit/91ed9cdbfa)] - split sql and sort (+ UT for sort) (nicolaslabbe) 
+* [[`bdfcbecf0b`](https://github.com/AdFabConnect/abejs/commit/bdfcbecf0b)] - bug on builderjs (nicolaslabbe) 
+* [[`e3c8933d0f`](https://github.com/AdFabConnect/abejs/commit/e3c8933d0f)] - refactor (nicolaslabbe) 
+* [[`f37dd68515`](https://github.com/AdFabConnect/abejs/commit/f37dd68515)] - Merged branch master into master (nicolaslabbe) 
+* [[`ef82267191`](https://github.com/AdFabConnect/abejs/commit/ef82267191)] - Merge remote-tracking branch 'refs/remotes/origin/master' (nicolaslabbe) 
+* [[`2115c9d9a9`](https://github.com/AdFabConnect/abejs/commit/2115c9d9a9)] - sql (NOT IN)  inside manager (wonknu10) 
+* [[`dc11833841`](https://github.com/AdFabConnect/abejs/commit/dc11833841)] - remove log before merge (nicolaslabbe) 
+* [[`8b9bbd696b`](https://github.com/AdFabConnect/abejs/commit/8b9bbd696b)] - refactor sql (nicolaslabbe) 
+* [[`922ed96336`](https://github.com/AdFabConnect/abejs/commit/922ed96336)] - refactor remove-duplicate-attr (nicolaslabbe) 
+* [[`87e1e60fd0`](https://github.com/AdFabConnect/abejs/commit/87e1e60fd0)] - Update CHANGELOG.md (Greg Besson) 
+* [[`ab57b7f4b7`](https://github.com/AdFabConnect/abejs/commit/ab57b7f4b7)] - Merged branch master into master (nicolaslabbe) 
+* [[`e590bccfaa`](https://github.com/AdFabConnect/abejs/commit/e590bccfaa)] - UT title (nicolaslabbe) 
+* [[`891dab2747`](https://github.com/AdFabConnect/abejs/commit/891dab2747)] - TU cleanSlug (wonknu10) 
+* [[`858b989dd0`](https://github.com/AdFabConnect/abejs/commit/858b989dd0)] - slugify image url with limax not cleanSlug (wonknu10) 
+* [[`08a083d37a`](https://github.com/AdFabConnect/abejs/commit/08a083d37a)] - Merged branch master into master (nicolaslabbe) 
+* [[`b392e68932`](https://github.com/AdFabConnect/abejs/commit/b392e68932)] - abe-sql test and doc (nicolaslabbe) 
+* [[`e8fa11e1af`](https://github.com/AdFabConnect/abejs/commit/e8fa11e1af)] - **refactoring**: templates (gregorybesson) 
+* [[`a10c333d33`](https://github.com/AdFabConnect/abejs/commit/a10c333d33)] - updating dependencies + refactoring cms operations (gregorybesson) 
+* [[`7b2ec6a95b`](https://github.com/AdFabConnect/abejs/commit/7b2ec6a95b)] - fix UT (nicolaslabbe) 
+* [[`15e74c7548`](https://github.com/AdFabConnect/abejs/commit/15e74c7548)] - Merged branch master into master (nicolaslabbe) 
+* [[`5ae72849f8`](https://github.com/AdFabConnect/abejs/commit/5ae72849f8)] - abe-sql fix where clause (nicolaslabbe) 
+* [[`1f5b3a8d45`](https://github.com/AdFabConnect/abejs/commit/1f5b3a8d45)] - fix UT (gregorybesson) 
+* [[`e7925e0c54`](https://github.com/AdFabConnect/abejs/commit/e7925e0c54)] - remove magick variable template (nicolaslabbe) 
+* [[`e601c9c2a8`](https://github.com/AdFabConnect/abejs/commit/e601c9c2a8)] - bug abe-sql (nicolaslabbe) 
+* [[`2d27682d34`](https://github.com/AdFabConnect/abejs/commit/2d27682d34)] - bug abe-sql where OR/And (reversed) (nicolaslabbe) 
 * [[`8416acdbc8`](https://github.com/AdFabConnect/abejs/commit/8416acdbc8)] - Merge remote-tracking branch 'refs/remotes/origin/master' (nicolaslabbe) 
 * [[`c7989111c6`](https://github.com/AdFabConnect/abejs/commit/c7989111c6)] - fix require only file (nicolaslabbe) 
 * [[`f71997390a`](https://github.com/AdFabConnect/abejs/commit/f71997390a)] - merge (nicolaslabbe) 

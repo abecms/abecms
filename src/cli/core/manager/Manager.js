@@ -298,8 +298,29 @@ class Manager {
     this._list = cmsData.file.getAllWithKeys(this._whereKeys)
     this._list.sort(coreUtils.sort.predicatBy('date', -1))
     console.log('Manager updated')
-    
-    return this
+  }
+
+  getPage(currentPage = 1, pageSize = 2, sortField = 'date', sortOrder = -1){
+    const total = this._list.length
+    const pageCount = total/pageSize
+    const start = (currentPage - 1)*pageSize
+    const end = currentPage*pageSize
+    let list
+    if(sortField != 'date' || sortOrder != -1){
+      const tmpList = this._list
+      tmpList.sort(coreUtils.sort.predicatBy(sortField, sortOrder))
+      list = tmpList.slice(start, end)
+    } else {
+      list = this._list.slice(start, end)
+    }
+
+    return {
+      "currentPage": currentPage,
+      "pageSize": pageSize,
+      "total": total,
+      "pageCount": pageCount,
+      "list": list
+    }
   }
 
   addHbsTemplate(templateId) {

@@ -136,19 +136,19 @@ export default class EditorAutocomplete {
     // var deepval = this._deep_value_array(json, display)
 
     // if(typeof deepval !== 'undefined' && deepval !== null && deepval !== '') {
-      var div = document.createElement('div')
-      div.classList.add('autocomplete-result')
-      div.setAttribute('data-parent-id', this._currentInput.getAttribute('data-id'))
-      div.setAttribute('value', value.replace(/&quote;/g, '\''))
-      div.innerHTML = display
+    var div = document.createElement('div')
+    div.classList.add('autocomplete-result')
+    div.setAttribute('data-parent-id', this._currentInput.getAttribute('data-id'))
+    div.setAttribute('value', value.replace(/&quote;/g, '\''))
+    div.innerHTML = display
 
-      var remove = document.createElement('span')
-      remove.classList.add('glyphicon', 'glyphicon-remove')
-      remove.setAttribute('data-autocomplete-remove', 'true')
-      remove.addEventListener('click', this._handleRemove)
-      div.appendChild(remove)
+    var remove = document.createElement('span')
+    remove.classList.add('glyphicon', 'glyphicon-remove')
+    remove.setAttribute('data-autocomplete-remove', 'true')
+    remove.addEventListener('click', this._handleRemove)
+    div.appendChild(remove)
 
-      autocompleteResultWrapper.appendChild(div)
+    autocompleteResultWrapper.appendChild(div)
     // }
   }
 
@@ -191,7 +191,7 @@ export default class EditorAutocomplete {
           replace: match[0],
           value: match[1]
         })
-        displayValues = displayValues.replace('{{' + match[1] + '}}', "")
+        displayValues = displayValues.replace('{{' + match[1] + '}}', '')
       }
     }
 
@@ -204,7 +204,7 @@ export default class EditorAutocomplete {
       }
     }
 
-    this._divWrapper.innerHTML = ""
+    this._divWrapper.innerHTML = ''
     var deepValues = []
     var first = true
     if(typeof sources !== 'undefined' && sources !== null) {
@@ -229,8 +229,8 @@ export default class EditorAutocomplete {
         if (Object.prototype.toString.call(trueJson) === '[object Array]') {
           var j = 0
           Array.prototype.forEach.call(trueJson, (item) => {
-            var sourceVal = ""
-            var replace = ""
+            var sourceVal = ''
+            var replace = ''
             var sourceDisplay = display
             if (Object.prototype.toString.call(item) === '[object Object]') {
               try {
@@ -244,12 +244,12 @@ export default class EditorAutocomplete {
             }else {
               sourceVal = item
             }
-            if (sourceVal != "") {
+            if (sourceVal != '') {
               if (deepValues[j] == null) {
                 deepValues[j] = {
                   replace: [replace],
                   value: typeof sourceVal == 'string' ? [sourceVal] : sourceVal,
-                  display: (display == null || display == "null") ? sourceVal : display
+                  display: (display == null || display == 'null') ? sourceVal : display
                 }
               }else {
                 deepValues[j].replace.push(replace)
@@ -265,7 +265,7 @@ export default class EditorAutocomplete {
       Array.prototype.forEach.call(deepValues, (item) => {
         var displayName = item.display
         Array.prototype.forEach.call(item.replace, (replace) => {
-          if (replace != null && replace != "") {
+          if (replace != null && replace != '') {
             displayName = displayName.replace(new RegExp(replace.key, 'g'), replace.value)
           }
         })
@@ -278,7 +278,7 @@ export default class EditorAutocomplete {
             div.classList.add('selected')
           }
           first = false
-          div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), `<span class="select">$1</span>`)
+          div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), '<span class="select">$1</span>')
           this._divWrapper.appendChild(div)
         }
       })

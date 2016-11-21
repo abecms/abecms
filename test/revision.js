@@ -7,6 +7,7 @@ config.set({root: path.join(__dirname,'fixtures')})
 var cmsData = require('../src/cli').cmsData
 var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
+require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 describe('Revision', function() {
   before( function(done) {
