@@ -14,16 +14,16 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   if (typeof req.query.page !== 'undefined') {
-    currentPage = +req.query.page;
+    currentPage = +req.query.page
   }
   if (typeof req.query.pageSize !== 'undefined') {
-    pageSize = +req.query.pageSize;
+    pageSize = +req.query.pageSize
   }
   if (typeof req.query.sortField !== 'undefined') {
-    sortField = req.query.sortField;
+    sortField = req.query.sortField
   }
   if (typeof req.query.sortOrder !== 'undefined') {
-    sortOrder = +req.query.sortOrder;
+    sortOrder = +req.query.sortOrder
   }
   var page = Manager.instance.getPage(currentPage, pageSize, sortField, sortOrder)
 

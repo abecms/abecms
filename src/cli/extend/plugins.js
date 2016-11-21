@@ -234,7 +234,7 @@ class Plugins {
       if(typeof json.plugins !== 'undefined' && json.plugins !== null) {
         Array.prototype.forEach.call(json.plugins, (plugged, index) => {
           if (pluginName === path.basename(plugged.split('@')[0].split('#')[0])) {
-            json.plugins.splice(index, 1);
+            json.plugins.splice(index, 1)
             config.save(json)
           }
         })

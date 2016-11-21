@@ -315,11 +315,11 @@ class Manager {
     }
 
     return {
-      "currentPage": currentPage,
-      "pageSize": pageSize,
-      "total": total,
-      "pageCount": pageCount,
-      "list": list
+      'currentPage': currentPage,
+      'pageSize': pageSize,
+      'total': total,
+      'pageCount': pageCount,
+      'list': list
     }
   }
 
