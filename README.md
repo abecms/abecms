@@ -11,6 +11,9 @@
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
 
+[![NPM](https://nodei.co/npm/abe-cli.png?downloads=true&downloadRank=true)](https://nodei.co/npm/abe-cli/)
+[![NPM](https://nodei.co/npm-dl/abe-cli.png?months=3&height=3)](https://nodei.co/npm/abe-cli/)
+
 # Demo
 Deploy your own Abe demo on Heroku
 
@@ -31,6 +34,28 @@ The 2.x releases will focus on quality and stability and will be covered by Unit
 The separation between the engine, the API server and the front will be reinforced by putting each part in its own repository
 The documentation will be rewritten and included in the modules
 As a major new feature, it will be possible to create a template from partials.
+
+## Roadmap of the next 2.x releases
+- the stateful manager of Abe has to become responsible of pagination of articles (huge performance boost)
+- A homepage will arrive (at last !) on the frontend
+- It will be possible to create filtered views on the manager frontend
+- Refactoring of the editor has to be done
+- Unit testing will cover >60% of the code
+- A full functional test scenario from blog creation to article manipulation will be written
+- The load testing scenarii will be open sourced (based on Locust)
+- Bugfixing
+- Precompiling of templates has to be fully tested
+- since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
+- Add template creation from partials
+- Structure will be editable from abe, as references
+- templates and partials will be uploadable
+- Video training will be produced
+
+## Roadmap of the 3.x releases
+- Separate the engine, the REST server and the client
+- rewrite the client in react
+- create an Electron version
+- More to come !
 
 ## Changelog
 See the complete [changelog](./CHANGELOG.md)
