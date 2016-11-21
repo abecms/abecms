@@ -13,55 +13,234 @@ for example the type text, some required and other optional
 
 are always required for all content type
 
-## Type of abe content
+## <a name="abe-type"></a>Type of abe content
 
-- text
-- image
-- textarea
-- translate
-- import
-- file
-- rich
-- link
+- [text](abe-text.md)
+- [image](abe-image.md)
+- [textarea](abe-textarea.md)
+- [translate](abe-translate.md)
+- [import](abe-import.md)
+- [file](abe-file.md)
+- [rich](abe-rich.md)
+- [link](abe-link.md)
+- [data](abe-data.md)
+- [slug](abe-slug.md)
 
 ## Other attributes
 
-- desc (String)
-- tab (String)
-- reload (Boolean)
-- required (Boolean)
-- visible (Boolean)
-- order (Int)
-- filetype (String)
-- file (String)
-- locale (String | variable)
-- max-length (Int)
-- min-length (Int)
-- display (String)
-- editable (Boolean)
-- source (String | variables)
-- autocomplete (Boolean)
-- duplicate (Boolean)
+- [tab](#tab)
+- [key](#key)
+- [type](#type)
+- [autocomplete](#autocomplete)
+- [desc](#desc)
+- [display](#display)
+- [editable](#editable)
+- [max-length](#max-length)
+- [min-length](#min-length)
+- [source](#source)
+- [duplicate](#duplicate)
+- [reload](#reload)
+- [required](#required)
+- [visible](#visible)
+- [order](#order)
+- [filetype](#filetype)
+- [file](#file)
+- [locale](#locale)
+- [prefill](#prefill)
+- [prefill-quantity](#prefill-quantity)
 
-## Details 
+## <a name="tab"></a>tab (String)
 
-type  | example | description | types | Default
---- | --- | --- | --- | ---
-desc | ```desc="some description for the contributor"``` | (text only) | all | (null)
-tab | ```tab="Image"``` | Will show input into a tab (text only) | all | "default"
-reload  | ```reload="true"``` | Will reload the page on input blur (usefull to trigger some javascript on change) | all | "false"
-required  | ```required="true"``` | Calculate completion of content | all | "false"
-visible  | ```visible="false"``` | will not insert value into html | all | "false"
-order  | ```order="10"``` | Order input into admin form | all | (null)
-filetype  | ```filetype="image"``` | for upload | file | (null)
-file  | ```file="partial.html"``` | for partials import | import | (null)
-locale  | ```locale="fr"``` | for translate | translate | String or Variable (with {{lang}}) (default null)
-max-length  | ```max-length="5"``` | List max choice N | data | (null)
-min-length  | ```min-length="5"``` | List min choice N (used with required attribute) | data | (null)
-display  | ```display="title"``` | List from json source display title attribute | data | (null)
-editable  | ```editable="false"``` | List is editable | data | true
-source  | ```source="[ data source ]"``` | List json value (http url, local url, static json, select sql like) | data | (null)
-autocomplete  | ```autocomplete="true"``` | change the list to autocomplete | data | false
-duplicate  | ```duplicate="false"``` | the field will not be duplicate when user duplicate content | all | false
+Default: "default"
 
+```html
+tab="NameOfTheTab"
+```
 
+Set the admin tab display
+
+## <a name="key"></a>key (String)
+
+Default: ""
+
+```html
+key="keyData"
+```
+
+the key used into json file
+
+## <a name="type"></a>type (String)
+
+Default: "text"
+
+```html
+type="text"
+```
+
+See abe [type](#abe-type)
+
+## <a name="autocomplete"></a>autocomplete (Boolean)
+
+Default: null
+
+```html
+autocomplete="true"
+```
+
+for abe type data, display input form autocomplete into admin
+
+## <a name="desc"></a>desc (String)
+
+Default: ""
+
+```html
+desc="some description for the contributor"
+```
+
+The admin description input
+
+## <a name="display"></a>display (String)
+
+Default: null
+
+```html
+display="variable"
+```
+
+for abe type data (autocomplete true or false)
+
+## <a name="editable"></a>editable (Boolean)
+
+Default: true
+
+```html
+editable="true"
+```
+
+if editable true user can change the value, if not abe will set the values
+
+## <a name="max-length"></a>max-length (Int)
+
+Default: null
+
+```html
+max-length="3"
+```
+
+for abe type data, array max selection
+
+## <a name="min-length"></a>min-length (Int)
+
+Default: 0
+
+```html
+min-length="1"
+```
+
+for abe type data, array min selection (if required)
+
+## <a name="source"></a>source (String | variables)
+
+Default: null
+
+```html
+source="[ source type ]"
+```
+
+see abe type [data](abe-data.md)
+
+## <a name="duplicate"></a>duplicate (Boolean)
+
+Default: true
+
+```html
+duplicate="true"
+```
+
+if set to false, when user duplicate a post. The value will not be diplcate into the new post
+
+## <a name="reload"></a>reload (Boolean)
+
+Default: false
+
+```html
+reload="true"
+```
+
+if reload true, on blur event on the input field the post preview will be reloaded
+
+## <a name="required"></a>required (Boolean)
+
+Default: false
+
+```html
+required="true"
+```
+
+If set to true user cannot publish the post without required field
+
+## <a name="visible"></a>visible (Boolean)
+
+Default: true
+
+```html
+visible="true"
+```
+
+if visible set to false, the value will not be set into post page (but will be visible on the admin and set into the json file)
+
+## <a name="order"></a>order (Int)
+
+Default: 0
+
+```html
+order="1"
+```
+
+to order the input in the admin
+
+## <a name="filetype"></a>filetype (String)
+
+Default: ""
+
+```html
+filetype="image"
+```
+
+## <a name="file"></a>file (String)
+
+Default: ""
+
+```html
+file="partial.html"
+```
+
+see abe [import](abe-import.md)
+
+## <a name="locale"></a>locale (String | variable)
+
+Default: ""
+
+```html
+locale="fr"
+```
+
+## <a name="prefill"></a>prefill (Boolean)
+
+Default: false
+
+```html
+prefill="true"
+```
+
+For abe type data, if set to true will add default values
+
+## <a name="prefill-quantity"></a>prefill-quantity (Int)
+
+Default: null
+
+```html
+prefill-quantity="3"
+```
+
+How many default values to prefill
