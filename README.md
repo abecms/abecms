@@ -37,7 +37,7 @@ As a major new feature, it will be possible to create a template from partials.
 
 ## Roadmap of the next 2.x releases
 - the stateful manager of Abe has to become responsible of pagination of articles (huge performance boost)
-- A homepage will arive (at last !) on the frontend
+- A homepage will arrive (at last !) on the frontend
 - It will be possible to create filtered views on the manager frontend
 - Refactoring of the editor has to be done
 - Unit testing will cover >60% of the code
