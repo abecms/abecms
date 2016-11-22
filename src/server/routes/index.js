@@ -18,6 +18,7 @@ import postSqlRequest from './post-sql-request'
 import postReference from './post-reference'
 import getReference from './get-reference'
 import getPaginate from './get-paginate'
+import users from './users/index'
 
 export {
 	getMain,
@@ -39,5 +40,6 @@ export {
 	postSqlRequest,
 	postReference,
 	getReference,
-	getPaginate
+	getPaginate,
+	users
 }
