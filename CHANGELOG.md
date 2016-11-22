@@ -1,3 +1,15 @@
+
+## [2.8.1] - 2016-11-21
+
+## [2.8.0] - 2016-11-21
+* [[`97e96b0f09`](https://github.com/AdFabConnect/abejs/commit/97e96b0f09)] - **ci**: linting (gregorybesson) 
+* [[`82641aa647`](https://github.com/AdFabConnect/abejs/commit/82641aa647)] - Merge branch 'master' of https://github.com/adfabconnect/abejs (gregorybesson) 
+* [[`1e2d241bb8`](https://github.com/AdFabConnect/abejs/commit/1e2d241bb8)] - **refactoring**: New plugin system implemented (gregorybesson) 
+* [[`7ee59718e4`](https://github.com/AdFabConnect/abejs/commit/7ee59718e4)] - **fix**: broken link abe doc (nicolaslabbe) 
+* [[`b18dd4b9b3`](https://github.com/AdFabConnect/abejs/commit/b18dd4b9b3)] - Update doc for abe type and attribute (nicolaslabbe) 
+* [[`5a58775fe6`](https://github.com/AdFabConnect/abejs/commit/5a58775fe6)] - **doc**: abe type slug (nicolaslabbe) 
+* [[`8e9656db3b`](https://github.com/AdFabConnect/abejs/commit/8e9656db3b)] - Update README.md (Greg Besson) 
+* [[`2d02a26a1b`](https://github.com/AdFabConnect/abejs/commit/2d02a26a1b)] - Update README.md (Greg Besson) 
 * [[`f0b8f0bacd`](https://github.com/AdFabConnect/abejs/commit/f0b8f0bacd)] - **bug**: add watch partials forlder since enhancement (nicolaslabbe) 
 
 ## [2.7.8] - 2016-11-18
