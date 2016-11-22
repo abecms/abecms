@@ -1,20 +1,20 @@
 'use strict';
 
+import fs from 'fs'
+import Cookies from 'cookies'
+import jwt from 'jwt-simple'
+import crypto from 'crypto'
+import nodemailer from 'nodemailer'
+import path from 'path'
+
 import {
-  abeExtend,
-  cmsOperations
+  coreUtils,
+  config,
+  Handlebars,
+  User
 } from '../../../../cli'
 
-var config = require('../../modules/config')
-  , User = require('../../modules/User')
-  , fs = require('fs')
-  , Cookies = require('cookies')
-  , jwt = require('jwt-simple')
-  , crypto = require('crypto')
-  , nodemailer = require('nodemailer');
-var path = require('path');
-
-var route = function route(req, res, next, abe) {
+var route = function route(req, res, next) {
 
   if(typeof req.query.email !== 'undefined' && req.query.email !== null) {
     User.findByEmail(req.query.email, function (err, user) {
@@ -24,28 +24,28 @@ var route = function route(req, res, next, abe) {
 
       crypto.randomBytes(20, function(err, buf) {
         var resetPasswordToken = buf.toString('hex');
-        var forgotExpire = config.getConfig('forgotExpire', abe);
+        var forgotExpire = config.forgotExpire;
 
         User.update({
           id:user.id,
           resetPasswordToken: resetPasswordToken,
           resetPasswordExpires: Date.now() + (forgotExpire*60*1000)
-        }, abe);
+        });
 
-        var requestedUrl = req.protocol + '://' + req.get('Host') + '/abe/plugin/abe-users/reset?token=' + resetPasswordToken;
+        var requestedUrl = req.protocol + '://' + req.get('Host') + '/abe/users/reset?token=' + resetPasswordToken;
 
-        var smtp = config.getConfig('smtp', abe);
-        var emailConf = config.getConfig('email', abe);
+        var smtp = config.smtp;
+        var emailConf = config.email;
         var html = emailConf.html || ''
 
         if(typeof emailConf.templateHtml !== 'undefined' && emailConf.templateHtml !== null) {
-          var fileHtml = path.join(abe.config.root, emailConf.templateHtml)
-          if (abe.coreUtils.file.exist(fileHtml)) {
+          var fileHtml = path.join(config.root, emailConf.templateHtml)
+          if (coreUtils.file.exist(fileHtml)) {
             var html = fs.readFileSync(fileHtml, 'utf8')
           }
         }
 
-        var template = abe.Handlebars.compile(html, {noEscape: true})
+        var template = Handlebars.compile(html, {noEscape: true})
 
         html = template({
           express: {
@@ -68,13 +68,13 @@ var route = function route(req, res, next, abe) {
           }, console.error);
 
           var reset = path.join(__dirname + '/../../partials/forgot.html')
-          var html = abe.coreUtils.file.getContent(reset);
+          var html = coreUtils.file.getContent(reset);
 
-          var template = abe.Handlebars.compile(html, {noEscape: true})
+          var template = Handlebars.compile(html, {noEscape: true})
 
           var tmp = template({
             csrfToken: res.locals.csrfToken,
-            config: JSON.stringify(abe.config),
+            config: JSON.stringify(config),
             express: {
               req: req,
               res: res
@@ -104,13 +104,13 @@ var route = function route(req, res, next, abe) {
               }
 
               var reset = path.join(__dirname + '/../../partials/forgot.html')
-              var html = abe.coreUtils.file.getContent(reset);
+              var html = coreUtils.file.getContent(reset);
 
-              var template = abe.Handlebars.compile(html, {noEscape: true})
+              var template = Handlebars.compile(html, {noEscape: true})
 
               var tmp = template({
                 csrfToken: res.locals.csrfToken,
-                config: JSON.stringify(abe.config),
+                config: JSON.stringify(config),
                 express: {
                   req: req,
                   res: res
@@ -127,13 +127,13 @@ var route = function route(req, res, next, abe) {
     });
   }else {
     var reset = path.join(__dirname + '/../../partials/forgot.html')
-    var html = abe.coreUtils.file.getContent(reset);
+    var html = coreUtils.file.getContent(reset);
 
-    var template = abe.Handlebars.compile(html, {noEscape: true})
+    var template = Handlebars.compile(html, {noEscape: true})
 
     var tmp = template({
       csrfToken: res.locals.csrfToken,
-      config: JSON.stringify(abe.config),
+      config: JSON.stringify(config),
       express: {
         req: req,
         res: res
