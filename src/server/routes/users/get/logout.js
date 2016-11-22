@@ -1,20 +1,20 @@
-'use strict';
+import moment from 'moment'
+import Cookies from 'cookies'
 
-var config = require('../../modules/config')
-  , Cookies = require('cookies')
-  , moment = require('moment');
+import {
+  config
+} from '../../../../cli'
 
-var route = function route(req, res, next, abe) {
+var route = function route(req, res, next) {
   var expires = moment().valueOf();
 
   var cookies = new Cookies( req, res, {
-  	secure: abe.config.cookie.secure
+  	secure: config.cookie.secure
   })
   cookies.set( 'x-access-token', null )
 
   req.logout();
-  var login = config.getConfig('login', abe);
-  res.redirect(login);
+  res.redirect('/abe/users/login');
 }
 
-exports.default = route
+export default route

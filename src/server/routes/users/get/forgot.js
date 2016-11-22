@@ -1,6 +1,4 @@
-'use strict';
-
-import fs from 'fs'
+import fs from 'fs-extra'
 import Cookies from 'cookies'
 import jwt from 'jwt-simple'
 import crypto from 'crypto'
@@ -14,8 +12,30 @@ import {
   User
 } from '../../../../cli'
 
-var route = function route(req, res, next) {
+function showHtml(res, req, info) {
+  var resHtml = ""
+  var page = path.join(__dirname + '/../../../views/users/forgot.html')
+  if (coreUtils.file.exist(page)) {
+    resHtml = fs.readFileSync(page, 'utf8')
+  }
 
+  var template = Handlebars.compile(resHtml, {noEscape: true})
+
+  var tmp = template({
+    csrfToken: res.locals.csrfToken,
+    config: JSON.stringify(config),
+    express: {
+      req: req,
+      res: res
+    },
+    token: req.query.token,
+    info: info
+  })
+
+  return res.send(tmp);
+}
+
+var route = function route(req, res, next) {
   if(typeof req.query.email !== 'undefined' && req.query.email !== null) {
     User.findByEmail(req.query.email, function (err, user) {
       if (err) {
@@ -35,7 +55,7 @@ var route = function route(req, res, next) {
         var requestedUrl = req.protocol + '://' + req.get('Host') + '/abe/users/reset?token=' + resetPasswordToken;
 
         var smtp = config.smtp;
-        var emailConf = config.email;
+        var emailConf = config.users.email;
         var html = emailConf.html || ''
 
         if(typeof emailConf.templateHtml !== 'undefined' && emailConf.templateHtml !== null) {
@@ -67,23 +87,7 @@ var route = function route(req, res, next) {
               html: html.replace(/\{\{forgotUrl\}\}/g, requestedUrl) // html body
           }, console.error);
 
-          var reset = path.join(__dirname + '/../../partials/forgot.html')
-          var html = coreUtils.file.getContent(reset);
-
-          var template = Handlebars.compile(html, {noEscape: true})
-
-          var tmp = template({
-            csrfToken: res.locals.csrfToken,
-            config: JSON.stringify(config),
-            express: {
-              req: req,
-              res: res
-            },
-            token: req.query.token,
-            info: 'Check your inbox'
-          })
-
-          return res.send(tmp);
+          showHtml(res, req, 'Check your inbox')
         }else if(typeof smtp !== 'string') {
           // create reusable transporter object using the default SMTP transport
           var transporter = nodemailer.createTransport("SMTP", smtp)
@@ -103,46 +107,14 @@ var route = function route(req, res, next) {
                   return console.log(error);
               }
 
-              var reset = path.join(__dirname + '/../../partials/forgot.html')
-              var html = coreUtils.file.getContent(reset);
-
-              var template = Handlebars.compile(html, {noEscape: true})
-
-              var tmp = template({
-                csrfToken: res.locals.csrfToken,
-                config: JSON.stringify(config),
-                express: {
-                  req: req,
-                  res: res
-                },
-                token: req.query.token,
-                info: 'Check your inbox'
-              })
-
-              return res.send(tmp);
+              showHtml(res, req, 'Check your inbox')
               console.log('Message sent: ' + info.response);
           });
         }
       });
     });
   }else {
-    var reset = path.join(__dirname + '/../../partials/forgot.html')
-    var html = coreUtils.file.getContent(reset);
-
-    var template = Handlebars.compile(html, {noEscape: true})
-
-    var tmp = template({
-      csrfToken: res.locals.csrfToken,
-      config: JSON.stringify(config),
-      express: {
-        req: req,
-        res: res
-      },
-      token: req.query.token,
-      info: req.flash('info')
-    })
-
-    return res.send(tmp);
+    showHtml(res, req, req.flash('info'))
   }
 }
 

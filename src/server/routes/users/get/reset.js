@@ -1,24 +1,31 @@
-'use strict';
+import fs from 'fs-extra'
+import Cookies from 'cookies'
+import jwt from 'jwt-simple'
+import crypto from 'crypto'
+import path from 'path'
 
-var config = require('../../modules/config')
-  , User = require('../../modules/User')
-  , fs = require('fs')
-  , Cookies = require('cookies')
-  , jwt = require('jwt-simple')
-  , crypto = require('crypto');
-var path = require('path');
+import {
+  coreUtils,
+  config,
+  Handlebars,
+  User
+} from '../../../../cli'
 
-var route = function route(req, res, next, abe) {
+var route = function route(req, res, next) {
+  var resHtml = ""
   if(typeof req.query.token !== 'undefined' && req.query.token !== null) {
     User.findByResetPasswordToken(req.query.token, function (err, user) {
-      var reset = path.join(__dirname + '/../../partials/reset.html')
-      var html = abe.coreUtils.file.getContent(reset);
 
-      var template = abe.Handlebars.compile(html, {noEscape: true})
+      var page = path.join(__dirname + '/../../../views/users/reset.html')
+      if (coreUtils.file.exist(page)) {
+        resHtml = fs.readFileSync(page, 'utf8')
+      }
+      
+      var template = Handlebars.compile(resHtml, {noEscape: true})
 
       var tmp = template({
         csrfToken: res.locals.csrfToken,
-        config: JSON.stringify(abe.config),
+        config: JSON.stringify(config),
         express: {
           req: req,
           res: res
@@ -30,8 +37,8 @@ var route = function route(req, res, next, abe) {
       return res.send(tmp);
     });
   }else {
-    res.redirect('/abe/plugin/abe-users/forgot')
+    res.redirect('/abe/users/forgot')
   }
 }
 
-exports.default = route
+export default route

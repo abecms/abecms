@@ -1,35 +1,42 @@
-'use strict';
+import fs from 'fs-extra'
+import Cookies from 'cookies'
+import jwt from 'jwt-simple'
+import path from 'path'
 
-var config = require('../../modules/config')
-  , User = require('../../modules/User')
-  , fs = require('fs')
-  , Cookies = require('cookies')
-  , jwt = require('jwt-simple');
-var path = require('path');
+import {
+  abeExtend,
+  coreUtils,
+  config,
+  Handlebars,
+  User
+} from '../../../../cli'
 
-var route = function route(req, res, next, abe) {
-  abe.abeExtend.hooks.instance.trigger('beforeRoute', req, res, next);
+var route = function route(req, res, next) {
+  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next);
   if(typeof res._header !== 'undefined' && res._header !== null) return;
 
-  var htmlToSend = '';
+  var resHtml = '';
 
-  var login = path.join(__dirname + '/../../partials/users-list.html')
-  var html = abe.coreUtils.file.getContent(login);
+  var page = path.join(__dirname + '/../../../views/users/users-list.html')
+  if (coreUtils.file.exist(page)) {
+    resHtml = fs.readFileSync(page, 'utf8')
+  }
+  
+  var template = Handlebars.compile(resHtml, {noEscape: true})
 
-  var template = abe.Handlebars.compile(html, {noEscape: true})
   var roles = []
-  var roles = config.getConfig('roles', abe);
+  var roles = config.users.roles
   var tmp = template({
     users: User.getAll(),
     express: {
       req: req,
       res: res
     },
-    config: JSON.stringify(abe.config),
+    config: JSON.stringify(config),
     roles: roles
   })
   
   return res.send(tmp);
 }
 
-exports.default = route
+export default route

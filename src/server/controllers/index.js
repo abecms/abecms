@@ -21,6 +21,7 @@ import {
   ,postReference
   ,getReference
   ,getPaginate
+  ,users
 } from '../routes'
 
 import {
@@ -31,6 +32,19 @@ import {
 var router = express.Router()
 abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 abeExtend.hooks.instance.trigger('beforeAddRoute', router)
+
+router.get('/abe/users/forgot', users.getForgot)
+router.get('/abe/users/list', users.getList)
+router.get('/abe/users/login', users.getLogin)
+router.get('/abe/users/logout', users.getLogout)
+router.get('/abe/users/reset', users.getReset)
+router.post('/abe/users/activate', users.postActivate)
+router.post('/abe/users/add', users.postAdd)
+router.post('/abe/users/deactivate', users.postDeactivate)
+router.post('/abe/users/login', users.postLogin)
+router.post('/abe/users/remove', users.postRemove)
+router.post('/abe/users/reset', users.postReset)
+router.post('/abe/users/update', users.postUpdate)
 
 router.get('/abe/paginate', getPaginate)
 router.post('/abe/create*', postCreate)

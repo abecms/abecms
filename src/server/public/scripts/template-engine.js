@@ -16,12 +16,26 @@ var htmlTag = document.querySelector('html')
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
 // window.json = JSON.parse(unescape(htmlTag.getAttribute('data-json').replace(/&quot;/g, '\"')))
 var j = htmlTag.getAttribute('data-json')
-j = j.replace(/&quot;/g, '"')
-j = unescape(j)
-j = j.replace(/\%27/g, '\'')
-window.json = JSON.parse(j)
-window.Locales = JSON.parse(htmlTag.getAttribute('data-locales'))
-window.slugs = JSON.parse(htmlTag.getAttribute('data-slugs'))
+if (j != null) {
+  j = j.replace(/&quot;/g, '"')
+  j = unescape(j)
+  j = j.replace(/\%27/g, '\'')
+  window.json = JSON.parse(j)
+}else {
+  window.json = {}
+}
+var l = htmlTag.getAttribute('data-locales')
+if (l != null) {
+  window.Locales = JSON.parse(l)
+}else {
+  window.Locales = {}
+}
+var s = htmlTag.getAttribute('data-slugs')
+if (s != null) {
+  window.slugs = JSON.parse(s)
+}else {
+  window.slugs = {}
+}
 
 class Engine {
 
@@ -41,11 +55,13 @@ class Engine {
 
     this.table = null
     $(document).ready(() => {
-      this.table = $('#navigation-list').DataTable({
-        //"order": [[ 3, 'desc' ]],
-        'pageLength': 50,
-        'autoWidth': false
-      })
+      if ($('#navigation-list').size() > 0) {
+        this.table = $('#navigation-list').DataTable({
+          //"order": [[ 3, 'desc' ]],
+          'pageLength': 50,
+          'autoWidth': false
+        })
+      }
     })
 
     var abeReady = new Event('abeReady')

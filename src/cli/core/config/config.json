@@ -96,10 +96,6 @@
   "sitePort": false,
   "users": {
     "secret": "GoNinjaGo",
-    "login": "/abe/plugin/abe-users/login",
-    "signup": "/abe/plugin/abe-users/signup",
-    "logout": "/abe/plugin/abe-users/logout",
-    "home": "/abe/",
     "smtp": null,
     "forgotExpire": 60,
     "email": {

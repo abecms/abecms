@@ -1,18 +1,22 @@
-'use strict';
+import fs from 'fs'
+import Cookies from 'cookies'
+import moment from 'moment'
+import Strategy from 'passport-local'
+import flash from 'connect-flash'
+import passport from 'passport'
+import jwt from 'jwt-simple'
 
-var config = require('../../modules/config')
-  , moment = require('moment')
-  , passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy
-  , User = require('../../modules/User')
-  , Cookies = require( "cookies" )
-  , jwt = require('jwt-simple')
-  , flash = require('connect-flash');
+import {
+  abeExtend,
+  config,
+  Handlebars,
+  User
+} from '../../../../cli'
 
 /**
- * LocalStrategy
+ * Strategy
  */
-passport.use(new LocalStrategy(
+passport.use(new Strategy(
   function(username, password, done) {
     User.findByUsername(username, function(err, user) {
       if (err) { return done(err); }
@@ -35,19 +39,17 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-var route = function route(req, res, next, abe) {
+var route = function(req, res, next) {
   passport.authenticate(
     'local',
     { session: false},
     function(err, user, info) {
-      var login = config.getConfig('login', abe);
-      var secret = config.getConfig('secret', abe);
-      var home = config.getConfig('home', abe);
+      var secret = config.users.secret
       if (err) { return next(err) }
 
       if (!user) {
         req.flash('info', info.message)
-        return res.redirect(login);
+        return res.redirect('/abe/users/login');
         // return res.status(401).json({ error: info });
       }
       var expires = moment().add(7, 'days').valueOf();
@@ -61,12 +63,12 @@ var route = function route(req, res, next, abe) {
       }, secret);
 
       var cookies = new Cookies( req, res, {
-        secure: abe.config.cookie.secure
+        secure: config.cookie.secure
       })
       cookies.set( 'x-access-token', token )
 
-      res.redirect(home);
+      res.redirect('/abe/');
     })(req, res, next);
 }
 
-exports.default = route
+export default route

@@ -1,16 +1,43 @@
-import fs from 'fs'
+import fs from 'fs-extra'
+import path from 'path'
 import bcrypt from 'bcrypt-nodejs'
-import config from './config'
 import Cookies from 'cookies'
 import jwt from 'jwt-simple'
 import owasp from 'owasp-password-strength-test'
 import xss from 'xss'
+import mkdirp from 'mkdirp'
+
+import {
+  config,
+  coreUtils
+} from '../../cli'
 
 function getBdd() {
-   return JSON.parse(fs.readFileSync(__dirname + '/../../../users/bdd.json', 'utf8'));
+  var bddFile = path.join(config.root, 'users', 'bdd.json')
+  var json = {}
+  if (coreUtils.file.exist(bddFile)) {
+    json = JSON.parse(fs.readFileSync(bddFile, 'utf8'))
+  }else {
+    mkdirp(path.dirname(bddFile))
+    fs.writeJsonSync(bddFile, [], { space: 2, encoding: 'utf-8' })
+    var admin = add({
+        "username": "admin",
+        "name": "admin",
+        "email": "admin@test.com",
+        "password": "Adm1n@test",
+        "role": {
+          "workflow":"admin",
+          "name":"Admin"
+        }
+      });
+    activate(admin.user.id)
+
+    json = JSON.parse(fs.readFileSync(bddFile, 'utf8'))
+  }
+  return json;
 }
 
-exports.findSync = function(id) {
+export function findSync(id) {
   var bdd = getBdd()
   for (var i = 0, len = bdd.length; i < len; i++) {
     var user = bdd[i];
@@ -21,7 +48,7 @@ exports.findSync = function(id) {
   return null;
 };
 
-exports.find = function(id, done) {
+export function find(id, done) {
   var bdd = getBdd()
   for (var i = 0, len = bdd.length; i < len; i++) {
     var user = bdd[i];
@@ -32,7 +59,7 @@ exports.find = function(id, done) {
   return done(null, null);
 };
 
-exports.findByUsername = function(username, done) {
+export function findByUsername(username, done) {
   var bdd = getBdd()
   for (var i = 0, len = bdd.length; i < len; i++) {
     var user = bdd[i];
@@ -43,7 +70,7 @@ exports.findByUsername = function(username, done) {
   return done(null, null);
 };
 
-exports.findByEmail = function(email, done) {
+export function findByEmail(email, done) {
   var bdd = getBdd()
   for (var i = 0, len = bdd.length; i < len; i++) {
     var user = bdd[i];
@@ -54,7 +81,7 @@ exports.findByEmail = function(email, done) {
   return done(null, null);
 };
 
-exports.findByResetPasswordToken = function(resetPasswordToken, done) {
+export function findByResetPasswordToken(resetPasswordToken, done) {
   var bdd = getBdd()
   for (var i = 0, len = bdd.length; i < len; i++) {
     var user = bdd[i];
@@ -65,7 +92,7 @@ exports.findByResetPasswordToken = function(resetPasswordToken, done) {
   return done(null, null);
 };
 
-exports.isValid = function(user, password) {
+export function isValid(user, password) {
   var bdd = getBdd()
   if(user.actif === 1) {
     if(bcrypt.compareSync(password, user.password)) {
@@ -75,7 +102,7 @@ exports.isValid = function(user, password) {
   return false;
 };
 
-exports.deactivate = function(id, abe) {
+export function deactivate(id) {
   var bdd = getBdd()
   id = parseInt(id)
   for (var i = 0, len = bdd.length; i < len; i++) {
@@ -84,11 +111,10 @@ exports.deactivate = function(id, abe) {
       bdd[i].actif = 0
     }
   }
-  mkdirp(path.dirname(userBddUrl))
-  abe.fse.writeJsonSync(__dirname + '/../../../users/bdd.json', bdd, { space: 2, encoding: 'utf-8' })
+  fs.writeJsonSync(path.join(config.root, 'users', 'bdd.json'), bdd, { space: 2, encoding: 'utf-8' })
 };
 
-exports.activate = function(id, abe) {
+export function activate(id) {
   var bdd = getBdd()
   id = parseInt(id)
   for (var i = 0, len = bdd.length; i < len; i++) {
@@ -98,10 +124,10 @@ exports.activate = function(id, abe) {
     }
   }
 
-  abe.fse.writeJsonSync(__dirname + '/../../../users/bdd.json', bdd)
+  fs.writeJsonSync(path.join(config.root, 'users', 'bdd.json'), bdd)
 };
 
-exports.remove = function(id, abe) {
+export function remove(id) {
   var bdd = getBdd()
   id = parseInt(id)
   var newBdd = []
@@ -113,18 +139,18 @@ exports.remove = function(id, abe) {
   }
   bdd = newBdd;
 
-  abe.fse.writeJsonSync(__dirname + '/../../../users/bdd.json', bdd)
+  fs.writeJsonSync(path.join(config.root, 'users', 'bdd.json'), bdd)
 };
 
-exports.decodeUser = function(req, res, abe) {
+export function decodeUser(req, res) {
   var decoded = {}
   var cookies = new Cookies(req, res, {
-    secure: abe.config.cookie.secure
+    secure: config.cookie.secure
   })
   var token = cookies.get('x-access-token');
   if(typeof token !== 'undefined' && token !== null && token !== '') {
     try {
-      var secret = config.getConfig('secret', abe);
+      var secret = config.users.secret;
       decoded = jwt.decode(token, secret);
     } catch (err) {}
   }
@@ -185,8 +211,8 @@ function textXss(newUser) {
   }
 }
 
-function getRole(data, abe) {
-  var roles = config.getConfig('roles', abe);
+function getRole(data) {
+  var roles = config.users.roles;
   Array.prototype.forEach.call(roles, (role) => {
     if(role.name === data.role) {
       data.role = role
@@ -194,7 +220,7 @@ function getRole(data, abe) {
   })
 }
 
-function checkSameEmail(data, abe) {
+function checkSameEmail(data) {
   var emailAlreadyUsed = false
   var bdd = getBdd();
   var email = data.email;
@@ -217,17 +243,17 @@ function checkSameEmail(data, abe) {
   }
 }
 
-function commonPassword(data, abe) {
-  var owaspConfig = config.getConfig('owasp', abe)
+function commonPassword(data) {
+  var owaspConfig = config.users.owasp
   owasp.config(owaspConfig);
 
-  var owaspConfig = config.getConfig('owasp', abe)
+  var owaspConfig = config.users.owasp
   owasp.config(owaspConfig);
   var res = owasp.test(data.password)
 
   currentUserName = data.username;
 
-  mustCommonPassword = config.getConfig('mustCommonPassword', abe);
+  mustCommonPassword = config.users.mustCommonPassword
   sameAsUser = (typeof owaspConfig.sameAsUser !== 'undefined' && owaspConfig.sameAsUser !== null) ? owaspConfig.sameAsUser : true;
   mostCommon = (typeof owaspConfig.mostCommon !== 'undefined' && owaspConfig.mostCommon !== null) ? owaspConfig.mostCommon : true;
 
@@ -250,7 +276,7 @@ function commonPassword(data, abe) {
   }
 }
 
-exports.update = function(data, abe) {
+export function update(data) {
   var xss = textXss(data)
   if(xss.success === 0) {
     return xss
@@ -260,7 +286,7 @@ exports.update = function(data, abe) {
     return sameEmail
   }
 
-  getRole(data, abe);
+  getRole(data);
 
   var bdd = getBdd();
   var id = parseInt(data.id);
@@ -273,7 +299,7 @@ exports.update = function(data, abe) {
     }
   }
 
-  abe.fse.writeJsonSync(__dirname + '/../../../users/bdd.json', bdd)
+  fs.writeJsonSync(path.join(config.root, 'users', 'bdd.json'), bdd)
 
   return {
     success:1,
@@ -281,8 +307,8 @@ exports.update = function(data, abe) {
   }
 };
 
-exports.updatePassword = function(data, password, abe) {
-  var cPassword = commonPassword(data, abe)
+export function updatePassword(data, password) {
+  var cPassword = commonPassword(data)
   if(cPassword.success === 0) {
     return cPassword
   }
@@ -298,7 +324,7 @@ exports.updatePassword = function(data, password, abe) {
     }
   }
 
-  abe.fse.writeJsonSync(__dirname + '/../../../users/bdd.json', bdd)
+  fs.writeJsonSync(path.join(config.root, 'users', 'bdd.json'), bdd)
   
   return {
     success:1,
@@ -306,7 +332,7 @@ exports.updatePassword = function(data, password, abe) {
   }
 }
 
-exports.add = function(newUser, abe) {
+export function add(newUser) {
   var xss = textXss(newUser)
   if(xss.success === 0) {
     return xss
@@ -316,7 +342,7 @@ exports.add = function(newUser, abe) {
     return sameEmail
   }
 
-  getRole(newUser, abe);
+  getRole(newUser);
   var bdd = getBdd()
   var lastId = 0
   for (var i = 0, len = bdd.length; i < len; i++) {
@@ -324,7 +350,7 @@ exports.add = function(newUser, abe) {
   }
   newUser.id = lastId+1;
   newUser.actif = 0;
-  var cPassword = commonPassword(newUser, abe)
+  var cPassword = commonPassword(newUser)
   if(cPassword.success === 0) {
     return cPassword
   }
@@ -332,7 +358,7 @@ exports.add = function(newUser, abe) {
   var salt = bcrypt.genSaltSync(10);
   newUser.password = bcrypt.hashSync(newUser.password, salt);
   bdd.push(newUser);
-  abe.fse.writeJsonSync(__dirname + '/../../../users/bdd.json', bdd)
+  fs.writeJsonSync(path.join(config.root, 'users', 'bdd.json'), bdd)
   
   return {
     success:1,
@@ -340,7 +366,7 @@ exports.add = function(newUser, abe) {
   }
 };
 
-exports.getAll = function(abe) {
+export function getAll() {
   var bdd = getBdd()
   return bdd;
 };

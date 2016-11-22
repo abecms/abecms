@@ -1,26 +1,33 @@
-'use strict';
+import fs from 'fs-extra'
+import Cookies from 'cookies'
+import jwt from 'jwt-simple'
+import crypto from 'crypto'
+import path from 'path'
 
-var config = require('../../modules/config')
-  , User = require('../../modules/User')
-  , fs = require('fs')
-  , Cookies = require('cookies')
-  , jwt = require('jwt-simple')
-  , crypto = require('crypto');
-var path = require('path');
+import {
+  coreUtils,
+  Handlebars,
+  config,
+  User
+} from '../../../../cli'
 
-var route = function route(req, res, next, abe) {
+var route = function(req, res, next) {
+  var resHtml = ""
   if(typeof req.body.token !== 'undefined' && req.body.token !== null
     && typeof req.body.password !== 'undefined' && req.body.password !== null
     && typeof req.body['repeat-password'] !== 'undefined' && req.body['repeat-password'] !== null) {
     if (req.body.password !== req.body['repeat-password']) {
-      var reset = path.join(__dirname + '/../../partials/reset.html')
-      var html = abe.coreUtils.file.getContent(reset);
 
-      var template = abe.Handlebars.compile(html, {noEscape: true})
+      var page = path.join(__dirname + '/../../../views/users/reset.html')
+      if (coreUtils.file.exist(page)) {
+        resHtml = fs.readFileSync(page, 'utf8')
+      }
+      
+      var template = Handlebars.compile(resHtml, {noEscape: true})
 
       var tmp = template({
         csrfToken: res.locals.csrfToken,
-        config: JSON.stringify(abe.config),
+        config: JSON.stringify(config),
         express: {
           req: req,
           res: res
@@ -33,7 +40,7 @@ var route = function route(req, res, next, abe) {
     }
     User.findByResetPasswordToken(req.body.token, function (err, userToReset) {
       var msg = ''
-      var forgotExpire = config.getConfig('forgotExpire', abe);
+      var forgotExpire = config.users.forgotExpire
       if (err) {
         msg = 'Error'
       }else if (typeof userToReset === 'undefined' || userToReset === null) {
@@ -46,14 +53,17 @@ var route = function route(req, res, next, abe) {
         }
       }
       if (msg !== '') {
-        var reset = path.join(__dirname + '/../../partials/reset.html')
-        var html = abe.coreUtils.file.getContent(reset);
 
-        var template = abe.Handlebars.compile(html, {noEscape: true})
+        var page = path.join(__dirname + '/../../../views/users/reset.html')
+        if (coreUtils.file.exist(page)) {
+          resHtml = fs.readFileSync(page, 'utf8')
+        }
+        
+        var template = Handlebars.compile(resHtml, {noEscape: true})
 
         var tmp = template({
           csrfToken: res.locals.csrfToken,
-          config: JSON.stringify(abe.config),
+          config: JSON.stringify(config),
           express: {
             req: req,
             res: res
@@ -66,19 +76,21 @@ var route = function route(req, res, next, abe) {
       }
 
       userToReset.password = req.body.password
-      var resUpdatePassword = User.updatePassword(userToReset, req.body.password, abe)
+      var resUpdatePassword = User.updatePassword(userToReset, req.body.password)
       if (resUpdatePassword.success === 1) {
-        var login = config.getConfig('login', abe);
+        var login = config.users.login
         res.redirect(login)
       }else {
-        var reset = path.join(__dirname + '/../../partials/reset.html')
-        var html = abe.coreUtils.file.getContent(reset);
-
-        var template = abe.Handlebars.compile(html, {noEscape: true})
+        var page = path.join(__dirname + '/../../../views/users/reset.html')
+        if (coreUtils.file.exist(page)) {
+          resHtml = fs.readFileSync(page, 'utf8')
+        }
+        
+        var template = Handlebars.compile(resHtml, {noEscape: true})
 
         var tmp = template({
           csrfToken: res.locals.csrfToken,
-          config: JSON.stringify(abe.config),
+          config: JSON.stringify(config),
           express: {
             req: req,
             res: res
@@ -91,10 +103,10 @@ var route = function route(req, res, next, abe) {
       }
     });
   }else if(typeof req.body.token !== 'undefined' && req.body.token !== null) {
-    res.redirect('/abe/plugin/abe-users/reset?token=' + req.body.token)
+    res.redirect('/abe/users/reset?token=' + req.body.token)
   }else {
-    res.redirect('/abe/plugin/abe-users/forgot')
+    res.redirect('/abe/users/forgot')
   }
 }
 
-exports.default = route
+export default route

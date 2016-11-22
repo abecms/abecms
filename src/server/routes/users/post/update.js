@@ -1,43 +1,17 @@
-'use strict';
+import fs from 'fs'
+import Cookies from 'cookies'
+import jwt from 'jwt-simple'
 
-var config = require('../../modules/config')
-  , User = require('../../modules/User')
-  , fs = require('fs')
-  , Cookies = require('cookies')
-  , jwt = require('jwt-simple');
+import {
+  abeExtend,
+  Handlebars,
+  config,
+  User
+} from '../../../../cli'
 
-var route = function route(req, res, next, abe) {
-  abe.abeExtend.hooks.instance.trigger('beforeRoute', req, res, next);
-  if(typeof res._header !== 'undefined' && res._header !== null) return;
-
-  var cookies = new Cookies(req, res, {
-    secure: abe.config.cookie.secure
-  })
-  var token = cookies.get('x-access-token');
-
-  if(typeof token !== 'undefined' && token !== null && token !== '') {
-    try {
-      var secret = config.getConfig('secret', abe);
-      var decoded = jwt.decode(token, secret);
-
-      User.find(decoded.iss, function(err, user) {
-
-        var manage = config.getConfig('manage', abe);
-        if(err || manage.indexOf(user.role.workflow) === -1) {
-          return res.status(401).send('Not authorized !');
-        }
-
-        var resultUpdate = User.update(req.body, abe);
-
-        return res.status(200).json(resultUpdate);
-      })
-
-    } catch (err) {
-      return res.status(401).send('Not authorized !');
-    }
-  }else {
-    return res.status(401).send('Not authorized !');
-  }
+var route = function(req, res, next) {
+  var resultUpdate = User.update(req.body);
+  return res.status(200).json(resultUpdate);
 }
 
-exports.default = route
+export default route

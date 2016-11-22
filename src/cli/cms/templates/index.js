@@ -19,6 +19,7 @@ import truncate 	from './handlebars/truncate'
 import lowercase 	from './handlebars/lowercase'
 import uppercase 	from './handlebars/uppercase'
 import setVariable 	from './handlebars/setVariable'
+import role 	from './handlebars/role'
 
 import * as template from './template'
 import * as assets from './assets'
@@ -43,6 +44,7 @@ Handlebars.registerHelper('truncate', 	truncate)
 Handlebars.registerHelper('lowercase', 	lowercase)
 Handlebars.registerHelper('uppercase', 	uppercase)
 Handlebars.registerHelper('setVariable', 	setVariable)
+Handlebars.registerHelper('role', 	role)
 
 HandlebarsIntl.registerWith(Handlebars)
 
@@ -61,6 +63,7 @@ export {
 	lowercase,
 	uppercase,
 	setVariable,
+	role,
 	math,
 	moduloIf,
 	notEmpty,
