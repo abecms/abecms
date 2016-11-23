@@ -4,6 +4,7 @@ import * as text from './text'
 import locales from './locales'
 import * as slug from './slug'
 import * as file from './file'
+import * as random from './random'
 
 export {
   array,
@@ -11,5 +12,6 @@ export {
   text,
   locales,
   slug,
-  file
+  file,
+  random
 }

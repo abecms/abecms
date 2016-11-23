@@ -18,6 +18,8 @@ import postSqlRequest from './post-sql-request'
 import postReference from './post-reference'
 import getReference from './get-reference'
 import getPaginate from './get-paginate'
+import getThumbs from './get-thumbs'
+import getImage from './get-image'
 
 export {
 	getMain,
@@ -39,5 +41,7 @@ export {
 	postSqlRequest,
 	postReference,
 	getReference,
-	getPaginate
+	getPaginate,
+	getThumbs,
+	getImage
 }
