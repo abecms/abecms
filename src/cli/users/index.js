@@ -13,28 +13,42 @@ import {
 } from '../../cli'
 
 function getBdd() {
-  var bddFile = path.join(config.root, 'users', 'bdd.json')
   var json = {}
-  if (coreUtils.file.exist(bddFile)) {
-    json = JSON.parse(fs.readFileSync(bddFile, 'utf8'))
-  }else {
-    mkdirp(path.dirname(bddFile))
-    fs.writeJsonSync(bddFile, [], { space: 2, encoding: 'utf-8' })
-    var admin = add({
-        "username": "admin",
-        "name": "admin",
-        "email": "admin@test.com",
-        "password": "Adm1n@test",
-        "role": {
-          "workflow":"admin",
-          "name":"Admin"
-        }
-      });
-    activate(admin.user.id)
+  if (config.users.enable) {
+    var bddFile = path.join(config.root, 'users', 'bdd.json')
+    if (coreUtils.file.exist(bddFile)) {
+      json = JSON.parse(fs.readFileSync(bddFile, 'utf8'))
+    }else {
+      mkdirp(path.dirname(bddFile))
+      fs.writeJsonSync(bddFile, [], { space: 2, encoding: 'utf-8' })
+      var admin = add({
+          "username": "admin",
+          "name": "admin",
+          "email": "admin@test.com",
+          "password": "Adm1n@test",
+          "role": {
+            "workflow":"admin",
+            "name":"Admin"
+          }
+        });
+      activate(admin.user.id)
 
-    json = JSON.parse(fs.readFileSync(bddFile, 'utf8'))
+      json = JSON.parse(fs.readFileSync(bddFile, 'utf8'))
+    }
   }
   return json;
+}
+
+export function getUserRoutes(workflow) {
+  var routes = config.users.routes;
+  var userRoles = []
+  Array.prototype.forEach.call(Object.keys(routes), (role) => {
+    if(role === workflow) {
+      userRoles = routes[role]
+    }
+  })
+
+  return userRoles
 }
 
 export function findSync(id) {
@@ -170,10 +184,10 @@ function contains(arr, obj) {
 
 var sameAsUser = true;
 var mostCommon = true;
-var mustCommonPassword = [];
+var mostCommonPassword = [];
 owasp.tests.required.push(function(password) {
   var shouldTest = mostCommon
-  if (shouldTest && contains(mustCommonPassword, password.toLowerCase())) {
+  if (shouldTest && contains(mostCommonPassword, password.toLowerCase())) {
     return "the password used is too common.";
   }
 });
@@ -253,7 +267,7 @@ function commonPassword(data) {
 
   currentUserName = data.username;
 
-  mustCommonPassword = config.users.mustCommonPassword
+  mostCommonPassword = config.users.mostCommonPassword
   sameAsUser = (typeof owaspConfig.sameAsUser !== 'undefined' && owaspConfig.sameAsUser !== null) ? owaspConfig.sameAsUser : true;
   mostCommon = (typeof owaspConfig.mostCommon !== 'undefined' && owaspConfig.mostCommon !== null) ? owaspConfig.mostCommon : true;
 

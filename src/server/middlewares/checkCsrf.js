@@ -3,7 +3,6 @@ import {
 } from '../../cli'
 
 var middleware = function(err, req, res, next) {
-  console.log('checkCsrf', req.url)
   if (err.code !== 'EBADCSRFTOKEN') {
     return next(err)
   }else {

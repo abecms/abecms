@@ -24,6 +24,9 @@
               <th>method</th>
               <th>link</th>
               <th>regex</th>
+              {{#each @root.roles}}
+              <th align="center" class="text-center">{{this.name}}</th>
+              {{/each}}
             </tr>
           </thead>
           <tbody>
@@ -32,6 +35,17 @@
               <td>{{method}}</td>
               <td>{{url}}</td>
               <td>{{regex}}</td>
+              {{#each @root.roles}}
+                {{#isAuthorized ../url this.workflow}}
+                <td align="center" class="text-center">
+                  <input type="checkbox" checked="checked" />
+                </td>
+                {{else}}
+                <td align="center" class="text-center">
+                  <input type="checkbox"/>
+                </td>
+                {{/isAuthorized}}
+              {{/each}}
             </tr>
             {{/each}}
           </tbody>

@@ -24,7 +24,6 @@ var route = function route(req, res, next) {
   
   var template = Handlebars.compile(resHtml, {noEscape: true})
 
-  var roles = []
   var roles = config.users.roles
   var tmp = template({
     users: User.getAll(),

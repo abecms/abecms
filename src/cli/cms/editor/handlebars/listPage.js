@@ -3,6 +3,7 @@ import moment from 'moment'
 import {
   math
   ,abeExtend
+  ,config
 } from '../../../'
 
 export default function listPage(file, index, text) {
@@ -38,27 +39,27 @@ export default function listPage(file, index, text) {
 
   var workflow = ''
 
-  workflow += '<td align="center" class="draft">'
-  if(file.draft != null) {
-    if((file.publish == null)
-      || (file.publish && file.publish.date < file.draft.date)) {
-      workflow += `<a href="/abe${file.draft.html}" class="label label-default label-draft" title="${file.draft.cleanDate}">draft</a>`
-    }else {
-      workflow += `<a href="/abe${file.draft.html}" class="hidden label label-default label-draft" title="${file.draft.cleanDate}">draft</a>`
+  var status = file.abe_meta.status
+  var workflowUser = config.users.workflow
+  Array.prototype.forEach.call(workflowUser, (flow) => {
+    var hidden = ''
+    if(status !== flow) {
+      hidden = 'hidden'
     }
-  }else {
-    workflow += `<a href="/abe${file.abe_meta.link}" class="hidden label label-default label-draft" title="${file.cleanDate}">draft</a>`
-  }
 
-  workflow += '</td>'
-  workflow += '<td align="center" class="publish">'
+    workflow += `<td align="center" class="${flow}">`
+    if(file[flow]) {
+      if (flow === 'publish') {
+        workflow += `<a href="/abe${file[flow].html}" class="checkmark label-published" title="${file[flow].cleanDate}">&#10004;</a>`
+      }else {
+        workflow += `<a href="/abe${file[flow].html}" class="${hidden} label label-default label-draft" title="${file[flow].cleanDate}">${flow}</a>`
+      }
+    }else {
 
-  if (file.publish){
-    workflow += `<a href="/abe${file.publish.html}" class="checkmark label-published" title="${file.publish.cleanDate}">&#10004;</a>`
-  }
-  workflow += '</td>'
+    }
+    workflow += '</td>'
+  })
 
-  workflow = abeExtend.hooks.instance.trigger('afterListPageDraft', workflow, file, index, text)
   res += workflow
 
   res += `<td align="center">

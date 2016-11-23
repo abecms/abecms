@@ -6,10 +6,7 @@ import getListUrl from './get-list-url'
 import getListHooks from './get-list-hooks'
 import getPage from './get-page'
 import postPage from './post-page'
-import postPublish from './post-publish'
 import getGeneratePost from './get-generate-posts'
-import postReject from './post-reject'
-import postDraft from './post-draft'
 import getSaveConfig from './get-save-config'
 import getUnpublish from './get-unpublish'
 import getDelete from './get-delete'
@@ -19,6 +16,7 @@ import postReference from './post-reference'
 import getReference from './get-reference'
 import getPaginate from './get-paginate'
 import * as users from './users'
+import * as operations from './operations'
 
 export {
 	getMain,
@@ -29,10 +27,7 @@ export {
 	postUpdate,
 	getPage,
 	postPage,
-	postPublish,
 	getGeneratePost,
-	postReject,
-	postDraft,
 	getSaveConfig,
 	getUnpublish,
 	getDelete,
@@ -41,5 +36,6 @@ export {
 	postReference,
 	getReference,
 	getPaginate,
-	users
+	users,
+	operations
 }

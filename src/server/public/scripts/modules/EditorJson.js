@@ -52,9 +52,14 @@ export default class Json {
 
       this.headersSaving._fire({url: document.location.origin + '/' + type})
 
+      var ajaxUrl = document.location.origin + '/abe/save/' + type + '/submit' + filePath
+      if (type === 'reject') {
+        ajaxUrl = document.location.origin + '/abe/save/' + json.abe_meta.status + '/reject' + filePath
+      }
+
       this._ajax(
         {
-          url: document.location.origin + '/abe/' + type + filePath,
+          url: ajaxUrl,
           body: toSave,
           headers: this._headers,
           method: 'post'

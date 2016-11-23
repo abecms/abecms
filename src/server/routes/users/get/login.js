@@ -9,8 +9,6 @@ import {
 } from '../../../../cli'
 
 var route = function route(req, res, next) {
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  console.log('call login url', req.url)
   var resHtml = '';
 
   var page = path.join(__dirname + '/../../../views/users/login.html')

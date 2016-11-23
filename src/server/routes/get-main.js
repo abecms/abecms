@@ -100,6 +100,7 @@ var route = function(req, res, next) {
   var folderPath = null
 
   var EditorVariables = {
+    user: res.user,
     slugs: Manager.instance.getSlugs(),
     express: {
       res: res,

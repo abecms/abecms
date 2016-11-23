@@ -19,7 +19,9 @@ import truncate 	from './handlebars/truncate'
 import lowercase 	from './handlebars/lowercase'
 import uppercase 	from './handlebars/uppercase'
 import setVariable 	from './handlebars/setVariable'
-import role 	from './handlebars/role'
+import isAuthorized 	from './handlebars/isAuthorized'
+import concat 	from './handlebars/concat'
+import getCurrentuserRole 	from './handlebars/getCurrentuserRole'
 
 import * as template from './template'
 import * as assets from './assets'
@@ -44,7 +46,9 @@ Handlebars.registerHelper('truncate', 	truncate)
 Handlebars.registerHelper('lowercase', 	lowercase)
 Handlebars.registerHelper('uppercase', 	uppercase)
 Handlebars.registerHelper('setVariable', 	setVariable)
-Handlebars.registerHelper('role', 	role)
+Handlebars.registerHelper('isAuthorized', 	isAuthorized)
+Handlebars.registerHelper('concat', 	concat)
+Handlebars.registerHelper('getCurrentuserRole', 	getCurrentuserRole)
 
 HandlebarsIntl.registerWith(Handlebars)
 
@@ -63,7 +67,9 @@ export {
 	lowercase,
 	uppercase,
 	setVariable,
-	role,
+	isAuthorized,
+	concat,
+	getCurrentuserRole,
 	math,
 	moduloIf,
 	notEmpty,

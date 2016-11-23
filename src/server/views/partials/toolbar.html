@@ -1,23 +1,78 @@
-    
+{{&setVariable "statusFound" "false"}}
+
+{{#ifCond @root.json.abe_meta.status "draft"}}
+  {{#isAuthorized "/abe/save/draft/submit" @root.user.role.workflow}}
     <button class='btn btn-info btn-save' data-action="draft">
       <span class="before">
         draft
       </span>
       <span class="loading">
-        {{text.saving}}
+        {{@root.text.saving}}
       </span>
       <span class="after">
-        {{text.done}}
+        {{@root.text.done}}
       </span>
     </button>
-    <button class='btn btn-info btn-save' data-action="publish">
+  {{/isAuthorized}}
+{{else}}
+  {{#ifCond @root.json.abe_meta.status "publish"}}
+    {{#isAuthorized "/abe/save/draft/submit" @root.user.role.workflow}}
+    <button class='btn btn-info btn-save' data-action="draft">
       <span class="before">
-        publish
+        draft
       </span>
       <span class="loading">
-        {{text.saving}}
+        {{@root.text.saving}}
       </span>
       <span class="after">
-        {{text.done}}
+        {{@root.text.done}}
       </span>
     </button>
+    {{/isAuthorized}}
+  {{else}}
+    {{#isAuthorized (concat "/abe/save/" @root.json.abe_meta.status "/reject") @root.user.role.workflow}}
+    <button class='btn btn-info btn-save' data-action="reject">
+      <span class="before">
+        reject
+      </span>
+      <span class="loading">
+        {{@root.text.saving}}
+      </span>
+      <span class="after">
+        {{@root.text.done}}
+      </span>
+    </button>
+    {{/isAuthorized}}
+  {{/ifCond}}
+{{/ifCond}}
+
+{{#each @root.config.users.workflow}}
+  
+  {{#ifCond @root.statusFound "true"}}
+    
+    {{#isAuthorized (concat "/abe/save/" this "/submit") @root.user.role.workflow}}
+    <button class='btn btn-info btn-save' data-action="{{this}}">
+      <span class="before">
+        {{this}}
+      </span>
+      <span class="loading">
+        {{@root.text.saving}}
+      </span>
+      <span class="after">
+        {{@root.text.done}}
+      </span>
+    </button>
+    {{/isAuthorized}}
+  {{/ifCond}}
+
+  {{#ifCond @root.json.abe_meta.status this}}
+    {{&setVariable "statusFound" "true"}}
+  {{else}}
+    {{&setVariable "statusFound" "false"}}
+  {{/ifCond}}
+  
+  {{#if @root.config.users.enabled}}
+  {{else}}
+    {{&setVariable "statusFound" "true"}}
+  {{/if}}
+{{/each}}

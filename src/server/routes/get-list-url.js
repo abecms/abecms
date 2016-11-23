@@ -4,6 +4,7 @@ import Handlebars from 'handlebars'
 import {
   abeExtend
   ,coreUtils
+  ,config
 } from '../../cli'
 
 var route = function(router, req, res, next) {
@@ -25,9 +26,16 @@ var route = function(router, req, res, next) {
     html = fse.readFileSync(page, 'utf8')
   }
 
+  var roles = config.users.roles
   var template = Handlebars.compile(html, {noEscape: true})
   var tmp = template({
-    urls: urls
+    urls: urls,
+    express: {
+      req: req,
+      res: res
+    },
+    config: JSON.stringify(config),
+    roles: roles
   })
   
   return res.send(tmp)
