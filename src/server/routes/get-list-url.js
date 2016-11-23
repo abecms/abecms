@@ -30,10 +30,7 @@ var route = function(router, req, res, next) {
   var template = Handlebars.compile(html, {noEscape: true})
   var tmp = template({
     urls: urls,
-    express: {
-      req: req,
-      res: res
-    },
+    user: res.user,
     config: JSON.stringify(config),
     roles: roles
   })

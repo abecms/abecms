@@ -33,7 +33,9 @@ function add(obj, json, text, util) {
   }
 
   obj.key = getDataIdWithNoSlash(obj.key)
-  obj.status = json.abe_meta.status
+  if (json != null && json.abe_meta != null) {
+    obj.status = json.abe_meta.status
+  }
 
   util.add(obj)
 

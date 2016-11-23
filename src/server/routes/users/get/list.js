@@ -27,10 +27,7 @@ var route = function route(req, res, next) {
   var roles = config.users.roles
   var tmp = template({
     users: User.getAll(),
-    express: {
-      req: req,
-      res: res
-    },
+    user: res.user,
     config: JSON.stringify(config),
     roles: roles
   })
