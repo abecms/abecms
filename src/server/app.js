@@ -9,7 +9,7 @@ import path from 'path'
 import busboy from 'connect-busboy'
 import clc from 'cli-color'
 import openurl from 'openurl'
-import uuid from 'node-uuid'
+import uuid from 'uuid'
 
 import {
   config,
