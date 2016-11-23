@@ -64,7 +64,7 @@
             {{else}}
               {{#each this}}
                 <div class="{{cleanTab @key}}">
-                {{{printBlock this}}}
+                {{{printBlock this @root}}}
                 </div>
               {{/each}}
             {{/ifCond}}

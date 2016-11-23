@@ -18,6 +18,10 @@ var usersList = {
       this._handleCloseUpdate = this._closeUpdate.bind(this);
       this._handleAdd = this._add.bind(this);
 
+      this._bindEvents()
+    }
+
+    if ($('#filtered-list').size() > 0) {
       var orderables = document.querySelectorAll('#filtered-list thead th')
       var columns = []
       Array.prototype.forEach.call(orderables, (orderable) => {
@@ -28,14 +32,11 @@ var usersList = {
           columns.push(null)
         }
       })
-
       this.table = $('#filtered-list').DataTable({
         paging: false,
         "info": false,
         "columns": columns
       })
-
-      this._bindEvents()
     }
   },
   _bindEvents: function () {

@@ -26,6 +26,7 @@ if (j != null) {
 }
 var l = htmlTag.getAttribute('data-locales')
 if (l != null) {
+  
   window.Locales = JSON.parse(l)
 }else {
   window.Locales = {}

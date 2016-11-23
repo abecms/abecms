@@ -15,44 +15,43 @@
       <li class="active">Url list</li>
     </ol>
 
-    <div class="panel panel-default">
-  
-      <form classs="form-inline">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>method</th>
-              <th>link</th>
-              <th>regex</th>
-              {{#each @root.roles}}
-              <th align="center" class="text-center">{{this.name}}</th>
-              {{/each}}
-            </tr>
-          </thead>
-          <tbody>
-            {{#each urls}}
-            <tr>
-              <td>{{method}}</td>
-              <td>{{url}}</td>
-              <td>{{regex}}</td>
-              {{#each @root.roles}}
-                {{#isAuthorized ../url this.workflow}}
-                <td align="center" class="text-center">
-                  <input type="checkbox" checked="checked" />
-                </td>
-                {{else}}
-                <td align="center" class="text-center">
-                  <input type="checkbox"/>
-                </td>
-                {{/isAuthorized}}
-              {{/each}}
-            </tr>
+    <form classs="form-inline">
+      <table class="table table-striped table-bordered table-responsive" id="filtered-list">
+        <thead>
+          <tr>
+            <th>method</th>
+            <th>link</th>
+            <th>regex</th>
+            {{#each @root.roles}}
+            <th align="center" class="text-center">{{this.name}}</th>
             {{/each}}
-          </tbody>
-        </table>
-      </form>
-    </div>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each urls}}
+          <tr>
+            <td>{{method}}</td>
+            <td>{{url}}</td>
+            <td>{{regex}}</td>
+            {{#each @root.roles}}
+              {{#isAuthorized ../url this.workflow}}
+              <td align="center" class="text-center">
+                <input type="checkbox" checked="checked" />
+              </td>
+              {{else}}
+              <td align="center" class="text-center">
+                <input type="checkbox"/>
+              </td>
+              {{/isAuthorized}}
+            {{/each}}
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </form>
   </div>
+  <script type="text/javascript" src="/libs/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="/libs/dataTables.bootstrap.min.js"></script>
   
 </body>
 </html>

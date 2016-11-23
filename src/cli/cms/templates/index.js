@@ -53,6 +53,7 @@ Handlebars.registerHelper('getCurrentuserRole', 	getCurrentuserRole)
 HandlebarsIntl.registerWith(Handlebars)
 
 export {
+	Handlebars,
 	template,
 	assets,
 	encodeAbeTagAsComment,

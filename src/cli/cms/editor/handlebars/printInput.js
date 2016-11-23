@@ -9,8 +9,8 @@ import {
  * && add appropriate attributs / data-attributs
  * @return {String|html} input / input group ...
  */
-export default function printInput () {
-  var params = arguments[0]
+export default function printInput (params, root) {
+  // var params = arguments[0]
   params = abeExtend.hooks.instance.trigger('beforeEditorInput', params)
 
   var desc = params.desc + ((params.required) ? ' *' : '')
@@ -32,6 +32,10 @@ export default function printInput () {
   
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
+  var disabled = `{{#isAuthorized '/abe/save/${params.status}/edit' "${root.user.role.workflow}"}}{{else}}disabled="disabled"{{/isAuthorized}}"`
+  if (params.tab == "slug") {
+    disabled = ""
+  }
   var inputClass = 'form-control form-abe'
   var commonParams = `id="${params.key}"
                     data-id="${params.key}"
@@ -43,7 +47,8 @@ export default function printInput () {
                     data-display="${params.display}"
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
-                    placeholder="${params.placeholder}"`
+                    placeholder="${params.placeholder}"
+                    ${disabled}`
 
   if(params.source != null) {
     commonParams = `id="${params.key}"
@@ -55,7 +60,8 @@ export default function printInput () {
                     data-display="${params.display}"
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
-                    placeholder="${params.placeholder}"`
+                    placeholder="${params.placeholder}"
+                    ${disabled}`
 
     var multiple = ''
     disabled = ''
@@ -123,7 +129,8 @@ export default function printInput () {
                     data-display="${params.display}"
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
-                    placeholder="${params.placeholder}"`
+                    placeholder="${params.placeholder}"
+                    ${disabled}`
                     
     res += `<div class="wysiwyg-container rich">
               <div class="wysiwyg-toolbar wysiwyg-toolbar-top">

@@ -1,19 +1,7 @@
 {{&setVariable "statusFound" "false"}}
 
 {{#ifCond @root.json.abe_meta.status "draft"}}
-  {{#isAuthorized "/abe/save/draft/submit" @root.user.role.workflow}}
-    <button class='btn btn-info btn-save' data-action="draft">
-      <span class="before">
-        draft
-      </span>
-      <span class="loading">
-        {{@root.text.saving}}
-      </span>
-      <span class="after">
-        {{@root.text.done}}
-      </span>
-    </button>
-  {{/isAuthorized}}
+  
 {{else}}
   {{#ifCond @root.json.abe_meta.status "publish"}}
     {{#isAuthorized "/abe/save/draft/submit" @root.user.role.workflow}}
@@ -67,11 +55,25 @@
 
   {{#ifCond @root.json.abe_meta.status this}}
     {{&setVariable "statusFound" "true"}}
+
+    {{#isAuthorized (concat "/abe/save/" this "/edit") @root.user.role.workflow}}
+    <button class='btn btn-info btn-save' data-action="{{this}}">
+      <span class="before">
+        {{this}}
+      </span>
+      <span class="loading">
+        {{@root.text.saving}}
+      </span>
+      <span class="after">
+        {{@root.text.done}}
+      </span>
+    </button>
+    {{/isAuthorized}}
   {{else}}
     {{&setVariable "statusFound" "false"}}
   {{/ifCond}}
   
-  {{#if @root.config.users.enabled}}
+  {{#if @root.config.users.enable}}
   {{else}}
     {{&setVariable "statusFound" "true"}}
   {{/if}}
