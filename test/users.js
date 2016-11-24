@@ -246,6 +246,25 @@ describe('users', function() {
     User.getBdd.restore()
   })
 
+  it('User.isValid', function(){
+    // stub
+    var sinonInstance = sinon.sandbox.create();
+    var stub = sinonInstance.stub(User, 'getBdd');
+    stub.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stubHashSync = sinonInstance.stub(bcrypt, 'compareSync');
+    stubHashSync.returns(true);
+
+    // test
+    var res = User.isValid(JSON.parse(JSON.stringify(this.fixture.users))[0])
+    chai.expect(res).to.be.equal(true)
+
+    // unstub
+    sinon.assert.calledOnce(User.getBdd)
+    User.getBdd.restore()
+    sinon.assert.calledOnce(bcrypt.compareSync)
+    bcrypt.compareSync.restore()
+  })
+
   it('User.findSync', function(){
     var sinonInstance = sinon.sandbox.create();
     var stub = sinonInstance.stub(User, 'getBdd');

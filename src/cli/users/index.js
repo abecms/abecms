@@ -117,15 +117,15 @@ export function findByResetPasswordToken(resetPasswordToken, done) {
   return done(null, null)
 }
 
-// export function isValid(user, password) {
-//   var bdd = User.getBdd()
-//   if(user.actif === 1) {
-//     if(bcrypt.compareSync(password, user.password)) {
-//       return true
-//     }
-//   }
-//   return false;
-// };
+export function isValid(user, password) {
+  var bdd = User.getBdd()
+  if(user.actif === 1) {
+    if(bcrypt.compareSync(password, user.password)) {
+      return true
+    }
+  }
+  return false;
+};
 
 export function deactivate(id) {
   var bdd = User.getBdd()
