@@ -1,4 +1,12 @@
 
+## [2.8.2] - 2016-11-24
+* [[`b34b5f1c87`](https://github.com/AdFabConnect/abejs/commit/b34b5f1c87)] - Merge pull request #38 from AdFabConnect/bug-2.8.1 (Greg Besson) 
+* [[`0712b583fc`](https://github.com/AdFabConnect/abejs/commit/0712b583fc)] - Merge pull request #37 from marcbachmann/update-uuid (Greg Besson) 
+* [[`836379157b`](https://github.com/AdFabConnect/abejs/commit/836379157b)] - **fix**: bug abejs form multiple precontrib was selected on queryselector for structure path url (nicolaslabbe) 
+* [[`487d28817a`](https://github.com/AdFabConnect/abejs/commit/487d28817a)] - **fix**: tab slug autocomplete remove result glyph not visible (nicolaslabbe) 
+* [[`ca8528b5c6`](https://github.com/AdFabConnect/abejs/commit/ca8528b5c6)] - chore(package): update uuid to version 3.0.0 (Marc Bachmann) 
+* [[`75b643bc40`](https://github.com/AdFabConnect/abejs/commit/75b643bc40)] - **doc**: changelog (gregorybesson) 
+
 ## [2.8.1] - 2016-11-21
 
 ## [2.8.0] - 2016-11-21
