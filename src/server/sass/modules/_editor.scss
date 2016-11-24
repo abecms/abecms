@@ -14,6 +14,12 @@
   word-break: break-all;
 }
 
+#slug {
+  .autocomplete-result .glyphicon.glyphicon-remove {
+    display: inline-block;
+  }
+}
+
 .manager-wrapper {
   .form-create {
     padding: 0px 20px;
