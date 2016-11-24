@@ -9,11 +9,7 @@ var path = require('path');
 var bcrypt = require('bcrypt-nodejs');
 var Cookies = require('cookies');
 var jwt = require('jwt-simple');
-// var child_process = require('child_process')
-// import {Promise} from 'bluebird'
-// var events = require('events')
-// import which from 'which'
-// const npm = which.sync('npm')
+var Handlebars =require('../src/cli').Handlebars
 
 var coreUtils = require('../src/cli').coreUtils
 var config = require('../src/cli').config
@@ -25,8 +21,20 @@ describe('users', function() {
   before( function() {
     config.users.enable = true
     this.fixture = {
-      users: JSON.parse(fs.readFileSync(__dirname + '/fixtures/users/users.json', 'utf8')),
+      htmlIsAuthorized: fs.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'isAuthorized.html'), 'utf8'),
+      htmlIsAuthorizedTrue: fs.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'isAuthorizedTrue.html'), 'utf8'),
+      users: JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'users', 'users.json'), 'utf8'))
     }
+  });
+
+  it('Handlebars.helpers.isAuthorized', function() {
+    var template = Handlebars.compile(this.fixture.htmlIsAuthorized)
+    var resHtml = template({})
+    chai.expect(resHtml).to.be.equal("");
+
+    template = Handlebars.compile(this.fixture.htmlIsAuthorizedTrue)
+    resHtml = template({})
+    chai.expect(resHtml).to.not.be.equal("");
   });
 
   it('User.utils.getUserRoutes', function(){

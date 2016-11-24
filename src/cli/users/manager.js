@@ -33,8 +33,11 @@ class Manager {
       if (coreUtils.file.exist(this._file)) {
         return JSON.parse(fs.readFileSync(this._file, 'utf8'))
       }else {
+        this._users = []
         var admin = User.operations.add(config.users.default)
+        this.save()
         User.operations.activate(admin.user.id)
+        return JSON.parse(fs.readFileSync(this._file, 'utf8'))
       }
     }
     return []
