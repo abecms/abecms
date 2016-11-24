@@ -14,7 +14,7 @@ export default function listPage(file, index, text) {
   res += '<tr>'
   res += `<td>${math(index, '+', 1)}</td>
         <td>
-          <a href="/abe${file.abe_meta.link}" class="file-path">
+          <a href="/abe/editor${file.abe_meta.link}" class="file-path">
             ${file.abe_meta.link}
           </a>
         </td>`
@@ -50,9 +50,9 @@ export default function listPage(file, index, text) {
     workflow += `<td align="center" class="${flow}">`
     if(file[flow]) {
       if (flow === 'publish') {
-        workflow += `<a href="/abe${file[flow].html}" class="checkmark label-published" title="${file[flow].cleanDate}">&#10004;</a>`
+        workflow += `<a href="/abe/editor${file[flow].html}" class="checkmark label-published" title="${file[flow].cleanDate}">&#10004;</a>`
       }else {
-        workflow += `<a href="/abe${file[flow].html}" class="${hidden} label label-default label-draft" title="${file[flow].cleanDate}">${flow}</a>`
+        workflow += `<a href="/abe/editor${file[flow].html}" class="${hidden} label label-default label-draft" title="${file[flow].cleanDate}">${flow}</a>`
       }
     }else {
 

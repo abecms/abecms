@@ -63,7 +63,7 @@ var route = function(req, res, next) {
       })
       cookies.set( 'x-access-token', token )
 
-      res.redirect('/abe/')
+      res.redirect('/abe/editor/')
     })(req, res, next)
 }
 

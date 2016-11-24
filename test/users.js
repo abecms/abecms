@@ -402,12 +402,10 @@ describe('users', function() {
 
     // test
     var user = JSON.parse(JSON.stringify(this.fixture.users))[0]
-    var res = User.utils.isUserAllowedOnRoute(user, "/abe/test")
+    var res = User.utils.isUserAllowedOnRoute("admin", "/abe/test")
     chai.expect(res).to.be.equal(true)
 
-    user.role.workflow = "review"
-    user.role.name = "review"
-    var res = User.utils.isUserAllowedOnRoute(user, "/abe")
+    var res = User.utils.isUserAllowedOnRoute("review", "/abe/truc")
     chai.expect(res).to.be.equal(false)
 
     // unstub

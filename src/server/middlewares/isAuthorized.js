@@ -24,7 +24,7 @@ var middleware = function(req, res, next) {
   var decoded = User.utils.decodeUser(req, res)
   var user = User.utils.findSync(decoded.iss)
 
-  if (User.utils.isUserAllowedOnRoute(user, req.url)) {
+  if (user != null && User.utils.isUserAllowedOnRoute(user.role.workflow, req.url)) {
     res.user = user
     next()
   }else {

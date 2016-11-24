@@ -7,19 +7,7 @@ import {
  * Handlebars helper, to print className and escape it string
  */
 export default function isAuthorized(route, role, ctx) {
-  var isAuthorized = true
-
-  if (config.users.enable) {
-    var allowedRoutes = User.utils.getUserRoutes(role)
-    Array.prototype.forEach.call(allowedRoutes, (allowedRoute) => {
-      var reg = new RegExp(allowedRoute)
-      if (reg.test(route)) {
-        isAuthorized = false
-      }
-    })
-  }
-
-  if (isAuthorized) {
+  if (User.utils.isUserAllowedOnRoute(role, route)) {
     return ctx.fn(this)
   }else {
     return ctx.inverse(this)

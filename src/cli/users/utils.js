@@ -190,21 +190,23 @@ export function getTokenFromCookies(req, res) {
   return cookies.get('x-access-token')
 }
 
-export function isUserAllowedOnRoute(user, currentRoute) {
-  var isAllowed = true
+export function isUserAllowedOnRoute(workflow, currentRoute) {
+  var isAllowed = false
 
-  if (user != null) {
+  if (currentRoute.indexOf('abe/') === -1) {
+    isAllowed = true
+  }
+
+  if (workflow != null) {
     var routes = config.users.routes
-    if(typeof routes[user.role.workflow] !== 'undefined' && routes[user.role.workflow] !== null) {
-      Array.prototype.forEach.call(routes[user.role.workflow], (route) => {
+    if(typeof routes[workflow] !== 'undefined' && routes[workflow] !== null) {
+      Array.prototype.forEach.call(routes[workflow], (route) => {
         var reg = new RegExp(route)
         if(reg.test(currentRoute)) {
-          isAllowed = false
+          isAllowed = true
         }
       })
     }
-  }else {
-    isAllowed = false
   }
 
   return isAllowed

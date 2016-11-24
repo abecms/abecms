@@ -8,7 +8,7 @@ import {
 } from '../../cli'
 
 var middleware = function(req, res, next) {
-  if (req.originalUrl.indexOf('/abe/') > -1 || req.originalUrl.indexOf('/plugin/') > -1) {
+  if (req.originalUrl.indexOf('/abe/') > -1) {
     return next()
   }
 
@@ -25,7 +25,7 @@ var middleware = function(req, res, next) {
     var files = coreUtils.file.getFilesSync(pathWebsite, false)
     var folders = coreUtils.file.getFoldersSync(pathWebsite, false)
     var html = '<ul>'
-    html += '<li><a href="/abe/">abe</abe></li>'
+    html += '<li><a href="/abe/editor">abe</abe></li>'
     html += '<br />'
     if (req.originalUrl !== '/' && req.originalUrl !== '') {
       var parent = req.originalUrl.replace(/\/$/, '').split('/')

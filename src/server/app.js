@@ -42,7 +42,7 @@ import {
   middleWebsite,
   middleLogin,
   middleCheckCsrf,
-  middleIsAllowed
+  middleIsAuthorized
 } from './middlewares'
 
 var abePort = null
@@ -150,7 +150,7 @@ app.set('view engine', '.html')
 
 app.locals.layout = false
 
-app.use(middleIsAllowed)
+app.use(middleIsAuthorized)
 app.use(middleLogin)
 app.use(middleWebsite)
 app.use(middleCheckCsrf)

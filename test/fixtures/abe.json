@@ -12,8 +12,11 @@
       "test"
     ],
     "routes": {
-      "review": [
+      "admin": [
         "/abe.*"
+      ],
+      "review": [
+        "/abe/test.*"
       ]
     }
   }

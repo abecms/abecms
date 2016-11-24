@@ -17,7 +17,7 @@
   <ul class="list-group">
   {{#each manager.file.revision}}
     <li class="list-group-item">
-      <a href="/abe/{{this.template}}?filePath={{this.filePath}}" class="version">
+      <a href="/abe/editor/{{this.template}}?filePath={{this.filePath}}" class="version">
         {{@root.text.version}} {{this.version}}
         <span class="label label-default label-{{this.publishedDate}} pull-right">
           {{this.duration}}

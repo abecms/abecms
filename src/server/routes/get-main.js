@@ -74,7 +74,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
 }
 
 var route = function(req, res, next) {
-  var filePath = req.originalUrl.replace('/abe', '')
+  var filePath = req.originalUrl.replace('/abe/editor', '')
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
@@ -108,7 +108,7 @@ var route = function(req, res, next) {
     },
     filename: fileName,
     folderPath: folderPath,
-    abeUrl: '/abe/',
+    abeUrl: '/abe/editor/',
     isHome: isHome,
     config: config,
     Locales: coreUtils.locales.instance.i18n,
@@ -130,7 +130,7 @@ var route = function(req, res, next) {
       }
 
       if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
-        res.redirect('/abe/') 
+        res.redirect('/abe/editor') 
         return 
       }
 

@@ -9,9 +9,7 @@ import {
   ,getMain
   ,getPage
   ,postPage
-  // ,postPublish
   ,getGeneratePost
-  // ,postDraft
   ,operations
   ,getSaveConfig
   ,getUnpublish
@@ -61,6 +59,8 @@ router.get('/abe/delete*', getDelete)
 router.get('/abe/reference/*', getReference)
 router.post('/abe/upload/*', postUpload)
 router.post('/abe/reference/*', postReference)
+router.get('/abe/editor*', getMain)
+
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
 })
@@ -110,7 +110,6 @@ Array.prototype.forEach.call(routes, (route) => {
     })
   }
 })
-router.get('/abe*', getMain)
 // router.get('/abe*', getMain)
 
 abeExtend.hooks.instance.trigger('afterAddRoute', router)
