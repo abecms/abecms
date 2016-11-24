@@ -20,7 +20,6 @@ var middleware = function(req, res, next) {
   }
 
   var isHtml = /text\/html/.test(req.get('accept')) ? true : false
-  var isAllowed = true
 
   var decoded = User.utils.decodeUser(req, res)
   var user = User.utils.findSync(decoded.iss)

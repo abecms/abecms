@@ -281,8 +281,6 @@ describe('users', function() {
   it('User.utils.isValid', function(){
     // stub
     var sinonInstance = sinon.sandbox.create();
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
     var stubHashSync = sinonInstance.stub(bcrypt, 'compareSync');
     stubHashSync.returns(true);
 
@@ -291,8 +289,6 @@ describe('users', function() {
     chai.expect(res).to.be.equal(true)
 
     // unstub
-    sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
     sinon.assert.calledOnce(bcrypt.compareSync)
     bcrypt.compareSync.restore()
   })

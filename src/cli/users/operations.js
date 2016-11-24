@@ -1,9 +1,5 @@
-import fs from 'fs-extra'
-import mkdirp from 'mkdirp'
-
 import {
-  config
-  ,coreUtils
+  coreUtils
   ,User
 } from '../../cli'
 
@@ -104,7 +100,7 @@ export function update(data) {
       })
     }
   }
-  var bdd = User.manager.instance.save(bdd)
+  bdd = User.manager.instance.save(bdd)
 
   return {
     success:1,
@@ -127,7 +123,7 @@ export function updatePassword(data, password) {
     }
   }
 
-  var bdd = User.manager.instance.save(bdd)
+  bdd = User.manager.instance.save(bdd)
   
   return {
     success:1,

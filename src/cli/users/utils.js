@@ -162,14 +162,13 @@ export function findByResetPasswordToken(resetPasswordToken, done) {
 }
 
 export function isValid(user, password) {
-  var bdd = User.manager.instance.get()
   if(user.actif === 1) {
     if(bcrypt.compareSync(password, user.password)) {
       return true
     }
   }
-  return false;
-};
+  return false
+}
 
 export function decodeUser(req, res) {
   var decoded = {}
