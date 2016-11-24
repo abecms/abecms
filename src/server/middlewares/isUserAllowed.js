@@ -3,19 +3,6 @@ import {
   User
 } from '../../cli'
 
-function notAllowed(res, isHtml) {
-  if(isHtml) {
-    res.redirect('/abe/users/login')
-  }else {
-    var notAuthorized = {
-      success: 0,
-      message: 'Not authorized !'
-    }
-    res.set('Content-Type', 'application/json')
-    res.send(JSON.stringify(notAuthorized))
-  }
-}
-
 var middleware = function(req, res, next) {
   if (!config.users.enable) {
     if (req.url.indexOf('/abe/users/login') > -1) {
@@ -35,29 +22,23 @@ var middleware = function(req, res, next) {
   var isHtml = /text\/html/.test(req.get('accept')) ? true : false
   var isAllowed = true
 
-  var decoded = User.decodeUser(req, res)
-  var user = User.findSync(decoded.iss)
+  var decoded = User.utils.decodeUser(req, res)
+  var user = User.utils.findSync(decoded.iss)
 
-  if (user != null) {
+  if (User.utils.isUserAllowedOnRoute(user, req.url)) {
     res.user = user
-    
-    var routes = config.users.routes
-    if(typeof routes[user.role.workflow] !== 'undefined' && routes[user.role.workflow] !== null) {
-      Array.prototype.forEach.call(routes[user.role.workflow], (route) => {
-        var reg = new RegExp(route)
-        if(reg.test(req.url)) {
-          isAllowed = false
-        }
-      })
-    }
-  }else {
-    isAllowed = false
-  }
-
-  if(!isAllowed) {
-    notAllowed(res, isHtml)
-  }else {
     next()
+  }else {
+    if(isHtml) {
+      res.redirect('/abe/users/login')
+    }else {
+      var notAuthorized = {
+        success: 0,
+        message: 'Not authorized !'
+      }
+      res.set('Content-Type', 'application/json')
+      res.send(JSON.stringify(notAuthorized))
+    }
   }
 }
 

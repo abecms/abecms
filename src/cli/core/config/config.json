@@ -129,6 +129,16 @@
     "workflow": ["draft", "publish"],
     "routes": {
       "admin": []
+    },
+    "default": {
+      "username": "admin",
+      "name": "admin",
+      "email": "admin@test.com",
+      "password": "Adm1n@test",
+      "role": {
+        "workflow":"admin",
+        "name":"Admin"
+      }
     }
   }
 }

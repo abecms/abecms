@@ -10,7 +10,7 @@ export default function isAuthorized(route, role, ctx) {
   var isAuthorized = true
 
   if (config.users.enable) {
-    var allowedRoutes = User.getUserRoutes(role)
+    var allowedRoutes = User.utils.getUserRoutes(role)
     Array.prototype.forEach.call(allowedRoutes, (allowedRoute) => {
       var reg = new RegExp(allowedRoute)
       if (reg.test(route)) {

@@ -36,7 +36,7 @@ function showHtml(res, req, info) {
 var route = function route(req, res) {
   var html
   if(typeof req.query.email !== 'undefined' && req.query.email !== null) {
-    User.findByEmail(req.query.email, function (err, user) {
+    User.utils.findByEmail(req.query.email, function (err, user) {
       if (err) {
         return res.status(200).json({success: 1}) 
       }
@@ -45,7 +45,7 @@ var route = function route(req, res) {
         var resetPasswordToken = buf.toString('hex')
         var forgotExpire = config.forgotExpire
 
-        User.update({
+        User.operations.update({
           id:user.id,
           resetPasswordToken: resetPasswordToken,
           resetPasswordExpires: Date.now() + (forgotExpire*60*1000)

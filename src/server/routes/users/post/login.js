@@ -14,10 +14,10 @@ import {
  */
 passport.use(new Strategy(
   function(username, password, done) {
-    User.findByUsername(username, function(err, user) {
+    User.utils.findByUsername(username, function(err, user) {
       if (err) { return done(err) }
       if (!user) { return done(null, false, { message: 'Incorrect username or password.' }) }
-      if(!User.isValid(user, password)) {
+      if(!User.utils.isValid(user, password)) {
         return done(null, false, { message: 'Incorrect username or password.' })
       }
       return done(null, user)
@@ -30,7 +30,7 @@ passport.serializeUser(function(user, done) {
 })
 
 passport.deserializeUser(function(id, done) {
-  User.find(id, function (err, user) {
+  User.utils.find(id, function (err, user) {
     done(err, user)
   })
 })

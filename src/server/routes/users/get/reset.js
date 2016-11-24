@@ -11,7 +11,7 @@ import {
 var route = function route(req, res) {
   var resHtml = ''
   if(typeof req.query.token !== 'undefined' && req.query.token !== null) {
-    User.findByResetPasswordToken(req.query.token, function () {
+    User.utils.findByResetPasswordToken(req.query.token, function () {
 
       var page = path.join(__dirname + '/../../../views/users/reset.html')
       if (coreUtils.file.exist(page)) {

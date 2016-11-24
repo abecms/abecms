@@ -3,7 +3,7 @@ import {
 } from '../../../../cli'
 
 var route = function(req, res) {
-  User.remove(req.body.id)
+  User.operations.remove(req.body.id)
   return res.status(200).json({ sucess: 1 })
 }
 

@@ -38,7 +38,7 @@ var route = function(req, res) {
 
       return res.send(tmp)
     }
-    User.findByResetPasswordToken(req.body.token, function (err, userToReset) {
+    User.utils.findByResetPasswordToken(req.body.token, function (err, userToReset) {
       var msg = ''
       if (err) {
         msg = 'Error'
@@ -75,7 +75,7 @@ var route = function(req, res) {
       }
 
       userToReset.password = req.body.password
-      var resUpdatePassword = User.updatePassword(userToReset, req.body.password)
+      var resUpdatePassword = User.operations.updatePassword(userToReset, req.body.password)
       if (resUpdatePassword.success === 1) {
         var login = config.users.login
         res.redirect(login)
