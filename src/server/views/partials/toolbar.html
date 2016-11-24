@@ -36,22 +36,24 @@
 
 {{#each @root.config.users.workflow}}
   
-  {{#ifCond @root.statusFound "true"}}
-    
-    {{#isAuthorized (concat "/abe/save/" this "/submit") @root.user.role.workflow}}
-    <button class='btn btn-info btn-save' data-action="{{this}}">
-      <span class="before">
-        {{this}}
-      </span>
-      <span class="loading">
-        {{@root.text.saving}}
-      </span>
-      <span class="after">
-        {{@root.text.done}}
-      </span>
-    </button>
-    {{/isAuthorized}}
-  {{/ifCond}}
+  {{#if @root.config.users.enable}}
+    {{#ifCond @root.statusFound "true"}}
+      
+      {{#isAuthorized (concat "/abe/save/" this "/submit") @root.user.role.workflow}}
+      <button class='btn btn-info btn-save' data-action="{{this}}">
+        <span class="before">
+          {{this}}
+        </span>
+        <span class="loading">
+          {{@root.text.saving}}
+        </span>
+        <span class="after">
+          {{@root.text.done}}
+        </span>
+      </button>
+      {{/isAuthorized}}
+    {{/ifCond}}
+  {{/if}}
 
   {{#ifCond @root.json.abe_meta.status this}}
     {{&setVariable "statusFound" "true"}}
