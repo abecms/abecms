@@ -1,6 +1,5 @@
 import fs from 'fs-extra'
 import path from 'path'
-import flash from 'connect-flash'
 
 import {
   coreUtils,
@@ -8,8 +7,8 @@ import {
   Handlebars
 } from '../../../../cli'
 
-var route = function route(req, res, next) {
-  var resHtml = '';
+var route = function route(req, res) {
+  var resHtml = ''
 
   var page = path.join(__dirname + '/../../../views/users/login.html')
   if (coreUtils.file.exist(page)) {
@@ -28,7 +27,7 @@ var route = function route(req, res, next) {
     info: req.flash('info')
   })
 
-  return res.send(tmp);
+  return res.send(tmp)
 }
 
 export default route

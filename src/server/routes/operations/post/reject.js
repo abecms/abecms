@@ -14,7 +14,6 @@ var route = function(req, res, next){
     workflow = match[1]
   }
   var postUrl = req.originalUrl.replace(regUrl, '')
-  var json = req.body.json
   
   var p = cmsOperations.post.reject(
     postUrl, 

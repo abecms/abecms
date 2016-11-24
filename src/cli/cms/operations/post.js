@@ -140,7 +140,7 @@ export function reject(filePath, json, workflow) {
     }
   })
   if (!found) {
-    rejectToWorkflow = "draft"
+    rejectToWorkflow = 'draft'
   }
 
   var p = new Promise((resolve) => {

@@ -89,15 +89,15 @@ var app = express(opts)
 Manager.instance.init()
 app.set('config', config.getConfigByWebsite())
 
-app.use(flash());
-app.use(cookieParser());
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(flash())
+app.use(cookieParser())
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(csrf({
   cookie: {
     secure: config.cookie.secure
   }
-}));
+}))
 
 app.use(bodyParser.json({limit: '1gb'}))
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))

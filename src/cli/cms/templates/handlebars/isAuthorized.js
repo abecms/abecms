@@ -1,6 +1,3 @@
-import Cookies from 'cookies'
-import jwt from 'jwt-simple'
-
 import {
   config,
 	User

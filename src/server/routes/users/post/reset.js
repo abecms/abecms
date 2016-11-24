@@ -1,7 +1,4 @@
 import fs from 'fs-extra'
-import Cookies from 'cookies'
-import jwt from 'jwt-simple'
-import crypto from 'crypto'
 import path from 'path'
 
 import {
@@ -11,21 +8,24 @@ import {
   User
 } from '../../../../cli'
 
-var route = function(req, res, next) {
-  var resHtml = ""
+var route = function(req, res) {
+  var resHtml = ''
+  var page
+  var template
+  var tmp
   if(typeof req.body.token !== 'undefined' && req.body.token !== null
     && typeof req.body.password !== 'undefined' && req.body.password !== null
     && typeof req.body['repeat-password'] !== 'undefined' && req.body['repeat-password'] !== null) {
     if (req.body.password !== req.body['repeat-password']) {
 
-      var page = path.join(__dirname + '/../../../views/users/reset.html')
+      page = path.join(__dirname + '/../../../views/users/reset.html')
       if (coreUtils.file.exist(page)) {
         resHtml = fs.readFileSync(page, 'utf8')
       }
       
-      var template = Handlebars.compile(resHtml, {noEscape: true})
+      template = Handlebars.compile(resHtml, {noEscape: true})
 
-      var tmp = template({
+      tmp = template({
         csrfToken: res.locals.csrfToken,
         config: JSON.stringify(config),
         express: {
@@ -36,11 +36,10 @@ var route = function(req, res, next) {
         info: 'Emails are not the same'
       })
 
-      return res.send(tmp);
+      return res.send(tmp)
     }
     User.findByResetPasswordToken(req.body.token, function (err, userToReset) {
       var msg = ''
-      var forgotExpire = config.users.forgotExpire
       if (err) {
         msg = 'Error'
       }else if (typeof userToReset === 'undefined' || userToReset === null) {
@@ -54,14 +53,14 @@ var route = function(req, res, next) {
       }
       if (msg !== '') {
 
-        var page = path.join(__dirname + '/../../../views/users/reset.html')
+        page = path.join(__dirname + '/../../../views/users/reset.html')
         if (coreUtils.file.exist(page)) {
           resHtml = fs.readFileSync(page, 'utf8')
         }
         
-        var template = Handlebars.compile(resHtml, {noEscape: true})
+        template = Handlebars.compile(resHtml, {noEscape: true})
 
-        var tmp = template({
+        tmp = template({
           csrfToken: res.locals.csrfToken,
           config: JSON.stringify(config),
           express: {
@@ -72,7 +71,7 @@ var route = function(req, res, next) {
           info: msg
         })
 
-        return res.send(tmp);
+        return res.send(tmp)
       }
 
       userToReset.password = req.body.password
@@ -81,14 +80,14 @@ var route = function(req, res, next) {
         var login = config.users.login
         res.redirect(login)
       }else {
-        var page = path.join(__dirname + '/../../../views/users/reset.html')
+        page = path.join(__dirname + '/../../../views/users/reset.html')
         if (coreUtils.file.exist(page)) {
           resHtml = fs.readFileSync(page, 'utf8')
         }
         
-        var template = Handlebars.compile(resHtml, {noEscape: true})
+        template = Handlebars.compile(resHtml, {noEscape: true})
 
-        var tmp = template({
+        tmp = template({
           csrfToken: res.locals.csrfToken,
           config: JSON.stringify(config),
           express: {
@@ -99,9 +98,9 @@ var route = function(req, res, next) {
           info: resUpdatePassword.message
         })
 
-        return res.send(tmp);
+        return res.send(tmp)
       }
-    });
+    })
   }else if(typeof req.body.token !== 'undefined' && req.body.token !== null) {
     res.redirect('/abe/users/reset?token=' + req.body.token)
   }else {

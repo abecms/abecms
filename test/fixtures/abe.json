@@ -7,12 +7,14 @@
     "image": "unitimage"
   },
   "users": {
-  	"enable": true,
-    "commonPassword": ["test"],
+    "enable": true,
+    "commonPassword": [
+      "test"
+    ],
     "routes": {
-	    "review": [
-	    	"\/abe.*"
-	    ]
+      "review": [
+        "/abe.*"
+      ]
     }
   }
 }

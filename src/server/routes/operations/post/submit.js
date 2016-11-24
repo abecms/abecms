@@ -16,13 +16,14 @@ var route = function(req, res, next){
   var postUrl = req.originalUrl.replace(regUrl, '')
   var json = req.body.json
   
+  var p
   if (workflow === 'publish') {
-    var p = cmsOperations.post.publish(
+    p = cmsOperations.post.publish(
       postUrl, 
       json
     )
   }else {
-    var p = cmsOperations.post.draft(
+    p = cmsOperations.post.draft(
       postUrl, 
       json, 
       workflow

@@ -33,8 +33,8 @@ export default function printInput (params, root) {
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
   var disabled = `{{#isAuthorized '/abe/save/${params.status}/edit' "${root.user.role.workflow}"}}{{else}}disabled="disabled"{{/isAuthorized}}"`
-  if (params.tab == "slug") {
-    disabled = ""
+  if (params.tab == 'slug') {
+    disabled = ''
   }
   var inputClass = 'form-control form-abe'
   var commonParams = `id="${params.key}"

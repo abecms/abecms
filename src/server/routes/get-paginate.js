@@ -1,6 +1,5 @@
 import {
   abeExtend,
-  cmsOperations,
   Manager
 } from '../../cli'
 

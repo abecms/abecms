@@ -1,7 +1,4 @@
 import fs from 'fs-extra'
-import Cookies from 'cookies'
-import jwt from 'jwt-simple'
-import crypto from 'crypto'
 import path from 'path'
 
 import {
@@ -11,10 +8,10 @@ import {
   User
 } from '../../../../cli'
 
-var route = function route(req, res, next) {
-  var resHtml = ""
+var route = function route(req, res) {
+  var resHtml = ''
   if(typeof req.query.token !== 'undefined' && req.query.token !== null) {
-    User.findByResetPasswordToken(req.query.token, function (err, user) {
+    User.findByResetPasswordToken(req.query.token, function () {
 
       var page = path.join(__dirname + '/../../../views/users/reset.html')
       if (coreUtils.file.exist(page)) {
@@ -34,8 +31,8 @@ var route = function route(req, res, next) {
         info: req.flash('info')
       })
 
-      return res.send(tmp);
-    });
+      return res.send(tmp)
+    })
   }else {
     res.redirect('/abe/users/forgot')
   }

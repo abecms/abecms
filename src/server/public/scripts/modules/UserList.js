@@ -1,3 +1,5 @@
+/*global document, confirm, $ */
+
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 
@@ -7,16 +9,16 @@ var usersList = {
     if (scope != null) {
       this._ajax = Nanoajax.ajax
 
-      this._scope = scope;
-      this._table = this._scope.querySelector('#filtered-list tbody');
-      this._alert = document.querySelector('.alert');
-      this._handleActivate = this._activate.bind(this);
-      this._handleDeactivate = this._deactivate.bind(this);
-      this._handleRemove = this._remove.bind(this);
-      this._handleEdit = this._edit.bind(this);
-      this._handleUpdate = this._update.bind(this);
-      this._handleCloseUpdate = this._closeUpdate.bind(this);
-      this._handleAdd = this._add.bind(this);
+      this._scope = scope
+      this._table = this._scope.querySelector('#filtered-list tbody')
+      this._alert = document.querySelector('.alert')
+      this._handleActivate = this._activate.bind(this)
+      this._handleDeactivate = this._deactivate.bind(this)
+      this._handleRemove = this._remove.bind(this)
+      this._handleEdit = this._edit.bind(this)
+      this._handleUpdate = this._update.bind(this)
+      this._handleCloseUpdate = this._closeUpdate.bind(this)
+      this._handleAdd = this._add.bind(this)
 
       this._bindEvents()
     }
@@ -27,99 +29,99 @@ var usersList = {
       Array.prototype.forEach.call(orderables, (orderable) => {
         var order = orderable.getAttribute('data-orderable')
         if (order != null) {
-          columns.push({ "orderable": (order == 'true') ? true : false })
+          columns.push({ 'orderable': (order == 'true') ? true : false })
         }else {
           columns.push(null)
         }
       })
       this.table = $('#filtered-list').DataTable({
         paging: false,
-        "info": false,
-        "columns": columns
+        'info': false,
+        'columns': columns
       })
     }
   },
   _bindEvents: function () {
-      this._activateBtn = this._scope.querySelectorAll('[data-activate]')
-      this._deactivateBtn = this._scope.querySelectorAll('[data-deactivate]')
-      this._removeBtn = this._scope.querySelectorAll('[data-remove]')
-      this._editBtn = this._scope.querySelectorAll('[data-edit]')
-      this._updateBtn = this._scope.querySelectorAll('[data-update]')
-      this._addBtn = this._scope.querySelector('[data-add-user]')
+    this._activateBtn = this._scope.querySelectorAll('[data-activate]')
+    this._deactivateBtn = this._scope.querySelectorAll('[data-deactivate]')
+    this._removeBtn = this._scope.querySelectorAll('[data-remove]')
+    this._editBtn = this._scope.querySelectorAll('[data-edit]')
+    this._updateBtn = this._scope.querySelectorAll('[data-update]')
+    this._addBtn = this._scope.querySelector('[data-add-user]')
 
-      Array.prototype.forEach.call(this._activateBtn, (btn) => {
-        btn.removeEventListener('click', this._handleActivate)
-        btn.addEventListener('click', this._handleActivate)
-      })
+    Array.prototype.forEach.call(this._activateBtn, (btn) => {
+      btn.removeEventListener('click', this._handleActivate)
+      btn.addEventListener('click', this._handleActivate)
+    })
 
-      Array.prototype.forEach.call(this._deactivateBtn, (btn) => {
-        btn.removeEventListener('click', this._handleDeactivate)
-        btn.addEventListener('click', this._handleDeactivate)
-      })
+    Array.prototype.forEach.call(this._deactivateBtn, (btn) => {
+      btn.removeEventListener('click', this._handleDeactivate)
+      btn.addEventListener('click', this._handleDeactivate)
+    })
 
-      Array.prototype.forEach.call(this._removeBtn, (btn) => {
-        btn.removeEventListener('click', this._handleRemove)
-        btn.addEventListener('click', this._handleRemove)
-      })
+    Array.prototype.forEach.call(this._removeBtn, (btn) => {
+      btn.removeEventListener('click', this._handleRemove)
+      btn.addEventListener('click', this._handleRemove)
+    })
 
-      Array.prototype.forEach.call(this._editBtn, (btn) => {
-        btn.removeEventListener('click', this._handleEdit, true)
-        btn.addEventListener('click', this._handleEdit, true)
-      })
+    Array.prototype.forEach.call(this._editBtn, (btn) => {
+      btn.removeEventListener('click', this._handleEdit, true)
+      btn.addEventListener('click', this._handleEdit, true)
+    })
 
-      Array.prototype.forEach.call(this._updateBtn, (btn) => {
-        btn.removeEventListener('click', this._handleUpdate, true)
-        btn.addEventListener('click', this._handleUpdate, true)
-      })
+    Array.prototype.forEach.call(this._updateBtn, (btn) => {
+      btn.removeEventListener('click', this._handleUpdate, true)
+      btn.addEventListener('click', this._handleUpdate, true)
+    })
 
-      if(typeof this._addBtn !== 'undefined' && this._addBtn !== null) {
-        this._addBtn.addEventListener('click', this._handleAdd)
-      }
+    if(typeof this._addBtn !== 'undefined' && this._addBtn !== null) {
+      this._addBtn.addEventListener('click', this._handleAdd)
+    }
   },
   _activate: function (e) {
-    var target = e.currentTarget;
+    var target = e.currentTarget
     var id = target.getAttribute('data-user-id')
 
     var toSave = qs.stringify({
-        id: id
-      })
+      id: id
+    })
 
     this._ajax(
       {
-        url: "/abe/users/activate",
+        url: '/abe/users/activate',
         body: toSave,
         method: 'post'
       },
-      (code, responseText) => {
+      () => {
         var childGlyph = target.querySelector('.glyphicon')
-        childGlyph.classList.remove('glyphicon-eye-open', 'text-info');
-        childGlyph.classList.add('glyphicon-eye-close', 'text-danger');
-        target.classList.remove('glyphicon-eye-close', 'text-danger');
-        target.classList.add('glyphicon-eye-open', 'text-info');
+        childGlyph.classList.remove('glyphicon-eye-open', 'text-info')
+        childGlyph.classList.add('glyphicon-eye-close', 'text-danger')
+        target.classList.remove('glyphicon-eye-close', 'text-danger')
+        target.classList.add('glyphicon-eye-open', 'text-info')
         target.removeEventListener('click', this._handleActivate)
         target.addEventListener('click', this._handleDeactivate)
       })
   },
   _deactivate: function (e) {
-    var target = e.currentTarget;
+    var target = e.currentTarget
     var id = target.getAttribute('data-user-id')
 
     var toSave = qs.stringify({
-        id: id
-      })
+      id: id
+    })
     
     this._ajax(
       {
-        url: "/abe/users/deactivate",
+        url: '/abe/users/deactivate',
         body: toSave,
         method: 'post'
       },
-      (code, responseText) => {
+      () => {
         var childGlyph = target.querySelector('.glyphicon')
-        childGlyph.classList.remove('glyphicon-eye-close', 'text-danger');
-        childGlyph.classList.add('glyphicon-eye-open', 'text-info');
-        target.classList.remove('glyphicon-eye-open', 'text-info');
-        target.classList.add('glyphicon-eye-close', 'text-danger');
+        childGlyph.classList.remove('glyphicon-eye-close', 'text-danger')
+        childGlyph.classList.add('glyphicon-eye-open', 'text-info')
+        target.classList.remove('glyphicon-eye-open', 'text-info')
+        target.classList.add('glyphicon-eye-close', 'text-danger')
         target.removeEventListener('click', this._handleDeactivate)
         target.addEventListener('click', this._handleActivate)
       })
@@ -144,47 +146,47 @@ var usersList = {
     this._closeFormUpdate(e.currentTarget)
   },
   _update: function (e) {
-    var parent = e.currentTarget.parentNode.parentNode.parentNode;
-    var target = e.currentTarget;
+    var parent = e.currentTarget.parentNode.parentNode.parentNode
+    var target = e.currentTarget
     var data = {
       id: target.getAttribute('data-user-id')
     }
 
     var inputs = parent.querySelectorAll('.form-control')
-    var msg = ""
-    var hasError = false;
+    var msg = ''
+    var hasError = false
     Array.prototype.forEach.call(inputs, function(input) {
-      data[input.name] = input.value;
+      data[input.name] = input.value
 
       if(input.name === 'email' && !this._validateEmail(input.value)) {
-        hasError = true;
-        input.parentNode.classList.add('has-error');
-        this._alert.classList.remove('hidden');
-        msg += 'email is invalid<br />';
-        return;
+        hasError = true
+        input.parentNode.classList.add('has-error')
+        this._alert.classList.remove('hidden')
+        msg += 'email is invalid<br />'
+        return
       }else if (input.value.trim() === '') {
-        hasError = true;
-        input.parentNode.classList.add('has-error');
-        this._alert.classList.remove('hidden');
-        msg += input.name + ' is invalid<br />';
-        return;
+        hasError = true
+        input.parentNode.classList.add('has-error')
+        this._alert.classList.remove('hidden')
+        msg += input.name + ' is invalid<br />'
+        return
       }else {
-        input.parentNode.classList.remove('has-error');
+        input.parentNode.classList.remove('has-error')
       }
     }.bind(this))
 
     if (hasError) {
-      this._alert.innerHTML = msg;
+      this._alert.innerHTML = msg
       return
     }else {
-        this._alert.classList.add('hidden');
-        this._alert.innerHTML = '';
+      this._alert.classList.add('hidden')
+      this._alert.innerHTML = ''
     }
     var toSave = qs.stringify(data)
     
     this._ajax(
       {
-        url: "/abe/users/update",
+        url: '/abe/users/update',
         body: toSave,
         method: 'post'
       },
@@ -196,8 +198,8 @@ var usersList = {
           })
           this._closeFormUpdate(target)
         }else {
-          this._alert.classList.remove('hidden');
-          this._alert.innerHTML = response.message;
+          this._alert.classList.remove('hidden')
+          this._alert.innerHTML = response.message
         }
       })
   },
@@ -205,7 +207,7 @@ var usersList = {
     var confirmDelete = confirm(e.currentTarget.getAttribute('data-text'))
     if (!confirmDelete) return
 
-    var target = e.currentTarget;
+    var target = e.currentTarget
     var id = target.getAttribute('data-user-id')
     var toSave = qs.stringify({
       id: id
@@ -213,21 +215,20 @@ var usersList = {
     
     this._ajax(
       {
-        url: "/abe/users/remove",
+        url: '/abe/users/remove',
         body: toSave,
         method: 'post'
       },
-      (code, responseText) => {
+      () => {
         target.parentNode.parentNode.remove()
       })
   },
   _validateEmail: function(email) {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(email)
   },
-  _add: function (e) {
-    this._alert.classList.add('hidden');
-    var target = e.currentTarget;
+  _add: function () {
+    this._alert.classList.add('hidden')
     var username = document.querySelector('[data-add-user-username]')
     if(typeof username.value === 'undefined' || username.value === null || username.value === '') {
       username.parentNode.classList.add('has-error')
@@ -244,14 +245,14 @@ var usersList = {
 
     var email = document.querySelector('[data-add-user-email]')
     if(typeof email.value === 'undefined' || email.value === null || email.value === '') {
-      email.parentNode.classList.add('has-error');
+      email.parentNode.classList.add('has-error')
       return 
     }
     if(!this._validateEmail(email.value)) {
-      email.parentNode.classList.add('has-error');
-      this._alert.classList.remove('hidden');
-      this._alert.innerHTML = 'email is invalid';
-      return;
+      email.parentNode.classList.add('has-error')
+      this._alert.classList.remove('hidden')
+      this._alert.innerHTML = 'email is invalid'
+      return
     }
     email.parentNode.classList.remove('has-error')
 
@@ -274,7 +275,7 @@ var usersList = {
     
     this._ajax(
       {
-        url: "/abe/users/add",
+        url: '/abe/users/add',
         body: toSave,
         method: 'post'
       },
@@ -330,18 +331,17 @@ var usersList = {
             glypRemove.addEventListener('click', this._handleRemove, true)
           }
 
-          var lastRow = document.querySelectorAll('#filtered-list tbody tr')
           this._table.appendChild(tr)
       
-          username.value = ""
-          name.value = ""
-          email.value = ""
-          password.value = ""
+          username.value = ''
+          name.value = ''
+          email.value = ''
+          password.value = ''
         }else {
-          this._alert.classList.remove('hidden');
-          this._alert.innerHTML = data.message;
+          this._alert.classList.remove('hidden')
+          this._alert.innerHTML = data.message
         }
-    });
+      })
   }
 }
 

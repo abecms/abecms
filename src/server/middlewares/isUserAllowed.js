@@ -1,6 +1,3 @@
-import Cookies from 'cookies'
-import jwt from 'jwt-simple'
-
 import {
   config,
   User
@@ -25,14 +22,14 @@ var middleware = function(req, res, next) {
       res.redirect('/abe')
       return
     }else {
-      next();
-      return;
+      next()
+      return
     }
   }
 
   if( req.url.indexOf('/abe/users/forgot') > -1 || req.url.indexOf('/abe/users/login') > -1 || !/^\/abe/.test(req.url)) {
-    next();
-    return;
+    next()
+    return
   }
 
   var isHtml = /text\/html/.test(req.get('accept')) ? true : false
@@ -60,7 +57,7 @@ var middleware = function(req, res, next) {
   if(!isAllowed) {
     notAllowed(res, isHtml)
   }else {
-    next();
+    next()
   }
 }
 

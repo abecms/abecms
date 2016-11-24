@@ -36,9 +36,6 @@ var route = function(router, req, res, next) {
   })
   
   return res.send(tmp)
-
-  res.set('Content-Type', 'text/html')
-  res.send('working !')
 }
 
 export default route

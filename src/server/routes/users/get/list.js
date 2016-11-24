@@ -1,21 +1,15 @@
 import fs from 'fs-extra'
-import Cookies from 'cookies'
-import jwt from 'jwt-simple'
 import path from 'path'
 
 import {
-  abeExtend,
   coreUtils,
   config,
   Handlebars,
   User
 } from '../../../../cli'
 
-var route = function route(req, res, next) {
-  abeExtend.hooks.instance.trigger('beforeRoute', req, res, next);
-  if(typeof res._header !== 'undefined' && res._header !== null) return;
-
-  var resHtml = '';
+var route = function route(req, res) {
+  var resHtml = ''
 
   var page = path.join(__dirname + '/../../../views/users/users-list.html')
   if (coreUtils.file.exist(page)) {
@@ -32,7 +26,7 @@ var route = function route(req, res, next) {
     roles: roles
   })
   
-  return res.send(tmp);
+  return res.send(tmp)
 }
 
 export default route
