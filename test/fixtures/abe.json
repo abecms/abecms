@@ -5,5 +5,14 @@
   ],
   "upload": {
     "image": "unitimage"
+  },
+  "users": {
+  	"enable": true,
+    "commonPassword": ["test"],
+    "routes": {
+	    "review": [
+	    	"\/abe.*"
+	    ]
+    }
   }
 }

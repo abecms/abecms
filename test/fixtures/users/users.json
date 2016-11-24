@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "username": "test",
+    "name": "admin",
+    "email": "admin@test.com",
+    "resetPasswordToken": "token",
+    "password": "$2a$10$Vb.dH21.uIVCj2yEArmU4OcsHlLTNldGBg/NdhSnD/Q.SWRgIA7Xm",
+    "role": {
+      "workflow": "admin",
+      "name": "Admin"
+    },
+    "actif": 1
+  }
+]
