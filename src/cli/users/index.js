@@ -32,9 +32,6 @@ export function getBdd() {
   if (config.users.enable) {
     json = readBddFile()
     if (json == null) {
-      // writeBddFile({})
-      // mkdirp(path.dirname(bddFile))
-      // fs.writeJsonSync(bddFile, [], { space: 2, encoding: 'utf-8' })
       var admin = add({
         'username': 'admin',
         'name': 'admin',
@@ -48,8 +45,6 @@ export function getBdd() {
       activate(admin.user.id)
 
       json = readBddFile({})
-      // json = JSON.parse(fs.readFileSync(bddFile, 'utf8'))
-
     }
   }
   return json
