@@ -15,7 +15,8 @@
       <li class="active">Url list</li>
     </ol>
 
-    <form classs="form-inline">
+    <form classs="form-inline" action="/abe/list-url/save" data-user-role="true" method="post">
+      <input class='btn btn-info btn-save' type="submit" value="save" data-save-user-role="true" />
       <table class="table table-striped table-bordered table-responsive" id="filtered-list">
         <thead>
           <tr>
@@ -36,11 +37,11 @@
             {{#each @root.roles}}
               {{#isAuthorized ../url this.workflow}}
               <td align="center" class="text-center">
-                <input type="checkbox" checked="checked" />
+                <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" />
               </td>
               {{else}}
               <td align="center" class="text-center">
-                <input type="checkbox"/>
+                <input type="checkbox" name="{{this.workflow}}" value="{{../regex}}" />
               </td>
               {{/isAuthorized}}
             {{/each}}

@@ -213,7 +213,7 @@ export default class FormCreate {
     }
   }
 
-  _submit(type) {
+  _submit(type, target) {
     var res = this._setSlug(true)
     var toSave = qs.stringify(res.values)
 

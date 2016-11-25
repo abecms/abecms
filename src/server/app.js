@@ -150,10 +150,10 @@ app.set('view engine', '.html')
 
 app.locals.layout = false
 
+app.use(middleCheckCsrf)
 app.use(middleIsAuthorized)
 app.use(middleLogin)
 app.use(middleWebsite)
-app.use(middleCheckCsrf)
 app.use(express.static(__dirname + '/public'))
 
 cmsTemplates.assets.copy()

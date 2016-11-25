@@ -9,7 +9,8 @@ import {
   cmsTemplates,
   coreUtils,
   abeExtend,
-  Manager
+  Manager,
+  User
 } from '../../cli'
 
 import {editor} from '../controllers/editor'
@@ -62,6 +63,10 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   EditorVariables.manager = manager
   EditorVariables.nonce = '\'nonce-' + EditorVariables.express.res.locals.nonce + '\''
   EditorVariables.editorWidth = editorWidth
+
+  if (_json != null && _json.abe_meta) {
+    EditorVariables.workflows = User.utils.getUserWorkflow(_json.abe_meta.status)
+  }
 
   EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 

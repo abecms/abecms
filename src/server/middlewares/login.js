@@ -52,8 +52,9 @@ var middleware = function(req, res, next) {
       console.log('e', e)
       next()
     }
-  }else {
+  }else if( req.url.indexOf('/abe/') > -1) {
     var send = res.send
+    var token = req.csrfToken()
     res.send = function (string) {
       var body = string instanceof Buffer ? string.toString() : string
       body = body.replace(/<\/body>/g, function (w) {
@@ -61,9 +62,9 @@ var middleware = function(req, res, next) {
       })
       send.call(this, body)
     }
-    var token = req.csrfToken()
     res.locals.csrfToken = token
-
+    next()
+  }else {
     next()
   }
 }

@@ -29,7 +29,7 @@ export default class Json {
     return this[singleton]
   }
 
-  save(type = 'draft', tplPath = null, filePath = null) {
+  save(type = 'draft', url = "/abe/save/draft/submit", tplPath = null, filePath = null) {
     this.saving._fire({type: type})
     var p = new Promise((resolve) => {
       if(!this.canSave){
@@ -52,10 +52,7 @@ export default class Json {
 
       this.headersSaving._fire({url: document.location.origin + '/' + type})
 
-      var ajaxUrl = document.location.origin + '/abe/save/' + type + '/submit' + filePath
-      if (type === 'reject') {
-        ajaxUrl = document.location.origin + '/abe/save/' + json.abe_meta.status + '/reject' + filePath
-      }
+      var ajaxUrl = document.location.origin + url + filePath
 
       this._ajax(
         {

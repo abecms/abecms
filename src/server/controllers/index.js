@@ -5,6 +5,7 @@ import {
   ,postDuplicate
   ,postUpdate
   ,getListUrl
+  ,postListUrlSave
   ,getListHooks
   ,getMain
   ,getPage
@@ -60,6 +61,7 @@ router.get('/abe/reference/*', getReference)
 router.post('/abe/upload/*', postUpload)
 router.post('/abe/reference/*', postReference)
 router.get('/abe/editor*', getMain)
+router.post('/abe/list-url/save*', postListUrlSave)
 
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 

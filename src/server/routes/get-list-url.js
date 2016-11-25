@@ -35,6 +35,7 @@ var route = function(router, req, res, next) {
     roles: roles
   })
   
+  res.cookie('csrf-token', res.locals.csrfToken)
   return res.send(tmp)
 }
 

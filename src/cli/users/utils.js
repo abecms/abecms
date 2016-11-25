@@ -208,10 +208,48 @@ export function isUserAllowedOnRoute(workflow, currentRoute) {
       })
     }
   }
-
+  
   return isAllowed
 }
 
 export function getAll() {
   return User.manager.instance.get()
+}
+
+export function getUserWorkflow(status, role) {
+  var flows = []
+
+  function addFlow (flow, type, action) {
+    type = (type != null) ? type : flow
+    return {
+      status: flow,
+      url: `/abe/save/${type}/${action}`
+    }
+  }
+
+  if (config.users.enable) {
+    var before = null
+    var found = false
+    Array.prototype.forEach.call(config.users.workflow, (flow) => {
+      if (found) {
+        flows.push(addFlow(flow, flow, "submit"))
+        found = false
+      }
+      if (status == flow) {
+        found = true
+        if (before != null) {
+          if (flow == "publish") {
+            flows.push(addFlow("edit", "draft", "submit"))
+          }else {
+            flows.push(addFlow("reject", before, "reject"))
+          }
+        }
+        flows.push(addFlow(flow, flow, "edit"))
+      }
+      before = flow
+    })
+  }else {
+    flows = [addFlow("draft", "draft", "submit"), addFlow("publish", "publish", "submit")]
+  }
+  return flows
 }

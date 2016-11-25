@@ -1,13 +1,8 @@
-{{&setVariable "statusFound" "false"}}
-
-{{#ifCond @root.json.abe_meta.status "draft"}}
-  
-{{else}}
-  {{#ifCond @root.json.abe_meta.status "publish"}}
-    {{#isAuthorized "/abe/save/draft/submit" @root.user.role.workflow}}
-    <button class='btn btn-info btn-save' data-action="draft">
+{{#each @root.workflows}}
+  {{#isAuthorized this.status this.url}}
+    <button class='btn btn-info btn-save' data-action="{{this.status}}" data-url="{{this.url}}">
       <span class="before">
-        draft
+        {{this.status}}
       </span>
       <span class="loading">
         {{@root.text.saving}}
@@ -16,65 +11,5 @@
         {{@root.text.done}}
       </span>
     </button>
-    {{/isAuthorized}}
-  {{else}}
-    {{#isAuthorized (concat "/abe/save/" @root.json.abe_meta.status "/reject") @root.user.role.workflow}}
-    <button class='btn btn-info btn-save' data-action="reject">
-      <span class="before">
-        reject
-      </span>
-      <span class="loading">
-        {{@root.text.saving}}
-      </span>
-      <span class="after">
-        {{@root.text.done}}
-      </span>
-    </button>
-    {{/isAuthorized}}
-  {{/ifCond}}
-{{/ifCond}}
-
-{{#each @root.config.users.workflow}}
-  
-  {{#ifCond @root.statusFound "true"}}
-    
-    {{#isAuthorized (concat "/abe/save/" this "/submit") @root.user.role.workflow}}
-    <button class='btn btn-info btn-save' data-action="{{this}}">
-      <span class="before">
-        {{this}}
-      </span>
-      <span class="loading">
-        {{@root.text.saving}}
-      </span>
-      <span class="after">
-        {{@root.text.done}}
-      </span>
-    </button>
-    {{/isAuthorized}}
-  {{/ifCond}}
-
-  {{#ifCond @root.json.abe_meta.status this}}
-    {{&setVariable "statusFound" "true"}}
-
-    {{#isAuthorized (concat "/abe/save/" this "/edit") @root.user.role.workflow}}
-    <button class='btn btn-info btn-save' data-action="{{this}}">
-      <span class="before">
-        {{this}}
-      </span>
-      <span class="loading">
-        {{@root.text.saving}}
-      </span>
-      <span class="after">
-        {{@root.text.done}}
-      </span>
-    </button>
-    {{/isAuthorized}}
-  {{else}}
-    {{&setVariable "statusFound" "false"}}
-  {{/ifCond}}
-  
-  {{#if @root.config.users.enable}}
-  {{else}}
-    {{&setVariable "statusFound" "true"}}
-  {{/if}}
+  {{/isAuthorized}}
 {{/each}}

@@ -2,6 +2,7 @@ import getMain from './get-main'
 import postCreate from './post-create'
 import postDuplicate from './post-duplicate'
 import postUpdate from './post-update'
+import postListUrlSave from './post-list-url-save'
 import getListUrl from './get-list-url'
 import getListHooks from './get-list-hooks'
 import getPage from './get-page'
@@ -21,6 +22,7 @@ import * as operations from './operations'
 export {
 	getMain,
 	postCreate,
+	postListUrlSave,
 	getListUrl,
 	getListHooks,
 	postDuplicate,

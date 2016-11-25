@@ -39,6 +39,15 @@ var usersList = {
         'info': false,
         'columns': columns
       })
+
+      this._handleFormUserRoleSubmit = this._formUserRoleSubmit.bind(this)
+
+      this._formUserRole = document.querySelector('[data-user-role]')
+      this._formUserRoleSave = document.querySelector('[data-save-user-role]')
+
+      if(typeof this._formUserRole !== 'undefined' && this._formUserRole !== null) {
+        this._formUserRole.addEventListener('submit', this._handleFormUserRoleSubmit)
+      }
     }
   },
   _bindEvents: function () {
@@ -77,6 +86,31 @@ var usersList = {
     if(typeof this._addBtn !== 'undefined' && this._addBtn !== null) {
       this._addBtn.addEventListener('click', this._handleAdd)
     }
+  },
+  _formUserRoleSubmit: function (e) {
+    e.preventDefault()
+
+    var inputs = this._formUserRole.querySelectorAll('input[type=checkbox]')
+    var data = {}
+    Array.prototype.forEach.call(inputs, (input) => {
+      var name = input.getAttribute('name')
+      if (data[name] == null) {
+        data[name] = []
+      }
+      data[name].push(input.getAttribute('value'))
+    })
+
+    var toSave = qs.stringify(data)
+
+    this._ajax(
+      {
+        url: '/abe/list-url/save',
+        body: toSave,
+        method: 'post'
+      },
+      () => {
+        
+      })
   },
   _activate: function (e) {
     var target = e.currentTarget
