@@ -74,7 +74,7 @@ export default function printBlock (ctx, root) {
     res += printInput(ctx[0], root)
   }
 
-  var template = cmsTemplates.Handlebars.compile(res)
-  return new cmsTemplates.Handlebars.SafeString(template(ctx, {data: {intl: config.intlData}}))
-  // return res
+  // var template = cmsTemplates.Handlebars.compile(res)
+  // return new cmsTemplates.Handlebars.SafeString(template(ctx, {data: {intl: config.intlData}}))
+  return res
 }

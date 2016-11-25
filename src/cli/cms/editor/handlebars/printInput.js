@@ -2,6 +2,7 @@ import sourceAutocomplete   from './sourceAutocomplete'
 import sourceOption   from './sourceOption'
 import {
   abeExtend
+  ,User
 } from '../../../'
 
 /**
@@ -37,7 +38,10 @@ export default function printInput (params, root) {
     userWorkflow = root.user.role.workflow
   }
 
-  var disabled = `{{#isAuthorized '/abe/save/${params.status}/edit' "${userWorkflow}"}}{{else}}disabled="disabled"{{/isAuthorized}}"`
+  var disabled = ''
+  if (!User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/save/${params.status}/edit`)) {
+    disabled = 'disabled="disabled"'
+  }
   if (params.tab == 'slug') {
     disabled = ''
   }

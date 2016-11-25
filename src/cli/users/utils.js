@@ -204,26 +204,30 @@ export function isAbeRestrictedUrl(currentRoute) {
 }
 
 export function isUserAllowedOnRoute(workflow, currentRoute) {
-  if( currentRoute.indexOf('/abe/users/forgot') > -1 || currentRoute.indexOf('/abe/users/login') > -1 || !/^\/abe/.test(currentRoute)) {
-    return true
-  }
-
   var isAllowed = false
 
-  if (currentRoute.indexOf('abe/') === -1) {
-    isAllowed = true
-  }
-
-  if (workflow != null) {
-    var routes = config.users.routes
-    if(typeof routes[workflow] !== 'undefined' && routes[workflow] !== null) {
-      Array.prototype.forEach.call(routes[workflow], (route) => {
-        var reg = new RegExp(route)
-        if(reg.test(currentRoute)) {
-          isAllowed = true
-        }
-      })
+  if (config.users.enable) {
+    if( currentRoute.indexOf('/abe/users/forgot') > -1 || currentRoute.indexOf('/abe/users/login') > -1 || !/^\/abe/.test(currentRoute)) {
+      return true
     }
+
+    if (currentRoute.indexOf('abe/') === -1) {
+      isAllowed = true
+    }
+
+    if (workflow != null) {
+      var routes = config.users.routes
+      if(typeof routes[workflow] !== 'undefined' && routes[workflow] !== null) {
+        Array.prototype.forEach.call(routes[workflow], (route) => {
+          var reg = new RegExp(route)
+          if(reg.test(currentRoute)) {
+            isAllowed = true
+          }
+        })
+      }
+    }
+  }else {
+    isAllowed = true
   }
   
   return isAllowed
