@@ -16,7 +16,7 @@ import data from './fixtures/editor/index'
 describe('Editor', function() {
   
   /**
-   * cmsData.fileAttr.test
+   * cmsEditor.printInput
    * 
    */
   it('cmsEditor.printInput()', function() {
@@ -46,6 +46,17 @@ describe('Editor', function() {
     chai.expect(placeholder).to.equal('placeholder="val9"')
 
     this.sinon.restore()
+  });
+
+  /**
+   * cmsEditor.folders
+   * 
+   */
+  it('cmsEditor.folders()', function() {
+    var result = cmsEditor.folders([{path: ''}], 1, null, {'level-1': 'my wording'})
+    var wordingExist = result.indexOf('my wording')
+    chai.expect(result).to.be.a('string')
+    chai.expect(wordingExist).to.equal(110)
   });
 
 });
