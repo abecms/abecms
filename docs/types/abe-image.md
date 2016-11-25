@@ -14,7 +14,7 @@
 > 
 > __key__ = references key to use into your html
 
-optrionnal parameter
+optional parameters
 
 - desc = (String)
 - display = (String)

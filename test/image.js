@@ -7,10 +7,12 @@ import path from 'path'
 import {Promise} from 'bluebird'
 import fse from 'fs-extra'
 import events from 'events'
+import mkdirp from 'mkdirp'
 import {
   config,
   cmsMedia,
-  coreUtils
+  coreUtils,
+  abeExtend
 } from '../src/cli'
 config.set({root: path.join(__dirname,'fixtures')})
 
@@ -100,6 +102,26 @@ describe('image', function() {
   });
 
   /**
+   * cmsMedia.image.createMediaFolder
+   * 
+   */
+  it('cmsMedia.image.createMediaFolder()', function() {
+    this.sinon = sinon.sandbox.create();
+    var stub = sinon.stub(abeExtend.hooks.instance, 'trigger')
+    stub.returns('/myImageFolder')
+    var stubDir = sinon.stub(mkdirp, 'sync')
+    stubDir.returns({})
+    var result = cmsMedia.image.createMediaFolder({})
+    chai.expect(result).to.not.be.undefined
+    chai.expect(result).to.be.a('string')
+    chai.expect(result).to.equal(path.join(config.root, config.publish.url, '/myImageFolder'))
+    sinon.assert.calledOnce(abeExtend.hooks.instance.trigger)
+    abeExtend.hooks.instance.trigger.restore()
+    sinon.assert.calledOnce(mkdirp.sync)
+    mkdirp.sync.restore()
+  });
+
+  /**
    * cmsMedia.image.getAssociatedImageFileFromThumb
    * 
    */
@@ -127,6 +149,22 @@ describe('image', function() {
     chai.expect(result.error).to.equal(false)
     chai.expect(result2.error).to.be.a('string')
     chai.expect(result2.error).to.equal('unauthorized file')
+  });
+
+  /**
+   * cmsMedia.image.createMediaSlug
+   * 
+   */
+  it('cmsMedia.image.createMediaSlug()', function() {
+    this.sinon = sinon.sandbox.create();
+    var stub = sinon.stub(coreUtils.random, 'generateUniqueIdentifier')
+    stub.returns(12345)
+    var result = cmsMedia.image.createMediaSlug('teSt f1le s l û g', '.jpg')
+    chai.expect(result).to.not.be.undefined
+    chai.expect(result).to.be.a('string')
+    chai.expect(result).to.equal('test-f1le-s-l-u-g-12345.jpg')
+    sinon.assert.calledOnce(coreUtils.random.generateUniqueIdentifier)
+    coreUtils.random.generateUniqueIdentifier.restore()
   });
 
   after(function(done) {
