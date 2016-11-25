@@ -189,7 +189,8 @@ export function getThumbsList() {
 
 export function getAssociatedImageFileFromThumb(name) {
   var rexMatchImageName = /_(thumb|\d+x\d+)/
-  var originalName = name.replace(rexMatchImageName, '')
+  name = path.join(path.sep, name)
+  var originalName = path.join(path.sep, name.replace(rexMatchImageName, ''))
   var imageList = {
     thumbFile: name,
     originalFile: originalName,
