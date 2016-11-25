@@ -128,7 +128,9 @@
     ],
     "workflow": ["draft", "publish"],
     "routes": {
-      "admin": []
+      "admin": [
+        "/abe.*"
+      ]
     },
     "default": {
       "username": "admin",
