@@ -1,3 +1,9 @@
+* [[`becb7b9dee`](https://github.com/AdFabConnect/abejs/commit/becb7b9dee)] - Merge pull request #41 from AdFabConnect/fix_abe_update (Greg Besson) 
+* [[`454eeff71f`](https://github.com/AdFabConnect/abejs/commit/454eeff71f)] - **fix**: remove unused dependencies (nicolaslabbe) 
+* [[`b2b4ab0225`](https://github.com/AdFabConnect/abejs/commit/b2b4ab0225)] - **fix**: bug update admin (nicolaslabbe) 
+
+## [2.8.3] - 2016-11-24
+* [[`7bda2d9247`](https://github.com/AdFabConnect/abejs/commit/7bda2d9247)] - **doc**: changelog (gregorybesson) 
 
 ## [2.8.2] - 2016-11-24
 * [[`b34b5f1c87`](https://github.com/AdFabConnect/abejs/commit/b34b5f1c87)] - Merge pull request #38 from AdFabConnect/bug-2.8.1 (Greg Besson) 

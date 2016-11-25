@@ -46,14 +46,16 @@ function isSelected(currentValue, values) {
   var isEqual = false
   if(typeof currentValue === 'object' && Object.prototype.toString.call(currentValue) === '[object Object]') {
     Array.prototype.forEach.call(values, (value) => {
-      var checkAllEqual = false
-      Array.prototype.forEach.call(Object.keys(value), (key) => {
-        if (currentValue[key] != null && currentValue[key] == value[key] && checkAllEqual == false) {
-          checkAllEqual = true
+      if (value != null) {
+        var checkAllEqual = false
+        Array.prototype.forEach.call(Object.keys(value), (key) => {
+          if (currentValue[key] != null && currentValue[key] == value[key] && checkAllEqual == false) {
+            checkAllEqual = true
+          }
+        })
+        if (checkAllEqual) {
+          isEqual = true
         }
-      })
-      if (checkAllEqual) {
-        isEqual = true
       }
     })
   }else {
