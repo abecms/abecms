@@ -1,16 +1,48 @@
+
+## [2.9.0] - 2016-11-25
+* [[`18a1c66e62`](https://github.com/AdFabConnect/abejs/commit/18a1c66e62)] - Merge pull request #42 from AdFabConnect/abe-users-core (Greg Besson) 
+* [[`95b46008c1`](https://github.com/AdFabConnect/abejs/commit/95b46008c1)] - **fix**: missing nodemailer dep (nicolaslabbe) 
+* [[`949122fe3d`](https://github.com/AdFabConnect/abejs/commit/949122fe3d)] - Merge pull request #40 from AdFabConnect/abe-users-core (Greg Besson) 
+* [[`2e1819226d`](https://github.com/AdFabConnect/abejs/commit/2e1819226d)] - **fix**: user default authorize (nicolaslabbe) 
+* [[`cf43231cfe`](https://github.com/AdFabConnect/abejs/commit/cf43231cfe)] - **fix**: bug printInput isAuthorized (nicolaslabbe) 
+* [[`2d89cf963b`](https://github.com/AdFabConnect/abejs/commit/2d89cf963b)] - **fix**: ut abe user (nicolaslabbe) 
+* [[`015dfc8197`](https://github.com/AdFabConnect/abejs/commit/015dfc8197)] - **fix**: user role (nicolaslabbe) 
+
+## [2.8.4] - 2016-11-25
+* [[`bd345aea0c`](https://github.com/AdFabConnect/abejs/commit/bd345aea0c)] - **doc**: Changelog (gregorybesson) 
 * [[`becb7b9dee`](https://github.com/AdFabConnect/abejs/commit/becb7b9dee)] - Merge pull request #41 from AdFabConnect/fix_abe_update (Greg Besson) 
 * [[`454eeff71f`](https://github.com/AdFabConnect/abejs/commit/454eeff71f)] - **fix**: remove unused dependencies (nicolaslabbe) 
 * [[`b2b4ab0225`](https://github.com/AdFabConnect/abejs/commit/b2b4ab0225)] - **fix**: bug update admin (nicolaslabbe) 
+* [[`115f3d8d02`](https://github.com/AdFabConnect/abejs/commit/115f3d8d02)] - **enhancement**: abe user role (nicolaslabbe) 
+* [[`fc65b3b4ff`](https://github.com/AdFabConnect/abejs/commit/fc65b3b4ff)] - **enhancement**: invert user role (nicolaslabbe) 
+* [[`059ae3d762`](https://github.com/AdFabConnect/abejs/commit/059ae3d762)] - **bug**: user core (nicolaslabbe) 
+* [[`d2da713dad`](https://github.com/AdFabConnect/abejs/commit/d2da713dad)] - **bug**: user core (nicolaslabbe) 
+* [[`eac11601c8`](https://github.com/AdFabConnect/abejs/commit/eac11601c8)] - **fix**: UT handlebars (nicolaslabbe) 
+* [[`66249a704f`](https://github.com/AdFabConnect/abejs/commit/66249a704f)] - **fix**: UT abe user (nicolaslabbe) 
+* [[`37dc90fed6`](https://github.com/AdFabConnect/abejs/commit/37dc90fed6)] - **UT**: abe user (nicolaslabbe) 
+* [[`4eba1170d2`](https://github.com/AdFabConnect/abejs/commit/4eba1170d2)] - **fix**: don't remove User.isValid (nicolaslabbe) 
+* [[`d1a346d545`](https://github.com/AdFabConnect/abejs/commit/d1a346d545)] - Merged branch master into abe-users-core (nicolaslabbe) 
+* [[`16471183a2`](https://github.com/AdFabConnect/abejs/commit/16471183a2)] - **fix**: UT User core (nicolaslabbe) 
 
 ## [2.8.3] - 2016-11-24
 * [[`7bda2d9247`](https://github.com/AdFabConnect/abejs/commit/7bda2d9247)] - **doc**: changelog (gregorybesson) 
 
 ## [2.8.2] - 2016-11-24
+* [[`5fb32b7133`](https://github.com/AdFabConnect/abejs/commit/5fb32b7133)] - **fix**: linting (nicolaslabbe) 
+* [[`201e894f22`](https://github.com/AdFabConnect/abejs/commit/201e894f22)] - Merge branch 'master' (nicolaslabbe) 
+* [[`425b19a2c3`](https://github.com/AdFabConnect/abejs/commit/425b19a2c3)] - **UT**: user into core (nicolaslabbe) 
 * [[`b34b5f1c87`](https://github.com/AdFabConnect/abejs/commit/b34b5f1c87)] - Merge pull request #38 from AdFabConnect/bug-2.8.1 (Greg Besson) 
 * [[`0712b583fc`](https://github.com/AdFabConnect/abejs/commit/0712b583fc)] - Merge pull request #37 from marcbachmann/update-uuid (Greg Besson) 
 * [[`836379157b`](https://github.com/AdFabConnect/abejs/commit/836379157b)] - **fix**: bug abejs form multiple precontrib was selected on queryselector for structure path url (nicolaslabbe) 
 * [[`487d28817a`](https://github.com/AdFabConnect/abejs/commit/487d28817a)] - **fix**: tab slug autocomplete remove result glyph not visible (nicolaslabbe) 
 * [[`ca8528b5c6`](https://github.com/AdFabConnect/abejs/commit/ca8528b5c6)] - chore(package): update uuid to version 3.0.0 (Marc Bachmann) 
+* [[`092f9177bf`](https://github.com/AdFabConnect/abejs/commit/092f9177bf)] - **enhancement**: merge abe users into core (nicolaslabbe) 
+* [[`a0e7dccc3a`](https://github.com/AdFabConnect/abejs/commit/a0e7dccc3a)] - **enhancement**: merge abe users into core (nicolaslabbe) 
+* [[`38e5c731d5`](https://github.com/AdFabConnect/abejs/commit/38e5c731d5)] - **enhancement**: merge abe users into core (nicolaslabbe) 
+* [[`20c0d7d7e2`](https://github.com/AdFabConnect/abejs/commit/20c0d7d7e2)] -  (nicolaslabbe) 
+* [[`e416161d0a`](https://github.com/AdFabConnect/abejs/commit/e416161d0a)] - **enhancement**: merge abe users into core (nicolaslabbe) 
+* [[`3e310d4658`](https://github.com/AdFabConnect/abejs/commit/3e310d4658)] - Merged branch master into master (nicolaslabbe) 
+* [[`a2d35c301b`](https://github.com/AdFabConnect/abejs/commit/a2d35c301b)] - **enhancement**: merge abe users into core (nicolaslabbe) 
 * [[`75b643bc40`](https://github.com/AdFabConnect/abejs/commit/75b643bc40)] - **doc**: changelog (gregorybesson) 
 
 ## [2.8.1] - 2016-11-21
