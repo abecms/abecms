@@ -217,6 +217,7 @@ export default function printInput (params, root) {
           </div>`
   }
   else if (params.type.indexOf('image') >= 0){
+    if(params.thumbs != null) commonParams += `data-size="${params.thumbs}"`
     res += `<div class="input-group img-upload">
               <div class="input-group-addon image">
                 <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>

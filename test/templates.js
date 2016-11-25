@@ -13,11 +13,11 @@ describe('Template', function() {
     Manager.instance.init()
       .then(function () {
         this.fixture = {
-          slug: fse.readFileSync(__dirname + '/fixtures/templates/slug.html', 'utf-8'),
-          template: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf-8'),
-          articleEach: fse.readFileSync(__dirname + '/fixtures/templates/article-each-abe.html', 'utf-8'),
-          articlePrecontrib: fse.readFileSync(__dirname + '/fixtures/templates/article-precontribution.html', 'utf-8'),
-          templateKeys: fse.readFileSync(__dirname + '/fixtures/templates/article-keys.html', 'utf-8')
+          slug: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'slug.html'), 'utf-8'),
+          template: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf-8'),
+          articleEach: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-each-abe.html'), 'utf-8'),
+          articlePrecontrib: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-precontribution.html'), 'utf-8'),
+          templateKeys: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-keys.html'), 'utf-8')
         }
         done()
         

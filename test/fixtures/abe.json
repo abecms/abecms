@@ -6,6 +6,7 @@
   "upload": {
     "image": "unitimage"
   },
+  "siteLocaleFolder": "locales",
   "users": {
     "enable": false,
     "commonPassword": [

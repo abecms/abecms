@@ -16,9 +16,9 @@ describe('Manager', function() {
       .then(function () {
 
         this.fixture = {
-          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
-          jsonArticle: fse.readJsonSync(__dirname + '/fixtures/files/article-4.json'),
-          jsonArticle1: fse.readJsonSync(__dirname + '/fixtures/data/article-1.json')
+          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8'),
+          jsonArticle: fse.readJsonSync(path.join(__dirname, 'fixtures', 'files', 'article-4.json')),
+          jsonArticle1: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'article-1.json'))
         }
         done()
         

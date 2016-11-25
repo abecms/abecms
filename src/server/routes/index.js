@@ -16,6 +16,8 @@ import postSqlRequest from './post-sql-request'
 import postReference from './post-reference'
 import getReference from './get-reference'
 import getPaginate from './get-paginate'
+import getThumbs from './get-thumbs'
+import getImage from './get-image'
 import * as users from './users'
 import * as operations from './operations'
 
@@ -38,6 +40,8 @@ export {
 	postReference,
 	getReference,
 	getPaginate,
+	getThumbs,
+	getImage,
 	users,
 	operations
 }

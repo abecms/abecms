@@ -20,6 +20,8 @@ import {
   ,postReference
   ,getReference
   ,getPaginate
+  ,getThumbs
+  ,getImage
   ,users
 } from '../routes'
 
@@ -58,6 +60,8 @@ router.get('/abe/save-config', getSaveConfig)
 router.get('/abe/unpublish*', getUnpublish)
 router.get('/abe/delete*', getDelete)
 router.get('/abe/reference/*', getReference)
+router.get('/abe/thumbs/*', getThumbs)
+router.get('/abe/image/*', getImage)
 router.post('/abe/upload/*', postUpload)
 router.post('/abe/reference/*', postReference)
 router.get('/abe/editor*', getMain)
