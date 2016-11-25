@@ -1,10 +1,15 @@
 import printInput from './printInput'
 import abeEngine from './abeEngine'
 
-export default function printBlock (ctx, obj) {
+import {
+  config
+  ,cmsTemplates
+} from '../../../../cli'
+
+export default function printBlock (ctx, root) {
   var res = ''
   var precontrib = false
-  if (obj.data.root.precontrib != null && obj.data.root.precontrib === 'true') {
+  if (root.precontrib != null && root.precontrib === 'true') {
     precontrib = true
   }
 
@@ -14,7 +19,7 @@ export default function printBlock (ctx, obj) {
               <div class='single-block well well-sm'>`
     Array.prototype.forEach.call(ctx, (item) => {
       if (precontrib) item.value = ''
-      res += printInput(item)
+      res += printInput(item, root)
     })
     res += '</div></div>'
   }else if(ctx[0].key.indexOf('[') > -1) {
@@ -56,7 +61,7 @@ export default function printBlock (ctx, obj) {
                 `
       Array.prototype.forEach.call(arrItem[i], (item) => {
         if (precontrib) item.value = ''
-        res += printInput(item)
+        res += printInput(item, root)
       })
       res += '</div></div>'
     })
@@ -66,7 +71,10 @@ export default function printBlock (ctx, obj) {
         </div>`
   }else {
     if (precontrib) ctx[0].value = ''
-    res += printInput(ctx[0])
+    res += printInput(ctx[0], root)
   }
+
+  // var template = cmsTemplates.Handlebars.compile(res)
+  // return new cmsTemplates.Handlebars.SafeString(template(ctx, {data: {intl: config.intlData}}))
   return res
 }

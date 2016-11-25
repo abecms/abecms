@@ -29,7 +29,7 @@ export default class Json {
     return this[singleton]
   }
 
-  save(type = 'draft', tplPath = null, filePath = null) {
+  save(type = 'draft', url = "/abe/save/draft/submit", tplPath = null, filePath = null) {
     this.saving._fire({type: type})
     var p = new Promise((resolve) => {
       if(!this.canSave){
@@ -52,9 +52,11 @@ export default class Json {
 
       this.headersSaving._fire({url: document.location.origin + '/' + type})
 
+      var ajaxUrl = document.location.origin + url + filePath
+
       this._ajax(
         {
-          url: document.location.origin + '/abe/' + type + filePath,
+          url: ajaxUrl,
           body: toSave,
           headers: this._headers,
           method: 'post'
@@ -66,12 +68,12 @@ export default class Json {
               alert(jsonRes.error)
               return
             }
-            // if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-            //   location.reload()
-            //   return
-            // }
-            this.data = jsonRes.json
-            location.reload()
+            if (jsonRes.success == 1) {
+              this.data = jsonRes.json
+              location.reload()
+            }else {
+              alert(jsonRes.message)
+            }
           }
           catch(e){
             alert('The following error happened : \n' + e + '\n if it persist, reload your web page tab.')

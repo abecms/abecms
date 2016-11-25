@@ -10,6 +10,10 @@ import busboy from 'connect-busboy'
 import clc from 'cli-color'
 import openurl from 'openurl'
 import uuid from 'uuid'
+import flash from 'connect-flash'
+import cookieParser from 'cookie-parser'
+import csrf from 'csurf'
+import passport from 'passport'
 
 import {
   config,
@@ -36,6 +40,9 @@ import {
 
 import {
   middleWebsite,
+  middleLogin,
+  middleCheckCsrf,
+  middleIsAuthorized
 } from './middlewares'
 
 var abePort = null
@@ -82,22 +89,20 @@ var app = express(opts)
 Manager.instance.init()
 app.set('config', config.getConfigByWebsite())
 
+app.use(flash())
+app.use(cookieParser())
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(csrf({
+  cookie: {
+    secure: config.cookie.secure
+  }
+}))
+
 app.use(bodyParser.json({limit: '1gb'}))
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
-
 app.use(function (req, res, next) {
   res.locals.nonce = uuid.v4()
-  next()
-})
-
-app.use(function (req, res, next) {
-  if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
-      && req.query.logs === 'true') {
-    config.logs = true
-  }else if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
-      && req.query.logs === 'false') {
-    config.logs = false
-  }
   next()
 })
 
@@ -124,7 +129,6 @@ if(config.security === true){
     disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.    
     browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
   }))
-
 }
 
 var port = (abePort !== null) ? abePort : 3000
@@ -136,6 +140,9 @@ app.set('view engine', '.html')
 
 app.locals.layout = false
 
+app.use(middleCheckCsrf)
+app.use(middleIsAuthorized)
+app.use(middleLogin)
 app.use(middleWebsite)
 app.use(express.static(__dirname + '/public'))
 

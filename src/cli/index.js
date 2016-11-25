@@ -47,6 +47,7 @@ import * as cmsTemplates from './cms/templates'
 import * as cmsReference from './cms/reference'
 import * as coreUtils from './core/utils'
 import * as abeExtend from './extend'
+import * as User from './users'
 
 export {
 	cmsData,
@@ -81,7 +82,8 @@ export {
 	ifCond,
 	config,
 	Manager,
-	Page
+	Page,
+	User
 }
 
 export {compileAbe as compileAbe}

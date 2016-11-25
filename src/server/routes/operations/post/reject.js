@@ -1,17 +1,24 @@
 import {
   cmsOperations,
   abeExtend
-} from '../../cli'
+} from '../../../../cli'
 
 var route = function(req, res, next){
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var filePath = req.originalUrl.replace('/abe/reject', '')
+  let regUrl = /\/abe\/save\/(.*?)\/reject\//
+  var workflow = 'draft'
+  var match = req.originalUrl.match(regUrl)
+  if (match != null && match[1] != null) {
+    workflow = match[1]
+  }
+  var postUrl = req.originalUrl.replace(regUrl, '')
   
   var p = cmsOperations.post.reject(
-    filePath, 
-    req.body.json
+    postUrl, 
+    req.body.json,
+    workflow
   )
 
   p.then((result) => {

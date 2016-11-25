@@ -11,34 +11,52 @@
   
   <div class="user-list row col-xs-offset-1 col-xs-10">
     <ol class="breadcrumb">
-      <li><a href="/abe/">Home</a></li>
+      <li><a href="/abe/editor/">Home</a></li>
       <li class="active">Url list</li>
     </ol>
 
-    <div class="panel panel-default">
-  
-      <form classs="form-inline">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>method</th>
-              <th>link</th>
-              <th>regex</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each urls}}
-            <tr>
-              <td>{{method}}</td>
-              <td>{{url}}</td>
-              <td>{{regex}}</td>
-            </tr>
+    <form classs="form-inline" action="/abe/list-url/save" data-user-role="true" method="post" id="filtered-list-url">
+      <div class="form-group">
+        <input class='btn btn-info btn-save pull-right' type="submit" value="save" data-save-user-role="true" />
+        <br />
+        <br />
+      </div>
+      <table class="table table-condensed table-striped table-bordered table-responsive">
+        <thead>
+          <tr>
+            <th>method</th>
+            <th>link</th>
+            {{#each @root.roles}}
+            <th align="center" class="text-center">{{this.name}}</th>
             {{/each}}
-          </tbody>
-        </table>
-      </form>
-    </div>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each urls}}
+          <tr>
+            <td>{{method}}</td>
+            <td>{{url}}</td>
+            {{#each @root.roles}}
+            <td align="center" class="text-center">
+              {{#ifCond this.workflow "admin"}}
+              <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" disabled="disabled" />
+              {{else}}
+                {{#isAuthorized ../url this.workflow}}
+                  <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" />
+                {{else}}
+                  <input type="checkbox" name="{{this.workflow}}" value="{{../regex}}" />
+                {{/isAuthorized}}
+              {{/ifCond}}
+            </td>
+            {{/each}}
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </form>
   </div>
+  <script type="text/javascript" src="/libs/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="/libs/dataTables.bootstrap.min.js"></script>
   
 </body>
 </html>
