@@ -95,8 +95,8 @@ describe('image', function() {
     var result = cmsMedia.image.getThumbsList()
     chai.expect(result).to.not.be.undefined
     chai.expect(result).to.have.length(1)
-    chai.expect(result[0]).to.have.property('originalFile').to.equal('/unitimage/img.jpg')
-    chai.expect(result[0]).to.have.property('thumbFile').to.equal('/unitimage/img_thumb.jpg')
+    chai.expect(result[0]).to.have.property('originalFile').to.equal(path.join(path.sep, 'unitimage', 'img.jpg'))
+    chai.expect(result[0]).to.have.property('thumbFile').to.equal(path.join(path.sep, 'unitimage', 'img_thumb.jpg'))
     sinon.assert.calledOnce(coreUtils.file.getFilesSync)
     coreUtils.file.getFilesSync.restore()
   });
@@ -129,12 +129,13 @@ describe('image', function() {
     this.sinon = sinon.sandbox.create();
     var stub = sinon.stub(coreUtils.file, 'getFilesSync')
     stub.returns(imagesListInFolder)
-    var result = cmsMedia.image.getAssociatedImageFileFromThumb('/unitimage/img_thumb.jpg')
+    var result = cmsMedia.image.getAssociatedImageFileFromThumb(path.join(path.sep, 'unitimage', 'img_thumb.jpg'))
+    console.log(result)
     chai.expect(result).to.not.be.undefined
-    chai.expect(result).to.have.property('originalFile').to.equal('/unitimage/img.jpg')
-    chai.expect(result).to.have.property('thumbFile').to.equal('/unitimage/img_thumb.jpg')
+    chai.expect(result).to.have.property('originalFile').to.equal(path.join(path.sep, 'unitimage', 'img.jpg'))
+    chai.expect(result).to.have.property('thumbFile').to.equal(path.join(path.sep, 'unitimage', 'img_thumb.jpg'))
     chai.expect(result.thumbs).to.have.length(2)
-    chai.expect(result.thumbs[0]).to.equal('/unitimage/img_100x100.jpg')
+    chai.expect(result.thumbs[0]).to.equal(path.join(path.sep, 'unitimage', 'img_100x100.jpg'))
     sinon.assert.calledOnce(coreUtils.file.getFilesSync)
     coreUtils.file.getFilesSync.restore()
   });
