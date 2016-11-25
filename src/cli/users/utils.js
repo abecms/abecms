@@ -300,7 +300,6 @@ export function loginLimitTry(username) {
         }
       })
     }catch(e) {
-      console.log('loginLimitTry', e)
       resolve()
     }
   })

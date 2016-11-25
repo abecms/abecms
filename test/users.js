@@ -422,7 +422,6 @@ describe('users', function() {
     chai.expect(res.length).to.be.above(0)
 
     // unstub
-    sinon.assert.calledOnce(User.manager.instance.read)
     User.manager.instance.read.restore()
   })
 
@@ -472,5 +471,31 @@ describe('users', function() {
     // unstub
     sinon.assert.calledOnce(User.manager.instance.save)
     User.manager.instance.save.restore()
+  })
+
+  it('User.utils.getUserWorkflow', function(){
+    // stub
+
+    // test
+    config.users.enable = false
+    var res = User.utils.getUserWorkflow()
+    chai.expect(res.length).to.be.equal(2)
+
+    config.users.enable = true
+    var res = User.utils.getUserWorkflow("draft", "admin")
+    chai.expect(res.length).to.be.equal(2)
+    // unstub
+  })
+
+  it('User.utils.loginLimitTry', function(done){
+    // stub
+
+    // test
+    var res = User.utils.loginLimitTry()
+      .then(function () {
+        done()
+      })
+
+    // unstub
   })
 });
