@@ -14,9 +14,9 @@ describe('Request', function() {
       .then(function () {
 
         this.fixture = {
-          articleSingle: fse.readFileSync(__dirname + '/fixtures/templates/article-single-abe.html', 'utf8'),
-          articleEach: fse.readFileSync(__dirname + '/fixtures/templates/article-each-abe.html', 'utf8'),
-          articleRequest: fse.readFileSync(__dirname + '/fixtures/templates/article-request.html', 'utf8')
+          articleSingle: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-single-abe.html'), 'utf8'),
+          articleEach: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-each-abe.html'), 'utf8'),
+          articleRequest: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-request.html'), 'utf8')
         }
         done()
         

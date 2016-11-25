@@ -15,9 +15,9 @@ describe('Revision', function() {
       .then(function () {
 
         this.fixture = {
-          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
-          jsonArticle: fse.readJsonSync(__dirname + '/fixtures/data/article-1.json'),
-          jsonHomepage: fse.readJsonSync(__dirname + '/fixtures/data/homepage-1.json')
+          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8'),
+          jsonArticle: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'article-1.json')),
+          jsonHomepage: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'homepage-1.json'))
         }
         done()
         
