@@ -122,8 +122,8 @@ export default class EditorSave {
           target.classList.remove('done')
           target.removeAttribute('disabled')
 
-          this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
           if(result.success === 1) {
+            this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
             window.json = result.json
           }
           var formWrapper = document.querySelector('#abeForm')

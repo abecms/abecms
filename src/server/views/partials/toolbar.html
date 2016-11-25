@@ -1,5 +1,5 @@
 {{#each @root.workflows}}
-  {{#isAuthorized this.status this.url}}
+  {{#isAuthorized this.url @root.user.role.workflow}}
     <button class='btn btn-info btn-save' data-action="{{this.status}}" data-url="{{this.url}}">
       <span class="before">
         {{this.status}}
@@ -11,5 +11,6 @@
         {{@root.text.done}}
       </span>
     </button>
+  {{else}}
   {{/isAuthorized}}
 {{/each}}

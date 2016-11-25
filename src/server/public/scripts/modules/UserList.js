@@ -39,7 +39,9 @@ var usersList = {
         'info': false,
         'columns': columns
       })
+    }
 
+    if ($('#filtered-list-url').size() > 0) {
       this._handleFormUserRoleSubmit = this._formUserRoleSubmit.bind(this)
 
       this._formUserRole = document.querySelector('[data-user-role]')
@@ -93,15 +95,19 @@ var usersList = {
     var inputs = this._formUserRole.querySelectorAll('input[type=checkbox]')
     var data = {}
     Array.prototype.forEach.call(inputs, (input) => {
-      var name = input.getAttribute('name')
-      if (data[name] == null) {
-        data[name] = []
+      if (!input.disabled) {
+        var name = input.getAttribute('name')
+        if (data[name] == null) {
+          data[name] = []
+        }
+        if (input.checked) {
+          data[name].push(input.getAttribute('value'))
+        }
       }
-      data[name].push(input.getAttribute('value'))
     })
 
     var toSave = qs.stringify(data)
-
+    
     this._ajax(
       {
         url: '/abe/list-url/save',

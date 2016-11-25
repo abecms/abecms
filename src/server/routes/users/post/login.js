@@ -36,35 +36,46 @@ passport.deserializeUser(function(id, done) {
 })
 
 var route = function(req, res, next) {
-  passport.authenticate(
-    'local',
-    { session: false},
-    function(err, user, info) {
-      var secret = config.users.secret
-      if (err) { return next(err) }
-
-      if (!user) {
-        req.flash('info', info.message)
+  User.utils.loginLimitTry(req.body.username)
+  .then((limit) => {
+    if (limit != null) {
+      // all good
+      if (!limit.remaining) {
+        req.flash('info', 'Rate limit exceeded')
         return res.redirect('/abe/users/login')
-        // return res.status(401).json({ error: info });
       }
-      var expires = moment().add(7, 'days').valueOf()
-      var token = jwt.encode({
-        iss: user.id,
-        exp: expires,
-        username: user.username,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }, secret)
+    }
 
-      var cookies = new Cookies( req, res, {
-        secure: config.cookie.secure
-      })
-      cookies.set( 'x-access-token', token )
+    passport.authenticate(
+      'local',
+      { session: false},
+      function(err, user, info) {
+        var secret = config.users.secret
+        if (err) { return next(err) }
 
-      res.redirect('/abe/editor/')
-    })(req, res, next)
+        if (!user) {
+          req.flash('info', info.message)
+          return res.redirect('/abe/users/login')
+          // return res.status(401).json({ error: info });
+        }
+        var expires = moment().add(7, 'days').valueOf()
+        var token = jwt.encode({
+          iss: user.id,
+          exp: expires,
+          username: user.username,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }, secret)
+
+        var cookies = new Cookies( req, res, {
+          secure: config.cookie.secure
+        })
+        cookies.set( 'x-access-token', token )
+
+        res.redirect('/abe/editor/')
+      })(req, res, next)
+  })
 }
 
 export default route

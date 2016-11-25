@@ -68,12 +68,12 @@ export default class Json {
               alert(jsonRes.error)
               return
             }
-            // if(typeof jsonRes.reject !== 'undefined' && jsonRes.reject !== null) {
-            //   location.reload()
-            //   return
-            // }
-            this.data = jsonRes.json
-            location.reload()
+            if (jsonRes.success == 1) {
+              this.data = jsonRes.json
+              location.reload()
+            }else {
+              alert(jsonRes.message)
+            }
           }
           catch(e){
             alert('The following error happened : \n' + e + '\n if it persist, reload your web page tab.')

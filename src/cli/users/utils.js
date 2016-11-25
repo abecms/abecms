@@ -1,3 +1,5 @@
+import redis from 'redis'
+import Limiter from 'ratelimiter'
 import owasp from 'owasp-password-strength-test'
 import bcrypt from 'bcrypt-nodejs'
 import Cookies from 'cookies'
@@ -190,7 +192,22 @@ export function getTokenFromCookies(req, res) {
   return cookies.get('x-access-token')
 }
 
+export function isAbeRestrictedUrl(currentRoute) {
+  if( currentRoute.indexOf('/abe/users/forgot') > -1
+    || currentRoute.indexOf('/abe/users/login') > -1
+    || currentRoute.indexOf('/abe/users/reset') > -1
+    || !/^\/abe/.test(currentRoute)) {
+    return false
+  }
+
+  return true
+}
+
 export function isUserAllowedOnRoute(workflow, currentRoute) {
+  if( currentRoute.indexOf('/abe/users/forgot') > -1 || currentRoute.indexOf('/abe/users/login') > -1 || !/^\/abe/.test(currentRoute)) {
+    return true
+  }
+
   var isAllowed = false
 
   if (currentRoute.indexOf('abe/') === -1) {
@@ -252,4 +269,41 @@ export function getUserWorkflow(status, role) {
     flows = [addFlow("draft", "draft", "submit"), addFlow("publish", "publish", "submit")]
   }
   return flows
+}
+
+export function loginLimitTry(username) {
+  var p = new Promise((resolve) => {
+    var isNexted = false
+    try {
+      var limiterConfig = config.users.limiter
+
+      var client = redis.createClient()
+      client.on('error', function() {
+        if (!isNexted) {
+          isNexted = true
+          resolve()
+        }
+      })
+
+      var limit = new Limiter({
+        id: username,
+        db: client,
+        duration: limiterConfig.duration,
+        max: limiterConfig.max
+      })
+
+      limit.get(function(err, limit) {
+        if (err) {
+          resolve()
+        }else {
+          resolve(limit)
+        }
+      })
+    }catch(e) {
+      console.log('loginLimitTry', e)
+      resolve()
+    }
+  })
+
+  return p
 }

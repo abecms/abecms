@@ -6,7 +6,7 @@ import {
 var middleware = function(req, res, next) {
   if (!config.users.enable) {
     if (req.url.indexOf('/abe/users/login') > -1) {
-      res.redirect('/abe')
+      res.redirect('/abe/editor')
       return
     }else {
       next()
@@ -14,18 +14,23 @@ var middleware = function(req, res, next) {
     }
   }
 
-  if( req.url.indexOf('/abe/users/forgot') > -1 || req.url.indexOf('/abe/users/login') > -1 || !/^\/abe/.test(req.url)) {
-    next()
-    return
+  var decoded = User.utils.decodeUser(req, res)
+  var user = User.utils.findSync(decoded.iss)
+  res.user = user
+
+  if(!User.utils.isAbeRestrictedUrl(req.url)) {
+    // if (user != null && req.url.indexOf('/abe/users/login') > -1 && req.method === 'GET' ) {
+    //   res.redirect('/abe/editor')
+    //   return
+    // }else {
+      next()
+      return
+    // }
   }
 
   var isHtml = /text\/html/.test(req.get('accept')) ? true : false
 
-  var decoded = User.utils.decodeUser(req, res)
-  var user = User.utils.findSync(decoded.iss)
-
   if (user != null && User.utils.isUserAllowedOnRoute(user.role.workflow, req.url)) {
-    res.user = user
     next()
   }else {
     if(isHtml) {

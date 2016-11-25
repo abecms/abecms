@@ -105,16 +105,6 @@ app.use(function (req, res, next) {
   res.locals.nonce = uuid.v4()
   next()
 })
-app.use(function (req, res, next) {
-  if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
-      && req.query.logs === 'true') {
-    config.logs = true
-  }else if(typeof req.query.logs !== 'undefined' && req.query.logs !== null
-      && req.query.logs === 'false') {
-    config.logs = false
-  }
-  next()
-})
 
 if(config.security === true){
   app.use(helmet())

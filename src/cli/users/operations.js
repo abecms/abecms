@@ -29,7 +29,7 @@ export function add(newUser) {
   newUser.password = User.utils.encryptPassword(10, newUser.password)
   bdd.push(newUser)
 
-  User.manager.instance.save(bdd)
+  User.manager.instance.update(bdd)
   
   return {
     success:1,
@@ -46,7 +46,7 @@ export function deactivate(id) {
       bdd[i].actif = 0
     }
   }
-  User.manager.instance.save(bdd)
+  User.manager.instance.update(bdd)
   return bdd
 }
 
@@ -59,7 +59,7 @@ export function activate(id) {
       bdd[i].actif = 1
     }
   }
-  User.manager.instance.save(bdd)
+  User.manager.instance.update(bdd)
   return bdd
 }
 
@@ -74,7 +74,7 @@ export function remove(id) {
     }
   }
   bdd = newBdd
-  User.manager.instance.save(bdd)
+  User.manager.instance.update(bdd)
   return bdd
 }
 
@@ -100,7 +100,7 @@ export function update(data) {
       })
     }
   }
-  bdd = User.manager.instance.save(bdd)
+  bdd = User.manager.instance.update(bdd)
 
   return {
     success:1,
@@ -123,7 +123,7 @@ export function updatePassword(data, password) {
     }
   }
 
-  bdd = User.manager.instance.save(bdd)
+  bdd = User.manager.instance.update(bdd)
   
   return {
     success:1,
