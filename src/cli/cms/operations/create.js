@@ -3,7 +3,6 @@ import {
   coreUtils,
   cmsTemplates,
   cmsOperations,
-  config,
   abeExtend,
   cmsData
 } from '../../'

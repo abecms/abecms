@@ -26,7 +26,7 @@ describe('Editor', function() {
       return (param === 'beforeEditorInput') ? val : html;
     })
 
-    var result = cmsEditor.printInput(val)
+    var result = cmsEditor.printInput(val, {})
     chai.expect(result).to.be.a('string')
     var value = result.match(/value="[a-zA-Z0-9-]*"/ig)[0]
     chai.expect(value).to.equal('value="val2"')

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/wysiwyg-editor.min.css">
+    <script type="text/javascript" src="/libs/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+  
+  <div class="user-list row col-xs-offset-1 col-xs-10">
+    <ol class="breadcrumb">
+      <li><a href="/abe/editor/">Home</a></li>
+      <li class="active">User list</li>
+    </ol>
+
+    <div class="alert alert-danger hidden" role="alert">
+      
+    </div>
+
+    <div class="">
+  
+        <table class="table table-striped table-bordered table-responsive" id="filtered-list">
+          <thead>
+            <tr>
+              <th>username</th>
+              <th>name</th>
+              <th>email</th>
+              <th>role</th>
+              {{#isAuthorized '/abe/users/activate' @root.user.role.workflow}}<th>active/inactive</th>{{/isAuthorized}}
+              <th data-orderable="false">actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each users}}
+            <tr>
+              <td class="td-username">
+                <div class="form-group form-group-sm wrapper-values wrapper-values-username">
+                  <input type="text" name="username" placeholder="username" class="form-control input-sm" value="{{this.username}}" data-update-user-username>
+                </div>
+                <span class="value">{{this.username}}</span>
+              </td>
+              <td class="td-name">
+                <div class="form-group form-group-sm wrapper-values wrapper-values-name">
+                  <input type="text" name="name" placeholder="name" class="form-control input-sm" value="{{this.name}}" data-update-user-name>
+                </div>
+                <span class="value">{{this.name}}</span>
+              </td>
+              <td class="td-email">
+                <div class="form-group form-group-sm wrapper-values wrapper-values-email">
+                  <input type="text" name="email" placeholder="email" class="form-control input-sm" value="{{this.email}}" data-update-user-email>
+                </div>
+                <span class="value">{{this.email}}</span>
+              </td>
+              <td class="td-role">
+                <div class="form-group form-group-sm wrapper-values wrapper-values-role">
+                  <select name="role" id="role" class="form-control input-sm" data-update-user-role>
+                  {{#each ../roles}}
+                    <option value="{{this.name}}" {{#ifCond ../role.name this.name}}selected{{/ifCond}}>{{this.name}}</option>
+                  {{/each}}
+                  </select>
+                </div>
+                <span class="value">{{this.role.name}}</span>
+              </td>
+              {{#isAuthorized '/abe/users/activate' @root.user.role.workflow}}
+              <td align="center" class="td-active">
+                {{#ifCond this.actif 1}}
+                  <span class="hidden is-active">active</span>
+                  <span class="glyphicon glyphicon-eye-open text-info" data-deactivate data-user-id="{{this.id}}">
+                    <span class="glyphicon glyphicon-eye-close text-danger"></span>
+                  </span>
+                {{/ifCond}}
+                {{#ifCond this.actif 0}}
+                  <span class="hidden is-active">inactive</span>
+                  <span class="glyphicon glyphicon-eye-close text-danger" data-activate data-user-id="{{this.id}}">
+                    <span class="glyphicon glyphicon-eye-open text-info"></span>
+                  </span>
+                {{/ifCond}}
+              </td>
+              {{/isAuthorized}}
+              <td align="center" class="td-actions">
+                {{#isAuthorized '/abe/users/update' @root.user.role.workflow}}
+                  <span class="glyphicon glyphicon-pencil text-info" data-edit data-user-id="{{this.id}}">
+                    <span class="glyphicon glyphicon-ok text-success" data-update data-user-id="{{this.id}}"></span>
+                    <span class="glyphicon glyphicon-remove text-warning" data-close-update data-user-id="{{this.id}}"></span>
+                  </span>
+                {{/isAuthorized}}
+                {{#isAuthorized '/abe/users/remove' @root.user.role.workflow}}
+                <span class="glyphicon glyphicon-trash text-danger" data-remove data-user-id="{{this.id}}" data-text="Are you sure you want to delete this user"></span>
+                {{/isAuthorized}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+      </table>
+      <form classs="form-inline">
+        <table class="table">
+          <tbody>
+            {{#isAuthorized '/abe/users/add' @root.user.role.workflow}}
+            <tr>
+              <td class="no-border">
+                <div class="form-group">
+                  <input type="text" name="username" placeholder="username" class="form-control" data-add-user-username>
+                </div>
+              </td>
+              <td class="no-border">
+                <div class="form-group">
+                  <input type="text" name="name" placeholder="name" class="form-control" data-add-user-name>
+                </div>
+              </td>
+              <td class="no-border">
+                <div class="form-group">
+                  <input type="text" name="email" placeholder="email" class="form-control" data-add-user-email>
+                </div>
+              </td>
+              <td class="no-border">
+                <div class="form-group">
+                  <input type="password" name="password" placeholder="password" class="form-control" data-add-user-password>
+                </div>
+              </td>
+              <td class="no-border">
+                <div class="form-group">
+                  <select name="role" id="role" class="form-control" data-add-user-role>
+                  {{#each roles}}
+                    <option value="{{this.name}}">{{this.name}}</option>
+                  {{/each}}
+                  </select>
+                </div>
+              </td>
+              <td class="no-border">
+                <span class="glyphicon glyphicon-plus text-info" data-add-user></span>
+              </td>
+            </tr>
+            {{/isAuthorized}}
+          </tbody>
+        </table>
+      </form>
+    </div>
+  
+    <table class="hidden">
+      <tr data-user-base>
+        <td class="td-username">
+          <div class="form-group form-group-sm wrapper-values wrapper-values-username">
+            <input type="text" name="username" placeholder="username" class="form-control input-sm" value="" data-update-user-username>
+          </div>
+          <span class="value"></span>
+        </td>
+        <td class="td-name">
+          <div class="form-group form-group-sm wrapper-values wrapper-values-name">
+            <input type="text" name="name" placeholder="name" class="form-control input-sm" value="" data-update-user-name>
+          </div>
+          <span class="value"></span>
+        </td>
+        <td class="td-email">
+          <div class="form-group form-group-sm wrapper-values wrapper-values-email">
+            <input type="text" name="email" placeholder="email" class="form-control input-sm" value="" data-update-user-email>
+          </div>
+          <span class="value"></span>
+        </td>
+        <td class="td-role">
+          <div class="form-group form-group-sm wrapper-values wrapper-values-role">
+            <select name="role" id="role" class="form-control input-sm" data-update-user-role>
+            {{#each roles}}
+              <option value="{{this.name}}">{{this.name}}</option>
+            {{/each}}
+            </select>
+          </div>
+          <span class="value"></span>
+        </td>
+        {{#isAuthorized '/abe/users/activate' @root.user.role.workflow}}
+        <td align="center" class="td-active">
+            <span class="hidden is-active">inactive</span>
+            <span class="glyphicon glyphicon-eye-close text-danger" data-activate data-user-id="">
+              <span class="glyphicon glyphicon-eye-open text-info"></span>
+            </span>
+        </td>
+        {{/isAuthorized}}
+        {{#isAuthorized '/abe/users/remove' @root.user.role.workflow}}
+        <td align="center" class="td-actions">
+          <span class="glyphicon glyphicon-pencil text-info" data-edit data-user-id="">
+            <span class="glyphicon glyphicon-ok text-success" data-update data-user-id=""></span>
+            <span class="glyphicon glyphicon-remove text-warning" data-close-update data-user-id=""></span>
+          </span>
+          <span class="glyphicon glyphicon-trash text-danger" data-remove data-user-id="" data-text="Are you sure you want to delete this user"></span>
+        </td>
+        {{/isAuthorized}}
+      </tr>
+    </table>
+  </div>
+  <script type="text/javascript" src="/libs/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="/libs/dataTables.bootstrap.min.js"></script>
+  
+</body>
+</html>

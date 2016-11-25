@@ -8,18 +8,21 @@ export default class RichTexarea {
     this.wrapper = wrapper
     this.textarea = wrapper.querySelector('.form-rich')
     this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon')
-    this.textEditor = wysiwyg({
-      element: this.textarea,
-      onKeyUp: () => {
-        this.setHTML()
-      },
-      hijackContextmenu: false
-    })
+    
+    if (this.textarea.getAttribute('disabled') !== 'disabled') {
+      this.textEditor = wysiwyg({
+        element: this.textarea,
+        onKeyUp: () => {
+          this.setHTML()
+        },
+        hijackContextmenu: false
+      })
 
-    this._action = this.action.bind(this)
-    Array.prototype.forEach.call(this.btns, (btn) => {
-      btn.addEventListener('click', this._action)
-    })
+      this._action = this.action.bind(this)
+      Array.prototype.forEach.call(this.btns, (btn) => {
+        btn.addEventListener('click', this._action)
+      })
+    }
   }
 
   setHTML() {

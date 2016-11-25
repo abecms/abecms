@@ -8,25 +8,27 @@ export default class EditorFiles {
   constructor() {
     this._ajax = Nanoajax.ajax
     this.referenceTabButton = document.querySelector('[data-manager-show="references-files"]')
-    this.referenceTabButton.addEventListener('click', () => {
-      this._ajax({
-        url: '/abe/reference/',
-        body: '',
-        cors: true,
-        method: 'get'
-      }, (code, responseText) => {
-        var resp = JSON.parse(responseText)
-        var referenceListHtml = document.querySelector('.references-files-wrapper')
-        var template = Handlebars.compile(referenceListHtml.innerHTML)
-        var compiled = template(resp)
-        referenceListHtml.innerHTML = compiled
-        this.referenceLinks = document.querySelectorAll('[data-ref-json]')
-        this.textArea = document.querySelector('.display-json')
-        this.jsonError = document.querySelector('.json-error')
-        if(!this.referenceLinks) return
-        this.rebind()
+    if (this.referenceTabButton != null) {
+      this.referenceTabButton.addEventListener('click', () => {
+        this._ajax({
+          url: '/abe/reference/',
+          body: '',
+          cors: true,
+          method: 'get'
+        }, (code, responseText) => {
+          var resp = JSON.parse(responseText)
+          var referenceListHtml = document.querySelector('.references-files-wrapper')
+          var template = Handlebars.compile(referenceListHtml.innerHTML)
+          var compiled = template(resp)
+          referenceListHtml.innerHTML = compiled
+          this.referenceLinks = document.querySelectorAll('[data-ref-json]')
+          this.textArea = document.querySelector('.display-json')
+          this.jsonError = document.querySelector('.json-error')
+          if(!this.referenceLinks) return
+          this.rebind()
+        })
       })
-    })
+    }
   }
 
   rebind() {

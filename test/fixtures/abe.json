@@ -6,5 +6,19 @@
   "upload": {
     "image": "unitimage"
   },
-  "siteLocaleFolder": "locales"
+  "siteLocaleFolder": "locales",
+  "users": {
+    "enable": false,
+    "commonPassword": [
+      "test"
+    ],
+    "routes": {
+      "admin": [
+        "/abe.*"
+      ],
+      "review": [
+        "/abe/test.*"
+      ]
+    }
+  }
 }

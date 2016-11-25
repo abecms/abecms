@@ -126,8 +126,22 @@ export function unpublish(filePath) {
   return p
 }
 
-export function reject(filePath, json) {
+export function reject(filePath, json, workflow) {
   abeExtend.hooks.instance.trigger('beforeReject', filePath)
+
+  var rejectToWorkflow
+  var found = false
+  Array.prototype.forEach.call(config.users.workflow, (flow) => {
+    if (workflow === flow) {
+      found = true
+    }
+    if (!found) {
+      rejectToWorkflow = flow
+    }
+  })
+  if (!found) {
+    rejectToWorkflow = 'draft'
+  }
 
   var p = new Promise((resolve) => {
     if(json.abe_meta.publish != null) {
@@ -136,7 +150,7 @@ export function reject(filePath, json) {
     var p2 = draft(
         filePath, 
         json,
-        'draft'
+        rejectToWorkflow
       )
     p2.then((result) => {
       abeExtend.hooks.instance.trigger('afterReject', result)

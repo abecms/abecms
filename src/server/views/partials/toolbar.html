@@ -1,23 +1,16 @@
-    
-    <button class='btn btn-info btn-save' data-action="draft">
+{{#each @root.workflows}}
+  {{#isAuthorized this.url @root.user.role.workflow}}
+    <button class='btn btn-info btn-save' data-action="{{this.status}}" data-url="{{this.url}}">
       <span class="before">
-        draft
+        {{this.status}}
       </span>
       <span class="loading">
-        {{text.saving}}
+        {{@root.text.saving}}
       </span>
       <span class="after">
-        {{text.done}}
+        {{@root.text.done}}
       </span>
     </button>
-    <button class='btn btn-info btn-save' data-action="publish">
-      <span class="before">
-        publish
-      </span>
-      <span class="loading">
-        {{text.saving}}
-      </span>
-      <span class="after">
-        {{text.done}}
-      </span>
-    </button>
+  {{else}}
+  {{/isAuthorized}}
+{{/each}}

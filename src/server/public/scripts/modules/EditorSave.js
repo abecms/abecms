@@ -111,8 +111,9 @@ export default class EditorSave {
     this.serializeForm()
     target.classList.add('loading')
     target.setAttribute('disabled', 'disabled')
+    var url = target.getAttribute('data-url')
 
-    this._json.save(this._saveType)
+    this._json.save(this._saveType, url)
         .then((result) => {
           target.classList.add('done')
           // this._populateFromJson(this._json.data)
@@ -121,8 +122,8 @@ export default class EditorSave {
           target.classList.remove('done')
           target.removeAttribute('disabled')
 
-          this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
           if(result.success === 1) {
+            this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
             window.json = result.json
           }
           var formWrapper = document.querySelector('#abeForm')

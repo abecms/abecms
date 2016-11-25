@@ -12,8 +12,14 @@ import on from 'on'
 export default class EditorBlock {
   constructor() {
     this._json = Json.instance
-    this.color = new Color(document.querySelector('.wysiwyg-popup.color'))
-    this.link = new Link(document.querySelector('.wysiwyg-popup.link'))
+    var colorWysiwyg = document.querySelector('.wysiwyg-popup.color')
+    if (colorWysiwyg != null) {
+      this.color = new Color(colorWysiwyg)
+    }
+    var linkWysiwyg = document.querySelector('.wysiwyg-popup.link')
+    if (linkWysiwyg != null) {
+      this.link = new Link(linkWysiwyg)
+    }
 
     this._removeblock = [].slice.call(document.querySelectorAll('.list-group[data-block]'))
     this._handleClickRemoveBlock = this._clickRemoveBlock.bind(this)

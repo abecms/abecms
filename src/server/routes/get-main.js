@@ -9,7 +9,8 @@ import {
   cmsTemplates,
   coreUtils,
   abeExtend,
-  Manager
+  Manager,
+  User
 } from '../../cli'
 
 import {editor} from '../controllers/editor'
@@ -63,6 +64,10 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   EditorVariables.nonce = '\'nonce-' + EditorVariables.express.res.locals.nonce + '\''
   EditorVariables.editorWidth = editorWidth
 
+  if (_json != null && _json.abe_meta) {
+    EditorVariables.workflows = User.utils.getUserWorkflow(_json.abe_meta.status)
+  }
+
   EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 
   if (filePath != null && filePath.indexOf('.json') > -1) {
@@ -74,7 +79,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
 }
 
 var route = function(req, res, next) {
-  var filePath = req.originalUrl.replace('/abe', '')
+  var filePath = req.originalUrl.replace('/abe/editor', '')
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
@@ -100,6 +105,7 @@ var route = function(req, res, next) {
   var folderPath = null
 
   var EditorVariables = {
+    user: res.user,
     slugs: Manager.instance.getSlugs(),
     express: {
       res: res,
@@ -107,7 +113,7 @@ var route = function(req, res, next) {
     },
     filename: fileName,
     folderPath: folderPath,
-    abeUrl: '/abe/',
+    abeUrl: '/abe/editor/',
     isHome: isHome,
     config: config,
     Locales: coreUtils.locales.instance.i18n,
@@ -129,7 +135,7 @@ var route = function(req, res, next) {
       }
 
       if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
-        res.redirect('/abe/') 
+        res.redirect('/abe/editor') 
         return 
       }
 
