@@ -208,10 +208,10 @@ export default class EditorAutocomplete {
   _find(obj, path) {
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) {
-        if ("object" == typeof(obj[key]) && !this._has(obj[key], path)) {
-            this._find(obj[key], path)
+        if ('object' == typeof(obj[key]) && !this._has(obj[key], path)) {
+          this._find(obj[key], path)
         } else if (this._has(obj[key], path)) {
-            this.result.push(obj[key])
+          this.result.push(obj[key])
         }
       }
     }
@@ -224,12 +224,12 @@ export default class EditorAutocomplete {
    * @return {Boolean}      is the path found in obj
    */
   _has(obj, path) {
-    return path.split(".").every(function(x) {
-      if(typeof obj != "object" || obj === null || typeof obj[x] == 'undefined')
-          return false;
-      obj = obj[x];
-      return true;
-    });
+    return path.split('.').every(function(x) {
+      if(typeof obj != 'object' || obj === null || typeof obj[x] == 'undefined')
+        return false
+      obj = obj[x]
+      return true
+    })
   }
 
   /**
@@ -239,8 +239,8 @@ export default class EditorAutocomplete {
    * @return {[type]}      the object containing the path object or undefined
    */
   _get(obj, path) {
-    return path.split(".").reduce(function(prev, curr) {
-        return prev ? prev[curr] : undefined
+    return path.split('.').reduce(function(prev, curr) {
+      return prev ? prev[curr] : undefined
     }, obj || self)
   }
 
@@ -255,7 +255,7 @@ export default class EditorAutocomplete {
     var keys = this._getKeys(str)
     Array.prototype.forEach.call(keys, (key) => {
       var val = this._get(obj, key)
-      var pattern = new RegExp("{{"+key+"}}|"+key)
+      var pattern = new RegExp('{{'+key+'}}|'+key)
       str = str.replace(pattern, val)
     })
 
@@ -268,7 +268,7 @@ export default class EditorAutocomplete {
    * @return {Array}     the array of variables
    */
   _getKeys(str){
-    var regex = /\{\{(.*?)\}\}/g;
+    var regex = /\{\{(.*?)\}\}/g
     var variables = []
     var match
 

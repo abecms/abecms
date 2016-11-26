@@ -47,8 +47,8 @@ export default function sourceAttr(obj, params) {
  * @return {[type]}      the object containing the path object or undefined
  */
 function get(obj, path) {
-  return path.split(".").reduce(function(prev, curr) {
-      return prev ? prev[curr] : undefined
+  return path.split('.').reduce(function(prev, curr) {
+    return prev ? prev[curr] : undefined
   }, obj || self)
 }
 
@@ -63,7 +63,7 @@ function prepareDisplay(obj, str) {
   var keys = getKeys(str)
   Array.prototype.forEach.call(keys, (key) => {
     var val = get(obj, key)
-    var pattern = new RegExp("{{"+key+"}}|"+key)
+    var pattern = new RegExp('{{'+key+'}}|'+key)
     str = str.replace(pattern, val)
   })
 
@@ -76,7 +76,7 @@ function prepareDisplay(obj, str) {
  * @return {Array}     the array of variables
  */
 function getKeys(str){
-  var regex = /\{\{(.*?)\}\}/g;
+  var regex = /\{\{(.*?)\}\}/g
   var variables = []
   var match
 
