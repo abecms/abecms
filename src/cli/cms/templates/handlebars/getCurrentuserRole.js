@@ -19,7 +19,10 @@ export default function getCurrentuserRole(obj) {
       var secret = config.users.secret
       var decoded = jwt.decode(token, secret)
       var user = User.utils.findSync(decoded.iss)
-      return user.role.workflow
+      if (user && user.role)
+        return user.role.workflow
+
+      return null
     }
   }
   return ''
