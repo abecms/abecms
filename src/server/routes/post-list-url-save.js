@@ -14,7 +14,7 @@ var route = function(req, res, next) {
   let json = config.getLocalConfig()
 
   Array.prototype.forEach.call(Object.keys(authorizations), (key) => {
-  	if (key != "admin") {
+  	if (key != 'admin') {
   		json.users.routes[key] = authorizations[key]
   	}
   })

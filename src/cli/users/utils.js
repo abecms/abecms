@@ -253,24 +253,24 @@ export function getUserWorkflow(status, role) {
     var found = false
     Array.prototype.forEach.call(config.users.workflow, (flow) => {
       if (found) {
-        flows.push(addFlow(flow, flow, "submit"))
+        flows.push(addFlow(flow, flow, 'submit'))
         found = false
       }
       if (status == flow) {
         found = true
         if (before != null) {
-          if (flow == "publish") {
-            flows.push(addFlow("edit", "draft", "submit"))
+          if (flow == 'publish') {
+            flows.push(addFlow('edit', 'draft', 'submit'))
           }else {
-            flows.push(addFlow("reject", before, "reject"))
+            flows.push(addFlow('reject', before, 'reject'))
           }
         }
-        flows.push(addFlow(flow, flow, "edit"))
+        flows.push(addFlow(flow, flow, 'edit'))
       }
       before = flow
     })
   }else {
-    flows = [addFlow("draft", "draft", "submit"), addFlow("publish", "publish", "submit")]
+    flows = [addFlow('draft', 'draft', 'submit'), addFlow('publish', 'publish', 'submit')]
   }
   return flows
 }

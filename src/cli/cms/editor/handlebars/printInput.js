@@ -33,7 +33,7 @@ export default function printInput (params, root) {
   
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
-  var userWorkflow = ""
+  var userWorkflow = ''
   if (root.user != null) {
     userWorkflow = root.user.role.workflow
   }

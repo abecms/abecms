@@ -29,7 +29,7 @@ export default class Json {
     return this[singleton]
   }
 
-  save(type = 'draft', url = "/abe/save/draft/submit", tplPath = null, filePath = null) {
+  save(type = 'draft', url = '/abe/save/draft/submit', tplPath = null, filePath = null) {
     this.saving._fire({type: type})
     var p = new Promise((resolve) => {
       if(!this.canSave){
