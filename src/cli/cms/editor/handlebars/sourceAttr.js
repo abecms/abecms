@@ -1,4 +1,4 @@
-function isSelected(currentValue, values) {
+export function isSelected(currentValue, values) {
   var isEqual = false
   if(typeof currentValue === 'object' && Object.prototype.toString.call(currentValue) === '[object Object]') {
     Array.prototype.forEach.call(values, (value) => {
@@ -46,7 +46,7 @@ export default function sourceAttr(obj, params) {
  * @param  {string} path the path to object (dot notation)
  * @return {[type]}      the object containing the path object or undefined
  */
-function get(obj, path) {
+export function get(obj, path) {
   return path.split('.').reduce(function(prev, curr) {
     return prev ? prev[curr] : undefined
   }, obj || self)
@@ -59,7 +59,7 @@ function get(obj, path) {
  * @param  {string} str    the string
  * @return {string}        the string with values
  */
-function prepareDisplay(obj, str) {
+export function prepareDisplay(obj, str) {
   var keys = getKeys(str)
   Array.prototype.forEach.call(keys, (key) => {
     var val = get(obj, key)
@@ -75,7 +75,7 @@ function prepareDisplay(obj, str) {
  * @param  {string} str the string containing variables
  * @return {Array}     the array of variables
  */
-function getKeys(str){
+export function getKeys(str){
   var regex = /\{\{(.*?)\}\}/g
   var variables = []
   var match
