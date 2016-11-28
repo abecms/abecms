@@ -1,0 +1,101 @@
+.panel-login {
+  width: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0px;
+}
+
+.login-footer .pull-right {
+  margin-top: 5px;
+}
+
+.btn-logout {
+  margin-top: 20px;
+}
+
+.user-list {
+  .table .glyphicon {
+    cursor: pointer;
+  }
+
+  table {
+    margin-bottom: 0px;
+  }
+
+  table .form-group {
+    margin-bottom: 0px;
+  }
+
+  .table>tbody>tr>td.no-border {
+    border: 0px;
+  }
+
+  .glyphicon-eye-open,
+  .glyphicon-eye-close {
+    width: 15px;
+    height: 15px;
+  }
+
+  .glyphicon-eye-open:hover:before,
+  .glyphicon-eye-close:hover:before {
+    display: none;
+  }
+
+  .glyphicon-eye-open:hover .glyphicon-eye-close:before,
+  .glyphicon-eye-close:hover .glyphicon-eye-open:before {
+    display: inline;
+  }
+
+  .glyphicon-eye-open .glyphicon-eye-close,
+  .glyphicon-eye-close .glyphicon-eye-open {
+    position: absolute;
+    left: 0px;
+  }
+
+  .glyphicon-eye-open .glyphicon-eye-close:before,
+  .glyphicon-eye-close .glyphicon-eye-open:before {
+    display: none;
+  }
+
+  .glyphicon-pencil {
+    width: 40px;
+    height: 15px;
+  }
+
+  .editing .glyphicon-pencil:before {
+    display: none;
+  }
+
+  .editing .glyphicon-pencil .glyphicon-ok:before,
+  .editing .glyphicon-pencil .glyphicon-remove:before {
+    display: inline;
+  }
+
+  .glyphicon-pencil .glyphicon-ok {
+    position: absolute;
+    left: 0px;
+  }
+  .glyphicon-pencil .glyphicon-remove {
+    position: absolute;
+    left: 25px;
+  }
+
+  .glyphicon-pencil .glyphicon-ok:before,
+  .glyphicon-pencil .glyphicon-remove:before {
+    display: none;
+  }
+
+  .form-inline .form-group.wrapper-values {
+    display: none;
+  }
+
+  .form-inline .editing .form-group.wrapper-values {
+    display: inline-block;
+  }
+
+  .form-inline .editing .value {
+    display: none;
+  }
+}

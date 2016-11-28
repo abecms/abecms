@@ -45,14 +45,17 @@ import * as cmsEditor from './cms/editor'
 import * as cmsOperations from './cms/operations'
 import * as cmsTemplates from './cms/templates'
 import * as cmsReference from './cms/reference'
+import * as cmsMedia from './cms/media'
 import * as coreUtils from './core/utils'
 import * as abeExtend from './extend'
+import * as User from './users'
 
 export {
 	cmsData,
 	cmsOperations,
 	cmsTemplates,
 	cmsReference,
+	cmsMedia,
 	coreUtils,
 	cmsEditor,
 	abeExtend,
@@ -81,7 +84,8 @@ export {
 	ifCond,
 	config,
 	Manager,
-	Page
+	Page,
+	User
 }
 
 export {compileAbe as compileAbe}

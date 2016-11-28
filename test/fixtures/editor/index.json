@@ -1,0 +1,17 @@
+{
+  "text": {
+    "type": "text",
+    "key": "val1",
+    "value": "val2",
+    "reload": "val3",
+    "order": "val4",
+    "required": "val5",
+    "display": "val6",
+    "visible": "val7",
+    "autocomplete": "val8",
+    "placeholder": "val9"
+  },
+  "image": {},
+  "file": {},
+  "rich": {}
+}

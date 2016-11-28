@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/wysiwyg-editor.min.css">
+    <script type="text/javascript" src="/libs/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+  <div class="panel panel-default panel-login">
+    <div class="panel-body">
+      {{#if info}}
+        <span class="text-danger">{{info}}</span>
+        <br /><br />
+        <a href="/abe/users/login">Login</a>
+      {{else}}
+      <form action="/abe/users/forgot" method="get">
+
+        <div class="form-group">
+          <label for="email">Enter your email</label>
+          <input type="email" class="form-control" name="email" placeholder="">
+        </div>
+        <input type="hidden" class="form-control" name="token" value="{{token}}">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      {{/if}}
+
+      {{abeImport 'login-more' config this}}
+    </div>
+  </div>
+  
+</body>
+</html>

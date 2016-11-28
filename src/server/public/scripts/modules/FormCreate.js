@@ -213,7 +213,7 @@ export default class FormCreate {
     }
   }
 
-  _submit(type) {
+  _submit(type, target) {
     var res = this._setSlug(true)
     var toSave = qs.stringify(res.values)
 
@@ -230,7 +230,7 @@ export default class FormCreate {
             this._isSaving = false
             var jsonRes = JSON.parse(responseText)
             if (jsonRes.success == 1 && jsonRes.json != null && jsonRes.json.abe_meta != null) {
-              window.location.href = window.location.origin + '/abe' + jsonRes.json.abe_meta.link
+              window.location.href = window.location.origin + '/abe/editor' + jsonRes.json.abe_meta.link
             }else {
               alert('error')
             }

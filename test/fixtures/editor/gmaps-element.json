@@ -1,0 +1,53 @@
+{
+  "address_components": [
+    {
+      "long_name": "State of Pará",
+      "short_name": "PA",
+      "types": [
+        "administrative_area_level_1",
+        "political"
+      ]
+    },
+    {
+      "long_name": "Brazil",
+      "short_name": "BR",
+      "types": [
+        "country",
+        "political"
+      ]
+    }
+  ],
+  "formatted_address": "State of Pará, Brazil",
+  "geometry": {
+    "bounds": {
+      "northeast": {
+        "lat": 2.5910246,
+        "lng": -46.0643195
+      },
+      "southwest": {
+        "lat": -9.8411565,
+        "lng": -58.89827700000001
+      }
+    },
+    "location": {
+      "lat": -1.9981271,
+      "lng": -54.9306152
+    },
+    "location_type": "APPROXIMATE",
+    "viewport": {
+      "northeast": {
+        "lat": 2.5910246,
+        "lng": -46.0643195
+      },
+      "southwest": {
+        "lat": -9.8411565,
+        "lng": -58.89827700000001
+      }
+    }
+  },
+  "place_id": "ChIJlwksrJn5iJIRCvNV5z7IXjE",
+  "types": [
+    "administrative_area_level_1",
+    "political"
+  ]
+}

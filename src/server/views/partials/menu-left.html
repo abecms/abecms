@@ -15,6 +15,18 @@
   <li class="list-group-item pointer" data-config="true" data-manager-show="references-files">
     edit references
   </li>
+  {{#if @root.config.users.enable}}
+    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+      <li class="list-group-item pointer">
+        <a href="/abe/users/list">User list</a> 
+      </li>
+    {{/isAuthorized}}
+  {{/if}}
+  {{#isAuthorized '/abe/list-url' @root.user.role.workflow}}
+    <li class="list-group-item pointer">
+      <a href="/abe/list-url">User roles</a> 
+    </li>
+  {{/isAuthorized}}
   {{abeImport 'menu-left-addons' manager.config this}}
 </ul>
 {{/if}}
@@ -30,4 +42,8 @@
     </li>
   </ul>
   {{/if}}
+{{/if}}
+
+{{#if @root.config.users.enable}}
+  <a href="/abe/users/logout" class="btn btn-danger btn-logout">logout</a>
 {{/if}}

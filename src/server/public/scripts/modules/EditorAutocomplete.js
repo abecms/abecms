@@ -133,14 +133,11 @@ export default class EditorAutocomplete {
   }
 
   _add(display, value, json, autocompleteResultWrapper) {
-    // var deepval = this._deep_value_array(json, display)
-
-    // if(typeof deepval !== 'undefined' && deepval !== null && deepval !== '') {
     var div = document.createElement('div')
     div.classList.add('autocomplete-result')
     div.setAttribute('data-parent-id', this._currentInput.getAttribute('data-id'))
     div.setAttribute('value', value.replace(/&quote;/g, '\''))
-    div.innerHTML = display
+    div.innerHTML = this._prepareDisplay(json, display)
 
     var remove = document.createElement('span')
     remove.classList.add('glyphicon', 'glyphicon-remove')
@@ -149,7 +146,6 @@ export default class EditorAutocomplete {
     div.appendChild(remove)
 
     autocompleteResultWrapper.appendChild(div)
-    // }
   }
 
   _select(target) {
@@ -164,7 +160,7 @@ export default class EditorAutocomplete {
     }
 
     this._add(
-      target.getAttribute('data-display'),
+      this._currentInput.getAttribute('data-display'),
       target.getAttribute('data-value'),
       json,
       this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper')
@@ -177,114 +173,114 @@ export default class EditorAutocomplete {
     this._select(e.currentTarget)
   }
 
-  _showAutocomplete(sources, target, val) {
-    var display = target.getAttribute('data-display')
-
-    var variables = []
-    var displayValues = display
-    var match
-    var isVariable = false
-    while(match = /\{\{(.*?)\}\}/g.exec(displayValues)) {
-      if (match != null && match[1] != null) {
-        isVariable = true
-        variables.push({
-          replace: match[0],
-          value: match[1]
-        })
-        displayValues = displayValues.replace('{{' + match[1] + '}}', '')
-      }
-    }
-
-    if (!isVariable) {
-      if (display != null) {
-        variables.push({
-          replace: display,
-          value: display
-        })
-      }
-    }
-
-    this._divWrapper.innerHTML = ''
-    var deepValues = []
+  _showAutocomplete(obj, target, val) {
     var first = true
-    if(typeof sources !== 'undefined' && sources !== null) {
-      var i = 0
-      Array.prototype.forEach.call(variables, (variable) => {
-        var trueJson = sources
-        
-        var splittedDiplay = variable.value.split('.')
-        while(Object.prototype.toString.call(trueJson) === '[object Object]') {
-          Array.prototype.forEach.call(Object.keys(trueJson), (key) => {
-            if (key === splittedDiplay[0]) {
-              trueJson = trueJson[key]
-              splittedDiplay.shift()
+    var str = target.getAttribute('data-display')
+    this._divWrapper.innerHTML = ''
+    this.result = []
+    var keys = this._getKeys(str)
+    var key = keys[0]
+    this._find(obj, key)
+    Array.prototype.forEach.call(this.result, (o) => {
 
-              variables[i].value = splittedDiplay.join('.')
-            }else {
-              trueJson = []
-            }
-          })
+      var displayName = this._prepareDisplay(o, str, keys)
+      var div = document.createElement('div')
+      div.addEventListener('mousedown', this._handleSelectValue)
+      div.setAttribute('data-value', JSON.stringify(o))
+      div.setAttribute('data-display', displayName)
+      if(first) {
+        div.classList.add('selected')
+      }
+      first = false
+      div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), '<span class="select">$1</span>')
+      this._divWrapper.appendChild(div)
+    })
+
+    this._show(target)
+    console.log(this.result)
+  }
+
+  /**
+   * add in array the object containing the object path if it exists in obj
+   * @param  {Object}  obj  json object
+   * @param  {string}  path the path to object (dot notation)
+   */
+  _find(obj, path) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if ('object' == typeof(obj[key]) && !this._has(obj[key], path)) {
+          this._find(obj[key], path)
+        } else if (this._has(obj[key], path)) {
+          this.result.push(obj[key])
         }
+      }
+    }
+  }
 
-        if (Object.prototype.toString.call(trueJson) === '[object Array]') {
-          var j = 0
-          Array.prototype.forEach.call(trueJson, (item) => {
-            var sourceVal = ''
-            var replace = ''
-            var sourceDisplay = display
-            if (Object.prototype.toString.call(item) === '[object Object]') {
-              try {
-                var sourceValCheck = eval('item.' + variables[i].value)
-                replace = {key: variables[i].replace, value: sourceValCheck}
-                sourceVal = item
-                sourceDisplay = sourceValCheck
-              }catch(e) {
-                console.log(e)
-              }
-            }else {
-              sourceVal = item
-            }
-            if (sourceVal != '') {
-              if (deepValues[j] == null) {
-                deepValues[j] = {
-                  replace: [replace],
-                  value: typeof sourceVal == 'string' ? [sourceVal] : sourceVal,
-                  display: (display == null || display == 'null') ? sourceVal : display
-                }
-              }else {
-                deepValues[j].replace.push(replace)
-              }
-              j++
-            }
-          })
-        }
+  /**
+   * return true if the object path exist in obj
+   * @param  {Object}  obj  json object
+   * @param  {string}  path the path to object (dot notation)
+   * @return {Boolean}      is the path found in obj
+   */
+  _has(obj, path) {
+    return path.split('.').every(function(x) {
+      if(typeof obj != 'object' || obj === null || typeof obj[x] == 'undefined')
+        return false
+      obj = obj[x]
+      return true
+    })
+  }
 
-        i++
-      })
+  /**
+   * return the value from a json obj of a nested attribute
+   * @param  {Object} obj  the json object
+   * @param  {string} path the path to object (dot notation)
+   * @return {[type]}      the object containing the path object or undefined
+   */
+  _get(obj, path) {
+    return path.split('.').reduce(function(prev, curr) {
+      return prev ? prev[curr] : undefined
+    }, obj || self)
+  }
 
-      Array.prototype.forEach.call(deepValues, (item) => {
-        var displayName = item.display
-        Array.prototype.forEach.call(item.replace, (replace) => {
-          if (replace != null && replace != '') {
-            displayName = displayName.replace(new RegExp(replace.key, 'g'), replace.value)
-          }
-        })
-        if (displayName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
-          var div = document.createElement('div')
-          div.addEventListener('mousedown', this._handleSelectValue)
-          div.setAttribute('data-value', JSON.stringify(item.value))
-          div.setAttribute('data-display', displayName)
-          if(first) {
-            div.classList.add('selected')
-          }
-          first = false
-          div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), '<span class="select">$1</span>')
-          this._divWrapper.appendChild(div)
-        }
-      })
+  /**
+   * replace the variables in str by values from obj
+   * corresponding to keys
+   * @param  {Object} obj    the json object
+   * @param  {string} str    the string
+   * @return {string}        the string with values
+   */
+  _prepareDisplay(obj, str) {
+    var keys = this._getKeys(str)
+    Array.prototype.forEach.call(keys, (key) => {
+      var val = this._get(obj, key)
+      var pattern = new RegExp('{{'+key+'}}|'+key)
+      str = str.replace(pattern, val)
+    })
+
+    return str
+  }
+
+  /**
+   * return array of variables {{variable}} extracted from str
+   * @param  {string} str the string containing variables
+   * @return {Array}     the array of variables
+   */
+  _getKeys(str){
+    var regex = /\{\{(.*?)\}\}/g
+    var variables = []
+    var match
+
+    while ((match = regex.exec(str)) !== null) {
+      variables.push(match[1])
     }
     
-    this._show(target)
+    if (variables.length == 0) {
+      variables.push(str)
+    }
+
+    return variables
   }
 
   _hide() {
@@ -468,56 +464,5 @@ export default class EditorAutocomplete {
     target.parentNode.removeChild(target)
     this._saveData()
     this._currentInput = null
-  }
-
-  _deep_value_array(obj, path) {
-
-    if(path.indexOf('.') === -1) {
-      return (typeof obj[path] !== 'undefined' && obj[path] !== null) ? obj[path].replace(/&quote;/g, '\'') : null
-    }
-
-    var pathSplit = path.split('.')
-    var res = JSON.parse(JSON.stringify(obj))
-
-    while(pathSplit.length > 0) {
-      
-      if(typeof res[pathSplit[0]] !== 'undefined' && res[pathSplit[0]] !== null) {
-        if(typeof res[pathSplit[0]] === 'object' && Object.prototype.toString.call(res[pathSplit[0]]) === '[object Array]') {
-          var resArray = []
-
-          Array.prototype.forEach.call(res[pathSplit[0]], (item) => {
-            resArray.push(this._deep_value_array(item, pathSplit.join('.').replace(`${pathSplit[0]}.`, '')))
-          })
-          res = resArray
-          pathSplit.shift()
-        }else {
-          res = res[pathSplit[0]]
-        }
-      }else {
-        return null
-      }
-      pathSplit.shift()
-    }
-
-    return res
-  }
-
-  _deep_value(obj, path) {
-
-    if(path.indexOf('.') === -1) {
-      return (typeof obj[path] !== 'undefined' && obj[path] !== null) ? obj[path] : null
-    }
-
-    var pathSplit = path.split('.')
-    var res = JSON.parse(JSON.stringify(obj))
-    for (var i = 0; i < pathSplit.length; i++) {
-      if(typeof res[pathSplit[i]] !== 'undefined' && res[pathSplit[i]] !== null) {
-        res = res[pathSplit[i]]
-      }else {
-        return null
-      }
-    }
-
-    return res
   }
 }

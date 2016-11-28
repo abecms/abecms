@@ -8,7 +8,7 @@ config.set({root: path.join(__dirname,'fixtures')})
 
 describe('Url', function() {
 
-  var urls = fse.readJsonSync(__dirname + '/fixtures/string/urls.json', 'utf8')
+  var urls = fse.readJsonSync(path.join(__dirname, 'fixtures', 'string', 'urls.json'), 'utf8')
 
   /**
    * getAbeImport
