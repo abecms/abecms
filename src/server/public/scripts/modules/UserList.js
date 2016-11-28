@@ -23,7 +23,7 @@ var usersList = {
       this._bindEvents()
     }
 
-    if ($('#filtered-list').size() > 0) {
+    if (document.querySelectorAll('#filtered-list').length > 0) {
       var orderables = document.querySelectorAll('#filtered-list thead th')
       var columns = []
       Array.prototype.forEach.call(orderables, (orderable) => {
@@ -41,7 +41,7 @@ var usersList = {
       })
     }
 
-    if ($('#filtered-list-url').size() > 0) {
+    if (document.querySelectorAll('#filtered-list-url').length > 0) {
       this._handleFormUserRoleSubmit = this._formUserRoleSubmit.bind(this)
 
       this._formUserRole = document.querySelector('[data-user-role]')

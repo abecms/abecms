@@ -140,7 +140,7 @@ export default class Page {
       }
 
       // I compile the text
-      var compiledTemplate = Handlebars.compile((!this._onlyHTML) ? cmsTemplates.insertDebugtoolUtilities(this.template) : this.template)
+      var compiledTemplate = Handlebars.compile(cmsTemplates.insertDebugtoolUtilities(this.template, this._onlyHTML))
 
       // I create the html page ! yeah !!!
       this.html = compiledTemplate(json, {data: {intl: config.intlData}})
