@@ -63,8 +63,13 @@ export default class EditorManager {
       url: href,
       method: 'get'
     },
-      () => {
-        this.remove._fire(target.parentNode.parentNode.parentNode)
+      (e, responseText) => {
+        var response = JSON.parse(responseText)
+        if (response.success !== 1) {
+          alert(response.message)
+        }else {
+          this.remove._fire(target.parentNode.parentNode.parentNode)
+        }
       })
   }
 
@@ -78,20 +83,25 @@ export default class EditorManager {
       url: href,
       method: 'get'
     },
-      () => {
-        var labels = target.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
-        var p = target.parentNode.parentNode.parentNode.querySelector('.label-published')
-        Array.prototype.forEach.call(labels, (label) => {
-          label.classList.add('hidden')
-        })
-        var draft = target.parentNode.parentNode.parentNode.querySelector('.label-draft')
-        
-        if(typeof draft !== 'undefined' && draft !== null) {
-          draft.classList.remove('hidden')
-        }
+      (e, responseText) => {
+        var response = JSON.parse(responseText)
+        if (response.success !== 1) {
+          alert(response.message)
+        }else {
+          var labels = target.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
+          var p = target.parentNode.parentNode.parentNode.querySelector('.label-published')
+          Array.prototype.forEach.call(labels, (label) => {
+            label.classList.add('hidden')
+          })
+          var draft = target.parentNode.parentNode.parentNode.querySelector('.label-draft')
+          
+          if(typeof draft !== 'undefined' && draft !== null) {
+            draft.classList.remove('hidden')
+          }
 
-        if(typeof p !== 'undefined' && p !== null) p.remove()
-        target.remove()
+          if(typeof p !== 'undefined' && p !== null) p.remove()
+          target.remove()
+        }
       })
   }
 

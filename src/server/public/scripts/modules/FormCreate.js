@@ -213,7 +213,7 @@ export default class FormCreate {
     }
   }
 
-  _submit(type, target) {
+  _submit(type) {
     var res = this._setSlug(true)
     var toSave = qs.stringify(res.values)
 
@@ -240,16 +240,16 @@ export default class FormCreate {
 
   _btnDuplicateManagerClick(e) {
     e.preventDefault()
-    this._submit('duplicate', e.target)
+    this._submit('duplicate')
   }
 
   _btnUpdateManagerClick(e) {
     e.preventDefault()
-    this._submit('update', e.target)
+    this._submit('update')
   }
 
   _btnCreateManagerClick(e) {
     e.preventDefault()
-    this._submit('create', e.target)
+    this._submit('create')
   }
 }
