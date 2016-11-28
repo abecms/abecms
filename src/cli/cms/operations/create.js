@@ -1,5 +1,6 @@
 import path from 'path'
 import {
+  Manager,
   coreUtils,
   cmsTemplates,
   cmsOperations,
@@ -13,6 +14,13 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
 
     var postUrl = path.join('/', pathCreate, name)
     postUrl = coreUtils.slug.clean(postUrl)
+
+    var postExist = Manager.instance.postExist(postUrl)
+    if (postExist) {
+      var postJson = cmsData.revision.getDocumentRevision(postUrl)
+      resolve(postJson)
+      return
+    }
 
     var json = (forceJson) ? forceJson : {}
     json = cmsData.metas.create(json, template, postUrl)
