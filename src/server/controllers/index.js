@@ -13,8 +13,6 @@ import {
   ,getGeneratePost
   ,operations
   ,getSaveConfig
-  ,getUnpublish
-  ,getDelete
   ,postUpload
   ,postSqlRequest
   ,postReference
@@ -57,8 +55,6 @@ router.post('/abe/page/*', postPage)
 router.get('/abe/page/*', getPage)
 router.get('/abe/generate-posts', getGeneratePost)
 router.get('/abe/save-config', getSaveConfig)
-router.get('/abe/unpublish*', getUnpublish)
-router.get('/abe/delete*', getDelete)
 router.get('/abe/reference/*', getReference)
 router.get('/abe/thumbs/*', getThumbs)
 router.get('/abe/image/*', getImage)
@@ -74,9 +70,11 @@ router.get('/abe/list-hooks*', getListHooks)
 
 var workflows = config.users.workflow
 Array.prototype.forEach.call(workflows, (workflow) => {
-  router.post(`/abe/save/${workflow}/reject*`, operations.postReject)
-  router.post(`/abe/save/${workflow}/submit*`, operations.postSubmit)
-  router.post(`/abe/save/${workflow}/edit*`, operations.postSubmit)
+  router.get(`/abe/operations/${workflow}/unpublish*`, operations.getUnpublish)
+  router.get(`/abe/operations/${workflow}/delete*`, operations.getDelete)
+  router.post(`/abe/operations/${workflow}/reject*`, operations.postReject)
+  router.post(`/abe/operations/${workflow}/submit*`, operations.postSubmit)
+  router.post(`/abe/operations/${workflow}/edit*`, operations.postSubmit)
 })
 
 var routes = abeExtend.plugins.instance.getRoutes()

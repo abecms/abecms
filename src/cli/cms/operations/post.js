@@ -104,7 +104,7 @@ export function unpublish(filePath) {
         delete json.abe_meta.publish
       }
 
-      var p = draft(
+      var p = cmsOperations.post.draft(
         filePath, 
         json,
         'draft'
@@ -147,7 +147,7 @@ export function reject(filePath, json, workflow) {
     if(json.abe_meta.publish != null) {
       delete json.abe_meta.publish
     }
-    var p2 = draft(
+    var p2 = cmsOperations.post.draft(
         filePath, 
         json,
         rejectToWorkflow

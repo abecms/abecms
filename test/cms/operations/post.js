@@ -6,17 +6,17 @@ var sinon = require('sinon');
 var path = require('path');
 var fse = require('fs-extra');
 
-var config = require('../src/cli').config
+var config = require('../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'test','fixtures')})
 
-var abeExtend = require('../src/cli').abeExtend
-var cmsData = require('../src/cli').cmsData
-var Manager = require('../src/cli').Manager
-var coreUtils = require('../src/cli').coreUtils
-var cmsOperations = require('../src/cli').cmsOperations
-var cmsTemplates = require('../src/cli').cmsTemplates
-var Manager = require('../src/cli').Manager;
-var Page = require('../src/cli').Page;
+var abeExtend = require('../../../src/cli').abeExtend
+var cmsData = require('../../../src/cli').cmsData
+var Manager = require('../../../src/cli').Manager
+var coreUtils = require('../../../src/cli').coreUtils
+var cmsOperations = require('../../../src/cli').cmsOperations
+var cmsTemplates = require('../../../src/cli').cmsTemplates
+var Manager = require('../../../src/cli').Manager;
+var Page = require('../../../src/cli').Page;
 
 describe('cmsOperations', function() {
   before( function(done) {
@@ -33,43 +33,6 @@ describe('cmsOperations', function() {
         done()
         
       }.bind(this))
-  });
-
-  it('cmsOperations.create()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj, body, json) {
-      if (str == 'beforeFirstSave') {
-        return {
-          postUrl: obj,
-          json: json
-        }
-      }
-      return str, obj;
-    }.bind(this));
-    s.stub(coreUtils.slug, 'clean', function (p) { return p; }.bind(this));
-    s.stub(Manager.instance, 'postExist', function (p) { return false; }.bind(this));
-    s.stub(cmsData.metas, 'create', function (json, template, postUrl) { return json; }.bind(this));
-    s.stub(cmsTemplates.template, 'getTemplate', function () { return this.fixture.htmlArticle; }.bind(this));
-    s.stub(cmsData.values, 'removeDuplicate', function (templateText, json) { return json; }.bind(this));
-    s.stub(cmsOperations.post, 'draft', function () {
-      return Promise.resolve({json: JSON.parse(JSON.stringify(this.fixture.jsonArticle))})
-    }.bind(this));
-
-    cmsOperations.create('article', '', 'article-2.html', {query: ''}, JSON.parse(JSON.stringify(this.fixture.jsonArticle)), false)
-      .then(function(resSave) {
-        var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
-        
-        abeExtend.hooks.instance.trigger.restore()
-        coreUtils.slug.clean.restore()
-        Manager.instance.postExist.restore()
-        cmsData.metas.create.restore()
-        cmsTemplates.template.getTemplate.restore()
-        cmsData.values.removeDuplicate.restore()
-        cmsOperations.post.draft.restore()
-
-        done()
-      }.bind(this));
   });
 
   /**
@@ -206,46 +169,5 @@ describe('cmsOperations', function() {
         cmsOperations.post.draft.restore()
         done()
       }.bind(this));
-  });
-
-  it('cmsOperations.duplicate()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj) { return str, obj; }.bind(this));
-    s.stub(Manager.instance, 'getList', function (str, obj) { return [this.fixture.jsonArticle]; }.bind(this));
-    s.stub(coreUtils.slug, 'clean', function (p) { return p; }.bind(this));
-    s.stub(coreUtils.array, 'filter', function () { return [this.fixture.jsonArticle]; }.bind(this));
-    s.stub(cmsData.file, 'get', function () { return this.fixture.jsonArticle; }.bind(this));
-    s.stub(cmsOperations, 'create', function () { return Promise.resolve(this.fixture.jsonArticle); }.bind(this));
-    s.stub(cmsOperations.remove, 'remove', function () { return null; }.bind(this));
-
-    // test
-    var newPostUrl = 'article-2.html'
-    cmsOperations.duplicate('article-1.html', 'article', '', newPostUrl, {}, false)
-    .then(function(resSave) {
-      chai.expect(resSave.abe_meta).to.not.be.undefined;
-      chai.expect(resSave.abe_meta.link).to.be.equal('/article-2.html');
-
-      cmsOperations.duplicate('article-1.html', 'article', '', newPostUrl, {}, true)
-      .then(function(resSave2) {
-        chai.expect(resSave2.abe_meta).to.not.be.undefined;
-        chai.expect(resSave2.abe_meta.link).to.be.equal('/article-2.html');
-
-        // unstub
-        abeExtend.hooks.instance.trigger.restore()
-        sinon.assert.calledTwice(Manager.instance.getList)
-        Manager.instance.getList.restore()
-        sinon.assert.calledTwice(coreUtils.slug.clean)
-        coreUtils.slug.clean.restore()
-        sinon.assert.calledTwice(coreUtils.array.filter)
-        coreUtils.array.filter.restore()
-        cmsData.file.get.restore()
-        sinon.assert.calledTwice(cmsOperations.create)
-        cmsOperations.create.restore()
-        sinon.assert.calledOnce(cmsOperations.remove.remove)
-        cmsOperations.remove.remove.restore()
-        done()
-      }.bind(this))
-    }.bind(this))
   });
 });

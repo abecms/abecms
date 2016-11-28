@@ -96,3 +96,17 @@ export function getTagAbeWithTab(text, tab) {
 export function validDataAbe(str){
   return str.replace(/\[([0-9]*)\]/g, '$1')
 }
+
+export function getWorkflowFromOperationsUrl(str){
+  let regUrl = /\/abe\/operations\/(.*?)\/(.*?)\//
+  var workflow = 'draft'
+  var match = str.match(regUrl)
+  if (match != null && match[1] != null) {
+    workflow = match[1]
+  }
+  var postUrl = str.replace(regUrl, '')
+  return {
+    workflow: workflow,
+    postUrl: postUrl
+  }
+}
