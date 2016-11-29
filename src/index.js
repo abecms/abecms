@@ -22,6 +22,8 @@ program
   .option('-f, --folder <folder>', '--folder draft|sites')
   .option('-t, --type <type>', '--type draft|other')
   .option('-d, --destination <destination>', '--destination folder')
+  .option('-p, --path <path>', '--path folder')
+  .option('-s, --status <status>', '--status abe')
   .option('generate-posts, --path=<folder> --destination=<folder> --status=<status>', 'save only <status> posts into <destination> from <path> folder')
   .parse(process.argv)
 
