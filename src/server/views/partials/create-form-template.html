@@ -4,7 +4,7 @@
     <option></option>
     {{#each @root.manager.list.templates}}
       {{#ifCond @root.json.abe_meta.template name}}
-        {{#ifCond @root.precontrib "true"}}
+        {{#ifCond @root.precontrib true}}
         <option value="{{name}}" clean-value="{{website}}">{{name}}</option>
         {{else}}
         <option value="{{name}}" clean-value="{{website}}" selected="selected">{{name}}</option>

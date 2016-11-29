@@ -151,4 +151,13 @@ describe("Helpers", function () {
             chai.expect(rendered).to.eql(expected);
         });
     });
+    describe("setVariable", function () {
+        it('setVariable', function() {
+            var variableName = "variableName",
+                variableValue = 'variableValue',
+                obj = {data: {root: {}}},
+                rendered = Handlebars.helpers.setVariable(variableName, variableValue, obj);
+            chai.expect(obj.data.root.variableName).to.be.equal(variableValue);
+        });
+    });
 });

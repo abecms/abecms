@@ -9,8 +9,8 @@ import {
 export default function printBlock (ctx, root) {
   var res = ''
   var precontrib = false
-  if (root.precontrib != null && root.precontrib === 'true') {
-    precontrib = true
+  if (root.precontrib != null) {
+    precontrib = root.precontrib
   }
 
   if(ctx[0].block != null && ctx[0].block !== '') {
