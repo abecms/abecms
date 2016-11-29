@@ -126,6 +126,44 @@ export function unpublish(filePath) {
   return p
 }
 
+export function edit(filePath, json, workflow) {
+  var p
+  if (workflow === 'publish') {
+    p = cmsOperations.post.publish(
+      filePath, 
+      json
+    )
+  }else {
+    p = cmsOperations.post.draft(
+      filePath, 
+      json, 
+      workflow
+    )
+  }
+
+  return p
+}
+
+export function submit(filePath, json, workflow) {
+  var submitToWorkflow = 'draft'
+  var found = false
+  Array.prototype.forEach.call(config.users.workflow, (flow) => {
+    if (found) {
+      found = false
+      submitToWorkflow = flow
+    }
+    if (workflow === flow) {
+      found = true
+    }
+  })
+
+  return cmsOperations.post.edit(
+    filePath, 
+    json, 
+    submitToWorkflow
+  )
+}
+
 export function reject(filePath, json, workflow) {
   abeExtend.hooks.instance.trigger('beforeReject', filePath)
 

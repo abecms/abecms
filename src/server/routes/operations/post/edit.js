@@ -9,8 +9,8 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var operation = cmsData.regex.getWorkflowFromOperationsUrl(req.originalUrl)
-  
-  var p = cmsOperations.post.submit(
+
+  var p = cmsOperations.post.edit(
     operation.postUrl, 
     req.body.json, 
     operation.workflow

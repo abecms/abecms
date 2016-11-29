@@ -5,6 +5,7 @@ import {
   ,postDuplicate
   ,postUpdate
   ,getListUrl
+  ,getListWorkflow
   ,postListUrlSave
   ,getListHooks
   ,getMain
@@ -63,6 +64,9 @@ router.post('/abe/reference/*', postReference)
 router.get('/abe/editor*', getMain)
 router.post('/abe/list-url/save*', postListUrlSave)
 
+router.get('/abe/list-workflow*', function (req, res, next) {
+  getListWorkflow(router, req, res, next) 
+})
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
 })
@@ -70,11 +74,18 @@ router.get('/abe/list-hooks*', getListHooks)
 
 var workflows = config.users.workflow
 Array.prototype.forEach.call(workflows, (workflow) => {
-  router.get(`/abe/operations/${workflow}/unpublish*`, operations.getUnpublish)
   router.get(`/abe/operations/${workflow}/delete*`, operations.getDelete)
-  router.post(`/abe/operations/${workflow}/reject*`, operations.postReject)
-  router.post(`/abe/operations/${workflow}/submit*`, operations.postSubmit)
-  router.post(`/abe/operations/${workflow}/edit*`, operations.postSubmit)
+
+  if (workflow != 'draft' && workflow != 'publish') {
+    router.post(`/abe/operations/${workflow}/reject*`, operations.postReject)
+  }else if (workflow == 'publish') {
+    router.get(`/abe/operations/publish/unpublish*`, operations.getUnpublish)
+  }
+
+  if (workflow != 'publish') {
+    router.post(`/abe/operations/${workflow}/submit*`, operations.postSubmit)
+  }
+  router.post(`/abe/operations/${workflow}/edit*`, operations.postEdit)
 })
 
 var routes = abeExtend.plugins.instance.getRoutes()

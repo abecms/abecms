@@ -4,6 +4,7 @@ import postDuplicate from './post-duplicate'
 import postUpdate from './post-update'
 import postListUrlSave from './post-list-url-save'
 import getListUrl from './get-list-url'
+import getListWorkflow from './get-list-workflow'
 import getListHooks from './get-list-hooks'
 import getPage from './get-page'
 import postPage from './post-page'
@@ -24,6 +25,7 @@ export {
 	postCreate,
 	postListUrlSave,
 	getListUrl,
+	getListWorkflow,
 	getListHooks,
 	postDuplicate,
 	postUpdate,

@@ -1,11 +1,38 @@
-.tab-content{
-  background-color: #fff;
-  padding: 20px 10px 10px;
-  border-top: none;
-}
+.abeform-wrapper {
 
-.nav.nav-tabs{
-  margin: 10px 0 10px 0;
-  background-color: #fff;
-}
+	.tab-content{
+	  background-color: #fff;
+	  padding: 20px 10px 10px;
+	  border-top: none;
+	}
 
+	.nav.nav-tabs{
+	  margin: 10px 0 10px 0;
+	  background-color: #fff;
+	}
+
+	.nav-tabs>li {
+	    margin: 0;
+	}
+
+	.nav>li>a {
+	    padding: 4px 8px;
+	    color: #a3a1a1;
+	}
+
+	.nav-tabs>li>a {
+	    margin-right: 0;
+	    border: 0;
+	    border-radius: 0;
+	}
+
+	.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+	    color: #47b8e0;
+	    background-color: #fff;
+	    border: 0;
+	}
+
+	a:focus, a:hover {
+	    color: #a3a1a1;
+	}
+}
