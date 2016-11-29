@@ -1,8 +1,3 @@
-import {
-  config
-  ,User
-} from '../../cli'
-
 var middleware = function(req, res, next) {
   if( req.url.indexOf('/abe/') > -1) {
     var send = res.send

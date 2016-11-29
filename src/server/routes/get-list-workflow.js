@@ -21,7 +21,7 @@ var route = function(router, req, res, next) {
     })
   })
 
-  var page = path.join(__dirname + '/../views/list-url.html')
+  var page = path.join(__dirname + '/../views/list-workflow.html')
   if (coreUtils.file.exist(page)) {
     html = fse.readFileSync(page, 'utf8')
   }
@@ -32,6 +32,10 @@ var route = function(router, req, res, next) {
       {url: `/abe/operations/${flow}/edit`, action: 'edit', workflow: flow},
       {url: `/abe/operations/${flow}/delete`, action: 'delete', workflow: flow}
     ]
+    if (flow != 'publish') {
+      workflowUrl[flow].push({url: `/abe/operations/${flow}/reject`, action: 'reject', workflow: flow})
+      workflowUrl[flow].push({url: `/abe/operations/${flow}/submit`, action: 'submit', workflow: flow})
+    }
   })
   var template = Handlebars.compile(html, {noEscape: true})
   var tmp = template({

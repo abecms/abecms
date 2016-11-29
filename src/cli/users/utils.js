@@ -244,31 +244,35 @@ export function getUserWorkflow(status, role) {
     type = (type != null) ? type : flow
     return {
       status: flow,
-      url: `/abe/save/${type}/${action}`
+      url: `/abe/operations/${type}/${action}`
     }
   }
 
   if (config.users.enable) {
     var before = null
-    var found = false
+    var found = null
     Array.prototype.forEach.call(config.users.workflow, (flow) => {
-      if (found) {
-        flows.push(addFlow(flow, flow, 'submit'))
-        found = false
+
+      if (found != null) {
+        flows.push(addFlow(flow, found, 'submit'))
+        found = null
       }
+
       if (status == flow) {
-        found = true
-        if (before != null) {
-          if (flow == 'publish') {
-            flows.push(addFlow('edit', 'draft', 'submit'))
-          }else {
-            flows.push(addFlow('reject', before, 'reject'))
-          }
+        found = flow
+        if (flow != 'draft' && flow != 'publish') {
+          flows.push(addFlow('reject', flow, 'reject'))
         }
-        flows.push(addFlow(flow, flow, 'edit'))
+        if (flow == 'publish') {
+          flows.push(addFlow('edit', 'draft', 'edit'))
+        }else {
+          flows.push(addFlow('save', flow, 'edit'))
+        }
       }
-      before = flow
     })
+    if (found != null) {
+      flows.push(addFlow('save', 'publish', 'edit'))
+    }
   }else {
     flows = [addFlow('draft', 'draft', 'submit'), addFlow('publish', 'publish', 'submit')]
   }

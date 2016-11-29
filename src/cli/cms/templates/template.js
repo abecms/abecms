@@ -5,7 +5,8 @@ import {
   config,
   coreUtils,
   cmsData,
-  abeExtend
+  abeExtend,
+  cmsTemplates
 } from '../../'
 
 export function getTemplatesAndPartials(templatesPath) {
@@ -54,16 +55,17 @@ export function getAbeImport(text) {
 }
 
 export function includePartials(text) {
-  var abeImports = getAbeImport(text)
+  var abeImports = cmsTemplates.template.getAbeImport(text)
 
   Array.prototype.forEach.call(abeImports, (abeImport) => {
     var obj = cmsData.attributes.getAll(abeImport, {})
+
 
     var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
     if(coreUtils.file.exist(file)) {
-      partial = includePartials(fse.readFileSync(file, 'utf8'))
+      partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'))
     }
     text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
   })
@@ -71,7 +73,7 @@ export function includePartials(text) {
   return text
 }
 
-function translate(text) {
+export function translate(text) {
   var importReg = /({{abe.*type=[\'|\"]translate.*}})/g
 
   var matches = text.match(importReg)
@@ -127,9 +129,9 @@ export function getTemplate (file) {
   file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
   if(coreUtils.file.exist(file)) {
     text = fse.readFileSync(file, 'utf8')
-    text = includePartials(text)
-    text = translate(text)
-    text = addOrder(text)
+    text = cmsTemplates.template.includePartials(text)
+    text = cmsTemplates.template.translate(text)
+    text = cmsTemplates.template.addOrder(text)
   }else {
     text = `[ ERROR ] template ${file + '.' + config.files.templates.extension} doesn't exist anymore`
   }
@@ -187,13 +189,13 @@ export function recurseWhereVariables (where) {
   var arRight
   switch(where.operator) {
   case 'AND':
-    arLeft = recurseWhereVariables(where.left)
-    arRight = recurseWhereVariables(where.right)
+    arLeft = cmsTemplates.template.recurseWhereVariables(where.left)
+    arRight = cmsTemplates.template.recurseWhereVariables(where.right)
     return arLeft.concat(arRight)
     break
   case 'OR':
-    arLeft = recurseWhereVariables(where.left)
-    arRight = recurseWhereVariables(where.right)
+    arLeft = cmsTemplates.template.recurseWhereVariables(where.left)
+    arRight = cmsTemplates.template.recurseWhereVariables(where.right)
     return arLeft.concat(arRight)
     break
   default:
@@ -209,7 +211,7 @@ export function getTemplatesTexts(templatesList) {
   var p = new Promise((resolve) => {
     Array.prototype.forEach.call(templatesList, (file) => {
       var template = fse.readFileSync(file, 'utf8')
-      template = includePartials(template)
+      template = cmsTemplates.template.includePartials(template)
       var name = file.replace(path.join(config.root, config.templates.url, path.sep), '').replace(`.${config.files.templates.extension}`, '')
       templates.push({
         name: name,
@@ -238,7 +240,7 @@ export function execRequestColumns(tpl) {
         })
       }
       if(typeof request.where !== 'undefined' && request.where !== null) {
-        ar = ar.concat(recurseWhereVariables(request.where))
+        ar = ar.concat(cmsTemplates.template.recurseWhereVariables(request.where))
       }
     }
   })
@@ -250,7 +252,7 @@ export function getAbeRequestWhereKeysFromTemplates(templatesList) {
   var whereKeys = []
   var p = new Promise((resolve) => {
     Array.prototype.forEach.call(templatesList, (file) => {
-      whereKeys = whereKeys.concat(execRequestColumns(file.template))
+      whereKeys = whereKeys.concat(cmsTemplates.template.execRequestColumns(file.template))
     })
     whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
     resolve(whereKeys)
@@ -271,7 +273,7 @@ export function setAbeSlugDefaultValueIfDoesntExist(templateText) {
 export function getAbeSlugFromTemplates(templatesList) {
   var slugs = {}
   Array.prototype.forEach.call(templatesList, (file) => {
-    var templateText = setAbeSlugDefaultValueIfDoesntExist(file.template)
+    var templateText = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(file.template)
     var matchesSlug = cmsData.regex.getTagAbeWithType(templateText, 'slug')
     var obj = cmsData.attributes.getAll(matchesSlug[0], {})
     slugs[file.name] = obj.sourceString
@@ -295,7 +297,7 @@ export function getAbePrecontribFromTemplates(templatesList) {
     var slugMatch = cmsData.regex.getTagAbeWithType(file.template, 'slug')
     var templateText = file.template
     if(slugMatch == null || slugMatch[0] == null) {
-      templateText = setAbePrecontribDefaultValueIfDoesntExist(file.template)
+      templateText = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(file.template)
     }
 
     var matchesTabSlug = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
@@ -307,7 +309,7 @@ export function getAbePrecontribFromTemplates(templatesList) {
     })
   })
 
-  precontributionTemplate = addOrder(precontributionTemplate)
+  precontributionTemplate = cmsTemplates.template.addOrder(precontributionTemplate)
 
   return {
     fields: fields,

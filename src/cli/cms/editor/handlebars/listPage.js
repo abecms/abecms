@@ -65,16 +65,18 @@ export default function listPage(file, index, text) {
   res += `<td align="center">
             <div class="row icons-action">`
 
+  
   if(file.publish != null) {
-    res += `<a href="/abe/unpublish${file.abe_meta.link}"
+    res += `<a href="/abe/operations/publish/unpublish${file.abe_meta.link}"
                title="${text.unpublish}"
                class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}"
                title="unpublish">
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
-      
-  res += `<a href="/abe/delete${file.abe_meta.link}"
+  
+
+  res += `<a href="/abe/operations/${file.abe_meta.status}/delete${file.abe_meta.link}"
              title="${text.delete}"
              class="icon"
              data-delete="true"

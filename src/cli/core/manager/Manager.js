@@ -245,6 +245,20 @@ class Manager {
    * When a post is modified or created, this method is called so that the manager updates the list with the updated/new item
    * @param {String} pathFile The full path to the post
    */
+  postExist(postUrl){
+    var parentRelativePath = cmsData.fileAttr.delete(postUrl.split('/').join(path.sep).replace(`.${config.files.templates.extension}`, '.json')).replace(/^\//, '')
+    const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
+
+    if (found.length > 0) {
+      return true
+    }
+    return false
+  }
+
+  /**
+   * When a post is modified or created, this method is called so that the manager updates the list with the updated/new item
+   * @param {String} pathFile The full path to the post
+   */
   updatePostInList(pathFile){
     const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + path.sep, '')
     const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)

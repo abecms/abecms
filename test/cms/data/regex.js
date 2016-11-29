@@ -1,22 +1,22 @@
 var chai = require('chai');
 var path = require('path');
 
-var config = require('../src/cli').config
-config.set({root: path.join(__dirname,'fixtures')})
+var config = require('../../../src/cli').config
+config.set({root: path.join(process.cwd(), 'test', 'fixtures')})
 
-var cmsData = require('../src/cli').cmsData
-var Manager = require('../src/cli').Manager;
+var cmsData = require('../../../src/cli').cmsData
+var Manager = require('../../../src/cli').Manager;
 var fse = require('fs-extra');
 
-describe('Request', function() {
+describe('regex', function() {
   before( function(done) {
     Manager.instance.init()
       .then(function () {
 
         this.fixture = {
-          articleSingle: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-single-abe.html'), 'utf8'),
-          articleEach: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-each-abe.html'), 'utf8'),
-          articleRequest: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article-request.html'), 'utf8')
+          articleSingle: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-single-abe.html'), 'utf8'),
+          articleEach: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-each-abe.html'), 'utf8'),
+          articleRequest: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-request.html'), 'utf8')
         }
         done()
         

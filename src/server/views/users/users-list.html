@@ -15,6 +15,30 @@
       <li class="active">User list</li>
     </ol>
 
+    <div>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+          <li role="presentation" class="active">
+            <a href="/abe/users/list">list</a> 
+          </li>
+        {{/isAuthorized}}
+        {{#isAuthorized '/abe/list-url' @root.user.role.workflow}}
+          <li role="presentation" >
+            <a href="/abe/list-url">Roles</a> 
+          </li>
+        {{/isAuthorized}}
+        {{#isAuthorized '/abe/list-workflow' @root.user.role.workflow}}
+          <li role="presentation" >
+            <a href="/abe/list-workflow">Graph</a> 
+          </li>
+        {{/isAuthorized}}
+      </ul>
+
+    </div>
+
+    <br />
+
     <div class="alert alert-danger hidden" role="alert">
       
     </div>
