@@ -86,6 +86,7 @@ program
 
 program
   .command('serve')
+  .alias('s')
   .description('create http server for abe')
   .action(function(dest, options){
     var dir = process.cwd()
@@ -123,6 +124,7 @@ program
 
 program
   .command('install [plugin]')
+  .alias('i')
   .description('install abe plugin(s)')
   .action(function(plugin){
     var dir = process.cwd()
@@ -145,6 +147,7 @@ program
 
 program
   .command('uninstall <plugin>')
+  .alias('un')
   .description('uninstall abe plugin(s)')
   .action(function(plugin){
     var dir = process.env.ROOT.replace(/\/$/, '')
