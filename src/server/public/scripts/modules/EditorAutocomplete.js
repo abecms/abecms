@@ -252,12 +252,16 @@ export default class EditorAutocomplete {
    * @return {string}        the string with values
    */
   _prepareDisplay(obj, str) {
-    var keys = this._getKeys(str)
-    Array.prototype.forEach.call(keys, (key) => {
-      var val = this._get(obj, key)
-      var pattern = new RegExp('{{'+key+'}}|'+key)
-      str = str.replace(pattern, val)
-    })
+    if (typeof obj === 'string') {
+      str = obj
+    }else {
+      var keys = this._getKeys(str)
+      Array.prototype.forEach.call(keys, (key) => {
+        var val = this._get(obj, key)
+        var pattern = new RegExp('{{'+key+'}}|'+key)
+        str = str.replace(pattern, val)
+      })
+    }
 
     return str
   }

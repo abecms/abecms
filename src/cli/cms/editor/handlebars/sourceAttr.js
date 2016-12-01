@@ -60,12 +60,16 @@ export function get(obj, path) {
  * @return {string}        the string with values
  */
 export function prepareDisplay(obj, str) {
-  var keys = getKeys(str)
-  Array.prototype.forEach.call(keys, (key) => {
-    var val = get(obj, key)
-    var pattern = new RegExp('{{'+key+'}}|'+key)
-    str = str.replace(pattern, val)
-  })
+  if (typeof obj === 'string') {
+    return obj
+  }else {
+    var keys = getKeys(str)
+    Array.prototype.forEach.call(keys, (key) => {
+      var val = get(obj, key)
+      var pattern = new RegExp('{{'+key+'}}|'+key)
+      str = str.replace(pattern, val)
+    })
+  }
 
   return str
 }
