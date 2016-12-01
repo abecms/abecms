@@ -8,6 +8,7 @@ import {
   abeExtend,
   cmsTemplates
 } from '../../'
+import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 
 export function getTemplatesAndPartials(templatesPath) {
   var p = new Promise((resolve) => {
@@ -45,7 +46,7 @@ export function addOrder(text) {
 
 export function getAbeImport(text) {
   var partials = []
-  let listReg = /({{abe.*?type=[\'|\"]import.*?}})/g
+  let listReg = /({{abe.*type=[\'|\"]import.*}})/g
   var match
   while (match = listReg.exec(text)) {
     partials.push(match[0])
@@ -54,7 +55,7 @@ export function getAbeImport(text) {
   return partials
 }
 
-export function includePartials(text) {
+export function includePartials(text, json) {
   var abeImports = cmsTemplates.template.getAbeImport(text)
 
   Array.prototype.forEach.call(abeImports, (abeImport) => {
@@ -64,8 +65,20 @@ export function includePartials(text) {
     var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
+
+    if (file.indexOf('{{') > -1) {
+      var keys = sourceAttr.getKeys(file)
+      Array.prototype.forEach.call(keys, (key) => {
+        try {
+          var toEval = `${key.replace(/(\[|\.|\])/g, '\\$1')}`
+          file = file.replace(new RegExp(`\{\{${toEval}\}\}`, 'g'), eval(`json.${key}`))
+        }catch(e) {
+        }
+      })
+    }
+    
     if(coreUtils.file.exist(file)) {
-      partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'))
+      partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'), json)
     }
     text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
   })
@@ -115,7 +128,7 @@ export function translate(text) {
   return text
 }
 
-export function getTemplate (file) {
+export function getTemplate (file, json = {}) {
   var text = ''
 
   // HOOKS beforeGetTemplate
@@ -129,7 +142,7 @@ export function getTemplate (file) {
   file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
   if(coreUtils.file.exist(file)) {
     text = fse.readFileSync(file, 'utf8')
-    text = cmsTemplates.template.includePartials(text)
+    text = cmsTemplates.template.includePartials(text, json)
     text = cmsTemplates.template.translate(text)
     text = cmsTemplates.template.addOrder(text)
   }else {
@@ -206,12 +219,12 @@ export function recurseWhereVariables (where) {
   return ar
 }
 
-export function getTemplatesTexts(templatesList) {
+export function getTemplatesTexts(templatesList, json) {
   var templates = []
   var p = new Promise((resolve) => {
     Array.prototype.forEach.call(templatesList, (file) => {
       var template = fse.readFileSync(file, 'utf8')
-      template = cmsTemplates.template.includePartials(template)
+      template = cmsTemplates.template.includePartials(template, json)
       var name = file.replace(path.join(config.root, config.templates.url, path.sep), '').replace(`.${config.files.templates.extension}`, '')
       templates.push({
         name: name,
