@@ -19,13 +19,13 @@ var middleware = function(req, res, next) {
   res.user = user
 
   if(!User.utils.isAbeRestrictedUrl(req.url)) {
-    // if (user != null && req.url.indexOf('/abe/users/login') > -1 && req.method === 'GET' ) {
-    //   res.redirect('/abe/editor')
-    //   return
-    // }else {
+    if (user != null && req.url.indexOf('/abe/users/login') > -1 && req.method === 'GET' ) {
+      res.redirect('/abe/editor')
+      return
+    }else {
     next()
     return
-    // }
+    }
   }
 
   var isHtml = /text\/html/.test(req.get('accept')) ? true : false
