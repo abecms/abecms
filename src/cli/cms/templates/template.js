@@ -61,7 +61,6 @@ export function includePartials(text, json) {
   Array.prototype.forEach.call(abeImports, (abeImport) => {
     var obj = cmsData.attributes.getAll(abeImport, {})
 
-
     var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
