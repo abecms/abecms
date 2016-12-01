@@ -16,70 +16,79 @@ import clc from 'cli-color'
 program
   .version(pkg.version)
   .option('-v, --version', 'version')
-  .option('-p, --port <port>', 'Port on which to listen to (defaults to 8000)', parseInt)
-  .option('-i, --interactive', 'open in browser')
-  .option('-N, --pname <pname>', 'pm2 server name')
-  .option('-f, --folder <folder>', '--folder draft|sites')
-  .option('-t, --type <type>', '--type draft|other')
-  .option('-d, --destination <destination>', '--destination folder')
-  .option('-p, --path <path>', '--path folder')
-  .option('-s, --status <status>', '--status abe')
-  .option('generate-posts, --path=<folder> --destination=<folder> --status=<status>', 'save only <status> posts into <destination> from <path> folder')
-  .parse(process.argv)
+  // .parse(process.argv)
 
-var userArgs = process.argv.slice(2)
-var create = new Create()
-var port = program.port
-var interactive = program.interactive
-
-var vPos = process.argv.indexOf('-v')
-if (vPos > -1) {
-  process.argv[vPos] = '-V'
-}
-
-if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
-  var dir
-  var command
-  var cp
-  var plugin
-
-  switch(userArgs[0]){
-  case 'build':
-    dir = process.cwd()
-    process.chdir(__dirname + '/../')
-    command = 'ROOT=' + dir +
-				' FOLDER=' + (program.folder ? program.folder : 'draft') +
-				' DEST=' + (program.destination ? program.destination : 'tmp') +
-				' FLOW=' + (program.type ? program.type : 'draft') +
-				' npm run build:folder'
-    console.log('command : ' + command)
-    execPromise.exec(command)
-			.then(function (result) {
-  var stdout = result.stdout
-  var stderr = result.stderr
-  if(stdout) {console.log('stdout: ', stdout)}
-  if(stderr) {console.log('stderr: ', stderr)}
-})
-      .fail(function (err) {
-        console.error('ERROR: ', err)
-      })
-      .progress(function () {
-        
-      })
-    break
-  case 'create':
-    dir = userArgs[1]
+program
+  .command('generate-posts')
+  .alias('gp')
+  .description('save post to file with type from folder')
+  .option('-t, --type [type]', 'posts status draft|other')
+  .option('-t, --path [path]', 'path /relative/path')
+  .option('-d, --destination [destination]', 'folder to save result')
+  .action(function(options){
+    var dir = process.cwd()
     if(process.env.ROOT) {
-      dir = process.env.ROOT + userArgs[1]
+      dir = process.env.ROOT.replace(/\/$/, '')
     }
+    process.env.DEBUG = 'generate-posts:*'
+    var generateArgs = ['--harmony', __dirname + '/cli/process/generate-posts.js', 'ABE_WEBSITE=' + dir]
+    if(options.destination != null) {
+      generateArgs.push('ABE_DESTINATION=' + options.destination)
+    }
+    if(options.path != null) {
+      generateArgs.push('ABE_PATH=' + options.path)
+    }
+    if(options.type != null) {
+      generateArgs.push('ABE_STATUS=' + options.type)
+    }
+
+    var generate
+    if (__dirname.indexOf('dist') > -1) {
+      generate = spawn('node', generateArgs, { shell: true, stdio: 'inherit' })
+    }else {
+      generate = spawn(path.join(__dirname, '..', 'node_modules', '.bin', 'babel-node'), generateArgs, { shell: true, stdio: 'inherit' })
+    }
+
+    generate.on('close', (code) => {
+      console.log(clc.cyan('child process exited with code') + ' ' + code)
+      process.exit(0)
+    })
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ abe generate-posts --path /test --destination result --status publish');
+    console.log();
+  });
+
+program
+  .command('create [path]')
+  .alias('c')
+  .description('create new abe project')
+  .action(function(dest, options){
+    dest = (dest != null) ? dest : ''
+    var dir = path.join(process.cwd(), dest)
+    if(process.env.ROOT) {
+      dir = path.join(process.env.ROOT, dest)
+    }
+    var create = new Create()
     if(typeof dir !== 'undefined' && dir !== null) {
       create.init(dir)
     }else {
       console.error('Error: no project path specified')
     }
-    break
-  case 'serve':
-    dir = process.cwd()
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ abe create');
+    console.log('    $ abe create [destination]');
+    console.log();
+  });
+
+program
+  .command('serve')
+  .description('create http server for abe')
+  .action(function(dest, options){
+    var dir = process.cwd()
     if(process.env.ROOT) {
       dir = process.env.ROOT
     }
@@ -88,81 +97,35 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     if (typeof port !== 'undefined' && port !== null) {
       environment.PORT = port
     }
-    command = 'node --harmony ./dist/server/index.js'
-			// if (interactive) command = 'OPENURL=1 ' + command
-    process.chdir(__dirname + '/../')
-    console.log('website started : ' + dir + (port ? ' on port :' + port : ''))
-    cp = exec(command,
-      {
-        env: environment
-      },
-			function (err, out, code) {
-  if (err instanceof Error) throw err
-  process.stderr.write(err)
-  process.stdout.write(out)
-  process.exit(code)
-})
-    cp.stderr.pipe(process.stderr)
-    cp.stdout.pipe(process.stdout)
-    break
-  case 'list':
-    dir = process.cwd()
-    dir = dir.replace(/\/$/, '')
-    pm2.connect((err) => {
-      if (err instanceof Error) throw err
+    var command
+    if (__dirname.indexOf('dist') > -1) {
+      command = 'node --harmony ./dist/server/index.js'
+    }else {
+      command = path.join(__dirname, '..', 'node_modules', '.bin', 'babel-node') + ' --harmony ./src/server/index.js'
+    }
 
-      pm2.list(function(err, list) {
-        if (err instanceof Error) throw err
-        Array.prototype.forEach.call(list, (item) => {
-          console.log('[ pm2 ]', '{', '"pid":', item.pid + ',', '"process":', '"' + item.name + '"', '}')
-        })
-        process.exit(0)
-      })
-    })
-    break
-  case 'servenodemon':
-    dir = process.cwd()
-    command = 'ROOT=' + dir + ' npm run startdev --node-args="--debug"'
-    if (interactive) command = 'OPENURL=1 ' + command
-    if(port) command = 'PORT=' + port + ' ' + command
     process.chdir(__dirname + '/../')
-    console.log('website started : ' + dir + (port ? ' on port :' + port : ''))
-    cp = exec(command, function (err, out, code) {
-      if (err instanceof Error) {throw err}
+    console.log('website started : ' + dir)
+    var cp = exec(command,{}, function (err, out, code) {
+      if (err instanceof Error) throw err
+      process.stderr.write(err)
+      process.stdout.write(out)
       process.exit(code)
     })
     cp.stderr.pipe(process.stderr)
     cp.stdout.pipe(process.stdout)
-    break
-  case 'generate-posts':
-    dir = process.cwd()
-    if(process.env.ROOT) {
-      dir = process.env.ROOT.replace(/\/$/, '')
-    }
-    process.env.DEBUG = 'generate-posts:*'
-    var generateArgs = ['--harmony', __dirname + '/cli/process/generate-posts.js', 'ABE_WEBSITE=' + dir]
-    var isHelp = false
-    Array.prototype.forEach.call(userArgs, (arg) => {
-      if (arg.indexOf('--path=') > -1) {
-        generateArgs.push('ABE_PATH=' + arg.split('=')[1])
-      }else if (arg.indexOf('--destination=') > -1) {
-        generateArgs.push('ABE_DESTINATION=' + arg.split('=')[1])
-      }else if (arg.indexOf('--status=') > -1) {
-        generateArgs.push('ABE_STATUS=' + arg.split('=')[1])
-      }
-    })
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ abe serve');
+    console.log();
+  });
 
-    const generate = spawn('node', generateArgs, { shell: true, stdio: 'inherit' })
-
-    generate.on('close', (code) => {
-      console.log(clc.cyan('child process exited with code') + ' ' + code)
-      process.exit(0)
-    })
-
-    break
-  case 'install':
-    dir = process.cwd()
-    plugin = userArgs[1]
+program
+  .command('install [plugin]')
+  .description('install abe plugin(s)')
+  .action(function(plugin){
+    var dir = process.cwd()
     if(process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }
@@ -172,10 +135,19 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     } else {
       plugins.instance.install(dir)
     }
-    break
-  case 'uninstall':
-    dir = process.cwd()
-    plugin = userArgs[1]
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ abe install');
+    console.log('    $ abe install [plugin]');
+    console.log();
+  });
+
+program
+  .command('uninstall <plugin>')
+  .description('uninstall abe plugin(s)')
+  .action(function(plugin){
+    var dir = process.env.ROOT.replace(/\/$/, '')
     if(process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }
@@ -183,13 +155,12 @@ if(typeof userArgs[0] !== 'undefined' && userArgs[0] !== null){
     if(typeof plugin !== 'undefined' && plugin !== null) {
       plugins.instance.uninstall(dir, plugin)
     }
-    break
-  default:
-    console.log('Help: use `create` or `serve` command')
-    break
-  }
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ abe uninstall');
+    console.log('    $ abe uninstall [plugin]');
+    console.log();
+  });
 
-}
-else{
-  console.log('Help: use `create` or `serve` command')
-}
+program.parse(process.argv);

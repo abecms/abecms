@@ -183,7 +183,7 @@ Usage: abe [commande] {OPTIONS}
 
 Standard Options:
 
---version, -V 	Output the version number
+--version, -v 	Output the version number
 
    --help, -h 	Show this message
 
