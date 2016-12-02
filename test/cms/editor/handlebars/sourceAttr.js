@@ -12,11 +12,11 @@ describe('cmsEditor.handlebars.sourceAttr', function() {
     }
   });
 
-  it('sourceAttr', function() {
+  it('sourceAttr test', function() {
     var obj = this.fixture.gmapsElement
     var params = {
       display:'{{formatted_address}}',
-      value: 'State of Pará, Brazil'
+      value: [{formatted_address: 'State of Pará, Brazil'}]
     }
     var json = sourceAttr.default(obj, params)
     chai.expect(json.selected).to.equal('selected')

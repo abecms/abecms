@@ -83,7 +83,7 @@ export default function printInput (params, root) {
 
     var lastValues
     if(params.autocomplete != null && params.autocomplete === 'true') {
-      if(params.source.indexOf('http') === 0) {
+      if(params.sourceString.indexOf('http') === 0) {
         lastValues = params.source
       }else {
         lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')

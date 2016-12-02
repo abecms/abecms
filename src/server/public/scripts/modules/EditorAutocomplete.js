@@ -187,7 +187,7 @@ export default class EditorAutocomplete {
     Array.prototype.forEach.call(this.result, (o) => {
 
       var displayName = this._prepareDisplay(o, str, keys)
-      if (displayName.indexOf(val) > -1) {
+      if (displayName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
         var div = document.createElement('div')
         div.addEventListener('mousedown', this._handleSelectValue)
         div.setAttribute('data-value', (typeof o == "object") ? JSON.stringify(o) : o)
@@ -213,6 +213,9 @@ export default class EditorAutocomplete {
     if (path == null) {
       this.result = obj
     }else {
+      if (this._has(obj, path)) {
+        this.result.push(obj)
+      }
       for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
           if ('object' == typeof(obj[key]) && !this._has(obj[key], path)) {
