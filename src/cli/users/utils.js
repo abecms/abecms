@@ -244,7 +244,7 @@ export function getUserWorkflow(status, role) {
     type = (type != null) ? type : flow
     return {
       status: flow,
-      url: `/abe/operations/${type}/${action}`
+      url: `/abe/operations/${action}/${type}`
     }
   }
 
@@ -254,7 +254,7 @@ export function getUserWorkflow(status, role) {
     Array.prototype.forEach.call(config.users.workflow, (flow) => {
 
       if (found != null) {
-        flows.push(addFlow(flow, found, 'submit'))
+        flows.push(addFlow(flow, flow, 'submit'))
         found = null
       }
 
@@ -271,7 +271,7 @@ export function getUserWorkflow(status, role) {
       }
     })
     if (found != null) {
-      flows.push(addFlow('save', 'publish', 'edit'))
+      flows.push(addFlow('save', 'publish', 'submit'))
     }
   }else {
     flows = [addFlow('draft', 'draft', 'submit'), addFlow('publish', 'publish', 'submit')]

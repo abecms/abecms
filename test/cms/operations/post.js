@@ -151,33 +151,6 @@ describe('cmsOperations', function() {
   it('cmsOperations.post.submit()', function(done) {
     // stub
     var s = sinon.sandbox.create();
-    s.stub(cmsOperations.post, 'edit', function (filePath, json, rejectToWorkflow) {
-      return Promise.resolve({
-          success: 1,
-          json: this.fixture.jsonArticle
-        });
-    }.bind(this));
-
-    // test
-    var json = JSON.parse(JSON.stringify(this.fixture.jsonArticle))
-    json.abe_meta.status = 'publish'
-    cmsOperations.post.submit('article-2.html', json)
-      .then(function(resSave) {
-        chai.expect(resSave.json.abe_meta).to.not.be.undefined;
-
-        // unstub
-        cmsOperations.post.edit.restore()
-        done()
-      }.bind(this));
-  });
-
-  /**
-   * cmsOperations.post.edit
-   * 
-   */
-  it('cmsOperations.post.edit()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
     s.stub(cmsOperations.post, 'draft', function (filePath, json, rejectToWorkflow) {
       return Promise.resolve({
           success: 1,
@@ -188,7 +161,7 @@ describe('cmsOperations', function() {
     // test
     var json = JSON.parse(JSON.stringify(this.fixture.jsonArticle))
     json.abe_meta.status = 'publish'
-    cmsOperations.post.edit('article-2.html', json)
+    cmsOperations.post.submit('article-2.html', json)
       .then(function(resSave) {
         chai.expect(resSave.json.abe_meta).to.not.be.undefined;
 
