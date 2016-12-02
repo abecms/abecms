@@ -47,9 +47,12 @@ export default function sourceAttr(obj, params) {
  * @return {[type]}      the object containing the path object or undefined
  */
 export function get(obj, path) {
+  if (path == null) {
+    return obj
+  }
   return path.split('.').reduce(function(prev, curr) {
     return prev ? prev[curr] : undefined
-  }, obj || self)
+  }, obj || this)
 }
 
 /**
@@ -59,16 +62,16 @@ export function get(obj, path) {
  * @param  {string} str    the string
  * @return {string}        the string with values
  */
-export function prepareDisplay(obj, str) {
-  if (typeof obj === 'string') {
-    return obj
-  }else {
-    var keys = getKeys(str)
-    Array.prototype.forEach.call(keys, (key) => {
-      var val = get(obj, key)
-      var pattern = new RegExp('{{'+key+'}}|'+key)
-      str = str.replace(pattern, val)
-    })
+export function prepareDisplay(obj, str = null) {
+  var keys = getKeys(str)
+  Array.prototype.forEach.call(keys, (key) => {
+    var val = get(obj, key)
+    var pattern = new RegExp('{{'+key+'}}|'+key)
+    str = str.replace(pattern, val)
+  })
+
+  if (str == null) {
+    str = obj
   }
 
   return str
@@ -85,10 +88,12 @@ export function getKeys(str){
   var match
 
   while ((match = regex.exec(str)) !== null) {
-    variables.push(match[1])
+    if (match[1] != null) {
+      variables.push(match[1])
+    }
   }
   
-  if (variables.length == 0) {
+  if (variables.length == 0 && str != null) {
     variables.push(str)
   }
 

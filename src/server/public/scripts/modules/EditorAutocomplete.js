@@ -184,16 +184,18 @@ export default class EditorAutocomplete {
     Array.prototype.forEach.call(this.result, (o) => {
 
       var displayName = this._prepareDisplay(o, str, keys)
-      var div = document.createElement('div')
-      div.addEventListener('mousedown', this._handleSelectValue)
-      div.setAttribute('data-value', JSON.stringify(o))
-      div.setAttribute('data-display', displayName)
-      if(first) {
-        div.classList.add('selected')
+      if (displayName.indexOf(val) > -1) {
+        var div = document.createElement('div')
+        div.addEventListener('mousedown', this._handleSelectValue)
+        div.setAttribute('data-value', JSON.stringify(o))
+        div.setAttribute('data-display', displayName)
+        if(first) {
+          div.classList.add('selected')
+        }
+        first = false
+        div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), '<span class="select">$1</span>')
+        this._divWrapper.appendChild(div)
       }
-      first = false
-      div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), '<span class="select">$1</span>')
-      this._divWrapper.appendChild(div)
     })
 
     this._show(target)
@@ -206,12 +208,16 @@ export default class EditorAutocomplete {
    * @param  {string}  path the path to object (dot notation)
    */
   _find(obj, path) {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if ('object' == typeof(obj[key]) && !this._has(obj[key], path)) {
-          this._find(obj[key], path)
-        } else if (this._has(obj[key], path)) {
-          this.result.push(obj[key])
+    if (path == null) {
+      this.result = obj
+    }else {
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if ('object' == typeof(obj[key]) && !this._has(obj[key], path)) {
+            this._find(obj[key], path)
+          } else if (this._has(obj[key], path)) {
+            this.result.push(obj[key])
+          }
         }
       }
     }
@@ -251,16 +257,16 @@ export default class EditorAutocomplete {
    * @param  {string} str    the string
    * @return {string}        the string with values
    */
-  _prepareDisplay(obj, str) {
-    if (typeof obj === 'string') {
+  _prepareDisplay(obj, str = null) {
+    var keys = this._getKeys(str)
+    Array.prototype.forEach.call(keys, (key) => {
+      var val = this._get(obj, key)
+      var pattern = new RegExp('{{'+key+'}}|'+key, 'g')
+      str = str.replace(pattern, val)
+    })
+
+    if (str == null) {
       str = obj
-    }else {
-      var keys = this._getKeys(str)
-      Array.prototype.forEach.call(keys, (key) => {
-        var val = this._get(obj, key)
-        var pattern = new RegExp('{{'+key+'}}|'+key)
-        str = str.replace(pattern, val)
-      })
     }
 
     return str
@@ -280,7 +286,7 @@ export default class EditorAutocomplete {
       variables.push(match[1])
     }
     
-    if (variables.length == 0) {
+    if (variables.length == 0 && str != null) {
       variables.push(str)
     }
 

@@ -66,7 +66,7 @@ export default function printInput (params, root) {
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
-                    data-display="${params.display}"
+                    ${(params.display) ? 'data-display="'+params.display+'"' : ''}
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"
