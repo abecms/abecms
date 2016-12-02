@@ -29,12 +29,16 @@ export default function sourceAttr(obj, params) {
   var str = params.display
   var selected = ''
   var displayName = prepareDisplay(obj, str)
-  if (params.value === displayName) {
-    selected = 'selected'
-  }
-
+  
+  Array.prototype.forEach.call(params.value, (pValue) => {
+    var pDisplay = prepareDisplay(pValue, str)
+    if (pDisplay === displayName) {
+      selected = 'selected'
+    }
+  })
+  
   return {
-    hiddenVal: JSON.stringify(obj).replace(/\'/g, '&quote;'),
+    hiddenVal: (typeof obj == 'object') ? JSON.stringify(obj).replace(/\'/g, '&quote;') : obj,
     selected: selected,
     val: displayName
   }

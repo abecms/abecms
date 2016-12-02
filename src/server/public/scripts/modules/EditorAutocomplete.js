@@ -149,7 +149,10 @@ export default class EditorAutocomplete {
   }
 
   _select(target) {
-    var json = JSON.parse(target.getAttribute('data-value').replace(/&quote;/g, '\''))
+    var json = target.getAttribute('data-value').replace(/&quote;/g, '\'')
+    if (json.indexOf('{') > -1) {
+      json = JSON.parse(json)
+    }
     var maxLength = this._currentInput.getAttribute('data-maxlength')
     if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
       maxLength = parseInt(maxLength)
@@ -187,7 +190,7 @@ export default class EditorAutocomplete {
       if (displayName.indexOf(val) > -1) {
         var div = document.createElement('div')
         div.addEventListener('mousedown', this._handleSelectValue)
-        div.setAttribute('data-value', JSON.stringify(o))
+        div.setAttribute('data-value', (typeof o == "object") ? JSON.stringify(o) : o)
         div.setAttribute('data-display', displayName)
         if(first) {
           div.classList.add('selected')
@@ -199,7 +202,6 @@ export default class EditorAutocomplete {
     })
 
     this._show(target)
-    console.log(this.result)
   }
 
   /**
