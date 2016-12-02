@@ -63,9 +63,19 @@
                 <div class="workflow-title">{{@key}} :</div>
                 {{#each this}}
                   {{#isAuthorized this.url ../../workflow}}
-                  <div class="workflow-actif">{{this.action}}</div>
+                  <div class="workflow-actif">
+                    {{this.action}}
+                    {{#ifCond this.action "edit"}} in <b>{{this.workflow}}</b>{{/ifCond}}
+                    {{#ifCond this.action "reject"}} to <b>{{this.previous}}</b> status{{/ifCond}}
+                    {{#ifCond this.action "submit"}} to <b>{{next}}</b> status{{/ifCond}}
+                  </div>
                   {{else}}
-                  <div class="workflow-inactif">{{this.action}}</div>
+                  <div class="workflow-inactif">
+                    {{this.action}}
+                    {{#ifCond this.action "edit"}} in <b>{{this.workflow}}</b>{{/ifCond}}
+                    {{#ifCond this.action "reject"}} to <b>{{this.previous}}</b> status{{/ifCond}}
+                    {{#ifCond this.action "submit"}} to <b>{{next}}</b> status{{/ifCond}}
+                  </div>
                   {{/isAuthorized}}
                 {{/each}}
 
