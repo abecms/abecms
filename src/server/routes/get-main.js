@@ -41,7 +41,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   if(typeof _json !== 'undefined' && _json !== null 
       && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) {
 
-    var text = cmsTemplates.template.getTemplate(_json.abe_meta.template) 
+    var text = cmsTemplates.template.getTemplate(_json.abe_meta.template, _json) 
     var page = new Page(_json.abe_meta.template, text, _json, false) 
     pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
   }
@@ -143,7 +143,7 @@ var route = function(req, res, next) {
       if(coreUtils.file.exist(jsonPath)) {
         json = cmsData.file.get(jsonPath, 'utf8')
       }
-      var text = cmsTemplates.template.getTemplate(template)
+      var text = cmsTemplates.template.getTemplate(template, json)
 
       editor(text, json, linkPath)
         .then((result) => {
