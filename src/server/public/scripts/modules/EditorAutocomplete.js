@@ -149,7 +149,10 @@ export default class EditorAutocomplete {
   }
 
   _select(target) {
-    var json = JSON.parse(target.getAttribute('data-value').replace(/&quote;/g, '\''))
+    var json = target.getAttribute('data-value').replace(/&quote;/g, '\'')
+    if (json.indexOf('{') > -1) {
+      json = JSON.parse(json)
+    }
     var maxLength = this._currentInput.getAttribute('data-maxlength')
     if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
       maxLength = parseInt(maxLength)
@@ -184,20 +187,21 @@ export default class EditorAutocomplete {
     Array.prototype.forEach.call(this.result, (o) => {
 
       var displayName = this._prepareDisplay(o, str, keys)
-      var div = document.createElement('div')
-      div.addEventListener('mousedown', this._handleSelectValue)
-      div.setAttribute('data-value', JSON.stringify(o))
-      div.setAttribute('data-display', displayName)
-      if(first) {
-        div.classList.add('selected')
+      if (displayName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+        var div = document.createElement('div')
+        div.addEventListener('mousedown', this._handleSelectValue)
+        div.setAttribute('data-value', (typeof o == "object") ? JSON.stringify(o) : o)
+        div.setAttribute('data-display', displayName)
+        if(first) {
+          div.classList.add('selected')
+        }
+        first = false
+        div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), '<span class="select">$1</span>')
+        this._divWrapper.appendChild(div)
       }
-      first = false
-      div.innerHTML = displayName.replace(new RegExp(`(${val})`, 'i'), '<span class="select">$1</span>')
-      this._divWrapper.appendChild(div)
     })
 
     this._show(target)
-    console.log(this.result)
   }
 
   /**
@@ -206,12 +210,19 @@ export default class EditorAutocomplete {
    * @param  {string}  path the path to object (dot notation)
    */
   _find(obj, path) {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if ('object' == typeof(obj[key]) && !this._has(obj[key], path)) {
-          this._find(obj[key], path)
-        } else if (this._has(obj[key], path)) {
-          this.result.push(obj[key])
+    if (path == null) {
+      this.result = obj
+    }else {
+      if (this._has(obj, path)) {
+        this.result.push(obj)
+      }
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if ('object' == typeof(obj[key]) && !this._has(obj[key], path)) {
+            this._find(obj[key], path)
+          } else if (this._has(obj[key], path)) {
+            this.result.push(obj[key])
+          }
         }
       }
     }
@@ -251,13 +262,17 @@ export default class EditorAutocomplete {
    * @param  {string} str    the string
    * @return {string}        the string with values
    */
-  _prepareDisplay(obj, str) {
+  _prepareDisplay(obj, str = null) {
     var keys = this._getKeys(str)
     Array.prototype.forEach.call(keys, (key) => {
       var val = this._get(obj, key)
-      var pattern = new RegExp('{{'+key+'}}|'+key)
+      var pattern = new RegExp('{{'+key+'}}|'+key, 'g')
       str = str.replace(pattern, val)
     })
+
+    if (str == null) {
+      str = obj
+    }
 
     return str
   }
@@ -276,7 +291,7 @@ export default class EditorAutocomplete {
       variables.push(match[1])
     }
     
-    if (variables.length == 0) {
+    if (variables.length == 0 && str != null) {
       variables.push(str)
     }
 

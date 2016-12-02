@@ -1,40 +1,27 @@
-export function isSelected(currentValue, values) {
-  var isEqual = false
-  if(typeof currentValue === 'object' && Object.prototype.toString.call(currentValue) === '[object Object]') {
-    Array.prototype.forEach.call(values, (value) => {
-      if (value != null) {
-        var checkAllEqual = false
-        Array.prototype.forEach.call(Object.keys(value), (key) => {
-          if (currentValue[key] != null && currentValue[key] == value[key] && checkAllEqual == false) {
-            checkAllEqual = true
-          }
-        })
-        if (checkAllEqual) {
-          isEqual = true
-        }
-      }
-    })
-  }else {
-    Array.prototype.forEach.call(values, (value) => {
-      if (currentValue == value) {
-        isEqual = true
-      }
-    })
+export function isSelected(value, display, str) {
+  var selected = false
+
+  var pDisplay = prepareDisplay(value, str)
+  if (pDisplay === display) {
+    selected = true
   }
 
-  return isEqual
+  return selected
 }
 
 export default function sourceAttr(obj, params) {
   var str = params.display
   var selected = ''
   var displayName = prepareDisplay(obj, str)
-  if (params.value === displayName) {
-    selected = 'selected'
-  }
+
+  Array.prototype.forEach.call(params.value, (pValue) => {
+    if (isSelected(pValue, displayName, str)) {
+      selected = "selected"
+    }
+  })
 
   return {
-    hiddenVal: JSON.stringify(obj).replace(/\'/g, '&quote;'),
+    hiddenVal: (typeof obj == 'object') ? JSON.stringify(obj).replace(/\'/g, '&quote;') : obj,
     selected: selected,
     val: displayName
   }
@@ -47,6 +34,9 @@ export default function sourceAttr(obj, params) {
  * @return {[type]}      the object containing the path object or undefined
  */
 export function get(obj, path) {
+  if (path == null) {
+    return obj
+  }
   return path.split('.').reduce(function(prev, curr) {
     return prev ? prev[curr] : undefined
   }, obj || this)
@@ -59,13 +49,17 @@ export function get(obj, path) {
  * @param  {string} str    the string
  * @return {string}        the string with values
  */
-export function prepareDisplay(obj, str) {
+export function prepareDisplay(obj, str = null) {
   var keys = getKeys(str)
   Array.prototype.forEach.call(keys, (key) => {
     var val = get(obj, key)
-    var pattern = new RegExp('{{'+key+'}}|'+key)
+    var pattern = new RegExp('{{'+key+'}}|'+key, 'g')
     str = str.replace(pattern, val)
   })
+
+  if (str == null) {
+    str = obj
+  }
 
   return str
 }
@@ -81,10 +75,12 @@ export function getKeys(str){
   var match
 
   while ((match = regex.exec(str)) !== null) {
-    variables.push(match[1])
+    if (match[1] != null) {
+      variables.push(match[1])
+    }
   }
   
-  if (variables.length == 0) {
+  if (variables.length == 0 && str != null) {
     variables.push(str)
   }
 
