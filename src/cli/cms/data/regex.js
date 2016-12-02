@@ -101,8 +101,8 @@ export function getWorkflowFromOperationsUrl(str){
   let regUrl = /\/abe\/operations\/(.*?)\/(.*?)\//
   var workflow = 'draft'
   var match = str.match(regUrl)
-  if (match != null && match[1] != null) {
-    workflow = match[1]
+  if (match != null && match[2] != null) {
+    workflow = match[2]
   }
   var postUrl = str.replace(regUrl, '')
   return {

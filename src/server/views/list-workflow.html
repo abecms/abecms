@@ -51,7 +51,7 @@
                 <div class="workflow-box">
                 {{#ifCond @key 'draft'}}
                 {{else}}
-                  {{#isAuthorized (concat '/abe/operations/' @key '/reject') ../workflow}}
+                  {{#isAuthorized (concat '/abe/operations/reject/' @key) ../workflow}}
                     <span class="glyphicon glyphicon-arrow-left icon-allowed icon-reject"
                     title="{{@key}} - reject" aria-hidden="true"></span>
                   {{else}}
@@ -70,14 +70,14 @@
                 {{/each}}
 
                 {{#ifCond @key 'publish'}}
-                  {{#isAuthorized '/abe/operations/publish/unpublish' ../workflow}}
+                  {{#isAuthorized '/abe/operations/unpublish' ../workflow}}
                     <div class="workflow-actif">unpublish</div>
                   {{else}}
                     <div class="workflow-inactif">unpublish</div>
                   {{/isAuthorized}}
                 {{else}}
                   
-                  {{#isAuthorized (concat '/abe/operations/' @key '/submit') ../workflow}}
+                  {{#isAuthorized (concat '/abe/operations/submit/' @key) ../workflow}}
                     <span class="glyphicon glyphicon-arrow-right icon-allowed icon-submit"
                       title="{{@key}} - submit" aria-hidden="true"></span>
                   {{else}}

@@ -14,6 +14,7 @@ var route = function(req, res) {
     }
   })
 
+  config.users.routes = json.users.routes
   config.save(json)
 
   res.set('Content-Type', 'application/json')

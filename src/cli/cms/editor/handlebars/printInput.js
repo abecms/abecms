@@ -39,7 +39,7 @@ export default function printInput (params, root) {
   }
 
   var disabled = ''
-  if (!User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/${params.status}/edit`)) {
+  if (!User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/edit/${params.status}`)) {
     disabled = 'disabled="disabled"'
   }
   if (params.tab == 'slug') {

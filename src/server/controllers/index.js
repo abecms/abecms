@@ -74,18 +74,16 @@ router.get('/abe/list-hooks*', getListHooks)
 
 var workflows = config.users.workflow
 Array.prototype.forEach.call(workflows, (workflow) => {
-  router.get(`/abe/operations/${workflow}/delete*`, operations.getDelete)
+  router.get(`/abe/operations/delete/${workflow}*`, operations.getDelete)
 
   if (workflow != 'draft' && workflow != 'publish') {
-    router.post(`/abe/operations/${workflow}/reject*`, operations.postReject)
+    router.post(`/abe/operations/reject/${workflow}*`, operations.postReject)
   }else if (workflow == 'publish') {
-    router.get(`/abe/operations/publish/unpublish*`, operations.getUnpublish)
+    router.get(`/abe/operations/unpublish*`, operations.getUnpublish)
   }
 
-  if (workflow != 'publish') {
-    router.post(`/abe/operations/${workflow}/submit*`, operations.postSubmit)
-  }
-  router.post(`/abe/operations/${workflow}/edit*`, operations.postEdit)
+  router.post(`/abe/operations/submit/${workflow}*`, operations.postSubmit)
+  router.post(`/abe/operations/edit/${workflow}*`, operations.postEdit)
 })
 
 var routes = abeExtend.plugins.instance.getRoutes()

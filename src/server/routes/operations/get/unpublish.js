@@ -8,7 +8,7 @@ var route = function(req, res, next){
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var operation = cmsData.regex.getWorkflowFromOperationsUrl(req.originalUrl)
+  var operation = req.originalUrl.replace(/\/abe\/operations\/unpublish\//, '')
 
   cmsOperations.post.unpublish(operation.postUrl)
 
