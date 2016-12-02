@@ -1,4 +1,4 @@
-import printInput from './printInput'
+import {printInput} from './printInput'
 import abeEngine from './abeEngine'
 
 import {
