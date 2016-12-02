@@ -20,7 +20,7 @@ export function draft(filePath, json, workflow = 'draft') {
     var date = coreUtils.file.getDate(revisionPath)
     cmsData.metas.add(json, workflow, date)
 
-    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
@@ -57,7 +57,7 @@ export function publish(filePath, json) {
     // revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
     cmsData.metas.add(json, 'publish')
 
-    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
