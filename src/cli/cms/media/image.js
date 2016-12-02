@@ -167,11 +167,8 @@ export function createMediaFolder(req) {
   return folderFilePath
 }
 
-var thumbsList
-
 export function getThumbsList() {
-  if(thumbsList != null) return thumbsList
-  thumbsList = []
+  var thumbsList = []
   var pathToThumbs = path.join(config.root, config.publish.url, config.upload.image)
   var files = coreUtils.file.getFilesSync(pathToThumbs, true)
   Array.prototype.forEach.call(files, (pathFile) => {

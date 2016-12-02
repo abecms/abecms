@@ -9,7 +9,8 @@ import {
   cmsData,
   config,
   cmsTemplates,
-  cmsReference
+  cmsReference,
+  cmsMedia
 } from '../../'
 
 let singleton = Symbol()
@@ -195,6 +196,11 @@ class Manager {
 
   updateStructureAndTemplates() {
     this._structureAndTemplates = cmsTemplates.template.getStructureAndTemplates()
+  }
+
+  getThumbsList() {
+    if(typeof this._thumbs === 'undefined' || this._thumbs === null) this._thumbs = cmsMedia.image.getThumbsList()
+    return this._thumbs
   }
 
   getReferences() {
