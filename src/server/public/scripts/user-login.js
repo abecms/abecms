@@ -61,8 +61,9 @@ export default class UserLogin {
     (function(open) {
       XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
         // extracting domain of the query
-        var domain = (url.indexOf('://') > -1)? url.split('/')[2]: window.location.hostname
+        var domain = (url.indexOf('://') > -1) ? url.split('/')[2]: window.location.hostname
         this._domain = domain.split(':')[0]
+        this._port = (domain.split(':').length == 2) ? domain.split(':')[1]:window.location.port
         open.call(this, method, url, async, user, password)
       }
     })(XMLHttpRequest.prototype.open);
@@ -70,7 +71,7 @@ export default class UserLogin {
     (function(send) {
       XMLHttpRequest.prototype.send = function(data) {
         // if query domain == abe domain => CSRF token
-        if (window.location.hostname == this._domain)
+        if (window.location.hostname == this._domain && window.location.port == this._port)
           this.setRequestHeader('X-CSRF-Token', csrfToken)
         send.call(this, data)
       }

@@ -82,9 +82,9 @@ Array.prototype.forEach.call(workflows, (workflow) => {
     router.get(`/abe/operations/publish/unpublish*`, operations.getUnpublish)
   }
 
-  if (workflow != 'publish') {
+  //if (workflow != 'publish') {
     router.post(`/abe/operations/${workflow}/submit*`, operations.postSubmit)
-  }
+  //}
   router.post(`/abe/operations/${workflow}/edit*`, operations.postEdit)
 })
 

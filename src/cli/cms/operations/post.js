@@ -69,16 +69,17 @@ export function publish(filePath, json) {
       if (!cmsOperations.save.saveHtml(postPath, page.html)) {
         result = {
           success: 0,
-          error: 'cannot html save file'
+          error: 'cannot save html file'
         }
       }else {
         if (!cmsOperations.save.saveJson(revisionPath, json)) {
           result = {
             success: 0,
-            error: 'cannot json save file'
+            error: 'cannot save json file'
           }
         }else {
           Manager.instance.updatePostInList(revisionPath)
+          abeExtend.hooks.instance.trigger('afterPublish', json, filePath)
           result = {
             success: 1,
             json: json
@@ -129,16 +130,9 @@ export function unpublish(filePath) {
 export function edit(filePath, json, workflow) {
   var p
   if (workflow === 'publish') {
-    p = cmsOperations.post.publish(
-      filePath, 
-      json
-    )
+    p = cmsOperations.post.publish(filePath, json)
   }else {
-    p = cmsOperations.post.draft(
-      filePath, 
-      json, 
-      workflow
-    )
+    p = cmsOperations.post.draft(filePath, json, workflow)
   }
 
   return p
@@ -148,12 +142,12 @@ export function submit(filePath, json, workflow) {
   var submitToWorkflow = 'draft'
   var found = false
   Array.prototype.forEach.call(config.users.workflow, (flow) => {
-    if (found) {
-      found = false
-      submitToWorkflow = flow
-    }
+    // if (found) {
+    //   found = false
+    //   submitToWorkflow = flow
+    // }
     if (workflow === flow) {
-      found = true
+      submitToWorkflow = flow
     }
   })
 

@@ -242,8 +242,8 @@ class Manager {
   }
 
   /**
-   * When a post is modified or created, this method is called so that the manager updates the list with the updated/new item
-   * @param {String} pathFile The full path to the post
+   * return true if postUrl is found in the Manager list
+   * @param {String} postUrl The url path of the file
    */
   postExist(postUrl){
     var parentRelativePath = cmsData.fileAttr.delete(postUrl.split('/').join(path.sep).replace(`.${config.files.templates.extension}`, '.json')).replace(/^\//, '')
