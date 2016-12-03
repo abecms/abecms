@@ -233,7 +233,7 @@ export default class FormCreate {
               window.location.href = window.location.origin + '/abe/editor' + jsonRes.json.abe_meta.link
             }else {
               console.log(responseText)
-              alert('erroreu')
+              alert('error')
             }
           })
     }
