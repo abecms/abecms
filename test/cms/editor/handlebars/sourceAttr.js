@@ -7,19 +7,32 @@ var sourceAttr = require('../../../../src/cli/cms/editor/handlebars/sourceAttr')
 describe('cmsEditor.handlebars.sourceAttr', function() {
   before( function() {
     this.fixture = {
-      gmapsElement: fse.readJsonSync(path.join(__dirname, '../../../fixtures/editor/gmaps-element.json'), 'utf8')
+      gmapsElement: fse.readJsonSync(path.join(__dirname, '../../../fixtures/editor/gmaps-element.json'), 'utf8'),
+      colors: fse.readJsonSync(path.join(__dirname, '../../../fixtures/editor/colors.json'), 'utf8')
     }
   });
 
-  it('sourceAttr', function() {
+  it('sourceAttr test', function() {
     var obj = this.fixture.gmapsElement
     var params = {
       display:'{{formatted_address}}',
-      value: 'State of Pará, Brazil'
+      value: [{formatted_address: 'State of Pará, Brazil'}]
     }
     var json = sourceAttr.default(obj, params)
     chai.expect(json.selected).to.equal('selected')
     chai.expect(json.val).to.equal('State of Pará, Brazil')
+  });
+
+  it('sourceAttr string', function() {
+    var obj = this.fixture.colors
+    var params = {
+      display: null,
+      value: ["red"],
+      source: this.fixture.colors
+    }
+    var json = sourceAttr.default("red", params)
+    chai.expect(json.selected).to.equal('selected')
+    chai.expect(json.val).to.equal('red')
   });
 
   it('get path', function() {
@@ -62,6 +75,13 @@ describe('cmsEditor.handlebars.sourceAttr', function() {
     var str = 'unknownkey'
     str = sourceAttr.prepareDisplay(obj, str)
     chai.expect(str).to.equal(str)
+  });
+
+  it('prepareDisplay null', function() {
+    var obj = this.fixture.colors
+    var str = null
+    str = sourceAttr.prepareDisplay(obj, str)
+    chai.expect(str).to.equal(this.fixture.colors)
   });
 
   it('getKeys key', function() {

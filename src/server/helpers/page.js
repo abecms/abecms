@@ -49,7 +49,7 @@ var page = function (req, res) {
     }else {
       templateId = req.params[0]
     }
-    var text = cmsTemplates.template.getTemplate(templateId)
+    var text = cmsTemplates.template.getTemplate(templateId, json)
 
     if (!editor) {
 

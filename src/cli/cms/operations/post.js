@@ -20,7 +20,7 @@ export function draft(filePath, json, workflow = 'draft') {
     var date = coreUtils.file.getDate(revisionPath)
     cmsData.metas.add(json, workflow, date)
 
-    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
@@ -57,7 +57,7 @@ export function publish(filePath, json) {
     // revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
     cmsData.metas.add(json, 'publish')
 
-    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
@@ -127,7 +127,7 @@ export function unpublish(filePath) {
   return p
 }
 
-export function edit(filePath, json, workflow) {
+export function submit(filePath, json, workflow) {
   var p
   if (workflow === 'publish') {
     p = cmsOperations.post.publish(filePath, json)
@@ -136,26 +136,6 @@ export function edit(filePath, json, workflow) {
   }
 
   return p
-}
-
-export function submit(filePath, json, workflow) {
-  var submitToWorkflow = 'draft'
-  var found = false
-  Array.prototype.forEach.call(config.users.workflow, (flow) => {
-    // if (found) {
-    //   found = false
-    //   submitToWorkflow = flow
-    // }
-    if (workflow === flow) {
-      submitToWorkflow = flow
-    }
-  })
-
-  return cmsOperations.post.edit(
-    filePath, 
-    json, 
-    submitToWorkflow
-  )
 }
 
 export function reject(filePath, json, workflow) {

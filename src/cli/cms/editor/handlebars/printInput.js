@@ -39,7 +39,7 @@ export default function printInput (params, root) {
   }
 
   var disabled = ''
-  if (!User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/${params.status}/edit`)) {
+  if (!User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/edit/${params.status}`)) {
     disabled = 'disabled="disabled"'
   }
   if (params.tab == 'slug') {
@@ -66,7 +66,7 @@ export default function printInput (params, root) {
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
-                    data-display="${params.display}"
+                    ${(params.display) ? 'data-display="'+params.display+'"' : ''}
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
                     placeholder="${params.placeholder}"
@@ -83,7 +83,7 @@ export default function printInput (params, root) {
 
     var lastValues
     if(params.autocomplete != null && params.autocomplete === 'true') {
-      if(params.source.indexOf('http') === 0) {
+      if(params.sourceString.indexOf('http') === 0) {
         lastValues = params.source
       }else {
         lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')

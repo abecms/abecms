@@ -27,15 +27,33 @@ var route = function(router, req, res, next) {
   }
 
   var workflowUrl = {}
+  var previous = ""
+  var next = ""
   Array.prototype.forEach.call(config.users.workflow, (flow) => {
-    workflowUrl[flow] = [
-      {url: `/abe/operations/${flow}/edit`, action: 'edit', workflow: flow},
-      {url: `/abe/operations/${flow}/delete`, action: 'delete', workflow: flow}
-    ]
+    var current = false
     if (flow != 'publish') {
-      workflowUrl[flow].push({url: `/abe/operations/${flow}/reject`, action: 'reject', workflow: flow})
-      workflowUrl[flow].push({url: `/abe/operations/${flow}/submit`, action: 'submit', workflow: flow})
+      Array.prototype.forEach.call(config.users.workflow, (flowCheck) => {
+        if (current) {
+          next = flowCheck
+          current = false
+        }
+        if (flow === flowCheck) {
+          current = true
+        }
+      })
+    }else {
+      next = "draft"
     }
+    workflowUrl[flow] = [
+      {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow, previous: previous, next: next},
+      {url: `/abe/operations/delete/${flow}`, action: 'delete', workflow: flow, previous: previous, next: next},
+      {url: `/abe/operations/submit/${flow}`, action: 'submit', workflow: flow, previous: previous, next: next}
+    ]
+
+    if (flow !== 'draft') {
+      workflowUrl[flow].push({url: `/abe/operations/reject/${flow}`, action: 'reject', workflow: flow, previous: previous, next: next})
+    }
+    previous = flow
   })
   var template = Handlebars.compile(html, {noEscape: true})
   var tmp = template({
