@@ -27,8 +27,8 @@ var route = function(router, req, res, next) {
   }
 
   var workflowUrl = {}
-  var previous = ""
-  var next = ""
+  var previous = ''
+  var next = ''
   Array.prototype.forEach.call(config.users.workflow, (flow) => {
     var current = false
     if (flow != 'publish') {
@@ -42,7 +42,7 @@ var route = function(router, req, res, next) {
         }
       })
     }else {
-      next = "draft"
+      next = 'draft'
     }
     workflowUrl[flow] = [
       {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow, previous: previous, next: next},

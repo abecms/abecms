@@ -23,8 +23,8 @@ var middleware = function(req, res, next) {
       res.redirect('/abe/editor')
       return
     }else {
-    next()
-    return
+      next()
+      return
     }
   }
 

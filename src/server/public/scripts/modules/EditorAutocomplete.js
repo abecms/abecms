@@ -190,7 +190,7 @@ export default class EditorAutocomplete {
       if (displayName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
         var div = document.createElement('div')
         div.addEventListener('mousedown', this._handleSelectValue)
-        div.setAttribute('data-value', (typeof o == "object") ? JSON.stringify(o) : o)
+        div.setAttribute('data-value', (typeof o == 'object') ? JSON.stringify(o) : o)
         div.setAttribute('data-display', displayName)
         if(first) {
           div.classList.add('selected')

@@ -16,7 +16,7 @@ export default function sourceAttr(obj, params) {
 
   Array.prototype.forEach.call(params.value, (pValue) => {
     if (isSelected(pValue, displayName, str)) {
-      selected = "selected"
+      selected = 'selected'
     }
   })
 

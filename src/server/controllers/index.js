@@ -79,7 +79,7 @@ Array.prototype.forEach.call(workflows, (workflow) => {
   if (workflow != 'draft' && workflow != 'publish') {
     router.post(`/abe/operations/reject/${workflow}*`, operations.postReject)
   }else if (workflow == 'publish') {
-    router.get(`/abe/operations/unpublish*`, operations.getUnpublish)
+    router.get('/abe/operations/unpublish*', operations.getUnpublish)
   }
 
   router.post(`/abe/operations/submit/${workflow}*`, operations.postSubmit)

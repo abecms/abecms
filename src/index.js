@@ -54,11 +54,11 @@ program
       process.exit(0)
     })
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe generate-posts --path /test --destination result --status publish');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe generate-posts --path /test --destination result --status publish')
+    console.log()
+  })
 
 program
   .command('create [path]')
@@ -77,12 +77,12 @@ program
       console.error('Error: no project path specified')
     }
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe create');
-    console.log('    $ abe create [destination]');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe create')
+    console.log('    $ abe create [destination]')
+    console.log()
+  })
 
 program
   .command('serve')
@@ -116,11 +116,11 @@ program
     cp.stderr.pipe(process.stderr)
     cp.stdout.pipe(process.stdout)
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe serve');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe serve')
+    console.log()
+  })
 
 program
   .command('install [plugin]')
@@ -138,12 +138,12 @@ program
       plugins.instance.install(dir)
     }
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe install');
-    console.log('    $ abe install [plugin]');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe install')
+    console.log('    $ abe install [plugin]')
+    console.log()
+  })
 
 program
   .command('uninstall <plugin>')
@@ -159,11 +159,11 @@ program
       plugins.instance.uninstall(dir, plugin)
     }
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe uninstall');
-    console.log('    $ abe uninstall [plugin]');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe uninstall')
+    console.log('    $ abe uninstall [plugin]')
+    console.log()
+  })
 
-program.parse(process.argv);
+program.parse(process.argv)
