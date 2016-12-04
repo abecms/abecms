@@ -5,3 +5,4 @@ plugins/
 .eslintrc.json
 .eslintignore
 abe.json
+selenium-debug.log

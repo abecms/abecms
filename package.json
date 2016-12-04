@@ -8,10 +8,14 @@
     "url": "git://github.com/AdFabConnect/abejs.git"
   },
   "scripts": {
+    "postinstall": "node nightwatch.conf.js",
     "lint": "eslint src --fix",
     "test": "mocha --recursive --compilers js:babel-register --require babel-polyfill",
     "test-cov": "istanbul cover _mocha -- --recursive --compilers js:babel-register --require babel-polyfill",
     "test-coveralls": "istanbul cover _mocha --report lcovonly -- --recursive --compilers js:babel-register --require babel-polyfill -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "pretest-func": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
+    "test-func": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
+    "posttest-func":"killall node",
     "start": "node --debug --harmony ./dist/server/index.js",
     "startpm2": "pm2 startOrRestart ./processes.json",
     "babel": "babelify --presets [ es2015 ] src/server/public/scripts/template-engine.js -o src/server/public/scripts/template-engine-compiled.js",
@@ -27,6 +31,7 @@
     "build:front": "npm run js:admin && npm run js:users && npm run js:engine && npm run sass",
     "build:scripts": "npm run build:front && ./node_modules/.bin/babel --presets es2015,stage-0 -d dist/server src/server/ && ./node_modules/.bin/babel --presets es2015,stage-0 -d dist/cli src/cli/ && npm run mvasset",
     "compile": "./node_modules/.bin/babel --presets es2015,stage-0 -d dist/ src/ && cp -r src/cli/core/config/config.json dist/cli/core/config/config.json",
+    "distribute": "npm run build:front && npm run compile && npm run mvasset",
     "watchdev": "npm run build:front && npm run compile && npm run mvasset && nodemon --debug --exec npm run compile && npm run mvasset --kill-others",
     "startdev": "npm run build:front && npm run compile && npm run mvasset && node src/tasks/nodemon.js & npm run watch --kill-others",
     "startdevOnly": "npm run js:admin && npm run js:users && npm run js:engine && node src/tasks/nodemon.js & npm run watch --kill-others"
@@ -109,9 +114,11 @@
     "eslint": "^3.6.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.2",
+    "nightwatch": "^0.9.9",
     "node-sass": "^3.7.0",
     "nodemon": "^1.8.1",
     "parallelshell": "^2.0.0",
+    "selenium-download": "^2.0.7",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "watchify": "^3.4.0"
