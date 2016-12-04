@@ -32,7 +32,7 @@ module.exports = {
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "args" : ["start-fullscreen", "--no-sandbox"]
+          "args" : ["--no-sandbox"]
         }
       }
     },
@@ -42,7 +42,7 @@ module.exports = {
         "javascriptEnabled": true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "args" : ["start-fullscreen", "--no-sandbox"]
+          "args" : ["--no-sandbox"]
         }
       }
     }
