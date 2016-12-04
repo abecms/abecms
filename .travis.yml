@@ -6,8 +6,6 @@ node_js:
   - "5"
   - "6"
   - "7"
-sudo: required
-dist: trusty
 env:
   - NODE_ENV=PROD
 before_install:
@@ -23,7 +21,6 @@ install:
 before_script:
   - npm run distribute
 script:
-  - jdk_switcher use oraclejdk8
   - npm run test-coveralls
   - npm run test-func
   - npm run lint
