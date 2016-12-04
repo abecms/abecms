@@ -1,0 +1,22 @@
+{
+  "abe_meta": {
+    "template": "index",
+    "link": "/index.html",
+    "complete": "100",
+    "type": "draft",
+    "date": "2016-11-05T16:32:09.098Z",
+    "latest": {
+      "date": "2016-11-05T16:32:09.098Z",
+      "abeUrl": "/index-abe-d20161105T163209098Z.html"
+    },
+    "status": "draft",
+    "draft": {
+      "date": "2016-11-05T16:32:09.098Z",
+      "abeUrl": "/index-abe-d20161105T163209098Z.html",
+      "latest": {
+        "date": "2016-11-05T16:32:09.098Z",
+        "abeUrl": "/index-abe-d20161105T163209098Z.html"
+      }
+    }
+  }
+}
