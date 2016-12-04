@@ -8,12 +8,6 @@ node_js:
   - "7"
 sudo: required
 dist: trusty
-jdk:
-  - oraclejdk8
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 env:
   - NODE_ENV=PROD
 before_install:
@@ -29,6 +23,7 @@ install:
 before_script:
   - npm run distribute
 script:
+  - jdk_switcher use oraclejdk8
   - npm run test-coveralls
   - npm run test-func
   - npm run lint
