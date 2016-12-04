@@ -21,6 +21,7 @@ install:
 before_script:
   - npm run distribute
 script:
+  - jdk_switcher use oraclejdk8
   - npm run test-coveralls
   - npm run test-func
   - npm run lint
