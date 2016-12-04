@@ -8,6 +8,12 @@ node_js:
   - "7"
 sudo: required
 dist: trusty
+jdk:
+  - oraclejdk8
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 env:
   - NODE_ENV=PROD
 before_install:
