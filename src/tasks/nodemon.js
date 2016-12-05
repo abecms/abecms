@@ -19,7 +19,7 @@ nodemon({
     'NODE_ENV': 'development'
   },
   ignore: [
-    'docs/*'
+    // 'docs/*' //TODO: find out why in dev mode this line uncommented break server reload on file change
   ],
   watch: [
     'src/cli/*',
