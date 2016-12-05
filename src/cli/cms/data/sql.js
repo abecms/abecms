@@ -224,15 +224,34 @@ export function executeOrderByClause(files, orderby){
 }
 
 /**
+ * Keep only published post
+ *
+ * keepOnlyPublishedPost([files])
+ *
+ * @param  {Array} files      paths
+ * @return {Array}                files
+ */
+export function keepOnlyPublishedPost(files){
+  var publishedValue = []
+  Array.prototype.forEach.call(files, (file) => {
+    if (file.publish != null) {
+      publishedValue.push(file.publish)
+    }
+  })
+
+  return publishedValue
+}
+
+/**
  * Check array of files have path that match path statement
  *
- * executeFromClause(['/'], ['/'])
+ * executeFromClause([array], ['/'], ['/'])
  *
  * @param  {Array} statement      paths
  * @param  {Array} pathFromClause paths
  * @return {Array}                files
  */
-export function executeFromClause(statement, pathFromClause){
+export function executeFromClause(files, statement, pathFromClause){
   var from = sanitizeFromStatement(statement)
 
   // if the from clause ends with a dot, we won't recurse the directory analyze
@@ -242,15 +261,13 @@ export function executeFromClause(statement, pathFromClause){
   
   var fromDirectory = getFromDirectory(from, pathFromClause)
 
-  var list = Manager.instance.getList()
-  var files_array = list.filter((element) => {
-    if(element.publish) {
-      if (element.path.indexOf(fromDirectory) > -1) {
-        return true
-      }
+  var files_array = files.filter((element) => {
+    if (element.path.indexOf(fromDirectory) > -1) {
+      return true
     }
     return false
   })
+
   return files_array
 }
 
@@ -263,10 +280,10 @@ export function executeFromClause(statement, pathFromClause){
  * @return {Array}           found object that match
  */
 export function execQuery(pathQuery, match, jsonPage) {
-  var files
+  var files = keepOnlyPublishedPost(Manager.instance.getList())
   var request = handleSqlRequest(cmsData.regex.getAttr(match, 'source'), jsonPage)
 
-  files = executeFromClause(request.from, pathQuery)
+  files = executeFromClause(files, request.from, pathQuery)
   files = executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
   files = executeOrderByClause(files, request.orderby)
   return files
@@ -343,8 +360,8 @@ export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
   for(let file of files) {
     if(limit < maxLimit || maxLimit === -1) {
       if(wheres != null) {
-        if(file.publish && !recurseWhere(wheres, file.publish, jsonPage)) {
-          json = JSON.parse(JSON.stringify(file.publish))
+        if(!recurseWhere(wheres, file, jsonPage)) {
+          json = JSON.parse(JSON.stringify(file))
           jsonValues = {}
 
           if(columns != null && columns.length > 0 && columns[0] !== '*') {

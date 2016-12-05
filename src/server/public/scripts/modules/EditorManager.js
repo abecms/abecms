@@ -1,4 +1,4 @@
-/*global document, top, $, location, confirm, window */
+/*global document, top, $, location, confirm, alert */
 
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
@@ -24,7 +24,6 @@ export default class EditorManager {
     this._btnGeneratePosts = document.querySelector('[data-generate-posts]')
     this._btnCloseManager = document.querySelector('.close-manager')
     this._btnManager = document.querySelector('.btn-manager')
-    this._btnVisitSite = document.querySelectorAll('.btn-visit-site')
     this._btnDataFile = document.querySelector('[data-file="true"]')
 
     this._btnDeleteFile = [].slice.call(document.querySelectorAll('[data-delete="true"]'))
@@ -36,7 +35,6 @@ export default class EditorManager {
     this._handleBtnManagerTabClick = this._btnManagerTabClick.bind(this)
     this._handleBtnManagerClick = this._btnManagerClick.bind(this)
     this._handleBtnSaveConfigClick = this._btnSaveConfigClick.bind(this)
-    this._handleBtnVisitClick = this._btnVisitClick.bind(this)
 
     this._handleBtnDeleteClick = this._btnDeleteClick.bind(this)
     this._handleBtnUnpublishClick = this._btnUnpublishClick.bind(this)
@@ -65,8 +63,13 @@ export default class EditorManager {
       url: href,
       method: 'get'
     },
-      () => {
-        this.remove._fire(target.parentNode.parentNode.parentNode)
+      (e, responseText) => {
+        var response = JSON.parse(responseText)
+        if (response.success !== 1) {
+          alert(response.message)
+        }else {
+          this.remove._fire(target.parentNode.parentNode.parentNode)
+        }
       })
   }
 
@@ -80,35 +83,25 @@ export default class EditorManager {
       url: href,
       method: 'get'
     },
-      () => {
-        var labels = target.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
-        var p = target.parentNode.parentNode.parentNode.querySelector('.label-published')
-        Array.prototype.forEach.call(labels, (label) => {
-          label.classList.add('hidden')
-        })
-        var draft = target.parentNode.parentNode.parentNode.querySelector('.label-draft')
-        
-        if(typeof draft !== 'undefined' && draft !== null) {
-          draft.classList.remove('hidden')
+      (e, responseText) => {
+        var response = JSON.parse(responseText)
+        if (response.success !== 1) {
+          alert(response.message)
+        }else {
+          var labels = target.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
+          var p = target.parentNode.parentNode.parentNode.querySelector('.label-published')
+          Array.prototype.forEach.call(labels, (label) => {
+            label.classList.add('hidden')
+          })
+          var draft = target.parentNode.parentNode.parentNode.querySelector('.label-draft')
+          
+          if(typeof draft !== 'undefined' && draft !== null) {
+            draft.classList.remove('hidden')
+          }
+
+          if(typeof p !== 'undefined' && p !== null) p.remove()
+          target.remove()
         }
-
-        if(typeof p !== 'undefined' && p !== null) p.remove()
-        target.remove()
-      })
-  }
-
-  _btnVisitClick(e){
-    var target = e.target
-    var dataPage = target.getAttribute('data-page')
-    this._ajax({
-      url: document.location.origin + target.getAttribute('data-href'),
-      method: 'get'
-    },
-      (code, responseText) => {
-        var res = JSON.parse(responseText)
-        var routePath = (typeof dataPage !== 'undefined' && dataPage !== null) ? dataPage : ''
-        res.port = res.port === 80 ? '' : ':' + res.port
-        window.open(`${res.webroot.replace(/\/$/, '')}${res.port}/${routePath}`, '_blank')
       })
   }
 
@@ -118,9 +111,6 @@ export default class EditorManager {
     })
     Array.prototype.forEach.call(this._btnSaveConfig, (btnSaveConfig) => {
       btnSaveConfig.addEventListener('click', this._handleBtnSaveConfigClick)
-    })
-    Array.prototype.forEach.call(this._btnVisitSite, (btnVisitSite) => {
-      btnVisitSite.addEventListener('click', this._handleBtnVisitClick)
     })
 
     if (this._btnManager != null) {

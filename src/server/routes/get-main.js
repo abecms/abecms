@@ -9,13 +9,14 @@ import {
   cmsTemplates,
   coreUtils,
   abeExtend,
-  Manager
+  Manager,
+  User
 } from '../../cli'
 
 import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
-function renderAbeAdmin(EditorVariables, obj, filePath, isHome, template) {
+function renderAbeAdmin(EditorVariables, obj, filePath) {
   var manager = {}
   
   manager.home = {
@@ -31,8 +32,6 @@ function renderAbeAdmin(EditorVariables, obj, filePath, isHome, template) {
   var _preview = (filePath) ? '/abe/page/' + EditorVariables.express.req.params[0] + `?filePath=${EditorVariables.express.req.query.filePath}` : false
   var _form = (obj) ? obj.form : false
   var _json = (obj) ? obj.json : false
-  var _text = (obj) ? obj.text : false
-    // var _file = (tplUrl) ? tplUrl.draft.file : false
   var _filePath = (filePath) ? filePath : false
   if (_filePath) {
     _filePath = '/' + _filePath.replace(/^\/+/, '')
@@ -42,7 +41,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath, isHome, template) {
   if(typeof _json !== 'undefined' && _json !== null 
       && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) {
 
-    var text = cmsTemplates.template.getTemplate(_json.abe_meta.template) 
+    var text = cmsTemplates.template.getTemplate(_json.abe_meta.template, _json) 
     var page = new Page(_json.abe_meta.template, text, _json, false) 
     pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
   }
@@ -65,6 +64,10 @@ function renderAbeAdmin(EditorVariables, obj, filePath, isHome, template) {
   EditorVariables.nonce = '\'nonce-' + EditorVariables.express.res.locals.nonce + '\''
   EditorVariables.editorWidth = editorWidth
 
+  if (_json != null && _json.abe_meta) {
+    EditorVariables.workflows = User.utils.getUserWorkflow(_json.abe_meta.status)
+  }
+
   EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
 
   if (filePath != null && filePath.indexOf('.json') > -1) {
@@ -76,7 +79,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath, isHome, template) {
 }
 
 var route = function(req, res, next) {
-  var filePath = req.originalUrl.replace('/abe', '')
+  var filePath = req.originalUrl.replace('/abe/editor', '')
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
@@ -102,13 +105,15 @@ var route = function(req, res, next) {
   var folderPath = null
 
   var EditorVariables = {
+    user: res.user,
+    slugs: Manager.instance.getSlugs(),
     express: {
       res: res,
       req: req
     },
     filename: fileName,
     folderPath: folderPath,
-    abeUrl: '/abe/',
+    abeUrl: '/abe/editor/',
     isHome: isHome,
     config: config,
     Locales: coreUtils.locales.instance.i18n,
@@ -130,7 +135,7 @@ var route = function(req, res, next) {
       }
 
       if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
-        res.redirect('/abe/') 
+        res.redirect('/abe/editor') 
         return 
       }
 
@@ -138,7 +143,7 @@ var route = function(req, res, next) {
       if(coreUtils.file.exist(jsonPath)) {
         json = cmsData.file.get(jsonPath, 'utf8')
       }
-      var text = cmsTemplates.template.getTemplate(template)
+      var text = cmsTemplates.template.getTemplate(template, json)
 
       editor(text, json, linkPath)
         .then((result) => {
@@ -158,8 +163,7 @@ var route = function(req, res, next) {
 
   p.then((obj) => {
     var precontrib = Manager.instance.getPrecontribution()
-
-    editor(precontrib.template, obj.json, '')
+    editor(precontrib.template, obj.json, '', true)
       .then((resultPrecontrib) => {
         EditorVariables.resultPrecontrib = resultPrecontrib
         renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)

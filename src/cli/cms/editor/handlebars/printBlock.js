@@ -1,15 +1,25 @@
 import printInput from './printInput'
 import abeEngine from './abeEngine'
 
-export default function printBlock (ctx) {
+import {
+  config
+  ,cmsTemplates
+} from '../../../../cli'
+
+export default function printBlock (ctx, root) {
   var res = ''
+  var precontrib = false
+  if (root.precontrib != null) {
+    precontrib = root.precontrib
+  }
 
   if(ctx[0].block != null && ctx[0].block !== '') {
     res += `<div class="form-group">
               <label class="title">${ctx[0].block}</label>
               <div class='single-block well well-sm'>`
     Array.prototype.forEach.call(ctx, (item) => {
-      res += printInput(item)
+      if (precontrib) item.value = ''
+      res += printInput(item, root)
     })
     res += '</div></div>'
   }else if(ctx[0].key.indexOf('[') > -1) {
@@ -50,7 +60,8 @@ export default function printBlock (ctx) {
                 <div id="${key}${i}" class="collapse" >
                 `
       Array.prototype.forEach.call(arrItem[i], (item) => {
-        res += printInput(item)
+        if (precontrib) item.value = ''
+        res += printInput(item, root)
       })
       res += '</div></div>'
     })
@@ -59,7 +70,11 @@ export default function printBlock (ctx) {
           </div>
         </div>`
   }else {
-    res += printInput(ctx[0])
+    if (precontrib) ctx[0].value = ''
+    res += printInput(ctx[0], root)
   }
+
+  // var template = cmsTemplates.Handlebars.compile(res)
+  // return new cmsTemplates.Handlebars.SafeString(template(ctx, {data: {intl: config.intlData}}))
   return res
 }

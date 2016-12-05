@@ -7,6 +7,7 @@ config.set({root: path.join(__dirname,'fixtures')})
 var cmsData = require('../src/cli').cmsData
 var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
+require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 describe('Revision', function() {
   before( function(done) {
@@ -14,9 +15,9 @@ describe('Revision', function() {
       .then(function () {
 
         this.fixture = {
-          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
-          jsonArticle: fse.readJsonSync(__dirname + '/fixtures/data/article-1.json'),
-          jsonHomepage: fse.readJsonSync(__dirname + '/fixtures/data/homepage-1.json')
+          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8'),
+          jsonArticle: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'article-1.json')),
+          jsonHomepage: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'homepage-1.json'))
         }
         done()
         

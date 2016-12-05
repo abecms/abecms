@@ -7,7 +7,7 @@ import {
   coreUtils
 } from '../../cli'
 
-var page = function (req, res, next) {
+var page = function (req, res) {
   var html = (req.query.html) ? true : false
   var json = null
   var editor = false
@@ -49,7 +49,7 @@ var page = function (req, res, next) {
     }else {
       templateId = req.params[0]
     }
-    var text = cmsTemplates.template.getTemplate(templateId)
+    var text = cmsTemplates.template.getTemplate(templateId, json)
 
     if (!editor) {
 

@@ -3,8 +3,6 @@ import {Promise} from 'bluebird'
 import path from 'path'
 import fse from 'fs-extra'
 import clc from 'cli-color'
-import mkdirp from 'mkdirp'
-import git from 'git-exec'
 import which from 'which'
 const npm = which.sync('npm')
 
@@ -20,121 +18,29 @@ class Plugins {
 
   constructor(enforcer) {
     if(enforcer != singletonEnforcer) throw 'Cannot construct Plugins singleton'
+    this.pluginsDir = path.join(config.root, 'node_modules') + path.sep
+    this.scriptsDir = path.join(config.root, 'scripts') + path.sep
     this._plugins = []
     this.fn = []
-    var pluginsDir = path.join(config.root, config.plugins.url)
+    
+    // Plugins
+    if(config.plugins && Array.isArray(config.plugins)){
+      Array.prototype.forEach.call(config.plugins, (pluginEntry) => {
+        const plugin = this.getPluginConfig(this.pluginsDir, pluginEntry)
+        this._plugins.push(plugin)
+      })
+    }
+
+    // Scripts
     try {
-      var directoryPlugins = fse.lstatSync(pluginsDir)
-      if (directoryPlugins.isDirectory()) {
-        
-        this._plugins = coreUtils.file.getFoldersSync(pluginsDir, false)
-        Array.prototype.forEach.call(this._plugins, (plugin) => {
-          var name = plugin.path.replace(pluginsDir + '/', '')
-          // has hooks
-          var plugHooks = path.join(plugin.path, config.hooks.url)
-          try {
-            var directoryHook = fse.lstatSync(plugHooks)
-            if (directoryHook.isDirectory()) {
-              var plugHooksFile = path.join(plugHooks, 'hooks.js')
-              var h = require(plugHooksFile)
-              plugin.hooks = h.default
-            }else {
-              plugin.hooks = null
-            }
-          }catch(e) {
-            plugin.hooks = null
-          }
-
-          // has partials
-          var plugPartials = path.join(plugin.path, config.pluginsPartials)
-          try {
-            var directoryPartials = fse.lstatSync(plugPartials)
-            if (directoryPartials.isDirectory()) {
-              plugin.partials = plugPartials
-            }else {
-              plugin.partials = null
-            }
-          }catch(e) {
-            plugin.partials = null
-          }
-
-          // has templates
-          var plugTemplates = path.join(plugin.path, config.templates.url)
-          try {
-            var directoryTemplates = fse.lstatSync(plugTemplates)
-            if (directoryTemplates.isDirectory()) {
-              plugin.templates = plugTemplates
-            }else {
-              plugin.templates = null
-            }
-          }catch(e) {
-            plugin.templates = null
-          }
-
-          // has process
-          var plugProcess = path.join(plugin.path, 'process')
-          try {
-            var directoryProcess = fse.lstatSync(plugProcess)
-            if (directoryProcess.isDirectory()) {
-              plugin.process = {}
-              let processFiles = coreUtils.file.getFilesSync(plugProcess, false)
-              Array.prototype.forEach.call(processFiles, (processFile) => {
-                plugin.process[path.basename(processFile, '.js')] = processFile
-              })
-            }else {
-              plugin.process = null
-            }
-          }catch(e) {
-            plugin.process = null
-          }
-
-          // has routes
-          var plugRoutes = path.join(plugin.path, 'routes')
-          try {
-            var directoryRoute = fse.lstatSync(plugRoutes)
-            if (directoryRoute.isDirectory()) {
-              plugin.routes = {}
-
-              var gets = path.join(plugRoutes, 'get')
-              try {
-                var directoryGets = fse.lstatSync(gets)
-                if (directoryGets.isDirectory()) {
-                  let routesGet = []
-                  let routePaths = coreUtils.file.getFilesSync(gets, false)
-                  Array.prototype.forEach.call(routePaths, (route) => {
-                    let pathUrl = `/abe/plugin/${name}/${path.basename(route, '.js')}*`
-                    let routeObject = {'path':route, 'routePath':pathUrl}
-                    routesGet.push(routeObject)
-                  })
-                  plugin.routes.get = routesGet
-                }
-              }catch(e) {
-                plugin.routes.get = null
-              }
-              try {
-                let posts = path.join(plugRoutes, 'post')
-                let directoryPosts = fse.lstatSync(gets)
-                if (directoryPosts.isDirectory()) {
-                  let routesPost = []
-                  let routePaths = coreUtils.file.getFilesSync(posts, false)
-                  Array.prototype.forEach.call(routePaths, (route) => {
-                    let pathUrl = `/abe/plugin/${name}/${path.basename(route, '.js')}*`
-                    let routeObject = {'path':route, 'routePath' : pathUrl}
-                    routesPost.push(routeObject)
-                  })
-                  plugin.routes.post = routesPost
-                }
-              }catch(e) {
-                plugin.routes.post = null
-              }
-            }else {
-              plugin.routes = null
-            }
-          }catch(e) {
-            plugin.routes = null
-          }
+      var directoryScripts = fse.lstatSync(this.scriptsDir)
+      if (directoryScripts.isDirectory()) {
+        this._scripts = coreUtils.file.getFoldersSync(this.scriptsDir, false)
+        Array.prototype.forEach.call(this._scripts, (scriptEntry) => {
+          const name = scriptEntry.path.replace(this.scriptsDir, '')
+          const script = this.getPluginConfig(this.scriptsDir, name)
+          this._plugins.push(script)
         })
-      
       }
     } catch (e) {
       
@@ -146,6 +52,123 @@ class Plugins {
       this[singleton] = new Plugins(singletonEnforcer)
     }
     return this[singleton]
+  }
+
+  getPluginConfig(dir, entry){
+    // remove npm version if any
+    let pluginId = entry.split('@')[0]
+
+    // remove github version if any
+    pluginId = pluginId.split('#')[0]
+
+    // remove github path if any
+    pluginId = path.basename(pluginId)
+
+    let plugHook = path.join(dir, pluginId, config.hooks.url, 'hooks.js')
+    let plugPartials = path.join(dir, pluginId, config.pluginsPartials)
+    let plugTemplates = path.join(dir, pluginId, config.templates.url)
+    let plugProcess = path.join(dir, pluginId, 'process')
+    let plugRoutes = path.join(dir, pluginId, 'routes')
+    let plugin = {
+      hooks : null,
+      partials : null,
+      templates : null,
+      process : null,
+      routes : null
+    }
+
+    try {
+      var fileHook = fse.lstatSync(plugHook)
+      if (fileHook.isFile()) {
+        try {
+          var h = require(plugHook)
+        } catch(e){
+          console.log(e.stack)
+          console.log(
+            clc.green('[ Hint ]'),
+            'It seems that you don\'t have the npm module babel-preset-es2015 installed on your project'
+          )
+        }
+        plugin.hooks = h.default
+      }
+    }catch(e) {
+      plugin.hooks = null
+    }
+    
+    try {
+      var directoryPartials = fse.lstatSync(plugPartials)
+      if (directoryPartials.isDirectory()) {
+        plugin.partials = plugPartials
+      }
+    }catch(e) {
+      plugin.partials = null
+    }
+    
+    try {
+      var directoryTemplates = fse.lstatSync(plugTemplates)
+      if (directoryTemplates.isDirectory()) {
+        plugin.templates = plugTemplates
+      }
+    }catch(e) {
+      plugin.templates = null
+    }
+
+    try {
+      var directoryProcess = fse.lstatSync(plugProcess)
+      if (directoryProcess.isDirectory()) {
+        plugin.process = {}
+        let processFiles = coreUtils.file.getFilesSync(plugProcess, false)
+        Array.prototype.forEach.call(processFiles, (processFile) => {
+          plugin.process[path.basename(processFile, '.js')] = processFile
+        })
+      }
+    }catch(e) {
+      plugin.process = null
+    }
+
+    try {
+      var directoryRoute = fse.lstatSync(plugRoutes)
+      if (directoryRoute.isDirectory()) {
+        plugin.routes = {}
+
+        var gets = path.join(plugRoutes, 'get')
+        try {
+          var directoryGets = fse.lstatSync(gets)
+          if (directoryGets.isDirectory()) {
+            let routesGet = []
+            let routePaths = coreUtils.file.getFilesSync(gets, false)
+            Array.prototype.forEach.call(routePaths, (route) => {
+              let pathUrl = `/abe/plugin/${pluginId}/${path.basename(route, '.js')}*`
+              let routeObject = {'path':route, 'routePath':pathUrl}
+              routesGet.push(routeObject)
+            })
+            plugin.routes.get = routesGet
+          }
+        }catch(e) {
+          plugin.routes.get = null
+        }
+        try {
+          let posts = path.join(plugRoutes, 'post')
+          let directoryPosts = fse.lstatSync(gets)
+          if (directoryPosts.isDirectory()) {
+            let routesPost = []
+            let routePaths = coreUtils.file.getFilesSync(posts, false)
+            Array.prototype.forEach.call(routePaths, (route) => {
+              let pathUrl = `/abe/plugin/${pluginId}/${path.basename(route, '.js')}*`
+              let routeObject = {'path':route, 'routePath' : pathUrl}
+              routesPost.push(routeObject)
+            })
+            plugin.routes.post = routesPost
+          }
+        }catch(e) {
+          plugin.routes.post = null
+        }
+      }
+    }catch(e) {
+      plugin.routes = null
+    }
+
+    return plugin
   }
 
   getProcess(fn) {
@@ -169,7 +192,7 @@ class Plugins {
 
       if(this._plugins != null) {
         Array.prototype.forEach.call(this._plugins, (plugin) => {
-          if(plugin.hooks != null&& plugin.hooks[fn] != null) {
+          if(plugin.hooks != null && plugin.hooks[fn] != null) {
             args[0] = plugin.hooks[fn].apply(this, args)
           }
         })
@@ -179,10 +202,6 @@ class Plugins {
     }
 
     return args[0]
-  }
-
-  getHooks() {
-    return this._plugins
   }
 
   getPartials() {
@@ -207,95 +226,173 @@ class Plugins {
     return routes
   }
 
-  add(dir, plugin) {
-    var p = new Promise((resolve) => {
-        
-      var pluginName = plugin.split('/')
-      pluginName = pluginName[pluginName.length - 1].split('.')[0]
-      var pluginDir = path.join(dir, 'plugins', pluginName)
-
-      try{
-        fse.statSync(pluginDir)
-        console.log(clc.green('remove plugin'), pluginName)
-        fse.removeSync(pluginDir)
-      }
-      catch(e){
-      }
-      console.log(clc.green('mkdir'), clc.green(pluginDir))
-      mkdirp(pluginDir)
-
-      git.clone(plugin, pluginDir, function(repo) {
-        if (repo !== null) {
-          try {
-            console.log(clc.green('cd'), clc.green(pluginDir))
-            process.chdir(pluginDir)
-
-            console.log(clc.green('spawn'), clc.cyan('npm install'))
-            // const npmInstall = spawn('npm', ['install', pluginDir]);
-            const npmInstall = spawn(npm, ['install'])
-
-            npmInstall.stdout.on('data', (data) => {
-              var str = data.toString(), lines = str.split(/(\r?\n)/g)
-              for (var i=0; i<lines.length; i++) {
-                console.log(str)
-              }
-            })
-
-            npmInstall.stderr.on('data', (data) => {
-              var str = data.toString(), lines = str.split(/(\r?\n)/g)
-              for (var i=0; i<lines.length; i++) {
-                console.log(str)
-              }
-            })
-
-            npmInstall.on('close', (code) => {
-              console.log(clc.cyan('child process exited with code'), code)
-
-              var json = {}
-              var abeJson = dir + '/abe.json'
-
-              try {
-                var stat = fse.statSync(abeJson)
-                if (stat) {
-                  json = fse.readJsonSync(abeJson)
-                }
-              }catch(e) {
-                console.log(e)
-                console.log(clc.cyan('no abe.json creating'), abeJson)
-              }
-
-              if(typeof json.dependencies === 'undefined' || json.dependencies === null) {
-                json.dependencies = [plugin]
-              }else {
-                var found = false
-                Array.prototype.forEach.call(json.dependencies, (plugged) => {
-                  if (plugin === plugged) {
-                    found = true
-                  }
-                })
-                if (!found) {
-                  json.dependencies.push(plugin)
-                }
-              }
-
-              fse.writeJsonSync(abeJson, json, { space: 2, encoding: 'utf-8' })
-              resolve()
-            })
-
-            npmInstall.on('error', (err) => {
-              console.log(clc.red('cannot install npm dependencies for'), pluginDir)
-              console.log(err)
-              resolve(err)
-            })
-          } catch (err) {
-            console.log(clc.cyan('chdir'), err)
-            resolve(err)
+  removePlugin(plugin){
+    let pluginName = plugin.split('@')[0]
+    pluginName = pluginName.split('#')[0]
+    if(config.localConfigExist()){
+      let json = config.getLocalConfig()
+      if(typeof json.plugins !== 'undefined' && json.plugins !== null) {
+        Array.prototype.forEach.call(json.plugins, (plugged, index) => {
+          if (pluginName === path.basename(plugged.split('@')[0].split('#')[0])) {
+            json.plugins.splice(index, 1)
+            config.save(json)
           }
-        } else {
-          console.log(clc.red('clone error'))
-          resolve(err)
+        })
+      }
+    }
+  }
+
+  updatePlugin(plugin){
+    let json = {}
+    let createLocalConfig = true
+    let pluginName = plugin.split('@')[0]
+    pluginName = pluginName.split('#')[0]
+
+    if(config.localConfigExist()){
+      json = config.getLocalConfig()
+      createLocalConfig = false
+    }
+
+    if(typeof json.plugins === 'undefined' || json.plugins === null) {
+      json.plugins = [plugin]
+    } else {
+      var found = false
+      Array.prototype.forEach.call(json.plugins, (plugged, index) => {
+        if (pluginName === plugged.split('@')[0].split('#')[0]) {
+          json.plugins[index] = plugin
+          found = true
         }
       })
+      if (!found) {
+        json.plugins.push(plugin)
+      }
+    }
+
+    if(createLocalConfig){
+      console.log(
+        clc.green('[ Hint ]'),
+        'creating a local config abe.json with your plugin definition',
+        clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
+      )
+    }
+
+    config.save(json)
+  }
+
+  uninstall(dir, plugin) {
+    if(plugin !== null) {
+      this.remove(dir, plugin)
+      .then(function() {
+
+        return 0
+      })
+    } else {
+      console.log(clc.cyan('no plugin with this name found'))
+
+      return 0
+    }
+  }
+
+  install(dir, plugin = null) {
+    if(plugin !== null) {
+      this.add(dir, plugin)
+      .then(function() {
+
+        return 0
+      })
+    } else {
+      if(config.plugins && Array.isArray(config.plugins)){
+        var ps = []
+        Array.prototype.forEach.call(config.plugins, (plugin) => {
+          ps.push(this.add(dir, plugin))
+        })
+        
+        Promise.all(ps)
+        .then(function() {
+
+          return 0 
+        })
+      } else {
+        console.log(clc.cyan('no plugin found'))
+
+        return 0
+      }
+    }
+  }
+
+  remove(dir, plugin) {
+    var p = new Promise((resolve) => {
+      try {
+        console.log(clc.green('spawn'), clc.cyan('npm uninstall ' + plugin))
+        // const npmUninstall = spawn('npm', ['uninstall', pluginDir]);
+        const npmUninstall = spawn(npm, ['uninstall', '--save', plugin], { cwd: dir })
+
+        npmUninstall.stdout.on('data', (data) => {
+          console.log(''+data)
+        })
+
+        npmUninstall.stderr.on('data', (data) => {
+          console.log(''+data)
+        })
+
+        npmUninstall.on('close', (code) => {
+          console.log(clc.cyan('child process exited with code'), code)
+
+          if(code == 0){
+            this.removePlugin(plugin)
+          }
+          
+          resolve()
+        })
+
+        npmUninstall.on('error', (err) => {
+          console.log(clc.red('cannot uninstall npm dependencies for'), dir)
+          console.log(err)
+          resolve(err)
+        })
+      } catch (err) {
+        console.log(clc.cyan('uninstall'), err)
+        resolve(err)
+      }
+    })
+
+    return p
+  }
+
+  add(dir, plugin) {
+    var p = new Promise((resolve) => {
+      try {
+        console.log(clc.green('spawn'), clc.cyan('npm install ' + plugin))
+        // const npmInstall = spawn('npm', ['install', pluginDir]);
+        const npmInstall = spawn(npm, ['install', '--save', plugin], { cwd: dir })
+
+        npmInstall.stdout.on('data', (data) => {
+          console.log(''+data)
+        })
+
+        npmInstall.stderr.on('data', (data) => {
+          console.log(''+data)
+        })
+
+        npmInstall.on('close', (code) => {
+          console.log(clc.cyan('child process exited with code'), code)
+
+          if(code == 0){
+            this.updatePlugin(plugin)
+          }
+          
+          resolve()
+        })
+
+        npmInstall.on('error', (err) => {
+          console.log(clc.red('cannot install npm dependencies for'), dir)
+          console.log(err)
+          resolve(err)
+        })
+      } catch (err) {
+        console.log(clc.cyan('install'), err)
+        resolve(err)
+      }
     })
 
     return p

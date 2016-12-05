@@ -2,6 +2,7 @@ import sourceAutocomplete   from './sourceAutocomplete'
 import sourceOption   from './sourceOption'
 import {
   abeExtend
+  ,User
 } from '../../../'
 
 /**
@@ -9,12 +10,13 @@ import {
  * && add appropriate attributs / data-attributs
  * @return {String|html} input / input group ...
  */
-export default function printInput () {
-  var params = arguments[0]
+export default function printInput (params, root) {
+  // var params = arguments[0]
   params = abeExtend.hooks.instance.trigger('beforeEditorInput', params)
+
   var desc = params.desc + ((params.required) ? ' *' : '')
 
-  var res = `<div class="form-group" data-precontrib-templates="${params.precontribTemplates}">
+  var res = `<div class="form-group" data-precontrib-templates="${params.precontribTemplate}">
               <label class="control-label" for="${params.key}" 
                       ${(params.type.indexOf('text_link') > -1) ? 'data-for-link="' + params.key + '"' : ''} >
                 ${desc}
@@ -28,9 +30,21 @@ export default function printInput () {
   if(params.value == null) {
     params.value = ''
   }
-
+  
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
+  var userWorkflow = ''
+  if (root.user != null) {
+    userWorkflow = root.user.role.workflow
+  }
+
+  var disabled = ''
+  if (!User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/edit/${params.status}`)) {
+    disabled = 'disabled="disabled"'
+  }
+  if (params.tab == 'slug') {
+    disabled = ''
+  }
   var inputClass = 'form-control form-abe'
   var commonParams = `id="${params.key}"
                     data-id="${params.key}"
@@ -39,33 +53,28 @@ export default function printInput () {
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
-                    data-precontrib="${params.precontrib}"
-                    
-                    data-slug="${params.slug}"
-                    data-slug-type="${params.slugType}"
                     data-display="${params.display}"
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
-                    placeholder="${params.placeholder}"`
+                    placeholder="${params.placeholder}"
+                    ${disabled}`
 
   if(params.source != null) {
     commonParams = `id="${params.key}"
                     data-id="${params.key}"
                     data-maxlength="${params['max-length']}"
-                    data-precontrib="${params.precontrib}"
-                    data-slug="${params.slug}"
-                    data-slug-type="${params.slugType}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
                     data-required="${params.required}"
-                    data-display="${params.display}"
+                    ${(params.display) ? 'data-display="'+params.display+'"' : ''}
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
-                    placeholder="${params.placeholder}"`
+                    placeholder="${params.placeholder}"
+                    ${disabled}`
 
     var multiple = ''
     disabled = ''
-    if(params['max-length'] || (params['max-length'] > 1 && params.source.length > 0)) {
+    if(params['max-length'] == null && params.source.length > 0 || (params['max-length'] > 1 && params.source.length > 0)) {
       multiple = 'multiple'
     }
     if(params.source.length <= 0) {
@@ -74,7 +83,7 @@ export default function printInput () {
 
     var lastValues
     if(params.autocomplete != null && params.autocomplete === 'true') {
-      if(params.source.indexOf('http') === 0) {
+      if(params.sourceString.indexOf('http') === 0) {
         lastValues = params.source
       }else {
         lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
@@ -98,6 +107,7 @@ export default function printInput () {
       res += '</div>'
       res += `<input value="" autocomplete="off" data-value='${lastValues}' type="text" ${disabled} ${commonParams} class="${inputClass}" />`
     }else {
+
       lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
       res += `<select ${multiple} ${disabled} ${commonParams} class="${inputClass}"
                         last-values='${lastValues}'>`
@@ -105,7 +115,7 @@ export default function printInput () {
       if (!params.required) {
         res += '<option value=\'\'></option>'
       }
-
+      
       if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
         Array.prototype.forEach.call(params.source, (val) => {
           res += sourceOption(val, params)
@@ -124,14 +134,12 @@ export default function printInput () {
                     maxlength="${params['max-length']}"
                     reload="${params.reload}"
                     tabIndex="${params.order}"
-                    data-precontrib="${params.precontrib}"
-                    data-slug="${params.slug}"
-                    data-slug-type="${params.slugType}"
                     data-required="${params.required}"
                     data-display="${params.display}"
                     data-visible="${params.visible}"
                     data-autocomplete="${params.autocomplete}"
-                    placeholder="${params.placeholder}"`
+                    placeholder="${params.placeholder}"
+                    ${disabled}`
                     
     res += `<div class="wysiwyg-container rich">
               <div class="wysiwyg-toolbar wysiwyg-toolbar-top">
@@ -209,6 +217,7 @@ export default function printInput () {
           </div>`
   }
   else if (params.type.indexOf('image') >= 0){
+    if(params.thumbs != null) commonParams += `data-size="${params.thumbs}"`
     res += `<div class="input-group img-upload">
               <div class="input-group-addon image">
                 <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>

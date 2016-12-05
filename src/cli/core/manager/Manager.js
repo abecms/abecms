@@ -33,6 +33,7 @@ class Manager {
   }
 
   init() {
+    this._pathPartials = path.join(config.root, config.partials)
     this._pathTemplate = path.join(config.root, config.templates.url)
     this._pathStructure = path.join(config.root, config.structure.url)
     this._pathReference = path.join(config.root, config.reference.url)
@@ -64,6 +65,7 @@ class Manager {
       reference: new events.EventEmitter(0),
     }
 
+    // watch template folder
     try {
       fse.accessSync(this._pathTemplate, fse.F_OK)
       this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
@@ -86,6 +88,31 @@ class Manager {
       })
     } catch (e) {
       console.log('the directory ' + this._pathTemplate + ' does not exist')
+    }
+
+    // watch partial folder
+    try {
+      fse.accessSync(this._pathPartials, fse.F_OK)
+      this._watchPartialsFolder = watch.createMonitor(this._pathPartials, (monitor) => {
+        monitor.on('created', (f, stat) => {
+          this.getKeysFromSelect()
+          this.updateStructureAndTemplates()
+          this.events.template.emit('update')
+        })
+        monitor.on('changed', (f, curr, prev) => {
+          this.getKeysFromSelect()
+          this.updateStructureAndTemplates()
+          this.events.template.emit('update')
+          
+        })
+        monitor.on('removed', (f, stat) => {
+          this.getKeysFromSelect()
+          this.updateStructureAndTemplates()
+          this.events.template.emit('update')
+        })
+      })
+    } catch (e) {
+      console.log('the directory ' + this._pathPartials + ' does not exist')
     }
 
     try {
@@ -143,7 +170,8 @@ class Manager {
           return cmsTemplates.template.getAbeRequestWhereKeysFromTemplates(templatesText)
           .then((whereKeys) => {
             this._whereKeys = whereKeys
-            this._precontribution = cmsTemplates.template.getAbePrecontributionAttributesFromTemplates(templatesText)
+            this._slugs = cmsTemplates.template.getAbeSlugFromTemplates(templatesText)
+            this._precontribution = cmsTemplates.template.getAbePrecontribFromTemplates(templatesText)
             this.updateList()
             resolve()
           },
@@ -178,6 +206,10 @@ class Manager {
     return this._precontribution
   }
 
+  getSlugs() {
+    return this._slugs
+  }
+
   updateReferences(referenceName) {
     var references = cmsReference.reference.getFiles()
     if(referenceName && references[referenceName]) this._references[referenceName] = references[referenceName]
@@ -207,6 +239,20 @@ class Manager {
     this._list = list
 
     return this
+  }
+
+  /**
+   * return true if postUrl is found in the Manager list
+   * @param {String} postUrl The url path of the file
+   */
+  postExist(postUrl){
+    var parentRelativePath = cmsData.fileAttr.delete(postUrl.split('/').join(path.sep).replace(`.${config.files.templates.extension}`, '.json')).replace(/^\//, '')
+    const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
+
+    if (found.length > 0) {
+      return true
+    }
+    return false
   }
 
   /**
@@ -266,8 +312,29 @@ class Manager {
     this._list = cmsData.file.getAllWithKeys(this._whereKeys)
     this._list.sort(coreUtils.sort.predicatBy('date', -1))
     console.log('Manager updated')
-    
-    return this
+  }
+
+  getPage(currentPage = 1, pageSize = 2, sortField = 'date', sortOrder = -1){
+    const total = this._list.length
+    const pageCount = total/pageSize
+    const start = (currentPage - 1)*pageSize
+    const end = currentPage*pageSize
+    let list
+    if(sortField != 'date' || sortOrder != -1){
+      const tmpList = this._list
+      tmpList.sort(coreUtils.sort.predicatBy(sortField, sortOrder))
+      list = tmpList.slice(start, end)
+    } else {
+      list = this._list.slice(start, end)
+    }
+
+    return {
+      'currentPage': currentPage,
+      'pageSize': pageSize,
+      'total': total,
+      'pageCount': pageCount,
+      'list': list
+    }
   }
 
   addHbsTemplate(templateId) {

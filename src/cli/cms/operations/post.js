@@ -20,7 +20,7 @@ export function draft(filePath, json, workflow = 'draft') {
     var date = coreUtils.file.getDate(revisionPath)
     cmsData.metas.add(json, workflow, date)
 
-    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
@@ -57,7 +57,7 @@ export function publish(filePath, json) {
     // revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
     cmsData.metas.add(json, 'publish')
 
-    var template = cmsTemplates.template.getTemplate(json.abe_meta.template)
+    var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
@@ -69,16 +69,17 @@ export function publish(filePath, json) {
       if (!cmsOperations.save.saveHtml(postPath, page.html)) {
         result = {
           success: 0,
-          error: 'cannot html save file'
+          error: 'cannot save html file'
         }
       }else {
         if (!cmsOperations.save.saveJson(revisionPath, json)) {
           result = {
             success: 0,
-            error: 'cannot json save file'
+            error: 'cannot save json file'
           }
         }else {
           Manager.instance.updatePostInList(revisionPath)
+          abeExtend.hooks.instance.trigger('afterPublish', json, filePath)
           result = {
             success: 1,
             json: json
@@ -104,7 +105,7 @@ export function unpublish(filePath) {
         delete json.abe_meta.publish
       }
 
-      var p = draft(
+      var p = cmsOperations.post.draft(
         filePath, 
         json,
         'draft'
@@ -126,17 +127,42 @@ export function unpublish(filePath) {
   return p
 }
 
-export function reject(filePath, json) {
+export function submit(filePath, json, workflow) {
+  var p
+  if (workflow === 'publish') {
+    p = cmsOperations.post.publish(filePath, json)
+  }else {
+    p = cmsOperations.post.draft(filePath, json, workflow)
+  }
+
+  return p
+}
+
+export function reject(filePath, json, workflow) {
   abeExtend.hooks.instance.trigger('beforeReject', filePath)
+
+  var rejectToWorkflow
+  var found = false
+  Array.prototype.forEach.call(config.users.workflow, (flow) => {
+    if (workflow === flow) {
+      found = true
+    }
+    if (!found) {
+      rejectToWorkflow = flow
+    }
+  })
+  if (!found) {
+    rejectToWorkflow = 'draft'
+  }
 
   var p = new Promise((resolve) => {
     if(json.abe_meta.publish != null) {
       delete json.abe_meta.publish
     }
-    var p2 = draft(
+    var p2 = cmsOperations.post.draft(
         filePath, 
         json,
-        'draft'
+        rejectToWorkflow
       )
     p2.then((result) => {
       abeExtend.hooks.instance.trigger('afterReject', result)

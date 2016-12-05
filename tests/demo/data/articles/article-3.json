@@ -1,0 +1,42 @@
+{
+  "abe_meta": {
+    "template": "single",
+    "link": "/articles/article-3.html",
+    "complete": "100",
+    "type": "publish",
+    "date": "2016-11-05T17:05:38.370Z",
+    "latest": {
+      "date": "2016-11-05T17:06:33.645Z",
+      "abeUrl": "/articles/article-3.html"
+    },
+    "status": "publish",
+    "draft": {
+      "date": "2016-11-05T17:05:38.370Z",
+      "abeUrl": "/articles/article-3-abe-d20161105T170538370Z.html",
+      "latest": {
+        "date": "2016-11-05T17:06:33.627Z",
+        "abeUrl": "/articles/article-3-abe-d20161105T170633627Z.html"
+      }
+    },
+    "cleanName": "article-3",
+    "cleanFilename": "/articles",
+    "publish": {
+      "date": "2016-11-05T17:06:33.645Z",
+      "abeUrl": "/articles/article-3.html",
+      "latest": {
+        "date": "2016-11-05T17:06:33.645Z",
+        "abeUrl": "/articles/article-3.html"
+      }
+    }
+  },
+  "article_main_image": "/image/5238561864_86a3ccb678_b-7c9e.jpg",
+  "article_title": "Article 3",
+  "article_date": "20 March 2016",
+  "article_highlight": "another highlight",
+  "category_json": [
+    {
+      "category": "Photography"
+    }
+  ],
+  "article_content": "This is the content of article 3"
+}

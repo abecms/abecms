@@ -1,19 +1,74 @@
 # Abe Plugins
 
-# Add Plugin
+Abe plugin system is based on npm modules : You can install a plugin which has been deployed on npm or resides on github with a proper package.json.
+Furthermore, you can create your own scripts without having to register it in npm (see below).
+
+# Install a plugin
 
 run 
 
 ```shell
-abe add https://github.com/AdFabConnect/some-plugin-name.git
+abe install some-plugin-name
 ```
 
-this will add a new entry inside abe.json file
+this will install the plugin in the node_modules directory and add a new entry inside abe.json file (it will create abe.json if it doesn't exist).
 
 ```json
 {
-  "dependencies": [
-    "https://github.com/AdFabConnect/some-plugin-name"
+  "plugins": [
+    "some-plugin-name"
+  ]
+}
+```
+
+You can install a specific version of the plugin this way:
+
+```shell
+abe install some-plugin-name@1.0.0
+```
+
+this will install the plugin in the node_modules directory. The entry in abe.json:
+
+```json
+{
+  "plugins": [
+    "some-plugin-name@1.0.0"
+  ]
+}
+```
+
+You can also install a module hosted on github. This is particularly useful for modules you don't want to make public and don't have a private npm repo.
+The syntax is abe install user_or_org/repo#branch 
+user_or_org being your user or organization github id, repo being the repo and branch being the branch or the tag
+
+run 
+
+```shell
+abe install user_or_org/myrepo
+```
+
+this will install the plugin in the node_modules directory and add a new entry inside abe.json file (it will create abe.json if it doesn't exist).
+
+```json
+{
+  "plugins": [
+    "user_or_org/myrepo"
+  ]
+}
+```
+
+You can install a specific version of the plugin this way:
+
+```shell
+abe install user_or_org/myrepo#1.0.0
+```
+
+The entry in abe.json:
+
+```json
+{
+  "plugins": [
+    "user_or_org/myrepo#1.0.0"
   ]
 }
 ```
@@ -26,22 +81,19 @@ run
 abe install
 ```
 
-this will fetch all dependencies inside abe.json and clone + npm install package
+this will fetch all plugins listed in abe.json and npm install the plugins
 
-# Dev plugins
+# Use custom scripts
 
-> How to create plugins
-
-Inside website (create plugins folders) then an other (you choose the folder name)
-
-You can then add hooks or template override
+Custom scripts are created under "scripts" directory. Follow the same structure as for a plugin. 
+Example for a module "abe-hint" under scripts:
 
 Example from abe-hint plugins
 
 ```
 website/
-  |_ plugins/
-    |_ hint/
+  |_ scripts/
+    |_ abe-hint/
       |_ hooks/
       |  - hooks.js
       |_ partials/
@@ -52,8 +104,35 @@ website/
         - my_route.js ...
 ```
 
-Plugins examples at [https://github.com/AdFabConnect/abe-plugins](https://github.com/AdFabConnect/abe-plugins)
+This way, you'll be able to create custom scripts which you don't want to share between your different Abe projects. You can name your module as you want.
 
+# Dev plugins
+
+> How to create plugins
+
+Inside website (under scripts folder) create a directory with the name of your choice (this name will be the name of your plugin)
+
+You can then add hooks or template override
+
+Example from abe-hint plugins
+
+```
+website/
+  |_ node_modules/
+    |_ abe-hint/
+      |_ hooks/
+      |  - hooks.js
+      |_ partials/
+      | - some_partials.html ...
+      | - some ...
+      | - ...
+      |_ routes/
+        - my_route.js ...
+```
+
+Plugin examples at [https://github.com/AdFabConnect/abe-plugins](https://github.com/AdFabConnect/abe-plugins)
+
+Once you'll be satisfied with the way your module works, you'll then be able to create a regular npm module and install it on your project with the command abe install my_module
 
 ## frontend javascript
 
@@ -65,7 +144,7 @@ for example :
 
 ```
 website/
-  |_ plugins/
+  |_ node_modules/
     |_ my-plugin/
       |_ partials/
         - styles.html
@@ -92,7 +171,7 @@ abe.json.saving(function (e) {
 
 ```
 website/
-  |_ plugins/
+  |_ node_modules/
     |_ my-plugin/
       |_ routes/
         - my_route.js ...

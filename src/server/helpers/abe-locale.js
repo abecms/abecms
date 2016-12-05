@@ -16,4 +16,13 @@ Array.prototype.forEach.call(files, (file) => {
   result = extend(true, result, json)
 })
 
+if(config.siteLocaleFolder != null){
+  var pathToSiteLocale = path.join(config.root, config.siteLocaleFolder, config.intlData.locales)
+  var files = fse.readdirSync(pathToSiteLocale)
+  Array.prototype.forEach.call(files, (file) => {
+	  var json = fse.readJsonSync(pathToSiteLocale + '/' + file)
+	  result = extend(true, result, json)
+  })
+}
+
 export default result

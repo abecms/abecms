@@ -5,8 +5,10 @@ import {
   config,
   coreUtils,
   cmsData,
-  abeExtend
+  abeExtend,
+  cmsTemplates
 } from '../../'
+import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 
 export function getTemplatesAndPartials(templatesPath) {
   var p = new Promise((resolve) => {
@@ -44,7 +46,7 @@ export function addOrder(text) {
 
 export function getAbeImport(text) {
   var partials = []
-  let listReg = /({{abe.*?type=[\'|\"]import.*?}})/g
+  let listReg = /({{abe.*type=[\'|\"]import.*}})/g
   var match
   while (match = listReg.exec(text)) {
     partials.push(match[0])
@@ -53,8 +55,8 @@ export function getAbeImport(text) {
   return partials
 }
 
-export function includePartials(text) {
-  var abeImports = getAbeImport(text)
+export function includePartials(text, json) {
+  var abeImports = cmsTemplates.template.getAbeImport(text)
 
   Array.prototype.forEach.call(abeImports, (abeImport) => {
     var obj = cmsData.attributes.getAll(abeImport, {})
@@ -62,8 +64,20 @@ export function includePartials(text) {
     var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
+
+    if (file.indexOf('{{') > -1) {
+      var keys = sourceAttr.getKeys(file)
+      Array.prototype.forEach.call(keys, (key) => {
+        try {
+          var toEval = `${key.replace(/(\[|\.|\])/g, '\\$1')}`
+          file = file.replace(new RegExp(`\{\{${toEval}\}\}`, 'g'), eval(`json.${key}`))
+        }catch(e) {
+        }
+      })
+    }
+    
     if(coreUtils.file.exist(file)) {
-      partial = includePartials(fse.readFileSync(file, 'utf8'))
+      partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'), json)
     }
     text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
   })
@@ -71,7 +85,7 @@ export function includePartials(text) {
   return text
 }
 
-function translate(text) {
+export function translate(text) {
   var importReg = /({{abe.*type=[\'|\"]translate.*}})/g
 
   var matches = text.match(importReg)
@@ -113,7 +127,7 @@ function translate(text) {
   return text
 }
 
-export function getTemplate (file) {
+export function getTemplate (file, json = {}) {
   var text = ''
 
   // HOOKS beforeGetTemplate
@@ -127,9 +141,9 @@ export function getTemplate (file) {
   file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
   if(coreUtils.file.exist(file)) {
     text = fse.readFileSync(file, 'utf8')
-    text = includePartials(text)
-    text = translate(text)
-    text = addOrder(text)
+    text = cmsTemplates.template.includePartials(text, json)
+    text = cmsTemplates.template.translate(text)
+    text = cmsTemplates.template.addOrder(text)
   }else {
     text = `[ ERROR ] template ${file + '.' + config.files.templates.extension} doesn't exist anymore`
   }
@@ -187,13 +201,13 @@ export function recurseWhereVariables (where) {
   var arRight
   switch(where.operator) {
   case 'AND':
-    arLeft = recurseWhereVariables(where.left)
-    arRight = recurseWhereVariables(where.right)
+    arLeft = cmsTemplates.template.recurseWhereVariables(where.left)
+    arRight = cmsTemplates.template.recurseWhereVariables(where.right)
     return arLeft.concat(arRight)
     break
   case 'OR':
-    arLeft = recurseWhereVariables(where.left)
-    arRight = recurseWhereVariables(where.right)
+    arLeft = cmsTemplates.template.recurseWhereVariables(where.left)
+    arRight = cmsTemplates.template.recurseWhereVariables(where.right)
     return arLeft.concat(arRight)
     break
   default:
@@ -204,12 +218,12 @@ export function recurseWhereVariables (where) {
   return ar
 }
 
-export function getTemplatesTexts(templatesList) {
+export function getTemplatesTexts(templatesList, json) {
   var templates = []
   var p = new Promise((resolve) => {
     Array.prototype.forEach.call(templatesList, (file) => {
       var template = fse.readFileSync(file, 'utf8')
-      template = includePartials(template)
+      template = cmsTemplates.template.includePartials(template, json)
       var name = file.replace(path.join(config.root, config.templates.url, path.sep), '').replace(`.${config.files.templates.extension}`, '')
       templates.push({
         name: name,
@@ -238,7 +252,7 @@ export function execRequestColumns(tpl) {
         })
       }
       if(typeof request.where !== 'undefined' && request.where !== null) {
-        ar = ar.concat(recurseWhereVariables(request.where))
+        ar = ar.concat(cmsTemplates.template.recurseWhereVariables(request.where))
       }
     }
   })
@@ -250,7 +264,7 @@ export function getAbeRequestWhereKeysFromTemplates(templatesList) {
   var whereKeys = []
   var p = new Promise((resolve) => {
     Array.prototype.forEach.call(templatesList, (file) => {
-      whereKeys = whereKeys.concat(execRequestColumns(file.template))
+      whereKeys = whereKeys.concat(cmsTemplates.template.execRequestColumns(file.template))
     })
     whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
     resolve(whereKeys)
@@ -259,33 +273,55 @@ export function getAbeRequestWhereKeysFromTemplates(templatesList) {
   return p
 }
 
-export function getAbePrecontributionAttributesFromTemplates(templatesList) {
-  var ar = {}
+export function setAbeSlugDefaultValueIfDoesntExist(templateText) {
+  var matches = cmsData.regex.getTagAbeWithType(templateText, 'slug')
+  if(matches == null || matches[0] == null) {
+    templateText = `{{abe type="slug" source="{{name}}"}}\n${templateText}`
+  }
+
+  return templateText
+}
+
+export function getAbeSlugFromTemplates(templatesList) {
+  var slugs = {}
+  Array.prototype.forEach.call(templatesList, (file) => {
+    var templateText = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(file.template)
+    var matchesSlug = cmsData.regex.getTagAbeWithType(templateText, 'slug')
+    var obj = cmsData.attributes.getAll(matchesSlug[0], {})
+    slugs[file.name] = obj.sourceString
+  })
+  return slugs
+}
+
+export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
+  var matches = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
+  if(matches == null || matches[0] == null) {
+    templateText = `{{abe type='text' key='name' desc='Name' required="true" tab="slug" visible="false"}}\n${templateText}`
+  }
+
+  return templateText
+}
+
+export function getAbePrecontribFromTemplates(templatesList) {
   var fields = []
   var precontributionTemplate = ''
   Array.prototype.forEach.call(templatesList, (file) => {
-    var matches = cmsData.regex.getTagAbePrecontribution(file.template)
-    Array.prototype.forEach.call(matches, (match) => {
-      var obj = cmsData.attributes.getAll(match[0], {})
-      if (ar[obj.key] == null) {
-        ar[obj.key] = obj
-        ar[obj.key].precontribTemplates = []
-      }
-      ar[obj.key].precontribTemplates.push(file.name)
-      ar[obj.key].match = match[0]
+    var slugMatch = cmsData.regex.getTagAbeWithType(file.template, 'slug')
+    var templateText = file.template
+    if(slugMatch == null || slugMatch[0] == null) {
+      templateText = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(file.template)
+    }
+
+    var matchesTabSlug = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
+    Array.prototype.forEach.call(matchesTabSlug, (match) => {
+      fields.push(cmsData.attributes.getAll(match, {}))
+      var tag = match.replace(/\}\}$/, ' precontribTemplate="' + file.name + '"}}')
+      tag = tag.replace(/(key=[\'|\"])(.*?)([\'|\"])/, '$1/' + file.name + '/$2$3')
+      precontributionTemplate += `${tag}\n`
     })
   })
 
-  Array.prototype.forEach.call(Object.keys(ar), (key) => {
-    fields.push(ar[key])
-    precontributionTemplate += ar[key].match.replace(/\}\}$/, ' precontribTemplates="' + ar[key].precontribTemplates.join(',') + '"}}') + '\n'
-  })
-
-  if (precontributionTemplate === '') { // should always have a filename at least
-    precontributionTemplate = '{{abe type=\'text\' key=\'abe_filename\' desc=\'Name\' required="true" precontrib="true" slug="true" slugType="name" visible="false"}}'
-    var obj = cmsData.attributes.getAll(precontributionTemplate, {})
-    fields.push(obj)
-  }
+  precontributionTemplate = cmsTemplates.template.addOrder(precontributionTemplate)
 
   return {
     fields: fields,

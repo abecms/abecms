@@ -1,0 +1,42 @@
+{
+  "abe_meta": {
+    "template": "single",
+    "link": "/articles/article-2.html",
+    "complete": "100",
+    "type": "publish",
+    "date": "2016-11-05T16:59:44.784Z",
+    "latest": {
+      "date": "2016-11-05T17:03:17.725Z",
+      "abeUrl": "/articles/article-2.html"
+    },
+    "status": "publish",
+    "draft": {
+      "date": "2016-11-05T16:59:44.784Z",
+      "abeUrl": "/articles/article-2-abe-d20161105T165944784Z.html",
+      "latest": {
+        "date": "2016-11-05T17:03:17.693Z",
+        "abeUrl": "/articles/article-2-abe-d20161105T170317693Z.html"
+      }
+    },
+    "cleanName": "article-2",
+    "cleanFilename": "/articles",
+    "publish": {
+      "date": "2016-11-05T17:03:17.725Z",
+      "abeUrl": "/articles/article-2.html",
+      "latest": {
+        "date": "2016-11-05T17:03:17.725Z",
+        "abeUrl": "/articles/article-2.html"
+      }
+    }
+  },
+  "article_main_image": "/image/5237956755_14ba1d3880_b-8d68.jpg",
+  "article_title": "This is a second title",
+  "article_date": "4 April 2016",
+  "article_highlight": "This is another highlight",
+  "category_json": [
+    {
+      "category": "Abe"
+    }
+  ],
+  "article_content": "This is another article.<div>Enjoy this photograph from Moyan Brenn</div>"
+}

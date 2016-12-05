@@ -1,0 +1,159 @@
+{
+  "abe_meta": {
+    "template": "index",
+    "link": "/index.html",
+    "complete": "100",
+    "type": "draft",
+    "date": "2016-11-05T16:32:09.098Z",
+    "latest": {
+      "date": "2016-11-22T11:34:20.666Z",
+      "abeUrl": "/index.html"
+    },
+    "status": "publish",
+    "draft": {
+      "date": "2016-11-05T16:32:09.098Z",
+      "abeUrl": "/index-abe-d20161105T163209098Z.html",
+      "latest": {
+        "date": "2016-11-05T16:32:09.098Z",
+        "abeUrl": "/index-abe-d20161105T163209098Z.html"
+      }
+    },
+    "cleanName": "index",
+    "cleanFilename": "",
+    "publish": {
+      "latest": {
+        "date": "2016-11-22T11:34:20.666Z",
+        "abeUrl": "/index.html"
+      },
+      "date": "2016-11-22T11:34:20.666Z",
+      "abeUrl": "/index.html"
+    }
+  },
+  "articles": [
+    {
+      "article_title": "Article 3",
+      "article_main_image": "/image/5238561864_86a3ccb678_b-7c9e.jpg",
+      "article_date": "20 March 2016",
+      "category_json": [
+        {
+          "category": "Photography"
+        }
+      ],
+      "abe_meta": {
+        "template": "single",
+        "link": "/articles/article-3.html",
+        "complete": "100",
+        "type": "publish",
+        "date": "2016-11-05T17:05:38.370Z",
+        "latest": {
+          "date": "2016-11-05T17:06:33.645Z",
+          "abeUrl": "/articles/article-3.html"
+        },
+        "status": "publish",
+        "draft": {
+          "date": "2016-11-05T17:05:38.370Z",
+          "abeUrl": "/articles/article-3-abe-d20161105T170538370Z.html",
+          "latest": {
+            "date": "2016-11-05T17:06:33.627Z",
+            "abeUrl": "/articles/article-3-abe-d20161105T170633627Z.html"
+          }
+        },
+        "cleanName": "article-3",
+        "cleanFilename": "/articles",
+        "publish": {
+          "date": "2016-11-05T17:06:33.645Z",
+          "abeUrl": "/articles/article-3.html",
+          "latest": {
+            "date": "2016-11-05T17:06:33.645Z",
+            "abeUrl": "/articles/article-3.html"
+          }
+        }
+      }
+    },
+    {
+      "article_title": "This is a second title",
+      "article_main_image": "/image/5237956755_14ba1d3880_b-8d68.jpg",
+      "article_date": "4 April 2016",
+      "category_json": [
+        {
+          "category": "Abe"
+        }
+      ],
+      "abe_meta": {
+        "template": "single",
+        "link": "/articles/article-2.html",
+        "complete": "100",
+        "type": "publish",
+        "date": "2016-11-05T16:59:44.784Z",
+        "latest": {
+          "date": "2016-11-05T17:03:17.725Z",
+          "abeUrl": "/articles/article-2.html"
+        },
+        "status": "publish",
+        "draft": {
+          "date": "2016-11-05T16:59:44.784Z",
+          "abeUrl": "/articles/article-2-abe-d20161105T165944784Z.html",
+          "latest": {
+            "date": "2016-11-05T17:03:17.693Z",
+            "abeUrl": "/articles/article-2-abe-d20161105T170317693Z.html"
+          }
+        },
+        "cleanName": "article-2",
+        "cleanFilename": "/articles",
+        "publish": {
+          "date": "2016-11-05T17:03:17.725Z",
+          "abeUrl": "/articles/article-2.html",
+          "latest": {
+            "date": "2016-11-05T17:03:17.725Z",
+            "abeUrl": "/articles/article-2.html"
+          }
+        }
+      }
+    },
+    {
+      "article_title": "This is a title",
+      "article_main_image": "/image/header_australian_winter-aaaa_321x427-af09.jpg",
+      "article_date": "March 20 2016",
+      "category_json": [
+        {
+          "category": "Innovation"
+        }
+      ],
+      "abe_meta": {
+        "template": "single",
+        "link": "/articles/article-1.html",
+        "complete": "100",
+        "type": "publish",
+        "date": "2016-11-05T16:57:46.211Z",
+        "latest": {
+          "date": "2016-11-05T16:59:11.412Z",
+          "abeUrl": "/articles/article-1.html"
+        },
+        "status": "publish",
+        "draft": {
+          "date": "2016-11-05T16:57:46.211Z",
+          "abeUrl": "/articles/article-1-abe-d20161105T165746211Z.html",
+          "latest": {
+            "date": "2016-11-05T16:59:11.285Z",
+            "abeUrl": "/articles/article-1-abe-d20161105T165911285Z.html"
+          }
+        },
+        "cleanName": "article-1",
+        "cleanFilename": "/articles",
+        "publish": {
+          "date": "2016-11-05T16:59:11.412Z",
+          "abeUrl": "/articles/article-1.html",
+          "latest": {
+            "date": "2016-11-05T16:59:11.412Z",
+            "abeUrl": "/articles/article-1.html"
+          }
+        }
+      }
+    }
+  ],
+  "name": "",
+  "oldFilePath": "/index.html",
+  "selectTemplate": [
+    "index"
+  ]
+}

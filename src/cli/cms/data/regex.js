@@ -70,20 +70,43 @@ export function getTagAbeTypeRequest(text) {
 }
 
 /**
- * Test if a string contains string key from {{#each}} block statement
- * @param  {String}  str string to test
- * @return {Boolean} true = this is a block content
  */
-export function getTagAbePrecontribution(text) {
-  let listReg = /({{abe.*precontrib=[\'|\"].*}})/g
+export function getTagAbeWithType(text, type) {
+  var listReg = new RegExp(`({{abe.*type=[\\'|\\"]${type}.*}})`, 'g')
   var matches = []
   var match
   while (match = listReg.exec(text)) {
-    matches.push(match)
+    matches.push(match[0])
+  }
+  return matches
+}
+
+/**
+ */
+export function getTagAbeWithTab(text, tab) {
+  var listReg = new RegExp(`({{abe.*tab=[\\'|\\"]${tab}.*}})`, 'g')
+  var matches = []
+  var match
+  while (match = listReg.exec(text)) {
+    matches.push(match[0])
   }
   return matches
 }
 
 export function validDataAbe(str){
   return str.replace(/\[([0-9]*)\]/g, '$1')
+}
+
+export function getWorkflowFromOperationsUrl(str){
+  let regUrl = /\/abe\/operations\/(.*?)\/(.*?)\//
+  var workflow = 'draft'
+  var match = str.match(regUrl)
+  if (match != null && match[2] != null) {
+    workflow = match[2]
+  }
+  var postUrl = str.replace(regUrl, '')
+  return {
+    workflow: workflow,
+    postUrl: postUrl
+  }
 }

@@ -16,9 +16,9 @@ describe('Request', function() {
         Manager.instance.updateList()
 
         this.fixture = {
-          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8'),
-          jsonArticle: fse.readJsonSync(__dirname + '/fixtures/data/article-1.json'),
-          jsonHomepage: fse.readJsonSync(__dirname + '/fixtures/data/homepage-1.json')
+          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8'),
+          jsonArticle: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'article-1.json')),
+          jsonHomepage: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'homepage-1.json'))
         }
         done()
         
@@ -43,100 +43,203 @@ describe('Request', function() {
   });
 
   /**
+   * cmsData.sql.keepOnlyPublishedPost
+   * 
+   */
+  it('cmsData.sql.keepOnlyPublishedPost()', function() {
+    var res = cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList())
+    chai.expect(res).to.have.length(2);
+  });
+
+  /**
    * cmsData.sql.executeFromClause
    * 
    */
   it('cmsData.sql.executeFromClause()', function() {
-    var res = cmsData.sql.executeFromClause(['/'], ['/'])
+    var res = cmsData.sql.executeFromClause(cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()), ['/'], ['/'])
     chai.expect(res).to.have.length(2);
   });
 
   it('cmsData.sql.executeWhereClause() =', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`article`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns, {}
+    )
     chai.expect(res, '`abe_meta.template`=`article`').to.have.length(1);
     chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
 
     request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`{{abe_meta.template}}`', this.fixture.jsonHomepage)
-    res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
     chai.expect(res, '`abe_meta.template`=`{{abe_meta.template}}`').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
 
     request = cmsData.sql.handleSqlRequest('select title from ./ where `{{abe_meta.template}}`=`{{abe_meta.template}}`', this.fixture.jsonHomepage)
-    res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
     chai.expect(res, '`{{abe_meta.template}}`=`{{abe_meta.template}}`').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() !=', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template`!=`homepage`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns, {}
+    )
     chai.expect(res, '`abe_meta.template`!=`homepage`').to.have.length(1);
     chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() >', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `priority`>`1`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`priority`>`1`').to.have.length(1);
     chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() >=', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `priority`>=`1`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`priority`>=`1`').to.have.length(2);
   });
   it('cmsData.sql.executeWhereClause() <', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `priority`<`1`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`priority`<`1`').to.have.length(0);
   });
   it('cmsData.sql.executeWhereClause() <=', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `priority`<=`1`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, ' `priority`<=`1`').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() LIKE', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` LIKE `home`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`abe_meta.template` LIKE `home`').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() NOT LIKE', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT LIKE `home`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`abe_meta.template` NOT LIKE `home`').to.have.length(1);
     chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() AND', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`homepage` AND title=`homepage`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`abe_meta.template`=`homepage` AND title=`homepage`').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() OR', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template`=`homepage` OR `abe_meta.template`=`article`', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`abe_meta.template`=`homepage` OR `abe_meta.template`=`article`').to.have.length(2);
   });
   it('cmsData.sql.executeWhereClause() IN', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` IN (`homepage`,`test`)', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`abe_meta.template` IN (`homepage`,`test`)').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
 
     request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` IN (`{{articles}}`)', this.fixture.jsonHomepage)
-    res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
     chai.expect(res, '`abe_meta.template` IN (`{{articles}}`').to.have.length(1);
     chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() NOT IN', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT IN (`homepage`,`test`)', {})
-    var res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, {})
+    var res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      {}
+    )
     chai.expect(res, '`abe_meta.template` NOT IN (`homepage`,`test`)').to.have.length(1);
     chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
 
     request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT IN (`{{articles}}`)', this.fixture.jsonHomepage)
-    res = cmsData.sql.executeWhereClause(Manager.instance.getList(), request.where, request.limit, request.columns, this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
     chai.expect(res, '`abe_meta.template` NOT IN (`{{articles}}`)').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });

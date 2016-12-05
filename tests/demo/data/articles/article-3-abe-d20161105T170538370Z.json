@@ -1,0 +1,22 @@
+{
+  "abe_meta": {
+    "template": "single",
+    "link": "/articles/article-3.html",
+    "complete": "100",
+    "type": "draft",
+    "date": "2016-11-05T17:05:38.370Z",
+    "latest": {
+      "date": "2016-11-05T17:05:38.370Z",
+      "abeUrl": "/articles/article-3-abe-d20161105T170538370Z.html"
+    },
+    "status": "draft",
+    "draft": {
+      "date": "2016-11-05T17:05:38.370Z",
+      "abeUrl": "/articles/article-3-abe-d20161105T170538370Z.html",
+      "latest": {
+        "date": "2016-11-05T17:05:38.370Z",
+        "abeUrl": "/articles/article-3-abe-d20161105T170538370Z.html"
+      }
+    }
+  }
+}

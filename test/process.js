@@ -17,20 +17,11 @@ describe('Process', function() {
       }.bind(this))
   });
 
-  /**
-   * abeExtend.plugins.instance.getProcess
-   * 
-   */
   it('abeExtend.plugins.instance.getProcess()', function() {
     var file = abeExtend.plugins.instance.getProcess('test')
     chai.expect(file).to.not.be.null;
   });
 
-
-  /**
-   * abeExtend.process
-   * 
-   */
   it('abeExtend.process', function() {
     var res = abeExtend.process('test', [])
     // chai.assert.equal(res, 'test', 'Hook test failed !')

@@ -5,54 +5,88 @@ import {
   ,postDuplicate
   ,postUpdate
   ,getListUrl
+  ,getListWorkflow
+  ,postListUrlSave
   ,getListHooks
   ,getMain
   ,getPage
   ,postPage
-  ,postPublish
   ,getGeneratePost
-  ,postReject
-  ,postDraft
+  ,operations
   ,getSaveConfig
-  ,getUnpublish
-  ,getDelete
   ,postUpload
   ,postSqlRequest
   ,postReference
   ,getReference
   ,postStructure
+  ,getPaginate
+  ,getThumbs
+  ,getImage
+  ,users
 } from '../routes'
 
 import {
   abeExtend,
   Handlebars,
+  config
 } from '../../cli'
 
 var router = express.Router()
 abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 abeExtend.hooks.instance.trigger('beforeAddRoute', router)
 
+router.get('/abe/users/forgot', users.getForgot)
+router.get('/abe/users/list', users.getList)
+router.get('/abe/users/login', users.getLogin)
+router.get('/abe/users/logout', users.getLogout)
+router.get('/abe/users/reset', users.getReset)
+router.post('/abe/users/activate', users.postActivate)
+router.post('/abe/users/add', users.postAdd)
+router.post('/abe/users/deactivate', users.postDeactivate)
+router.post('/abe/users/login', users.postLogin)
+router.post('/abe/users/remove', users.postRemove)
+router.post('/abe/users/reset', users.postReset)
+router.post('/abe/users/update', users.postUpdate)
+
+router.get('/abe/paginate', getPaginate)
 router.post('/abe/create*', postCreate)
 router.post('/abe/duplicate*', postDuplicate)
 router.post('/abe/update*', postUpdate)
 router.post('/abe/sql-request*', postSqlRequest)
 router.post('/abe/page/*', postPage)
 router.get('/abe/page/*', getPage)
-router.post('/abe/publish*', postPublish)
 router.get('/abe/generate-posts', getGeneratePost)
-router.post('/abe/reject*', postReject)
-router.post('/abe/draft*', postDraft)
 router.get('/abe/save-config', getSaveConfig)
-router.get('/abe/unpublish*', getUnpublish)
-router.get('/abe/delete*', getDelete)
 router.get('/abe/reference/*', getReference)
+router.get('/abe/thumbs/*', getThumbs)
+router.get('/abe/image/*', getImage)
 router.post('/abe/upload/*', postUpload)
 router.post('/abe/reference/*', postReference)
 router.post('/abe/structure/*', postStructure)
+router.get('/abe/editor*', getMain)
+router.post('/abe/list-url/save*', postListUrlSave)
+
+router.get('/abe/list-workflow*', function (req, res, next) {
+  getListWorkflow(router, req, res, next) 
+})
 router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
 })
 router.get('/abe/list-hooks*', getListHooks)
+
+var workflows = config.users.workflow
+Array.prototype.forEach.call(workflows, (workflow) => {
+  router.get(`/abe/operations/delete/${workflow}*`, operations.getDelete)
+
+  if (workflow != 'draft' && workflow != 'publish') {
+    router.post(`/abe/operations/reject/${workflow}*`, operations.postReject)
+  }else if (workflow == 'publish') {
+    router.get('/abe/operations/unpublish*', operations.getUnpublish)
+  }
+
+  router.post(`/abe/operations/submit/${workflow}*`, operations.postSubmit)
+  router.post(`/abe/operations/edit/${workflow}*`, operations.postEdit)
+})
 
 var routes = abeExtend.plugins.instance.getRoutes()
 Array.prototype.forEach.call(routes, (route) => {
@@ -91,7 +125,6 @@ Array.prototype.forEach.call(routes, (route) => {
     })
   }
 })
-router.get('/abe*', getMain)
 // router.get('/abe*', getMain)
 
 abeExtend.hooks.instance.trigger('afterAddRoute', router)

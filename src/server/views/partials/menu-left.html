@@ -18,6 +18,13 @@
   <li class="list-group-item pointer" data-config="true" data-manager-show="structure-folders">
     edit structure
   </li>
+  {{#if @root.config.users.enable}}
+    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+      <li class="list-group-item pointer">
+        <a href="/abe/users/list">Users</a> 
+      </li>
+    {{/isAuthorized}}
+  {{/if}}
   {{abeImport 'menu-left-addons' manager.config this}}
 </ul>
 {{/if}}
@@ -33,4 +40,8 @@
     </li>
   </ul>
   {{/if}}
+{{/if}}
+
+{{#if @root.config.users.enable}}
+  <a href="/abe/users/logout" class="btn btn-danger btn-logout">logout</a>
 {{/if}}

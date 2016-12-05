@@ -61,10 +61,29 @@ export default class EditorFiles {
       }
       var input = parentTarget.querySelector('input.image-input')
       input.value = resp.filePath
+      if(resp.thumbs){
+        var parent = input.parentNode
+        var id = input.id
+        Array.prototype.forEach.call(resp.thumbs, (thumb) => {
+          var thumdID = `${id}_${thumb.size}`
+          var inputThumbs = parent.querySelector(`[data-id="${thumdID}"]`)
+          if(inputThumbs != null) inputThumbs.value = thumb.name
+          else {
+            var inputThumbs = document.createElement('input')
+            inputThumbs.classList.add('form-control')
+            inputThumbs.classList.add('form-abe')
+            inputThumbs.classList.add('image-input')
+            inputThumbs.id = thumdID
+            inputThumbs.setAttribute('data-id', thumdID)
+            inputThumbs.value = thumb.name
+            inputThumbs.type = 'hidden'
+          }
+          parent.appendChild(inputThumbs)
+        })
+      }
       input.focus()
       input.blur()
-      // window.inpt = input
-
+      
       var nodes = IframeNode('#page-template', '[data-abe-' + input.id + ']')
       Array.prototype.forEach.call(nodes, (node) => {
         EditorUtils.formToHtml(node, input)

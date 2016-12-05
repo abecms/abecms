@@ -1,3 +1,4 @@
 src/server/public/libs
 src/server/public/scripts/admin-compiled.js
 src/server/public/scripts/template-engine-compiled.js
+src/server/public/scripts/user-login-compiled.js

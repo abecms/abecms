@@ -1,5 +1,24 @@
 {
+  "plugins": [
+    "test@1.0.0",
+    "testnew"
+  ],
   "upload": {
     "image": "unitimage"
+  },
+  "siteLocaleFolder": "locales",
+  "users": {
+    "enable": false,
+    "commonPassword": [
+      "test"
+    ],
+    "routes": {
+      "admin": [
+        "/abe.*"
+      ],
+      "review": [
+        "/abe/test.*"
+      ]
+    }
   }
 }

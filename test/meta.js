@@ -12,10 +12,13 @@ describe('Meta', function() {
   before( function(done) {
     Manager.instance.init()
       .then(function () {
-
+try{
         this.fixture = {
-          tag: fse.readFileSync(__dirname + '/fixtures/templates/article.html', 'utf8')
+          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8')
         }
+}catch(e){
+  console.log("err", e)
+}
         done()
         
       }.bind(this))

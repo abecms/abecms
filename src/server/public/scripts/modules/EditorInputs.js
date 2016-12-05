@@ -12,8 +12,14 @@ import on from 'on'
 export default class EditorInputs {
   constructor() {
     this._json = Json.instance
-    this.color = new Color(document.querySelector('.wysiwyg-popup.color'))
-    this.link = new Link(document.querySelector('.wysiwyg-popup.link'))
+    var colorWysiwyg = document.querySelector('.wysiwyg-popup.color')
+    if (colorWysiwyg != null) {
+      this.color = new Color(colorWysiwyg)
+    }
+    var linkWysiwyg = document.querySelector('.wysiwyg-popup.link')
+    if (linkWysiwyg != null) {
+      this.link = new Link(linkWysiwyg)
+    }
     this.onBlur = on(this)
     this.onReload = on(this)
     this.onDisableInput = on(this)
@@ -148,7 +154,7 @@ export default class EditorInputs {
     var count = optionsChecked.length
     var attr = EditorUtils.getAttr(target)
 
-    if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
+    if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '' && !isNaN(maxLength)) {
       var lastValues
       if(count > maxLength) {
         lastValues = JSON.parse(target.getAttribute('last-values'))

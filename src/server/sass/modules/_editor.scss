@@ -10,9 +10,23 @@
   cursor: pointer;
 }
 
+.breadcrumb>li {
+  word-break: break-all;
+}
+
+#slug {
+  .autocomplete-result .glyphicon.glyphicon-remove {
+    display: inline-block;
+  }
+}
+
 .manager-wrapper {
   .form-create {
     padding: 0px 20px;
+
+    .autocomplete-result .glyphicon.glyphicon-remove {
+      display: inline-block;
+    }
 
     [data-precontrib-templates] {
       display: none;
@@ -24,7 +38,39 @@
 
     select,
     input {
-      height: 30px;
+      min-height: 30px;
+    }
+  }
+}
+
+.form-create {
+  .breadcrumb{
+    font-size: 12px;
+    margin-top: 20px;
+    >li{
+      &+li{
+        &:before{
+          display: inline-block;
+          padding: 0 1px;
+          width: 6px;
+        }
+        span{
+        }
+      }
+    }
+  }
+  [date-abe-create="true"]{
+    margin-top: 20px;
+  }
+}
+
+.tab-pane{
+  &#slug{
+    .btn-primary{
+      width: 100%;
+      + .btn-primary {
+        margin-top: 20px;
+      }
     }
   }
 }

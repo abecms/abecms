@@ -1,4 +1,4 @@
-/*global document, window */
+/*global document, window, json */
 
 import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'

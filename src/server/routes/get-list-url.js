@@ -4,6 +4,7 @@ import Handlebars from 'handlebars'
 import {
   abeExtend
   ,coreUtils
+  ,config
 } from '../../cli'
 
 var route = function(router, req, res, next) {
@@ -16,7 +17,7 @@ var route = function(router, req, res, next) {
     urls.push({
       url: route.route.path,
       method: Object.keys(route.route.methods)[0].toUpperCase(),
-      regex: '^\\' + route.route.path.replace(/\*$/, '') + '.*?'
+      regex: route.route.path.replace(/\*$/, '') + '.*'
     })
   })
 
@@ -25,15 +26,25 @@ var route = function(router, req, res, next) {
     html = fse.readFileSync(page, 'utf8')
   }
 
+  var workflowUrl = {}
+  Array.prototype.forEach.call(config.users.workflow, (flow) => {
+    workflowUrl[flow] = [
+      {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow},
+      {url: `/abe/operations/delete/${flow}`, action: 'delete', workflow: flow}
+    ]
+  })
   var template = Handlebars.compile(html, {noEscape: true})
   var tmp = template({
-    urls: urls
+    urls: urls,
+    user: res.user,
+    config: JSON.stringify(config),
+    roles: config.users.roles,
+    workflow: config.users.workflow,
+    workflowUrl: workflowUrl
   })
   
+  res.cookie('csrf-token', res.locals.csrfToken)
   return res.send(tmp)
-
-  res.set('Content-Type', 'text/html')
-  res.send('working !')
 }
 
 export default route

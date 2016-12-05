@@ -22,9 +22,9 @@
           <th>File path</th>
           <th align="center">Template</th>
           <th align="center" class="daterow">date</th>
-          <th align="center">draft</th>
-          {{abeImport 'right-list-head' manager.config this}}
-          <th align="center">published</th>
+          {{#each @root.config.users.workflow}}
+          <th align="center">{{this}}</th>
+          {{/each}}
           <th align="center">actions</th>
         </tr>
       </thead>

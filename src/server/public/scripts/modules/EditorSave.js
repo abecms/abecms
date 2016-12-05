@@ -1,4 +1,4 @@
-/*global document, CONFIG, window, json, alert, location */
+/*global document, window, json, alert */
 
 import {IframeNode} from '../utils/iframe'
 import EditorUtils from './EditorUtils'
@@ -111,8 +111,9 @@ export default class EditorSave {
     this.serializeForm()
     target.classList.add('loading')
     target.setAttribute('disabled', 'disabled')
+    var url = target.getAttribute('data-url')
 
-    this._json.save(this._saveType)
+    this._json.save(this._saveType, url)
         .then((result) => {
           target.classList.add('done')
           // this._populateFromJson(this._json.data)
@@ -121,8 +122,8 @@ export default class EditorSave {
           target.classList.remove('done')
           target.removeAttribute('disabled')
 
-          this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
           if(result.success === 1) {
+            this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
             window.json = result.json
           }
           var formWrapper = document.querySelector('#abeForm')
@@ -152,7 +153,8 @@ export default class EditorSave {
     if (this._saveType !== 'draft' && this._saveType !== 'reject') {
       this._abeFormRequired()
     }else {
-      this._abeFormSubmit.click()
+      this.savePage(this._saveType)
+      // this._abeFormSubmit.click()
     }
   }
 
@@ -164,6 +166,15 @@ export default class EditorSave {
       var input = formGroup.querySelector('[data-required=true]')
       if(typeof input !== 'undefined' && input !== null) {
         var required = input.getAttribute('data-required')
+
+        var precontrib = formGroup.getAttribute('data-precontrib-templates')
+
+        if (precontrib != null && precontrib != '') {
+          if (precontrib != 'json.abe_meta.template') {
+            return
+          }
+        }
+
         var autocomplete = input.getAttribute('data-autocomplete')
         if(typeof autocomplete !== 'undefined' && autocomplete !== null && (autocomplete === 'true' || autocomplete === true)) {
           var countValue = input.parentNode.querySelectorAll('.autocomplete-result')
@@ -185,7 +196,8 @@ export default class EditorSave {
     })
 
     if (valid) {
-      this._abeFormSubmit.click()
+      this.savePage(this._saveType)
+      // this._abeFormSubmit.click()
     }else {
       alert('Required fields are missing')
     }

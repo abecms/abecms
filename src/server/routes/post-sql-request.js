@@ -1,3 +1,5 @@
+import path from 'path'
+import url from 'url'
 import {
   cmsData
   ,abeExtend
@@ -9,7 +11,9 @@ var route = function(req, res, next){
 
   var sourceString = req.body.sourceString
   var prefillQuantity = req.body.prefillQuantity
-  var folder = req.body.folder
+  var folder = url.parse(req.header('referer')).path
+  folder = folder.replace('/abe/editor', '')
+  folder = path.dirname(folder)
   var key = req.body.key
   var jsonPage = (req.body.json) ? JSON.parse(JSON.stringify(req.body.json)) : {}
 

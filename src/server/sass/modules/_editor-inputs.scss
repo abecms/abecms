@@ -56,7 +56,7 @@
 }
 
 select[multiple], select[size] {
-  height: $select-size;
+  max-height: $select-size;
 }
 
 .has-error {

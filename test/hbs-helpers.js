@@ -2,6 +2,14 @@ var chai = require('chai');
 var Handlebars =require('../src/cli').Handlebars
 
 describe("Helpers", function () {
+    describe("className", function () {
+        it('properly lowercase string', function() {
+            var value = 'ThiS IS mY String',
+                rendered = Handlebars.helpers.className(value),
+                expected = 'ThiS_IS_mY_String';
+            chai.expect(rendered).to.eql(expected);
+        });
+    });
     describe("lowercase", function () {
         it('properly lowercase string', function() {
             var value = 'ThiS IS mY String',
@@ -141,6 +149,15 @@ describe("Helpers", function () {
                 rendered = Handlebars.helpers.isTrue(value1, operator, value2),
                 expected = true;
             chai.expect(rendered).to.eql(expected);
+        });
+    });
+    describe("setVariable", function () {
+        it('setVariable', function() {
+            var variableName = "variableName",
+                variableValue = 'variableValue',
+                obj = {data: {root: {}}},
+                rendered = Handlebars.helpers.setVariable(variableName, variableValue, obj);
+            chai.expect(obj.data.root.variableName).to.be.equal(variableValue);
         });
     });
 });
