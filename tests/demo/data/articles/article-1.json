@@ -1,0 +1,42 @@
+{
+  "abe_meta": {
+    "template": "single",
+    "link": "/articles/article-1.html",
+    "complete": "100",
+    "type": "publish",
+    "date": "2016-11-05T16:57:46.211Z",
+    "latest": {
+      "date": "2016-11-05T16:59:11.412Z",
+      "abeUrl": "/articles/article-1.html"
+    },
+    "status": "publish",
+    "draft": {
+      "date": "2016-11-05T16:57:46.211Z",
+      "abeUrl": "/articles/article-1-abe-d20161105T165746211Z.html",
+      "latest": {
+        "date": "2016-11-05T16:59:11.285Z",
+        "abeUrl": "/articles/article-1-abe-d20161105T165911285Z.html"
+      }
+    },
+    "cleanName": "article-1",
+    "cleanFilename": "/articles",
+    "publish": {
+      "date": "2016-11-05T16:59:11.412Z",
+      "abeUrl": "/articles/article-1.html",
+      "latest": {
+        "date": "2016-11-05T16:59:11.412Z",
+        "abeUrl": "/articles/article-1.html"
+      }
+    }
+  },
+  "article_main_image": "/image/header_australian_winter-aaaa_321x427-af09.jpg",
+  "article_title": "This is a title",
+  "article_date": "March 20 2016",
+  "article_highlight": "You can also provide a highlight",
+  "category_json": [
+    {
+      "category": "Innovation"
+    }
+  ],
+  "article_content": "This is the content&nbsp;"
+}

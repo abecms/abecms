@@ -19,7 +19,7 @@ nodemon({
     'NODE_ENV': 'development'
   },
   ignore: [
-    'docs/*'
+    // 'docs/*'
   ],
   watch: [
     'src/cli/*',

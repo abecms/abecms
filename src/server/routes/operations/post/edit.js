@@ -10,7 +10,7 @@ var route = function(req, res, next){
 
   var operation = cmsData.regex.getWorkflowFromOperationsUrl(req.originalUrl)
 
-  var p = cmsOperations.post.edit(
+  var p = cmsOperations.post.submit(
     operation.postUrl, 
     req.body.json, 
     operation.workflow

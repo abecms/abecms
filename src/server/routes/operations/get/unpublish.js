@@ -8,13 +8,13 @@ var route = function(req, res, next){
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  var operation = cmsData.regex.getWorkflowFromOperationsUrl(req.originalUrl)
+  var postUrl = req.originalUrl.replace(/\/abe\/operations\/unpublish\//, '')
 
-  cmsOperations.post.unpublish(operation.postUrl)
+  cmsOperations.post.unpublish(postUrl)
 
   var result = {
     success: 1,
-    file: operation.postUrl
+    file: postUrl
   }
   res.set('Content-Type', 'application/json')
   res.send(JSON.stringify(result))

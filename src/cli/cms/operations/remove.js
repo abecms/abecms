@@ -20,6 +20,8 @@ export function remove(filePath) {
     cmsOperations.remove.removeFile(revision.path, revision.htmlPath)
   })
 
+  filePath = abeExtend.hooks.instance.trigger('afterDeleteFile', filePath, {})
+
   Manager.instance.removePostFromList(filePath.replace(new RegExp('\\/', 'g'), path.sep))
 }
 

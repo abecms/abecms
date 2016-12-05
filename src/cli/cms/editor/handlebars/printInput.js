@@ -34,7 +34,7 @@ export function createInputSource(attributes, inputClass, params) {
   var inputSource = ''
   var lastValues
   if(params.autocomplete != null && params.autocomplete === 'true') {
-    if(params.source.indexOf('http') === 0) lastValues = params.source
+    if(params.sourceString.indexOf('http') === 0) lastValues = params.source
     else lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
     inputSource += '<div class="autocomplete-result-wrapper">'
     if(params.autocomplete != null && params.autocomplete === 'true' && params.prefill === 'true') {

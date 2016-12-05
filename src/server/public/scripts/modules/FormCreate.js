@@ -232,6 +232,7 @@ export default class FormCreate {
             if (jsonRes.success == 1 && jsonRes.json != null && jsonRes.json.abe_meta != null) {
               window.location.href = window.location.origin + '/abe/editor' + jsonRes.json.abe_meta.link
             }else {
+              console.log(responseText)
               alert('error')
             }
           })

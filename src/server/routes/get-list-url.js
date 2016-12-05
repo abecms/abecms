@@ -29,8 +29,8 @@ var route = function(router, req, res, next) {
   var workflowUrl = {}
   Array.prototype.forEach.call(config.users.workflow, (flow) => {
     workflowUrl[flow] = [
-      {url: `/abe/operations/${flow}/edit`, action: 'edit', workflow: flow},
-      {url: `/abe/operations/${flow}/delete`, action: 'delete', workflow: flow}
+      {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow},
+      {url: `/abe/operations/delete/${flow}`, action: 'delete', workflow: flow}
     ]
   })
   var template = Handlebars.compile(html, {noEscape: true})

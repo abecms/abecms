@@ -23,7 +23,7 @@ program
   .alias('gp')
   .description('save post to file with type from folder')
   .option('-t, --type [type]', 'posts status draft|other')
-  .option('-t, --path [path]', 'path /relative/path')
+  .option('-p, --path [path]', 'path /relative/path')
   .option('-d, --destination [destination]', 'folder to save result')
   .action(function(options){
     var dir = process.cwd()
@@ -54,11 +54,11 @@ program
       process.exit(0)
     })
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe generate-posts --path /test --destination result --status publish');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe generate-posts --path /test --destination result --status publish')
+    console.log()
+  })
 
 program
   .command('create [path]')
@@ -77,26 +77,28 @@ program
       console.error('Error: no project path specified')
     }
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe create');
-    console.log('    $ abe create [destination]');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe create')
+    console.log('    $ abe create [destination]')
+    console.log()
+  })
 
 program
   .command('serve')
   .alias('s')
   .description('create http server for abe')
-  .action(function(dest, options){
+  .option('-p, --port [number]', 'change port of the web server')
+  .option('-i, --interactive', 'open browser on web server startup')
+  .action(function(options){
     var dir = process.cwd()
     if(process.env.ROOT) {
       dir = process.env.ROOT
     }
     var environment = process.env
     environment.ROOT = dir
-    if (typeof port !== 'undefined' && port !== null) {
-      environment.PORT = port
+    if(options.port != null) {
+      environment.PORT = options.port
     }
     var command
     if (__dirname.indexOf('dist') > -1) {
@@ -104,10 +106,12 @@ program
     }else {
       command = path.join(__dirname, '..', 'node_modules', '.bin', 'babel-node') + ' --harmony ./src/server/index.js'
     }
-
+    if(options.interactive != null) {
+      command = 'OPENURL=1 ' + command
+    }
     process.chdir(__dirname + '/../')
     console.log('website started : ' + dir)
-    var cp = exec(command,{}, function (err, out, code) {
+    var cp = exec(command,{env: environment}, function (err, out, code) {
       if (err instanceof Error) throw err
       process.stderr.write(err)
       process.stdout.write(out)
@@ -116,11 +120,11 @@ program
     cp.stderr.pipe(process.stderr)
     cp.stdout.pipe(process.stdout)
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe serve');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe serve')
+    console.log()
+  })
 
 program
   .command('install [plugin]')
@@ -138,12 +142,12 @@ program
       plugins.instance.install(dir)
     }
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe install');
-    console.log('    $ abe install [plugin]');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe install')
+    console.log('    $ abe install [plugin]')
+    console.log()
+  })
 
 program
   .command('uninstall <plugin>')
@@ -159,11 +163,11 @@ program
       plugins.instance.uninstall(dir, plugin)
     }
   }).on('--help', function() {
-    console.log('  Examples:');
-    console.log();
-    console.log('    $ abe uninstall');
-    console.log('    $ abe uninstall [plugin]');
-    console.log();
-  });
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe uninstall')
+    console.log('    $ abe uninstall [plugin]')
+    console.log()
+  })
 
-program.parse(process.argv);
+program.parse(process.argv)

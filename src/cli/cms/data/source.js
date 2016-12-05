@@ -94,7 +94,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
       }
 
       var body = ''
-
+console.log(options)
       var localReq = httpUse.request(options, (localRes) => {
         localRes.setEncoding('utf8')
         localRes.on('data', (chunk) => {
