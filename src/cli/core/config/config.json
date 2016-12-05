@@ -17,9 +17,6 @@
   "data": {
     "url": "data"
   },
-  "draft": {
-    "url": "draft"
-  },
   "publish": {
     "url": "site"
   },

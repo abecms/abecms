@@ -141,9 +141,6 @@ result.getConfigByWebsite = () => {
     case 'data':
       configBySite.default.data = localConfig[item]
       break
-    case 'draft':
-      configBySite.default.draft = localConfig[item]
-      break
     case 'publish':
       configBySite.default.publish = localConfig[item]
       break
