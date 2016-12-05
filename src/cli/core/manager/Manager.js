@@ -203,6 +203,10 @@ class Manager {
     return this._thumbs
   }
 
+  addThumbsToList(thumb) {
+    if(this._thumbs) this._thumbs.push(thumb)
+  }
+
   getReferences() {
     if(typeof this._references === 'undefined' || this._references === null) this.updateReferences()
     return this._references

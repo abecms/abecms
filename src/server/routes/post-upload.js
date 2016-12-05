@@ -1,6 +1,7 @@
 import {
   abeExtend,
-  cmsMedia
+  cmsMedia,
+  Manager
 } from '../../cli'
 
 var route = function(req, res, next){
@@ -10,6 +11,10 @@ var route = function(req, res, next){
   var image = cmsMedia.image.saveFile(req)
 
   image.then(function (resp) {
+    Manager.instance.addThumbsToList({
+      originalFile: resp.filePath,
+      thumbFile: resp.thumbnail
+    })
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(resp))
   }).catch(function(e) {

@@ -74,12 +74,6 @@ export function generateThumbnail(file) {
     var cropThumb = smartCropAndSaveFile([250, 250], file, thumbFileName)
     cropThumb.then(function (result) {
       var stderr = result.stderr
-      if(thumbsList != null) {
-        thumbsList.push({
-          originalFile: file.replace(path.join(config.root, config.publish.url), ''),
-          thumbFile: thumbFileNameRelative
-        })
-      }
       if(stderr) {
         cropAndSaveFile([250, 250], file, thumbFileName).then(function () {
           resolve({thumb: thumbFileNameRelative})
