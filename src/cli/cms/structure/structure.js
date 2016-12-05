@@ -9,7 +9,9 @@ import {
 } from '../../'
 
 export function addFolder(folderPath) {
+  console.log(11111111)
   mkdirp(path.join(config.root, folderPath), function (err) {
+    console.log(22222222)
     if (err) console.error(err)
   })
   return folderPath
