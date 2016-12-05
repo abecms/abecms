@@ -4,14 +4,13 @@ import execPromise from 'child-process-promise'
 
 import {
   coreUtils,
+  cmsStructure,
   cmsData,
   config
 } from '../../'
 
 export function addFolder(folderPath) {
-  console.log(11111111)
   mkdirp(path.join(config.root, folderPath), function (err) {
-    console.log(22222222)
     if (err) console.error(err)
   })
   return folderPath
@@ -28,8 +27,8 @@ export function removeFolder(folderPath) {
 }
 
 export function editStructure(type, folderPath) {
-  if(type === 'add') addFolder(folderPath)
-  else removeFolder(folderPath)
+  if(type === 'add') cmsStructure.structure.addFolder(folderPath)
+  else cmsStructure.structure.removeFolder(folderPath)
   
   return folderPath
 }
