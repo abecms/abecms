@@ -130,7 +130,6 @@ describe('image', function() {
     var stub = sinon.stub(coreUtils.file, 'getFilesSync')
     stub.returns(imagesListInFolder)
     var result = cmsMedia.image.getAssociatedImageFileFromThumb(path.join(path.sep, 'unitimage', 'img_thumb.jpg'))
-    console.log(result)
     chai.expect(result).to.not.be.undefined
     chai.expect(result).to.have.property('originalFile').to.equal(path.join(path.sep, 'unitimage', 'img.jpg'))
     chai.expect(result).to.have.property('thumbFile').to.equal(path.join(path.sep, 'unitimage', 'img_thumb.jpg'))

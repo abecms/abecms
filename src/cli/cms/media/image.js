@@ -74,12 +74,6 @@ export function generateThumbnail(file) {
     var cropThumb = smartCropAndSaveFile([250, 250], file, thumbFileName)
     cropThumb.then(function (result) {
       var stderr = result.stderr
-      if(thumbsList != null) {
-        thumbsList.push({
-          originalFile: file.replace(path.join(config.root, config.publish.url), ''),
-          thumbFile: thumbFileNameRelative
-        })
-      }
       if(stderr) {
         cropAndSaveFile([250, 250], file, thumbFileName).then(function () {
           resolve({thumb: thumbFileNameRelative})
@@ -167,11 +161,8 @@ export function createMediaFolder(req) {
   return folderFilePath
 }
 
-var thumbsList
-
 export function getThumbsList() {
-  if(thumbsList != null) return thumbsList
-  thumbsList = []
+  var thumbsList = []
   var pathToThumbs = path.join(config.root, config.publish.url, config.upload.image)
   var files = coreUtils.file.getFilesSync(pathToThumbs, true)
   Array.prototype.forEach.call(files, (pathFile) => {
