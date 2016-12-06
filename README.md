@@ -60,6 +60,41 @@ As a major new feature, it will be possible to create a template from partials.
 ## Changelog
 See the complete [changelog](./CHANGELOG.md)
 
+### 2.11.*
+- Abe type="import": Can now include variables
+- Abe admin: Role Workflow management has been improved
+- Functional tests are now available !
+
+### 2.10.*
+- Template designer : isEditor variable can be used in a template
+- Bugfixes
+
+### 2.9.*
+- Only bugfixes concerning User management
+
+### 2.8.*
+- New plugin system for Abe. It's now based on npm !
+- Integrating user authentication and authorization Management inside Abe !
+- Integrating Image cropping and resizing into Abe !
+- Improving Unit tests
+
+### 2.7.*
+- New statement in Abe type="data": the display attribute can contain multiple variables (useful when used with autocomplete feature)
+
+### 2.6.*
+- Template designer: Precontrib is available for template designers. It will be possible to define specific slug structure from a template.
+- Template designer: 2 new handlebars helpers. uppercase and lowercase
+- Reference files editor available on admin !
+- Manager: On publish and unpublish, we only add/update or remove the concerned file. Huge performance improvement on save steps !
+- Dev: It's now possible to dev Abe under Windows
+
+### 2.5.*
+- New statement in Abe type="data" AQL format: A select may now contain "IN" or "NOT IN" with variables usage (you can reference another data type).
+- New attribute in Abe type="data": prefill gives the possibility on the editor to "refill" fields already filled in.
+- Adding unit tests
+- New command: generate-posts.js giving you the possibility to export data from Abe on the command line
+- The Abe editor is now compatible with Firefox
+
 ### 2.4.*
 - The first unit tests are implemented
 - Quality control with esLint added
