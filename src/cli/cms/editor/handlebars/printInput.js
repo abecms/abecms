@@ -18,6 +18,7 @@ export function getAttributes(params) {
   if(params.autocomplete != null) attributes += ` data-autocomplete="${params.autocomplete}"`
   if(params.placeholder != null) attributes += ` placeholder="${params.placeholder}"`
   if(params.thumbs != null) attributes += ` data-size="${params.thumbs}"`
+  if(params.toolbar != null) attributes += ` data-toolbar="${params.toolbar}"`
   if(params.multiple != null) attributes += ` ${params.multiple}`
   if(params.disabled != null) attributes += ` ${params.disabled}`
   return attributes
@@ -69,62 +70,51 @@ export function createInputSource(attributes, inputClass, params) {
 }
 
 export function createInputRich(attributes, inputClass, params) {
-  return `<div class="wysiwyg-container rich">
-            <div class="wysiwyg-toolbar wysiwyg-toolbar-top">
-              <a class="wysiwyg-toolbar-icon" href="#" title="Bold (Ctrl+B)" hotkey="b" data-action="bold" data-param="">
-                <span class="glyphicon glyphicon-bold"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Italic (Ctrl+I)" hotkey="i" data-action="italic" data-param="">
-                <span class="glyphicon glyphicon-italic"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Underline (Ctrl+U)" hotkey="u" data-action="underline" data-param="">
-                <span class="glyphicon underline">U</span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Text color" data-action="forecolor" data-param="" data-popup="color">
-                <span class="glyphicon glyphicon-text-color"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Background color" data-action="highlight" data-param="" data-popup="color">
-                <span class="glyphicon glyphicon-text-background"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Left" data-action="align" data-param="left">
-                <span class="glyphicon glyphicon-object-align-left"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Center" data-action="align" data-param="center">
-                <span class="glyphicon glyphicon-object-align-vertical"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Right" data-action="align" data-param="right">
-                <span class="glyphicon glyphicon-object-align-right"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Justify" data-action="justify" data-param="justify">
-                <span class="glyphicon glyphicon-menu-hamburger"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Subscript" data-action="subscript" data-param="">
-                <span class="glyphicon glyphicon-subscript"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Superscript" data-action="superscript" data-param="">
-                <span class="glyphicon glyphicon-superscript"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Indent" data-action="indent" data-param="">
-                <span class="glyphicon glyphicon-triangle-right"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Outdent" data-action="indent" data-param="outdent">
-                <span class="glyphicon glyphicon-triangle-left"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Unordered list" data-action="insertList" data-param="">
-                <span class="glyphicon glyphicon-th-list"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Remove format" data-action="removeFormat" data-param="">
-                <span class="glyphicon glyphicon-remove"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Add link" data-action="insertLink" data-popup="link" data-param="">
-                <span class="glyphicon glyphicon-link"></span>
-              </a>
-              <a class="wysiwyg-toolbar-icon" href="#" title="Code style" data-action="code" data-param="">
-                <span class="glyphicon glyphicon-console"></span>
-              </a>
-            </div>
-            <textarea class="${inputClass} form-rich" ${attributes} rows="4">${params.value}</textarea>
-          </div>`
+  var buttons = [
+    { icon: "bold",                  title: "Bold (Ctrl+B)",       action: "bold",         param: "",         hotkey: "b" },
+    { icon: "italic",                title: "Italic (Ctrl+I)",     action: "italic",       param: "",         hotkey: "i" },
+    { icon: "underline",             title: "Underline (Ctrl+U)",  action: "underline",    param: "",         hotkey: "u" },
+    { icon: "text-color",            title: "Text color",          action: "forecolor",    param: "",         popup: "color" },
+    { icon: "text-background",       title: "Background color",    action: "highlight",    param: "",         popup: "color" },
+    { icon: "object-align-left",     title: "Left",                action: "align",        param: "left" },
+    { icon: "object-align-vertical", title: "Center",              action: "align",        param: "center" },
+    { icon: "object-align-right",    title: "Right",               action: "align",        param: "right" },
+    { icon: "menu-hamburger",        title: "Justify",             action: "align",        param: "justify" },
+    { icon: "subscript",             title: "Subscript",           action: "subscript",    param: "" },
+    { icon: "superscript",           title: "Superscript",         action: "superscript",  param: "" },
+    { icon: "triangle-right",        title: "Indent",              action: "indent",       param: "" },
+    { icon: "triangle-left",         title: "Outdent",             action: "indent",       param: "outdent" },
+    { icon: "th-list",               title: "Unordered list",      action: "insertList",   param: "" },
+    { icon: "remove",                title: "Remove format",       action: "removeFormat", param: "" },
+    { icon: "link",                  title: "Add link",            action: "insertLink",   param: "",         popup: "link" },
+    { icon: "console",               title: "Code style",          action: "code",         param: "" }
+  ];
+  if(params.toolbar !== '*') params.toolbar = params.toolbar.split(',')
+  var inputRich = `<div class="wysiwyg-container rich">
+                    <div class="wysiwyg-toolbar wysiwyg-toolbar-top">`
+
+  buttons.forEach(function (button) {
+    if(params.toolbar === '*' || params.toolbar.indexOf(button.action) > -1){
+      var hotkey = (button.hotkey != null) ? `hotkey="${button.hotkey}"` : ''
+      var popup = (button.popup != null) ? `data-popup="${button.popup}"` : ''
+      var icon = (button.icon !== 'underline') ? `glyphicon-${button.icon}` : button.icon
+      inputRich += `<a  class="wysiwyg-toolbar-icon" 
+                        data-action="${button.action}"
+                        data-param="${button.param}"
+                        title="${button.title}"
+                        ${hotkey}
+                        ${popup}
+                        href="#">
+                      <span class="glyphicon ${icon}"></span>
+                    </a>`
+    }
+  })
+
+  inputRich +=    `</div>
+                  <textarea class="${inputClass} form-rich" ${attributes} rows="4">${params.value}</textarea>
+                </div>`
+
+  return inputRich
 }
 
 export function createInputFile(attributes, inputClass, params) {
@@ -187,6 +177,7 @@ export function printInput (params, root) {
   params.value = params.value || ''
   
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
+  if(!(params.toolbar != null)) params.toolbar = '*'
 
   params.disabled = ''
   if (params.tab !== 'slug' && !User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/${params.status}/edit`)) {

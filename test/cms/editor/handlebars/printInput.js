@@ -17,16 +17,6 @@ var classAttr = 'form-control form-abe'
 
 describe('printInput', function() {
 
-  // getAttributes,
-  // getLabel,
-  // createInputSource,
-  // createInputRich,
-  // createInputFile,
-  // createInputTextarea,
-  // createInputLink,
-  // createInputImage,
-  // createInputText
-  
   /**
    * cmsEditor.getLabel
    * 

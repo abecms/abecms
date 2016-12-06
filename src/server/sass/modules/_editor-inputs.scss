@@ -109,6 +109,11 @@ select[multiple], select[size] {
 
 .wysiwyg-toolbar {
   white-space: normal !important;
+  .underline {
+    &:after {
+      content: "U";
+    }
+  }
 }
 
 .rich [contenteditable]{
