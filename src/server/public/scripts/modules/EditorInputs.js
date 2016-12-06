@@ -7,6 +7,7 @@ import Handlebars from 'handlebars'
 import RichText from '../utils/rich-texarea'
 import Color from '../utils/color-picker'
 import Link from '../utils/link-picker'
+import image from '../utils/img-picker'
 import on from 'on'
 
 export default class EditorInputs {
@@ -19,6 +20,10 @@ export default class EditorInputs {
     var linkWysiwyg = document.querySelector('.wysiwyg-popup.link')
     if (linkWysiwyg != null) {
       this.link = new Link(linkWysiwyg)
+    }
+    var imgWysiwyg = document.querySelector('.wysiwyg-popup.image')
+    if (imgWysiwyg != null) {
+      this.image = new image(imgWysiwyg)
     }
     this.onBlur = on(this)
     this.onReload = on(this)
@@ -63,7 +68,7 @@ export default class EditorInputs {
     var richs = document.querySelectorAll('.rich')
     if(typeof richs !== 'undefined' && richs !== null){
       Array.prototype.forEach.call(richs, (rich) => {
-        new RichText(rich, this.color, this.link)
+        new RichText(rich, this.color, this.link, this.image)
       })
     }
 

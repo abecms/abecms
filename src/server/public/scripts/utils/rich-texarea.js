@@ -2,9 +2,10 @@
 
 export default class RichTexarea {
 
-  constructor(wrapper, color, link) {
+  constructor(wrapper, color, link, image) {
     this.color = color
     this.link = link
+    this.image = image
     this.wrapper = wrapper
     this.textarea = wrapper.querySelector('.form-rich')
     this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon')
@@ -89,6 +90,15 @@ export default class RichTexarea {
         })
         this.link.show(this.el)
         break
+        case 'image':
+          var html = this.textEditor.getHTML()
+          off = this.image.onImg((obj) => {
+            this.textEditor[this.action](obj.image)
+            this.setHTML()
+            off()
+          })
+          this.image.show(this.el)
+          break
       }
     }
     else if(this.action === 'code'){

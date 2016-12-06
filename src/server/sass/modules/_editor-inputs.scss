@@ -116,6 +116,31 @@ select[multiple], select[size] {
   }
 }
 
+.wysiwyg-popup {
+  &.image {
+    border-radius: 0;
+    margin-bottom: 0;
+    max-width: 300px;
+    margin-top: -40px;
+    margin-left: 40px;
+    .form-group {
+      margin-bottom: 0;
+    }
+    .input-error {
+      display: none;
+    }
+  }
+  .btn-add-img-wrapper {
+    display: table-cell;
+    position: relative;
+    vertical-align: middle;
+    .btn-add-img {
+      border-radius: 0;
+      border: 0;
+    }
+  }
+}
+
 .rich [contenteditable]{
   padding: 10px;
   height: 5em;

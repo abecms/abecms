@@ -87,7 +87,8 @@ export function createInputRich(attributes, inputClass, params) {
     { icon: "th-list",               title: "Unordered list",      action: "insertList",   param: "" },
     { icon: "remove",                title: "Remove format",       action: "removeFormat", param: "" },
     { icon: "link",                  title: "Add link",            action: "insertLink",   param: "",         popup: "link" },
-    { icon: "console",               title: "Code style",          action: "code",         param: "" }
+    { icon: "console",               title: "Code style",          action: "code",         param: "" },
+    { icon: "picture",               title: "image",               action: "image",        param: "",         popup: "image" },
   ];
   if(params.toolbar !== '*') params.toolbar = params.toolbar.split(',')
   var inputRich = `<div class="wysiwyg-container rich">
@@ -98,6 +99,7 @@ export function createInputRich(attributes, inputClass, params) {
       var hotkey = (button.hotkey != null) ? `hotkey="${button.hotkey}"` : ''
       var popup = (button.popup != null) ? `data-popup="${button.popup}"` : ''
       var icon = (button.icon !== 'underline') ? `glyphicon-${button.icon}` : button.icon
+      if (button.action === 'image') button.action = 'insertImage'
       inputRich += `<a  class="wysiwyg-toolbar-icon" 
                         data-action="${button.action}"
                         data-param="${button.param}"
