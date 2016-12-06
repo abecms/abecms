@@ -1,6 +1,7 @@
 export let abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g;
 // This pattern finds all abe tags enclosed in a HTML tag attribute
-export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
+// export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
+export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}).*?({{abe.*?}})/g;
 // This pattern finds all {{#each ...}}...{{/each}} blocks
 export let eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
 // This pattern finds all {{#each ...}}...{{/each}} blocks

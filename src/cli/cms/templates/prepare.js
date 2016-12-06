@@ -40,19 +40,32 @@ data-abe-image_key="image_key" src="{{abe type='image' key='image_key' tab='defa
  * @param {[type]} template [description]
  */
 export function addAbeDataAttrForHtmlAttributes(template) {
+  template = template.replace(/<([A-Za-z]+)/g, '\nABE_SPLIT<$1')
   var match
   while (match = cmsData.regex.abeAsAttributePattern.exec(template)) { // While regexp match {{attribut}}, ex: link, image ...
-    if(cmsData.regex.isSingleAbe(match[0], template)){
+    if(cmsData.regex.isSingleAbe(match[2], template)){
       var more_attr = ''
       var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
+      var toReplace = match[0].replace(
+        new RegExp(match[1]),
+        ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
+        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' + match[1])
+
+      toReplace = toReplace.replace(
+        new RegExp(match[2]),
+        match[2].replace('}}', ' has-abe=1}}')
+      )
+
+      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+      console.log('toReplace', toReplace)
+
       template = template.replace(
         new RegExp(match[0]),
-        ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
-        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' +
-        more_attr + match[0].replace('}}', ' has-abe=1}}')
+        toReplace
       )
     }
   }
+  template = template.replace(/\nABE_SPLIT</g, '<')
 
   return template
 }

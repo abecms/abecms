@@ -24,6 +24,7 @@ describe('cmsTemplates.prepare', function() {
           visibleFalse: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-visible-false.html'), 'utf-8'),
           text: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-text.html'), 'utf-8'),
           attribute: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-attribute.html'), 'utf-8'),
+          attributeConcat: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-attribute-concat.html'), 'utf-8'),
           source: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-source.html'), 'utf-8'),
           each: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each.html'), 'utf-8'),
           rawHandlebar: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-raw-handlebars.html'), 'utf-8')
@@ -55,6 +56,9 @@ describe('cmsTemplates.prepare', function() {
     // test
     var template = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.attribute)
     chai.expect(template.indexOf('data-abe-attr-')).to.be.above(-1);
+
+    var templateConcat = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.attributeConcat)
+    chai.expect(templateConcat.indexOf('data-abe-attr-')).to.be.above(-1);
   });
 
   /**
