@@ -62,16 +62,20 @@ export default class Page {
       this.blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g
 
       // Remove text with attribute "visible=false"
-      this._removeHidden()
+      // this._removeHidden()
+      this.template = cmsTemplates.prepare.removeHiddenAbeTag(this.template)
     
       if(!this._onlyHTML) {
 
         // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
         // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
-        this._encloseAbeTag()
+        // this._encloseAbeTag()
+        this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
       }
       else {
-        this._removeHandlebarsRawFromHtml()
+        this.template = cmsTemplates.prepare.removeHandlebarsRawFromHtml(this.template)
+        // this._removeHandlebarsRawFromHtml()
+        this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
       }
 
       // je rajoute les index pour chaque bloc lié à un each
@@ -79,59 +83,18 @@ export default class Page {
       
       if(!this._onlyHTML){
 
-        // Je maj les attributs associés aux Abe qui sont dans des attributs de tag HTML
-        this._updateAbeAsAttribute()
+        this.template = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.template)
 
-        // je rajoute les attributs pour les tags Abe (qui ne sont pas dans un attribut HTML)
-        this._updateAbeAsTag()
+        this.template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(this.template)
 
-        // Don't know what it does...
-        var source = config.source.name
-        if(typeof json[source] !== 'undefined' && json[source] !== null) {
-          var keys = Object.keys(json[source])
-          
-          for(var i in keys) {
-            var replaceEach = new RegExp(`<!-- \\[\\[${keys[i]}\\]\\][\\s\\S]*?-->`, 'g')
-            this.template = this.template.replace(replaceEach, '')
-
-            var patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g')
-            var patAttrSourceMatch = this.template.match(patAttrSource)
-
-            if(patAttrSourceMatch != null) {
-              let checkEscapedRegex = /["|'](.*?)["|']/
-              let patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
-              Array.prototype.forEach.call(patAttrSourceMatch, (pat) => {
-                let patAttrSourceCheck = patAttrSourceInside.exec(pat)
-                if(patAttrSourceCheck != null) {
-                  
-                  let checkEscaped = checkEscapedRegex.exec(patAttrSourceCheck[0])
-                  if(checkEscaped != null && checkEscaped.length > 0) {
-                    checkEscaped = escape(checkEscaped[1])
-                    this.template = this.template.replace(
-                      patAttrSourceCheck[0],
-                      ` data-abe-attr="${patAttrSourceCheck[1]}" data-abe-attr-escaped="${checkEscaped}" data-abe="${keys[i]}" ${patAttrSourceCheck[0]}`
-                    )
-                  }
-                }
-              })
-            }
-
-            var eachSource = new RegExp(`({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`, 'g')
-            var matches = this.template.match(eachSource)
-            if(typeof matches !== 'undefined' && matches !== null) {
-              Array.prototype.forEach.call(matches, (match) => {
-                this.template = this.template.replace(match, `${match}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(match)} -->`)
-              })
-            }
-          }
-        }
+        this.template = cmsTemplates.prepare.addAbeSourceComment(this.template, json)
       }
 
       // We remove the {{abe type=data ...}} from the text 
       this.template = cmsData.source.removeDataList(this.template)
 
       // It's time to replace the [index] by {{@index}} (concerning each blocks)
-      this.template = this.template.replace(/\[index\]\./g, '{{@index}}-')
+      this.template = cmsTemplates.prepare.replaceAbeEachIndex(this.template)
 
       if(config.files.templates.precompile){
         // Let's persist the precompiled template for future use (kind of cache)
@@ -153,36 +116,36 @@ export default class Page {
     }
   }
 
-  _updateAbeAsAttribute() {
-    var match
-    while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
-      if(cmsData.regex.isSingleAbe(match[0], this.template)){
-        var more_attr = ''
-        var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
-        this.template = this.template.replace(
-          new RegExp(match[0]),
-          ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
-          ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' +
-          more_attr + match[0].replace('}}', ' has-abe=1}}')
-        )
-      }
-    }
+  // _updateAbeAsAttribute() {
+  //   var match
+  //   while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
+  //     if(cmsData.regex.isSingleAbe(match[0], this.template)){
+  //       var more_attr = ''
+  //       var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
+  //       this.template = this.template.replace(
+  //         new RegExp(match[0]),
+  //         ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
+  //         ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' +
+  //         more_attr + match[0].replace('}}', ' has-abe=1}}')
+  //       )
+  //     }
+  //   }
 
-    return this
-  }
+  //   return this
+  // }
 
-  _updateAbeAsTag() {
-    var match
-    while (match = this.abePattern.exec(this.template)) {
-      var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
-      this.template = this.template.replace(
-        cmsData.regex.escapeTextToRegex(match[0], 'g'),
-        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
-      )
-    }
+  // _updateAbeAsTag() {
+  //   var match
+  //   while (match = this.abePattern.exec(this.template)) {
+  //     var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
+  //     this.template = this.template.replace(
+  //       cmsData.regex.escapeTextToRegex(match[0], 'g'),
+  //       ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
+  //     )
+  //   }
 
-    return this
-  }
+  //   return this
+  // }
   
   /**
    * [_indexEachBlocks description]
@@ -267,31 +230,31 @@ export default class Page {
   /**
    * add <abe> tag around html tag
    */
-  _removeHidden() {
-    this.template = this.template.replace(/(\{\{abe.*visible=[\'|\"]false.*\}\})/g, '')
+  // _removeHidden() {
+  //   this.template = this.template.replace(/(\{\{abe.*visible=[\'|\"]false.*\}\})/g, '')
 
-    return this
-  }
+  //   return this
+  // }
 
   /**
    * add <abe> tag around html tag
    * @param {String} text html string
    */
-  _encloseAbeTag() {
-    var match
-    while (match = this.abePattern.exec(this.template)) {
-      this.template = this.template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
-    }
+  // _encloseAbeTag() {
+  //   var match
+  //   while (match = this.abePattern.exec(this.template)) {
+  //     this.template = this.template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+  //   }
 
-    return this
-  }
+  //   return this
+  // }
 
   /**
    * remove {{{{raw}}}}{{{{/raw}}}} from html
    */
-  _removeHandlebarsRawFromHtml() {
-    this.template = this.template.replace(/\{\{\{\{\/?raw\}\}\}\}/g, '')
+  // _removeHandlebarsRawFromHtml() {
+  //   this.template = this.template.replace(/\{\{\{\{\/?raw\}\}\}\}/g, '')
 
-    return this
-  }
+  //   return this
+  // }
 }
