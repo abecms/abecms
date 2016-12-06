@@ -21,8 +21,6 @@ export function getAbeMeta(fileObject, json) {
   if(json.abe_meta != null) {
     if (json.abe_meta.status === 'publish') {
       fileObject.htmlPath = path.join(config.root, config.publish.url, path.join('/', fileObject.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-    }else {
-      fileObject.htmlPath = path.join(config.root, config.draft.url, path.join('/', fileObject.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
     }
     var date = null
     if (json.abe_meta.latest.date !== null) {
@@ -122,27 +120,20 @@ export function fromUrl(url) {
     link = link.replace(new RegExp('\\' + path.sep, 'g'), '/')
     link = cmsData.fileAttr.delete('/'+link)
 
-    let draft = config.draft.url
     let publish = config.publish.url
     let data = config.data.url
 
     res.root = config.root
 
-    // set dir path draft/json
-    res.draft.dir = coreUtils.file.changePath(dir, draft)
     res.json.dir = coreUtils.file.changePath(dir, data)
     res.publish.dir = coreUtils.file.changePath(dir, publish)
     res.publish.json = res.json.dir
 
-    // set filename draft/json
-    res.draft.file = filename
     res.publish.file = cmsData.fileAttr.delete(filename)
     res.publish.link = link
     res.json.file = filename.replace(`.${config.files.templates.extension}`, '.json')
     res.publish.json = path.join(res.json.dir, cmsData.fileAttr.delete(res.json.file))
 
-    // set filename draft/json
-    res.draft.path = path.join(res.draft.dir, res.draft.file)
     res.publish.path = path.join(res.publish.dir, res.publish.file)
     res.json.path = path.join(res.json.dir, res.json.file)
   }

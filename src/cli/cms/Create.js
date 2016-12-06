@@ -22,7 +22,6 @@ export default class Create {
   this.addFolder(config.structure.url)
   this.addFolder(config.reference.url)
   this.addFolder(config.data.url)
-  this.addFolder(config.draft.url)
 }).catch(function(e) {
   console.error(e)
 })
