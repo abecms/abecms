@@ -62,24 +62,21 @@ export default class Page {
       this.blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g
 
       // Remove text with attribute "visible=false"
-      // this._removeHidden()
       this.template = cmsTemplates.prepare.removeHiddenAbeTag(this.template)
     
       if(!this._onlyHTML) {
 
         // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
         // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
-        // this._encloseAbeTag()
         this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
       }
       else {
         this.template = cmsTemplates.prepare.removeHandlebarsRawFromHtml(this.template)
-        // this._removeHandlebarsRawFromHtml()
         this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
       }
 
       // je rajoute les index pour chaque bloc lié à un each
-      this._indexEachBlocks()
+      this.template = cmsTemplates.prepare.indexEachBlocks(this.template, this._onlyHTML)
       
       if(!this._onlyHTML){
 
@@ -115,146 +112,4 @@ export default class Page {
       this.html = abeExtend.hooks.instance.trigger('afterPageEditorCompile', this.html, json)
     }
   }
-
-  // _updateAbeAsAttribute() {
-  //   var match
-  //   while (match = this.abeAsAttributePattern.exec(this.template)) { // While regexp match {{attribut}}, ex: link, image ...
-  //     if(cmsData.regex.isSingleAbe(match[0], this.template)){
-  //       var more_attr = ''
-  //       var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
-  //       this.template = this.template.replace(
-  //         new RegExp(match[0]),
-  //         ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
-  //         ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' +
-  //         more_attr + match[0].replace('}}', ' has-abe=1}}')
-  //       )
-  //     }
-  //   }
-
-  //   return this
-  // }
-
-  // _updateAbeAsTag() {
-  //   var match
-  //   while (match = this.abePattern.exec(this.template)) {
-  //     var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
-  //     this.template = this.template.replace(
-  //       cmsData.regex.escapeTextToRegex(match[0], 'g'),
-  //       ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
-  //     )
-  //   }
-
-  //   return this
-  // }
-  
-  /**
-   * [_indexEachBlocks description]
-   * @param  {[type]} text   [description]
-   * @param  {[type]} blocks [description]
-   * @return {[type]}        [description]
-   */
-  _indexEachBlocks() {
-    // create an array of {{each}} blocks
-    var blocks = this._splitEachBlocks()
-
-    Array.prototype.forEach.call(blocks, (block) => {
-      var key = block.match(/#each (.*)\}\}/)
-      key = key[1]
-      var match
-
-      if(!this._onlyHTML) {
-
-        var voidData = {}
-        voidData[key] = [{}]
-        var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?)}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
-        var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
-
-        // je rajoute un data-abe-block avec index sur tous les tags html du bloc each
-        var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
-
-        // je remplace le block dans le texte par ça
-        this.template = this.template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${cmsTemplates.encodeAbeTagAsComment(blockHtml)} -->`)
-      }
-
-      // Pour chaque tag Abe, je mets en forme ce tag avec des data- supplémentaires
-      while (match = this.abePattern.exec(block)) {
-        this._insertAbeEach(match, key, this.eachBlockPattern.lastIndex - block.length)
-      }
-
-      // Pour chaque tag Abe attribut de HTML, je mets en forme ce tag avec des data- supplémentaires sur le tag html parent
-      while (match = this.abeAsAttributePattern.exec(block)) {
-        this._insertAbeEach(match, key, this.eachBlockPattern.lastIndex - block.length)
-      }  
-    })
-
-    return this
-  }
-
-  /**
-   * create an array of {{#each}} blocks from the html document
-   * @param  {String} html the html document
-   * @return {Array}      the array of {{#each}} blocks
-   */
-  _splitEachBlocks() {
-    var block
-    var blocks = []
-
-    while (block = this.blockPattern.exec(this.template)) {
-      blocks.push(block[1])
-    }
-
-    return blocks
-  }
-
-  _insertAbeEach(theMatch, key, lastIndex) {
-    var matchBlock = theMatch[0]
-    if(cmsData.regex.isEachStatement(matchBlock)) return
-    if(cmsData.regex.isBlockAbe(matchBlock)){
-      var matchblockattr = (matchBlock.split('=')[0]).trim()
-      var getattr = cmsData.regex.getAttr(matchBlock, 'key').replace('.', '[index].')
-      var newMatchBlock = ((!this._onlyHTML) ?
-                            (/=[\"\']\{\{(.*?)\}\}/g.test(matchBlock) ?
-                                ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + matchblockattr + '"' :
-                                '') +
-                            ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="' + getattr + '" ' + matchBlock :
-                            matchBlock)
-          .replace(new RegExp('(key=[\'|"])' + key + '.', 'g'), '$1' + key + '[index].')
-          .replace(/\{\{abe/, '{{abe dictionnary=\'' + key + '\'')
-
-      this.template = this.template.replace(matchBlock, newMatchBlock)
-    }
-
-    return this
-  }
-
-  /**
-   * add <abe> tag around html tag
-   */
-  // _removeHidden() {
-  //   this.template = this.template.replace(/(\{\{abe.*visible=[\'|\"]false.*\}\})/g, '')
-
-  //   return this
-  // }
-
-  /**
-   * add <abe> tag around html tag
-   * @param {String} text html string
-   */
-  // _encloseAbeTag() {
-  //   var match
-  //   while (match = this.abePattern.exec(this.template)) {
-  //     this.template = this.template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
-  //   }
-
-  //   return this
-  // }
-
-  /**
-   * remove {{{{raw}}}}{{{{/raw}}}} from html
-   */
-  // _removeHandlebarsRawFromHtml() {
-  //   this.template = this.template.replace(/\{\{\{\{\/?raw\}\}\}\}/g, '')
-
-  //   return this
-  // }
 }
