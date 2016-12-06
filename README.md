@@ -39,11 +39,8 @@ As a major new feature, it will be possible to create a template from partials.
 - the stateful manager of Abe has to become responsible of pagination of articles (huge performance boost)
 - A homepage will arrive (at last !) on the frontend
 - It will be possible to create filtered views on the manager frontend
-- Refactoring of the editor has to be done
-- Unit testing will cover >60% of the code
-- A full functional test scenario from blog creation to article manipulation will be written
+- Refactoring the editor has to be done
 - The load testing scenarii will be open sourced (based on Locust)
-- Bugfixing
 - Precompiling of templates has to be fully tested
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
 - Add template creation from partials
@@ -64,6 +61,7 @@ See the complete [changelog](./CHANGELOG.md)
 - Abe type="import": Can now include variables
 - Abe admin: Role Workflow management has been improved
 - Functional tests are now available !
+- Unit testing covers more than 60% of the code :)
 
 ### 2.10.*
 - Template designer : isEditor variable can be used in a template
