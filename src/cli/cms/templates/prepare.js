@@ -56,9 +56,6 @@ export function addAbeDataAttrForHtmlAttributes(template) {
         match[2].replace('}}', ' has-abe=1}}')
       )
 
-      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-      console.log('toReplace', toReplace)
-
       template = template.replace(
         new RegExp(match[0]),
         toReplace
