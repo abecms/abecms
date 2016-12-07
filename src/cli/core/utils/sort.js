@@ -8,8 +8,8 @@
  * @return {Int}   1 | 0 | -1
  */
 export function byDateDesc(a, b) {
-  var dateA = new Date(a.abe_meta.publish.date)
-  var dateB = new Date(b.abe_meta.publish.date)
+  var dateA = (a.abe_meta.publish != null) ? new Date(a.abe_meta.publish.date) : 0
+  var dateB = (b.abe_meta.publish != null) ? new Date(b.abe_meta.publish.date) : 0
   if(dateA < dateB) {
     return 1
   }else if(dateA > dateB) {
@@ -54,8 +54,8 @@ export function shuffle(array) {
  * @return {Int}   1 | 0 | -1
  */
 export function byDateAsc(a, b) {
-  var dateA = new Date(a.abe_meta.publish.date)
-  var dateB = new Date(b.abe_meta.publish.date)
+  var dateA = (a.abe_meta.publish != null) ? new Date(a.abe_meta.publish.date) : 0
+  var dateB = (b.abe_meta.publish != null) ? new Date(b.abe_meta.publish.date) : 0
   if(dateA > dateB) {
     return 1
   }else if(dateA < dateB) {

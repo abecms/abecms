@@ -24,7 +24,7 @@ describe('Sort', function() {
   it('coreUtils.sort.byDateAsc', function() {
   	var list = Manager.instance.getList()
   	list.sort(coreUtils.sort.byDateAsc)
-  	chai.expect(list[0].name).to.contain('homepage');
+  	chai.expect(list[0].name).to.contain('article-1');
   });
 
   /**
