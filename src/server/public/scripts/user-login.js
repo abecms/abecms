@@ -48,15 +48,7 @@ export default class UserLogin {
   }
 
   _csrfToken() {
-    var csrfToken = document.querySelector('#globalCsrfToken').value
-    var forms = [].slice.call(document.querySelectorAll('form'))
-    Array.prototype.forEach.call(forms, function(form) {
-      var csrInput = document.createElement('input')
-      csrInput.type = 'hidden'
-      csrInput.name = '_csrf'
-      csrInput.value = csrfToken
-      form.appendChild(csrInput)
-    });
+    var csrfToken = document.querySelector('#globalCsrfToken').value;
 
     (function(open) {
       XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
