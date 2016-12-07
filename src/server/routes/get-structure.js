@@ -12,17 +12,18 @@ import {
 var route = function(req, res){
   var resHtml = ''
 
-  var page = path.join(__dirname + '/../views/list-references.html')
+  var page = path.join(__dirname + '/../views/list-structure.html')
   if (coreUtils.file.exist(page)) {
     resHtml = fs.readFileSync(page, 'utf8')
   }
   
+  var structure = Manager.instance.getStructureAndTemplates().structure
+  structure = JSON.stringify(structure).replace(new RegExp(config.root, 'g'), '')
   var template = Handlebars.compile(resHtml, {noEscape: true})
   var tmp = template({
     config: JSON.stringify(config),
-    reference: Manager.instance.getReferences()
+    structure: structure
   })
-  
   return res.send(tmp)
 }
 

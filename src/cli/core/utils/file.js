@@ -1,5 +1,7 @@
 import Promise from 'bluebird'
 import path from 'path'
+import mkdirp from 'mkdirp'
+import execPromise from 'child-process-promise'
 var fse = Promise.promisifyAll(require('fs-extra'))
 
 import {
@@ -158,6 +160,23 @@ export function getFilesAsync(dirname, recursive = true, filterExt = '') {
   }).then(function() {
     return items
   })
+}
+
+export function addFolder(folderPath) {
+  mkdirp(path.join(config.root, folderPath), function (err) {
+    if (err) console.error(err)
+  })
+  return folderPath
+}
+
+export function removeFolder(folderPath) {
+  execPromise.exec('rm -rf ' + path.join(config.root, folderPath)).then(function (result) {
+    var stdout = result.stdout
+    var stderr = result.stderr
+    if(stdout) console.log('stdout: ', stdout)
+    if(stderr) console.log('stderr: ', stderr)
+  })
+  return folderPath
 }
 
 /**

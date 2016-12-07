@@ -19,6 +19,7 @@ import {
   ,postReference
   ,getReference
   ,postStructure
+  ,getStructure
   ,getPaginate
   ,getThumbs
   ,getImage
@@ -57,7 +58,8 @@ router.post('/abe/page/*', postPage)
 router.get('/abe/page/*', getPage)
 router.get('/abe/generate-posts', getGeneratePost)
 router.get('/abe/save-config', getSaveConfig)
-router.get('/abe/reference/*', getReference)
+router.get('/abe/reference', getReference)
+router.get('/abe/structure', getStructure)
 router.get('/abe/thumbs/*', getThumbs)
 router.get('/abe/image/*', getImage)
 router.post('/abe/upload/*', postUpload)

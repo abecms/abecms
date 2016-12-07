@@ -18,7 +18,6 @@ import times 			from './handlebars/times'
 import truncate 	from './handlebars/truncate'
 import lowercase 	from './handlebars/lowercase'
 import uppercase 	from './handlebars/uppercase'
-import removeRootPath 	from './handlebars/removeRootPath'
 import setVariable 	from './handlebars/setVariable'
 import isAuthorized 	from './handlebars/isAuthorized'
 import concat 	from './handlebars/concat'
@@ -47,7 +46,6 @@ Handlebars.registerHelper('times', 			times)
 Handlebars.registerHelper('truncate', 	truncate)
 Handlebars.registerHelper('lowercase', 	lowercase)
 Handlebars.registerHelper('uppercase', 	uppercase)
-Handlebars.registerHelper('removeRootPath', 	removeRootPath)
 Handlebars.registerHelper('setVariable', 	setVariable)
 Handlebars.registerHelper('isAuthorized', 	isAuthorized)
 Handlebars.registerHelper('concat', 	concat)
@@ -80,7 +78,6 @@ export {
 	notEmpty,
 	printJson,
 	translate,
-	times,
-	removeRootPath
+	times
 }
 

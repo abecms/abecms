@@ -12,12 +12,20 @@
   <li class="list-group-item pointer" data-config="true" data-manager-show="manager-files">
     {{@root.text.navigation}}
   </li>
-  <li class="list-group-item pointer" data-config="true" data-manager-show="references-files">
-    edit references
+  {{#if @root.config.users.enable}}
+    {{#isAuthorized '/abe/references' @root.user.role.workflow}}
+  <li class="list-group-item pointer" >
+    <a href="/abe/reference">edit references</a>
   </li>
-  <li class="list-group-item pointer" data-config="true" data-manager-show="structure-folders">
-    edit structure
+    {{/isAuthorized}}
+  {{/if}}
+  {{#if @root.config.users.enable}}
+    {{#isAuthorized '/abe/structure' @root.user.role.workflow}}
+  <li class="list-group-item pointer" >
+    <a href="/abe/structure">edit structure</a>
   </li>
+    {{/isAuthorized}}
+  {{/if}}
   {{#if @root.config.users.enable}}
     {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
       <li class="list-group-item pointer">
