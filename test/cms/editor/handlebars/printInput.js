@@ -45,7 +45,7 @@ describe('printInput', function() {
   it('cmsEditor.getAttributes()', function() {
     var result = cmsEditor.getAttributes(data.attributes)
     chai.expect(result).to.be.a('string')
-    chai.expect(result).to.be.equal('id="key" data-id="key" value="value" maxlength="max-length" data-maxlength="max-length" reload="reload" tabIndex="order" data-required="required" data-display="display" data-visible="visible" data-autocomplete="autocomplete" placeholder="placeholder" data-size="thumbs" multiple disabled')
+    chai.expect(result).to.be.equal('id="key" data-id="key" value="value" data-maxlength="max-length" reload="reload" tabIndex="order" data-required="required" data-display="display" data-visible="visible" data-autocomplete="autocomplete" placeholder="placeholder" data-size="thumbs" multiple disabled')
   })
 
   /**
