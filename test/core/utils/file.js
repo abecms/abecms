@@ -53,7 +53,7 @@ describe('coreUtils.file', function() {
     var stub = sinon.stub(cmsData.fileAttr, 'get')
     stub.returns({d: '2016-12-07T13:04:18.810Z'});
     var result = coreUtils.file.getDate(path.join(config.root, config.data.url, 'article-abe-d20161207T130418810Z.json'))
-    chai.expect(result.toString()).to.equal('Wed Dec 07 2016 14:04:18 GMT+0100 (CET)')
+    chai.expect(result.getYear()).to.equal(116)
     cmsData.fileAttr.get.restore()
   });
 
