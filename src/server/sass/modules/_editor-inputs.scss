@@ -114,6 +114,11 @@ select[multiple], select[size] {
       content: "U";
     }
   }
+  .glyphicon-strikethrough {
+    &:after {
+      content: "Ꞩ";
+    }
+  }
 }
 
 .wysiwyg-popup {

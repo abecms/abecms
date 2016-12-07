@@ -34,21 +34,27 @@ export default class RichTexarea {
   }
 
   _replaceSelectionWithHtml(html) {
-    var range
-    if (window.getSelection && window.getSelection().getRangeAt) {
-      range = window.getSelection().getRangeAt(0)
-      range.deleteContents()
-      var div = document.createElement('div')
-      div.innerHTML = html
-      var frag = document.createDocumentFragment(), child
-      while ( (child = div.firstChild) ) {
-        frag.appendChild(child)
+    if(document.activeElement.getAttribute('contenteditable') != null) {
+      var range
+      if (window.getSelection && window.getSelection().getRangeAt) {
+        range = window.getSelection().getRangeAt(0)
+        range.deleteContents()
+        var div = document.createElement('div')
+        div.innerHTML = html
+        var frag = document.createDocumentFragment(), child
+        while ( (child = div.firstChild) ) {
+          frag.appendChild(child)
+        }
+        range.insertNode(frag)
+      } else if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange()
+        html = (node.nodeType == 3) ? node.data : node.outerHTML
+        range.pasteHTML(html)
       }
-      range.insertNode(frag)
-    } else if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange()
-      html = (node.nodeType == 3) ? node.data : node.outerHTML
-      range.pasteHTML(html)
+    }
+    else {
+      this.wrapper.querySelector('[contenteditable]').focus()
+      this._replaceSelectionWithHtml(html)
     }
   }
 
@@ -92,8 +98,16 @@ export default class RichTexarea {
         break
         case 'image':
           var html = this.textEditor.getHTML()
+          this._replaceSelectionWithHtml(`${window.getSelection().toString()}[MEDIA]`)
           off = this.image.onImg((obj) => {
-            this.textEditor[this.action](obj.image)
+            if(obj.image.indexOf('.mp4') > 0){
+              html = this.textEditor.getHTML().replace('[MEDIA]', `<video controls><source src="${obj.image}" type="video/mp4"></source></video>`)
+            }
+            else{
+              this.textEditor[this.action](obj.image) 
+              html = this.textEditor.getHTML().replace('[MEDIA]', '')
+            }
+            this.textEditor.setHTML(html)
             this.setHTML()
             off()
           })

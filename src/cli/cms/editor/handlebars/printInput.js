@@ -71,24 +71,26 @@ export function createInputSource(attributes, inputClass, params) {
 
 export function createInputRich(attributes, inputClass, params) {
   var buttons = [
-    { icon: "bold",                  title: "Bold (Ctrl+B)",       action: "bold",         param: "",         hotkey: "b" },
-    { icon: "italic",                title: "Italic (Ctrl+I)",     action: "italic",       param: "",         hotkey: "i" },
-    { icon: "underline",             title: "Underline (Ctrl+U)",  action: "underline",    param: "",         hotkey: "u" },
-    { icon: "text-color",            title: "Text color",          action: "forecolor",    param: "",         popup: "color" },
-    { icon: "text-background",       title: "Background color",    action: "highlight",    param: "",         popup: "color" },
-    { icon: "object-align-left",     title: "Left",                action: "align",        param: "left" },
-    { icon: "object-align-vertical", title: "Center",              action: "align",        param: "center" },
-    { icon: "object-align-right",    title: "Right",               action: "align",        param: "right" },
-    { icon: "menu-hamburger",        title: "Justify",             action: "align",        param: "justify" },
-    { icon: "subscript",             title: "Subscript",           action: "subscript",    param: "" },
-    { icon: "superscript",           title: "Superscript",         action: "superscript",  param: "" },
-    { icon: "triangle-right",        title: "Indent",              action: "indent",       param: "" },
-    { icon: "triangle-left",         title: "Outdent",             action: "indent",       param: "outdent" },
-    { icon: "th-list",               title: "Unordered list",      action: "insertList",   param: "" },
-    { icon: "remove",                title: "Remove format",       action: "removeFormat", param: "" },
-    { icon: "link",                  title: "Add link",            action: "insertLink",   param: "",         popup: "link" },
-    { icon: "console",               title: "Code style",          action: "code",         param: "" },
-    { icon: "picture",               title: "image",               action: "image",        param: "",         popup: "image" },
+    { icon: "bold",                  title: "Bold (Ctrl+B)",          action: "bold",         param: "",         hotkey: "b",     key:"b" },
+    { icon: "ti-Italic",             title: "Italic (Ctrl+I)",        action: "italic",       param: "",         hotkey: "i" },
+    { icon: "ti-underline",          title: "Underline (Ctrl+U)",     action: "underline",    param: "",         hotkey: "u" },
+    { icon: "strikethrough",         title: "Strikethrough",          action: "strikethrough",param: "" ,                         key:"s" },
+    { icon: "ti-paint-bucket",       title: "Text color",             action: "forecolor",    param: "",         popup: "color" },
+    { icon: "ti-paint-bucket bg",    title: "Background color",       action: "highlight",    param: "",         popup: "color" },
+    { icon: "ti-align-left",         title: "Left",                   action: "align",        param: "left" },
+    { icon: "ti-align-center",       title: "Center",                 action: "align",        param: "center" },
+    { icon: "ti-align-right",        title: "Right",                  action: "align",        param: "right" },
+    { icon: "ti-align-justify",      title: "Justify",                action: "align",        param: "justify" },
+    { icon: "ti-text ti-text-sub",   title: "Subscript",              action: "subscript",    param: "" },
+    { icon: "ti-text ti-text-sup",   title: "Superscript",            action: "superscript",  param: "" },
+    { icon: "ti-shift-right-alt",    title: "Indent",                 action: "indent",       param: "" },
+    { icon: "ti-shift-left-alt",     title: "Outdent",                action: "indent",       param: "outdent" },
+    { icon: "ti-list",               title: "Unordered list",         action: "list",         param: "" },
+    { icon: "ti-list-ol",            title: "Ordered list",           action: "list",         param: "ordered" },
+    { icon: "ti-eraser",             title: "Remove format",          action: "removeFormat", param: "" },
+    { icon: "ti-link",               title: "Add link",               action: "insertLink",   param: "",         popup: "link" },
+    { icon: "console",               title: "Code style",             action: "code",         param: "",                          key:"{code}" },
+    { icon: "ti-image",              title: "media",                  action: "media",        param: "",         popup: "image" },
   ];
   if(params.toolbar !== '*') params.toolbar = params.toolbar.split(',')
   var inputRich = `<div class="wysiwyg-container rich">
@@ -98,16 +100,16 @@ export function createInputRich(attributes, inputClass, params) {
     if(params.toolbar === '*' || params.toolbar.indexOf(button.action) > -1){
       var hotkey = (button.hotkey != null) ? `hotkey="${button.hotkey}"` : ''
       var popup = (button.popup != null) ? `data-popup="${button.popup}"` : ''
-      var icon = (button.icon !== 'underline') ? `glyphicon-${button.icon}` : button.icon
       if (button.action === 'image') button.action = 'insertImage'
-      inputRich += `<a  class="wysiwyg-toolbar-icon" 
+      if (button.action === 'list') button.action = 'insertList'
+      inputRich += `<a  class="wysiwyg-toolbar-icon parent-${button.icon}" 
                         data-action="${button.action}"
                         data-param="${button.param}"
                         title="${button.title}"
                         ${hotkey}
                         ${popup}
                         href="#">
-                      <span class="glyphicon ${icon}"></span>
+                      <span class="glyphicon theme-icon ${button.icon}">${(button.key) ? button.key : ''}</span>
                     </a>`
     }
   })

@@ -55,7 +55,10 @@
     "h3": ["style"],
     "h4": ["style"],
     "pre": ["style"],
-    "code": ["style"]
+    "code": ["style"],
+    "img": ["src", "alt"],
+    "video": ["style", "controls"],
+    "source": ["style", "src", "type"]
   },
   "files": {
     "exclude": "^[.]",

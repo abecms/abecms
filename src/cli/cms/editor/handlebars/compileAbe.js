@@ -58,5 +58,6 @@ export default function compileAbe(){
     })
     return new Handlebars.SafeString(testXSS)
   }
+  console.log(value)
   return value.replace(/%27/, '\'')
 }
