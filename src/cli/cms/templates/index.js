@@ -25,6 +25,7 @@ import concat 	from './handlebars/concat'
 import getCurrentuserRole 	from './handlebars/getCurrentuserRole'
 
 import * as template from './template'
+import * as prepare from './prepare'
 import * as assets from './assets'
 import encodeAbeTagAsComment from './encodeAbeTagAsComment'
 import insertDebugtoolUtilities from './insertDebugtoolUtilities'
@@ -57,6 +58,7 @@ HandlebarsIntl.registerWith(Handlebars)
 export {
 	Handlebars,
 	template,
+	prepare,
 	assets,
 	encodeAbeTagAsComment,
 	insertDebugtoolUtilities,
