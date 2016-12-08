@@ -8,11 +8,11 @@
     "url": "git://github.com/AdFabConnect/abejs.git"
   },
   "scripts": {
-    "postinstall": "node nightwatch.conf.js",
     "lint": "eslint src --fix",
     "test": "mocha --recursive --compilers js:babel-register --require babel-polyfill",
     "test-cov": "istanbul cover _mocha -- --recursive --compilers js:babel-register --require babel-polyfill",
     "test-coveralls": "istanbul cover _mocha --report lcovonly -- --recursive --compilers js:babel-register --require babel-polyfill -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "install-selenium": "node nightwatch.conf.js",
     "pretest-func": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
     "test-func": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "posttest-func": "killall node",
