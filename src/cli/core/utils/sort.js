@@ -1,24 +1,4 @@
 /**
- * sort an array of objects by date attribute
- *
- * Example : [{date: date}, {date: date}].sort(coreUtils.sort.byDateDesc)
- * 
- * @param  {Object} a object with date attribute
- * @param  {Object} b object with date attribute
- * @return {Int}   1 | 0 | -1
- */
-export function byDateDesc(a, b) {
-  var dateA = (a.abe_meta.publish != null && a.abe_meta.publish.latest != null) ? new Date(a.abe_meta.publish.latest.date) : 0
-  var dateB = (b.abe_meta.publish != null && b.abe_meta.publish.latest) ? new Date(b.abe_meta.publish.latest.date) : 0
-  if(dateA < dateB) {
-    return 1
-  }else if(dateA > dateB) {
-    return -1
-  }
-  return 0
-}
-
-/**
  * shuffle an array of objects by date attribute
  *
  * Example : var shuffledArray = coreUtils.sort.shuffle([Object}, Object])
@@ -43,25 +23,6 @@ export function shuffle(array) {
   }
 
   return array
-}
-/**
- * sort an array of objects by date attribute
- *
- * Example : [{date: date}, {date: date}].sort(coreUtils.sort.byDateAsc)
- * 
- * @param  {Object} a object with date attribute
- * @param  {Object} b object with date attribute
- * @return {Int}   1 | 0 | -1
- */
-export function byDateAsc(a, b) {
-  var dateA = (a.abe_meta.publish != null && a.abe_meta.publish.latest != null) ? new Date(a.abe_meta.publish.latest.date) : 0
-  var dateB = (b.abe_meta.publish != null && b.abe_meta.publish.latest) ? new Date(b.abe_meta.publish.latest.date) : 0
-  if(dateA > dateB) {
-    return 1
-  }else if(dateA < dateB) {
-    return -1
-  }
-  return 0
 }
 
 /**
