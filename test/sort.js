@@ -18,26 +18,6 @@ describe('Sort', function() {
   });
 
   /**
-   * coreUtils.sort.byDateAsc
-   * 
-   */
-  it('coreUtils.sort.byDateAsc', function() {
-  	var list = Manager.instance.getList()
-  	list.sort(coreUtils.sort.byDateAsc)
-  	chai.expect(list[0].name).to.contain('homepage');
-  });
-
-  /**
-   * coreUtils.sort.byDateDesc
-   * 
-   */
-  it('coreUtils.sort.byDateDesc', function() {
-  	var list = Manager.instance.getList()
-  	list.sort(coreUtils.sort.byDateDesc)
-  	chai.expect(list[0].name).to.contain('article');
-  });
-
-  /**
    * coreUtils.sort.shuffle
    * 
    */

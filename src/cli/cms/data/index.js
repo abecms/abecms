@@ -9,6 +9,7 @@ import * as revision from './revision'
 import * as metas from './metas'
 import * as file from './file'
 import * as utils from './utils'
+import * as sort from './sort'
 
 export {
 	values,
@@ -21,5 +22,6 @@ export {
   regex,
   metas,
   file,
-  utils
+  utils,
+  sort
 }
