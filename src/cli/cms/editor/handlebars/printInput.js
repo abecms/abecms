@@ -189,7 +189,7 @@ export function printInput (params, root) {
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
 
   params.disabled = ''
-  if (params.tab !== 'slug' && !User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/${params.status}/edit`)) {
+  if (params.tab !== 'slug' && !User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/edit/${params.status}`)) {
     params.disabled = 'disabled="disabled"'
   }
   var attributes = getAttributes(params)
