@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+  <body>
+    
+    <div class="references-list row col-xs-offset-1 col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="/abe/editor/">Home</a></li>
+        <li class="active">References editor</li>
+      </ol>
+
+      <div class="manager-tab references-files">
+        <div class="references-files-wrapper">
+          <ul class="list-group">
+            {{#each reference}}
+            <li class="list-group-item" data-error="0" data-href='{{@key}}' data-ref-json='{{printJson this}}'>
+              {{@key}}
+            </li>
+            {{/each}}
+            </ul>
+            <div class="display-json-wrapper">
+              <textarea class="form-control display-json"></textarea>
+              <div class="text-saved">✔ saved</div>
+              <div class="json-error">
+                &nbsp;
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/libs/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="/scripts/template-engine-compiled.js"></script>
+    <script type="text/javascript" src="/scripts/admin-compiled.js"></script>
+  </body>
+</html>

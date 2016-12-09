@@ -120,13 +120,18 @@ select[multiple], select[size] {
   resize: both;
 }
 
+.structure-list,
+.references-list{
+  height: 100%;
+}
+
 .references-files{
-  height: calc(100% - 40px);
+  height: calc(100% - 60px);
 }
 
 .references-files-wrapper{
   display: table;
-  height: calc(100% - 90px);
+  height: calc(100% - 20px);
   width: 100%;
   .list-group{
     display: table-cell;
@@ -147,7 +152,7 @@ select[multiple], select[size] {
   position: relative;
   vertical-align: top;
   .form-control{
-    height: 100%
+    height: 100%;
   }
 }
 

@@ -1,0 +1,14 @@
+import path from 'path'
+
+import {
+  coreUtils,
+  cmsStructure,
+  cmsData,
+  config
+} from '../../'
+
+export function editStructure(type, folderPath) {
+  if(type === 'add') coreUtils.file.addFolder(folderPath)
+  else coreUtils.file.removeFolder(folderPath)
+  return folderPath
+}
