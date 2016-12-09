@@ -101,10 +101,10 @@ app.use(csrf({
 }))
 app.use(function(req, res, next) {
   if (req.url.indexOf('/abe/') > -1 ) {
-    res.locals._csrf = req.csrfToken();
+    res.locals._csrf = req.csrfToken()
   }
-  next();
-});
+  next()
+})
 
 app.use(bodyParser.json({limit: '1gb'}))
 app.use(function (req, res, next) {
