@@ -43,13 +43,11 @@ export function addAbeDataAttrForHtmlAttributes(template) {
   template = template.replace(/<([A-Za-z]+)/g, '\nABE_SPLIT<$1')
   var match
   while (match = cmsData.regex.abeAsAttributePattern.exec(template)) { // While regexp match {{attribut}}, ex: link, image ...
-    if(cmsData.regex.isSingleAbe(match[2], template)){
+    if(cmsData.regex.isSingleAbe(match[0], template)){
       var more_attr = ''
-      var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
-      var toReplace = match[0].replace(
-        cmsData.regex.escapeTextToRegex(match[1]),
-        ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
-        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' + match[1])
+      var getattr = cmsData.regex.getAttr(match[2], 'key').replace(/\./g, '-')
+      var toReplace = ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[1].split('=')[0]).trim() + '"' +
+        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' + match[1] + match[2]
 
       toReplace = toReplace.replace(
         cmsData.regex.escapeTextToRegex(match[2]),
@@ -57,7 +55,7 @@ export function addAbeDataAttrForHtmlAttributes(template) {
       )
 
       template = template.replace(
-        cmsData.regex.escapeTextToRegex(match[0]),
+        cmsData.regex.escapeTextToRegex(match[1] + match[2]),
         toReplace
       )
     }
