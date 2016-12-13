@@ -16,6 +16,7 @@ A toolbar attribut allow to customize the rich textarea (display / hide customiz
 - bold
 - italic
 - underline
+- strikethrough
 - forecolor
 - highlight
 - align (add align [left|right|center|justify] buttons)
@@ -26,6 +27,8 @@ A toolbar attribut allow to customize the rich textarea (display / hide customiz
 - removeFormat
 - insertLink
 - code
+- list (ordered & unordered)
+- media (upload image & video)
 
 exemple :
 
