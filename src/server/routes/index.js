@@ -14,6 +14,8 @@ import postUpload from './post-upload'
 import postSqlRequest from './post-sql-request'
 import postReference from './post-reference'
 import getReference from './get-reference'
+import postStructure from './post-structure'
+import getStructure from './get-structure'
 import getPaginate from './get-paginate'
 import getThumbs from './get-thumbs'
 import getImage from './get-image'
@@ -37,6 +39,8 @@ export {
 	postSqlRequest,
 	postReference,
 	getReference,
+	postStructure,
+	getStructure,
 	getPaginate,
 	getThumbs,
 	getImage,

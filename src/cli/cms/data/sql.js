@@ -213,9 +213,9 @@ export function executeOrderByClause(files, orderby){
       files = coreUtils.sort.shuffle(files)
     }else if(orderby.column.toLowerCase() === 'date') {
       if(orderby.type === 'ASC') {
-        files.sort(coreUtils.sort.byDateAsc)
+        files.sort(cmsData.sort.byDateAsc)
       }else if(orderby.type === 'DESC') {
-        files.sort(coreUtils.sort.byDateDesc)
+        files.sort(cmsData.sort.byDateDesc)
       }
     }
   }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+  <body>
+    
+    <div class="structure-list row col-xs-offset-1 col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="/abe/editor/">Home</a></li>
+        <li class="active">Structure editor</li>
+      </ol>
+
+      <div class="manager-tab structure-folders">
+        <div class="structure-editor">
+          <input type="hidden" class="structure-json" value='{{@root.structure}}'>
+          <input type="text" class="form-control folder-name" value="" placeholder="folder name" data-folder="" disabled="disabled">
+          <div class="help-info">
+            hit <span>ENTER</span> to create folder
+          </div>
+          <div class="structure-wrapper">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/libs/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="/scripts/template-engine-compiled.js"></script>
+    <script type="text/javascript" src="/scripts/admin-compiled.js"></script>
+  </body>
+</html>

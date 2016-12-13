@@ -2,9 +2,9 @@
 
 import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
-import math from '../../../../cli/cms/templates/handlebars/math'
-import translate from '../../../../cli/cms/templates/handlebars/translate-front'
-import printJson from '../../../../cli/cms/templates/handlebars/printJson'
+import math from '../../../../../cli/cms/templates/handlebars/math'
+import translate from '../../../../../cli/cms/templates/handlebars/translate-front'
+import printJson from '../../../../../cli/cms/templates/handlebars/printJson'
 
 Handlebars.registerHelper('math', math)
 Handlebars.registerHelper('i18nAbe', translate)

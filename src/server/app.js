@@ -93,14 +93,20 @@ app.use(flash())
 app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
 app.use(csrf({
   cookie: {
     secure: config.cookie.secure
   }
 }))
+app.use(function(req, res, next) {
+  if (req.url.indexOf('/abe/') > -1 ) {
+    res.locals._csrf = req.csrfToken()
+  }
+  next()
+})
 
 app.use(bodyParser.json({limit: '1gb'}))
-app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
 app.use(function (req, res, next) {
   res.locals.nonce = uuid.v4()
   next()

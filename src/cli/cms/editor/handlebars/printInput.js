@@ -9,7 +9,7 @@ export function getAttributes(params) {
   var attributes = ''
   if(params.key != null) attributes += `id="${params.key}" data-id="${params.key}"`
   if(params.value != null) attributes += ` value="${params.value}"`
-  if(params['max-length'] != null) attributes += ` maxlength="${params['max-length']}" data-maxlength="${params['max-length']}"`
+  if(params['max-length'] != null) attributes += ` data-maxlength="${params['max-length']}"`
   if(params.reload != null) attributes += ` reload="${params.reload}"`
   if(params.order != null) attributes += ` tabIndex="${params.order}"`
   if(params.required != null) attributes += ` data-required="${params.required}"`
@@ -184,7 +184,7 @@ export function printInput (params, root) {
   if(!(params.toolbar != null)) params.toolbar = '*'
 
   params.disabled = ''
-  if (params.tab !== 'slug' && !User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/${params.status}/edit`)) {
+  if (params.tab !== 'slug' && !User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/edit/${params.status}`)) {
     params.disabled = 'disabled="disabled"'
   }
   var attributes = getAttributes(params)

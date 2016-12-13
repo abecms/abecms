@@ -84,10 +84,10 @@ export default class RichTexarea {
         off = this.link.onLink((obj) => {
           if(obj.link !== null) {
             html = this.textEditor.getHTML().replace('[LINK]', obj.link)
-            if(obj.target) 		html = html.replace(/\[TARGET\]/, '_blank')
-            else 							html = html.replace(/target=\"\[TARGET\]\"/, '')
-            if(obj.noFollow) 	html = html.replace(/\[REL\]/, 'nofollow')
-            else 							html = html.replace(/rel=\"\[REL\]\"/, '')
+            if(obj.target)    html = html.replace(/\[TARGET\]/, '_blank')
+            else              html = html.replace(/target=\"\[TARGET\]\"/, '')
+            if(obj.noFollow)  html = html.replace(/\[REL\]/, 'nofollow')
+            else              html = html.replace(/rel=\"\[REL\]\"/, '')
             this.textEditor.setHTML(html)
           }
           else this.textEditor.setHTML(html)

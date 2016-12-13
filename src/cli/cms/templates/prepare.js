@@ -47,20 +47,17 @@ export function addAbeDataAttrForHtmlAttributes(template) {
       var more_attr = ''
       var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
       var toReplace = match[0].replace(
-        new RegExp(match[1]),
+        cmsData.regex.escapeTextToRegex(match[1]),
         ' data-abe-attr-' + cmsData.regex.validDataAbe(getattr) + '="'  + (match[0].split('=')[0]).trim() + '"' +
         ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '"' + match[1])
 
       toReplace = toReplace.replace(
-        new RegExp(match[2]),
+        cmsData.regex.escapeTextToRegex(match[2]),
         match[2].replace('}}', ' has-abe=1}}')
       )
 
-      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-      console.log('toReplace', toReplace)
-
       template = template.replace(
-        new RegExp(match[0]),
+        cmsData.regex.escapeTextToRegex(match[0]),
         toReplace
       )
     }

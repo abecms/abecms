@@ -20,6 +20,7 @@ before_install:
  - sudo dpkg -i google-chrome*.deb
 install:
   - npm install
+  - npm run install-selenium
 before_script:
   - npm run distribute
 script:

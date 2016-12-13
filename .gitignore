@@ -9,8 +9,8 @@ draft/
 *.sublime-workspace
 
 # admin compiled
-src/server/public/scripts/*-compiled.js
-src/server/public/css/styles.css
+src/server/public/abejs/scripts/*-compiled.js
+src/server/public/abejs/css/styles.css
 
 # Local configs
 cli/config/*-local.js

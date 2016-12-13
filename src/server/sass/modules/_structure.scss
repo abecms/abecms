@@ -1,0 +1,88 @@
+.structure-editor{
+	display: inline-block;
+	.help-info{
+		transition: all 150ms ease-in-out;
+		font-size: 11px;
+		color: #e6e6e6;
+		padding: 2px;
+		span{
+			color: #ccc;
+		}
+	}
+	[disabled="disabled"]{
+		~ .help-info{
+			opacity: 0.1;
+		}
+	}
+}
+.folder-name{
+	transition: all 350ms ease-in-out;
+	display: inline-block;
+	width: 100%;
+	opacity: 1;
+	&[disabled]{
+		opacity: 0.4;
+	}
+	&.error{
+		border-color: red;
+	}
+}
+.structure-folder{
+	margin: 5px;
+	position: relative;
+	> span:hover{
+    cursor: pointer;
+	}
+	.glyphicon-chevron-right{
+		transition: all 100ms ease-in-out;
+		font-size: 10px;
+	}
+	&.open{
+		> span .glyphicon-chevron-right{
+	    transform: rotate(45deg);
+		}
+		&:before{
+	    background: #eee;
+	    content: " ";
+	    position: absolute;
+	    bottom: 3px;
+	    left: 6px;
+	    width: 1px;
+	    height: calc(100% - 34px);
+		}
+	}
+	.structure-folder{
+		margin-left: 20px;
+	}
+	.glyphicon-minus,
+	.glyphicon-plus{
+		transition: all 100ms ease-in-out;
+    opacity: 0.5;
+    &:hover{
+    	opacity: 1;
+    }
+	}
+	.structure-tool{
+		display: inline-block;
+		transition: all 100ms ease-in-out;
+    opacity: 0;
+    padding: 0px 5px;
+		&:hover{
+			opacity: 1;
+    }
+	}
+	.glyphicon-minus{
+    // margin-left: 5px;
+    font-size: 15px;
+    &:hover{
+    	color: #ff1371;
+    }
+	}
+	.glyphicon-plus{
+		font-size: 13px;
+    transform: translate3d(0, -1px, 0);
+    &:hover{
+    	color: #47b8e0;
+    }
+	}
+}
