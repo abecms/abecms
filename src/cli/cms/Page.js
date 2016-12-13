@@ -74,9 +74,6 @@ export default class Page {
         this.template = cmsTemplates.prepare.removeHandlebarsRawFromHtml(this.template)
         this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
       }
-
-      // je rajoute les index pour chaque bloc lié à un each
-      this.template = cmsTemplates.prepare.indexEachBlocks(this.template, this._onlyHTML)
       
       if(!this._onlyHTML){
 
@@ -86,6 +83,9 @@ export default class Page {
 
         this.template = cmsTemplates.prepare.addAbeSourceComment(this.template, json)
       }
+
+      // je rajoute les index pour chaque bloc lié à un each
+      this.template = cmsTemplates.prepare.indexEachBlocks(this.template, this._onlyHTML)
 
       // We remove the {{abe type=data ...}} from the text 
       this.template = cmsData.source.removeDataList(this.template)
