@@ -5,6 +5,7 @@ import {nextSibling} from '../utils/dom'
 import Color from '../utils/color-picker'
 import Link from '../utils/link-picker'
 import image from '../utils/img-picker'
+import smiley from '../utils/smiley-picker'
 import RichText from '../utils/rich-texarea'
 import Json from './EditorJson'
 import EditorUtils from './EditorUtils'
@@ -24,6 +25,11 @@ export default class EditorBlock {
     var imgWysiwyg = document.querySelector('.wysiwyg-popup.image')
     if (imgWysiwyg != null) {
       this.image = new image(imgWysiwyg)
+    }
+
+    var imgWysiwyg = document.querySelector('.wysiwyg-popup.smiley')
+    if (imgWysiwyg != null) {
+      this.smiley = new smiley(imgWysiwyg)
     }
 
     this._removeblock = [].slice.call(document.querySelectorAll('.list-group[data-block]'))
@@ -307,7 +313,7 @@ export default class EditorBlock {
       })
       var newRichs = [].slice.call(newBlock.querySelectorAll('.rich'))
       Array.prototype.forEach.call(newRichs, (newRich) => {
-        new RichText(newRich, this.color, this.link, this.image)
+        new RichText(newRich, this.color, this.link, this.image, this.smiley)
       })
     }
 

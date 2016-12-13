@@ -144,6 +144,16 @@ select[multiple], select[size] {
       border: 0;
     }
   }
+  &.smiley {
+    padding: 3px 5px 0px 0px;
+  }
+  .wysiwyg-toolbar-smiley {
+    width: 19px;
+    text-align: center;
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .rich [contenteditable]{

@@ -2,10 +2,11 @@
 
 export default class RichTexarea {
 
-  constructor(wrapper, color, link, image) {
+  constructor(wrapper, color, link, image, smiley) {
     this.color = color
     this.link = link
     this.image = image
+    this.smiley = smiley
     this.wrapper = wrapper
     this.textarea = wrapper.querySelector('.form-rich')
     this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon')
@@ -112,6 +113,16 @@ export default class RichTexarea {
             off()
           })
           this.image.show(this.el)
+          break
+        case 'smiley':
+          var html = this.textEditor.getHTML()
+          off = this.smiley.onSmiley((obj) => {
+            this._replaceSelectionWithHtml(obj)
+            this.textEditor.setHTML(this.textEditor.getHTML())
+            this.setHTML()
+            off()
+          })
+          this.smiley.show(this.el)
           break
       }
     }
