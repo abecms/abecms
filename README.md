@@ -269,6 +269,25 @@ List of self-descriptive Abe tag
 {{/each}}
 ```
 
+## Template designer references
+
+- [abe tags template integration](docs/abe-tags.md)
+- [abe attributes](docs/abe-attributes.md)
+- [abe handlebars variables](docs/abe-handlebars-variables.md)
+- [abe handlebars helpers](docs/abe-handlebars-helpers.md)
+
+## Template cms admin
+
+- [abe users management](docs/abe-users.md)
+- [abe route list](docs/abe-url.md)
+- [abe config json](docs/abe-config.md)
+
+## Template plugins developer
+
+- [abe plugin install](docs/abe-plugins.md)
+- [abe plugin hook list](docs/abe-hooks.md)
+- [abe attributes](docs/abe-attributes.md)
+
 More detailled documentation comming soon
 
 ## Adding a template and assets (css / js / images ...)
