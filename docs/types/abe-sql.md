@@ -209,18 +209,18 @@ Request:
 ```
 select some_variable from / where `abe_meta.template` NOT IN (`template_name_1`, `template_name_2`, `template_name_3`)
 // ex with variables
-select some_variable from / where `title` NOT IN `{{variable_array}}`
+select some_variable from / where `template` NOT IN `{{variable_array}}`
 select some_variable from / where `{{abe_meta.template}}` NOT IN `a title`
 ```
 
 Same as `IN`
 
 ```
-select some_variable from / where `title` NOT IN `{{variable_array}}`
+select some_variable from / where `template` NOT IN `{{variable_array}}`
 
 =
 
-select some_variable from / where `title` NOT IN (`homepage`, `article`)
+select some_variable from / where `template` NOT IN (`homepage`, `article`)
 ```
 
 ## ORDER BY
