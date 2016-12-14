@@ -4,8 +4,6 @@ import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import clc from 'cli-color'
 
-import handlebarsHelperSlugify from 'handlebars-helper-slugify'
-
 import {
 	translate,
 	cleanTab,
@@ -16,9 +14,7 @@ import {
 	moduloIf,
 	attrAbe,
 	ifIn,
-	ifCond,
-	isTrue,
-	truncate
+	ifCond
 } from './cms/templates/index'
 
 import {

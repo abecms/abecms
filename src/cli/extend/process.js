@@ -40,7 +40,7 @@ var abeProcess = function(name, args = []) {
   }
 
   if(typeof proc !== 'undefined' && proc !== null) {
-    proc.on('message', function(msg) {
+    proc.on('message', function() {
       abeExtend.lock.remove(name)
       proc.kill()
     })

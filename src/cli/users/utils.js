@@ -237,7 +237,7 @@ export function getAll() {
   return User.manager.instance.get()
 }
 
-export function getUserWorkflow(status, role) {
+export function getUserWorkflow(status) {
   var flows = []
 
   function addFlow (flow, type, action) {
@@ -249,7 +249,6 @@ export function getUserWorkflow(status, role) {
   }
 
   if (config.users.enable) {
-    var before = null
     var found = null
     Array.prototype.forEach.call(config.users.workflow, (flow) => {
 

@@ -57,13 +57,24 @@ export function createInputSource(attributes, inputClass, params) {
     lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
     inputSource += `<select ${attributes} class="${inputClass}" last-values='${lastValues}'>`
 
-    if (!params.required) inputSource += '<option value=\'\'></option>'
+    // if (!params.required) inputSource += '<option value=\'\'></option>'
+    var options = ''
     if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
       Array.prototype.forEach.call(params.source, (val) => {
-        inputSource += sourceOption(val, params)
+        options += sourceOption(val, params)
       })
+    }else{
+      options += sourceOption(params.source, params)
     }
-    else inputSource += sourceOption(params.source, params)
+
+    var defaultValueSelected = 'selected=selected'
+    if (options.indexOf('selected') > -1) {
+      defaultValueSelected = ''
+    }
+    if (params.required) inputSource += `<option value=\'\' value="" disabled ${defaultValueSelected}>Select ${params.desc.toLowerCase()}...</option>`
+    if (!params.required) inputSource += `<option value=\'\' value="" ${defaultValueSelected}></option>`
+    inputSource += options
+
     inputSource += '</select>'
   }
   return inputSource
@@ -132,7 +143,7 @@ export function createInputTextarea(attributes, inputClass, params) {
   return `<textarea class="${inputClass}" ${attributes} rows="4">${params.value}</textarea>`
 }
 
-export function createInputLink(attributes, inputClass, params) {
+export function createInputLink(attributes, inputClass) {
   return `<div class="input-group">
             <div class="input-group-addon link">
               <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
@@ -157,7 +168,7 @@ export function createInputImage(attributes, inputClass, params) {
           <div class="input-error"></div>`
 }
 
-export function createInputText(attributes, inputClass, params) {
+export function createInputText(attributes, inputClass) {
   return `<div class="input-group">
           <div class="input-group-addon">
             <span class="glyphicon glyphicon-font" aria-hidden="true"></span>

@@ -78,7 +78,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
       if(pathSource[1] != null) {
         pathSource = pathSource[1].split('/')
         pathSource.shift()
-        pathSource = '/' + path.join('/')
+        pathSource = '/' + pathSource.join('/')
       }else {
         pathSource = '/'
       }

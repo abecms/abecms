@@ -1,11 +1,6 @@
 import {printInput} from './printInput'
 import abeEngine from './abeEngine'
 
-import {
-  config
-  ,cmsTemplates
-} from '../../../../cli'
-
 export default function printBlock (ctx, root) {
   var res = ''
   var precontrib = false
@@ -74,7 +69,5 @@ export default function printBlock (ctx, root) {
     res += printInput(ctx[0], root)
   }
 
-  // var template = cmsTemplates.Handlebars.compile(res)
-  // return new cmsTemplates.Handlebars.SafeString(template(ctx, {data: {intl: config.intlData}}))
   return res
 }

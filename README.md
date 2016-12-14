@@ -173,27 +173,7 @@ start server with nodemon (dev)
 
 ```$ abe servedev ```
 
-OR
-
-start server with pm2
-
-open ./abe.json
-
-```
-{
-  "processName": "abe",
-  "port": "8000"
-}
-
-```
 > default config
-
-
-```$ abe prod ```
-
-to stop pm2 in production
-
-```$ abe stop ```
 
 
 ## Options

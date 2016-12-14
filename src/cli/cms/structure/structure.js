@@ -1,10 +1,5 @@
-import path from 'path'
-
 import {
-  coreUtils,
-  cmsStructure,
-  cmsData,
-  config
+  coreUtils
 } from '../../'
 
 export function editStructure(type, folderPath) {

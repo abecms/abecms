@@ -70,18 +70,18 @@ class Manager {
     try {
       fse.accessSync(this._pathTemplate, fse.F_OK)
       this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
-        monitor.on('created', (f, stat) => {
+        monitor.on('created', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
           this.events.template.emit('update')
         })
-        monitor.on('changed', (f, curr, prev) => {
+        monitor.on('changed', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
           this.events.template.emit('update')
           
         })
-        monitor.on('removed', (f, stat) => {
+        monitor.on('removed', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
           this.events.template.emit('update')
@@ -95,18 +95,18 @@ class Manager {
     try {
       fse.accessSync(this._pathPartials, fse.F_OK)
       this._watchPartialsFolder = watch.createMonitor(this._pathPartials, (monitor) => {
-        monitor.on('created', (f, stat) => {
+        monitor.on('created', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
           this.events.template.emit('update')
         })
-        monitor.on('changed', (f, curr, prev) => {
+        monitor.on('changed', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
           this.events.template.emit('update')
           
         })
-        monitor.on('removed', (f, stat) => {
+        monitor.on('removed', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
           this.events.template.emit('update')
@@ -119,15 +119,15 @@ class Manager {
     try {
       fse.accessSync(this._pathStructure, fse.F_OK)
       this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
-        monitor.on('created', (f, stat) => {
+        monitor.on('created', () => {
           this.updateStructureAndTemplates()
           this.events.structure.emit('update')
         })
-        monitor.on('changed', (f, curr, prev) => {
+        monitor.on('changed', () => {
           this.updateStructureAndTemplates()
           this.events.structure.emit('update')
         })
-        monitor.on('removed', (f, stat) => {
+        monitor.on('removed', () => {
           this.updateStructureAndTemplates()
           this.events.structure.emit('update')
         })
@@ -139,16 +139,16 @@ class Manager {
     try {
       fse.accessSync(this._pathReference, fse.F_OK)
       this._watchReferenceFolder = watch.createMonitor(this._pathReference, (monitor) => {
-        monitor.on('created', (f, stat) => {
+        monitor.on('created', (f) => {
           this.updateReferences(f)
           this.events.reference.emit('update')
         })
-        monitor.on('changed', (f, curr, prev) => {
+        monitor.on('changed', (f) => {
           this.updateReferences(f)
           this.events.reference.emit('update')
           
         })
-        monitor.on('removed', (f, stat) => {
+        monitor.on('removed', () => {
           this.updateReferences()
           this.events.reference.emit('update')
         })

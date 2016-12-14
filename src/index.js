@@ -1,17 +1,11 @@
 #!/usr/bin/env node
-import {Promise} from 'bluebird'
 import Create from './cli/cms/Create'
 import plugins from './cli/extend/plugins'
 import {exec} from 'child_process'
 import {spawn} from 'child_process'
-import execPromise from 'child-process-promise'
-import mkdirp from 'mkdirp'
-import fse from 'fs-extra'
 import path from 'path'
 import program from 'commander'
 import pkg from '../package'
-import pm2 from 'pm2'
-import clc from 'cli-color'
 
 program
   .version(pkg.version)
@@ -50,7 +44,7 @@ program
     }
 
     generate.on('close', (code) => {
-      console.log(clc.cyan('child process exited with code') + ' ' + code)
+      console.log('child process exited with code ' + code)
       process.exit(0)
     })
   }).on('--help', function() {
@@ -64,7 +58,7 @@ program
   .command('create [path]')
   .alias('c')
   .description('create new abe project')
-  .action(function(dest, options){
+  .action(function(dest){
     dest = (dest != null) ? dest : ''
     var dir = path.join(process.cwd(), dest)
     if(process.env.ROOT) {

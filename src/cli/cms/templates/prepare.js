@@ -35,24 +35,22 @@ export function addHasAbeAttr(text) {
 export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
   var valueOfAttritube
   var key = cmsData.regex.getAttr(match, 'key')
-  var getattr
   var res
 
   if (cmsData.regex.isSingleAbe(match, text)) {
     valueOfAttritube = key.replace(/\./g, '-')
     key = cmsData.regex.validDataAbe(valueOfAttritube)
-    getattr = key.replace(/\./g, '-')
-    res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + getattr + '"' + abeTag
+    key = key.replace(/\./g, '-')
+    res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + abeTag
   }else {
-    var valueOfAttritube = key.split('.')
+    valueOfAttritube = key.split('.')
     var parentKey = valueOfAttritube.shift()
     valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0]}`
     var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
     key = cmsData.regex.validDataAbe(valueOfAttritube)
-    getattr = key
 
-    res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${getattr}"`
-    + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${getattr}"${abeTag}`
+    res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
+    + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${abeTag}`
   }
 
   return res
@@ -83,7 +81,7 @@ data-abe-image_key="image_key" src="{{abe type='image' key='image_key' tab='defa
 
  * @param {[type]} template [description]
  */
-export function addAbeDataAttrForHtmlAttributes(template, key) {
+export function addAbeDataAttrForHtmlAttributes(template) {
   var text = template.replace(/<([A-Za-z]+)/g, '\nABE_SPLIT<$1')
   let abeTagIntoAttribute = text.match(cmsData.regex.abeAsAttributePattern)
 

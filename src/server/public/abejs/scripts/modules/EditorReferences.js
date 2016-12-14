@@ -1,6 +1,5 @@
 /*global document */
 
-import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 
