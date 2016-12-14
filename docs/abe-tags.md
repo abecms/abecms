@@ -113,3 +113,17 @@ Multiple abe attribute into the same html tag
 </html>
 ```
 
+tips use visible false abe attribute
+
+```html
+{{abe type='text' key='text_1' visible="false"}}
+{{abe type='text' key='text_2' visible="false"}}
+<html>
+	<head>
+	</head>
+	<body class="{{text_1}} {{text_2}}">
+		
+	</body>
+</html>
+```
+
