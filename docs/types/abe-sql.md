@@ -166,6 +166,10 @@ select some_variable from / where `abe_meta.template` IN (`template_name_1`, `te
 // ex with variables
 select some_variable from / where `template` IN (`{{variable_array}}`)
 select some_variable from / where `{{abe_meta.template}}` IN (`a title`)
+// ex with an array
+select some_variable from / where `array.attribute` IN (`{{variable_array}}`)
+// the previous example is equivalent to this notation (notice the [] to indicate an array)
+select some_variable from / where `array[].attribute` IN (`{{variable_array}}`)
 ```
 
 variable_array can be something like this
@@ -203,6 +207,42 @@ select some_variable from / where `template` IN (`{{variable_array}}`)
 select some_variable from / where `template` IN (`homepage`, `article`)
 ```
 
+Use case :
+
+If the template looks like this:
+
+```json
+{{abe type="data" key="products" source="select title,cover_300x200 from /products where `abe_meta.template`=`product`" desc="select products" display="{{title}}"}}
+
+{{abe type="data" key="other_recipes" source="select title,cover_300x200 from /recipes where `products.title` IN (`{{products}}`) AND `abe_meta.link`!=`{{abe_meta.link}}`" editable="false"}}
+```
+
+> we could have written the other_recipes request this way (see the [] in products[].title):
+```json
+{{abe type="data" key="other_recipes" source="select title,cover_300x200 from /recipes where `products[].title` IN (`{{products}}`) AND `abe_meta.link`!=`{{abe_meta.link}}`" editable="false"}}
+```
+
+If the json post looks like this
+
+```json
+{
+  "name": "r2",
+  "recipe": "Recipe 2",
+  "products": [
+    {
+      "title": "p1",
+      "cover_300x200": "/image/turkey_300x200.jpg",
+    },
+    {
+      "title": "p3",
+      "cover_300x200": "/image/chicken_300x200.jpg",
+    }
+  ]
+}
+```
+
+the result of the request will return all the recipes containing one or more products included in the json post (containing p1 or p3 or both)
+
 ## NOT IN
 
 Request:
@@ -211,6 +251,10 @@ select some_variable from / where `abe_meta.template` NOT IN (`template_name_1`,
 // ex with variables
 select some_variable from / where `template` NOT IN (`{{variable_array}}`)
 select some_variable from / where `{{abe_meta.template}}` NOT IN (`a title`)
+// ex with an array
+select some_variable from / where `{{array.attribute}}` NOT IN (`{{variable_array}}`)
+// the previous example is equivalent to this notation (notice the [] to indicate an array)
+select some_variable from / where `{{array[].attribute}}` NOT IN (`{{variable_array}}`)
 ```
 
 Same as `IN`
