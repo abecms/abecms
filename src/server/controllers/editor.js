@@ -56,23 +56,25 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
     obj = cmsData.attributes.getAll(v, json)
 
   var realKey
-  if(typeof keyArray !== 'undefined' && keyArray !== null) {
-    realKey = obj.key.replace(/[^\.]+?\./, '')
 
-    if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
-      obj.keyArray = keyArray
-      obj.realKey = realKey
-      obj.key = keyArray + '[' + i + '].' + realKey
-      obj.desc = obj.desc + ' ' + i,
-      insertAbeEach(obj, text, json, util, arrayBlock)
+  // if(typeof keyArray !== 'undefined' && keyArray !== null) {
+  //   realKey = obj.key.replace(/[^\.]+?\./, '')
 
-    }else if(util.dontHaveKey(obj.key)) {
-      obj.value = json[getDataIdWithNoSlash(obj.key)]
-      json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
-    }
+  //   if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
+  //     obj.keyArray = keyArray
+  //     obj.realKey = realKey
+  //     obj.key = keyArray + '[' + i + '].' + realKey
+  //     obj.desc = obj.desc + ' ' + i,
+  //     insertAbeEach(obj, text, json, util, arrayBlock)
 
-  }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
-    realKey = obj.key.replace(/\./g, '-')
+  //   }else if(util.dontHaveKey(obj.key)) {
+  //     obj.value = json[getDataIdWithNoSlash(obj.key)]
+  //     json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
+  //   }
+
+  // }else 
+  if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
+    realKey = obj.key//.replace(/\./g, '-')
     obj.value = json[getDataIdWithNoSlash(realKey)]
     json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
   }

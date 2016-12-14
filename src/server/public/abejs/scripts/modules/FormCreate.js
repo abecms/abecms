@@ -4,6 +4,7 @@ import limax from 'limax'
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 import FolderSelect from './FolderSelect'
+import {setObjByString} from '../utils/jsonObject'
 
 export default class FormCreate {
   constructor(parentForm) {
@@ -20,7 +21,7 @@ export default class FormCreate {
       this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'))
       this._precontribTemplate = [].slice.call(this._form.querySelectorAll('[data-precontrib-templates]'))
 
-      this._selectTemplate = this._form.querySelector('[data-id="selectTemplate"]')
+      this._selectTemplate = this._form.querySelector('[data-id="abe_meta.template"]')
       this._showHideSelect(this._selectTemplate)
       this._handleBtnSelectTemplate = this._btnSelectTemplate.bind(this)
 
@@ -126,7 +127,8 @@ export default class FormCreate {
                 if (resultValue.indexOf('{') > -1) {
                   try {
                     var jsonValue = JSON.parse(resultValue)
-                    values[id].push(jsonValue)
+                    setObjByString(values, id, jsonValue);
+                    // values[id].push(jsonValue)
                   }catch(e) {
                     // values[id].push(value)
                   }
@@ -140,7 +142,8 @@ export default class FormCreate {
               if (value.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(value)
-                  values[id] = [jsonValue]
+                  // values[id] = [jsonValue]
+                  setObjByString(values, id, [jsonValue]);
 
                   if (required && values[id].length == 0) {
                     isValid = false
@@ -150,7 +153,8 @@ export default class FormCreate {
                   // values[id].push(value)
                 }
               }else {
-                values[id] = value
+                // values[id] = value
+                setObjByString(values, id, value);
                 if (required && values[id] == '') {
                   isValid = false
                   if(showErrors) parentNode.classList.add('has-error')

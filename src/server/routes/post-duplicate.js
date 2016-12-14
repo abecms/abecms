@@ -11,7 +11,10 @@ var route = function(req, res, next) {
   var postName = folderName.pop()
   folderName = folderName.join('/')
 
-  var p = cmsOperations.duplicate(req.body.oldFilePath, req.body.selectTemplate, folderName, postName, req)
+  var oldFilePath = req.body.oldFilePath
+  delete req.body.oldFilePath
+
+  var p = cmsOperations.duplicate(oldFilePath, req.body.abe_meta.template, folderName, postName, req)
 
   p.then((resSave) => {
     var result = {

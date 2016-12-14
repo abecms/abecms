@@ -4774,6 +4774,8 @@ var _FolderSelect = require('./FolderSelect');
 
 var _FolderSelect2 = _interopRequireDefault(_FolderSelect);
 
+var _jsonObject = require('../utils/jsonObject');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -4795,7 +4797,7 @@ var FormCreate = function () {
       this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'));
       this._precontribTemplate = [].slice.call(this._form.querySelectorAll('[data-precontrib-templates]'));
 
-      this._selectTemplate = this._form.querySelector('[data-id="selectTemplate"]');
+      this._selectTemplate = this._form.querySelector('[data-id="abe_meta.template"]');
       this._showHideSelect(this._selectTemplate);
       this._handleBtnSelectTemplate = this._btnSelectTemplate.bind(this);
 
@@ -4907,7 +4909,8 @@ var FormCreate = function () {
                   if (resultValue.indexOf('{') > -1) {
                     try {
                       var jsonValue = JSON.parse(resultValue);
-                      values[id].push(jsonValue);
+                      (0, _jsonObject.setObjByString)(values, id, jsonValue);
+                      // values[id].push(jsonValue)
                     } catch (e) {
                       // values[id].push(value)
                     }
@@ -4921,7 +4924,8 @@ var FormCreate = function () {
                 if (value.indexOf('{') > -1) {
                   try {
                     var jsonValue = JSON.parse(value);
-                    values[id] = [jsonValue];
+                    // values[id] = [jsonValue]
+                    (0, _jsonObject.setObjByString)(values, id, [jsonValue]);
 
                     if (required && values[id].length == 0) {
                       isValid = false;
@@ -4931,7 +4935,8 @@ var FormCreate = function () {
                     // values[id].push(value)
                   }
                 } else {
-                  values[id] = value;
+                  // values[id] = value
+                  (0, _jsonObject.setObjByString)(values, id, value);
                   if (required && values[id] == '') {
                     isValid = false;
                     if (showErrors) parentNode.classList.add('has-error');
@@ -5047,7 +5052,7 @@ var FormCreate = function () {
 
 exports.default = FormCreate;
 
-},{"./FolderSelect":18,"limax":3,"nanoajax":4,"qs":11}],20:[function(require,module,exports){
+},{"../utils/jsonObject":21,"./FolderSelect":18,"limax":3,"nanoajax":4,"qs":11}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5108,5 +5113,38 @@ var FormList = function () {
 }();
 
 exports.default = FormList;
+
+},{}],21:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.setObjByString = setObjByString;
+function setObjByString(obj, str, val) {
+    var keys, key;
+    //make sure str is a string with length
+    if (!str || !str.length || Object.prototype.toString.call(str) !== "[object String]") {
+        return false;
+    }
+    if (obj !== Object(obj)) {
+        //if it's not an object, make it one
+        obj = {};
+    }
+    keys = str.split(".");
+    while (keys.length > 1) {
+        key = keys.shift();
+        if (obj !== Object(obj)) {
+            //if it's not an object, make it one
+            obj = {};
+        }
+        if (!(key in obj)) {
+            //if obj doesn't contain the key, add it and set it to an empty object
+            obj[key] = {};
+        }
+        obj = obj[key];
+    }
+    return obj[keys[0]] = val;
+}
 
 },{}]},{},[17]);

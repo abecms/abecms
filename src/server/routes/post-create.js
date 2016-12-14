@@ -11,7 +11,7 @@ var route = function(req, res, next) {
   var postName = folderName.pop()
   folderName = folderName.join('/')
 
-  var p = cmsOperations.create(req.body.selectTemplate, folderName, postName, req, req.body)
+  var p = cmsOperations.create(req.body.abe_meta.template, folderName, postName, req, req.body)
 
   p.then((resSave) => {
     var result = {
