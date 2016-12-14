@@ -87,23 +87,25 @@ export function addAbeDataAttrForHtmlAttributes(template, key) {
   var text = template.replace(/<([A-Za-z]+)/g, '\nABE_SPLIT<$1')
   let abeTagIntoAttribute = text.match(cmsData.regex.abeAsAttributePattern)
 
-  Array.prototype.forEach.call(abeTagIntoAttribute, (abeIntoTag) => {
-    let matchAbeTag = /({{abe.*?[\s\S].*?}})/g.exec(abeIntoTag)
+  if (abeTagIntoAttribute != null) {
+    Array.prototype.forEach.call(abeTagIntoAttribute, (abeIntoTag) => {
+      let matchAbeTag = /({{abe.*?[\s\S].*?}})/g.exec(abeIntoTag)
 
-    if(matchAbeTag != null && matchAbeTag[1] != null) {
-      var toReplace = cmsTemplates.prepare.getAbeAttributeData(matchAbeTag[1], text, (abeIntoTag.split('=')[0]).trim(), abeIntoTag)
+      if(matchAbeTag != null && matchAbeTag[1] != null) {
+        var toReplace = cmsTemplates.prepare.getAbeAttributeData(matchAbeTag[1], text, (abeIntoTag.split('=')[0]).trim(), abeIntoTag)
 
-      toReplace = toReplace.replace(
-        cmsData.regex.escapeTextToRegex(matchAbeTag[1]),
-        cmsTemplates.prepare.addHasAbeAttr(matchAbeTag[1])
-      )
+        toReplace = toReplace.replace(
+          cmsData.regex.escapeTextToRegex(matchAbeTag[1]),
+          cmsTemplates.prepare.addHasAbeAttr(matchAbeTag[1])
+        )
 
-      text = text.replace(
-        cmsData.regex.escapeTextToRegex(abeIntoTag),
-        toReplace
-      )
-    }
-  })
+        text = text.replace(
+          cmsData.regex.escapeTextToRegex(abeIntoTag),
+          toReplace
+        )
+      }
+    })
+  }
   text = text.replace(/\nABE_SPLIT</g, '<')
 
   return text
