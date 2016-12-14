@@ -109,6 +109,76 @@ select[multiple], select[size] {
 
 .wysiwyg-toolbar {
   white-space: normal !important;
+  .underline {
+    &:after {
+      content: "U";
+    }
+  }
+  .glyphicon-strikethrough {
+    &:after {
+      content: "Ꞩ";
+    }
+  }
+}
+
+.wysiwyg-popup {
+  &.image {
+    border-radius: 0;
+    margin-bottom: 0;
+    max-width: 300px;
+    margin-top: -40px;
+    margin-left: 40px;
+    .form-group {
+      margin-bottom: 0;
+    }
+    .input-error {
+      display: none;
+    }
+  }
+  .btn-add-img-wrapper {
+    display: table-cell;
+    position: relative;
+    vertical-align: middle;
+    .btn-add-img {
+      border-radius: 0;
+      border: 0;
+    }
+  }
+  &.smiley {
+    padding: 8px 10px 5px 5px;
+    max-height: 200px;
+    overflow: auto;
+    transition: all 350ms ease-in;
+    margin-top: -15px;
+    margin-left: 20px;
+  }
+  &.on {
+    &.smiley {
+      box-shadow: 0px 5px 3px 0px rgba(0, 0, 0, 0.1);
+    }
+  }
+  .smiley-title {
+    border-bottom: 1px solid #f1f1f1;
+    color: #666;
+    font-weight: 100;
+    font-size: 12px;
+    text-align: center;
+  }
+  .smiley-subtitle {
+    color: #999;
+    font-weight: 100;
+    font-size: 10px;
+    text-transform: capitalize;
+    padding-left: 5px;
+    padding-top: 5px;
+  }
+  .wysiwyg-toolbar-smiley {
+    width: 19px;
+    text-align: center;
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .rich [contenteditable]{

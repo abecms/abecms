@@ -179,9 +179,9 @@ export function getThumbsList() {
 }
 
 export function getAssociatedImageFileFromThumb(name) {
-  var rexMatchImageName = /_(thumb|\d+x\d+)/
+  var rexMatchImageName = /_(thumb|\d+x\d+)\./
   name = path.join(path.sep, name)
-  var originalName = path.join(path.sep, name.replace(rexMatchImageName, ''))
+  var originalName = path.join(path.sep, name.replace(rexMatchImageName, '.'))
   var imageList = {
     thumbFile: name,
     originalFile: originalName,
@@ -194,7 +194,7 @@ export function getAssociatedImageFileFromThumb(name) {
   var files = coreUtils.file.getFilesSync(pathThumb, true)
   Array.prototype.forEach.call(files, (pathFile) => {
     pathFile = pathFile.replace(path.join(config.root, config.publish.url), '')
-    if(pathFile !== originalName && pathFile !== name && pathFile.replace(rexMatchImageName, '') === originalName){
+    if(pathFile !== originalName && pathFile !== name && pathFile.replace(rexMatchImageName, '.') === originalName){
       imageList.thumbs.push(pathFile)
     }
   })

@@ -1,4 +1,4 @@
-export let abeTag = /({{abe.*?[\s\S].*?}})/g
+export let abeTag = /({{abe.*?[\s\S].*?}})/g;
 // 
 export let abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g
 // This pattern finds all abe tags enclosed in a HTML tag attribute

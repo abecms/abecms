@@ -2,11 +2,11 @@ var chai = require('chai');
 var path = require('path');
 var fse = require('fs-extra');
 
-var config = require('../src/cli').config
-config.set({root: path.join(__dirname,'fixtures')})
+var config = require('../../../src/cli').config
+config.set({root: path.join(process.cwd(), 'test', 'fixtures')})
 
-var Manager = require('../src/cli').Manager;
-var coreUtils = require('../src/cli').coreUtils
+var Manager = require('../../../src/cli').Manager;
+var coreUtils = require('../../../src/cli').coreUtils
 
 describe('Sort', function() {
   before( function(done) {
