@@ -1,3 +1,4 @@
+
 export let abeTag = /({{abe.*?[\s\S].*?}})/g;
 // 
 export let abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g;
@@ -9,7 +10,7 @@ export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})([^=]*?)({{abe.*
 // export let eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
 export let eachBlockPattern = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
 // This pattern finds all {{#each ...}}...{{/each}} blocks
-export let blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g;
+export let blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g
 
 /**
  * escape a regex
