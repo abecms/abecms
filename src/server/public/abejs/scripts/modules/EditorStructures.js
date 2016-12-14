@@ -6,7 +6,7 @@ import qs from 'qs'
 export default class EditorStructures {
   constructor() {
     var struc = document.querySelector('.structure-json')
-    if(!(struc != null)) return;
+    if(!(struc != null)) return
     this._ajax = Nanoajax.ajax
     this.datas = JSON.parse(struc.value)
     this.structureWrapper = document.querySelector('.structure-wrapper')
