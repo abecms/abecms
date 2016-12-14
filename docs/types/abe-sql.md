@@ -164,8 +164,8 @@ Request:
 ```
 select some_variable from / where `abe_meta.template` IN (`template_name_1`, `template_name_2`, `template_name_3`)
 // ex with variables
-select some_variable from / where `template` IN `{{variable_array}}`
-select some_variable from / where `{{abe_meta.template}}` IN `a title`
+select some_variable from / where `template` IN (`{{variable_array}}`)
+select some_variable from / where `{{abe_meta.template}}` IN (`a title`)
 ```
 
 variable_array can be something like this
@@ -196,7 +196,7 @@ If the json look like this
 the result of the request look like that
 
 ```
-select some_variable from / where `template` IN `{{variable_array}}`
+select some_variable from / where `template` IN (`{{variable_array}}`)
 
 =
 
@@ -209,14 +209,14 @@ Request:
 ```
 select some_variable from / where `abe_meta.template` NOT IN (`template_name_1`, `template_name_2`, `template_name_3`)
 // ex with variables
-select some_variable from / where `template` NOT IN `{{variable_array}}`
-select some_variable from / where `{{abe_meta.template}}` NOT IN `a title`
+select some_variable from / where `template` NOT IN (`{{variable_array}}`)
+select some_variable from / where `{{abe_meta.template}}` NOT IN (`a title`)
 ```
 
 Same as `IN`
 
 ```
-select some_variable from / where `template` NOT IN `{{variable_array}}`
+select some_variable from / where `template` NOT IN (`{{variable_array}}`)
 
 =
 
