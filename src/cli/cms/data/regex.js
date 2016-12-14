@@ -1,9 +1,14 @@
-export let abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g
+
+export let abeTag = /({{abe.*?[\s\S].*?}})/g;
+// 
+export let abePattern = /[^"']({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g;
 // This pattern finds all abe tags enclosed in a HTML tag attribute
 // export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
-export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}).*?({{abe.*?}})/g
+// export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})(.*?)({{abe.*?}})/g
+export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})([^=]*?)({{abe.*?["|'| ]}})["|']/g;
 // This pattern finds all {{#each ...}}...{{/each}} blocks
-export let eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
+// export let eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
+export let eachBlockPattern = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
 // This pattern finds all {{#each ...}}...{{/each}} blocks
 export let blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g
 
@@ -43,6 +48,15 @@ export function isSingleAbe(str, text){
           str.indexOf('{{/') < 0 &&
           str.indexOf('/each') < 0 &&
           str.indexOf('attrAbe') < 0
+}
+
+/**
+ * Test if a string don't contains string key from ABE block statement
+ * @param  {String}  str string to test
+ * @return {Boolean} true = this is not a block content
+ */
+export function getEachParentKey(str){
+  return getAttr(str, 'key').split('.')[0]
 }
 
 /**

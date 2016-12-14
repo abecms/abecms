@@ -25,8 +25,10 @@ describe('cmsTemplates.prepare', function() {
           text: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-text.html'), 'utf-8'),
           attribute: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-attribute.html'), 'utf-8'),
           attributeConcat: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-attribute-concat.html'), 'utf-8'),
+          attributeMultiple: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-attribute-multiple.html'), 'utf-8'),
           source: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-source.html'), 'utf-8'),
           each: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each.html'), 'utf-8'),
+          eachMultiple: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each-multiple.html'), 'utf-8'),
           rawHandlebar: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-raw-handlebars.html'), 'utf-8')
         }
         done()
@@ -47,6 +49,35 @@ describe('cmsTemplates.prepare', function() {
   });
 
   /**
+   * cmsTemplates.template.getAbeAttributeData
+   * 
+   */
+  it('cmsTemplates.prepare.getAbeAttributeData()', function() {
+    // stub
+
+    // test
+    var template = cmsTemplates.prepare.getAbeAttributeData(
+      this.fixture.attribute,
+      "src=\"{{abe type='image' key='image_key' tab='default'}}\"",
+      "src",
+      "{{abe type='image' key='image_key' tab='default'}}"
+    )
+    chai.expect(template.indexOf('data-abe-attr-image_key="src" data-abe-image_key="image_key"')).to.be.above(-1);
+  });
+
+  /**
+   * cmsTemplates.template.addHasAbeAttr
+   * 
+   */
+  it('cmsTemplates.prepare.addHasAbeAttr()', function() {
+    // stub
+
+    // test
+    var template = cmsTemplates.prepare.addHasAbeAttr("}}")
+    chai.expect(template.indexOf('has-abe=1}}')).to.be.above(-1);
+  });
+
+  /**
    * cmsTemplates.template.addAbeDataAttrForHtmlAttributes
    * 
    */
@@ -55,10 +86,21 @@ describe('cmsTemplates.prepare', function() {
 
     // test
     var template = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.attribute)
-    chai.expect(template.indexOf('data-abe-attr-')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-attr-image_key="src" data-abe-image_key="image_key"')).to.be.above(-1);
 
-    var templateConcat = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.attributeConcat)
-    chai.expect(templateConcat.indexOf('data-abe-attr-')).to.be.above(-1);
+    template = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.attributeConcat)
+    chai.expect(template.indexOf('data-abe-attr-image_key="src" data-abe-image_key="image_key"')).to.be.above(-1);
+
+    template = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.attributeMultiple)
+    chai.expect(template.indexOf('data-abe-attr-image_key="src" data-abe-image_key="image_key"')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-attr-alternate="alt" data-abe-alternate="alternate" alt="mon alt')).to.be.above(-1);
+
+    template = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.each)
+    chai.expect(template.indexOf('data-abe-attr-test[index].img="src"  data-abe-test[index].img="test[index].img" data-abe-attr-test{{@index}}.img="src" data-abe-test{{@index}}.img="test[index].img" src="')).to.be.above(-1);
+
+    template = cmsTemplates.prepare.addAbeDataAttrForHtmlAttributes(this.fixture.eachMultiple)
+    chai.expect(template.indexOf('data-abe-attr-test[index].img="src"  data-abe-test[index].img="test[index].img" data-abe-attr-test{{@index}}.img="src" data-abe-test{{@index}}.img="test[index].img" src="')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-attr-test[index].alternate="alt"  data-abe-test[index].alternate="test[index].alternate" data-abe-attr-test{{@index}}.alternate="alt" data-abe-test{{@index}}.alternate="test[index].alternate" alt="')).to.be.above(-1);
   });
 
   /**
@@ -155,7 +197,23 @@ describe('cmsTemplates.prepare', function() {
 
     // test
     var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.each, false)
-    chai.expect(template.indexOf('data-abe-block')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-block="test{{@index}}"')).to.be.above(-1);
     chai.expect(template.indexOf('<!-- [[test]]')).to.be.above(-1);
+
+    var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachMultiple, false)
+    chai.expect(template.indexOf('data-abe-block')).to.be.above(-1);
+    chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1);
+  });
+
+  /**
+   * cmsTemplates.template.addAbeDictionnary
+   * 
+   */
+  it('cmsTemplates.prepare.addAbeDictionnary()', function() {
+    // stub
+
+    // test
+    var template = cmsTemplates.prepare.addAbeDictionnary(this.fixture.each, "{{abe type='text' key='test.title' desc='test title' tab='default'}}", 'test')
+    chai.expect(template.indexOf("abe dictionnary='test'")).to.be.above(-1);
   });
 });
