@@ -57,7 +57,7 @@ export function createInputSource(attributes, inputClass, params) {
     inputSource += `<select ${attributes} class="${inputClass}" last-values='${lastValues}'>`
 
     // if (!params.required) inputSource += '<option value=\'\'></option>'
-    var options = ""
+    var options = ''
     if(typeof params.source === 'object' && Object.prototype.toString.call(params.source) === '[object Array]') {
       Array.prototype.forEach.call(params.source, (val) => {
         options += sourceOption(val, params)
@@ -68,7 +68,7 @@ export function createInputSource(attributes, inputClass, params) {
 
     var defaultValueSelected = 'selected=selected'
     if (options.indexOf('selected') > -1) {
-      defaultValueSelected = ""
+      defaultValueSelected = ''
     }
     if (params.required) inputSource += `<option value=\'\' value="" disabled ${defaultValueSelected}>Select ${params.desc.toLowerCase()}...</option>`
     if (!params.required) inputSource += `<option value=\'\' value="" ${defaultValueSelected}></option>`

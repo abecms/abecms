@@ -28,13 +28,13 @@ var route = function(router, req, res, next) {
 
   var workflowUrl = {}
   var previous = ''
-  var next = ''
+  var nextWorkflow = ''
   Array.prototype.forEach.call(config.users.workflow, (flow) => {
     var current = false
     if (flow != 'publish') {
       Array.prototype.forEach.call(config.users.workflow, (flowCheck) => {
         if (current) {
-          next = flowCheck
+          nextWorkflow = flowCheck
           current = false
         }
         if (flow === flowCheck) {
@@ -42,16 +42,16 @@ var route = function(router, req, res, next) {
         }
       })
     }else {
-      next = 'draft'
+      nextWorkflow = 'draft'
     }
     workflowUrl[flow] = [
-      {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow, previous: previous, next: next},
-      {url: `/abe/operations/delete/${flow}`, action: 'delete', workflow: flow, previous: previous, next: next},
-      {url: `/abe/operations/submit/${flow}`, action: 'submit', workflow: flow, previous: previous, next: next}
+      {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow, previous: previous, next: nextWorkflow},
+      {url: `/abe/operations/delete/${flow}`, action: 'delete', workflow: flow, previous: previous, next: nextWorkflow},
+      {url: `/abe/operations/submit/${flow}`, action: 'submit', workflow: flow, previous: previous, next: nextWorkflow}
     ]
 
     if (flow !== 'draft') {
-      workflowUrl[flow].push({url: `/abe/operations/reject/${flow}`, action: 'reject', workflow: flow, previous: previous, next: next})
+      workflowUrl[flow].push({url: `/abe/operations/reject/${flow}`, action: 'reject', workflow: flow, previous: previous, next: nextWorkflow})
     }
     previous = flow
   })

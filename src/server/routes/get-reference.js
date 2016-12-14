@@ -5,8 +5,7 @@ import {
 	Manager,
   coreUtils,
   config,
-  Handlebars,
-  User
+  Handlebars
 } from '../../cli'
 
 var route = function(req, res){

@@ -252,7 +252,7 @@ export default class EditorAutocomplete {
   _get(obj, path) {
     return path.split('.').reduce(function(prev, curr) {
       return prev ? prev[curr] : undefined
-    }, obj || self)
+    }, obj || this)
   }
 
   /**

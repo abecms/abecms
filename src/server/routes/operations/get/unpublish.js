@@ -1,7 +1,6 @@
 import {
   cmsOperations
   ,abeExtend
-  ,cmsData
 } from '../../../../cli'
 
 var route = function(req, res, next){
