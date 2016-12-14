@@ -14,9 +14,7 @@ import {
 	moduloIf,
 	attrAbe,
 	ifIn,
-	ifCond,
-	isTrue,
-	truncate
+	ifCond
 } from './cms/templates/index'
 
 import {

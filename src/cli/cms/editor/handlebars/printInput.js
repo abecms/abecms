@@ -148,7 +148,7 @@ export function createInputTextarea(attributes, inputClass, params) {
   return `<textarea class="${inputClass}" ${attributes} rows="4">${params.value}</textarea>`
 }
 
-export function createInputLink(attributes, inputClass, params) {
+export function createInputLink(attributes, inputClass) {
   return `<div class="input-group">
             <div class="input-group-addon link">
               <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
@@ -173,7 +173,7 @@ export function createInputImage(attributes, inputClass, params) {
           <div class="input-error"></div>`
 }
 
-export function createInputText(attributes, inputClass, params) {
+export function createInputText(attributes, inputClass) {
   return `<div class="input-group">
           <div class="input-group-addon">
             <span class="glyphicon glyphicon-font" aria-hidden="true"></span>

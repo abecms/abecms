@@ -1,6 +1,5 @@
 import path from 'path'
 import {
-  Manager,
   coreUtils,
   cmsTemplates,
   cmsOperations,

@@ -1,5 +1,4 @@
 import {
-  config,
 	User
 } from '../../../'
 

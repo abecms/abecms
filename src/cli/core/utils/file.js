@@ -1,7 +1,6 @@
 import Promise from 'bluebird'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import execPromise from 'child-process-promise'
 var fse = Promise.promisifyAll(require('fs-extra'))
 
 import {
