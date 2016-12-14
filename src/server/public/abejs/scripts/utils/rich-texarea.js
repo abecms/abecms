@@ -2,9 +2,11 @@
 
 export default class RichTexarea {
 
-  constructor(wrapper, color, link) {
+  constructor(wrapper, color, link, image, smiley) {
     this.color = color
     this.link = link
+    this.image = image
+    this.smiley = smiley
     this.wrapper = wrapper
     this.textarea = wrapper.querySelector('.form-rich')
     this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon')
@@ -33,21 +35,27 @@ export default class RichTexarea {
   }
 
   _replaceSelectionWithHtml(html) {
-    var range
-    if (window.getSelection && window.getSelection().getRangeAt) {
-      range = window.getSelection().getRangeAt(0)
-      range.deleteContents()
-      var div = document.createElement('div')
-      div.innerHTML = html
-      var frag = document.createDocumentFragment(), child
-      while ( (child = div.firstChild) ) {
-        frag.appendChild(child)
+    if(document.activeElement.getAttribute('contenteditable') != null) {
+      var range
+      if (window.getSelection && window.getSelection().getRangeAt) {
+        range = window.getSelection().getRangeAt(0)
+        range.deleteContents()
+        var div = document.createElement('div')
+        div.innerHTML = html
+        var frag = document.createDocumentFragment(), child
+        while ( (child = div.firstChild) ) {
+          frag.appendChild(child)
+        }
+        range.insertNode(frag)
+      } else if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange()
+        html = (node.nodeType == 3) ? node.data : node.outerHTML
+        range.pasteHTML(html)
       }
-      range.insertNode(frag)
-    } else if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange()
-      html = (node.nodeType == 3) ? node.data : node.outerHTML
-      range.pasteHTML(html)
+    }
+    else {
+      this.wrapper.querySelector('[contenteditable]').focus()
+      this._replaceSelectionWithHtml(html)
     }
   }
 
@@ -77,10 +85,10 @@ export default class RichTexarea {
         off = this.link.onLink((obj) => {
           if(obj.link !== null) {
             html = this.textEditor.getHTML().replace('[LINK]', obj.link)
-            if(obj.target) 		html = html.replace(/\[TARGET\]/, '_blank')
-            else 							html = html.replace(/target=\"\[TARGET\]\"/, '')
-            if(obj.noFollow) 	html = html.replace(/\[REL\]/, 'nofollow')
-            else 							html = html.replace(/rel=\"\[REL\]\"/, '')
+            if(obj.target)    html = html.replace(/\[TARGET\]/, '_blank')
+            else              html = html.replace(/target=\"\[TARGET\]\"/, '')
+            if(obj.noFollow)  html = html.replace(/\[REL\]/, 'nofollow')
+            else              html = html.replace(/rel=\"\[REL\]\"/, '')
             this.textEditor.setHTML(html)
           }
           else this.textEditor.setHTML(html)
@@ -89,6 +97,33 @@ export default class RichTexarea {
         })
         this.link.show(this.el)
         break
+        case 'image':
+          var html = this.textEditor.getHTML()
+          this._replaceSelectionWithHtml(`${window.getSelection().toString()}[MEDIA]`)
+          off = this.image.onImg((obj) => {
+            if(obj.image.indexOf('.mp4') > 0){
+              html = this.textEditor.getHTML().replace('[MEDIA]', `<video controls><source src="${obj.image}" type="video/mp4"></source></video>`)
+            }
+            else{
+              this.textEditor[this.action](obj.image) 
+              html = this.textEditor.getHTML().replace('[MEDIA]', '')
+            }
+            this.textEditor.setHTML(html)
+            this.setHTML()
+            off()
+          })
+          this.image.show(this.el)
+          break
+        case 'smiley':
+          var html = this.textEditor.getHTML()
+          off = this.smiley.onSmiley((obj) => {
+            this._replaceSelectionWithHtml(obj)
+            this.textEditor.setHTML(this.textEditor.getHTML())
+            this.setHTML()
+            off()
+          })
+          this.smiley.show(this.el)
+          break
       }
     }
     else if(this.action === 'code'){

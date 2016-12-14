@@ -182,7 +182,8 @@
       "file": "",
       "sourceString": null,
       "status": "publish",
-      "disabled": ""
+      "disabled": "",
+      "toolbar": "*"
     },
     "attributes": "id=\"rich_key\" data-id=\"rich_key\" value=\"\" reload=\"false\" tabIndex=\"0\" data-required=\"false\" data-visible=\"true\" placeholder=\"\""
   },
