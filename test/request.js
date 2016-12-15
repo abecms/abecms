@@ -219,6 +219,48 @@ describe('Request', function() {
     )
     chai.expect(res, '`abe_meta.template` IN (`{{articles}}`').to.have.length(1);
     chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
+
+    request = cmsData.sql.handleSqlRequest('select title from ./ where `articles[].title` IN (`{{articles}}`)', this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
+    chai.expect(res, '`articles[].title` IN (`{{articles}}`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find article but found ' + res[0].title);
+
+    request = cmsData.sql.handleSqlRequest('select title from ./ where `articles.title` IN (`{{articles}}`)', this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
+    chai.expect(res, '`articles.title` IN (`{{articles}}`').to.have.length(1);
+    chai.assert.equal(res[0].title, 'homepage', 'expected select to find article but found ' + res[0].title);
+
+    request = cmsData.sql.handleSqlRequest('select title from ./ where `articles.fakeAttribute` IN (`{{articles}}`)', this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
+    chai.expect(res, '`articles.fakeAttribute` IN (`{{articles}}`').to.have.length(0);
+
+    request = cmsData.sql.handleSqlRequest('select title from ./ where `fakekey.fakeAttribute` IN (`{{articles}}`)', this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
+    chai.expect(res, '`fakekey.fakeAttribute` IN (`{{articles}}`').to.have.length(0);
   });
   it('cmsData.sql.executeWhereClause() NOT IN', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT IN (`homepage`,`test`)', {})
@@ -244,10 +286,6 @@ describe('Request', function() {
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
   });
 
-  /**
-   * cmsData.sql.whereLike
-   * 
-   */
   it('cmsData.sql.getSourceType()', function() {
     chai.expect(cmsData.sql.getSourceType('http://google.com')).to.equal('url');
     chai.expect(cmsData.sql.getSourceType('select * from test')).to.equal('request');
@@ -256,10 +294,6 @@ describe('Request', function() {
     chai.expect(cmsData.sql.getSourceType('test')).to.equal('other');
   });
 
-  /**
-   * cmsData.source.requestList
-   * 
-   */
   it('cmsData.source.requestList()', function(done) {
     var matches = cmsData.regex.getTagAbeTypeRequest(this.fixture.tag)
 
@@ -274,5 +308,57 @@ describe('Request', function() {
         chai.expect(jsonPage.abe_source).to.not.be.undefined
         done()
       })
+  });
+
+  it('cmsData.sql.isInStatementCorrect()', function() {
+    var values = {
+      "left":"ok",
+      "right":["ok","fok"]
+    }
+
+    var res = cmsData.sql.isInStatementCorrect(values, false)
+    chai.assert.equal(res, true, 'expected to find true found ' + res);
+
+    res = cmsData.sql.isInStatementCorrect(values, true)
+    chai.assert.equal(res, false, 'expected to find false found ' + res);
+
+    values = {
+      "left":[
+        "nok",
+        "ok"
+      ],
+      "right":["ok","fok"]
+    }
+
+    res = cmsData.sql.isInStatementCorrect(values, false)
+    chai.assert.equal(res, true, 'expected to find true found ' + res);
+
+    res = cmsData.sql.isInStatementCorrect(values, true)
+    chai.assert.equal(res, false, 'expected to find false found ' + res);
+
+    var values = {
+      "left":"nok",
+      "right":["ok","fok"]
+    }
+
+    var res = cmsData.sql.isInStatementCorrect(values, false)
+    chai.assert.equal(res, false, 'expected to find false found ' + res);
+
+    res = cmsData.sql.isInStatementCorrect(values, true)
+    chai.assert.equal(res, true, 'expected to find true found ' + res);
+
+    values = {
+      "left":[
+        "nok",
+        "nok2"
+      ],
+      "right":["ok","fok"]
+    }
+
+    res = cmsData.sql.isInStatementCorrect(values, false)
+    chai.assert.equal(res, false, 'expected to find false found ' + res);
+
+    res = cmsData.sql.isInStatementCorrect(values, true)
+    chai.assert.equal(res, true, 'expected to find true found ' + res);
   });
 });

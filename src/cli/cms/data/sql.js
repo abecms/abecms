@@ -402,6 +402,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
 
   try {
     var variableLeft = where.left.column
+    var whereLeftColumn = where.left.column
     var checkIfLeftIsAVariable = regexIsVariable.exec(variableLeft)
     if(checkIfLeftIsAVariable != null && checkIfLeftIsAVariable.length > 0) {
       variableLeft = checkIfLeftIsAVariable[1]
@@ -412,6 +413,29 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
   }
   
   if(where.operator === 'IN' || where.operator === 'NOT IN') {
+    if(value == null) {
+      // is the form of variableLeft something like elt.attribute or elt[].attribute?
+      // so maybe is elt an array ?
+      let arValues = variableLeft.split('.')
+      let key = arValues[0]
+      if(key.slice(-2) == '[]'){
+        key = key.slice(0, -2)
+      }
+      let records = eval('jsonDoc.' + key)
+      whereLeftColumn = arValues[1]
+      value = []
+      // if yes, value is then an array of values
+      if(records != null) {
+        Array.prototype.forEach.call(records, (record) => {
+          try {
+            let val = record[arValues[1]]
+            value.push(val)
+          } catch (e) {
+            console.log(e.stack)
+          }
+        })
+      }
+    }
     compare = []
     Array.prototype.forEach.call(where.right.value, (right) => {
       var matchRightVariable = regexIsVariable.exec(right.column)
@@ -419,7 +443,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
         try {
           var jsonOriginalValues = eval('jsonOriginalDoc.' + matchRightVariable[1])
           Array.prototype.forEach.call(jsonOriginalValues, (jsonOriginalValue) => {
-            compare.push(eval('jsonOriginalValue.' + where.left.column))
+            compare.push(eval('jsonOriginalValue.' + whereLeftColumn))
           })
         }catch(e) {}
       }
@@ -454,6 +478,26 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
     left: value,
     right: compare
   }
+}
+
+export function isInStatementCorrect(values, isCorrect){
+  if( Object.prototype.toString.call(values.left) === '[object Array]' ) {
+    Array.prototype.forEach.call(values.left, (left) => {
+      Array.prototype.forEach.call(values.right, (right) => {
+        if(left != null && left === right) {
+          isCorrect = !isCorrect
+        }
+      })
+    })
+  } else {
+    Array.prototype.forEach.call(values.right, (right) => {
+      if(values.left === right) {
+        isCorrect = !isCorrect
+      }
+    })
+  }
+
+  return isCorrect
 }
 
 /**
@@ -518,22 +562,13 @@ export function recurseWhere(where, jsonDoc, jsonOriginalDoc) {
     break
   case 'IN':
     values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-    isNotCorrect = true
-    Array.prototype.forEach.call(values.right, (right) => {
-      if(values.left === right) {
-        isNotCorrect = false
-      }
-    })
+    isNotCorrect = isInStatementCorrect(values, true)
     break
   case 'NOT IN':
     values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-    isNotCorrect = false
-    Array.prototype.forEach.call(values.right, (right) => {
-      if(values.left === right) {
-        isNotCorrect = true
-      }
-    })
+    isNotCorrect = isInStatementCorrect(values, false)
     break
   }
+
   return isNotCorrect
 }
