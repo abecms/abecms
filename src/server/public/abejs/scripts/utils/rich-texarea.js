@@ -97,33 +97,33 @@ export default class RichTexarea {
         })
         this.link.show(this.el)
         break
-        case 'image':
-          var html = this.textEditor.getHTML()
-          this._replaceSelectionWithHtml(`${window.getSelection().toString()}[MEDIA]`)
-          off = this.image.onImg((obj) => {
-            if(obj.image.indexOf('.mp4') > 0){
-              html = this.textEditor.getHTML().replace('[MEDIA]', `<video controls><source src="${obj.image}" type="video/mp4"></source></video>`)
-            }
-            else{
-              this.textEditor[this.action](obj.image) 
-              html = this.textEditor.getHTML().replace('[MEDIA]', '')
-            }
-            this.textEditor.setHTML(html)
-            this.setHTML()
-            off()
-          })
-          this.image.show(this.el)
-          break
-        case 'smiley':
-          var html = this.textEditor.getHTML()
-          off = this.smiley.onSmiley((obj) => {
-            this._replaceSelectionWithHtml(obj)
-            this.textEditor.setHTML(this.textEditor.getHTML())
-            this.setHTML()
-            off()
-          })
-          this.smiley.show(this.el)
-          break
+      case 'image':
+        var html = this.textEditor.getHTML()
+        this._replaceSelectionWithHtml(`${window.getSelection().toString()}[MEDIA]`)
+        off = this.image.onImg((obj) => {
+          if(obj.image.indexOf('.mp4') > 0){
+            html = this.textEditor.getHTML().replace('[MEDIA]', `<video controls><source src="${obj.image}" type="video/mp4"></source></video>`)
+          }
+          else{
+            this.textEditor[this.action](obj.image) 
+            html = this.textEditor.getHTML().replace('[MEDIA]', '')
+          }
+          this.textEditor.setHTML(html)
+          this.setHTML()
+          off()
+        })
+        this.image.show(this.el)
+        break
+      case 'smiley':
+        var html = this.textEditor.getHTML()
+        off = this.smiley.onSmiley((obj) => {
+          this._replaceSelectionWithHtml(obj)
+          this.textEditor.setHTML(this.textEditor.getHTML())
+          this.setHTML()
+          off()
+        })
+        this.smiley.show(this.el)
+        break
       }
     }
     else if(this.action === 'code'){

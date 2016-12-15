@@ -8,7 +8,7 @@ export default class SmileyPicker {
     this.wrapper = wrapper
     var smileyHTML = '<div class="smiley-title">Emoji</div>'
     for(var smileys in SmileyData){
-      var countSmiley = 0;
+      var countSmiley = 0
       smileyHTML += `<div class="smiley-subtitle">${smileys} :</div>
                     <table cellpadding="0" cellspacing="0">
                         <tbody>
@@ -21,7 +21,7 @@ export default class SmileyPicker {
         smileyHTML += `<td class="wysiwyg-toolbar-smiley" data-smiley="${smiley.icon}">
                         <span class="" title="${smiley.desc}" data-smiley="${smiley.icon}">${smiley.icon}</span>
                        </td>`
-         countSmiley++
+        countSmiley++
       })
       smileyHTML +=     `</tr>
                       </tbody>

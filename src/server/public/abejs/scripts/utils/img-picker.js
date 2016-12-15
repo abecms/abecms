@@ -85,7 +85,7 @@ window.ImagePickerUpload = {
 
     return this
   }
-};
+}
 
 
 export default class ImagePicker {
