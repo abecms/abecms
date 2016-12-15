@@ -33,7 +33,9 @@
     "distribute": "npm run build:front && npm run compile && npm run mvasset",
     "watchdev": "npm run build:front && npm run compile && npm run mvasset && nodemon --debug --exec npm run compile && npm run mvasset --kill-others",
     "startdev": "npm run build:front && npm run compile && npm run mvasset && node src/tasks/nodemon.js & npm run watch --kill-others",
-    "startdevOnly": "npm run js:admin && npm run js:users && npm run js:engine && node src/tasks/nodemon.js & npm run watch --kill-others"
+    "startdevOnly": "npm run js:admin && npm run js:users && npm run js:engine && node src/tasks/nodemon.js & npm run watch --kill-others",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "author": "Adfab Connect",
   "license": "ISC",
@@ -98,7 +100,8 @@
     "uuid": "^3.0.0",
     "watch": "^1.0.1",
     "which": "^1.2.11",
-    "xss": "^0.3.2"
+    "xss": "^0.3.2",
+    "snyk": "^1.21.2"
   },
   "devDependencies": {
     "babel": "^6.3.26",
@@ -120,5 +123,6 @@
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "watchify": "^3.4.0"
-  }
+  },
+  "snyk": true
 }
