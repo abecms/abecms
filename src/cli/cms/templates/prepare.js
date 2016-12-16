@@ -56,36 +56,30 @@ export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
  * @param {[type]} template [description]
  */
 export function addAbeDataAttrForHtmlTag(template) {
-  var match
+  // var match
 
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-  console.log('cmsData.regex.getAllAbeHtmlTag(template)', cmsData.regex.getAllAbeHtmlTag(template))
+  var matches = cmsData.regex.getAllAbeHtmlTag(template)
+  Array.prototype.forEach.call(matches, (match) => {
+    console.log('match', match)
+  // })
 
-  while (match = cmsData.regex.abePattern.exec(template)) {
+  // while (match = cmsData.regex.abePattern.exec(template)) {
     var key = cmsData.regex.getAttr(match, 'key')//.replace(/\./g, '-')
-    if (cmsData.regex.isSingleAbe(match[0], template)) {
+    if (cmsData.regex.isSingleAbe(match, template)) {
       // data-abe-test[index].img="test[index].img"
       template = template.replace(
-        cmsData.regex.escapeTextToRegex(match[0], 'g'),
-        addAbeAttrSingleTab(key, match[0])
-        // ' data-abe-' + cmsData.regex.validDataAbe(key) + '="'  + key + '" ' + match[0]
+        cmsData.regex.escapeTextToRegex(match, 'g'),
+        addAbeAttrSingleTab(key, match)
+        // ' data-abe-' + cmsData.regex.validDataAbe(key) + '="'  + key + '" ' + match
       )
     }else {
-
-      if (addAbeAttrForBlock(key, match[0]).indexOf('ata-abe-blocarticle')) {
-        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-        console.log(addAbeAttrForBlock(key, match[0]))
-        console.log('')
-        console.log(template)
-        die()
-      }
       template = template.replace(
         cmsData.regex.escapeTextToRegex(match[0], 'g'),
         addAbeAttrForBlock(key, match[0])
         // ' data-abe-' + cmsData.regex.validDataAbe(key) + '="'  + key + '" ' + match[0]
       )
     }
-  }
+  })
 
   return template
 }
@@ -252,9 +246,15 @@ export function addAbeSourceComment(template, json) {
  */
 export function addAbeHtmlTagBetweenAbeTags(template) {
   var match
-  while (match = cmsData.regex.abePattern.exec(template)) {
-    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
-  }
+
+  var tags = cmsData.regex.getAllAbeHtmlTag(template)
+  Array.prototype.forEach.call(tags, (tag) => {
+    template = template.replace(cmsData.regex.escapeTextToRegex(tag, 'g'), '<abe>' + tag.trim() + '</abe>')
+  })
+
+  // while (match = cmsData.regex.abePattern.exec(template)) {
+  //   template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+  // }
 
   return template
 }

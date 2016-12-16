@@ -69,6 +69,8 @@ export default class Page {
         // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
         // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>
         this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
+        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+        console.log('template', template)
       }
       else {
         this.template = cmsTemplates.prepare.removeHandlebarsRawFromHtml(this.template)
