@@ -57,23 +57,22 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
 
   var realKey
 
-  // if(typeof keyArray !== 'undefined' && keyArray !== null) {
-  //   realKey = obj.key.replace(/[^\.]+?\./, '')
+  if(typeof keyArray !== 'undefined' && keyArray !== null) {
+    realKey = obj.key.replace(/[^\.]+?\./, '')
 
-  //   if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
-  //     obj.keyArray = keyArray
-  //     obj.realKey = realKey
-  //     obj.key = keyArray + '[' + i + '].' + realKey
-  //     obj.desc = obj.desc + ' ' + i,
-  //     insertAbeEach(obj, text, json, util, arrayBlock)
+    if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
+      obj.keyArray = keyArray
+      obj.realKey = realKey
+      obj.key = keyArray + '[' + i + '].' + realKey
+      obj.desc = obj.desc + ' ' + i,
+      insertAbeEach(obj, text, json, util, arrayBlock)
 
-  //   }else if(util.dontHaveKey(obj.key)) {
-  //     obj.value = json[getDataIdWithNoSlash(obj.key)]
-  //     json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
-  //   }
+    }else if(util.dontHaveKey(obj.key)) {
+      obj.value = json[getDataIdWithNoSlash(obj.key)]
+      json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
+    }
 
-  // }else 
-  if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
+  }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
     realKey = obj.key//.replace(/\./g, '-')
     try {
       obj.value = eval(`json.${getDataIdWithNoSlash(realKey)}`)

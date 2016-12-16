@@ -41,7 +41,7 @@ export default class EditorSave {
    * @return {Object} json
    */
   serializeForm() {
-    var abeForm = document.getElementById('abeForm')
+    var abeForm = document.querySelector('.abeform-wrapper')
     if (abeForm == null) return
       
     var inputs = [].slice.call(abeForm.querySelectorAll('input'))
@@ -73,7 +73,6 @@ export default class EditorSave {
           }
         }else {
           var value
-
           if (input.nodeName === 'SELECT' && maxlength != "1") {
             var checked = input.querySelectorAll('option:checked')
             value = []

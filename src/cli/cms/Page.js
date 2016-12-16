@@ -101,9 +101,6 @@ export default class Page {
 
       // I compile the text
       var compiledTemplate = Handlebars.compile(cmsTemplates.insertDebugtoolUtilities(this.template, this._onlyHTML))
-
-      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-      console.log('this.template', this.template)
       
       // I create the html page ! yeah !!!
       this.html = compiledTemplate(json, {data: {intl: config.intlData}})

@@ -56,8 +56,14 @@ Default: "default"
 ```html
 tab="NameOfTheTab"
 ```
+Html input will be displayed into the tab `NameOfTheTab` 
 
-Set the admin tab display
+Allowed:
+
+- CamelCase
+- Underscore
+- Spaces
+- Special charactères
 
 ## <a name="key"></a>key (String)
 
@@ -66,8 +72,43 @@ Default: ""
 ```html
 key="keyData"
 ```
-
 the key used into json file
+
+Allowed:
+
+- CamelCase
+- Underscore
+- Dot
+
+Examples:
+
+```html
+{{abe type='text' key='title'}}
+```
+
+```json
+{
+	"title": "value"
+}
+```
+
+```html
+{{abe type='text' key='blog.title'}}
+```
+
+```json
+{
+	"blog": {
+		"title": "value"
+	}
+}
+```
+
+> You can use dot json for keys the result will create json value when the data is saved
+> 
+> `mypage.content.title.value` as key will output
+> 
+> `{"mypage": {"content": {"title": {"value": ""}}}}`
 
 ## <a name="type"></a>type (String)
 
@@ -77,7 +118,11 @@ Default: "text"
 type="text"
 ```
 
-See abe [type](#abe-type)
+Result:
+
+![MacDown Screenshot](assets/abe-type-text.png)
+
+Look at all abe type [here](#abe-type)
 
 ## <a name="autocomplete"></a>autocomplete (Boolean)
 
@@ -86,6 +131,30 @@ Default: null
 ```html
 autocomplete="true"
 ```
+
+Json example for autocomplete
+
+```json
+[
+	{
+		"id": 1,
+		"name": "test 1",
+		"lang": "de"
+	},
+	{
+		"id": 2,
+		"name": "test 2",
+		"lang": "fr"
+	},
+	{
+		"id": 3,
+		"name": "test 3",
+		"lang": "es"
+	}
+]
+```
+
+![MacDown Screenshot](assets/abe-type-autocomplete.png)
 
 for abe type data, display input form autocomplete into admin
 
@@ -96,8 +165,14 @@ Default: ""
 ```html
 desc="some description for the contributor"
 ```
+The admin description over the input
 
-The admin description input
+Allowed:
+
+- CamelCase
+- Underscore
+- Spaces
+- Special charactères
 
 ## <a name="display"></a>display (String)
 
@@ -108,6 +183,54 @@ display="variable"
 ```
 
 for abe type data (autocomplete true or false)
+
+Example:
+
+```html
+display="{{name}}"
+```
+
+Json
+
+```json
+[
+	{
+		"id": 1,
+		"name": "test 1",
+		"lang": "de"
+	},
+	{
+		"id": 2,
+		"name": "test 2",
+		"lang": "fr"
+	},
+	{
+		"id": 3,
+		"name": "test 3",
+		"lang": "es"
+	}
+]
+```
+
+the autocomplete value visible under the input will use `name` from json
+
+- test 1
+- test 2
+- test 3
+
+![Autocomplete 1](assets/abe-type-autocomplete.png)
+
+Multiple variables are allowed for example with our json:
+
+```html
+display="{{name}} - {{lang}}"
+```
+
+- test 1 - de
+- test 2 - fr
+- test 3 - es
+
+![Autocomple 2](assets/abe-type-autocomplete-2.png)
 
 ## <a name="editable"></a>editable (Boolean)
 
@@ -157,7 +280,41 @@ Default: true
 duplicate="true"
 ```
 
-if set to false, when user duplicate a post. The value will not be diplcate into the new post
+if set to false, when user duplicate a post. The value will not be duplicate into the new post
+
+Example:
+
+```html
+{{abe type='text' key='title' duplicate="false"}}
+```
+
+Json before duplicate:
+
+```json
+{
+  "abe_meta": {
+    "template": "autocomplete",
+    "link": "/test.html",
+    "date": "2016-12-15T16:46:22.946Z",
+  },
+  "title": "test"
+}
+```
+
+Json after duplicate:
+
+value of title is not filled after duplicate the post with name `test-2.html`
+
+```json
+{
+  "abe_meta": {
+    "template": "autocomplete",
+    "link": "/test-2.html",
+    "date": "2016-12-15T16:46:22.946Z",
+  },
+  "title": ""
+}
+```
 
 ## <a name="reload"></a>reload (Boolean)
 
@@ -179,6 +336,16 @@ required="true"
 
 If set to true user cannot publish the post without required field
 
+Example:
+
+```html
+{{abe type="text" key="title" required="true"}}
+```
+
+> if submited but empty
+
+![Required](assets/abe-required.png)
+
 ## <a name="visible"></a>visible (Boolean)
 
 Default: true
@@ -198,6 +365,15 @@ order="1"
 ```
 
 to order the input in the admin
+
+```html
+{{abe type='text' key='title1' desc='title 1' order="2"}}
+{{abe type='text' key='title2' desc='title 2' order="1"}}
+```
+
+`title1` is added before on the template but without order the result on the admin is inversed
+
+![Order](assets/abe-order.png)
 
 ## <a name="filetype"></a>filetype (String)
 
@@ -234,6 +410,10 @@ prefill="true"
 ```
 
 For abe type data, if set to true will add default values
+
+On the admin side prefill add a `reload` button on the right
+
+![Prefill](assets/abe-prefill.png)
 
 ## <a name="prefill-quantity"></a>prefill-quantity (Int)
 

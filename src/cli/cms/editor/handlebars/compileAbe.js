@@ -46,7 +46,16 @@ export default function compileAbe(){
   key = arguments[0].hash['key'].replace('.', '-')
 
   hash = arguments[0].hash
-  value = ((content) ? content[hash.key.replace('.', '-')] : hash.key)
+  if(content) {
+    try {
+      value = eval('content.' + hash.key)
+    }catch(e) {
+      value = hash.key
+    }
+  }else {
+    value = hash.key
+  }
+  // value = ((content) ? content[hash.key.replace('.', '-')] : hash.key)
   if(typeof value === 'function' || value == null) {
     value = ''
   }
