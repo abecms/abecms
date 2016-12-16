@@ -69,7 +69,7 @@ this will __display__ (*because editable is true*) an input select with __3 choi
 
 I have a json file inside my abe website
 
-references/titles.json
+reference/titles.json
 
 ```json
 [
