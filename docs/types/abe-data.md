@@ -1,6 +1,6 @@
 # Abe type data
 
-> Abe type __data__ allow you to make your static website more __dynamic__
+> Abe type __data__ allows you to make your static website more __dynamic__
 
 ## How does it work ?
 
