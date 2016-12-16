@@ -11,8 +11,8 @@ export default class EditorReferences {
     this.jsonError = document.querySelector('.json-error')
     this.addReference = document.querySelector('.btn-add-reference')
     this.addReferenceInput = document.querySelector('.btn-add-reference input')
-    this.nameError = this.addReference.querySelector('.error-display')
     if(!this.referenceLinks || this.referenceLinks.length < 1) return
+    this.nameError = this.addReference.querySelector('.error-display')
     this.rebind()
   }
 
