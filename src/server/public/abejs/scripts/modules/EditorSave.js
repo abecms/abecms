@@ -66,7 +66,7 @@ export default class EditorSave {
           this._json.data[obj][index][key] = input.value
           var emptyObject = 0
           for(var prop in this._json.data[obj][index]) {
-            if(this._json.data[obj][index][prop].trim() !== '') emptyObject++
+            if(typeof this._json.data[obj][index][prop] !== "string" || this._json.data[obj][index][prop].trim() !== '') emptyObject++
           }
           if(emptyObject === 0) {
             delete this._json.data[obj][index]
