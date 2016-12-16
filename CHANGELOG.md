@@ -1,5 +1,22 @@
+
+## [2.11.5] - 2016-12-16
+* [[`cb592582be`](https://github.com/AdFabConnect/abejs/commit/cb592582be)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`3b238c851c`](https://github.com/AdFabConnect/abejs/commit/3b238c851c)] - **fix**: Add options to iFrame (gregorybesson) 
+* [[`f041a5b412`](https://github.com/AdFabConnect/abejs/commit/f041a5b412)] - Merge pull request #88 from AdFabConnect/bug_reference (Greg Besson) 
+* [[`22c628f3da`](https://github.com/AdFabConnect/abejs/commit/22c628f3da)] - **fix**: queryselector from addReference outside of reference editor (wonknu10) 
+* [[`27b549b858`](https://github.com/AdFabConnect/abejs/commit/27b549b858)] - Update abe-data.md (Greg Besson) 
+* [[`3aa00b5236`](https://github.com/AdFabConnect/abejs/commit/3aa00b5236)] - Update abe-data.md (Greg Besson) 
+* [[`8d2c737c1e`](https://github.com/AdFabConnect/abejs/commit/8d2c737c1e)] - Update abe-data.md (Greg Besson) 
+
+## [2.11.4] - 2016-12-15
+
+## [2.11.3] - 2016-12-15
+* [[`b26e50123b`](https://github.com/AdFabConnect/abejs/commit/b26e50123b)] - **ic**: lint (gregorybesson) 
+* [[`5ede88400e`](https://github.com/AdFabConnect/abejs/commit/5ede88400e)] - Merge pull request #84 from AdFabConnect/feature_52 (Greg Besson) 
+* [[`9c2a15ce2b`](https://github.com/AdFabConnect/abejs/commit/9c2a15ce2b)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`48936b1b81`](https://github.com/AdFabConnect/abejs/commit/48936b1b81)] - **enhancement**: Abe type='data' - An array can be used in a IN and NOT IN request statement (gregorybesson) 
 * [[`7326eb0af0`](https://github.com/AdFabConnect/abejs/commit/7326eb0af0)] - Merge pull request #81 from AdFabConnect/bug_76 (Greg Besson) 
+* [[`0a7d9fbb51`](https://github.com/AdFabConnect/abejs/commit/0a7d9fbb51)] - **feature**: add json reference from json reference editor (wonknu10) 
 * [[`8504e79efc`](https://github.com/AdFabConnect/abejs/commit/8504e79efc)] - Merge branch 'master' into bug_76 (Labbé nicolas) 
 * [[`5b5be35228`](https://github.com/AdFabConnect/abejs/commit/5b5be35228)] - Merge pull request #80 from AdFabConnect/type_rich_v2 (Greg Besson) 
 * [[`395a8a1a4e`](https://github.com/AdFabConnect/abejs/commit/395a8a1a4e)] - Merge pull request #83 from AdFabConnect/bug_82 (Greg Besson) 
