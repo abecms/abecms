@@ -142,20 +142,25 @@ export function handleSqlRequest(str, jsonPage) {
   }
 }
 
+/**
+ * get JSON from abe tag attribute source
+ *
+ * {{abe type='data' key='titles' desc='select titles' source='[{"title": "rouge", "id": 1},{"title": "vert", "id": 2},{"title": "blue", "id": 3}]' display="{{title}}"}}
+ *
+ * return 
+ * [{"title": "rouge", "id": 1},{"title": "vert", "id": 2},{"title": "blue", "id": 3}]
+ * 
+ * @param  {String} str abe tag
+ * @return {String}     json string
+ */
 export function getDataSource(str) {
-  var res = str.substring(str.indexOf('source=') + 8, str.length)
-
-  var reg = /([^'"]*=[\s\S]*?}})/g
-  var matches = res.match(reg)
-  if(matches != null) {
-    Array.prototype.forEach.call(matches, (match) => {
-      res = res.replace(match, '')
-    })
-  }else {
-    res = res.replace('}}', '')
+  var reg = /source=(['|"])(.*?)\1[ |\}]/g
+  var match = reg.exec(str)
+  if (match != null) {
+    return match[2]
   }
 
-  return res.substring(0, res.length-1)
+  return ""
 }
 
 /**
