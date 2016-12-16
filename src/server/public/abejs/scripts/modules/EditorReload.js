@@ -63,7 +63,7 @@ export default class Reload {
 
     iframe.id = 'page-template'
     iframe.src = 'about:blank'
-    iframe.sandbox = 'allow-same-origin allow-scripts allow-popups allow-forms'
+    iframe.sandbox = 'allow-presentation allow-modals allow-pointer-lock allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms allow-top-navigation'
     iframe.setAttribute('data-iframe-src', document.querySelector('#page-template').getAttribute('data-iframe-src'))
     
     var initIframe = function () {

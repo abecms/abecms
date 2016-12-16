@@ -2,7 +2,7 @@
 <div class="no-gutter half-view iframe-wrapper reloading">
   {{#if isHome}}
   {{else}}
-  <iframe id="page-template" data-iframe-src="/abe/page/{{@root.json.abe_meta.link}}" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+  <iframe id="page-template" data-iframe-src="/abe/page/{{@root.json.abe_meta.link}}" src="about:blank" sandbox="allow-presentation allow-modals allow-pointer-lock allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms allow-top-navigation"></iframe>
   {{/if}}
   <div class="browser-size"></div>
   <div class="ruler-over"></div>
