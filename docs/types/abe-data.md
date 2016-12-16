@@ -1,8 +1,8 @@
 # Abe type data
 
-> Abe type __data__ allow you to make your static website more __dynamic__
+> Abe type __data__ allows you to make your static website more __dynamic__
 
-## How does it works ?
+## How does it work ?
 
 ###Basic example
 
@@ -22,7 +22,7 @@
 > 
 > __source__ = json data of possible values
 
-optrionnal parameter
+optional parameters
 
 - desc = (String)
 - editable = (Boolean)
@@ -35,7 +35,7 @@ optrionnal parameter
 
 ##Use it
 
-Display user picked values into your html files
+Display user picked values in your html files
 
 ```html
 {{#each colors}}
@@ -69,7 +69,7 @@ this will __display__ (*because editable is true*) an input select with __3 choi
 
 I have a json file inside my abe website
 
-references/titles.json
+reference/titles.json
 
 ```json
 [

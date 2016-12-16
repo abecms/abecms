@@ -215,6 +215,36 @@ select[multiple], select[size] {
       cursor: pointer;
     }
   }
+  .filename-input{
+    min-width: 200px;
+  }
+  .error-display{
+    color: #ff2323;
+    font-size: 11px;
+    padding: 0 7px 3px;
+  }
+}
+
+.btn-add-reference{
+  padding: 0;
+  .input-group-addon,
+  input{
+    transition: all 250ms ease-in-out;
+  }
+  .input-group{
+    padding: 6px;
+  }
+  &.error{
+    .input-group-addon{
+      background: rgba(255, 35, 35, 0.57);
+      color: #FFF;
+      cursor: no-drop;
+    }
+    .input-group-addon,
+    input{
+      border-color: #ff2323;
+    }
+  }
 }
 
 .display-json-wrapper{

@@ -2,8 +2,8 @@
 <html>
   <head>
     <title></title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/abejs/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/abejs/css/styles.css">
 </head>
   <body>
     
@@ -17,10 +17,21 @@
         <div class="references-files-wrapper">
           <ul class="list-group">
             {{#each reference}}
-            <li class="list-group-item" data-error="0" data-href='{{@key}}' data-ref-json='{{printJson this}}'>
+            <li class="list-group-item" data-error="0" data-href='{{@key}}' data-ref-json='{{printJson this}}' data-init='0'>
               {{@key}}
             </li>
             {{/each}}
+            <li class="list-group-item last btn-add-reference">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <span class="">
+                    Add +
+                  </span>
+                </div>
+                <input class="form-control filename-input" type="text" placeholder="filename.json">
+              </div>
+              <div class="error-display"></div>
+            </li>
             </ul>
             <div class="display-json-wrapper">
               <textarea class="form-control display-json"></textarea>
@@ -32,8 +43,8 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="/libs/jquery-2.1.0.min.js"></script>
-    <script type="text/javascript" src="/scripts/template-engine-compiled.js"></script>
-    <script type="text/javascript" src="/scripts/admin-compiled.js"></script>
+    <script type="text/javascript" src="/abejs/libs/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="/abejs/scripts/template-engine-compiled.js"></script>
+    <script type="text/javascript" src="/abejs/scripts/admin-compiled.js"></script>
   </body>
 </html>
