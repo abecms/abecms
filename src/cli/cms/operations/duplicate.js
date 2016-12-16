@@ -38,7 +38,7 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
 
     var pCreate = cmsOperations.create(template, newPath, name, req, json, (isUpdate) ? false : true)
     pCreate.then((resSave) => {
-      if (isUpdate && oldPostUrl !== newPostUrl) {
+      if (isUpdate && oldPostUrl !== path.join('/', newPostUrl)) {
         abeExtend.hooks.instance.trigger('beforeUpdate', json, oldPostUrl, template, newPath, name, req, isUpdate)
         cmsOperations.remove.remove(oldPostUrl)
       }
