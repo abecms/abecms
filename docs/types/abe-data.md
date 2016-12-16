@@ -2,7 +2,7 @@
 
 > Abe type __data__ allow you to make your static website more __dynamic__
 
-## How does it works ?
+## How does it work ?
 
 ###Basic example
 
@@ -22,7 +22,7 @@
 > 
 > __source__ = json data of possible values
 
-optrionnal parameter
+optional parameters
 
 - desc = (String)
 - editable = (Boolean)
@@ -35,7 +35,7 @@ optrionnal parameter
 
 ##Use it
 
-Display user picked values into your html files
+Display user picked values in your html files
 
 ```html
 {{#each colors}}
