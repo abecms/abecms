@@ -12,13 +12,13 @@ dist: trusty
 env:
   - NODE_ENV=PROD
 before_install:
- - export CHROME_BIN=/usr/bin/google-chrome
- - export DISPLAY=:99.0
- - sh -e /etc/init.d/xvfb start
- - sudo apt-get update
- - sudo apt-get install -y libappindicator1 fonts-liberation
- - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
- - sudo dpkg -i google-chrome*.deb
+ - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; export CHROME_BIN=/usr/bin/google-chrome ; fi
+ - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; export DISPLAY=:99.0 ; fi
+ - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; sh -e /etc/init.d/xvfb start        ; fi
+ - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; sudo apt-get update ; fi
+ - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; sudo apt-get install -y libappindicator1 fonts-liberation ; fi
+ - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb ; fi
+ - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; sudo dpkg -i google-chrome*.deb ; fi
 install:
   - npm install
   - npm run install-selenium
