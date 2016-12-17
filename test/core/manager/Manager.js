@@ -4,7 +4,7 @@ var path = require('path');
 var Manager = require('../../../src/cli').Manager
 var config = require('../../../src/cli').config
 var cmsOperations = require('../../../src/cli').cmsOperations
-config.set({root: __dirname + '/fixtures/'})
+config.set({root: path.join(process.cwd(), 'test', 'fixtures')})
 
 var cmsData = require('../../../src/cli').cmsData;
 var Manager = require('../../../src/cli').Manager;
