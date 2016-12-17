@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import stripTags from 'stripTags'
+import striptags from 'striptags'
 
 import {
   cmsData
@@ -200,7 +200,7 @@ export function addAbeSourceComment(template, json) {
  */
 export function addAbeHtmlTagBetweenAbeTags(template) {
   var match
-  var templateNoDom = stripTags(template)
+  var templateNoDom = striptags(template)
   while (match = cmsData.regex.abeAsTagPattern.exec(templateNoDom)) {
     template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
   }
