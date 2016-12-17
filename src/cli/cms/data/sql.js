@@ -160,7 +160,7 @@ export function getDataSource(str) {
     return match[2]
   }
 
-  return ""
+  return ''
 }
 
 /**
