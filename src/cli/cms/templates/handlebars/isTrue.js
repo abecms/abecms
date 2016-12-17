@@ -3,6 +3,10 @@ export default function isTrue(v1, operator, v2) {
   var eval1
   var eval2
   switch (operator) {
+  case '!=':
+    return (v1 != v2)
+  case '!==':
+    return (v1 !== v2)
   case '==':
     return (v1 == v2)
   case '===':

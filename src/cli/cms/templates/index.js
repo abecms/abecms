@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import HandlebarsIntl from 'handlebars-intl'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
+import markdown from 'helper-markdown'
 
 /* Handlebar utilities */
 import attrAbe 		from './handlebars/attrAbe'
@@ -30,6 +31,8 @@ import encodeAbeTagAsComment from './encodeAbeTagAsComment'
 import insertDebugtoolUtilities from './insertDebugtoolUtilities'
 
 /* Register utilities */
+require('handlebars-helpers')()
+Handlebars.registerHelper('markdown', markdown())
 Handlebars.registerHelper('attrAbe', 		attrAbe)
 Handlebars.registerHelper('className', 	className)
 Handlebars.registerHelper('cleanTab', 	cleanTab)
