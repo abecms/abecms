@@ -17,8 +17,18 @@ import {
  */
 export function addAbeDataAttrForHtmlTag(template) {
   var match
+  var key
+  var getattr
+
   while (match = cmsData.regex.abePattern.exec(template)) {
-    var getattr = cmsData.regex.getAttr(match, 'key').replace(/\./g, '-')
+    key = cmsData.regex.getAttr(match, 'key')
+
+    if (cmsData.regex.isSingleAbe(match, template)) {
+      getattr = key.replace(/\./g, '-')
+    } else {
+      getattr = key.replace('.', '[index].')
+    }
+
     template = template.replace(
       cmsData.regex.escapeTextToRegex(match[0], 'g'),
       ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
@@ -263,7 +273,6 @@ export function indexEachBlocks(template, onlyHtml) {
 
     // Pour chaque tag Abe
     while (match = cmsData.regex.abeTag.exec(block)) {
-      // template = cmsTemplates.prepare.insertAbeEach(template, match, key, cmsData.regex.eachBlockPattern.lastIndex - block.length, onlyHtml)
       template = cmsTemplates.prepare.addAbeDictionnary(template, match[0], key)
     } 
   })
