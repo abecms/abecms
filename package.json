@@ -95,6 +95,7 @@
     "request": "^2.69.0",
     "smartcrop-cli": "^1.0.2",
     "smtp-server": "^1.11.1",
+    "striptags": "^2.1.1",
     "uuid": "^3.0.0",
     "watch": "^1.0.1",
     "which": "^1.2.11",

@@ -1,13 +1,13 @@
 var chai = require('chai');
 var path = require('path');
 
-var Manager = require('../src/cli').Manager
-var config = require('../src/cli').config
-var cmsOperations = require('../src/cli').cmsOperations
+var Manager = require('../../../src/cli').Manager
+var config = require('../../../src/cli').config
+var cmsOperations = require('../../../src/cli').cmsOperations
 config.set({root: __dirname + '/fixtures/'})
 
-var cmsData = require('../src/cli').cmsData;
-var Manager = require('../src/cli').Manager;
+var cmsData = require('../../../src/cli').cmsData;
+var Manager = require('../../../src/cli').Manager;
 var fse = require('fs-extra');
 
 describe('Manager', function() {
@@ -16,9 +16,9 @@ describe('Manager', function() {
       .then(function () {
 
         this.fixture = {
-          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8'),
-          jsonArticle: fse.readJsonSync(path.join(__dirname, 'fixtures', 'files', 'article-4.json')),
-          jsonArticle1: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'article-1.json'))
+          tag: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article.html'), 'utf8'),
+          jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'test', 'fixtures', 'files', 'article-4.json')),
+          jsonArticle1: fse.readJsonSync(path.join(process.cwd(), 'test', 'fixtures', 'data', 'article-1.json'))
         }
         done()
         
@@ -28,14 +28,14 @@ describe('Manager', function() {
   it('getStructureAndTemplates()', function() {
     const data = Manager.instance.getStructureAndTemplates()
     chai.assert.equal(data['templates'][0].name, 'article-data-arrayinline', 'failed !')
-    chai.assert.equal(data['templates'].length, 24, 'failed !')
+    chai.assert.equal(data['templates'].length, 25, 'failed !')
   });
 
   it('updateStructureAndTemplates()', function() {
     Manager.instance.updateStructureAndTemplates()
     const data = Manager.instance.getStructureAndTemplates()
     chai.assert.equal(data['templates'][0].name, 'article-data-arrayinline', 'failed !')
-    chai.assert.equal(data['templates'].length, 24, 'failed !')
+    chai.assert.equal(data['templates'].length, 25, 'failed !')
   });
 
   it('getList()', function() {

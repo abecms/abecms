@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars'
+import stripTags from 'stripTags'
 
 import {
   cmsData
@@ -19,23 +20,24 @@ export function addAbeDataAttrForHtmlTag(template) {
   var match
   var key
   var getattr
+  var newTemplate = template
 
   while (match = cmsData.regex.abePattern.exec(template)) {
     key = cmsData.regex.getAttr(match, 'key')
 
-    if (cmsData.regex.isSingleAbe(match, template)) {
+    if (cmsData.regex.isSingleAbe(match, newTemplate)) {
       getattr = key.replace(/\./g, '-')
     } else {
       getattr = key.replace('.', '[index].')
     }
 
-    template = template.replace(
+    newTemplate = newTemplate.replace(
       cmsData.regex.escapeTextToRegex(match[0], 'g'),
       ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
     )
   }
 
-  return template
+  return newTemplate
 }
 
 export function addHasAbeAttr(text) {
@@ -198,7 +200,8 @@ export function addAbeSourceComment(template, json) {
  */
 export function addAbeHtmlTagBetweenAbeTags(template) {
   var match
-  while (match = cmsData.regex.abePattern.exec(template)) {
+  var templateNoDom = stripTags(template)
+  while (match = cmsData.regex.abeAsTagPattern.exec(templateNoDom)) {
     template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
   }
 
