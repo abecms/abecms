@@ -53,9 +53,11 @@ export function prepareDisplay(obj, str = null) {
   var keys = getKeys(str)
   Array.prototype.forEach.call(keys, (key) => {
     var val = get(obj, key)
+
     var pattern = new RegExp('{{'+key+'}}|'+key, 'g')
     str = str.replace(pattern, val)
   })
+    // console.log('params.value', params.value)
 
   if (str == null) {
     str = obj

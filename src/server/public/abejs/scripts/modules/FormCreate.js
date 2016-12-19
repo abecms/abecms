@@ -122,18 +122,22 @@ export default class FormCreate {
             if (autocomplete) {
               var results = input.parentNode.querySelectorAll('.autocomplete-result')
               values[id] = []
+              var mergedValues = []
               Array.prototype.forEach.call(results, function(result) {
                 var resultValue = result.getAttribute('value')
                 if (resultValue.indexOf('{') > -1) {
                   try {
                     var jsonValue = JSON.parse(resultValue)
-                    setObjByString(values, id, jsonValue);
-                    // values[id].push(jsonValue)
+                    // setObjByString(values, id, jsonValue);
+                    mergedValues.push(jsonValue)
                   }catch(e) {
-                    // values[id].push(value)
+                    // setObjByString(values, id, value);
+                    mergedValues.push(value)
                   }
                 }
               }.bind(this))
+              setObjByString(values, id, mergedValues);
+
               if (required && values[id].length == 0) {
                 isValid = false
                 if(showErrors) parentNode.classList.add('has-error')
@@ -163,7 +167,6 @@ export default class FormCreate {
           }
         }
       }.bind(this))
-
       var slug = slugs[this._selectedTemplate]
       var slugMatches = slug.match(/{{.*?}}/g)
       if (slugMatches !== null) {
