@@ -42,7 +42,7 @@ export default class EditorSave {
   serializeForm() {
     var abeForm = document.getElementById('abeForm')
     if (abeForm == null) return
-      
+    
     var inputs = [].slice.call(abeForm.querySelectorAll('input'))
     var selects = [].slice.call(abeForm.querySelectorAll('select'))
     inputs = inputs.concat(selects)

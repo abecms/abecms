@@ -113,46 +113,48 @@ export default class FormCreate {
         input.parentNode.classList.remove('error')
         if (linkedTpl == null || linkedTpl == this._selectedTemplate) {
           var id = input.getAttribute('data-id')
-          var autocomplete = input.getAttribute('data-autocomplete') == 'true' ? true : false
-          var required = input.getAttribute('data-required') == 'true' ? true : false
-          var value = input.value
+          if (id != null) {
+            var autocomplete = input.getAttribute('data-autocomplete') == 'true' ? true : false
+            var required = input.getAttribute('data-required') == 'true' ? true : false
+            var value = input.value
 
-          if (autocomplete) {
-            var results = input.parentNode.querySelectorAll('.autocomplete-result')
-            values[id] = []
-            Array.prototype.forEach.call(results, function(result) {
-              var resultValue = result.getAttribute('value')
-              if (resultValue.indexOf('{') > -1) {
+            if (autocomplete) {
+              var results = input.parentNode.querySelectorAll('.autocomplete-result')
+              values[id] = []
+              Array.prototype.forEach.call(results, function(result) {
+                var resultValue = result.getAttribute('value')
+                if (resultValue.indexOf('{') > -1) {
+                  try {
+                    var jsonValue = JSON.parse(resultValue)
+                    values[id].push(jsonValue)
+                  }catch(e) {
+                    // values[id].push(value)
+                  }
+                }
+              }.bind(this))
+              if (required && values[id].length == 0) {
+                isValid = false
+                if(showErrors) parentNode.classList.add('has-error')
+              }
+            }else {
+              if (value.indexOf('{') > -1) {
                 try {
-                  var jsonValue = JSON.parse(resultValue)
-                  values[id].push(jsonValue)
+                  var jsonValue = JSON.parse(value)
+                  values[id] = [jsonValue]
+
+                  if (required && values[id].length == 0) {
+                    isValid = false
+                    if(showErrors) parentNode.classList.add('has-error')
+                  }
                 }catch(e) {
                   // values[id].push(value)
                 }
-              }
-            }.bind(this))
-            if (required && values[id].length == 0) {
-              isValid = false
-              if(showErrors) parentNode.classList.add('has-error')
-            }
-          }else {
-            if (value.indexOf('{') > -1) {
-              try {
-                var jsonValue = JSON.parse(value)
-                values[id] = [jsonValue]
-
-                if (required && values[id].length == 0) {
+              }else {
+                values[id] = value
+                if (required && values[id] == '') {
                   isValid = false
                   if(showErrors) parentNode.classList.add('has-error')
                 }
-              }catch(e) {
-                // values[id].push(value)
-              }
-            }else {
-              values[id] = value
-              if (required && values[id] == '') {
-                isValid = false
-                if(showErrors) parentNode.classList.add('has-error')
               }
             }
           }
