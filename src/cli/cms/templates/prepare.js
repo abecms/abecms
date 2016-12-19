@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars'
+import striptags from 'striptags'
 
 import {
   cmsData
@@ -56,32 +57,27 @@ export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
  * @param {[type]} template [description]
  */
 export function addAbeDataAttrForHtmlTag(template) {
-  // var match
+  var match
+  var key
+  var getattr
+  var newTemplate = template
 
-  var matches = cmsData.regex.getAllAbeHtmlTag(template)
-  Array.prototype.forEach.call(matches, (match) => {
-    console.log('match', match)
-  // })
+  while (match = cmsData.regex.abePattern.exec(template)) {
+    key = cmsData.regex.getAttr(match, 'key')
 
-  // while (match = cmsData.regex.abePattern.exec(template)) {
-    var key = cmsData.regex.getAttr(match, 'key')//.replace(/\./g, '-')
-    if (cmsData.regex.isSingleAbe(match, template)) {
-      // data-abe-test[index].img="test[index].img"
-      template = template.replace(
-        cmsData.regex.escapeTextToRegex(match, 'g'),
-        addAbeAttrSingleTab(key, match)
-        // ' data-abe-' + cmsData.regex.validDataAbe(key) + '="'  + key + '" ' + match
-      )
-    }else {
-      template = template.replace(
-        cmsData.regex.escapeTextToRegex(match[0], 'g'),
-        addAbeAttrForBlock(key, match[0])
-        // ' data-abe-' + cmsData.regex.validDataAbe(key) + '="'  + key + '" ' + match[0]
-      )
+    if (cmsData.regex.isSingleAbe(match, newTemplate)) {
+      getattr = key.replace(/\./g, '-')
+    } else {
+      getattr = key.replace('.', '[index].')
     }
-  })
 
-  return template
+    newTemplate = newTemplate.replace(
+      cmsData.regex.escapeTextToRegex(match[0], 'g'),
+      ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
+    )
+  }
+
+  return newTemplate
 }
 
 export function addHasAbeAttr(text) {
@@ -246,6 +242,10 @@ export function addAbeSourceComment(template, json) {
  */
 export function addAbeHtmlTagBetweenAbeTags(template) {
   var match
+  var templateNoDom = striptags(template)
+  while (match = cmsData.regex.abeAsTagPattern.exec(templateNoDom)) {
+    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+  }
 
   var tags = cmsData.regex.getAllAbeHtmlTag(template)
   Array.prototype.forEach.call(tags, (tag) => {
@@ -327,7 +327,6 @@ export function indexEachBlocks(template, onlyHtml) {
 
     // Pour chaque tag Abe
     while (match = cmsData.regex.abeTag.exec(block)) {
-      // template = cmsTemplates.prepare.insertAbeEach(template, match, key, cmsData.regex.eachBlockPattern.lastIndex - block.length, onlyHtml)
       template = cmsTemplates.prepare.addAbeDictionnary(template, match[0], key)
     } 
   })

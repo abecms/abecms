@@ -1,6 +1,6 @@
 {
   "name": "abe-cli",
-  "version": "2.11.5",
+  "version": "2.11.6",
   "description": "Abe command line tool",
   "main": "src/server/app.js",
   "repository": {
@@ -66,8 +66,10 @@
     "fs-extra": "^1.0.0",
     "handlebars": "^4.0.3",
     "handlebars-helper-slugify": "^0.3.2",
+    "handlebars-helpers": "^0.7.5",
     "handlebars-intl": "^1.1.1",
     "helmet": "^3.1.0",
+    "helper-markdown": "^0.2.1",
     "html-minifier": "^3.1.0",
     "https": "^1.0.0",
     "jimp": "^0.2.27",
@@ -95,6 +97,7 @@
     "request": "^2.69.0",
     "smartcrop-cli": "^1.0.2",
     "smtp-server": "^1.11.1",
+    "striptags": "^2.1.1",
     "uuid": "^3.0.0",
     "watch": "^1.0.1",
     "which": "^1.2.11",
