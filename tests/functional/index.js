@@ -132,7 +132,7 @@ describe('Abe', function() {
         .assert.containsText("//div[@class='display-status']/span", "publish")
         .url('http://localhost:3003/abe/editor')
         .waitForElementVisible('//body')
-        .assert.containsText("//table[@id='navigation-list']/tbody/tr[1]/td[6]/a[@class='checkmark label-published']", "✔");
+        .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[6]/a", "label-published");
     });
 
     it('The updated article is unpublished in the manager', function(client) {
