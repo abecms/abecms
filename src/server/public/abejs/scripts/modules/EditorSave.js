@@ -4,6 +4,7 @@ import {IframeNode} from '../utils/iframe'
 import EditorUtils from './EditorUtils'
 import Json from '../modules/EditorJson'
 import on from 'on'
+import {setObjByString} from '../utils/jsonObject'
 
 export default class EditorSave {
   constructor() {
@@ -40,7 +41,7 @@ export default class EditorSave {
    * @return {Object} json
    */
   serializeForm() {
-    var abeForm = document.getElementById('abeForm')
+    var abeForm = document.querySelector('.abeform-wrapper')
     if (abeForm == null) return
     
     var inputs = [].slice.call(abeForm.querySelectorAll('input'))
@@ -53,6 +54,7 @@ export default class EditorSave {
 
     Array.prototype.forEach.call(inputs, (input) => {
       var dataId = input.getAttribute('data-id')
+      var maxlength = input.getAttribute('data-maxlength')
       if(input.type === 'file') return
       if(typeof dataId !== 'undefined' && dataId !== null) {
         if(dataId.indexOf('[') > -1){
@@ -72,7 +74,7 @@ export default class EditorSave {
         }else {
           var value
 
-          if (input.nodeName === 'SELECT') {
+          if (input.nodeName === 'SELECT' && maxlength != "1") {
             var checked = input.querySelectorAll('option:checked')
             value = []
             Array.prototype.forEach.call(checked, (check) => {
@@ -100,7 +102,8 @@ export default class EditorSave {
           }else {
             value = input.value.replace(/\"/g, '\&quot;') + ''
           }
-          this._json.data[dataId] = value
+          setObjByString(this._json.data, dataId, value);
+          // this._json.data[dataId] = value
         }
       }
     })
@@ -109,6 +112,8 @@ export default class EditorSave {
   savePage(type) {
     var target = document.querySelector(`[data-action="${type}"]`)
     this.serializeForm()
+    console.log('this._json.data', this._json.data)
+    return
     target.classList.add('loading')
     target.setAttribute('disabled', 'disabled')
     var url = target.getAttribute('data-url')

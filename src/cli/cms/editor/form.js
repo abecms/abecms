@@ -60,7 +60,7 @@ export default class Form {
     }
 
     obj = extend(true, defaultValues, obj)
-    obj.key = obj.key.replace(/\./, '-')
+    obj.key = obj.key//.replace(/\./, '-')
 
     if(obj.key.indexOf('[') < 0 && obj.key.indexOf('.') > -1) {
       obj.block = obj.key.split('.')[0]
