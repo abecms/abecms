@@ -13,8 +13,12 @@ export default function sourceAttr(obj, params) {
   var str = params.display
   var selected = ''
   var displayName = prepareDisplay(obj, str)
+  var values = params.value
+  if(Object.prototype.toString.call(params.value) !== '[object Array]') {
+    values = [params.value]
+  }
 
-  Array.prototype.forEach.call(params.value, (pValue) => {
+  Array.prototype.forEach.call(values, (pValue) => {
     if (isSelected(pValue, displayName, str)) {
       selected = 'selected'
     }
