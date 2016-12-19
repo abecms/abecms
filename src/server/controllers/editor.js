@@ -17,19 +17,31 @@ function add(obj, json, text, util) {
     var index = obj.key.match(/[^\[]+?(?=\])/)[0]
     var prop = obj.key.replace(/[^\.]+?\./, '')
 
-    if(typeof json[key] !== 'undefined' && json[key] !== null &&
-       typeof json[key][index] !== 'undefined' && json[key][index] !== null &&
-       typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
-      obj.value = json[getDataIdWithNoSlash(key)][index][prop]
-    }else if(typeof value !== 'undefined' && value !== null && value !== '') {
-      if(typeof json[key] === 'undefined' || json[key] === null){
-        json[key] = []
+    try {
+      obj.value = eval(`json[getDataIdWithNoSlash(key)][index].` + prop)
+    } catch(e) {
+
+      try {
+        eval(`json[getDataIdWithNoSlash(key)][index].` + prop + '=' + JSON.stringify(value))
+      }catch(e) {
       }
-      if(typeof json[key][index] === 'undefined' || json[key][index] === null){
-        json[key][index] = {}
-      }
-      json[key][index][prop] = value
     }
+
+    // if(typeof json[key] !== 'undefined' && json[key] !== null &&
+    //    typeof json[key][index] !== 'undefined' && json[key][index] !== null &&
+    //    typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
+    //   obj.value = eval(`json[getDataIdWithNoSlash(key)][index].` + prop)
+    //   // obj.value = json[getDataIdWithNoSlash(key)][index][prop]
+    //   console.log(obj.value)
+    // }else if(typeof value !== 'undefined' && value !== null && value !== '') {
+    //   if(typeof json[key] === 'undefined' || json[key] === null){
+    //     json[key] = []
+    //   }
+    //   if(typeof json[key][index] === 'undefined' || json[key][index] === null){
+    //     json[key][index] = {}
+    //   }
+    //   json[key][index][prop] = value
+    // }
   }
 
   obj.key = getDataIdWithNoSlash(obj.key)
@@ -75,12 +87,12 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
     realKey = obj.key//.replace(/\./g, '-')
     // obj.value = json[getDataIdWithNoSlash(realKey)]
     try {
-      console.log(`json.${getDataIdWithNoSlash(realKey)}`)
       obj.value = eval(`json.${getDataIdWithNoSlash(realKey)}`)
     }catch(e) {
       obj.value = null
     }
-    json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
+    // json[getDataIdWithNoSlash(obj.key)] = 
+    add(obj, json, text, util)
   }
 }
 
@@ -272,14 +284,12 @@ export function editor(text, json, documentLink, precontrib = false) {
 
         var blocks = orderBlock(util)
 
-
         if (!precontrib) {
           // HOOKS afterEditorFormBlocks
           blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json, text)
         }
 
         abeEngine.instance.content = json
-
         resolve({
           text: text,
           form: blocks,

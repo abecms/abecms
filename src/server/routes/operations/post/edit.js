@@ -9,10 +9,6 @@ var route = function(req, res, next){
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
   var operation = cmsData.regex.getWorkflowFromOperationsUrl(req.originalUrl)
-console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * $*')
-console.log('operation.postUrl, req.body.json, operation.workflow', operation.postUrl, 
-    req.body.json, 
-    operation.workflow)
 
   var p = cmsOperations.post.submit(
     operation.postUrl, 

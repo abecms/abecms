@@ -110,7 +110,7 @@ export default class EditorUtils {
    */
   static formToHtml(node, input) {
     var val = input.value
-    var id = input.id
+    var id = input.id.replace(/\./g, '-')
     var placeholder = input.getAttribute('placeholder')
     if(typeof placeholder === 'undefined' || placeholder === 'undefined' || placeholder === null) {
       placeholder = ''

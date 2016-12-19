@@ -63,10 +63,13 @@ export default class EditorSave {
           var key = dataId.replace(/[^\.]+?-/, '')
           if(typeof this._json.data[obj] === 'undefined' || this._json.data[obj] === null) this._json.data[obj] = []
           if(typeof this._json.data[obj][index] === 'undefined' || this._json.data[obj][index] === null) this._json.data[obj][index] = {}
-          this._json.data[obj][index][key] = input.value
+
+          var keyJson = key.replace(/.*?\[[0-9].*?\]\./, '')
+          setObjByString(this._json.data[obj][index], keyJson, input.value);
+          // this._json.data[obj][index][key] = input.value
           var emptyObject = 0
           for(var prop in this._json.data[obj][index]) {
-            if(this._json.data[obj][index][prop].trim() !== '') emptyObject++
+            if(typeof this._json.data[obj][index][prop] !== "string" || this._json.data[obj][index][prop].trim() !== '') emptyObject++
           }
           if(emptyObject === 0) {
             delete this._json.data[obj][index]
@@ -112,8 +115,6 @@ export default class EditorSave {
   savePage(type) {
     var target = document.querySelector(`[data-action="${type}"]`)
     this.serializeForm()
-    console.log('this._json.data', this._json.data)
-    return
     target.classList.add('loading')
     target.setAttribute('disabled', 'disabled')
     var url = target.getAttribute('data-url')

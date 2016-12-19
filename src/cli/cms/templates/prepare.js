@@ -25,11 +25,11 @@ export function addAbeDataAttrForHtmlTag(template) {
   while (match = cmsData.regex.abePattern.exec(template)) {
     key = cmsData.regex.getAttr(match, 'key')
 
-    if (cmsData.regex.isSingleAbe(match, newTemplate)) {
-      getattr = key.replace(/\./g, '-')
-    } else {
-      getattr = key.replace('.', '[index].')
+    if (!cmsData.regex.isSingleAbe(match, newTemplate)) {
+      key = key.replace('.', '{{@index}}.')
     }
+
+    getattr = key.replace(/\./g, '-')
 
     newTemplate = newTemplate.replace(
       cmsData.regex.escapeTextToRegex(match[0], 'g'),
