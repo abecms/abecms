@@ -18,6 +18,11 @@ export default function sourceAttr(obj, params) {
     values = [params.value]
   }
 
+  // if (params.key == "colors.single") {
+  //   console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+  //   console.log('params', params)
+  // }
+
   Array.prototype.forEach.call(values, (pValue) => {
     if (isSelected(pValue, displayName, str)) {
       selected = 'selected'

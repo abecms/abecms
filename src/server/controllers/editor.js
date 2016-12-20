@@ -11,37 +11,29 @@ import {
 
 function add(obj, json, text, util) {
   var value = obj.value
-  
+
   if(obj.key.indexOf('[') > -1) {
     var key = obj.key.split('[')[0]
     var index = obj.key.match(/[^\[]+?(?=\])/)[0]
     var prop = obj.key.replace(/[^\.]+?\./, '')
+    key = getDataIdWithNoSlash(key)
 
     try {
-      obj.value = eval(`json[getDataIdWithNoSlash(key)][index].` + prop)
+      obj.value = eval(`json[key][index].` + prop)
     } catch(e) {
 
       try {
-        eval(`json[getDataIdWithNoSlash(key)][index].` + prop + '=' + JSON.stringify(value))
+        eval(`json[key][index].${prop} = ` + JSON.stringify(value))
       }catch(e) {
+        // no value found inside json OKEY
       }
     }
-
-    // if(typeof json[key] !== 'undefined' && json[key] !== null &&
-    //    typeof json[key][index] !== 'undefined' && json[key][index] !== null &&
-    //    typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
-    //   obj.value = eval(`json[getDataIdWithNoSlash(key)][index].` + prop)
-    //   // obj.value = json[getDataIdWithNoSlash(key)][index][prop]
-    //   console.log(obj.value)
-    // }else if(typeof value !== 'undefined' && value !== null && value !== '') {
-    //   if(typeof json[key] === 'undefined' || json[key] === null){
-    //     json[key] = []
-    //   }
-    //   if(typeof json[key][index] === 'undefined' || json[key][index] === null){
-    //     json[key][index] = {}
-    //   }
-    //   json[key][index][prop] = value
-    // }
+  }else {
+    try {
+      obj.value = eval(`json.${getDataIdWithNoSlash(obj.key)}`)
+    } catch(e) {
+      // no value found inside json OKEY
+    }
   }
 
   obj.key = getDataIdWithNoSlash(obj.key)

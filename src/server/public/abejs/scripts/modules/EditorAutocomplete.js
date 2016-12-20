@@ -63,8 +63,8 @@ export default class EditorAutocomplete {
   }
 
   _saveData() {
-    var id = this._currentInput.getAttribute('id')
-    var nodeComments = IframeCommentNode('#page-template', id)
+    var id = this._currentInput.getAttribute('data-id')
+    var nodeComments = IframeCommentNode('#page-template', id.replace(/\./g, '-'))
     var maxLength = this._currentInput.getAttribute('data-maxlength')
 
     if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
@@ -81,18 +81,19 @@ export default class EditorAutocomplete {
 
     var results = [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result'))
     var json = this._json.data
-  
-    json[id] = []
+    
+    var toSave = []
     Array.prototype.forEach.call(results, (result) => {
       var value = result.getAttribute('value')
       if(value !== '') {
         if(value.indexOf('{') > -1 || value.indexOf('[') > -1) {
-          json[id].push(JSON.parse(value))
+          toSave.push(JSON.parse(value))
         }else {
-          json[id].push(value)
+          toSave.push(value)
         }
       }
     })
+    eval(`json.${id} = ${JSON.stringify(toSave)}`)
 
     this._json.data = json
     
