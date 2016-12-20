@@ -88,47 +88,56 @@ export function generateThumbnail(file) {
 
 export function saveFile(req) {
   var p = new Promise((resolve) => {
-    var folderFilePath = createMediaFolder(req)
     var resp = {success: 1}
     var filePath
     req.pipe(req.busboy)
     req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
       var ext = path.extname(filename).toLowerCase()
       var slug = createMediaSlug(filename, ext)
+      var mediaType = getMediaType(ext)
+
+      var folderFilePath = createMediaFolder(mediaType)
       var hasSentHeader = false
       
       filePath = path.join(folderFilePath, slug)
-      resp['filePath'] = path.join('/' + config.upload.image, slug)
-
-      var returnErr = function (msg) {
-        hasSentHeader = true
-        file.resume()
-        resolve({error: 1, response: msg})
-      }
+      resp['filePath'] = path.join('/' + mediaType, slug)
 
       file.on('limit', function() {
-        returnErr('file is too big')
+        hasSentHeader = true
+        file.resume()
+        resolve({error: 1, response: 'file is too big'})
+        return
       })
 
       var isValid = isValidMedia(mimetype, ext)
-      if(isValid.error) returnErr(isValid.error)
+      if(isValid.error){
+        hasSentHeader = true
+        file.resume()
+        resolve({error: 1, response: isValid.error})
+        return
+      }
 
       var fstream = fse.createWriteStream(filePath)
       fstream.on('finish', function() {
         if(hasSentHeader) return
-        if(/\.(jpg|png|gif|svg)/.test(filePath)) resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
 
-        var thumbPromise = generateThumbnail(filePath)
-        thumbPromise.then(function (thumbResp) {
-          resp.thumbnail = thumbResp.thumb
-          if(req.query.input.indexOf('data-size') > -1){
-            var thumbsSizes = cmsData.regex.getAttr(req.query.input, 'data-size').split(',')
-            cropAndSaveFiles(thumbsSizes, filePath, resp).then(function (resp) {
-              resolve(resp)
-            })
-          }
-          else resolve(resp)
-        })
+        resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
+
+        if(mediaType === 'image') {
+          var thumbPromise = generateThumbnail(filePath)
+          thumbPromise.then(function (thumbResp) {
+            resp.thumbnail = thumbResp.thumb
+            if(req.query.input.indexOf('data-size') > -1){
+              var thumbsSizes = cmsData.regex.getAttr(req.query.input, 'data-size').split(',')
+              cropAndSaveFiles(thumbsSizes, filePath, resp).then(function (resp) {
+                resolve(resp)
+              })
+            }
+            else resolve(resp)
+          })
+        } else {
+          resolve(resp)
+        }
       })
       file.pipe(fstream)
     })
@@ -138,13 +147,28 @@ export function saveFile(req) {
 }
 
 export function isValidMedia(mimetype, ext) {
-  var allowedExtensions = ['.gif', '.jpg', '.jpeg', '.png', '.svg', '.mp4']
-  var allowedMimetype = ['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'video/mp4']
+  var allowedExtensions = config.upload.extensions
+  var allowedMimetypes = config.upload.mimetypes
+
   var error = false
-  if (allowedMimetype.indexOf(mimetype) < 0) error = 'unauthorized file'
+  if (allowedMimetypes.indexOf(mimetype) < 0) error = 'unauthorized file'
   else if (allowedExtensions.indexOf(ext) < 0) error = 'not a valid asset'
 
   return {error: error}
+}
+
+export function getMediaType(ext) {
+  let type = 'document'
+
+  if(/\.(jpg|jpeg|png|gif|svg)/.test(ext)){
+    type = 'image'
+  } else if(/\.(mov|avi|mp4)/.test(ext)) {
+    type = 'video'
+  } else if(/\.(mp3|wav)/.test(ext)){
+    type = 'sound'
+  }
+
+  return type
 }
 
 export function createMediaSlug(filename, ext) {
@@ -152,9 +176,9 @@ export function createMediaSlug(filename, ext) {
   return limax(filenameNoExt, {separateNumbers: false}) + '-' + coreUtils.random.generateUniqueIdentifier(2) + ext
 }
 
-export function createMediaFolder(req) {
-  var folderWebPath = '/' + config.upload.image
-  folderWebPath = abeExtend.hooks.instance.trigger('beforeSaveImage', folderWebPath, req)
+export function createMediaFolder(mediaType) {
+  var folderWebPath = '/' + mediaType
+  folderWebPath = abeExtend.hooks.instance.trigger('beforeSaveImage', folderWebPath)
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
 

@@ -134,9 +134,20 @@ export function createInputRich(attributes, inputClass, params) {
 }
 
 export function createInputFile(attributes, inputClass, params) {
-  return `<input class="form-control" ${attributes} name="${params.key}" type="file" />
-          <span class="percent"></span>
-          <input type="text" ${attributes} class="${inputClass} hidden" />`
+
+  return `<div class="input-group file-upload">
+            <div class="input-group-addon image">
+              <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+            </div>
+            <input type="text" ${attributes} class="${inputClass} file-input" />
+            <div class="upload-wrapper">
+              <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload a file"/>
+              <span class="percent">
+                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+              </span>
+            </div>
+          </div>
+          <div class="input-error"></div>`
 }
 
 export function createInputTextarea(attributes, inputClass, params) {
@@ -157,7 +168,7 @@ export function createInputImage(attributes, inputClass, params) {
             <div class="input-group-addon image">
               <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
             </div>
-            <input type="text" ${attributes} class="${inputClass} image-input" />
+            <input type="text" ${attributes} class="${inputClass} file-input" />
             <div class="upload-wrapper">
               <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload an image"/>
               <span class="percent">

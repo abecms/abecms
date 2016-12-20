@@ -10,7 +10,7 @@ window.ImagePickerUpload = {
                 <div class="input-group-addon image">
                   <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
                 </div>
-                <input type="text" id="wysiwyg-image-text" name="wysiwyg-image-text" placeholder="image or video (.mp4)" value="" class="form-control form-abe image-input">
+                <input type="text" id="wysiwyg-image-text" name="wysiwyg-image-text" placeholder="image or video (.mp4)" value="" class="form-control form-abe file-input">
                 <div class="upload-wrapper">
                   <input class="form-control" id="wysiwyg-image-upload" name="wysiwyg-image-upload" value="" type="file" title="upload an image">
                   <span class="percent">
@@ -61,7 +61,7 @@ window.ImagePickerUpload = {
           percent.innerHTML = percentHtml
           return
         }
-        var input = parentTarget.querySelector('input.image-input')
+        var input = parentTarget.querySelector('input.file-input')
         input.value = resp.filePath
         input.focus()
         input.blur()
