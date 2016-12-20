@@ -19,10 +19,12 @@ import getStructure from './get-structure'
 import getPaginate from './get-paginate'
 import getThumbs from './get-thumbs'
 import getImage from './get-image'
+import getHome from './get-home'
 import * as users from './users'
 import * as operations from './operations'
 
 export {
+	getHome,
 	getMain,
 	postCreate,
 	postListUrlSave,
