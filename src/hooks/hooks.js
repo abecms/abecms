@@ -88,7 +88,7 @@ var hooks = {
   afterSave: (obj, abe) => {
     return obj
   },
-  beforeSaveImage: (folderWebPath, req, abe) => {
+  beforeSaveImage: (folderWebPath, abe) => {
     return folderWebPath
   },
   afterSaveImage: (resp, abe) => {
