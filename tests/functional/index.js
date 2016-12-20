@@ -127,9 +127,10 @@ describe('Abe', function() {
         .url('http://localhost:3003/abe/editor/articles/ftest.html#slug')
         .waitForElementVisible('//body')
         .assert.title('Abe')
+        .pause(1000)
         .click("//div[@class='btns']/button[3]")
         .pause(2000)
-        //.assert.containsText("//div[@class='display-status']/span", "publish") // don't pass in Travis
+        .assert.containsText("//div[@class='display-status']/span", "publish")
         .url('http://localhost:3003/abe/editor')
         .waitForElementVisible('//body')
         .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[6]/a", "label-published");
