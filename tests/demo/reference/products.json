@@ -1,0 +1,24 @@
+[
+	{
+	  "name": "r1",
+	  "recipe": "Recipe 1",
+	  "products": [
+	    {
+	      "title": "product 1",
+	      "cover_300x200": "/image/turkey_300x200.jpg",
+	    },
+	    {
+	      "title": "product 2",
+	      "cover_300x200": "/image/chicken_300x200.jpg",
+	    },
+	    {
+	      "title": "product 3",
+	      "cover_300x200": "/image/chicken_300x200.jpg",
+	    },
+	    {
+	      "title": "product 4",
+	      "cover_300x200": "/image/chicken_300x200.jpg",
+	    }
+	  ]
+	}
+]
