@@ -1,4 +1,25 @@
 
+## [2.12.0] - 2016-12-19
+* [[`6eb371f11c`](https://github.com/AdFabConnect/abejs/commit/6eb371f11c)] - **ic**: adding Mac OSX (gregorybesson) 
+* [[`542d6148d2`](https://github.com/AdFabConnect/abejs/commit/542d6148d2)] - **ic**: adding Mac OSX (gregorybesson) 
+* [[`ab35c47fa6`](https://github.com/AdFabConnect/abejs/commit/ab35c47fa6)] - **ic**: adding Mac OSX (gregorybesson) 
+* [[`139b50cc36`](https://github.com/AdFabConnect/abejs/commit/139b50cc36)] - **ic**: adding Mac OSX (gregorybesson) 
+* [[`6ecec6a05d`](https://github.com/AdFabConnect/abejs/commit/6ecec6a05d)] - **ic**: adding Mac OSX (gregorybesson) 
+* [[`b8e002f472`](https://github.com/AdFabConnect/abejs/commit/b8e002f472)] - **fix**: typo in require module (gregorybesson) 
+* [[`48e0e6690e`](https://github.com/AdFabConnect/abejs/commit/48e0e6690e)] - **feature**: 150 handlebars helpers added to Abe (gregorybesson) 
+* [[`4167c416bd`](https://github.com/AdFabConnect/abejs/commit/4167c416bd)] - **ic**: adding Mac OsX to the ic (gregorybesson) 
+* [[`e2b0e54a0e`](https://github.com/AdFabConnect/abejs/commit/e2b0e54a0e)] - **ic**: lint (gregorybesson) 
+* [[`c0c74f9866`](https://github.com/AdFabConnect/abejs/commit/c0c74f9866)] - **enhancement**: The way we detect Abe as tags (not inside a html attribute) has been widely improved. Adding Unit tests to cover existing and new cases (gregorybesson) 
+* [[`4d0225282a`](https://github.com/AdFabConnect/abejs/commit/4d0225282a)] - **fix**: The Abe tags not included in html attributes part of a {{#each statement where not modifiable on the frontend anymore (gregorybesson) 
+* [[`e264029c98`](https://github.com/AdFabConnect/abejs/commit/e264029c98)] - Merge pull request #92 from AdFabConnect/bug_jsoninline (Greg Besson) 
+* [[`b80883d7df`](https://github.com/AdFabConnect/abejs/commit/b80883d7df)] - **fix**: wrong return (nicolaslabbe) 
+* [[`31781a6ab8`](https://github.com/AdFabConnect/abejs/commit/31781a6ab8)] - **fix**: bug json inline into abe data (nicolaslabbe) 
+
+## [2.11.6] - 2016-12-16
+* [[`d9a26ed671`](https://github.com/AdFabConnect/abejs/commit/d9a26ed671)] - Merge pull request #91 from AdFabConnect/bug_duplicate (Greg Besson) 
+* [[`bcccc6a209`](https://github.com/AdFabConnect/abejs/commit/bcccc6a209)] - **fix**: on duplicate with same name (nicolaslabbe) 
+* [[`2444bdaaba`](https://github.com/AdFabConnect/abejs/commit/2444bdaaba)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.11.5] - 2016-12-16
 * [[`cb592582be`](https://github.com/AdFabConnect/abejs/commit/cb592582be)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
 * [[`3b238c851c`](https://github.com/AdFabConnect/abejs/commit/3b238c851c)] - **fix**: Add options to iFrame (gregorybesson) 
