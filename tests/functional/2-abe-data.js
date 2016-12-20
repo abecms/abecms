@@ -22,12 +22,14 @@ describe('Abe', function() {
 
     it('Create a autocomplete template post', function(client) {
       client
+        .useXpath()
         .url('http://localhost:3003/abe/editor')
-        .click('select[name="selectTemplate"] option[value="autocomplete"]')
-        .waitForElementVisible('div[data-precontrib-templates="autocomplete"] input[id="name"]', 1000)
-        .setValue('div[data-precontrib-templates="autocomplete"] input[id="name"]', 'autocomplete')
-        .click('button[type="submit"]')
-        .waitForElementVisible('form[id="abeForm"]', 2000)
+        .click('//*[@id="selectTemplate"]/option[2]')
+        .waitForElementVisible('//*[@id="name"]', 1000)
+        .setValue('//*[@id="name"]', 'autocomplete')
+        .click('/html/body/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/form/div[11]/div/button')
+        .pause(1000)
+        .waitForElementVisible('//*[@id="abeForm"]', 2000)
         .assert.urlEquals("http://localhost:3003/abe/editor/autocomplete.html", "Clicked URL Matches with URL of the New Window");
     });
 
