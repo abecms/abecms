@@ -31,6 +31,16 @@ export function getLabel(params) {
           </label>`
 }
 
+export function hint(params) {
+  if (params.hint) {
+    return `<p class="text-info">
+        <small><span class="glyphicon glyphicon-info-sign"></span>&nbsp;<em>${params.hint}</em></small>
+      </p>`
+  }
+
+  return ''
+}
+
 export function createInputSource(attributes, inputClass, params) {
   var inputSource = ''
   var lastValues
@@ -223,6 +233,8 @@ export function printInput (params, root) {
   else if (params.type.indexOf('link') >= 0) res += createInputLink(attributes, inputClass, params)
   else if (params.type.indexOf('image') >= 0) res += createInputImage(attributes, inputClass, params)
   else res += createInputText(attributes, inputClass, params)
+
+  res += hint(params)
 
   res += '</div>'
   res = abeExtend.hooks.instance.trigger('afterEditorInput', res, params)
