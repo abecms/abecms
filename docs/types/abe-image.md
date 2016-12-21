@@ -8,6 +8,20 @@
 {{abe type='image' key='image_key' desc='give some tips' thumbs='250x250,350x350'}}
 ```
 
+###Config Abe.json
+You can change the directory where file will be uploaded inside abe.json config file.
+
+To do this add __upload__ object that contains an __image__ property, the value of this propertie will be the path to your upload folder (relative to the root path of your project)
+
+You can also limit the size of the file uploaded via abe, to do this add a __fileSizelimit__ if the file uploaded are over the limit they won't be uploaded and the user will get back an error message
+
+```
+"upload": {
+  "image": "destinations/imagerie",
+  "fileSizelimit": 20971520
+}
+```
+
 ###Parameters
 
 > __type__ = image
