@@ -72,7 +72,7 @@ export default class Page {
       }
       else {
         this.template = cmsTemplates.prepare.removeHandlebarsRawFromHtml(this.template)
-        this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
+        // this.template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.template)
       }
       
       if(!this._onlyHTML){
