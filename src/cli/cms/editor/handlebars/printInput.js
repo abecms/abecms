@@ -33,8 +33,8 @@ export function getLabel(params) {
 
 export function hint(params) {
   if (params.hint) {
-    return `<p class="text-info">
-        <small><span class="glyphicon glyphicon-info-sign"></span>&nbsp;<em>${params.hint}</em></small>
+    return `<p class="abe-hint help-block">
+        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<em>${params.hint}</em>
       </p>`
   }
 
@@ -42,12 +42,12 @@ export function hint(params) {
 }
 
 export function createInputSource(attributes, inputClass, params) {
-  var inputSource = ''
+  var inputSource = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">`
   var lastValues
   if(params.autocomplete != null && params.autocomplete === 'true') {
     if(params.sourceString.indexOf('http') === 0) lastValues = params.source
     else lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
-    inputSource += '<div class="autocomplete-result-wrapper">'
+    inputSource += `<div class="autocomplete-result-wrapper">`
     if(params.autocomplete != null && params.autocomplete === 'true' && params.prefill === 'true') {
       inputSource += `<div  class="autocomplete-refresh" value=''
                             data-autocomplete-refresh="true"
@@ -87,6 +87,8 @@ export function createInputSource(attributes, inputClass, params) {
 
     inputSource += '</select>'
   }
+  inputSource += `${hint(params)}</div>`
+
   return inputSource
 }
 
@@ -115,7 +117,8 @@ export function createInputRich(attributes, inputClass, params) {
     { icon: 'ti-face-smile',         title: 'smiley',                 action: 'smiley',       param: '',         popup: 'smiley' },
   ]
   if(params.toolbar !== '*') params.toolbar = params.toolbar.split(',')
-  var inputRich = `<div class="wysiwyg-container rich">
+  var inputRich = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+                  <div class="wysiwyg-container rich">
                     <div class="wysiwyg-toolbar wysiwyg-toolbar-top">`
 
   buttons.forEach(function (button) {
@@ -138,14 +141,17 @@ export function createInputRich(attributes, inputClass, params) {
 
   inputRich +=    `</div>
                   <textarea class="${inputClass} form-rich" ${attributes} rows="4">${params.value}</textarea>
-                </div>`
+                </div>
+                ${hint(params)}
+              </div>`
 
   return inputRich
 }
 
 export function createInputFile(attributes, inputClass, params) {
 
-  return `<div class="input-group file-upload">
+  return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+          <div class="input-group file-upload">
             <div class="input-group-addon image">
               <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
             </div>
@@ -157,24 +163,33 @@ export function createInputFile(attributes, inputClass, params) {
               </span>
             </div>
           </div>
-          <div class="input-error"></div>`
+          <div class="input-error"></div>
+          ${hint(params)}
+        </div>`
 }
 
 export function createInputTextarea(attributes, inputClass, params) {
-  return `<textarea class="${inputClass}" ${attributes} rows="4">${params.value}</textarea>`
+  return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+          <textarea class="${inputClass}" ${attributes} rows="4">${params.value}</textarea>
+            ${hint(params)}
+          </div>`
 }
 
 export function createInputLink(attributes, inputClass) {
-  return `<div class="input-group">
+  return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+          <div class="input-group">
             <div class="input-group-addon link">
               <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
             </div>
             <input type="text" ${attributes} class="${inputClass}" />
-          </div>`
+          </div>
+          ${hint(params)}
+        </div>`
 }
 
 export function createInputImage(attributes, inputClass, params) {
-  return `<div class="input-group img-upload">
+  return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+          <div class="input-group img-upload">
             <div class="input-group-addon image">
               <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
             </div>
@@ -186,15 +201,21 @@ export function createInputImage(attributes, inputClass, params) {
               </span>
             </div>
           </div>
-          <div class="input-error"></div>`
+          <div class="input-error">
+        </div>
+        ${hint(params)}
+      </div>`
 }
 
-export function createInputText(attributes, inputClass) {
-  return `<div class="input-group">
-          <div class="input-group-addon">
-            <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+export function createInputText(attributes, inputClass, params) {
+  return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
             </div>
             <input type="text" ${attributes} class="${inputClass}" />
+            </div>
+            ${hint(params)}
           </div>`
 }
 
@@ -233,8 +254,6 @@ export function printInput (params, root) {
   else if (params.type.indexOf('link') >= 0) res += createInputLink(attributes, inputClass, params)
   else if (params.type.indexOf('image') >= 0) res += createInputImage(attributes, inputClass, params)
   else res += createInputText(attributes, inputClass, params)
-
-  res += hint(params)
 
   res += '</div>'
   res = abeExtend.hooks.instance.trigger('afterEditorInput', res, params)
