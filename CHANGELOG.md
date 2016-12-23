@@ -1,4 +1,23 @@
 
+## [2.12.1] - 2016-12-23
+* [[`e3560d350e`](https://github.com/AdFabConnect/abejs/commit/e3560d350e)] - Merge branch 'master' of https://github.com/AdFabConnect/abejs (gregorybesson) 
+* [[`e5244265a9`](https://github.com/AdFabConnect/abejs/commit/e5244265a9)] - **refactoring**: new nightwatch version (gregorybesson) 
+* [[`e0a6133d09`](https://github.com/AdFabConnect/abejs/commit/e0a6133d09)] - Merge pull request #101 from AdFabConnect/bug_abe_tag (Greg Besson) 
+* [[`671e5c216e`](https://github.com/AdFabConnect/abejs/commit/671e5c216e)] - **fix**: <abe> tags (nicolaslabbe) 
+* [[`86552faad8`](https://github.com/AdFabConnect/abejs/commit/86552faad8)] - Update abe-image.md (fabrice labbe) 
+* [[`3fb52cc69c`](https://github.com/AdFabConnect/abejs/commit/3fb52cc69c)] - Merge pull request #98 from AdFabConnect/bug_48 (Greg Besson) 
+* [[`45bd8e752c`](https://github.com/AdFabConnect/abejs/commit/45bd8e752c)] - **enhancement**: redirect /abe to /abe/editor (nicolaslabbe) 
+* [[`e77f208c79`](https://github.com/AdFabConnect/abejs/commit/e77f208c79)] - Merge pull request #97 from AdFabConnect/bug_RTE_upload_media (Greg Besson) 
+* [[`47124d6d58`](https://github.com/AdFabConnect/abejs/commit/47124d6d58)] - **fix**: missing media popup upload (wonknu10) 
+* [[`e771bd9103`](https://github.com/AdFabConnect/abejs/commit/e771bd9103)] - **ic**: trying to fix the functional tests (gregorybesson) 
+* [[`9b6507fcef`](https://github.com/AdFabConnect/abejs/commit/9b6507fcef)] - **enhancement**: The abe type 'file' is now usable. + we can configure authorized extensions and mimetypes in abe.json + fix big security hole on file save (gregorybesson) 
+* [[`f56d735f66`](https://github.com/AdFabConnect/abejs/commit/f56d735f66)] - **ic**: functional tests fixed (gregorybesson) 
+* [[`b42e5ae45d`](https://github.com/AdFabConnect/abejs/commit/b42e5ae45d)] - **ic**: functional tests improved (gregorybesson) 
+* [[`a86058a85f`](https://github.com/AdFabConnect/abejs/commit/a86058a85f)] - **ic**: functional tests improved (gregorybesson) 
+* [[`9c9ec41510`](https://github.com/AdFabConnect/abejs/commit/9c9ec41510)] - Merge pull request #93 from AdFabConnect/loadtests (gonzalezemmanuel) 
+* [[`c68532bb85`](https://github.com/AdFabConnect/abejs/commit/c68532bb85)] - Loadtests scenarios and README.md to use it (Emmanuel Gonzalez) 
+* [[`2eedcd9c2e`](https://github.com/AdFabConnect/abejs/commit/2eedcd9c2e)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.12.0] - 2016-12-19
 * [[`6eb371f11c`](https://github.com/AdFabConnect/abejs/commit/6eb371f11c)] - **ic**: adding Mac OSX (gregorybesson) 
 * [[`542d6148d2`](https://github.com/AdFabConnect/abejs/commit/542d6148d2)] - **ic**: adding Mac OSX (gregorybesson) 
