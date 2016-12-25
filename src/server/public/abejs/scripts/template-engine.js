@@ -57,14 +57,98 @@ class Engine {
     this._bindEvents()
 
     this.table = null
-    $(document).ready(() => {
-      if ($('#navigation-list').size() > 0) {
-        this.table = $('#navigation-list').DataTable({
-          //"order": [[ 3, 'desc' ]],
-          'pageLength': 50,
-          'autoWidth': false
-        })
+    this.columns = [
+      { 
+        'data': null,
+        'defaultContent': '',
+        'orderable': false
+      },
+      { 
+        'data': 'abe_meta.link'
+      },
+      { 
+        'data': 'abe_meta.template'
+      },
+      { 
+        'data': null,
+        'defaultContent': ''
       }
+    ]
+
+    Array.prototype.forEach.call(workflow, (flow) => {
+      this.columns.push( 
+        { 'data': null,
+          'defaultContent': '',
+          'orderable': false
+        } 
+      )
+    })
+
+    this.columns.push(
+      { 
+        'data': null,
+        'defaultContent': '',
+        'orderable': false
+      }
+    )
+
+    $(document).ready(() => {
+      this.table = $('#navigation-list').DataTable( {
+        'pageLength': 50,
+        'processing': true,
+        'serverSide': true,
+        'ajax': '/abe/paginate',
+        'columns': this.columns,
+        'order': [[ 3, 'desc' ]],
+        'stateSave': true,
+        'drawCallback': function(settings) {
+          window.abe.manager.rebind()
+        },
+        stateSaveCallback: function(settings,data) {
+          localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+        },
+        stateLoadCallback: function(settings) {
+          return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+        },
+        'createdRow': function (row, data, index) {
+          var actions = '<div class="row icons-action">'
+          if(data.publish != null) {
+            actions += `<a href="/abe/operations/unpublish${data.abe_meta.link}"
+                 title="Unpublish"
+                 class="icon" data-unpublish="true" data-text="Are you sure you want to unpublish : ${data.abe_meta.link}"
+                 title="unpublish">
+                <span class="glyphicon glyphicon-eye-close"></span>
+              </a>`
+          }
+  
+          actions += `<a href="/abe/operations/delete/${data.abe_meta.status}${data.abe_meta.link}"
+               title="Delete"
+               class="icon"
+               data-delete="true"
+               data-text="Are you sure you want to delete : ${data.abe_meta.link}"
+               title="remove">
+              <span class="glyphicon glyphicon-trash"></span>
+            </a></div>`
+          
+          var i = 4
+          Array.prototype.forEach.call(workflow, (flow) => {
+            var wkf = ''
+            if(typeof data[flow] !== 'undefined' && flow === 'publish') {
+              wkf = `<a href="/abe/editor${data[flow].html}" class="checkmark label-published" title="${data[flow].cleanDate}">&#10004;</a>`
+            } 
+            if(data.abe_meta.status == flow && flow !== 'publish') {  
+              wkf = `<a href="/abe/editor${data[flow].html}" class="label label-default label-draft" title="${data[flow].cleanDate}">${flow}</a>`
+            }
+            $('td', row).eq(i).html(wkf)
+            ++i
+          })
+
+          $('td', row).eq(0).html(index + 1)
+          $('td', row).eq(1).html('<a href="/abe/editor'+data.abe_meta.link+'" class="file-path">'+data.abe_meta.link+'</a>')
+          $('td', row).eq(3).html(moment(data.date).format('YYYY/MM/DD'))
+          $('td', row).eq(i).html(actions)
+        }
+      })
     })
 
     var abeReady = new Event('abeReady')
@@ -107,7 +191,7 @@ class Engine {
     })
 
     this._manager.remove((el) => {
-      this.table.row($(el)).remove().draw()
+      this.table.ajax.reload()
     })
 
     this._inputs.onReload(() => {
@@ -136,6 +220,7 @@ window.abe = {
   json: engine.json,
   inputs: engine._inputs,
   files: engine._files,
+  manager: engine._manager,
   blocks: engine._blocks,
   autocomplete: engine._autocomplete,
   editorReload: EditorReload

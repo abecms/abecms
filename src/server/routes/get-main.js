@@ -20,7 +20,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   var manager = {}
   
   manager.home = {
-    files: Manager.instance.getList()
+    files: []//Manager.instance.getList()
   }
 
   manager.list = Manager.instance.getStructureAndTemplates()
