@@ -175,7 +175,7 @@ export function createInputTextarea(attributes, inputClass, params) {
           </div>`
 }
 
-export function createInputLink(attributes, inputClass) {
+export function createInputLink(attributes, inputClass, params) {
   return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
           <div class="input-group">
             <div class="input-group-addon link">
