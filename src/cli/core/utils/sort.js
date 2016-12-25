@@ -34,6 +34,9 @@ export function shuffle(array) {
  * @return integer the ordered value
  */
 export function predicatBy(prop, order){
+  prop = prop.split('.')
+  var len = prop.length
+
   if (order !== -1) {
     order = 1
   }
@@ -50,12 +53,14 @@ export function predicatBy(prop, order){
     }
   }
 
-  return function(a,b){
-    if( a[prop] > b[prop]){
-      return 1*order
-    }else if( a[prop] < b[prop] ){
+  return function (a, b) {
+    var i = 0
+    while( i < len ) { a = a[prop[i]]; b = b[prop[i]]; i++ }
+    if (a < b) {
       return -1*order
+    } else if (a > b) {
+      return 1*order
     }
     return 0
-  }
+  } 
 }

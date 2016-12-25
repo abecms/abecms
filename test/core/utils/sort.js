@@ -26,4 +26,16 @@ describe('Sort', function() {
   	var shuffled = coreUtils.sort.shuffle(list)
   	chai.expect(shuffled[0].name).to.be.oneOf(['article-2.json', 'article-1.json', 'homepage-1.json']);
   });
+
+  it('coreUtils.sort.predicatBy 1', function() {
+    var list = Manager.instance.getList()
+    list.sort(coreUtils.sort.predicatBy('name', 1))
+    chai.expect(list[0].name).to.equal('article-1.json');
+  });
+
+  it('coreUtils.sort.predicatBy 2', function() {
+    var list = Manager.instance.getList()
+    list.sort(coreUtils.sort.predicatBy('abe_meta.template', -1))
+    chai.expect(list[0].abe_meta.template).to.equal('homepage');
+  });
 });
