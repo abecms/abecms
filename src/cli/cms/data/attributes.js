@@ -15,6 +15,7 @@ export function getAll(str, json) {
   var attrs = {
     autocomplete: null,
     desc: '',
+    hint: '',
     display: null,
     editable: true,
     key: '',
