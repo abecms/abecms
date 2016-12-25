@@ -65,4 +65,10 @@ describe('Manager', function() {
     chai.assert.equal(list[0].name, 'article-2.json', 'failed !')
     chai.assert.equal(list.length, 1, 'failed !')
   });
+
+  it('getPage() ', function() {
+    const list = Manager.instance.getPage()
+    chai.assert.equal(list.data[0].name, 'article-1.json', 'failed !')
+    chai.assert.equal(list.recordsTotal, 3, 'failed !')
+  });
 });
