@@ -54,7 +54,6 @@ describe('cmsTemplates.prepare', function() {
     //
     try{
       template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.fixture.noHtml)
-      console.log('ok')
       template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(template)
     } catch (e) {
       console.log(e.stack)
