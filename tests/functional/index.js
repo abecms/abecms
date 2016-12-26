@@ -122,36 +122,36 @@ describe('Abe', function() {
         .expect.element("//table[@id='navigation-list']/tbody/tr[2]/td[2]/a").text.to.not.contain('/articles/ftestupdated.html');
     });
 
-    it('The updated single article is published', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor/articles/ftest.html#slug')
-        .waitForElementVisible('//body')
-        .assert.title('Abe')
-        .pause(1000)
-        .click("//div[@class='btns']/button[3]")
-        .pause(2000)
-        .assert.containsText("//div[@class='display-status']/span", "publish")
-        .url('http://localhost:3003/abe/editor')
-        .waitForElementVisible('//body')
-        .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[6]/a", "label-published");
-    });
+    // it('The duplicated single article is published', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor/articles/ftest.html#slug')
+    //     .waitForElementVisible('//body')
+    //     .assert.title('Abe')
+    //     .pause(1000)
+    //     .click("//div[@class='btns']/button[3]")
+    //     .pause(2000)
+    //     .assert.containsText("//div[@class='display-status']/span", "publish")
+    //     .url('http://localhost:3003/abe/editor')
+    //     .waitForElementVisible('//body')
+    //     .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[6]/a", "label-published");
+    // });
 
-    it('The updated article is unpublished in the manager', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor')
-        .waitForElementVisible('//body')
-        .pause(1000)
-        .click("//table[@id='navigation-list']/tbody/tr[1]/td[7]/div/a")
-        .pause(1000)
-        .acceptAlert()
-        .url('http://localhost:3003/abe/editor')
-        .pause(2000)
-        .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[5]/a", "label-draft");
-    });
+    // it('The duplicated article is unpublished in the manager', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor')
+    //     .waitForElementVisible('//body')
+    //     .pause(1000)
+    //     .click("//table[@id='navigation-list']/tbody/tr[1]/td[7]/div/a")
+    //     .pause(1000)
+    //     .acceptAlert()
+    //     .url('http://localhost:3003/abe/editor')
+    //     .pause(2000)
+    //     .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[5]/a", "label-draft");
+    // });
 
-    it('The updated article is deleted in the manager', function(client) {
+    it('The duplicated article is deleted in the manager', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')
