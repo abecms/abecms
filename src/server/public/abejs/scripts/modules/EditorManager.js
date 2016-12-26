@@ -12,20 +12,6 @@ export default class EditorManager {
 
     this.remove = on(this)
 
-    // wrapper files
-    this._manager = document.querySelector('.manager-wrapper')
-    this._managerTabs = document.querySelectorAll('[data-manager-show]')
-    this._filesList = [].slice.call(document.querySelectorAll('.manager-files .list-group-item'))
-
-    // manager config button
-    this._btnSaveConfig = document.querySelectorAll('[data-save-config]')
-
-    // button manager
-    this._btnGeneratePosts = document.querySelector('[data-generate-posts]')
-    this._btnCloseManager = document.querySelector('.close-manager')
-    this._btnManager = document.querySelector('.btn-manager')
-    this._btnDataFile = document.querySelector('[data-file="true"]')
-
     // event handlers
     this._handleBtnGeneratePostsClick = this._btnGeneratePostsClick.bind(this)
     this._handleBtnCloseManagerClick = this._btnCloseManagerClick.bind(this)
@@ -51,6 +37,20 @@ export default class EditorManager {
   }
 
   rebind() {
+    // wrapper files
+    this._manager = document.querySelector('.manager-wrapper')
+    this._managerTabs = document.querySelectorAll('[data-manager-show]')
+    this._filesList = [].slice.call(document.querySelectorAll('.manager-files .list-group-item'))
+
+    // manager config button
+    this._btnSaveConfig = document.querySelectorAll('[data-save-config]')
+
+    // button manager
+    this._btnGeneratePosts = document.querySelector('[data-generate-posts]')
+    this._btnCloseManager = document.querySelector('.close-manager')
+    this._btnManager = document.querySelector('.btn-manager')
+    this._btnDataFile = document.querySelector('[data-file="true"]')
+
     this._btnDeleteFile = [].slice.call(document.querySelectorAll('[data-delete="true"]'))
     this._btnUnpublishFile = [].slice.call(document.querySelectorAll('[data-unpublish="true"]'))
     
