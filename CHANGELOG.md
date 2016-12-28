@@ -1,3 +1,7 @@
+
+## [2.13.0] - 2016-12-28
+* [[`601f0049d7`](https://github.com/AdFabConnect/abejs/commit/601f0049d7)] - fix : update error under windows in specific conditions (gregorybesson) 
+* [[`1eb72da210`](https://github.com/AdFabConnect/abejs/commit/1eb72da210)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`681a950c6f`](https://github.com/AdFabConnect/abejs/commit/681a950c6f)] - **ic**: fix linting (gregorybesson) 
 * [[`46780f8467`](https://github.com/AdFabConnect/abejs/commit/46780f8467)] - **ic**: removing 2 tests which don't pass under Travis :/ (gregorybesson) 
 * [[`51f5b69933`](https://github.com/AdFabConnect/abejs/commit/51f5b69933)] - **fix**: BC break after last PR merge + typos (gregorybesson) 
