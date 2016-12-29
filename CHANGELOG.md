@@ -1,4 +1,9 @@
 
+## [2.13.1] - 2016-12-29
+* [[`447137c00c`](https://github.com/AdFabConnect/abejs/commit/447137c00c)] - **fix**: right syntax for a tricky node inconsistency (gregorybesson) 
+* [[`9a771d15c5`](https://github.com/AdFabConnect/abejs/commit/9a771d15c5)] - **fix**: the generated html was improperly recompiled in handlebars client side (gregorybesson) 
+* [[`b17c319310`](https://github.com/AdFabConnect/abejs/commit/b17c319310)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.13.0] - 2016-12-28
 * [[`601f0049d7`](https://github.com/AdFabConnect/abejs/commit/601f0049d7)] - fix : update error under windows in specific conditions (gregorybesson) 
 * [[`1eb72da210`](https://github.com/AdFabConnect/abejs/commit/1eb72da210)] - **doc**: CHANGELOG (gregorybesson) 
