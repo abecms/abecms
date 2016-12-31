@@ -157,7 +157,7 @@ export function nextDataList(tplPath, jsonPage, match, onlyDynamicSelect) {
     obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
     
     var type = cmsData.sql.getSourceType(obj.sourceString)
-
+    
     switch (type) {
     case 'request':
       if (onlyDynamicSelect && obj.editable) {

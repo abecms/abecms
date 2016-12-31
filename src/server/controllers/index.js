@@ -24,6 +24,7 @@ import {
   ,getThumbs
   ,getImage
   ,users
+  ,getHome
 } from '../routes'
 
 import {
@@ -127,7 +128,8 @@ Array.prototype.forEach.call(routes, (route) => {
     })
   }
 })
-// router.get('/abe*', getMain)
+
+router.get('/abe*', getHome)
 
 abeExtend.hooks.instance.trigger('afterAddRoute', router)
 

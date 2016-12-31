@@ -12,23 +12,6 @@ export default class EditorManager {
 
     this.remove = on(this)
 
-    // wrapper files
-    this._manager = document.querySelector('.manager-wrapper')
-    this._managerTabs = document.querySelectorAll('[data-manager-show]')
-    this._filesList = [].slice.call(document.querySelectorAll('.manager-files .list-group-item'))
-
-    // manager config button
-    this._btnSaveConfig = document.querySelectorAll('[data-save-config]')
-
-    // button manager
-    this._btnGeneratePosts = document.querySelector('[data-generate-posts]')
-    this._btnCloseManager = document.querySelector('.close-manager')
-    this._btnManager = document.querySelector('.btn-manager')
-    this._btnDataFile = document.querySelector('[data-file="true"]')
-
-    this._btnDeleteFile = [].slice.call(document.querySelectorAll('[data-delete="true"]'))
-    this._btnUnpublishFile = [].slice.call(document.querySelectorAll('[data-unpublish="true"]'))
-
     // event handlers
     this._handleBtnGeneratePostsClick = this._btnGeneratePostsClick.bind(this)
     this._handleBtnCloseManagerClick = this._btnCloseManagerClick.bind(this)
@@ -50,7 +33,60 @@ export default class EditorManager {
       return location.hash = $(e.target).attr('href').substr(1)
     })
 
-    this._bindEvents()
+    this.rebind()
+  }
+
+  rebind() {
+    // wrapper files
+    this._manager = document.querySelector('.manager-wrapper')
+    this._managerTabs = document.querySelectorAll('[data-manager-show]')
+    this._filesList = [].slice.call(document.querySelectorAll('.manager-files .list-group-item'))
+
+    // manager config button
+    this._btnSaveConfig = document.querySelectorAll('[data-save-config]')
+
+    // button manager
+    this._btnGeneratePosts = document.querySelector('[data-generate-posts]')
+    this._btnCloseManager = document.querySelector('.close-manager')
+    this._btnManager = document.querySelector('.btn-manager')
+    this._btnDataFile = document.querySelector('[data-file="true"]')
+
+    this._btnDeleteFile = [].slice.call(document.querySelectorAll('[data-delete="true"]'))
+    this._btnUnpublishFile = [].slice.call(document.querySelectorAll('[data-unpublish="true"]'))
+    
+    Array.prototype.forEach.call(this._managerTabs, (managerTab) => {
+      managerTab.removeEventListener('click', this._handleBtnManagerTabClick)
+      managerTab.addEventListener('click', this._handleBtnManagerTabClick)
+    })
+    Array.prototype.forEach.call(this._btnSaveConfig, (btnSaveConfig) => {
+      btnSaveConfig.removeEventListener('click', this._handleBtnSaveConfigClick)
+      btnSaveConfig.addEventListener('click', this._handleBtnSaveConfigClick)
+    })
+
+    if (this._btnManager != null) {
+      this._btnManager.removeEventListener('click', this._handleBtnManagerClick)
+      this._btnManager.addEventListener('click', this._handleBtnManagerClick)
+    }
+    
+    if(typeof this._btnGeneratePosts !== 'undefined' && this._btnGeneratePosts !== null) {
+      this._btnGeneratePosts.removeEventListener('click', this._handleBtnGeneratePostsClick)
+      this._btnGeneratePosts.addEventListener('click', this._handleBtnGeneratePostsClick)
+    }
+
+    if(typeof this._btnCloseManager !== 'undefined' && this._btnCloseManager !== null) {
+      this._btnCloseManager.removeEventListener('click', this._handleBtnCloseManagerClick)
+      this._btnCloseManager.addEventListener('click', this._handleBtnCloseManagerClick)
+    }
+
+    Array.prototype.forEach.call(this._btnDeleteFile, (deleteFile) => {
+      deleteFile.removeEventListener('click', this._handleBtnDeleteClick)
+      deleteFile.addEventListener('click', this._handleBtnDeleteClick)
+    })
+
+    Array.prototype.forEach.call(this._btnUnpublishFile, (unpublishFile) => {
+      unpublishFile.removeEventListener('click', this._handleBtnUnpublishClick)
+      unpublishFile.addEventListener('click', this._handleBtnUnpublishClick)
+    })
   }
 
   _btnDeleteClick(e){
@@ -88,50 +124,9 @@ export default class EditorManager {
         if (response.success !== 1) {
           alert(response.message)
         }else {
-          var labels = target.parentNode.parentNode.parentNode.querySelectorAll('.label:not(.hidden)')
-          var p = target.parentNode.parentNode.parentNode.querySelector('.label-published')
-          Array.prototype.forEach.call(labels, (label) => {
-            label.classList.add('hidden')
-          })
-          var draft = target.parentNode.parentNode.parentNode.querySelector('.label-draft')
-          
-          if(typeof draft !== 'undefined' && draft !== null) {
-            draft.classList.remove('hidden')
-          }
-
-          if(typeof p !== 'undefined' && p !== null) p.remove()
-          target.remove()
+          this.remove._fire(target.parentNode.parentNode.parentNode)
         }
       })
-  }
-
-  _bindEvents() {
-    Array.prototype.forEach.call(this._managerTabs, (managerTab) => {
-      managerTab.addEventListener('click', this._handleBtnManagerTabClick)
-    })
-    Array.prototype.forEach.call(this._btnSaveConfig, (btnSaveConfig) => {
-      btnSaveConfig.addEventListener('click', this._handleBtnSaveConfigClick)
-    })
-
-    if (this._btnManager != null) {
-      this._btnManager.addEventListener('click', this._handleBtnManagerClick)
-    }
-    
-    if(typeof this._btnGeneratePosts !== 'undefined' && this._btnGeneratePosts !== null) {
-      this._btnGeneratePosts.addEventListener('click', this._handleBtnGeneratePostsClick)
-    }
-
-    if(typeof this._btnCloseManager !== 'undefined' && this._btnCloseManager !== null) {
-      this._btnCloseManager.addEventListener('click', this._handleBtnCloseManagerClick)
-    }
-
-    Array.prototype.forEach.call(this._btnDeleteFile, (deleteFile) => {
-      deleteFile.addEventListener('click', this._handleBtnDeleteClick)
-    })
-
-    Array.prototype.forEach.call(this._btnUnpublishFile, (unpublishFile) => {
-      unpublishFile.addEventListener('click', this._handleBtnUnpublishClick)
-    })
   }
 
   _btnGeneratePostsClick(e) {

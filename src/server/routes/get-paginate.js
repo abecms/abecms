@@ -1,33 +1,51 @@
 import {
+  config,
   abeExtend,
   Manager
 } from '../../cli'
 
 var route = function(req, res, next){
-  var currentPage = 1
-  var pageSize = 2
+  var start = 0
+  var length = 25
   var sortField = 'date'
   var sortOrder = -1
+  var search = ''
+  
+  var values = ['date', 'abe_meta.link', 'abe_meta.template', 'date']
+  Array.prototype.forEach.call(config.users.workflow, (flow) => {
+    values[i] = 'abe_meta.' + flow
+    ++i
+  })
 
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if(typeof res._header !== 'undefined' && res._header !== null) return
 
-  if (typeof req.query.page !== 'undefined') {
-    currentPage = +req.query.page
+  if (typeof req.query.start !== 'undefined') {
+    start = +req.query.start
   }
-  if (typeof req.query.pageSize !== 'undefined') {
-    pageSize = +req.query.pageSize
+
+  if (typeof req.query.length !== 'undefined') {
+    length = +req.query.length
   }
-  if (typeof req.query.sortField !== 'undefined') {
-    sortField = req.query.sortField
+
+  var i = 4
+  if (typeof req.query.order !== 'undefined') {
+    sortField = values[req.query.order[0]['column']]
+    sortOrder = (req.query.order[0]['dir'] === 'desc')? -1:1
   }
-  if (typeof req.query.sortOrder !== 'undefined') {
-    sortOrder = +req.query.sortOrder
+
+  if (typeof req.query.search.value !== '') {
+    search = req.query.search.value
   }
-  var page = Manager.instance.getPage(currentPage, pageSize, sortField, sortOrder)
+
+  var list = Manager.instance.getPage(start, length, sortField, sortOrder, search)
+
+  if (typeof req.query.draw !== 'undefined') {
+    list['draw'] = req.query.draw
+  }
 
   res.set('Content-Type', 'application/json')
-  res.send(JSON.stringify(page))
+  res.send(JSON.stringify(list))
 }
 
 export default route

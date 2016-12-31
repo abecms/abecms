@@ -22,15 +22,16 @@ describe('Abe', function() {
 
     it('Create a single article', function(client) {
       client
+        .useXpath()
         .url('http://localhost:3003/abe/editor')
-        .waitForElementVisible('body')
+        .waitForElementVisible('//body')
         .assert.title('Abe')
-        .click('select[id="level-1"] option:nth-child(2)')
-        .click('select[name="selectTemplate"] option[value="single"]')
-        .waitForElementVisible('div[data-precontrib-templates=single]', 1000)
-        .setValue('div[data-precontrib-templates=single] > div > input', 'ftest')
-        .click('button[type="submit"]')
-        .waitForElementVisible('form[id="abeForm"]', 2000)
+        .click('//*[@id="level-1"]/option[2]')
+        .click('//*[@id="selectTemplate"]/option[8]')
+        .waitForElementVisible("//div[@data-precontrib-templates='single']//input[@id='name']", 1000)
+        .setValue("//div[@data-precontrib-templates='single']//input[@id='name']", 'ftest')
+        .click("//button[@type='submit']")
+        .waitForElementVisible("//*[@id='abeForm']", 2000)
         .assert.urlEquals("http://localhost:3003/abe/editor/articles/ftest.html", "Clicked URL Matches with URL of the New Window");
     });
 
@@ -38,7 +39,7 @@ describe('Abe', function() {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')
-        .waitForElementVisible('//body')
+        .waitForElementVisible("//body")
         .pause(1000)
         .assert.containsText("//table[@id='navigation-list']/tbody/tr[1]/td[2]/a", "/articles/ftest.html");
     });
@@ -121,36 +122,36 @@ describe('Abe', function() {
         .expect.element("//table[@id='navigation-list']/tbody/tr[2]/td[2]/a").text.to.not.contain('/articles/ftestupdated.html');
     });
 
-    it('The updated single article is published', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor/articles/ftest.html#slug')
-        .waitForElementVisible('//body')
-        .assert.title('Abe')
-        .pause(1000)
-        .click("//div[@class='btns']/button[3]")
-        .pause(2000)
-        .assert.containsText("//div[@class='display-status']/span", "publish")
-        .url('http://localhost:3003/abe/editor')
-        .waitForElementVisible('//body')
-        .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[6]/a", "label-published");
-    });
+    // it('The duplicated single article is published', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor/articles/ftest.html#slug')
+    //     .waitForElementVisible('//body')
+    //     .assert.title('Abe')
+    //     .pause(1000)
+    //     .click("//div[@class='btns']/button[3]")
+    //     .pause(2000)
+    //     .assert.containsText("//div[@class='display-status']/span", "publish")
+    //     .url('http://localhost:3003/abe/editor')
+    //     .waitForElementVisible('//body')
+    //     .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[6]/a", "label-published");
+    // });
 
-    it('The updated article is unpublished in the manager', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor')
-        .waitForElementVisible('//body')
-        .pause(1000)
-        .click("//table[@id='navigation-list']/tbody/tr[1]/td[7]/div/a")
-        .pause(1000)
-        .acceptAlert()
-        .url('http://localhost:3003/abe/editor')
-        .pause(2000)
-        .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[5]/a", "label-draft");
-    });
+    // it('The duplicated article is unpublished in the manager', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor')
+    //     .waitForElementVisible('//body')
+    //     .pause(1000)
+    //     .click("//table[@id='navigation-list']/tbody/tr[1]/td[7]/div/a")
+    //     .pause(1000)
+    //     .acceptAlert()
+    //     .url('http://localhost:3003/abe/editor')
+    //     .pause(2000)
+    //     .assert.cssClassPresent("//table[@id='navigation-list']/tbody/tr[1]/td[5]/a", "label-draft");
+    // });
 
-    it('The updated article is deleted in the manager', function(client) {
+    it('The duplicated article is deleted in the manager', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')

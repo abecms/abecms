@@ -68,9 +68,7 @@ export default class Reload {
     
     var initIframe = function () {
       var doc = iframe.contentWindow.document 
-      str = str.replace(/<\/head>/, '<base href="/" /></head>') 
-      var template = Handlebars.compile(str, {noEscape: true})
-      str = template(json)
+      str = str.replace(/<\/head>/, '<base href="/" /></head>')
       doc.open('text/html', 'replace') 
       doc.write(str) 
       doc.close()
@@ -111,8 +109,6 @@ export default class Reload {
         },
       (code, responseText) => {
         if(typeof responseText !== 'undefined' && responseText !== null) {
-          var template = Handlebars.compile(responseText, {noEscape: true})
-          responseText = template(json)
           this.inject(responseText)
         }
           

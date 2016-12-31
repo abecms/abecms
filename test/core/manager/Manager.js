@@ -28,14 +28,14 @@ describe('Manager', function() {
   it('getStructureAndTemplates()', function() {
     const data = Manager.instance.getStructureAndTemplates()
     chai.assert.equal(data['templates'][0].name, 'article-data-arrayinline', 'failed !')
-    chai.assert.equal(data['templates'].length, 25, 'failed !')
+    chai.assert.equal(data['templates'].length, 26, 'failed !')
   });
 
   it('updateStructureAndTemplates()', function() {
     Manager.instance.updateStructureAndTemplates()
     const data = Manager.instance.getStructureAndTemplates()
     chai.assert.equal(data['templates'][0].name, 'article-data-arrayinline', 'failed !')
-    chai.assert.equal(data['templates'].length, 25, 'failed !')
+    chai.assert.equal(data['templates'].length, 26, 'failed !')
   });
 
   it('getList()', function() {
@@ -64,5 +64,11 @@ describe('Manager', function() {
     const list = Manager.instance.getListWithStatusOnFolder('draft', '0-1')
     chai.assert.equal(list[0].name, 'article-2.json', 'failed !')
     chai.assert.equal(list.length, 1, 'failed !')
+  });
+
+  it('getPage() ', function() {
+    const list = Manager.instance.getPage()
+    chai.assert.equal(list.data[0].name, 'article-1.json', 'failed !')
+    chai.assert.equal(list.recordsTotal, 3, 'failed !')
   });
 });

@@ -16,29 +16,90 @@
 	{{someVariable}}
 {{{{/raw}}}}
 ```
-someVariable won't compile server side only client side when injected on the iframe or when the iframe reload.
+you'll find {{someVariable}} in your html. This helper is for you if you want to use handlebars on your html generated static pages. 
 
 ### Use case
-This can be useful when working with inline script inside template, for exemple when a JS array is updated with abe-each.
+For example http://www.bjornblog.com/web/jquery-store-locator-plugin is a jquery plugin which uses handlebars as its dynamic templating language.
 
 template.html
 ```
-{{#each objs}}
-​	{{abe type='text' key='objs.item' desc='some item' visible='false' reload='true'}} // note that there is a reload attr
-{{/each}}
+<div id="infoTemplate" style="display:none">
+  {{{{raw}}}}
+  {{#location}}
+    {{name}}
+    {{address}}
+    {{address2}}
+    {{city}}{{#if city}},{{/if}} {{state}} {{postal}}
+    {{hours1}}{{hours2}}{{hours3}}
+    {{phone}}
+    {{niceURL web}}
+  {{/location}}
+  {{{{/raw}}}}
+  </div>
 
-{{{{raw}}}}
-	// objs = [{item: 1}, {item: 2}, {item: 3}]
-	var myArray = [
-		{{#each objs}}
-			{{item}},
-		{{/each objs}}
-	];
-{{{{/raw}}}}
+<div id="listTemplate" style="display:none">
+  {{{{raw}}}}
+  {{#location}}
+    <li data-markerid="{{markerid}}">
+      <div class="list-label">{{marker}}</div>
+      <div class="list-details">
+        <div class="list-content">
+          <div class="loc-name">{{name}}</div>
+          <div class="loc-addr">{{address}}</div>
+          <div class="loc-addr2">{{address2}}</div>
+          <div class="loc-addr3">{{city}}{{#if city}},{{/if}} {{state}} {{postal}}</div>
+          <div class="loc-phone">{{phone}}</div>
+          <div class="loc-web"><a href="{{web}}" target="_blank">{{niceURL web}}</a></div>
+          {{#if distance}}
+            <div class="loc-dist">{{distance}} {{length}}</div>
+            <div class="loc-directions">
+              <a href="https://maps.google.com/maps?saddr={{origin}}&amp;daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}" target="_blank" style="color: lightskyblue">Directions</a>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+      <hr>
+    </li>
+  {{/location}}
+  {{{{/raw}}}}
+</div>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="/js/handlebars-v4.0.5.js"></script>
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyCo_h54Rp4-1ygvmTSWgebLYz6hlcjLO7w&region=FRANCE"></script>
+<script src="/js/jquery.storelocator.js"></script>
+<script src="/js/jquery.tinycarousel.js"></script>
+<script>//var jsonData = {{stores}}</script>
+<script>//console.log({{stores}})</script>
+<script>
+  $(function() {
+    $('#bh-sl-map-container').storeLocator({
+      debug                      : false,
+      fullMapStart               : true,
+      mapSettings : {
+        zoom                   : 5,
+        mapTypeId              : google.maps.MapTypeId.ROADMAP,
+        disableDoubleClickZoom : true,
+        scrollwheel            : false,
+        navigationControl      : false,
+        draggable              : true
+      },
+      lengthUnit               : 'km',
+      storeLimit               : 5,
+      // Data
+      dataType                 : 'json',
+      dataLocation             : 'https://raw.githubusercontent.com/bjorn2404/jQuery-Store-Locator-Plugin/master/dist/data/locations.json',
+      //dataLocation           : '/stores.html',
+      //dataRaw                : jsonData,
+      infowindowTemplateID     : 'infoTemplate',
+      listTemplateID           : 'listTemplate',
+      distanceAlert            : -1
+    });
+  });
+</script>
 ```
 
-Everything inside raw block will be compiled client side and as the reload attribute is on the json that will be used is the one client side (not the one saved inside a json file)
-when a new item will be added or removed from abe form *objs* inside the json file won't have changed but as it compiled on the client after reloading the iframe myArray will contains as much item as there is on objs each block
+Everything inside raw blocks will be left as is and ready to be compiled client side by handlebars. In this example, it's used to have templates of infowindow and list of stores found on a googlemap.
 
 ## lowercase
 
