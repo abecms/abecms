@@ -324,26 +324,37 @@ class Manager {
     console.log('Manager updated')
   }
 
-  getPage(currentPage = 1, pageSize = 2, sortField = 'date', sortOrder = -1){
+  getPage(
+    start = 0,
+    length = 20,
+    sortField = 'date',
+    sortDir = -1,
+    search = '',
+    searchFields = ['abe_meta.link', 'abe_meta.template']
+  ){
     const total = this._list.length
-    const pageCount = total/pageSize
-    const start = (currentPage - 1)*pageSize
-    const end = currentPage*pageSize
-    let list
-    if(sortField != 'date' || sortOrder != -1){
-      const tmpList = this._list
-      tmpList.sort(coreUtils.sort.predicatBy(sortField, sortOrder))
-      list = tmpList.slice(start, end)
-    } else {
-      list = this._list.slice(start, end)
+    let totalFiltered = total
+    let list = this._list.slice()
+
+    if(search !== '') {
+      const searches = search.split(' ')
+      for(var i = 0; i < searches.length; i++){
+        list = coreUtils.array.facet(list, searchFields, searches[i])
+      }
+
+      totalFiltered = list.length
     }
 
+    if(sortField != 'date' || sortDir != -1){
+      list.sort(coreUtils.sort.predicatBy(sortField, sortDir))
+    }
+    
+    list = list.slice(start, start + length)
+
     return {
-      'currentPage': currentPage,
-      'pageSize': pageSize,
-      'total': total,
-      'pageCount': pageCount,
-      'list': list
+      'recordsTotal': total,
+      'recordsFiltered': totalFiltered,
+      'data': list
     }
   }
 

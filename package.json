@@ -1,6 +1,6 @@
 {
   "name": "abe-cli",
-  "version": "2.11.6",
+  "version": "2.13.1",
   "description": "Abe command line tool",
   "main": "src/server/app.js",
   "repository": {
@@ -115,7 +115,7 @@
     "eslint": "^3.6.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.2",
-    "nightwatch": "^0.9.9",
+    "nightwatch": "^0.9.11",
     "node-sass": "^3.7.0",
     "nodemon": "^1.8.1",
     "parallelshell": "^2.0.0",

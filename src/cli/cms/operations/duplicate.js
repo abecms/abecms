@@ -16,7 +16,7 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
 
     let json = {}
     let revisions = []
-    const newPostUrl = path.join(newPath, coreUtils.slug.clean(name))
+    const newPostUrl = path.posix.join(newPath, coreUtils.slug.clean(name))
     if(oldPostUrl != null) {
       const files = Manager.instance.getList()
       const oldPostDataPath = path.join(config.root, config.data.url, oldPostUrl.replace('.' + config.files.templates.extension, '.json'))
@@ -38,7 +38,7 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
 
     var pCreate = cmsOperations.create(template, newPath, name, req, json, (isUpdate) ? false : true)
     pCreate.then((resSave) => {
-      if (isUpdate && oldPostUrl !== path.join('/', newPostUrl)) {
+      if (isUpdate && oldPostUrl !== path.posix.join('/', newPostUrl)) {
         abeExtend.hooks.instance.trigger('beforeUpdate', json, oldPostUrl, template, newPath, name, req, isUpdate)
         cmsOperations.remove.remove(oldPostUrl)
       }

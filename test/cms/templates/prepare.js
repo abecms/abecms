@@ -29,6 +29,7 @@ describe('cmsTemplates.prepare', function() {
           source: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-source.html'), 'utf-8'),
           each: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each.html'), 'utf-8'),
           eachMultiple: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each-multiple.html'), 'utf-8'),
+          eachVariable: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each-variable.html'), 'utf-8'),
           rawHandlebar: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-raw-handlebars.html'), 'utf-8'),
           noHtml: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-nohtml.html'), 'utf-8')
         }
@@ -54,7 +55,6 @@ describe('cmsTemplates.prepare', function() {
     //
     try{
       template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.fixture.noHtml)
-      console.log('ok')
       template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(template)
     } catch (e) {
       console.log(e.stack)
@@ -221,12 +221,16 @@ describe('cmsTemplates.prepare', function() {
 
     // test
     var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.each, false)
-    chai.expect(template.indexOf('data-abe-block="test{{@index}}"')).to.be.above(-1);
-    chai.expect(template.indexOf('<!-- [[test]]')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-block="test{{@index}}"')).to.be.above(-1)
+    chai.expect(template.indexOf('<!-- [[test]]')).to.be.above(-1)
 
     var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachMultiple, false)
-    chai.expect(template.indexOf('data-abe-block')).to.be.above(-1);
-    chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-block')).to.be.above(-1)
+    chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1)
+
+    var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachVariable, false)
+    chai.expect(template.indexOf('{{formatted_address}} - (lat:{{geometry.location.lat}}-lng:{{geometry.location.lng}})')).to.be.above(-1)
+    chai.expect(template.indexOf('<!-- [[test]]')).to.be.above(-1)
   });
 
   /**

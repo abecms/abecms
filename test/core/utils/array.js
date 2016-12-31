@@ -15,6 +15,7 @@ config.set({root: path.join(process.cwd(), 'test', 'fixtures')})
 describe('coreUtils.array', function() {
 
   var arr = [{'test': 'val'}, {'test2': 'val2'}];
+  var arrFacet = [{'a': 'vala', 'b': {'ba':'other'}}, {'a': 'valaprime', 'b': {'ba':'otherprime'}}];
 
   /**
    * coreUtils.array.find
@@ -29,6 +30,22 @@ describe('coreUtils.array', function() {
     chai.expect(result2).to.be.a('array')
     chai.expect(result2.length).to.equal(1)
     chai.expect(result2[0]).to.equal(1)
+  });
+
+  /**
+   * coreUtils.array.facet
+   * 
+   */
+  it('coreUtils.array.facet()', function() {
+    var result = coreUtils.array.facet(arrFacet, ['a'], 'val');
+    chai.expect(result).to.be.a('array')
+    chai.expect(result.length).to.equal(2)
+    chai.expect(result[0]['a']).to.equal('vala')
+    
+    result = coreUtils.array.facet(arrFacet, ['a', 'b.ba'], 'otherprime');
+    chai.expect(result).to.be.a('array')
+    chai.expect(result.length).to.equal(1)
+    chai.expect(result[0]['a']).to.equal('valaprime')
   });
 
   /**

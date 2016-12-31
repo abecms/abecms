@@ -26,9 +26,9 @@ export default class FormCreate {
       this._handleBtnSelectTemplate = this._btnSelectTemplate.bind(this)
 
       // // manager update btn
-      this._btnCreate = this._form.querySelector('[date-abe-create]')
-      this._btnUpdate = this._form.querySelector('[date-abe-update]')
-      this._btnDuplicate = this._form.querySelector('[date-abe-duplicate]')
+      this._btnCreate = this._form.querySelector('[data-abe-create]')
+      this._btnUpdate = this._form.querySelector('[data-abe-update]')
+      this._btnDuplicate = this._form.querySelector('[data-abe-duplicate]')
       this._handleBtnDuplicateManagerClick = this._btnDuplicateManagerClick.bind(this)
       this._handleBtnUpdateManagerClick = this._btnUpdateManagerClick.bind(this)
       this._handleBtnCreateManagerClick = this._btnCreateManagerClick.bind(this)
@@ -82,7 +82,7 @@ export default class FormCreate {
 
       if (found) {
         input.style.display = 'block'
-      }else {
+      } else {
         input.style.display = 'none'
       }
     }.bind(this))
@@ -97,7 +97,6 @@ export default class FormCreate {
     var postPath = ''
     var isValid = true
     if (this._selectedTemplate != null && this._selectedTemplate != '') {
-
       Array.prototype.forEach.call(this._formInputs, function(input) {
         if (input.getAttribute('data-slug-type') == 'path') {
           if (input.parentNode.classList.contains('hidden')) {
@@ -105,9 +104,9 @@ export default class FormCreate {
           }
         }
 
-        var parentNode = input.parentNode
+        var parentNode = input.parentNode.parentNode
         if (parentNode.getAttribute('data-precontrib-templates') == null) {
-          parentNode = input.parentNode.parentNode
+          parentNode = parentNode.parentNode
         }
         parentNode.classList.remove('has-error')
         var linkedTpl = parentNode.getAttribute('data-precontrib-templates')
@@ -138,7 +137,7 @@ export default class FormCreate {
                 isValid = false
                 if(showErrors) parentNode.classList.add('has-error')
               }
-            }else {
+            } else {
               if (value.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(value)
@@ -152,7 +151,7 @@ export default class FormCreate {
                 }catch(e) {
                   // values[id].push(value)
                 }
-              }else {
+              } else {
                 // values[id] = value
                 setObjByString(values, id, value);
                 if (required && values[id] == '') {
@@ -169,9 +168,9 @@ export default class FormCreate {
       var slugMatches = slug.match(/{{.*?}}/g)
       if (slugMatches !== null) {
         Array.prototype.forEach.call(slugMatches, function(slugMatch) {
-          var cleanSlugMath = slugMatch.replace('{{', '').replace('}}', '')
+          var cleanSlugMatch = slugMatch.replace('{{', '').replace('}}', '')
           try {
-            var valueSlug = eval('values.' + cleanSlugMath) + ''
+            var valueSlug = eval('values.' + cleanSlugMatch) + ''
             valueSlug = limax(valueSlug, {separateNumbers: false})
             slug = slug.replace(slugMatch, valueSlug)
           }catch(e) {
@@ -190,7 +189,7 @@ export default class FormCreate {
         }
       })
       postPath +=  slug.replace(/^\//, '')
-    }else {
+    } else {
       isValid = false
     }
 
@@ -202,7 +201,7 @@ export default class FormCreate {
       Array.prototype.forEach.call(breadcrumbNames, function(breadcrumbName) {
         if (breadcrumbName == '' && showErrors) {
           breadcrumbsHtml += '<span class="btn-danger">...</span>-'
-        }else {
+        } else {
           breadcrumbsHtml += '<span>' + breadcrumbName + '</span>-'
         }
       }.bind(this))
@@ -237,7 +236,7 @@ export default class FormCreate {
             var jsonRes = JSON.parse(responseText)
             if (jsonRes.success == 1 && jsonRes.json != null && jsonRes.json.abe_meta != null) {
               window.location.href = window.location.origin + '/abe/editor' + jsonRes.json.abe_meta.link
-            }else {
+            } else {
               console.log(responseText)
               alert('error')
             }

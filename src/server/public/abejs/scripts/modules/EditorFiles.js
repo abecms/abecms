@@ -13,7 +13,9 @@ export default class EditorFiles {
   }
 
   rebind() {
-    let files = [].slice.call(document.querySelectorAll('.img-upload input[type="file"]'))
+    let files = [].slice.call(document.querySelectorAll(
+      '.img-upload input[type="file"], .file-upload input[type="file"]')
+    )
 
     Array.prototype.forEach.call(files, (file) => {
       file.removeEventListener('change', this._handleChangeFiles)
@@ -59,7 +61,7 @@ export default class EditorFiles {
         percent.innerHTML = percentHtml
         return
       }
-      var input = parentTarget.querySelector('input.image-input')
+      var input = parentTarget.querySelector('input.file-input')
       input.value = resp.filePath
       if(resp.thumbs){
         var parent = input.parentNode
@@ -72,7 +74,7 @@ export default class EditorFiles {
             var inputThumbs = document.createElement('input')
             inputThumbs.classList.add('form-control')
             inputThumbs.classList.add('form-abe')
-            inputThumbs.classList.add('image-input')
+            inputThumbs.classList.add('file-input')
             inputThumbs.id = thumdID
             inputThumbs.setAttribute('data-id', thumdID)
             inputThumbs.value = thumb.name

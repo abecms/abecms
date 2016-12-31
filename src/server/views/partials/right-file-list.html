@@ -36,4 +36,10 @@
     </table>
   <br />
 </div>
+<script>
+  var workflow = []
+  {{#each @root.config.users.workflow}}
+    workflow.push("{{this}}")
+  {{/each}}
+</script>
 {{/if}}

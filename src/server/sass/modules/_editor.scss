@@ -59,7 +59,7 @@
       }
     }
   }
-  [date-abe-create="true"]{
+  [data-abe-create="true"]{
     margin-top: 20px;
   }
 }
@@ -159,4 +159,28 @@ form.text-i18n{
     background-color: inherit;
     border-color: inherit;
   }
+}
+
+.abe-hint.help-block {
+  font-style: italic;
+  font-size: 12px;
+  color: #ccc;
+  margin: 0px 0px 5px 0px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  display: block;
+  padding: 5px 5px 2px 5px;
+  margin-top: -6px;
+  border-radius: 3px;
+  border-top: 0px;
+  line-height: 20px;
+}
+
+.abe-hint.help-block .glyphicon {
+  color: #5bc0de;
+  margin-right: 5px;
+}
+
+.parent-image .abe-hint.help-block {
+  width: calc(100% - 42px);
 }
