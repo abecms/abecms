@@ -26,11 +26,10 @@ export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
   var res = ""
 
   var valueOfAttritube = key.split('.')
-  key = key.replace(/\./g, '-')
   var parentKey = valueOfAttritube.shift()
-  valueOfAttritube = `${parentKey}[index]-${valueOfAttritube[0].replace(/\./g, '-')}`
+  valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0].replace(/\./g, '-')}`
   var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
-  key = cmsData.regex.validDataAbe(valueOfAttritube.replace(/\./g, '-'))
+  key = cmsData.regex.validDataAbe(valueOfAttritube)
 
   if (htmlAttribute) {
 
@@ -243,15 +242,6 @@ export function addAbeHtmlTagBetweenAbeTags(template) {
   while (match = cmsData.regex.abeAsTagPattern.exec(templateNoDom)) {
     template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
   }
-
-  var tags = cmsData.regex.getAllAbeHtmlTag(template)
-  Array.prototype.forEach.call(tags, (tag) => {
-    template = template.replace(cmsData.regex.escapeTextToRegex(tag, 'g'), '<abe>' + tag.trim() + '</abe>')
-  })
-
-  // while (match = cmsData.regex.abePattern.exec(template)) {
-  //   template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
-  // }
 
   return template
 }
