@@ -83,16 +83,16 @@ export default class EditorSave {
             value = input.value
           }
 
-          setObjByString(this._json.data[obj][index], keyJson, value);
+          setObjByString(this._json.data[obj][index], keyJson, value)
           var emptyObject = 0
           for(var prop in this._json.data[obj][index]) {
-            if(typeof this._json.data[obj][index][prop] !== "string" || this._json.data[obj][index][prop].trim() !== '') emptyObject++
+            if(typeof this._json.data[obj][index][prop] !== 'string' || this._json.data[obj][index][prop].trim() !== '') emptyObject++
           }
           if(emptyObject === 0) {
             delete this._json.data[obj][index]
           }
         } else {
-          if (input.nodeName === 'SELECT' && maxlength != "1") {
+          if (input.nodeName === 'SELECT' && maxlength != '1') {
             var checked = input.querySelectorAll('option:checked')
             value = []
             Array.prototype.forEach.call(checked, (check) => {
@@ -122,7 +122,7 @@ export default class EditorSave {
           } else {
             value = input.value //.replace(/\"/g, '\&quot;') + ''
           }
-          setObjByString(this._json.data, dataId, value);
+          setObjByString(this._json.data, dataId, value)
         }
       }
     })

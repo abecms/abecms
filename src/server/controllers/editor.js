@@ -18,8 +18,8 @@ function add(obj, json, text, util) {
     var prop = obj.key.replace(/[^\.]+?\./, '')
     key = getDataIdWithNoSlash(key)
 
-    try {
-      obj.value = eval(`json[key][index].` + prop)
+    try {
+      obj.value = eval('json[key][index].' + prop)
     } catch(e) {
 
       try {
@@ -29,7 +29,7 @@ function add(obj, json, text, util) {
       }
     }
   }else {
-    try {
+    try {
       obj.value = eval(`json.${getDataIdWithNoSlash(obj.key)}`)
     } catch(e) {
       // no value found inside json OKEY

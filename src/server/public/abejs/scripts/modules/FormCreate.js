@@ -135,7 +135,7 @@ export default class FormCreate {
                   }
                 }
               }.bind(this))
-              setObjByString(values, id, mergedValues);
+              setObjByString(values, id, mergedValues)
 
               if (required && values[id].length == 0) {
                 isValid = false
@@ -145,7 +145,7 @@ export default class FormCreate {
               if (value.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(value)
-                  setObjByString(values, id, [jsonValue]);
+                  setObjByString(values, id, [jsonValue])
 
                   if (required && values[id].length == 0) {
                     isValid = false
@@ -155,7 +155,7 @@ export default class FormCreate {
                   // values[id].push(value)
                 }
               }else {
-                setObjByString(values, id, value);
+                setObjByString(values, id, value)
                 // values[id] = value
                 if (required && values[id] == '') {
                   isValid = false
