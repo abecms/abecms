@@ -114,7 +114,7 @@ function insertAbeEach (obj, text, json, util, arrayBlock) {
 
 function each(text, json, util, arrayBlock) {
   let pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
-  let patt = /abe [^{{}}]+?(?=\}})/g
+  let patt = /{{(abe .*?["']) ?}}/g
   var textEach, match
 
   while (textEach = pattEach.exec(text)) {
@@ -158,6 +158,10 @@ function each(text, json, util, arrayBlock) {
 }
 
 function addSource(text, json, util) {
+  // removing each blocks potentially containing abe data type
+  let pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
+  text = text.replace(pattEach, '')
+
   var listReg = /({{abe.*type=[\'|\"]data.*}})/g
   var match
 
@@ -251,8 +255,6 @@ export function editor(text, json, documentLink, precontrib = false) {
       .then(() => {
         addSource(text, json, util)
 
-        text = cmsData.source.removeDataList(text)
-
         if (!precontrib) {
           text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(text)
           text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(text)
@@ -262,6 +264,7 @@ export function editor(text, json, documentLink, precontrib = false) {
         arrayBlock = []
         each(text, json, util, arrayBlock)
 
+        text = cmsData.source.removeDataList(text)
         if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
           var links = json.abe_meta.link.split('/')
           var link = links.pop()
