@@ -24,10 +24,6 @@ export default class EditorAutocomplete {
     this._handleSelectValue = this._selectValue.bind(this)
     this._handleRefresh = this._refresh.bind(this)
 
-    this._autocompletesRemove = [].slice.call(document.querySelectorAll('[data-autocomplete-remove=true]'))
-    this._autocompletes = [].slice.call(document.querySelectorAll('[data-autocomplete=true]'))
-    this._autocompletesRefresh = [].slice.call(document.querySelectorAll('[data-autocomplete-refresh=true]'))
-
     this._currentInput = null
     this._divWrapper = document.createElement('div')
     this._divWrapper.classList.add('autocomplete-wrapper')
@@ -38,6 +34,10 @@ export default class EditorAutocomplete {
   }
 
   rebind() {
+    this._autocompletesRemove = [].slice.call(document.querySelectorAll('[data-autocomplete-remove=true]'))
+    this._autocompletes = [].slice.call(document.querySelectorAll('[data-autocomplete=true]'))
+    this._autocompletesRefresh = [].slice.call(document.querySelectorAll('[data-autocomplete-refresh=true]'))
+
     document.body.removeEventListener('mouseup', this._handleDocumentClick)
     document.body.addEventListener('mouseup', this._handleDocumentClick)
 
@@ -96,7 +96,6 @@ export default class EditorAutocomplete {
     eval(`json.${id} = ${JSON.stringify(toSave)}`)
 
     this._json.data = json
-    
     if(typeof nodeComments !== 'undefined' && nodeComments !== null && nodeComments.length > 0) {
       
       try {
@@ -476,7 +475,8 @@ export default class EditorAutocomplete {
 
   _remove(e) {
     var target = e.currentTarget.parentNode
-    this._currentInput = document.querySelector(`#${target.getAttribute('data-parent-id')}`)
+    var escapedSelector = target.getAttribute('data-parent-id').replace(/(:|\.|\[|\])/g,'\\$1')
+    this._currentInput = document.querySelector(`#${escapedSelector}`)
     target.parentNode.removeChild(target)
     this._saveData()
     this._currentInput = null
