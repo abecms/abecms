@@ -8,7 +8,7 @@ import {
 } from '../../'
 
 export function addAbeAttrSingleTab(key, elem, htmlAttribute = null) {
-  var res = ""
+  var res = ''
 
   var valueOfAttritube = key.replace(/\./g, '-')
   key = cmsData.regex.validDataAbe(valueOfAttritube)
@@ -23,7 +23,7 @@ export function addAbeAttrSingleTab(key, elem, htmlAttribute = null) {
 }
 
 export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
-  var res = ""
+  var res = ''
 
   var valueOfAttritube = key.split('.')
   var parentKey = valueOfAttritube.shift()
@@ -61,11 +61,11 @@ export function addAbeDataAttrForHtmlTag(template) {
   while (match = cmsData.regex.abePattern.exec(template)) {
     key = cmsData.regex.getAttr(match, 'key')
 
-    if (cmsData.regex.isSingleAbe(match, newTemplate)) {
-      getattr = key.replace(/\./g, '-')
-    } else {
-      getattr = key.replace('.', '[index].')
+    if (!cmsData.regex.isSingleAbe(match, newTemplate)) {
+      key = key.replace('.', '{{@index}}.')
     }
+
+    getattr = key.replace(/\./g, '-')
 
     newTemplate = newTemplate.replace(
       cmsData.regex.escapeTextToRegex(match[0], 'g'),
@@ -183,8 +183,7 @@ export function addAbeDataAttrForHtmlAttributes(template) {
  * @param {[type]} json     [description]
  */
 export function addAbeSourceComment(template, json) {
-  
-  // Don't know what it does...
+
   if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
     var keys = Object.keys(json.abe_source)
     
@@ -302,7 +301,7 @@ export function indexEachBlocks(template, onlyHtml) {
 
       var voidData = {}
       voidData[key] = [{}]
-      var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?)["'] ?}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
+      var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?["']) ?}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
       var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
 
       // je rajoute un data-abe-block avec index sur tous les tags html du bloc each

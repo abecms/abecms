@@ -13,8 +13,17 @@ export default function sourceAttr(obj, params) {
   var str = params.display
   var selected = ''
   var displayName = prepareDisplay(obj, str)
+  var values = params.value
+  if(Object.prototype.toString.call(params.value) !== '[object Array]') {
+    values = [params.value]
+  }
 
-  Array.prototype.forEach.call(params.value, (pValue) => {
+  // if (params.key == "colors.single") {
+  //   console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+  //   console.log('params', params)
+  // }
+
+  Array.prototype.forEach.call(values, (pValue) => {
     if (isSelected(pValue, displayName, str)) {
       selected = 'selected'
     }
@@ -53,9 +62,11 @@ export function prepareDisplay(obj, str = null) {
   var keys = getKeys(str)
   Array.prototype.forEach.call(keys, (key) => {
     var val = get(obj, key)
+
     var pattern = new RegExp('{{'+key+'}}|'+key, 'g')
     str = str.replace(pattern, val)
   })
+    // console.log('params.value', params.value)
 
   if (str == null) {
     str = obj

@@ -10,9 +10,8 @@ import {
 export function saveJson(url, json) {
   mkdirp.sync(path.dirname(url))
 
-  if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
-    delete json.abe_source
-  }
+  if(json.abe_source != null) delete json.abe_source
+  if(json.abeEditor != null) delete json.abeEditor
 
   var eachRecursive = function (obj) {
     for (var k in obj) {

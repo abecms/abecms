@@ -21,7 +21,7 @@ export default class FormCreate {
       this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'))
       this._precontribTemplate = [].slice.call(this._form.querySelectorAll('[data-precontrib-templates]'))
 
-      this._selectTemplate = this._form.querySelector('[data-id="abe_meta.template"]')
+      this._selectTemplate = this._form.querySelector('[data-id="abe_meta.template"]') 
       this._showHideSelect(this._selectTemplate)
       this._handleBtnSelectTemplate = this._btnSelectTemplate.bind(this)
 
@@ -113,7 +113,7 @@ export default class FormCreate {
         input.parentNode.classList.remove('error')
         if (linkedTpl == null || linkedTpl == this._selectedTemplate) {
           var id = input.getAttribute('data-id')
-          if (id !== null) {
+          if (id != null) {
             var autocomplete = input.getAttribute('data-autocomplete') == 'true' ? true : false
             var required = input.getAttribute('data-required') == 'true' ? true : false
             var value = input.value
@@ -121,18 +121,19 @@ export default class FormCreate {
             if (autocomplete) {
               var results = input.parentNode.querySelectorAll('.autocomplete-result')
               values[id] = []
+              var mergedValues = []
               Array.prototype.forEach.call(results, function(result) {
                 var resultValue = result.getAttribute('value')
                 if (resultValue.indexOf('{') > -1) {
                   try {
                     var jsonValue = JSON.parse(resultValue)
-                    setObjByString(values, id, jsonValue);
-                    // values[id].push(jsonValue)
+                    mergedValues.push(jsonValue)
                   }catch(e) {
-                    // values[id].push(value)
+                    mergedValues.push(value)
                   }
                 }
               }.bind(this))
+              setObjByString(values, id, mergedValues)
               if (required && values[id].length == 0) {
                 isValid = false
                 if(showErrors) parentNode.classList.add('has-error')
@@ -141,8 +142,7 @@ export default class FormCreate {
               if (value.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(value)
-                  // values[id] = [jsonValue]
-                  setObjByString(values, id, [jsonValue]);
+                  setObjByString(values, id, [jsonValue])
 
                   if (required && values[id].length == 0) {
                     isValid = false
@@ -152,8 +152,7 @@ export default class FormCreate {
                   // values[id].push(value)
                 }
               } else {
-                // values[id] = value
-                setObjByString(values, id, value);
+                setObjByString(values, id, value)
                 if (required && values[id] == '') {
                   isValid = false
                   if(showErrors) parentNode.classList.add('has-error')
@@ -163,7 +162,6 @@ export default class FormCreate {
           }
         }
       }.bind(this))
-
       var slug = slugs[this._selectedTemplate]
       var slugMatches = slug.match(/{{.*?}}/g)
       if (slugMatches !== null) {
@@ -176,7 +174,6 @@ export default class FormCreate {
           }catch(e) {
             slug = slug.replace(slugMatch, '')
             isValid = false
-            // console.error('error on create', e.stack)
           }
         }.bind(this))
       }
@@ -231,16 +228,17 @@ export default class FormCreate {
           headers: {},
           method: 'post'
         },
-          (code, responseText) => {
-            this._isSaving = false
-            var jsonRes = JSON.parse(responseText)
-            if (jsonRes.success == 1 && jsonRes.json != null && jsonRes.json.abe_meta != null) {
-              window.location.href = window.location.origin + '/abe/editor' + jsonRes.json.abe_meta.link
-            } else {
-              console.log(responseText)
-              alert('error')
-            }
-          })
+        (code, responseText) => {
+          this._isSaving = false
+          var jsonRes = JSON.parse(responseText)
+          if (jsonRes.success == 1 && jsonRes.json != null && jsonRes.json.abe_meta != null) {
+            window.location.href = window.location.origin + '/abe/editor' + jsonRes.json.abe_meta.link
+          }else {
+            console.log(responseText)
+            alert('error')
+          }
+        }
+      )
     }
   }
 

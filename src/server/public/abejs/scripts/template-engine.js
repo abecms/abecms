@@ -188,6 +188,7 @@ class Engine {
     this._blocks.onNewBlock(() => {
       this._files.rebind()
       this._inputs.rebind()
+      this._autocomplete.rebind()
     })
 
     this._manager.remove((el) => {
@@ -209,6 +210,7 @@ class Engine {
 
     this._blocks.onRemoveBlock(() => {
       this._inputs.rebind()
+      this._autocomplete.rebind()
       this._save.serializeForm() ///**************************************** HOOLA
     })
   }

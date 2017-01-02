@@ -27,7 +27,7 @@ describe('Abe', function() {
         .waitForElementVisible('//body')
         .assert.title('Abe')
         .click('//*[@id="level-1"]/option[2]')
-        .click('//*[@id="selectTemplate"]/option[8]')
+        .click('//*[@id="selectTemplate"]/option[9]')
         .waitForElementVisible("//div[@data-precontrib-templates='single']//input[@id='name']", 1000)
         .setValue("//div[@data-precontrib-templates='single']//input[@id='name']", 'ftest')
         .click("//button[@type='submit']")

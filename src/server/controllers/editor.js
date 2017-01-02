@@ -11,24 +11,28 @@ import {
 
 function add(obj, json, text, util) {
   var value = obj.value
-  
+
   if(obj.key.indexOf('[') > -1) {
     var key = obj.key.split('[')[0]
     var index = obj.key.match(/[^\[]+?(?=\])/)[0]
     var prop = obj.key.replace(/[^\.]+?\./, '')
+    key = getDataIdWithNoSlash(key)
 
-    if(typeof json[key] !== 'undefined' && json[key] !== null &&
-       typeof json[key][index] !== 'undefined' && json[key][index] !== null &&
-       typeof json[key][index][prop] !== 'undefined' && json[key][index][prop] !== null) {
-      obj.value = json[getDataIdWithNoSlash(key)][index][prop]
-    }else if(typeof value !== 'undefined' && value !== null && value !== '') {
-      if(typeof json[key] === 'undefined' || json[key] === null){
-        json[key] = []
+    try {
+      obj.value = eval('json[key][index].' + prop)
+    } catch(e) {
+
+      try {
+        eval(`json[key][index].${prop} = ` + JSON.stringify(value))
+      }catch(e) {
+        // no value found inside json OKEY
       }
-      if(typeof json[key][index] === 'undefined' || json[key][index] === null){
-        json[key][index] = {}
-      }
-      json[key][index][prop] = value
+    }
+  }else {
+    try {
+      obj.value = eval(`json.${getDataIdWithNoSlash(obj.key)}`)
+    } catch(e) {
+      // no value found inside json OKEY
     }
   }
 
@@ -79,7 +83,8 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
     }catch(e) {
       obj.value = null
     }
-    json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
+    // json[getDataIdWithNoSlash(obj.key)] = 
+    add(obj, json, text, util)
   }
 }
 
@@ -109,7 +114,7 @@ function insertAbeEach (obj, text, json, util, arrayBlock) {
 
 function each(text, json, util, arrayBlock) {
   let pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
-  let patt = /abe [^{{}}]+?(?=\}})/g
+  let patt = /{{(abe .*?["']) ?}}/g
   var textEach, match
 
   while (textEach = pattEach.exec(text)) {
@@ -153,6 +158,10 @@ function each(text, json, util, arrayBlock) {
 }
 
 function addSource(text, json, util) {
+  // removing each blocks potentially containing abe data type
+  let pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
+  text = text.replace(pattEach, '')
+
   var listReg = /({{abe.*type=[\'|\"]data.*}})/g
   var match
 
@@ -246,8 +255,6 @@ export function editor(text, json, documentLink, precontrib = false) {
       .then(() => {
         addSource(text, json, util)
 
-        text = cmsData.source.removeDataList(text)
-
         if (!precontrib) {
           text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(text)
           text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(text)
@@ -257,6 +264,7 @@ export function editor(text, json, documentLink, precontrib = false) {
         arrayBlock = []
         each(text, json, util, arrayBlock)
 
+        text = cmsData.source.removeDataList(text)
         if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
           var links = json.abe_meta.link.split('/')
           var link = links.pop()
@@ -271,14 +279,12 @@ export function editor(text, json, documentLink, precontrib = false) {
 
         var blocks = orderBlock(util)
 
-
         if (!precontrib) {
           // HOOKS afterEditorFormBlocks
           blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json, text)
         }
 
         abeEngine.instance.content = json
-
         resolve({
           text: text,
           form: blocks,

@@ -1,6 +1,6 @@
 <div class="form-group">
   <label for="selectTemplate" class="control-label">{{@root.text.template}} *</label>
-  <select class="form-control" id="selectTemplate" data-id="abe_meta.template" data-required="true" data-maxlength="1" name="selectTemplate" data-type-template-abe="true">
+  <select class="form-control" id="selectTemplate" data-id="abe_meta.template" max-length="1" data-maxlength="1" data-required="true" name="selectTemplate" data-type-template-abe="true">
     <option></option>
     {{#each @root.manager.list.templates}}
       {{#ifCond @root.json.abe_meta.template name}}
