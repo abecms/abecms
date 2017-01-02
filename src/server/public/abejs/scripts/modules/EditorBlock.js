@@ -311,6 +311,10 @@ export default class EditorBlock {
     if(typeof autocompletes !== 'undefined' && autocompletes !== null && autocompletes.length > 0) {
       Array.prototype.forEach.call(autocompletes, (autocomplete) => {
         autocomplete.innerHTML = ''
+        var inputs = [].slice.call(autocomplete.parentNode.querySelectorAll('input:disabled'))
+        Array.prototype.forEach.call(inputs, (input) => {
+          input.disabled = ''
+        })
       })
     }
     var richs = [].slice.call(newBlock.querySelectorAll('[contenteditable]'))
