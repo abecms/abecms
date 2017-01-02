@@ -31,6 +31,23 @@ export function getAttr (str, attr) {
  * @param  {String} params g,m,i
  * @return {Object} RegExp
  */
+export function getAllAbeHtmlTag (str) {
+  var res = []
+
+  var matches = str.match(abePattern)
+  Array.prototype.forEach.call(matches, (match) => {
+    res.push(match)
+  })
+
+  return res
+}
+
+/**
+ * escape a regex
+ * @param  {String} str
+ * @param  {String} params g,m,i
+ * @return {Object} RegExp
+ */
 export function escapeTextToRegex(str, params) {
   str = str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
   return new RegExp(str, params)

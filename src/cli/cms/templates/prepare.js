@@ -7,6 +7,42 @@ import {
   ,cmsTemplates
 } from '../../'
 
+export function addAbeAttrSingleTab(key, elem, htmlAttribute = null) {
+  var res = ''
+
+  var valueOfAttritube = key.replace(/\./g, '-')
+  key = cmsData.regex.validDataAbe(valueOfAttritube)
+  
+  if (htmlAttribute != null) {
+    res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + elem
+  }else {
+    res = ' data-abe-' + key + '="'  + key + '" ' + elem
+  }
+
+  return res
+}
+
+export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
+  var res = ''
+
+  var valueOfAttritube = key.split('.')
+  var parentKey = valueOfAttritube.shift()
+  valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0].replace(/\./g, '-')}`
+  var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
+  key = cmsData.regex.validDataAbe(valueOfAttritube)
+
+  if (htmlAttribute) {
+
+    res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
+      + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${elem}`
+  }else {
+    res = ` data-abe-${valueOfAttritube}="${key}"`
+      + ` data-abe-${valueOfAttritubeIndexed}="${key}" ${elem}`
+  }
+
+  return res
+}
+
 /**
  * THIS:
 <span>{{abe type='text' key='text_visible'}}</span>
@@ -50,19 +86,21 @@ export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
   var res
 
   if (cmsData.regex.isSingleAbe(match, text)) {
-    valueOfAttritube = key.replace(/\./g, '-')
-    key = cmsData.regex.validDataAbe(valueOfAttritube)
-    key = key.replace(/\./g, '-')
-    res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + abeTag
+    // valueOfAttritube = key.replace(/\./g, '-')
+    // key = cmsData.regex.validDataAbe(valueOfAttritube)
+    // key = key.replace(/\./g, '-')
+    // res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + abeTag
+    res = addAbeAttrSingleTab(key, abeTag, htmlAttribute)
   }else {
-    valueOfAttritube = key.split('.')
-    var parentKey = valueOfAttritube.shift()
-    valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0]}`
-    var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
-    key = cmsData.regex.validDataAbe(valueOfAttritube)
+    res = addAbeAttrForBlock(key, abeTag, htmlAttribute)
+    // valueOfAttritube = key.split('.')
+    // var parentKey = valueOfAttritube.shift()
+    // valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0]}`
+    // var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
+    // key = cmsData.regex.validDataAbe(valueOfAttritube)
 
-    res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
-    + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${abeTag}`
+    // res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
+    // + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${abeTag}`
   }
 
   return res

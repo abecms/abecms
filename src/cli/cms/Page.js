@@ -59,10 +59,13 @@ export default class Page {
       } else {
         this.template = cmsTemplates.prepare.removeHandlebarsRawFromHtml(this.template)
       }
+
       // je rajoute les index pour chaque bloc lié à un each
       this.template = cmsTemplates.prepare.indexEachBlocks(this.template, this._onlyHTML)
+
       // We remove the {{abe type=data ...}} from the text 
       this.template = cmsData.source.removeDataList(this.template)
+
       // It's time to replace the [index] by {{@index}} (concerning each blocks)
       this.template = cmsTemplates.prepare.replaceAbeEachIndex(this.template)
 
@@ -71,8 +74,10 @@ export default class Page {
         fse.writeFileSync(this.HbsTemplatePath, Handlebars.precompile(this.template), 'utf8')
         Manager.instance.addHbsTemplate(templateId)
       }
+
       // I compile the text
       var compiledTemplate = Handlebars.compile(cmsTemplates.insertDebugtoolUtilities(this.template, this._onlyHTML))
+
       // I create the html page ! yeah !!!
       this.html = compiledTemplate(json, {data: {intl: config.intlData}})
     }

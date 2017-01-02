@@ -60,6 +60,7 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
     obj = cmsData.attributes.getAll(v, json)
 
   var realKey
+
   if(typeof keyArray !== 'undefined' && keyArray !== null) {
     realKey = obj.key.replace(/[^\.]+?\./, '')
 
@@ -77,7 +78,6 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
 
   }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
     realKey = obj.key//.replace(/\./g, '-')
-    // obj.value = json[getDataIdWithNoSlash(realKey)]
     try {
       obj.value = eval(`json.${getDataIdWithNoSlash(realKey)}`)
     }catch(e) {

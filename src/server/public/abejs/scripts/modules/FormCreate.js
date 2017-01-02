@@ -82,7 +82,7 @@ export default class FormCreate {
 
       if (found) {
         input.style.display = 'block'
-      }else {
+      } else {
         input.style.display = 'none'
       }
     }.bind(this))
@@ -127,21 +127,18 @@ export default class FormCreate {
                 if (resultValue.indexOf('{') > -1) {
                   try {
                     var jsonValue = JSON.parse(resultValue)
-                    // setObjByString(values, id, jsonValue);
                     mergedValues.push(jsonValue)
                   }catch(e) {
-                    // setObjByString(values, id, value);
                     mergedValues.push(value)
                   }
                 }
               }.bind(this))
               setObjByString(values, id, mergedValues)
-
               if (required && values[id].length == 0) {
                 isValid = false
                 if(showErrors) parentNode.classList.add('has-error')
               }
-            }else {
+            } else {
               if (value.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(value)
@@ -154,9 +151,8 @@ export default class FormCreate {
                 }catch(e) {
                   // values[id].push(value)
                 }
-              }else {
+              } else {
                 setObjByString(values, id, value)
-                // values[id] = value
                 if (required && values[id] == '') {
                   isValid = false
                   if(showErrors) parentNode.classList.add('has-error')
@@ -178,7 +174,6 @@ export default class FormCreate {
           }catch(e) {
             slug = slug.replace(slugMatch, '')
             isValid = false
-            // console.error('error on create', e.stack)
           }
         }.bind(this))
       }
@@ -203,7 +198,7 @@ export default class FormCreate {
       Array.prototype.forEach.call(breadcrumbNames, function(breadcrumbName) {
         if (breadcrumbName == '' && showErrors) {
           breadcrumbsHtml += '<span class="btn-danger">...</span>-'
-        }else {
+        } else {
           breadcrumbsHtml += '<span>' + breadcrumbName + '</span>-'
         }
       }.bind(this))
@@ -242,7 +237,8 @@ export default class FormCreate {
             console.log(responseText)
             alert('error')
           }
-        })
+        }
+      )
     }
   }
 
