@@ -1,0 +1,48 @@
+{{abe type='data' key='colors.single' desc='Color single' source='["rouge", "vert", "bleu"]' max-length="1" tab="colors" reload="true"}}
+{{abe type='data' key='colors.multiple' desc='Color multiple' source='["rouge", "vert", "bleu"]' tab="colors" reload="true"}}
+{{abe type='data' key='colors.colors_autocomplete' desc='Color autocomplete (enter "rouge")' source='["rouge", "vert", "bleu"]' autocomplete="true" tab="colors" reload="true"}}
+
+{{abe type='data' key='reference.single' source="reference/data.json" max-length="1" display="{{name}}" desc='data ref single' tab="reference" reload="true"}}
+{{abe type='data' key='reference.multiple' source="reference/data.json" display="{{name}}" desc='data ref multiple' tab="reference" reload="true"}}
+{{abe type='data' key='reference.autocomplete' source="reference/data.json" display="{{name}}" autocomplete="true" desc='Data ref autocomplete (enter "test")' tab="reference" reload="true"}}
+
+<!DOCTYPE HTML>
+<!--
+	Twenty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<style>
+			code { background: hsl(220, 80%, 90%); }
+			pre { white-space: pre-wrap; background: hsl(30,80%,90%); word-break: break-all;}
+		</style>
+	</head>
+	<body class="index">
+		<div>
+			<b>colors:</b>
+			<pre><code>{{printJson colors}}</code></pre>
+		</div>
+		<hr>
+		<div>
+			<b>reference:</b>
+			<pre><code>{{printJson reference}}</code></pre>
+		</div>
+		<hr>
+		
+		{{abe type='text' key='title1' desc='title' tab='default'}}
+		<img src="{{abe type='image' key='image1' desc='image' tab='default'}}" alt="">
+
+		{{abe type='text' key='level1.title' desc='level 1 title' tab='default'}}
+		<img src="{{abe type='image' key='level1.image' desc='level 1 image' tab='default'}}" alt="">
+
+		{{abe type='text' key='level2.sublevel2.title' desc='level 2 title' tab='default'}}
+
+		{{#each eachlevel}}
+			{{abe type='text' key='eachlevel.title' desc='title' tab='default'}}
+			<img src="{{abe type='image' key='eachlevel.image' desc='image' tab='default'}}" alt="">
+			{{abe type='text' key='eachlevel.level.value' desc='value' tab='default'}}
+		{{/each}}
+	</body>
+</html>

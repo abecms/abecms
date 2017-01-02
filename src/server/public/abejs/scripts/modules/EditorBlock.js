@@ -232,6 +232,7 @@ export default class EditorBlock {
       var blockHtml = unescape(blockContent.textContent.replace(/\[\[([\S\s]*?)\]\]/, ''))
                         .replace(new RegExp(`-${dataBlock}0`, 'g'), `-${dataBlock}${newNumber}`)
                         .replace(/\[0\]-/g, '' + newNumber + '-')
+                        .replace(/({{abe.*type=[\'|\"]data.*}})/g, '')
       var newBlock = document.createElement('abe')
       newBlock.innerHTML = blockHtml
 
@@ -306,6 +307,12 @@ export default class EditorBlock {
     prevListItem.parentNode.insertBefore(newBlock, next)
     this._unValueForm(newBlock)
 
+    var autocompletes = [].slice.call(newBlock.querySelectorAll('.autocomplete-result-wrapper'))
+    if(typeof autocompletes !== 'undefined' && autocompletes !== null && autocompletes.length > 0) {
+      Array.prototype.forEach.call(autocompletes, (autocomplete) => {
+        autocomplete.innerHTML = ''
+      })
+    }
     var richs = [].slice.call(newBlock.querySelectorAll('[contenteditable]'))
     if(typeof richs !== 'undefined' && richs !== null && richs.length > 0) {
       Array.prototype.forEach.call(richs, (rich) => {

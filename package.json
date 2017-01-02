@@ -15,7 +15,7 @@
     "install-selenium": "node nightwatch.conf.js",
     "pretest-func": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
     "test-func": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
-    "posttest-func": "killall node",
+    "posttest-func": "kill -9 $(lsof -ti tcp:3003)",
     "start": "node --debug --harmony ./dist/server/index.js",
     "babel": "babelify --presets [ es2015 ] src/server/public/abejs/scripts/template-engine.js -o src/server/public/abejs/scripts/template-engine-compiled.js",
     "watch": "./node_modules/.bin/parallelshell './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/template-engine.js -o src/server/public/abejs/scripts/template-engine-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/admin.js -o src/server/public/abejs/scripts/admin-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/user-login.js -o src/server/public/abejs/scripts/user-login-compiled.js' 'npm run watch:sass'",

@@ -50,7 +50,7 @@ describe('cmsTemplates.prepare', function() {
     chai.expect(template.indexOf('<span data-abe-text_visible="text_visible" >')).to.be.above(-1);
 
     template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(this.fixture.each)
-    chai.expect(template.indexOf('data-abe-test[index].title="test[index].title"')).to.be.above(-1)
+    chai.expect(template.indexOf('data-abe-test{{@index}}-title="test{{@index}}-title"')).to.be.above(-1)
 
     //
     try{
@@ -59,8 +59,8 @@ describe('cmsTemplates.prepare', function() {
     } catch (e) {
       console.log(e.stack)
     }
-    chai.expect(template.indexOf('"<abe data-abe-stores[index].lat="stores[index].lat"')).to.be.above(-1)
-    chai.expect(template.indexOf('<abe data-abe-stores2[index].lat="stores2[index].lat" >')).to.be.above(-1)
+    chai.expect(template.indexOf('"<abe data-abe-stores{{@index}}-lat="stores{{@index}}-lat"')).to.be.above(-1)
+    chai.expect(template.indexOf('<abe data-abe-stores2{{@index}}-lat="stores2{{@index}}-lat" >')).to.be.above(-1)
     chai.expect(template.indexOf('<abe data-abe-text2="text2" >{{abe type="text" key="text2" desc="name"}}</abe>')).to.be.above(-1)
     chai.expect(template.indexOf('"<abe data-abe-text3="text3" >{{abe type="text" key="text3" desc="name"}}</abe>"')).to.be.above(-1)
   });

@@ -37,12 +37,18 @@ export default class Attr {
    * @return {String} str without attributes
    */
   remove() {
-    return this.str.replace(new RegExp(fullAttr + this.getExtension() + ')'), '')
+    if (this.str != null) {
+      return this.str.replace(new RegExp(fullAttr + this.getExtension() + ')'), '')
+    }
+    return this.str
   }
  
   getExtension(){
-    var ext = this.str.split('.')
-    return ext[ext.length - 1]
+    if (this.str != null) {
+      var ext = this.str.split('.')
+      return ext[ext.length - 1]
+    }
+    return ''
   }
 
   /**

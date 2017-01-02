@@ -21,6 +21,7 @@ abe-logs/*
 # test-coverage
 coverage/*
 test/templates/hbs/*
+tests/demo/data/autocomplete*
 
 # dist
 dist
