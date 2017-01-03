@@ -6,10 +6,11 @@ import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import exphbs from 'express-secure-handlebars'
 import path from 'path'
+//import crypto from 'crypto';
 import busboy from 'connect-busboy'
 import clc from 'cli-color'
 import openurl from 'openurl'
-import uuid from 'uuid'
+//import uuid from 'uuid'
 import flash from 'connect-flash'
 import cookieParser from 'cookie-parser'
 import csrf from 'csurf'
@@ -107,10 +108,15 @@ app.use(function(req, res, next) {
 })
 
 app.use(bodyParser.json({limit: '1gb'}))
-app.use(function (req, res, next) {
-  res.locals.nonce = uuid.v4()
-  next()
-})
+// app.use(function (req, res, next) {
+//   crypto.randomBytes(Math.ceil(6), function(err, buffer){
+//     res.locals.nonce = buffer
+//       .toString('hex')
+//       .slice(0,12)
+//   })
+//   //res.locals.nonce = uuid.v4()
+//   next()
+// })
 
 if(config.security === true){
   app.use(helmet())

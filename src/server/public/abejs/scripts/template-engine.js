@@ -149,6 +149,19 @@ class Engine {
           $('td', row).eq(i).html(actions)
         }
       })
+      $('#navigation-list')
+      .on('processing.dt', function ( e, settings, processing ) {
+          $('#navigation-list_processing')
+          .css( 'display', processing ? 'block' : 'none' )
+          .css( {top:'150px'});
+      })
+      .dataTable();
+      $('#navigation-list')
+      .on('preXhr.dt', function ( e, settings, data ) {
+        if(settings.jqXHR) {
+          settings.jqXHR.abort()
+        }
+      });
     })
 
     var abeReady = new Event('abeReady')
