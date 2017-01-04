@@ -125,9 +125,6 @@ describe('cmsTemplates.prepare', function() {
    * 
    */
   it('cmsTemplates.prepare.addAbeSourceComment()', function() {
-    // stub
-
-    // test
     var template = cmsTemplates.prepare.addAbeSourceComment(this.fixture.source,
       {
         abe_source: {
@@ -135,6 +132,41 @@ describe('cmsTemplates.prepare', function() {
         }
       }
     )
+    
+    chai.expect(template.indexOf('<!-- [[')).to.be.above(-1);
+    chai.expect(template.indexOf('-->')).to.be.above(-1);
+  });
+
+  it('cmsTemplates.prepare.addAbeSourceComment() each', function() {
+    var template = cmsTemplates.prepare.addAbeSourceComment(this.fixture.each, {
+        abe_source: {
+          test: [{title: "test"}]
+        }
+      })
+    
+    chai.expect(template.indexOf('<!-- [[')).to.be.above(-1);
+    chai.expect(template.indexOf('-->')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-block="test{{@index}}"')).to.be.above(-1)
+  });
+
+  it('cmsTemplates.prepare.addAbeSourceComment() eachMultiple', function() {
+    var template = cmsTemplates.prepare.addAbeSourceComment(this.fixture.eachMultiple, {
+        abe_source: {
+          test: [{title: "test"}]
+        }
+      })
+    
+    chai.expect(template.indexOf('<!-- [[')).to.be.above(-1);
+    chai.expect(template.indexOf('-->')).to.be.above(-1);
+    chai.expect(template.indexOf('data-abe-block')).to.be.above(-1)
+  });
+
+  it('cmsTemplates.prepare.addAbeSourceComment() eachVariable', function() {
+    var template = cmsTemplates.prepare.addAbeSourceComment(this.fixture.eachVariable, {
+        abe_source: {
+          test: [{title: "test"}]
+        }
+      })
     
     chai.expect(template.indexOf('<!-- [[')).to.be.above(-1);
     chai.expect(template.indexOf('-->')).to.be.above(-1);
@@ -165,9 +197,6 @@ describe('cmsTemplates.prepare', function() {
    * 
    */
   it('cmsTemplates.prepare.replaceAbeEachIndex()', function() {
-    // stub
-
-    // test
     var template = cmsTemplates.prepare.replaceAbeEachIndex('[index].')
     chai.expect(template).to.be.equal('{{@index}}-');
   });
@@ -177,13 +206,9 @@ describe('cmsTemplates.prepare', function() {
    * 
    */
   it('cmsTemplates.prepare.removeHiddenAbeTag()', function() {
-    // stub
-
-    // test
     var template = cmsTemplates.prepare.removeHiddenAbeTag(this.fixture.visibleFalse)
     chai.expect(template).to.be.equal("");
 
-    // test
     var template2 = cmsTemplates.prepare.removeHiddenAbeTag(this.fixture.visibleTrue)
     chai.expect(template2.indexOf('{{abe')).to.be.above(-1);
   });
@@ -193,9 +218,6 @@ describe('cmsTemplates.prepare', function() {
    * 
    */
   it('cmsTemplates.prepare.removeHandlebarsRawFromHtml()', function() {
-    // stub
-
-    // test
     var template = cmsTemplates.prepare.removeHandlebarsRawFromHtml(this.fixture.rawHandlebar)
     chai.expect(template).to.be.equal("test");
   });
@@ -205,9 +227,6 @@ describe('cmsTemplates.prepare', function() {
    * 
    */
   it('cmsTemplates.prepare.splitEachBlocks()', function() {
-    // stub
-
-    // test
     var blocks = cmsTemplates.prepare.splitEachBlocks(this.fixture.each)
     chai.expect(blocks.length).to.be.above(0);
   });
@@ -216,21 +235,20 @@ describe('cmsTemplates.prepare', function() {
    * cmsTemplates.template.indexEachBlocks
    * 
    */
-  it('cmsTemplates.prepare.indexEachBlocks()', function() {
-    // stub
-
-    // test
+  it('cmsTemplates.prepare.indexEachBlocks() each', function() {
     var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.each, false)
-    chai.expect(template.indexOf('data-abe-block="test{{@index}}"')).to.be.above(-1)
-    chai.expect(template.indexOf('<!-- [[test]]')).to.be.above(-1)
-
-    var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachMultiple, false)
-    chai.expect(template.indexOf('data-abe-block')).to.be.above(-1)
     chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1)
+  });
 
+  it('cmsTemplates.prepare.indexEachBlocks() eachMultiple', function() {
+    var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachMultiple, false)
+    chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1)
+  });
+
+  it('cmsTemplates.prepare.indexEachBlocks() eachVariable', function() {
     var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachVariable, false)
+    chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1)
     chai.expect(template.indexOf('{{formatted_address}} - (lat:{{geometry.location.lat}}-lng:{{geometry.location.lng}})')).to.be.above(-1)
-    chai.expect(template.indexOf('<!-- [[test]]')).to.be.above(-1)
   });
 
   /**

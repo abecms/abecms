@@ -213,11 +213,11 @@ export function addAbeSourceComment(template, json) {
         })
       }
 
-      var eachSource = new RegExp(`({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`, 'g')
-      var matches = template.match(eachSource)
-      if(typeof matches !== 'undefined' && matches !== null) {
-        Array.prototype.forEach.call(matches, (match) => {
-          template = template.replace(match, `${match}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(match)} -->`)
+      let blocks = cmsTemplates.prepare.splitEachBlocks(template)      
+      if(typeof blocks !== 'undefined' && blocks !== null) {
+        Array.prototype.forEach.call(blocks, (block) => {
+          var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + keys[i] + '{{@index}}"')
+          template = template.replace(block, `${textEachWithIndex}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(block)} -->`)
         })
       }
     }
@@ -290,26 +290,11 @@ export function splitEachBlocks(template) {
 }
 
 export function indexEachBlocks(template, onlyHtml) {
-  // create an array of {{each}} blocks
   var blocks = cmsTemplates.prepare.splitEachBlocks(template)
 
   Array.prototype.forEach.call(blocks, (block) => {
     var key = block.match(/#each (.*)\}\}/)[1]
     var match
-
-    if(!onlyHtml) {
-
-      var voidData = {}
-      voidData[key] = [{}]
-      var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?["']) ?}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
-      var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
-
-      // je rajoute un data-abe-block avec index sur tous les tags html du bloc each
-      var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
-
-      // je remplace le block dans le texte par ça
-      template = template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${cmsTemplates.encodeAbeTagAsComment(blockHtml)} -->`)
-    }
 
     // Pour chaque tag Abe
     while (match = cmsData.regex.abeTag.exec(block)) {
