@@ -1,3 +1,6 @@
+
+## [2.14.0] - 2017-1-4
+* [[`0c0cc3a2c3`](https://github.com/AdFabConnect/abejs/commit/0c0cc3a2c3)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`27a7227943`](https://github.com/AdFabConnect/abejs/commit/27a7227943)] - **fix**: Bug introduced in 2.11.3 with each blocks non autocomplete (gregorybesson) 
 * [[`c2ed54fbc6`](https://github.com/AdFabConnect/abejs/commit/c2ed54fbc6)] - display processing on manager on search (gregorybesson) 
 * [[`272a41fddb`](https://github.com/AdFabConnect/abejs/commit/272a41fddb)] - **fix**: ajax datatable on search (gregorybesson) 
