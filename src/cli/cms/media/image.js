@@ -177,7 +177,11 @@ export function createMediaSlug(filename, ext) {
 }
 
 export function createMediaFolder(mediaType) {
-  var folderWebPath = '/' + mediaType
+  var folderWebPath = '/' + config.upload.image
+  if(config.upload[mediaType] != null){
+    folderWebPath = '/' + config.upload[mediaType]  
+  }
+  
   folderWebPath = abeExtend.hooks.instance.trigger('beforeSaveImage', folderWebPath)
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
