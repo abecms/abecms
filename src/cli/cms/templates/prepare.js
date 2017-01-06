@@ -7,6 +7,42 @@ import {
   ,cmsTemplates
 } from '../../'
 
+export function addAbeAttrSingleTab(key, elem, htmlAttribute = null) {
+  var res = ''
+
+  var valueOfAttritube = key.replace(/\./g, '-')
+  key = cmsData.regex.validDataAbe(valueOfAttritube)
+  
+  if (htmlAttribute != null) {
+    res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + elem
+  }else {
+    res = ' data-abe-' + key + '="'  + key + '" ' + elem
+  }
+
+  return res
+}
+
+export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
+  var res = ''
+
+  var valueOfAttritube = key.split('.')
+  var parentKey = valueOfAttritube.shift()
+  valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0].replace(/\./g, '-')}`
+  var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
+  key = cmsData.regex.validDataAbe(valueOfAttritube)
+
+  if (htmlAttribute) {
+
+    res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
+      + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${elem}`
+  }else {
+    res = ` data-abe-${valueOfAttritube}="${key}"`
+      + ` data-abe-${valueOfAttritubeIndexed}="${key}" ${elem}`
+  }
+
+  return res
+}
+
 /**
  * THIS:
 <span>{{abe type='text' key='text_visible'}}</span>
@@ -25,11 +61,11 @@ export function addAbeDataAttrForHtmlTag(template) {
   while (match = cmsData.regex.abePattern.exec(template)) {
     key = cmsData.regex.getAttr(match, 'key')
 
-    if (cmsData.regex.isSingleAbe(match, newTemplate)) {
-      getattr = key.replace(/\./g, '-')
-    } else {
-      getattr = key.replace('.', '[index].')
+    if (!cmsData.regex.isSingleAbe(match, newTemplate)) {
+      key = key.replace('.', '{{@index}}.')
     }
+
+    getattr = key.replace(/\./g, '-')
 
     newTemplate = newTemplate.replace(
       cmsData.regex.escapeTextToRegex(match[0], 'g'),
@@ -50,19 +86,21 @@ export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
   var res
 
   if (cmsData.regex.isSingleAbe(match, text)) {
-    valueOfAttritube = key.replace(/\./g, '-')
-    key = cmsData.regex.validDataAbe(valueOfAttritube)
-    key = key.replace(/\./g, '-')
-    res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + abeTag
+    // valueOfAttritube = key.replace(/\./g, '-')
+    // key = cmsData.regex.validDataAbe(valueOfAttritube)
+    // key = key.replace(/\./g, '-')
+    // res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + abeTag
+    res = addAbeAttrSingleTab(key, abeTag, htmlAttribute)
   }else {
-    valueOfAttritube = key.split('.')
-    var parentKey = valueOfAttritube.shift()
-    valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0]}`
-    var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
-    key = cmsData.regex.validDataAbe(valueOfAttritube)
+    res = addAbeAttrForBlock(key, abeTag, htmlAttribute)
+    // valueOfAttritube = key.split('.')
+    // var parentKey = valueOfAttritube.shift()
+    // valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0]}`
+    // var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
+    // key = cmsData.regex.validDataAbe(valueOfAttritube)
 
-    res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
-    + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${abeTag}`
+    // res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
+    // + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${abeTag}`
   }
 
   return res
@@ -145,8 +183,7 @@ export function addAbeDataAttrForHtmlAttributes(template) {
  * @param {[type]} json     [description]
  */
 export function addAbeSourceComment(template, json) {
-  
-  // Don't know what it does...
+
   if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
     var keys = Object.keys(json.abe_source)
     
@@ -176,11 +213,11 @@ export function addAbeSourceComment(template, json) {
         })
       }
 
-      var eachSource = new RegExp(`({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`, 'g')
-      var matches = template.match(eachSource)
-      if(typeof matches !== 'undefined' && matches !== null) {
-        Array.prototype.forEach.call(matches, (match) => {
-          template = template.replace(match, `${match}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(match)} -->`)
+      let blocks = cmsTemplates.prepare.splitEachBlocks(template)      
+      if(typeof blocks !== 'undefined' && blocks !== null) {
+        Array.prototype.forEach.call(blocks, (block) => {
+          var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + keys[i] + '{{@index}}"')
+          template = template.replace(block, `${textEachWithIndex}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(block)} -->`)
         })
       }
     }
@@ -253,26 +290,11 @@ export function splitEachBlocks(template) {
 }
 
 export function indexEachBlocks(template, onlyHtml) {
-  // create an array of {{each}} blocks
   var blocks = cmsTemplates.prepare.splitEachBlocks(template)
 
   Array.prototype.forEach.call(blocks, (block) => {
     var key = block.match(/#each (.*)\}\}/)[1]
     var match
-
-    if(!onlyHtml) {
-
-      var voidData = {}
-      voidData[key] = [{}]
-      var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?)}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
-      var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
-
-      // je rajoute un data-abe-block avec index sur tous les tags html du bloc each
-      var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
-
-      // je remplace le block dans le texte par ça
-      template = template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${cmsTemplates.encodeAbeTagAsComment(blockHtml)} -->`)
-    }
 
     // Pour chaque tag Abe
     while (match = cmsData.regex.abeTag.exec(block)) {

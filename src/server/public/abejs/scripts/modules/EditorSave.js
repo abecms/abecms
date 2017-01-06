@@ -4,6 +4,7 @@ import {IframeNode} from '../utils/iframe'
 import EditorUtils from './EditorUtils'
 import Json from '../modules/EditorJson'
 import on from 'on'
+import {setObjByString} from '../utils/jsonObject'
 
 export default class EditorSave {
   constructor() {
@@ -40,9 +41,9 @@ export default class EditorSave {
    * @return {Object} json
    */
   serializeForm() {
-    var abeForm = document.getElementById('abeForm')
+    var abeForm = document.querySelector('.abeform-wrapper')
     if (abeForm == null) return
-      
+    
     var inputs = [].slice.call(abeForm.querySelectorAll('input'))
     var selects = [].slice.call(abeForm.querySelectorAll('select'))
     inputs = inputs.concat(selects)
@@ -50,9 +51,11 @@ export default class EditorSave {
     inputs = inputs.concat(textareas)
 
     this._json.data = json
-
     Array.prototype.forEach.call(inputs, (input) => {
       var dataId = input.getAttribute('data-id')
+      var maxlength = input.getAttribute('data-maxlength')
+      var value
+
       if(input.type === 'file') return
       if(typeof dataId !== 'undefined' && dataId !== null) {
         if(dataId.indexOf('[') > -1){
@@ -61,30 +64,9 @@ export default class EditorSave {
           var key = dataId.replace(/[^\.]+?-/, '')
           if(typeof this._json.data[obj] === 'undefined' || this._json.data[obj] === null) this._json.data[obj] = []
           if(typeof this._json.data[obj][index] === 'undefined' || this._json.data[obj][index] === null) this._json.data[obj][index] = {}
-          this._json.data[obj][index][key] = input.value
-          var emptyObject = 0
-          for(var prop in this._json.data[obj][index]) {
-            if(this._json.data[obj][index][prop].trim() !== '') emptyObject++
-          }
-          if(emptyObject === 0) {
-            delete this._json.data[obj][index]
-          }
-        }else {
-          var value
 
-          if (input.nodeName === 'SELECT') {
-            var checked = input.querySelectorAll('option:checked')
-            value = []
-            Array.prototype.forEach.call(checked, (check) => {
-              if(check.value !== '') {
-                if(check.value.indexOf('{') > -1 || check.value.indexOf('[') > -1) {
-                  value.push(JSON.parse(check.value))
-                }else {
-                  value.push(check.value)
-                }
-              }
-            })
-          }else if (input.getAttribute('data-autocomplete') === 'true') {
+          var keyJson = key.replace(/.*?\[[0-9].*?\]\./, '')
+          if (input.getAttribute('data-autocomplete') === 'true') {
             var results = input.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')
             value = []
             Array.prototype.forEach.call(results, (result) => {
@@ -92,15 +74,55 @@ export default class EditorSave {
               if(val !== '') {
                 if(val.indexOf('{') > -1 || val.indexOf('[') > -1) {
                   value.push(JSON.parse(val))
-                }else {
+                } else {
                   value.push(val)
                 }
               }
             })
-          }else {
-            value = input.value.replace(/\"/g, '\&quot;') + ''
+          } else {
+            value = input.value
           }
-          this._json.data[dataId] = value
+
+          setObjByString(this._json.data[obj][index], keyJson, value)
+          var emptyObject = 0
+          for(var prop in this._json.data[obj][index]) {
+            if(typeof this._json.data[obj][index][prop] !== 'string' || this._json.data[obj][index][prop].trim() !== '') emptyObject++
+          }
+          if(emptyObject === 0) {
+            delete this._json.data[obj][index]
+          }
+        } else {
+          if (input.nodeName === 'SELECT' && maxlength != '1') {
+            var checked = input.querySelectorAll('option:checked')
+            value = []
+            Array.prototype.forEach.call(checked, (check) => {
+              if(check.value !== '') {
+                if(check.value.indexOf('{') > -1 || check.value.indexOf('[') > -1) {
+                  value.push(JSON.parse(check.value))
+                } else {
+                  value.push(check.value)
+                }
+              }
+            })
+          } else if (input.getAttribute('data-autocomplete') === 'true') {
+            var results = input.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')
+            value = []
+            Array.prototype.forEach.call(results, (result) => {
+              var val = result.getAttribute('value')
+              if(val !== '') {
+                if(val.indexOf('{') > -1 || val.indexOf('[') > -1) {
+                  value.push(JSON.parse(val))
+                } else {
+                  value.push(val)
+                }
+              }
+            })
+          } else if (input.value.indexOf('{') > -1) {
+            value = JSON.parse(input.value)
+          } else {
+            value = input.value //.replace(/\"/g, '\&quot;') + ''
+          }
+          setObjByString(this._json.data, dataId, value)
         }
       }
     })
@@ -114,27 +136,27 @@ export default class EditorSave {
     var url = target.getAttribute('data-url')
 
     this._json.save(this._saveType, url)
-        .then((result) => {
-          target.classList.add('done')
-          // this._populateFromJson(this._json.data)
+    .then((result) => {
+      target.classList.add('done')
+      // this._populateFromJson(this._json.data)
 
-          target.classList.remove('loading')
-          target.classList.remove('done')
-          target.removeAttribute('disabled')
+      target.classList.remove('loading')
+      target.classList.remove('done')
+      target.removeAttribute('disabled')
 
-          if(result.success === 1) {
-            this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
-            window.json = result.json
-          }
-          var formWrapper = document.querySelector('#abeForm')
-          Array.prototype.forEach.call(formWrapper.classList, (classStr) => {
-            if(classStr.indexOf('status-') > -1) formWrapper.classList.remove(classStr)
-          })
-          formWrapper.classList.add('status-' + result.json.abe_meta.status)
-          this.onFileSaved._fire()
-        }).catch(function(e) {
-          console.error(e)
-        })
+      if(result.success === 1) {
+        this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
+        window.json = result.json
+      }
+      var formWrapper = document.querySelector('#abeForm')
+      Array.prototype.forEach.call(formWrapper.classList, (classStr) => {
+        if(classStr.indexOf('status-') > -1) formWrapper.classList.remove(classStr)
+      })
+      formWrapper.classList.add('status-' + result.json.abe_meta.status)
+      this.onFileSaved._fire()
+    }).catch(function(e) {
+      console.error(e)
+    })
   }
 
   /**
@@ -152,7 +174,7 @@ export default class EditorSave {
     this._saveType = e.currentTarget.getAttribute('data-action')
     if (this._saveType !== 'draft' && this._saveType !== 'reject') {
       this._abeFormRequired()
-    }else {
+    } else {
       this.savePage(this._saveType)
       // this._abeFormSubmit.click()
     }
@@ -181,14 +203,14 @@ export default class EditorSave {
           if (countValue.length <= 0) {
             formGroup.classList.add('has-error')
             valid = false
-          }else {
+          } else {
             formGroup.classList.remove('has-error')
           }
-        }else if(typeof required !== 'undefined' && required !== null && (required === 'true' || required === true)) {
+        } else if(typeof required !== 'undefined' && required !== null && (required === 'true' || required === true)) {
           if (input.value === '') {
             formGroup.classList.add('has-error')
             valid = false
-          }else {
+          } else {
             formGroup.classList.remove('has-error')
           }
         }
@@ -198,7 +220,7 @@ export default class EditorSave {
     if (valid) {
       this.savePage(this._saveType)
       // this._abeFormSubmit.click()
-    }else {
+    } else {
       alert('Required fields are missing')
     }
   }
@@ -217,7 +239,7 @@ export default class EditorSave {
         var value = json[id]
         if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Array]') {
           value = JSON.stringify(value)
-        }else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
+        } else if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
           value = JSON.stringify(value)
         }
         form.value = value

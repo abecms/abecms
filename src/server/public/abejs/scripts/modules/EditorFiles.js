@@ -86,7 +86,7 @@ export default class EditorFiles {
       input.focus()
       input.blur()
       
-      var nodes = IframeNode('#page-template', '[data-abe-' + input.id + ']')
+      var nodes = IframeNode('#page-template', '[data-abe-' + input.id.replace(/\./g, '-') + ']')
       Array.prototype.forEach.call(nodes, (node) => {
         EditorUtils.formToHtml(node, input)
       })

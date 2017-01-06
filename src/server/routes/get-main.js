@@ -60,7 +60,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   EditorVariables.form = _form
   EditorVariables.json = _json
   EditorVariables.manager = manager
-  EditorVariables.nonce = '\'nonce-' + EditorVariables.express.res.locals.nonce + '\''
+//  EditorVariables.nonce = '\'nonce-' + EditorVariables.express.res.locals.nonce + '\''
   EditorVariables.editorWidth = editorWidth
 
   if (_json != null && _json.abe_meta) {
@@ -143,7 +143,6 @@ var route = function(req, res, next) {
         json = cmsData.file.get(jsonPath, 'utf8')
       }
       var text = cmsTemplates.template.getTemplate(template, json)
-
       editor(text, json, linkPath)
         .then((result) => {
           resolve(result)

@@ -37,9 +37,6 @@ export default class Page {
     ){
       template = Handlebars.templates[templateId]
       this.html = template(json, {data: {intl: config.intlData}})
-
-      //console.log('precompile')
-
     } else {
 
       this._onlyHTML = onlyHTML

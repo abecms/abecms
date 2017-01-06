@@ -144,8 +144,8 @@ export function getTemplate (file, json = {}) {
     text = cmsTemplates.template.includePartials(text, json)
     text = cmsTemplates.template.translate(text)
     text = cmsTemplates.template.addOrder(text)
-  }else {
-    text = `[ ERROR ] template ${file + '.' + config.files.templates.extension} doesn't exist anymore`
+  } else {
+    text = `[ ERROR ] template ${file} doesn't exist anymore`
   }
 
   // HOOKS afterGetTemplate

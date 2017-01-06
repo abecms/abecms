@@ -1,0 +1,3 @@
+{{#each test}}
+  {{abe type="data" key="test.gmaps" source="https://maps.googleapis.com/maps/api/geocode/json?key=gmapskey&address=" autocomplete="true" display="{{formatted_address}} - (lat:{{geometry.location.lat}}-lng:{{geometry.location.lng}})" desc='gmaps'}}
+{{/each}}

@@ -232,6 +232,17 @@ describe('cmsTemplates', function() {
     cmsData.regex.escapeTextToRegex.restore()
   });
 
+  it('cmsTemplates.template.includePartials()', function() {
+    // stub
+    var sinonInstance = sinon.sandbox.create();
+    var stubReadFileSync = sinonInstance.stub(fse, 'readFileSync');
+    stubReadFileSync.returns("test")
+
+    var template = cmsTemplates.template.includePartials("{{test}}", {"test" : "ok.html"})
+    console.log(template)
+    chai.expect(template).to.be.equal("test")
+  });
+
   /**
    * cmsTemplates.template.getTemplate
    * 

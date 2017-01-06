@@ -29,6 +29,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', postUrl, req.body, json)
     postUrl = resHook.postUrl
     json = resHook.json
+
     var p2 = cmsOperations.post.draft(
       postUrl,
       json,
