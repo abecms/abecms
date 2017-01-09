@@ -64,6 +64,8 @@ Below you find a benchmark (to be completed) of response time to display a conte
 | 2.3.1         |2,215                     |
 | 2.6.8         |0,622                     |
 
+See Chart [[https://github.com/AdFabConnect/abejs/blob/master/tests/loadtests/LoadTests.png|alt=LoadTests]]
+
 Between 1.8.0 and 2.6.8 the Abe content load time was divided by **27**! The refactoring was on his way. Never ceased then...
 
 To be continued...
