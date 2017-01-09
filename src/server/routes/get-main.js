@@ -48,7 +48,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   var editorWidth = '33%'
   EditorVariables.express.req.headers && EditorVariables.express.req.headers.cookie && EditorVariables.express.req.headers.cookie.split(';').forEach(function(cookie) {
     var parts = cookie.match(/(.*?)=(.*)$/)
-    if(parts[1] === 'editorWidth') editorWidth = parts[2]
+    if ( parts && ( parts.length > 2 ) && ( parts[1] === 'editorWidth' ) ) editorWidth = parts[2]
   })
 
   EditorVariables.pageHtml = pageHtml
