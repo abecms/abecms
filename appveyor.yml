@@ -4,6 +4,3 @@ install:
   - npm -g install npm@latest
   - set NODE_ENV=PROD
   - npm install
-build: off
-test_script:
-  - npm test
