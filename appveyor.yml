@@ -6,6 +6,9 @@ environment:
     - nodejs_version: '7'
 install:
   - ps: Install-Product node $env:nodejs_version
+  - set CI=true
+  - npm -g install npm@latest
+  - set NODE_ENV=PROD
   - npm install
 matrix:
   fast_finish: true
