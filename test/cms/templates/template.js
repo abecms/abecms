@@ -238,8 +238,8 @@ describe('cmsTemplates', function() {
     var stubReadFileSync = sinonInstance.stub(fse, 'readFileSync');
     stubReadFileSync.returns("test")
 
-    var template = cmsTemplates.template.includePartials("{{test}}", {"test" : "ok.html"})
-    console.log(template)
+    var template = cmsTemplates.template.includePartials("{{abe type='import' file='{{test}}'}}", {"test" : "test.html"})
+    fse.readFileSync.restore()
     chai.expect(template).to.be.equal("test")
   });
 
