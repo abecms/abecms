@@ -32,6 +32,8 @@ describe('cmsTemplates', function() {
           templatePaths: path.join(process.cwd(), 'test', 'fixtures', 'templates', 'templates/article.html'),
           structurePaths: path.join(process.cwd(), 'test', 'fixtures', 'templates', 'templates/structure/0-1'),
           import: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'import.html'), 'utf-8'),
+          pathTemplates: path.join(process.cwd(), 'test', 'fixtures', 'templates'),
+          pathPartials: path.join(process.cwd(), 'test', 'fixtures', 'partials'),
           count: 0
         }
         done()
@@ -44,20 +46,11 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getTemplatesAndPartials()', function(done) {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var getFilesAsync = sinonInstance.stub(coreUtils.file, 'getFilesAsync');
-    getFilesAsync.returns(Promise.resolve([this.fixture.article]))
 
-    // test
-    cmsTemplates.template.getTemplatesAndPartials(this._pathTemplate)
+    cmsTemplates.template.getTemplatesAndPartials(this.fixture.pathTemplates, this.fixture.pathPartials)
     .then((templatesList) => {
-      chai.expect(templatesList.length).to.be.equal(1);
+      chai.expect(templatesList.length).to.be.equal(28);
       done()
-
-      // unstub
-      sinon.assert.calledOnce(coreUtils.file.getFilesAsync)
-      coreUtils.file.getFilesAsync.restore()
     })
   });
 

@@ -162,7 +162,7 @@ class Manager {
     this._whereKeys = []
     var p = new Promise((resolve) => {
 
-      cmsTemplates.template.getTemplatesAndPartials(this._pathTemplate)
+      cmsTemplates.template.getTemplatesAndPartials(this._pathTemplate, this._pathPartials)
       .then((templatesList) => {
 
         return cmsTemplates.template.getTemplatesTexts(templatesList)

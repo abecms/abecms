@@ -10,13 +10,19 @@ import {
 } from '../../'
 import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 
-export function getTemplatesAndPartials(templatesPath) {
+export function getTemplatesAndPartials(templatesPath, partialsPath) {
+  let allFiles = []
   var p = new Promise((resolve) => {
     const extension = '.' + config.files.templates.extension
     return coreUtils.file.getFilesAsync(templatesPath, true, extension)
+    .then(function(files){
+      allFiles = allFiles.concat(files)
+      return coreUtils.file.getFilesAsync(partialsPath, true, extension)
       .then(function(files){
-        return resolve(files)
+        allFiles = allFiles.concat(files)
+        return resolve(allFiles)
       })
+    })
   })
 
   return p
