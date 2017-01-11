@@ -117,8 +117,22 @@ export default class FormCreate {
             var autocomplete = input.getAttribute('data-autocomplete') == 'true' ? true : false
             var required = input.getAttribute('data-required') == 'true' ? true : false
             var value = input.value
-
-            if (autocomplete) {
+            var maxlength = input.getAttribute('data-maxlength')
+            
+            if (input.nodeName === 'SELECT' && maxlength != "1") {
+              var checked = input.querySelectorAll('option:checked')
+              value = []
+              Array.prototype.forEach.call(checked, (check) => {
+                if(check.value !== '') {
+                  if(check.value.indexOf('{') > -1 || check.value.indexOf('[') > -1) {
+                    value.push(JSON.parse(check.value))
+                  }else {
+                    value.push(check.value)
+                  }
+                }
+              })
+              setObjByString(values, id, value);
+            } else if (autocomplete) {
               var results = input.parentNode.querySelectorAll('.autocomplete-result')
               values[id] = []
               var mergedValues = []
@@ -142,7 +156,7 @@ export default class FormCreate {
               if (value.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(value)
-                  setObjByString(values, id, [jsonValue])
+                  setObjByString(values, id, jsonValue)
 
                   if (required && values[id].length == 0) {
                     isValid = false

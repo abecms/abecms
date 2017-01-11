@@ -120,7 +120,7 @@ export default class EditorSave {
           } else if (input.value.indexOf('{') > -1) {
             value = JSON.parse(input.value)
           } else {
-            value = input.value //.replace(/\"/g, '\&quot;') + ''
+            value = input.value
           }
           setObjByString(this._json.data, dataId, value)
         }
