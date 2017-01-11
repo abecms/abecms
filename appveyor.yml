@@ -10,9 +10,6 @@ install:
   - npm -g install npm@latest
   - set NODE_ENV=PROD
   - npm install
-matrix:
-  fast_finish: true
 build: off
-shallow_clone: true
 test_script:
   - npm test
