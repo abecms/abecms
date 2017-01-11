@@ -189,6 +189,7 @@ export function addAbeSourceComment(template, json) {
     
     for(var i in keys) {
       var replaceEach = new RegExp(`<!-- \\[\\[${keys[i]}\\]\\][\\s\\S]*?-->`, 'g')
+      var regexEachKey = new RegExp(`{{#each ${keys[i]}}}`, 'g')
       template = template.replace(replaceEach, '')
 
       var patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g')
@@ -216,8 +217,10 @@ export function addAbeSourceComment(template, json) {
       let blocks = cmsTemplates.prepare.splitEachBlocks(template)      
       if(typeof blocks !== 'undefined' && blocks !== null) {
         Array.prototype.forEach.call(blocks, (block) => {
-          var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + keys[i] + '{{@index}}"')
-          template = template.replace(block, `${textEachWithIndex}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(block)} -->`)
+          if(block.match(regexEachKey)){
+            var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + keys[i] + '{{@index}}"')
+            template = template.replace(block, `${textEachWithIndex}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(block)} -->`)
+          }
         })
       }
     }
@@ -238,6 +241,12 @@ export function addAbeSourceComment(template, json) {
 export function addAbeHtmlTagBetweenAbeTags(template) {
   var match
   var templateNoDom = striptags(template)
+  
+  // {{#each tags may be declared outside of an html Tag}}
+  while (match = cmsData.regex.eachBlockPattern.exec(template)) {
+    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+  }
+  
   while (match = cmsData.regex.abeAsTagPattern.exec(templateNoDom)) {
     template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
   }
