@@ -119,7 +119,7 @@ export default class FormCreate {
             var value = input.value
             var maxlength = input.getAttribute('data-maxlength')
             
-            if (input.nodeName === 'SELECT' && maxlength != "1") {
+            if (input.nodeName === 'SELECT' && maxlength != '1') {
               var checked = input.querySelectorAll('option:checked')
               value = []
               Array.prototype.forEach.call(checked, (check) => {
@@ -131,7 +131,7 @@ export default class FormCreate {
                   }
                 }
               })
-              setObjByString(values, id, value);
+              setObjByString(values, id, value)
             } else if (autocomplete) {
               var results = input.parentNode.querySelectorAll('.autocomplete-result')
               values[id] = []
