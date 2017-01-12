@@ -140,23 +140,33 @@ export function getFilesSync(dirname, recursive = true, filterExt = '') {
  */
 export function getFilesAsync(dirname, recursive = true, filterExt = '') {
   let items = []
-  return fse.readdirAsync(dirname).map(function(fileName) {
-    let pathFile = path.join(dirname, fileName)
-    return fse.statAsync(pathFile).then(function(stat) {
-      if (stat.isFile()) {
-        let extFile = path.extname(fileName)
-        if (filterExt === '' || extFile === filterExt) {
-          return items.push(pathFile)
-        }
-        return 
-      }
-      if (recursive) {
-        return coreUtils.file.getFilesAsync(pathFile, recursive, filterExt).then(function(filesInDir) {
-          items = items.concat(filesInDir)
+
+  return fse.lstatAsync(dirname).then(stat => {
+    if (stat.isDirectory()) {
+      return fse.readdirAsync(dirname).map(function(fileName) {
+        let pathFile = path.join(dirname, fileName)
+        return fse.statAsync(pathFile).then(function(stat) {
+          if (stat.isFile()) {
+            let extFile = path.extname(fileName)
+            if (filterExt === '' || extFile === filterExt) {
+              return items.push(pathFile)
+            }
+            return 
+          }
+          if (recursive) {
+            return coreUtils.file.getFilesAsync(pathFile, recursive, filterExt).then(function(filesInDir) {
+              items = items.concat(filesInDir)
+            })
+          }
         })
-      }
-    })
-  }).then(function() {
+      }).then(function() {
+        return items
+      })
+    } else {
+      return items
+    }
+  })
+  .catch(function(e) {
     return items
   })
 }
