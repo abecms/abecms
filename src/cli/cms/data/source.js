@@ -227,7 +227,11 @@ export function getDataList(tplPath, text, jsonPage, onlyDynamicSelect = false) 
 }
 
 export function removeDataList(text) {
-  var listReg = /({{abe.*type=[\'|\"]data.*}})/g
 
-  return text.replace(listReg, '')
+  return text.replace(cmsData.regex.dataTypeReg, '')
+}
+
+export function removeNonEditableDataList(text) {
+
+  return text.replace(cmsData.regex.nonEditableDataReg, '')
 }

@@ -11,6 +11,10 @@ export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})([^=]*?)({{abe.*
 export let eachBlockPattern = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
 // This pattern finds all {{#each ...}}...{{/each}} blocks
 export let blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g
+// This pattern finds all non editable data types
+export let nonEditableDataReg = /({{abe.*(type=[\'|\"]data')?.*editable=[\'|\"]false.*(type=[\'|\"]data')?.*}})/g
+// This pattern finds all data types
+export let dataTypeReg = /({{abe.*type=[\'|\"]data.*}})/g
 
 /**
  * escape a regex

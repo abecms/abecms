@@ -250,7 +250,6 @@ export function editor(text, json, documentLink, precontrib = false) {
   let p = new Promise((resolve) => {
     var util = new cmsEditor.form()
     var arrayBlock = []
-    
     cmsData.source.getDataList(path.dirname(documentLink), text, json)
       .then(() => {
         addSource(text, json, util)
@@ -260,6 +259,7 @@ export function editor(text, json, documentLink, precontrib = false) {
           text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(text)
         }
 
+        text = cmsData.source.removeNonEditableDataList(text)
         matchAttrAbe(text, json, util, arrayBlock)
         arrayBlock = []
         each(text, json, util, arrayBlock)
