@@ -98,9 +98,13 @@ export function saveFile(req) {
 
       var folderFilePath = createMediaFolder(mediaType)
       var hasSentHeader = false
+      var folderWebPath = '/' + config.upload.image
+       if(config.upload[mediaType] != null){
+        folderWebPath = '/' + config.upload[mediaType]  
+       }
       
       filePath = path.join(folderFilePath, slug)
-      resp['filePath'] = path.join('/' + mediaType, slug)
+      resp['filePath'] = path.join('/' + folderWebPath, slug)
 
       file.on('limit', function() {
         hasSentHeader = true
@@ -177,7 +181,10 @@ export function createMediaSlug(filename, ext) {
 }
 
 export function createMediaFolder(mediaType) {
-  var folderWebPath = '/' + mediaType
+  var folderWebPath = '/' + config.upload.image
+  if(config.upload[mediaType] != null){
+    folderWebPath = '/' + config.upload[mediaType]  
+  }
   folderWebPath = abeExtend.hooks.instance.trigger('beforeSaveImage', folderWebPath)
   var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
   mkdirp.sync(folderFilePath)
