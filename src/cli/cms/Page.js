@@ -61,7 +61,7 @@ export default class Page {
       }
 
       // je rajoute les index pour chaque bloc lié à un each
-      this.template = cmsTemplates.prepare.indexEachBlocks(this.template, this._onlyHTML)
+      this.template = cmsTemplates.prepare.indexEachBlocks(this.template, json, this._onlyHTML)
 
       // We remove the {{abe type=data ...}} from the text 
       this.template = cmsData.source.removeDataList(this.template)
