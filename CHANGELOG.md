@@ -1,4 +1,30 @@
 
+## [2.14.1] - 2017-1-13
+* [[`751e351d03`](https://github.com/AdFabConnect/abejs/commit/751e351d03)] - **fix**: upload image in the right directory (gregorybesson) 
+* [[`d90db34b94`](https://github.com/AdFabConnect/abejs/commit/d90db34b94)] - **fix**: each blocks were not added on the front when a new block was created from the editor (gregorybesson) 
+* [[`cf46b793aa`](https://github.com/AdFabConnect/abejs/commit/cf46b793aa)] - **fix**: non editable Abe data tags were improperly displayed in the editor (gregorybesson) 
+* [[`5497ed392d`](https://github.com/AdFabConnect/abejs/commit/5497ed392d)] - **fix**: error when no partials directory exists (gregorybesson) 
+* [[`faac821e5a`](https://github.com/AdFabConnect/abejs/commit/faac821e5a)] - **fix**: The Manager didn't get the partials anymore since a very long time (gregorybesson) 
+* [[`ba4bed4579`](https://github.com/AdFabConnect/abejs/commit/ba4bed4579)] - Update appveyor.yml (Greg Besson) 
+* [[`7c66aa7a21`](https://github.com/AdFabConnect/abejs/commit/7c66aa7a21)] - Update appveyor.yml (Greg Besson) 
+* [[`7978d48b47`](https://github.com/AdFabConnect/abejs/commit/7978d48b47)] - Update appveyor.yml (Greg Besson) 
+* [[`3344f5f937`](https://github.com/AdFabConnect/abejs/commit/3344f5f937)] - Update appveyor.yml (Greg Besson) 
+* [[`9b7a01fccf`](https://github.com/AdFabConnect/abejs/commit/9b7a01fccf)] - Update appveyor.yml (Greg Besson) 
+* [[`630a5396fb`](https://github.com/AdFabConnect/abejs/commit/630a5396fb)] - Update CHANGELOG.md (Greg Besson) 
+* [[`229919a48b`](https://github.com/AdFabConnect/abejs/commit/229919a48b)] - Update CHANGELOG.md (Greg Besson) 
+* [[`9bf8517698`](https://github.com/AdFabConnect/abejs/commit/9bf8517698)] - **ic**: fix dependencies versions (gregorybesson) 
+* [[`0fa0a2e1c8`](https://github.com/AdFabConnect/abejs/commit/0fa0a2e1c8)] - **fix**: {{#each}} statements where modified with improper data keys (gregorybesson) 
+* [[`005cad9b23`](https://github.com/AdFabConnect/abejs/commit/005cad9b23)] - **ic**: linting (gregorybesson) 
+* [[`8a73e75e56`](https://github.com/AdFabConnect/abejs/commit/8a73e75e56)] - **ic**: fix UT (gregorybesson) 
+* [[`5437b2000b`](https://github.com/AdFabConnect/abejs/commit/5437b2000b)] - **fix**: When a select input with max-length = 1 was created in precontrib, the result was improperly saved as an array (gregorybesson) 
+* [[`20c81deba2`](https://github.com/AdFabConnect/abejs/commit/20c81deba2)] - \[TEST\] wrong syntax on last commit (Emmanuel Gonzalez) 
+* [[`f21b8af500`](https://github.com/AdFabConnect/abejs/commit/f21b8af500)] - Update get-main.js (Greg Besson) 
+* [[`68085c8766`](https://github.com/AdFabConnect/abejs/commit/68085c8766)] - Merge pull request #114 from AlexandreBeaurain/master (Greg Besson) 
+* [[`13f3fa18cb`](https://github.com/AdFabConnect/abejs/commit/13f3fa18cb)] - **fix**: bad cookies can crash process (Alexandre Beaurain) 
+* [[`8b7e75a0a1`](https://github.com/AdFabConnect/abejs/commit/8b7e75a0a1)] - \[TEST\] Add chart for loadtests (Emmanuel Gonzalez) 
+* [[`bfd9ce59ff`](https://github.com/AdFabConnect/abejs/commit/bfd9ce59ff)] - **ic**: renaming the test (gregorybesson) 
+* [[`b74011ba0f`](https://github.com/AdFabConnect/abejs/commit/b74011ba0f)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.14.0] - 2017-1-4
 * [[`0c0cc3a2c3`](https://github.com/AdFabConnect/abejs/commit/0c0cc3a2c3)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`27a7227943`](https://github.com/AdFabConnect/abejs/commit/27a7227943)] - **fix**: Bug introduced in 2.11.3 with each blocks non autocomplete (gregorybesson) 
@@ -648,7 +674,7 @@
 * [[`48675a00b6`](https://github.com/AdFabConnect/abejs/commit/48675a00b6)] - **refactoring**: process, hooks, plugins (nicolaslabbe) 
 * [[`dc6b63070c`](https://github.com/AdFabConnect/abejs/commit/dc6b63070c)] - **refactoring**: lint (nicolaslabbe) 
 
-## [2.5.7] - 2016-10-11
+## [2.5.7] - 2016-10-10
 * [[`f2b2604ca8`](https://github.com/AdFabConnect/abejs/commit/f2b2604ca8)] - fix error on reject status (gregorybesson) 
 * [[`5dcd2bcbf2`](https://github.com/AdFabConnect/abejs/commit/5dcd2bcbf2)] - missing function readded... (gregorybesson) 
 * [[`1825120b47`](https://github.com/AdFabConnect/abejs/commit/1825120b47)] - you can request abe version with -v (gregorybesson) 
@@ -690,7 +716,7 @@
 * [[`469e753ed9`](https://github.com/AdFabConnect/abejs/commit/469e753ed9)] - **refactoring**: UT revisions (nicolaslabbe) 
 * [[`46e766ea91`](https://github.com/AdFabConnect/abejs/commit/46e766ea91)] - **refactoring**:  (nicolaslabbe) 
 
-## [2.5.3] - 2016-10-6
+## [2.5.3] - 2016-10-5
 * [[`2c560fcaf3`](https://github.com/AdFabConnect/abejs/commit/2c560fcaf3)] - **fix**: - (gregorybesson) 
 * [[`0b2bf92d10`](https://github.com/AdFabConnect/abejs/commit/0b2bf92d10)] - **fix**: limax BC break + refactoring to better handle file saving (gregorybesson) 
 * [[`51d53a5e94`](https://github.com/AdFabConnect/abejs/commit/51d53a5e94)] - replace dash with dot in image filename (wonknu10) 
