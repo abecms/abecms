@@ -29,6 +29,7 @@ describe('cmsTemplates.prepare', function() {
           source: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-source.html'), 'utf-8'),
           each: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each.html'), 'utf-8'),
           eachMultiple: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each-multiple.html'), 'utf-8'),
+          eachMultiplePrepared: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each-multiple-prepared.html'), 'utf-8'),
           eachVariable: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-abe-each-variable.html'), 'utf-8'),
           rawHandlebar: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-raw-handlebars.html'), 'utf-8'),
           noHtml: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'prepare-tag-nohtml.html'), 'utf-8')
@@ -238,9 +239,13 @@ describe('cmsTemplates.prepare', function() {
     chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1)
   });
 
-  it('cmsTemplates.prepare.indexEachBlocks() eachMultiple', function() {
-    var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachMultiple, {}, false)
-    chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1)
+  // eachMultiplePrepared is the string obtained after all other functions have "prepared" the string
+  // and just before indexEachBlocks() is triggered
+  it('cmsTemplates.prepare.indexEachBlocks() eachMultiplePrepared', function() {
+    var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachMultiplePrepared, {}, false)
+    console.log(template)
+    var count = (template.match(/abe dictionnary=/g) || []).length;
+    chai.expect(count).to.be.equal(2)
   });
 
   it('cmsTemplates.prepare.indexEachBlocks() eachMultiple with data', function() {

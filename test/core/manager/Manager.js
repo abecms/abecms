@@ -28,14 +28,14 @@ describe('Manager', function() {
   it('getStructureAndTemplates()', function() {
     const data = Manager.instance.getStructureAndTemplates()
     chai.assert.equal(data['templates'][0].name, 'article-data-arrayinline', 'failed !')
-    chai.assert.equal(data['templates'].length, 26, 'failed !')
+    chai.assert.equal(data['templates'].length, 27, 'failed !')
   });
 
   it('updateStructureAndTemplates()', function() {
     Manager.instance.updateStructureAndTemplates()
     const data = Manager.instance.getStructureAndTemplates()
     chai.assert.equal(data['templates'][0].name, 'article-data-arrayinline', 'failed !')
-    chai.assert.equal(data['templates'].length, 26, 'failed !')
+    chai.assert.equal(data['templates'].length, 27, 'failed !')
   });
 
   it('getList()', function() {

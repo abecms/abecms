@@ -296,7 +296,7 @@ export function indexEachBlocks(template, json, onlyHtml) {
 
       var voidData = {}
       voidData[key] = [{}]
-      var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?["']) ?}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
+      var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?["'])[ ]?( has\-abe=1)?}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
       var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
 
       // je rajoute un data-abe-block avec index sur tous les tags html du bloc each

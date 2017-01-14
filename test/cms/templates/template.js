@@ -49,7 +49,7 @@ describe('cmsTemplates', function() {
 
     cmsTemplates.template.getTemplatesAndPartials(this.fixture.pathTemplates, this.fixture.pathPartials)
     .then((templatesList) => {
-      chai.expect(templatesList.length).to.be.equal(28);
+      chai.expect(templatesList.length).to.be.equal(29);
       done()
     })
   });
