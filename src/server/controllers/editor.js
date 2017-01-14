@@ -254,12 +254,13 @@ export function editor(text, json, documentLink, precontrib = false) {
       .then(() => {
         addSource(text, json, util)
 
+        text = cmsData.source.removeNonEachDataList(text)
+
         if (!precontrib) {
           text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(text)
           text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(text)
         }
 
-        text = cmsData.source.removeNonEditableDataList(text)
         matchAttrAbe(text, json, util, arrayBlock)
         arrayBlock = []
         each(text, json, util, arrayBlock)

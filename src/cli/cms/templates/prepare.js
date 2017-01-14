@@ -86,21 +86,9 @@ export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
   var res
 
   if (cmsData.regex.isSingleAbe(match, text)) {
-    // valueOfAttritube = key.replace(/\./g, '-')
-    // key = cmsData.regex.validDataAbe(valueOfAttritube)
-    // key = key.replace(/\./g, '-')
-    // res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + abeTag
     res = addAbeAttrSingleTab(key, abeTag, htmlAttribute)
-  }else {
+  } else {
     res = addAbeAttrForBlock(key, abeTag, htmlAttribute)
-    // valueOfAttritube = key.split('.')
-    // var parentKey = valueOfAttritube.shift()
-    // valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0]}`
-    // var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
-    // key = cmsData.regex.validDataAbe(valueOfAttritube)
-
-    // res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
-    // + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${abeTag}`
   }
 
   return res

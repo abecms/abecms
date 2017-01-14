@@ -235,3 +235,16 @@ export function removeNonEditableDataList(text) {
 
   return text.replace(cmsData.regex.nonEditableDataReg, '')
 }
+
+export function removeNonEachDataList(text) {
+  // removing each blocks potentially containing abe data type
+  let pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
+  let textWithNoEach = text.replace(pattEach, '')
+
+  var match
+  while (match = cmsData.regex.dataTypeReg.exec(textWithNoEach)) {
+    text = text.replace(match[0], '')
+  }
+
+  return text
+}
