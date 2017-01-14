@@ -1,4 +1,10 @@
 
+## [2.14.2] - 2017-1-14
+* [[`c389516428`](https://github.com/AdFabConnect/abejs/commit/c389516428)] - **fix**: BC break on each statement for mixed Abe tags in a each (gregorybesson) 
+* [[`6e83f4dd99`](https://github.com/AdFabConnect/abejs/commit/6e83f4dd99)] - **ic**: refactoring e2e tests + adding 1 test (gregorybesson) 
+* [[`93e6f2c28f`](https://github.com/AdFabConnect/abejs/commit/93e6f2c28f)] - **fix**: BC break on precontrib fields which were doubled (gregorybesson) 
+* [[`d93cafd398`](https://github.com/AdFabConnect/abejs/commit/d93cafd398)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.14.1] - 2017-1-13
 * [[`751e351d03`](https://github.com/AdFabConnect/abejs/commit/751e351d03)] - **fix**: upload image in the right directory (gregorybesson) 
 * [[`d90db34b94`](https://github.com/AdFabConnect/abejs/commit/d90db34b94)] - **fix**: each blocks were not added on the front when a new block was created from the editor (gregorybesson) 
