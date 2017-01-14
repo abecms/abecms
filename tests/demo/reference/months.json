@@ -1,0 +1,50 @@
+[
+  {
+    "month": "January",
+    "monthFormated": "01"
+  },
+  {
+    "month": "February",
+    "monthFormated": "02"
+  },
+  {
+    "month": "March",
+    "monthFormated": "03"
+  },
+  {
+    "month": "April",
+    "monthFormated": "04"
+  },
+  {
+    "month": "May",
+    "monthFormated": "05"
+  },
+  {
+    "month": "June",
+    "monthFormated": "06"
+  },
+  {
+    "month": "July",
+    "monthFormated": "07"
+  },
+  {
+    "month": "August",
+    "monthFormated": "08"
+  },
+  {
+    "month": "September",
+    "monthFormated": "09"
+  },
+  {
+    "month": "October",
+    "monthFormated": "10"
+  },
+  {
+    "month": "November",
+    "monthFormated": "11"
+  },
+  {
+    "month": "December",
+    "monthFormated": "12"
+  }
+]

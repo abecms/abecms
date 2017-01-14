@@ -3,7 +3,7 @@ const BINPATH = './node_modules/nightwatch/bin/';
 
 module.exports = {
   "src_folders": [
-    "tests/functional"
+    "tests/e2e"
   ],
   "output_folder": "./reports",
   "test_runner" : "mocha",
