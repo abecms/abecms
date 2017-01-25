@@ -39,12 +39,6 @@ describe('cmsOperations', function() {
     // stub
     var s = sinon.sandbox.create();
     s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj, body, json) {
-      if (str == 'beforeFirstSave') {
-        return {
-          postUrl: obj,
-          json: json
-        }
-      }
       return str, obj;
     }.bind(this));
     s.stub(coreUtils.slug, 'clean', function (p) { return p; }.bind(this));

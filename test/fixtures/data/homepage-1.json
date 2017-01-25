@@ -18,6 +18,16 @@
 				"priority":2
 			},
 			"title":"article"
+		},
+		{
+			"abe_meta": {
+		    "template": "other-article",
+				"link": "/article-2.html",
+		    "status": "publish",
+		    "date": "2016-08-11T16:40:41.974Z",
+				"priority":2
+			},
+			"title":"article2"
 		}
 	]
 }

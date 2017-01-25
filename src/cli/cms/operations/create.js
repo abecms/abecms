@@ -13,9 +13,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
 
     var postUrl = path.join('/', pathCreate, name)
     postUrl = coreUtils.slug.clean(postUrl)
-
     var json = (forceJson) ? forceJson : {}
-
     json = cmsData.metas.create(json, template, postUrl)
 
     if (duplicate) {
@@ -25,13 +23,9 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
       var templateText = cmsTemplates.template.getTemplate(template)
       json = cmsData.values.removeDuplicate(templateText, json)
     }
-
-    var resHook = abeExtend.hooks.instance.trigger('beforeFirstSave', postUrl, req.body, json)
-    postUrl = resHook.postUrl
-    json = resHook.json
-
+    json = abeExtend.hooks.instance.trigger('beforeFirstSave', json, req.body)
     var p2 = cmsOperations.post.draft(
-      postUrl,
+      json.abe_meta.link,
       json,
       'draft'
     )

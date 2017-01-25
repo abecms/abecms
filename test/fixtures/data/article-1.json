@@ -7,5 +7,17 @@
     "latest": {"date": "2016-08-11T16:40:41.974Z"}
 	},
 	"priority":2,
-	"title":"article"
+	"title":"article",
+  "products":[
+    {
+      "title" : "p1",
+      "content" : "content1",
+      "link" : "/homepage-1.html"
+    },
+    {
+      "title" : "p2",
+      "content" : "content2",
+      "link" : "/p2link"
+    }
+  ]
 }

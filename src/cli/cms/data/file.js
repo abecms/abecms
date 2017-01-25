@@ -58,8 +58,7 @@ export function getAllWithKeys(withKeys) {
     fileObject = cmsData.file.getAbeMeta(fileObject, json)
     
     Array.prototype.forEach.call(withKeys, (key) => {
-      var keyFirst = key.split('.')[0]
-      fileObject[keyFirst] = json[keyFirst]
+      fileObject[key] = json[key]
     })
 
     filesArr.push(fileObject)

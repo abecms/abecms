@@ -1,11 +1,11 @@
 {
-  "name": "abe-cli",
-  "version": "2.14.2",
-  "description": "Abe command line tool",
+  "name": "abecms",
+  "version": "2.14.5",
+  "description": "Abe: The lightning fast CMS",
   "main": "src/server/app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/AdFabConnect/abejs.git"
+    "url": "git://github.com/abecms/abecms.git"
   },
   "scripts": {
     "lint": "eslint src --fix",
@@ -17,16 +17,16 @@
     "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "posttest-e2e": "kill -9 $(lsof -ti tcp:3003)",
     "start": "node --debug --harmony ./dist/server/index.js",
-    "babel": "babelify --presets [ es2015 ] src/server/public/abejs/scripts/template-engine.js -o src/server/public/abejs/scripts/template-engine-compiled.js",
-    "watch": "./node_modules/.bin/parallelshell './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/template-engine.js -o src/server/public/abejs/scripts/template-engine-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/admin.js -o src/server/public/abejs/scripts/admin-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/user-login.js -o src/server/public/abejs/scripts/user-login-compiled.js' 'npm run watch:sass'",
+    "babel": "babelify --presets [ es2015 ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js",
+    "watch": "./node_modules/.bin/parallelshell './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/admin.js -o src/server/public/abecms/scripts/admin-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/user-login.js -o src/server/public/abecms/scripts/user-login-compiled.js' 'npm run watch:sass'",
     "watch:sass": "./node_modules/.bin/watch 'npm run sass' ./src/server/sass",
     "babel-app": "node_modules/.bin/babel-node --presets es2015",
     "build": "node_modules/.bin/babel-node --presets es2015 src/cli/build/template.js",
-    "mvasset": "mkdirp dist/server/public/abejs && cp -r src/server/locale dist/server && cp -r src/server/views dist/server && cp -r src/server/public/abejs/css dist/server/public/abejs && cp -r src/server/public/abejs/fonts dist/server/public/abejs && cp -r src/server/public/abejs/image dist/server/public/abejs",
+    "mvasset": "mkdirp dist/server/public/abecms && cp -r src/server/locale dist/server && cp -r src/server/views dist/server && cp -r src/server/public/abecms/css dist/server/public/abecms && cp -r src/server/public/abecms/fonts dist/server/public/abecms && cp -r src/server/public/abecms/image dist/server/public/abecms",
     "sass": "node ./src/tasks/sass.js",
-    "js:users": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/user-login.js -o src/server/public/abejs/scripts/user-login-compiled.js",
-    "js:admin": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/admin.js -o src/server/public/abejs/scripts/admin-compiled.js",
-    "js:engine": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abejs/scripts/template-engine.js -o src/server/public/abejs/scripts/template-engine-compiled.js",
+    "js:users": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/user-login.js -o src/server/public/abecms/scripts/user-login-compiled.js",
+    "js:admin": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/admin.js -o src/server/public/abecms/scripts/admin-compiled.js",
+    "js:engine": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js",
     "build:front": "npm run js:admin && npm run js:users && npm run js:engine && npm run sass",
     "build:scripts": "npm run build:front && ./node_modules/.bin/babel --presets es2015,stage-0 -d dist/server src/server/ && ./node_modules/.bin/babel --presets es2015,stage-0 -d dist/cli src/cli/ && npm run mvasset",
     "compile": "./node_modules/.bin/babel --presets es2015,stage-0 -d dist/ src/ && cp -r src/cli/core/config/config.json dist/cli/core/config/config.json",
@@ -35,7 +35,7 @@
     "startdev": "npm run build:front && npm run compile && npm run mvasset && node src/tasks/nodemon.js & npm run watch --kill-others",
     "startdevOnly": "npm run js:admin && npm run js:users && npm run js:engine && node src/tasks/nodemon.js & npm run watch --kill-others"
   },
-  "author": "Adfab Connect",
+  "author": "Gregory Besson",
   "license": "ISC",
   "preferGlobal": true,
   "bin": {
@@ -116,7 +116,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.2",
     "nightwatch": "^0.9.11",
-    "node-sass": "^3.7.0",
+    "node-sass": "^4.3.0",
     "nodemon": "^1.8.1",
     "parallelshell": "^2.0.0",
     "selenium-download": "^2.0.7",

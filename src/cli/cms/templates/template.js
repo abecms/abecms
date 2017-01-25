@@ -61,6 +61,13 @@ export function getAbeImport(text) {
   return partials
 }
 
+/**
+ * it will include recurively each encountered type=import
+ * and proceed to a foreach when the file={{some[]}} is an array of values
+ * @param  {[type]} text [description]
+ * @param  {[type]} json [description]
+ * @return {[type]}      [description]
+ */
 export function includePartials(text, json) {
   var abeImports = cmsTemplates.template.getAbeImport(text)
 
@@ -70,20 +77,18 @@ export function includePartials(text, json) {
     var file = obj.file
     var partial = ''
     file = path.join(config.root, config.partials, file)
+    file = cmsData.attributes.getValueFromAttribute(file, json)
 
-    if (file.indexOf('{{') > -1) {
-      var keys = sourceAttr.getKeys(file)
-      Array.prototype.forEach.call(keys, (key) => {
-        try {
-          var toEval = `${key.replace(/(\[|\.|\])/g, '\\$1')}`
-          file = file.replace(new RegExp(`\{\{${toEval}\}\}`, 'g'), eval(`json.${key}`))
-        }catch(e) {
+    if(Object.prototype.toString.call(file) === '[object Array]' ) {
+      Array.prototype.forEach.call(file, (f) => {
+        if(coreUtils.file.exist(f)) {
+          partial += cmsTemplates.template.includePartials(fse.readFileSync(f, 'utf8'), json)
         }
       })
-    }
-    
-    if(coreUtils.file.exist(file)) {
-      partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'), json)
+    } else {
+      if(coreUtils.file.exist(file)) {
+        partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'), json)
+      }
     }
     text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
   })
@@ -272,7 +277,10 @@ export function getAbeRequestWhereKeysFromTemplates(templatesList) {
     Array.prototype.forEach.call(templatesList, (file) => {
       whereKeys = whereKeys.concat(cmsTemplates.template.execRequestColumns(file.template))
     })
-    whereKeys = whereKeys.filter(function (item, pos) {return whereKeys.indexOf(item) == pos})
+    whereKeys = whereKeys.filter(function (item, pos) {
+      item = item.split('.')[0].split('[')[0]
+      return whereKeys.indexOf(item) == pos
+    })
     resolve(whereKeys)
   })
 

@@ -34,7 +34,7 @@ var route = function(req, res, next){
     sortOrder = (req.query.order[0]['dir'] === 'desc')? -1:1
   }
 
-  if (typeof req.query.search.value !== '') {
+  if (typeof req.query.search !== 'undefined' && req.query.search.value !== '') {
     search = req.query.search.value
   }
 

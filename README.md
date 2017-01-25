@@ -1,23 +1,23 @@
-[![Develop Branch Build Status](https://travis-ci.org/AdFabConnect/abejs.svg)](https://travis-ci.org/AdFabConnect/abejs)
-[![Build status](https://ci.appveyor.com/api/projects/status/dv6yt84497wseuxc?svg=true)](https://ci.appveyor.com/project/gregorybesson/abejs)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/AdFabConnect/abejs/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AdFabConnect/abejs/)
-[![Coverage Status](https://coveralls.io/repos/github/AdFabConnect/abejs/badge.svg?branch=master)](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
-[![Dependency Status](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c)
-[![Inline docs](http://inch-ci.org/github/adfabconnect/abejs.svg?branch=master)](http://inch-ci.org/github/adfabconnect/abejs)
-[![Latest Stable Version](https://img.shields.io/npm/v/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
-[![Total Downloads](https://img.shields.io/npm/dt/abe-cli.svg)](https://www.npmjs.com/package/abe-cli)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/AdFabConnect/abejs/master/LICENSE)
+[![Develop Branch Build Status](https://travis-ci.org/abecms/abecms.svg)](https://travis-ci.org/abecms/abecms)
+[![Build status](https://ci.appveyor.com/api/projects/status/dv6yt84497wseuxc?svg=true)](https://ci.appveyor.com/project/gregorybesson/abecms)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/abecms/abecms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/abecms/abecms/)
+[![Coverage Status](https://coveralls.io/repos/github/abecms/abecms/badge.svg?branch=master)](https://coveralls.io/github/abecms/abecms?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/587a81915450ea0034dffa93/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ea4badbd6fa600316f9f6c)
+[![Inline docs](http://inch-ci.org/github/abecms/abecms.svg?branch=master)](http://inch-ci.org/github/abecms/abecms)
+[![Latest Stable Version](https://img.shields.io/npm/v/abecms.svg)](https://www.npmjs.com/package/abecms)
+[![Total Downloads](https://img.shields.io/npm/dt/abecms.svg)](https://www.npmjs.com/package/abecms)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/abecms/abecms/master/LICENSE)
 # Abe, A better engine
 
 > Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
 
-[![NPM](https://nodei.co/npm/abe-cli.png?downloads=true&downloadRank=true)](https://nodei.co/npm/abe-cli/)
-[![NPM](https://nodei.co/npm-dl/abe-cli.png?months=3&height=3)](https://nodei.co/npm/abe-cli/)
+[![NPM](https://nodei.co/npm/abecms.png?downloads=true&downloadRank=true)](https://nodei.co/npm/abecms/)
+[![NPM](https://nodei.co/npm-dl/abecms.png?months=3&height=3)](https://nodei.co/npm/abecms/)
 
 # Demo
 Deploy your own Abe demo on Heroku
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/abejs/demo)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/abecms/demo)
 
 # Presentation
 I've designed this CMS because I wanted to simplify and optimize the way we're creating content. Wordpress is way too complex for what it does. Welcome to ABE (A Better Engine) : This CMS will make you create content in a snap and publish it on the web in no time !
@@ -96,8 +96,8 @@ See the complete [changelog](./CHANGELOG.md)
 ### 2.4.*
 - The first unit tests are implemented
 - Quality control with esLint added
-- Continuous Integration with [Travis](https://travis-ci.org/AdFabConnect/abejs)
-- Unit test coverage added : [coveralls](https://coveralls.io/github/AdFabConnect/abejs?branch=master)
+- Continuous Integration with [Travis](https://travis-ci.org/abecms/abecms)
+- Unit test coverage added : [coveralls](https://coveralls.io/github/abecms/abecms?branch=master)
 - Select data become a first class citizen in Manager => perf X50 on page display including templates with select statements
 
 ### 2.3.*
@@ -133,7 +133,7 @@ New features :
 
 # Getting started
 
-With __npm__ : ```$ npm install -g abe-cli ```
+With __npm__ : ```$ npm install -g abecms ```
 
 ## Unix
 
@@ -339,9 +339,9 @@ npm config set msvs_version 2015 --global
 Create a blog directory (ie. "abesite") with the default project structure (see below). It will contain your blog.
 git clone abe outside of your blog directory (not in abesite) :
 
-```$ git clone https://github.com/AdFabConnect/abejs.git ```
+```$ git clone https://github.com/abecms/abecms.git ```
 
-```$ cd abejs ```
+```$ cd abecms ```
 
 ```$ npm i ```
 

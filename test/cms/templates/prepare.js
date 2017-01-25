@@ -243,7 +243,6 @@ describe('cmsTemplates.prepare', function() {
   // and just before indexEachBlocks() is triggered
   it('cmsTemplates.prepare.indexEachBlocks() eachMultiplePrepared', function() {
     var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.eachMultiplePrepared, {}, false)
-    console.log(template)
     var count = (template.match(/abe dictionnary=/g) || []).length;
     chai.expect(count).to.be.equal(2)
   });

@@ -1,24 +1,24 @@
 var chai = require('chai');
 var path = require('path');
 
-var config = require('../src/cli').config
-config.set({root: path.join(__dirname,'fixtures')})
+var config = require('../../../src/cli').config
+config.set({root: path.join(process.cwd(), 'test', 'fixtures')})
 
-var cmsData = require('../src/cli').cmsData
-var Manager = require('../src/cli').Manager;
+var cmsData = require('../../../src/cli').cmsData
+var Manager = require('../../../src/cli').Manager;
 var fse = require('fs-extra');
 
 describe('Request', function() {
   before( function(done) {
     Manager.instance.init()
       .then(function () {
-        Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles']
+        Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles', 'products']
         Manager.instance.updateList()
 
         this.fixture = {
-          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8'),
-          jsonArticle: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'article-1.json')),
-          jsonHomepage: fse.readJsonSync(path.join(__dirname, 'fixtures', 'data', 'homepage-1.json'))
+          tag: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article.html'), 'utf8'),
+          jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'test', 'fixtures', 'data', 'article-1.json')),
+          jsonHomepage: fse.readJsonSync(path.join(process.cwd(), 'test', 'fixtures', 'data', 'homepage-1.json'))
         }
         done()
         
@@ -92,6 +92,16 @@ describe('Request', function() {
     )
     chai.expect(res, '`{{abe_meta.template}}`=`{{abe_meta.template}}`').to.have.length(1);
     chai.assert.equal(res[0].title, 'homepage', 'expected select to find homepage but found ' + res[0].title);
+
+    request = cmsData.sql.handleSqlRequest('select title from / where `products[].link` IN (`{{abe_meta.link}}`)', this.fixture.jsonHomepage)
+    res = cmsData.sql.executeWhereClause(
+      cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
+      request.where,
+      request.limit,
+      request.columns,
+      this.fixture.jsonHomepage
+    )
+    chai.assert.equal(res[0].title, 'article', 'expected select to find article but found ' + res[0].title);
   });
   it('cmsData.sql.executeWhereClause() !=', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template`!=`homepage`', {})
@@ -262,6 +272,7 @@ describe('Request', function() {
     )
     chai.expect(res, '`fakekey.fakeAttribute` IN (`{{articles}}`').to.have.length(0);
   });
+
   it('cmsData.sql.executeWhereClause() NOT IN', function() {
     var request = cmsData.sql.handleSqlRequest('select title from ./ where `abe_meta.template` NOT IN (`homepage`,`test`)', {})
     var res = cmsData.sql.executeWhereClause(

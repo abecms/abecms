@@ -79,14 +79,12 @@ export function handleSqlRequest(str, jsonPage) {
   var req = escapeAbeValuesFromStringRequest(str, jsonPage)
   var request = parse(req)
   var reconstructSql = ''
-
   // SQL TYPE
   var type = ''
   if(request.type != null) {
     type = request.type
   }
   reconstructSql += `${type} `
-
   // SQL COLUMNS
   var columns = []
   if(request.columns != null) {
@@ -99,7 +97,6 @@ export function handleSqlRequest(str, jsonPage) {
     }
   }
   reconstructSql += `${JSON.stringify(columns)} `
-
   // SQL FROM
   var from = []
   if(request.from != null) {
@@ -416,7 +413,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
   }catch(e) {
     // console.log('e', e)
   }
-  
+
   if(where.operator === 'IN' || where.operator === 'NOT IN') {
     if(value == null) {
       // is the form of variableLeft something like elt.attribute or elt[].attribute?
@@ -447,9 +444,13 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
       if(matchRightVariable != null && matchRightVariable.length > 0) {
         try {
           var jsonOriginalValues = eval('jsonOriginalDoc.' + matchRightVariable[1])
-          Array.prototype.forEach.call(jsonOriginalValues, (jsonOriginalValue) => {
-            compare.push(eval('jsonOriginalValue.' + whereLeftColumn))
-          })
+          if( Object.prototype.toString.call(jsonOriginalValues) === '[object Array]' ) {
+            Array.prototype.forEach.call(jsonOriginalValues, (jsonOriginalValue) => {
+              compare.push(eval('jsonOriginalValue.' + whereLeftColumn))
+            })
+          } else {
+            compare.push(jsonOriginalValues)
+          }
         }catch(e) {}
       }
       else{
@@ -486,21 +487,24 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
 }
 
 export function isInStatementCorrect(values, isCorrect){
+  let hasPassedTest = false
   if( Object.prototype.toString.call(values.left) === '[object Array]' ) {
     Array.prototype.forEach.call(values.left, (left) => {
       Array.prototype.forEach.call(values.right, (right) => {
         if(left != null && left === right) {
-          isCorrect = !isCorrect
+          hasPassedTest = true
         }
       })
     })
   } else {
     Array.prototype.forEach.call(values.right, (right) => {
       if(values.left === right) {
-        isCorrect = !isCorrect
+        hasPassedTest = true
       }
     })
   }
+
+  if(hasPassedTest) isCorrect = !isCorrect
 
   return isCorrect
 }

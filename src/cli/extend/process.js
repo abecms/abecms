@@ -14,7 +14,7 @@ function prepend(value, array) {
 
 var abeProcess = function(name, args = []) {
   args = prepend(`ABE_WEBSITE=${config.root}`, args)
-  args = prepend(`ABEJS_PATH=${__dirname}/../../../dist`, args)
+  args = prepend(`ABECMS_PATH=${__dirname}/../../../dist`, args)
 
   if (!abeExtend.lock.create(name)) {
     return false

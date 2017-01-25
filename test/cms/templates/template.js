@@ -236,6 +236,18 @@ describe('cmsTemplates', function() {
     chai.expect(template).to.be.equal("test")
   });
 
+  it('cmsTemplates.template.includePartials() with []', function() {
+    // stub
+    var sinonInstance = sinon.sandbox.create();
+    var stubReadFileSync = sinonInstance.stub(fse, 'readFileSync');
+    stubReadFileSync.withArgs(path.join(config.root, config.partials, 'test.html')).returns('test');
+    stubReadFileSync.withArgs(path.join(config.root, config.partials, 'title.html')).returns('title');
+
+    var template = cmsTemplates.template.includePartials("{{abe type='import' file='{{test[].value}}'}}", {"test" : [{"value":"test.html"}, {"value":"title.html"}]})
+    fse.readFileSync.restore()
+    chai.expect(template).to.be.equal("testtitle")
+  });
+
   /**
    * cmsTemplates.template.getTemplate
    * 

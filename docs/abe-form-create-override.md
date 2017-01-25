@@ -4,9 +4,9 @@ create a folder name "custom"
 
 and create a new file named "create.html"
 
-> info : https://github.com/AdFabConnect/abejs/blob/master/dist/server/views/partials/create.html
+> info : https://github.com/abecms/abecms/blob/master/dist/server/views/partials/create.html
 
-if you add the form attributes ```data-form-abe-create="true"``` default abejs javascript file will perform action on your custom form
+if you add the form attributes ```data-form-abe-create="true"``` default abecms javascript file will perform action on your custom form
 
 # create a new file
 

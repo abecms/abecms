@@ -130,8 +130,6 @@ website/
         - my_route.js ...
 ```
 
-Plugin examples at [https://github.com/AdFabConnect/abe-plugins](https://github.com/AdFabConnect/abe-plugins)
-
 Once you'll be satisfied with the way your module works, you'll then be able to create a regular npm module and install it on your project with the command abe install my_module
 
 ## frontend javascript

@@ -105,7 +105,7 @@
     "smtp": null,
     "forgotExpire": 60,
     "email": {
-      "from": "ABE Support <no-reply@abejs.io>",
+      "from": "ABE Support <no-reply@abecms.io>",
       "subject": "Reset your password",
       "text": "Reset your password {{forgotUrl}}",
       "html": "<b>Reset your password</b> <a href='{{forgotUrl}}'>{{forgotUrl}}</a>"

@@ -290,7 +290,7 @@ export default class EditorBlock {
   _createNewBlock(prevListItem, itemNumber, newNumber) {
     var htmlBlockItem = prevListItem.innerHTML
 
-    htmlBlockItem = htmlBlockItem.replace(/\[(.*?)\]/g, function(val, $_1) {
+    htmlBlockItem = htmlBlockItem.replace(/\[(\d*)\]/g, function(val, $_1) {
       itemNumber = parseInt($_1)
       newNumber = itemNumber + 1
       return '[' + newNumber + ']'

@@ -1,7 +1,7 @@
 import {
   abeExtend
 } from '../../'
-
+import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 /**
 * Get All attributes from a Abe tag
 * @return {Object} parsed attributes
@@ -71,4 +71,60 @@ export function sanitizeSourceAttribute(obj, jsonPage){
   }
 
   return obj
+}
+
+/**
+ * This function will take the value of an Abe attribute and analyze its content.
+ * If it contains a var {{variable.prop.value}}, it will extract its content with these rules
+ * element.[0].value
+ * element[0].value
+ * element.0.value
+ * will all be transformed into element[0].value and evaluated with the json
+ * If it contains a [] ie. {{variable[].value}} or {{variable.[].value}}
+ * It will return the array of values
+ * @param  {String} value 
+ * @return {String}       
+ */
+export function getValueFromAttribute(value, json){
+  var result = value
+  if (value.indexOf('{{') > -1) {
+    var keys = sourceAttr.getKeys(value)
+    var isAr = false
+    Array.prototype.forEach.call(keys, (key) => {
+      var toEval = `${key.replace(/(\[|\.|\])/g, '\\$1')}`
+      var properties = key.split('.')
+      Array.prototype.forEach.call(properties, (prop, index) => {
+        if (prop.indexOf('[]') > 0) {
+          isAr = true
+        } else if (prop.indexOf('[]') == 0 && index > 0) {
+          properties[index - 1] += prop
+          properties.splice(index, 1)
+          isAr = true
+        } else if (prop.indexOf('[') == 0 && index > 0) {
+          properties[index - 1] += prop
+          properties.splice(index, 1)
+        } else if(/^\d+$/.test(prop) && index > 0){
+          properties[index - 1] += '[' + prop + ']'
+          properties.splice(index, 1)
+        }
+      })
+      key = properties.join('.')
+      try {
+        if(isAr){
+          result = []
+          var properties = key.split('[]')
+          var jsonAr = eval(`json.${properties[0]}`)
+          Array.prototype.forEach.call(jsonAr, (prop, index) => {
+            var resTemp = value
+            result.push(resTemp.replace(new RegExp(`\{\{${toEval}\}\}`, 'g'), eval(`prop${properties[1]}`)))
+          })
+        } else {
+          result = result.replace(new RegExp(`\{\{${toEval}\}\}`, 'g'), eval(`json.${key}`))
+        }
+      }catch(e) {
+      }
+    })
+  }
+
+  return result
 }

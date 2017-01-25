@@ -30,7 +30,7 @@ var loadLocalConfig = (result) => {
             console.log(
               clc.green('[ Hint ]'),
               'you can create a specific config file named abe.json to customize your abe install',
-              clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
+              clc.cyan.underline('https://github.com/abecms/abecms/blob/master/docs/abe-config.md')
             )
           }
         }

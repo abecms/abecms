@@ -2,7 +2,7 @@ var sass = require('node-sass')
 var fs = require('fs')
 var clc = require('cli-color')
 
-var output = './src/server/public/abejs/css/styles.css'
+var output = './src/server/public/abecms/css/styles.css'
 
 sass.render({
   file: './src/server/sass/styles.scss',

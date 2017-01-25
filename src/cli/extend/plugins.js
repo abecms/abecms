@@ -272,7 +272,7 @@ class Plugins {
       console.log(
         clc.green('[ Hint ]'),
         'creating a local config abe.json with your plugin definition',
-        clc.cyan.underline('https://github.com/AdFabConnect/abejs/blob/master/docs/abe-config.md')
+        clc.cyan.underline('https://github.com/abecms/abecms/blob/master/docs/abe-config.md')
       )
     }
 

@@ -76,11 +76,8 @@ var hooks = {
   },
 
   /***************** save *****************/
-  beforeFirstSave: (postUrl, body, json, abe) => {
-    return {
-      postUrl: postUrl,
-      json: json
-    }
+  beforeFirstSave: (json, body, abe) => {
+    return json
   },
   beforeSave: (obj, abe) => {
     return obj

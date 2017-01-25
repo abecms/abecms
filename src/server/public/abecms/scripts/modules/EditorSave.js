@@ -79,6 +79,8 @@ export default class EditorSave {
                 }
               }
             })
+          } else if (input.value.indexOf('{') > -1 || input.value.indexOf('[') > -1) {
+            value = JSON.parse(input.value)
           } else {
             value = input.value
           }
