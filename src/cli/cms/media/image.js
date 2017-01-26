@@ -155,8 +155,8 @@ export function isValidMedia(mimetype, ext) {
   var allowedMimetypes = config.upload.mimetypes
 
   var error = false
-  if (allowedMimetypes.indexOf(mimetype) < 0) error = 'unauthorized file'
-  else if (allowedExtensions.indexOf(ext) < 0) error = 'not a valid asset'
+  if (allowedMimetypes.indexOf(mimetype) < 0) error = ext + ' is not an authorized extension'
+  else if (allowedExtensions.indexOf(ext) < 0) error = ext + ' is not an authorized extension'
 
   return {error: error}
 }
