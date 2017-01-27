@@ -27,5 +27,5 @@ before_script:
 script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then jdk_switcher use oraclejdk8; fi
   - npm run test-coveralls
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then npm run test-func; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then npm run test-e2e; fi
   - npm run lint
