@@ -67,7 +67,7 @@ export function isSingleAbe(str, text){
           str.indexOf('{{#') < 0 &&
           str.indexOf('#each') < 0 &&
           str.indexOf('{{/') < 0 &&
-          str.indexOf('/each') < 0 &&
+          str.indexOf('{{/each') < 0 &&
           str.indexOf('attrAbe') < 0
 }
 
