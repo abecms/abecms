@@ -13,8 +13,8 @@ import {
   cmsMedia,
   coreUtils,
   abeExtend
-} from '../src/cli'
-config.set({root: path.join(__dirname,'fixtures')})
+} from '../../../src/cli'
+config.set({root: path.join(process.cwd(), 'test','fixtures')})
 
 describe('image', function() {
 
@@ -148,7 +148,7 @@ describe('image', function() {
     var result2 = cmsMedia.image.isValidMedia('wrong/mimetype', '.exe')
     chai.expect(result.error).to.equal(false)
     chai.expect(result2.error).to.be.a('string')
-    chai.expect(result2.error).to.equal('unauthorized file')
+    chai.expect(result2.error).to.equal('.exe is not an authorized extension')
   });
 
   /**

@@ -42,19 +42,11 @@ describe('Request', function() {
     }
   });
 
-  /**
-   * cmsData.sql.keepOnlyPublishedPost
-   * 
-   */
   it('cmsData.sql.keepOnlyPublishedPost()', function() {
     var res = cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList())
     chai.expect(res).to.have.length(2);
   });
 
-  /**
-   * cmsData.sql.executeFromClause
-   * 
-   */
   it('cmsData.sql.executeFromClause()', function() {
     var res = cmsData.sql.executeFromClause(cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()), ['/'], ['/'])
     chai.expect(res).to.have.length(2);
@@ -65,7 +57,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns, {}
     )
     chai.expect(res, '`abe_meta.template`=`article`').to.have.length(1);
@@ -75,7 +66,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -86,7 +76,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -97,7 +86,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -108,7 +96,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns, {}
     )
     chai.expect(res, '`abe_meta.template`!=`homepage`').to.have.length(1);
@@ -119,7 +106,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -131,7 +117,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -142,7 +127,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -153,7 +137,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -165,7 +148,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -177,7 +159,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -189,7 +170,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -201,7 +181,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -212,7 +191,6 @@ describe('Request', function() {
     var res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       {}
     )
@@ -223,7 +201,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -234,7 +211,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -245,7 +221,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -256,7 +231,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -266,7 +240,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )
@@ -289,7 +262,6 @@ describe('Request', function() {
     res = cmsData.sql.executeWhereClause(
       cmsData.sql.keepOnlyPublishedPost(Manager.instance.getList()),
       request.where,
-      request.limit,
       request.columns,
       this.fixture.jsonHomepage
     )

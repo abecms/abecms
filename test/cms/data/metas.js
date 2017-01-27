@@ -1,24 +1,24 @@
 var chai = require('chai');
 var path = require('path');
-
-var config = require('../src/cli').config
-config.set({root: __dirname + '/fixtures/'})
-
-var cmsData = require('../src/cli').cmsData;
-var Manager = require('../src/cli').Manager;
 var fse = require('fs-extra');
+
+var config = require('../../../src/cli').config
+config.set({root: path.join(process.cwd(), 'test', '/fixtures/')})
+
+var cmsData = require('../../../src/cli').cmsData;
+var Manager = require('../../../src/cli').Manager;
 
 describe('Meta', function() {
   before( function(done) {
     Manager.instance.init()
       .then(function () {
-try{
-        this.fixture = {
-          tag: fse.readFileSync(path.join(__dirname, 'fixtures', 'templates', 'article.html'), 'utf8')
+        try{
+          this.fixture = {
+            tag: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article.html'), 'utf8')
+          }
+        }catch(e){
+          console.log("err", e)
         }
-}catch(e){
-  console.log("err", e)
-}
         done()
         
       }.bind(this))

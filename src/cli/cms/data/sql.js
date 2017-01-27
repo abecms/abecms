@@ -213,12 +213,14 @@ export function executeOrderByClause(files, orderby){
   if(orderby != null) {
     if(orderby.column.toLowerCase() === 'random') {
       files = coreUtils.sort.shuffle(files)
-    }else if(orderby.column.toLowerCase() === 'date') {
-      if(orderby.type === 'ASC') {
+    } else if(orderby.column.toLowerCase() === 'date') {
+      if(orderby.type.toLowerCase() === 'asc') {
         files.sort(cmsData.sort.byDateAsc)
-      }else if(orderby.type === 'DESC') {
+      } else if(orderby.type.toLowerCase() === 'desc') {
         files.sort(cmsData.sort.byDateDesc)
       }
+    } else {
+      files.sort(coreUtils.sort.predicatBy(orderby.column.toLowerCase(), (orderby.type.toLowerCase() === 'desc')? -1:1 ))
     }
   }
 
@@ -286,8 +288,9 @@ export function execQuery(pathQuery, match, jsonPage) {
   var request = handleSqlRequest(cmsData.regex.getAttr(match, 'source'), jsonPage)
 
   files = executeFromClause(files, request.from, pathQuery)
-  files = executeWhereClause(files, request.where, request.limit, request.columns, jsonPage)
+  files = executeWhereClause(files, request.where, request.columns, jsonPage)
   files = executeOrderByClause(files, request.orderby)
+  files = executeLimitClause(files, request.limit)
   return files
 }
 
@@ -352,41 +355,52 @@ export function getSourceType(str) {
  * @param  {Object} jsonPage json post
  * @return {Array}          of files
  */
-export function executeWhereClause(files, wheres, maxLimit, columns, jsonPage){
+export function executeWhereClause(files, wheres, columns, jsonPage){
   if(typeof wheres === 'undefined' || wheres === null) return files
   var res = []
-  var limit = 0
   var json = {}
   var jsonValues = {}
 
   for(let file of files) {
-    if(limit < maxLimit || maxLimit === -1) {
-      if(wheres != null) {
-        if(!recurseWhere(wheres, file, jsonPage)) {
-          json = JSON.parse(JSON.stringify(file))
-          jsonValues = {}
+    if(wheres != null) {
+      if(!recurseWhere(wheres, file, jsonPage)) {
+        json = JSON.parse(JSON.stringify(file))
+        jsonValues = {}
 
-          if(columns != null && columns.length > 0 && columns[0] !== '*') {
-            Array.prototype.forEach.call(columns, (column) => {
-              if(json[column] != null) {
-                jsonValues[column] = json[column]
-              }
-            })
-            jsonValues['abe_meta'] = json['abe_meta']
-          }else {
-            jsonValues = json
-          }
-
-          res.push(jsonValues)
-          limit++
+        if(columns != null && columns.length > 0 && columns[0] !== '*') {
+          Array.prototype.forEach.call(columns, (column) => {
+            if(json[column] != null) {
+              jsonValues[column] = json[column]
+            }
+          })
+          jsonValues['abe_meta'] = json['abe_meta']
+        }else {
+          jsonValues = json
         }
+
+        res.push(jsonValues)
       }
-    } else {
-      break
     }
   }
 
   return res
+}
+
+/**
+ * return array of post in the limit
+ *
+ * Example: executeLimitClause({}, 2)
+ *
+ * @param  {Array} files
+ * @param  {Int} maxLimit 
+ * @return {Array} of files
+ */
+export function executeLimitClause(files, maxLimit){
+  if(files.length > maxLimit && maxLimit > 0) {
+    files.splice(maxLimit, files.length - maxLimit)
+  }
+
+  return files
 }
 
 /**
