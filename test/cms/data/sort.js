@@ -17,20 +17,12 @@ describe('Sort', function() {
       }.bind(this))
   });
 
-  /**
-   * cmsData.sort.byDateAsc
-   * 
-   */
   it('cmsData.sort.byDateAsc', function() {
   	var list = Manager.instance.getList()
   	list.sort(cmsData.sort.byDateAsc)
-  	chai.expect(list[0].name).to.contain('article-1');
+  	chai.expect(list[0].name).to.contain('homepage-1');
   });
 
-  /**
-   * cmsData.sort.byDateDesc
-   * 
-   */
   it('cmsData.sort.byDateDesc', function() {
   	var list = Manager.instance.getList()
   	list.sort(cmsData.sort.byDateDesc)
