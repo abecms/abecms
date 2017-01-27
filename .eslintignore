@@ -1,4 +1,4 @@
-src/server/public/abejs/libs
-src/server/public/abejs/scripts/admin-compiled.js
-src/server/public/abejs/scripts/template-engine-compiled.js
-src/server/public/abejs/scripts/user-login-compiled.js
+src/server/public/abecms/libs
+src/server/public/abecms/scripts/admin-compiled.js
+src/server/public/abecms/scripts/template-engine-compiled.js
+src/server/public/abecms/scripts/user-login-compiled.js
