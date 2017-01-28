@@ -43,7 +43,8 @@ export default class EditorSave {
   serializeForm() {
     var abeForm = document.querySelector('.abeform-wrapper')
     if (abeForm == null) return
-    
+    var e = document.getElementById('selectTemplate')
+    var selectedTemplate = e.options[e.selectedIndex].value
     var inputs = [].slice.call(abeForm.querySelectorAll('input'))
     var selects = [].slice.call(abeForm.querySelectorAll('select'))
     inputs = inputs.concat(selects)
@@ -53,11 +54,17 @@ export default class EditorSave {
     this._json.data = json
     Array.prototype.forEach.call(inputs, (input) => {
       var dataId = input.getAttribute('data-id')
+      var precontrib = (input.parentNode.parentNode.getAttribute('data-precontrib-templates') != null)?
+        input.parentNode.parentNode.getAttribute('data-precontrib-templates'):
+        input.parentNode.parentNode.parentNode.getAttribute('data-precontrib-templates')
       var maxlength = input.getAttribute('data-maxlength')
       var value
 
       if(input.type === 'file') return
-      if(typeof dataId !== 'undefined' && dataId !== null) {
+      if( typeof dataId !== 'undefined' && 
+          dataId !== null && 
+          (typeof precontrib == null || precontrib === selectedTemplate)
+      ) {
         if(dataId.indexOf('[') > -1){
           var obj = dataId.split('[')[0]
           var index = dataId.match(/[^\[]+?(?=\])/)[0]
