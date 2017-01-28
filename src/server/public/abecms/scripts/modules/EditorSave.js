@@ -61,10 +61,12 @@ export default class EditorSave {
       var value
 
       if(input.type === 'file') return
+        console.log(dataId + ' - ' + precontrib)
       if( typeof dataId !== 'undefined' && 
           dataId !== null && 
-          (typeof precontrib == null || precontrib === selectedTemplate)
+          (precontrib == '' || precontrib == null || precontrib === selectedTemplate)
       ) {
+        console.log(dataId + ' - EST PASSE - ' + precontrib)
         if(dataId.indexOf('[') > -1){
           var obj = dataId.split('[')[0]
           var index = dataId.match(/[^\[]+?(?=\])/)[0]
