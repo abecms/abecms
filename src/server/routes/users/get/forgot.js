@@ -53,7 +53,7 @@ var route = function route(req, res) {
 
         var requestedUrl = req.protocol + '://' + req.get('Host') + '/abe/users/reset?token=' + resetPasswordToken
 
-        var smtp = config.smtp
+        var smtp = config.users.smtp
         var emailConf = config.users.email
         html = emailConf.html || ''
 
