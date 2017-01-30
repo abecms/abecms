@@ -77,7 +77,10 @@ var route = function route(req, res) {
         })
 
         if(typeof smtp === 'undefined' || smtp === null) {
-          var transport = nodemailer.createTransport('direct', {})
+          var transport = nodemailer.createTransport({
+            name: 'localhost',
+            direct: true
+          })
           transport.sendMail({
             from: emailConf.from, // sender address
             to: user.email, // list of receivers
@@ -89,7 +92,7 @@ var route = function route(req, res) {
           showHtml(res, req, 'Check your inbox')
         }else if(typeof smtp !== 'string') {
           // create reusable transporter object using the default SMTP transport
-          var transporter = nodemailer.createTransport('SMTP', smtp)
+          var transporter = nodemailer.createTransport(smtp)
 
           // setup e-mail data with unicode symbols
           var mailOptions = {
@@ -107,7 +110,6 @@ var route = function route(req, res) {
             }
 
             showHtml(res, req, 'Check your inbox')
-            console.log('Message sent: ' + info.response)
           })
         }
       })
