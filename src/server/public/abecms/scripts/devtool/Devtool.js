@@ -4,8 +4,7 @@ export class Devtool {
 
   constructor() {
     this.body = $('body')
-    this.form = $('.form-wrapper')
-    this.form = $('.form-wrapper')
+    this.form = $('.abeform-wrapper.form-wrapper')
     this.ruler = $('.iframe-wrapper')
     this.initDevtool()
     this.updateBrowserSize()

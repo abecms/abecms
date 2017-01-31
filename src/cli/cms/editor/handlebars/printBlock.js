@@ -9,7 +9,7 @@ export default function printBlock (ctx, root) {
   }
 
   if(ctx[0].block != null && ctx[0].block !== '') {
-    res += `<div class="form-group">
+    res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
               <label class="title">${ctx[0].block}</label>
               <div class='single-block well well-sm'>`
     Array.prototype.forEach.call(ctx, (item) => {
@@ -19,7 +19,7 @@ export default function printBlock (ctx, root) {
     res += '</div></div>'
   }else if(ctx[0].key.indexOf('[') > -1) {
     var ctxBlock = ctx[0].key.split('[')[0]
-    res += `<div class="form-group">
+    res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
               <div class="list-group" data-block="${ctxBlock}" >
                 <label>
                   ${ctxBlock}
