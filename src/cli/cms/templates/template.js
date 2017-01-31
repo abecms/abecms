@@ -333,7 +333,7 @@ export function getAbePrecontribFromTemplates(templatesList) {
   })
 
   return {
-    fields: fields,
+    // fields: fields,
     template: precontributionTemplate
   }
 }
