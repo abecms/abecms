@@ -2,6 +2,7 @@
 
 import limax from 'limax'
 import Nanoajax from 'nanoajax'
+import Handlebars from 'handlebars'
 import qs from 'qs'
 import FolderSelect from './FolderSelect'
 import {setObjByString} from '../utils/jsonObject'
@@ -41,6 +42,14 @@ export default class FormCreate {
 
       this._setSlug(false)
     }
+
+    window.abe.blocks.onNewBlock(() => {
+      this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'))
+      Array.prototype.forEach.call(this._formInputs, function(input) {
+        input.removeEventListener('blur', this._handleBlurEvent)
+        input.addEventListener('blur', this._handleBlurEvent)
+      }.bind(this))
+    })
   }
 
   _bindEvents() {
@@ -119,6 +128,20 @@ export default class FormCreate {
             var value = input.value
             var maxlength = input.getAttribute('data-maxlength')
             
+            var singleValues = values
+            if(id.indexOf('[') > -1) {
+              var regexBlock = /(.*?)\[(\d*?)\]\.(.+)/
+              var match = regexBlock.exec(id)
+              if (values[match[1]] == null) {
+                values[match[1]] = []
+              }
+              if (values[match[1]][match[2]] == null) {
+                values[match[1]][match[2]] = {}
+              }
+              addTo = values[match[1]][match[2]]
+              id = id.replace(/.+\[.+\]\./, '')
+            }
+            //else
             if (input.nodeName === 'SELECT' && maxlength != '1') {
               var checked = input.querySelectorAll('option:checked')
               value = []
@@ -131,10 +154,10 @@ export default class FormCreate {
                   }
                 }
               })
-              setObjByString(values, id, value)
+              setObjByString(addTo, id, value)
             } else if (autocomplete) {
               var results = input.parentNode.querySelectorAll('.autocomplete-result')
-              values[id] = []
+              addTo[id] = []
               var mergedValues = []
               Array.prototype.forEach.call(results, function(result) {
                 var resultValue = result.getAttribute('value')
@@ -147,8 +170,8 @@ export default class FormCreate {
                   }
                 }
               }.bind(this))
-              setObjByString(values, id, mergedValues)
-              if (required && values[id].length == 0) {
+              setObjByString(addTo, id, mergedValues)
+              if (required && addTo[id].length == 0) {
                 isValid = false
                 if(showErrors) parentNode.classList.add('has-error')
               }
@@ -156,9 +179,9 @@ export default class FormCreate {
               if (value.indexOf('{') > -1) {
                 try {
                   var jsonValue = JSON.parse(value)
-                  setObjByString(values, id, jsonValue)
+                  setObjByString(addTo, id, jsonValue)
 
-                  if (required && values[id].length == 0) {
+                  if (required && addTo[id].length == 0) {
                     isValid = false
                     if(showErrors) parentNode.classList.add('has-error')
                   }
@@ -166,8 +189,8 @@ export default class FormCreate {
                   // values[id].push(value)
                 }
               } else {
-                setObjByString(values, id, value)
-                if (required && values[id] == '') {
+                setObjByString(addTo, id, value)
+                if (required && addTo[id] == '') {
                   isValid = false
                   if(showErrors) parentNode.classList.add('has-error')
                 }
@@ -176,21 +199,13 @@ export default class FormCreate {
           }
         }
       }.bind(this))
+
       var slug = slugs[this._selectedTemplate]
-      var slugMatches = slug.match(/{{.*?}}/g)
-      if (slugMatches !== null) {
-        Array.prototype.forEach.call(slugMatches, function(slugMatch) {
-          var cleanSlugMatch = slugMatch.replace('{{', '').replace('}}', '')
-          try {
-            var valueSlug = eval('values.' + cleanSlugMatch) + ''
-            valueSlug = limax(valueSlug, {separateNumbers: false})
-            slug = slug.replace(slugMatch, valueSlug)
-          }catch(e) {
-            slug = slug.replace(slugMatch, '')
-            isValid = false
-          }
-        }.bind(this))
-      }
+      var template = Handlebars.compile(slug)
+      slug = template(values)
+      slug = slug.replace(/\/g/, '__abe_escape_slash__')
+      slug = limax(slug, {separateNumbers: false})
+      slug = slug.replace(/__abe_escape_slash__/g, '/')
 
       var slugPaths = this._form.querySelectorAll('[data-slug-type=path]')
       Array.prototype.forEach.call(slugPaths, function(slugPath) {
@@ -199,7 +214,7 @@ export default class FormCreate {
           postPath += slugPath.value + '/'
         }
       })
-      postPath +=  slug.replace(/^\//, '')
+      postPath +=  slug.replace(/^\//, '').replace(/\/\//, '/')
     } else {
       isValid = false
     }

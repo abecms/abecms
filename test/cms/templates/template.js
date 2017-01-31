@@ -331,27 +331,10 @@ describe('cmsTemplates', function() {
   it('cmsTemplates.template.getAbePrecontribFromTemplates()', function() {
     // stub
     var sinonInstance = sinon.sandbox.create();
-    var stubGetTagAbeWithTab = sinonInstance.stub(cmsData.regex, 'getTagAbeWithTab');
-    stubGetTagAbeWithTab.returns(['{{abe type="slug" source="{{name}}"}}'])
-
-    var stubGetAll = sinonInstance.stub(cmsData.attributes, 'getAll');
-    stubGetAll.returns({name: 'test.html'})
-
-    var stubAddOrder = sinonInstance.stub(cmsTemplates.template, 'addOrder', function (text) {
-      return text
-    });
 
     // test
     var precontrib = cmsTemplates.template.getAbePrecontribFromTemplates([{name: 'slug', template: this.fixture.slug}])
-    chai.expect(precontrib.fields[0]).to.not.be.undefined;
-
-    // unstub
-    sinon.assert.calledOnce(cmsData.regex.getTagAbeWithTab)
-    cmsData.regex.getTagAbeWithTab.restore()
-    sinon.assert.calledOnce(cmsData.attributes.getAll)
-    cmsData.attributes.getAll.restore()
-    sinon.assert.calledOnce(cmsTemplates.template.addOrder)
-    cmsTemplates.template.addOrder.restore()
+    chai.expect(precontrib.template[0]).to.not.be.undefined;
   });
 
   /**
