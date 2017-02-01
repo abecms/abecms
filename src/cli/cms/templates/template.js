@@ -70,6 +70,7 @@ export function getAbeImport(text) {
  */
 export function includePartials(text, json) {
   var abeImports = cmsTemplates.template.getAbeImport(text)
+  var duplicateImports = duplicateImports || []
 
   Array.prototype.forEach.call(abeImports, (abeImport) => {
     var obj = cmsData.attributes.getAll(abeImport, {})
@@ -82,15 +83,47 @@ export function includePartials(text, json) {
     if(Object.prototype.toString.call(file) === '[object Array]' ) {
       Array.prototype.forEach.call(file, (f) => {
         if(coreUtils.file.exist(f)) {
-          partial += cmsTemplates.template.includePartials(fse.readFileSync(f, 'utf8'), json)
+          if(duplicateImports[f] != null){
+            var tmpFile = fse.readFileSync(f, 'utf8')
+            var regAbe = /{{abe .*key=[\'|\"](.*?)[\'|\"].*}}/g
+            var matches = tmpFile.match(regAbe)
+            var match
+            while ((match = regAbe.exec(tmpFile)) !== null) {
+              if (match[1] != null) {
+                tmpFile = tmpFile.replace(match[0], match[0].replace(match[1], match[1] + '_' + duplicateImports[f]))
+                tmpFile = tmpFile.replace(new RegExp(`\{\{${match[1]}`, 'g'), '{{' + match[1] + '_' + duplicateImports[f])
+              }
+            }
+            duplicateImports[f] += 1
+            partial += cmsTemplates.template.includePartials(tmpFile, json)
+          } else{
+            duplicateImports[f] = 1
+            partial += cmsTemplates.template.includePartials(fse.readFileSync(f, 'utf8'), json)
+          }
         }
       })
     } else {
       if(coreUtils.file.exist(file)) {
-        partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'), json)
+        if(duplicateImports[file] != null){
+          var tmpFile = fse.readFileSync(file, 'utf8')
+          var regAbe = /{{abe .*key=[\'|\"](.*?)[\'|\"].*}}/g
+          var match
+          while ((match = regAbe.exec(tmpFile)) !== null) {
+            if (match[1] != null) {
+              tmpFile = tmpFile.replace(match[0], match[0].replace(match[1], match[1] + '_' + duplicateImports[file]))
+              tmpFile = tmpFile.replace(new RegExp(`\{\{${match[1]}`, 'g'), '{{' + match[1] + '_' + duplicateImports[file])
+            }
+          }
+
+          duplicateImports[file] += 1
+          partial = cmsTemplates.template.includePartials(tmpFile, json)
+        } else {
+          duplicateImports[file] = 1
+          partial = cmsTemplates.template.includePartials(fse.readFileSync(file, 'utf8'), json)
+        }
       }
     }
-    text = text.replace(cmsData.regex.escapeTextToRegex(abeImport, 'g'), partial)
+    text = text.replace(cmsData.regex.escapeTextToRegex(abeImport), partial)
   })
 
   return text

@@ -11,7 +11,7 @@
   <div class="panel panel-default panel-login">
     <div class="panel-body">
       {{#if info}}
-        <span class="text-danger">{{info}}</span>
+        <span class="text-danger">{{@root.info}}</span>
         <br /><br />
       {{/if}}
       <form action="/abe/users/login" method="post">

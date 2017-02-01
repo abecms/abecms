@@ -1,3 +1,16 @@
+
+## [2.15.0] - 2017-1-31
+* [[`0f4acd56b1`](https://github.com/abecms/abecms/commit/0f4acd56b1)] - **enhancement**: New HBS Helper eachGroup. This helper divide a json array of objects into groups of objects. Useful to create a set of different layouts to display the list of json objects (gregorybesson) 
+* [[`a36ba3fed1`](https://github.com/abecms/abecms/commit/a36ba3fed1)] - **enhancement**: It's now possible to import the same partial (containing Abe tags with keys) several times. (we update the keys id dynamically) (gregorybesson) 
+* [[`155df3760e`](https://github.com/abecms/abecms/commit/155df3760e)] - Update README.md (Greg Besson) 
+* [[`9531436f5c`](https://github.com/abecms/abecms/commit/9531436f5c)] - Merge pull request #125 from nicolaslabbe/issue_124 (Greg Besson) 
+* [[`e7e34de8bb`](https://github.com/abecms/abecms/commit/e7e34de8bb)] - **fix**: update code for nodemailer 2.x (nicolaslabbe) 
+* [[`68b5321841`](https://github.com/abecms/abecms/commit/68b5321841)] - **fix**: update code for nodemailer 2.x (nicolaslabbe) 
+* [[`b5f172f48c`](https://github.com/abecms/abecms/commit/b5f172f48c)] - **qa**: removing console.logs... (gregorybesson) 
+* [[`8c6a973c37`](https://github.com/abecms/abecms/commit/8c6a973c37)] - **qa**: updating dev dependency (gregorybesson) 
+* [[`01d1a4ed1d`](https://github.com/abecms/abecms/commit/01d1a4ed1d)] - **fix**: updating fields where precontrib='' (gregorybesson) 
+* [[`47598359c7`](https://github.com/abecms/abecms/commit/47598359c7)] - **qa**: update handlebars-helpers version (gregorybesson) 
+* [[`093af59abd`](https://github.com/abecms/abecms/commit/093af59abd)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`6e372c4e3e`](https://github.com/abecms/abecms/commit/6e372c4e3e)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
 * [[`5f010c1ca4`](https://github.com/abecms/abecms/commit/5f010c1ca4)] - **qa**: Updating dependencies versions (gregorybesson) 
 * [[`78a4038780`](https://github.com/abecms/abecms/commit/78a4038780)] - Update README.md (Greg Besson) 

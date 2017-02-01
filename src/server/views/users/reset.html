@@ -12,7 +12,7 @@
   <div class="panel panel-default panel-login">
     <div class="panel-body">
       {{#if info}}
-        <span class="text-danger">{{info}}</span>
+        <span class="text-danger">{{@root.info}}</span>
         <br /><br />
       {{/if}}
       <form action="/abe/users/reset" method="post">
@@ -25,7 +25,7 @@
           <label for="repeat-password">Repeat password</label>
           <input type="password" class="form-control" name="repeat-password" placeholder="">
         </div>
-        <input type="hidden" class="form-control" name="token" value="{{token}}">
+        <input type="hidden" class="form-control" name="token" value="{{@root.token}}">
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
 
