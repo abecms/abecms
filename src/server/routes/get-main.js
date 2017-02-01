@@ -160,13 +160,23 @@ var route = function(req, res, next) {
   })
 
   p.then((obj) => {
-    var precontrib = Manager.instance.getPrecontribution()
-    editor(precontrib.template, obj.json, '', true)
-      .then((resultPrecontrib) => {
-        EditorVariables.resultPrecontrib = resultPrecontrib
+    var precontribs = Manager.instance.getPrecontribution()
+    var promises = []
+    EditorVariables.resultPrecontrib = []
+    Array.prototype.forEach.call(precontribs.template, (precontrib) => {
+      var p = editor(precontrib, obj.json, '', true)
+        .then((resultPrecontrib) => {
+          EditorVariables.resultPrecontrib.push(resultPrecontrib)
+        }).catch(function(e) {
+          console.error(e)
+        })
+      promises.push(p)
+    })
+    Promise.all(promises)
+      .then(() => {
         renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
       }).catch(function(e) {
-        console.error(e)
+        console.error('source.js getDataList', e)
       })
   }).catch((e) => {
     console.log('error', e)

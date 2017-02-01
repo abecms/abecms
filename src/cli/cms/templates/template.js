@@ -351,7 +351,7 @@ export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
 
 export function getAbePrecontribFromTemplates(templatesList) {
   var fields = []
-  var precontributionTemplate = ''
+  var precontributionTemplate = []
 
   // loop over template file
   Array.prototype.forEach.call(templatesList, (file) => {
@@ -362,7 +362,8 @@ export function getAbePrecontribFromTemplates(templatesList) {
     }
 
     templateText = templateText.replace(/(?!.*?tab=['|"]slug)(\{\{abe.+.*)/g, ``)
-    precontributionTemplate += templateText.replace(/(\{\{abe.+)(\}\})/g, `$1 precontribTemplate="${file.name}"$2`)
+    templateText = templateText.replace(/(\{\{abe.+)(\}\})/g, `$1 precontribTemplate="${file.name}"$2`)
+    precontributionTemplate.push(templateText)
   })
 
   return {
