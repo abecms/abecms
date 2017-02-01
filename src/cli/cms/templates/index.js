@@ -10,6 +10,7 @@ import cleanTab 	from './handlebars/cleanTab'
 import ifCond 		from './handlebars/ifCond'
 import ifIn 			from './handlebars/ifIn'
 import isTrue 		from './handlebars/isTrue'
+import eachGroup  from './handlebars/eachGroup'
 import math 			from './handlebars/math'
 import moduloIf 	from './handlebars/moduloIf'
 import notEmpty 	from './handlebars/notEmpty'
@@ -40,6 +41,7 @@ Handlebars.registerHelper('slugify', 		handlebarsHelperSlugify({Handlebars: Hand
 Handlebars.registerHelper('ifCond', 		ifCond)
 Handlebars.registerHelper('ifIn', 			ifIn)
 Handlebars.registerHelper('isTrue', 		isTrue)
+Handlebars.registerHelper('eachGroup', 	eachGroup)
 Handlebars.registerHelper('math', 			math)
 Handlebars.registerHelper('moduloIf', 	moduloIf)
 Handlebars.registerHelper('notEmpty', 	notEmpty)
@@ -69,6 +71,7 @@ export {
 	ifCond,
 	ifIn,
 	isTrue,
+	eachGroup,
 	truncate,
 	lowercase,
 	uppercase,

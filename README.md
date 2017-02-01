@@ -36,11 +36,9 @@ The documentation will be rewritten and included in the modules
 As a major new feature, it will be possible to create a template from partials.
 
 ## Roadmap of the next 2.x releases
-- the stateful manager of Abe has to become responsible of pagination of articles (huge performance boost)
 - A homepage will arrive (at last !) on the frontend
 - It will be possible to create filtered views on the manager frontend
 - Refactoring the editor has to be done
-- The load testing scenarii will be open sourced (based on Locust)
 - Precompiling of templates has to be fully tested
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
 - Add template creation from partials
@@ -56,6 +54,24 @@ As a major new feature, it will be possible to create a template from partials.
 
 ## Changelog
 See the complete [changelog](./CHANGELOG.md)
+
+### 2.15.*
+- The order by statement in abe type="data" is now fully usable on any property of the json post. usage of order by date ASC is deprecated. Please use order by abe_meta.date ASC instead. And you can now limit a set of record without having to use the 'where' statement
+- abe type="import" are not usable in a {{#each}} statement for technical reasons. But you can reproduce this behavior by using the array notation in an import. ie. {{abe type="import" file="myPartial/{{list[].id}}"}} This is particularly useful when you propose a contributor to select several partials in a list (with the {{#each}} notation + type="data). You can then display these selected partials with this iarray style notation.
+
+### 2.14.*
+- Abe type="data" are now usable in {{#each x}} statements. This was a long awaited feature.
+
+### 2.13.*
+- The manager has been fully ajaxified ; A dedicated REST route is available making the performance on frontend much more performant. the stateful manager of Abe has become responsible of pagination of articles (huge performance boost)
+- New core features for the array class (facet + nested sort)
+
+### 2.12.*
+- 150 handlebars helpers are now available for template designers
+- The engine now detects abe tags with more accuracy and more performance
+- The abe type="file" is available (your users will be able to upload files
+- The "hint" attribute (which produces a comment under the fields in the editor) are now part of the core
+- The load testing scenarii have been open sourced (based on Locust)
 
 ### 2.11.*
 - Abe type="import": Can now include variables

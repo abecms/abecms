@@ -17,6 +17,9 @@ Warning:
 
 ## Variables
 
+> this will be compiled with handlebars
+> You can use single variable, or statements
+
 variables can be added to slug url
 
 ```slug
