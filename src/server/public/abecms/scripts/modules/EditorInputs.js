@@ -38,7 +38,7 @@ export default class EditorInputs {
   }
 
   rebind() {
-    this._reloads = [].slice.call(document.querySelectorAll('[reload=true]'))
+    this._reloads = [].slice.call(document.querySelectorAll('[reload=true]:not([data-multiple="multiple"])'))
     this._inputs = [].slice.call(document.querySelectorAll('input.form-abe'))
     this._inputs = this._inputs.concat([].slice.call(document.querySelectorAll('textarea.form-abe')))
 
@@ -52,7 +52,7 @@ export default class EditorInputs {
       input.addEventListener('focus', this._handleInputFocus)
     })
 
-    this._selects = [].slice.call(document.querySelectorAll('#abeForm select'))
+    this._selects = [].slice.call(document.querySelectorAll('#abeForm select:not([data-multiple="multiple"])'))
     Array.prototype.forEach.call(this._selects, (select) => {
       select.removeEventListener('change', this._handleChangeSelect)
       select.addEventListener('change', this._handleChangeSelect)
@@ -131,6 +131,8 @@ export default class EditorInputs {
    * @return {[type]}   [description]
    */
   _inputReloadBlur(e) {
+    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+    console.log('_inputReloadBlur')
     if (!e.target.parentNode.classList.contains('upload-wrapper') && e.currentTarget.getAttribute('data-autocomplete') !== 'true') {
       this.onReload._fire()
     }

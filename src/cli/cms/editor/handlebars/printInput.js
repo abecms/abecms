@@ -19,7 +19,7 @@ export function getAttributes(params) {
   if(params.placeholder != null) attributes += ` placeholder="${params.placeholder}"`
   if(params.thumbs != null) attributes += ` data-size="${params.thumbs}"`
   if(params.toolbar != null) attributes += ` data-toolbar="${params.toolbar}"`
-  if(params.multiple != null) attributes += ` ${params.multiple}`
+  if(params.multiple != null) attributes += ` data-multiple="${params.multiple}"`
   if(params.disabled != null) attributes += ` ${params.disabled}`
   return attributes
 }
@@ -44,7 +44,10 @@ export function hint(params) {
 export function createInputSource(attributes, inputClass, params) {
   var inputSource = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">`
   var lastValues
-  if(params.autocomplete != null && params.autocomplete === 'true') {
+
+  if((params.autocomplete != null && params.autocomplete === 'true')
+    || params.multiple != null && params.multiple === 'multiple') {
+
     if(params.sourceString.indexOf('http') === 0) lastValues = params.source
     else lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
     inputSource += '<div class="autocomplete-result-wrapper">'
@@ -61,11 +64,15 @@ export function createInputSource(attributes, inputClass, params) {
     Array.prototype.forEach.call(params.value, (val) => {
       inputSource += sourceAutocomplete(val, params)
     })
-    inputSource += `</div><input value="" type="text" autocomplete="off" data-value='${lastValues}' ${attributes} class="${inputClass}" />`
+    inputSource += `</div>`
+  }
+
+  if(params.autocomplete != null && params.autocomplete === 'true') {
+    inputSource += `<input value="" type="text" autocomplete="off" data-value='${lastValues}' ${attributes} class="${inputClass}" />`
   }
   else {
-    lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
-    inputSource += `<select ${attributes} class="${inputClass}" last-values='${lastValues}'>`
+    // lastValues = JSON.stringify(params.value).replace(/\'/g, '&quote;')
+    inputSource += `<select ${attributes} class="${inputClass}">`
 
     // if (!params.required) inputSource += '<option value=\'\'></option>'
     var options = ''

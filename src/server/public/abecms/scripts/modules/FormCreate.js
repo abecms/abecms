@@ -128,7 +128,7 @@ export default class FormCreate {
             var value = input.value
             var maxlength = input.getAttribute('data-maxlength')
             
-            var singleValues = values
+            var addTo = values
             if(id.indexOf('[') > -1) {
               var regexBlock = /(.*?)\[(\d*?)\]\.(.+)/
               var match = regexBlock.exec(id)
