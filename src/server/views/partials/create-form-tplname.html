@@ -1,5 +1,7 @@
-{{#each this.resultPrecontrib.form}}
-  {{#each this}}
-    {{{printBlock this @root}}}
-  {{/each}}
+{{#each this.resultPrecontrib}}
+  {{#each form}}
+	  {{#each this}}
+	    {{{printBlock this @root}}}
+	  {{/each}}
+	{{/each}}
 {{/each}}
