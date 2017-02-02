@@ -32,7 +32,7 @@ export default class EditorBlock {
       this.smiley = new smiley(imgWysiwyg)
     }
 
-    this._removeblock = [].slice.call(document.querySelectorAll('.list-group[data-block]'))
+    this._removeblock = [].slice.call(document.querySelectorAll('.list-group[data-block] .remove-block'))
     this._handleClickRemoveBlock = this._clickRemoveBlock.bind(this)
     
     this._addblock = [].slice.call(document.querySelectorAll('.add-block'))
@@ -94,7 +94,9 @@ export default class EditorBlock {
         Array.prototype.forEach.call(child.querySelectorAll('.form-abe'), (item) => {
           item.value = ''
         })
-        delete abe.json._data[blockAttr][0]
+        if (abe.json != null && abe.json._data[blockAttr] != null) {
+          delete abe.json._data[blockAttr][0]
+        }
       }
       else{
         var toRemove = null

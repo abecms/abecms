@@ -32,10 +32,6 @@
       display: none;
     }
 
-    .form-group {
-      margin-bottom: 0px;
-    }
-
     select,
     input {
       min-height: 30px;
@@ -98,12 +94,10 @@
 }
 
 .form-wrapper{
-  .status-draft{
-    .list-block{
-      &:hover{
-        [data-toggle="collapse"]{
-          width: calc(100% - 40px);
-        }
+  .list-block{
+    &:hover{
+      [data-toggle="collapse"]{
+        width: calc(100% - 40px);
       }
     }
   }
