@@ -91,7 +91,7 @@ export default class EditorAutocomplete {
     var target = e.currentTarget
     var option = target.querySelector('option:checked')
     this._currentInput = target
-    this._addResult(option, target.parentNode.getAttribute('data-display'), target.parentNode.querySelector('.autocomplete-result-wrapper'))
+    this._addResult(option, target.getAttribute('data-display'), target.parentNode.querySelector('.autocomplete-result-wrapper'))
     target.selectedIndex = 0
   }
 
