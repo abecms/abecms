@@ -131,8 +131,6 @@ export default class EditorInputs {
    * @return {[type]}   [description]
    */
   _inputReloadBlur(e) {
-    console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
-    console.log('_inputReloadBlur')
     if (!e.target.parentNode.classList.contains('upload-wrapper') && e.currentTarget.getAttribute('data-autocomplete') !== 'true') {
       this.onReload._fire()
     }
