@@ -44,12 +44,21 @@ export default class FormCreate {
     }
 
     window.abe.blocks.onNewBlock(() => {
-      this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'))
-      Array.prototype.forEach.call(this._formInputs, function(input) {
-        input.removeEventListener('blur', this._handleBlurEvent)
-        input.addEventListener('blur', this._handleBlurEvent)
-      }.bind(this))
+      this._updateBlocks()
     })
+
+    window.abe.blocks.onRemoveBlock(() => {
+      this._updateBlocks()
+    })
+  }
+
+  _updateBlocks() {
+    this._formInputs = [].slice.call(this._form.querySelectorAll('input, select'))
+    Array.prototype.forEach.call(this._formInputs, function(input) {
+      input.removeEventListener('blur', this._handleBlurEvent)
+      input.addEventListener('blur', this._handleBlurEvent)
+    }.bind(this))
+    this._setSlug(false)
   }
 
   _bindEvents() {

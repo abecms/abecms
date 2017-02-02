@@ -46,6 +46,8 @@ export default class Page {
       // Remove text with attribute "visible=false"
       this.template = cmsTemplates.prepare.removeHiddenAbeTag(this.template)
 
+      // remove abe type="slug" from template
+      this.template = this.template.replace(/({{abe.*type=[\'|\"]slug.*}})/g, '')
       if(!this._onlyHTML){
         // Surrounds each Abe tag (which are text/rich/textarea and not in html attribute) with <abe> tag
         // ie. <title><abe>{{abe type='text' key='meta_title' desc='Meta title' tab='Meta' order='4000'}}</abe></title>

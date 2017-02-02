@@ -2,9 +2,11 @@
   border-right: 1px solid #e3e3e3;
 }
 
+.manager-wrapper .form-wrapper form,
 .form-wrapper form {
 	.add-block,
 	.remove-block {
+		width: inherit;
 	  border-radius: 0px;
 	}
 	.remove-block {
