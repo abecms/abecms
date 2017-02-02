@@ -207,7 +207,10 @@ export default class EditorSave {
         }
 
         var autocomplete = input.getAttribute('data-autocomplete')
-        if(typeof autocomplete !== 'undefined' && autocomplete !== null && (autocomplete === 'true' || autocomplete === true)) {
+        var multiple = input.getAttribute('data-multiple')
+        if((typeof autocomplete !== 'undefined' && autocomplete !== null
+          && (autocomplete === 'true' || autocomplete === true))
+          || multiple != null && multiple == 'multiple') {
           var countValue = input.parentNode.querySelectorAll('.autocomplete-result')
           if (countValue.length <= 0) {
             formGroup.classList.add('has-error')
