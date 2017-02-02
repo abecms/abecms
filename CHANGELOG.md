@@ -1,4 +1,20 @@
 
+## [2.15.1] - 2017-2-2
+* [[`c6bbd01808`](https://github.com/abecms/abecms/commit/c6bbd01808)] - Merge pull request #132 from nicolaslabbe/issue_33 (Greg Besson) 
+* [[`1e241e391b`](https://github.com/abecms/abecms/commit/1e241e391b)] - **fix**: each on tab slug (nicolaslabbe) 
+* [[`deef941f1c`](https://github.com/abecms/abecms/commit/deef941f1c)] - Merge pull request #131 from nicolaslabbe/issue_33 (Greg Besson) 
+* [[`2738f45144`](https://github.com/abecms/abecms/commit/2738f45144)] - **fix**: issue_33 (nicolaslabbe) 
+* [[`5faa3ca460`](https://github.com/abecms/abecms/commit/5faa3ca460)] - **fix**: variable missing variables (nicolaslabbe) 
+* [[`9a88a6e899`](https://github.com/abecms/abecms/commit/9a88a6e899)] - Merged branch master into issue_33 (nicolaslabbe) 
+* [[`460688c93d`](https://github.com/abecms/abecms/commit/460688c93d)] - Merged branch master into master (nicolaslabbe) 
+* [[`637b8a3b1e`](https://github.com/abecms/abecms/commit/637b8a3b1e)] - Merge pull request #128 from nicolaslabbe/issue_33 (Greg Besson) 
+* [[`0780ad2201`](https://github.com/abecms/abecms/commit/0780ad2201)] - Merge pull request #129 from nicolaslabbe/issue_124 (Greg Besson) 
+* [[`b14ab15704`](https://github.com/abecms/abecms/commit/b14ab15704)] - **fix**: missing credential (nicolaslabbe) 
+* [[`6d597f4323`](https://github.com/abecms/abecms/commit/6d597f4323)] - **doc**: add doc to tell user that slug is handlebars compiled (nicolaslabbe) 
+* [[`ed7b36393b`](https://github.com/abecms/abecms/commit/ed7b36393b)] - **qa**: fix UT for templates (nicolaslabbe) 
+* [[`d1ca059064`](https://github.com/abecms/abecms/commit/d1ca059064)] - **fix**: bug using each into slug tab (nicolaslabbe) 
+* [[`824345a1fe`](https://github.com/abecms/abecms/commit/824345a1fe)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.15.0] - 2017-1-31
 * [[`0f4acd56b1`](https://github.com/abecms/abecms/commit/0f4acd56b1)] - **enhancement**: New HBS Helper eachGroup. This helper divide a json array of objects into groups of objects. Useful to create a set of different layouts to display the list of json objects (gregorybesson) 
 * [[`a36ba3fed1`](https://github.com/abecms/abecms/commit/a36ba3fed1)] - **enhancement**: It's now possible to import the same partial (containing Abe tags with keys) several times. (we update the keys id dynamically) (gregorybesson) 
