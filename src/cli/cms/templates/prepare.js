@@ -277,7 +277,7 @@ export function splitEachBlocks(template) {
   var block
   var blocks = []
 
-  while (block = cmsData.regex.blockPattern.exec(template)) {
+  while (block = cmsData.regex.eachBlockPattern.exec(template)) {
     blocks.push(block[1])
   }
 
@@ -289,7 +289,7 @@ export function indexEachBlocks(template, json, onlyHtml) {
   var blocks = cmsTemplates.prepare.splitEachBlocks(template)
 
   Array.prototype.forEach.call(blocks, (block) => {
-    var key = block.match(/#each (.*)\}\}/)[1]
+    var key = block.match(/#each (.*?)\}\}/)[1]
     var match
 
     if(!onlyHtml) {

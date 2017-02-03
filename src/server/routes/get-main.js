@@ -176,7 +176,7 @@ var route = function(req, res, next) {
       .then(() => {
         renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
       }).catch(function(e) {
-        console.error('source.js getDataList', e)
+        console.error('get-main.js getDataList', e.stack)
       })
   }).catch((e) => {
     console.log('error', e)

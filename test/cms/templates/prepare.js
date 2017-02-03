@@ -227,7 +227,7 @@ describe('cmsTemplates.prepare', function() {
    */
   it('cmsTemplates.prepare.splitEachBlocks()', function() {
     var blocks = cmsTemplates.prepare.splitEachBlocks(this.fixture.each)
-    chai.expect(blocks.length).to.be.above(0);
+    chai.expect(blocks.length).to.be.equal(2);
   });
 
   /**
@@ -237,6 +237,8 @@ describe('cmsTemplates.prepare', function() {
   it('cmsTemplates.prepare.indexEachBlocks() each', function() {
     var template = cmsTemplates.prepare.indexEachBlocks(this.fixture.each, {}, false)
     chai.expect(template.indexOf('abe dictionnary=')).to.be.above(-1)
+    chai.expect(template.indexOf('<!-- [[another.test]]')).to.be.above(-1)
+    chai.expect(template.indexOf('<!-- [[test]]')).to.be.above(-1)
   });
 
   // eachMultiplePrepared is the string obtained after all other functions have "prepared" the string

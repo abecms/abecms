@@ -7,10 +7,7 @@ export let abeAsTagPattern = /({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][
 // export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})(.*?)({{abe.*?}})/g
 export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})([^=]*?)({{abe.*?["|'| ]}})["|']/g
 // This pattern finds all {{#each ...}}...{{/each}} blocks
-// export let eachBlockPattern = />\s*(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g;
 export let eachBlockPattern = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
-// This pattern finds all {{#each ...}}...{{/each}} blocks
-export let blockPattern = /(\{\{#each.*\}\}[\s\S]*?\{\{\/each\}\})/g
 // This pattern finds all non editable data types
 export let nonEditableDataReg = /({{abe.*(type=[\'|\"]data')?.*editable=[\'|\"]false.*(type=[\'|\"]data')?.*}})/g
 // This pattern finds all data types
