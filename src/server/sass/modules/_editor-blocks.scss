@@ -3,20 +3,18 @@
 }
 
 .manager-wrapper .form-wrapper form,
-.form-wrapper form {
-	.add-block,
-	.remove-block {
-		width: inherit;
-	  border-radius: 0px;
-	}
-	.remove-block {
-    position: absolute;
-	  z-index: 5656;
-    right: 10px;
-    top: 10px;
-		height: 15px;
-    width: 15px;
-	}
+.add-block,
+.remove-block {
+	width: inherit;
+  border-radius: 0px;
+}
+.remove-block {
+position: absolute;
+  z-index: 5656;
+right: 10px;
+top: 10px;
+	height: 15px;
+width: 15px;
 }
 
 .abeform-wrapper {

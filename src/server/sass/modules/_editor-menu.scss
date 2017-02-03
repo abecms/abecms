@@ -10,8 +10,22 @@
   }
 }
 
-.form-wrapper
-{
+.list-block {
+  .btn-info {
+    color: #fff;
+    background-color: #f0f0f0;
+    border-bottom: 0;
+    text-align: right;
+    width: 100%;
+    color: #8E8E8E;
+    margin-bottom: 3px;
+  }
+  .btn-hidden{
+    display: none;
+  }
+}
+
+.form-wrapper {
   .btns 
     {
       .btn-info {

@@ -10,6 +10,7 @@ import RichText from '../utils/rich-texarea'
 import Json from './EditorJson'
 import EditorUtils from './EditorUtils'
 import on from 'on'
+import dragula from 'dragula'
 
 export default class EditorBlock {
   constructor() {
@@ -40,8 +41,45 @@ export default class EditorBlock {
 
     this.onNewBlock = on(this)
     this.onRemoveBlock = on(this)
+    this.onMoveBlock = on(this)
+
+    this._dragBlock = document.querySelectorAll('.list-group[data-block]')
+    Array.prototype.forEach.call(this._dragBlock, (drag) => {
+      var drake = dragula([drag],
+        {
+          moves: function (el, source, handle, sibling) {
+            return handle.getAttribute("data-toggle") != null
+          }
+        })
+      drake.on('drag', (el, source) => {
+        el.classList.add('moving')
+      })
+      drake.on('dragend', (el) => {
+        el.classList.remove('moving')
+        this._changeIndexOfBlocksFromElement(el)
+      })
+    })
 
     this._bindEvents()
+  }
+
+  _changeIndexOfBlocksFromElement(target) {
+    var blocks = target.parentNode.querySelectorAll('[data-block]')
+    var parentName = target.parentNode.getAttribute('data-block')
+    var i = 0
+    Array.prototype.forEach.call(blocks, (block) => {
+      var name = block.getAttribute('data-block')
+
+      block.setAttribute('data-block', `${parentName}${i}`)
+      block.querySelector('.label-count').innerHTML = i
+      var replaceHtml = block.innerHTML
+      replaceHtml = replaceHtml.replace(new RegExp(`${parentName}\\[.*?\\]`, 'g'), `${parentName}[${i}]`)
+      replaceHtml = replaceHtml.replace(new RegExp(name, 'g'), `${parentName}${i}`)
+      block.innerHTML = replaceHtml
+
+      i++
+    })
+      this.onMoveBlock._fire()
   }
 
   /**

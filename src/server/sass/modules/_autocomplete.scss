@@ -50,7 +50,7 @@
   position: absolute;
   overflow-x: hidden;
   background: $autocomplete-result-bg;
-  z-index: 999;
+  z-index: 9999999;
   max-height: 200px;
   overflow-y: auto;
   font-size: 12px;
