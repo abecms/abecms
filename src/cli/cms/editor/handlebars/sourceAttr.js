@@ -18,11 +18,13 @@ export default function sourceAttr(obj, params) {
     values = [params.value]
   }
 
-  Array.prototype.forEach.call(values, (pValue) => {
-    if (isSelected(pValue, displayName, str)) {
-      selected = 'selected'
-    }
-  })
+  if (params.multiple != 'multiple') {
+    Array.prototype.forEach.call(values, (pValue) => {
+      if (isSelected(pValue, displayName, str)) {
+        selected = 'selected'
+      }
+    })
+  }
 
   return {
     hiddenVal: (typeof obj == 'object') ? JSON.stringify(obj).replace(/\'/g, '&quote;') : obj,

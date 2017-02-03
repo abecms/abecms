@@ -101,19 +101,7 @@ export default class EditorSave {
             delete this._json.data[obj][index]
           }
         } else {
-          if (input.nodeName === 'SELECT' && maxlength != '1') {
-            var checked = input.querySelectorAll('option:checked')
-            value = []
-            Array.prototype.forEach.call(checked, (check) => {
-              if(check.value !== '') {
-                if(check.value.indexOf('{') > -1 || check.value.indexOf('[') > -1) {
-                  value.push(JSON.parse(check.value))
-                } else {
-                  value.push(check.value)
-                }
-              }
-            })
-          } else if (input.getAttribute('data-autocomplete') === 'true') {
+          if (input.getAttribute('data-autocomplete') === 'true' || input.getAttribute('data-multiple') === 'multiple') {
             var results = input.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')
             value = []
             Array.prototype.forEach.call(results, (result) => {
@@ -207,7 +195,10 @@ export default class EditorSave {
         }
 
         var autocomplete = input.getAttribute('data-autocomplete')
-        if(typeof autocomplete !== 'undefined' && autocomplete !== null && (autocomplete === 'true' || autocomplete === true)) {
+        var multiple = input.getAttribute('data-multiple')
+        if((typeof autocomplete !== 'undefined' && autocomplete !== null
+          && (autocomplete === 'true' || autocomplete === true))
+          || multiple != null && multiple == 'multiple') {
           var countValue = input.parentNode.querySelectorAll('.autocomplete-result')
           if (countValue.length <= 0) {
             formGroup.classList.add('has-error')

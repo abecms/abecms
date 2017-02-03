@@ -33,6 +33,30 @@ describe('Abe', function() {
         .assert.urlEquals("http://localhost:3003/abe/editor/autocomplete.html", "Clicked URL Matches with URL of the New Window");
     });
 
+    it('Check input select fields', function(client) {
+      client
+        .useXpath()
+        .url('http://localhost:3003/abe/editor/autocomplete.html')
+        .click('//*[@id="colors.multiple"]/option[2]')
+        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 1000)
+        .assert.containsText('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 'rouge')
+        .click('//*[@id="colors"]/div/div/div/div[2]/div/div/div/span')
+        .assert.elementNotPresent('//*[@id="colors"]/div/div/div/div[2]/div/div/div')
+    });
+
+    it('Check input autocomplete fields', function(client) {
+      client
+        .useXpath()
+        .url('http://localhost:3003/abe/editor/autocomplete.html')
+        .setValue('//*[@id="colors.colors_autocomplete"]', 'rouge')
+        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div', 1000)
+        .click('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div')
+        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[3]/div/div/div', 1000)
+        .assert.containsText('//*[@id="colors"]/div/div/div/div[3]/div/div/div', 'rouge')
+        .click('//*[@id="colors"]/div/div/div/div[3]/div/div/div/span')
+        .assert.elementNotPresent('//*[@id="colors"]/div/div/div/div[3]/div/div/div')
+    });
+
     // it('Abe type data reference json', function(client) {
     //   client
     //     .useXpath()

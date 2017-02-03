@@ -204,6 +204,14 @@ class Engine {
       this._autocomplete.rebind()
     })
 
+    this._blocks.onMoveBlock(() => {
+      this._files.rebind()
+      this._inputs.rebind()
+      this._autocomplete.rebind()
+      this._save.serializeForm()
+      EditorReload.instance.reload()
+    })
+
     this._manager.remove((el) => {
       this.table.ajax.reload()
     })

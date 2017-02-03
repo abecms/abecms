@@ -7,6 +7,7 @@ import Handlebars from 'handlebars'
 import Nanoajax from 'nanoajax'
 import on from 'on'
 import qs from 'qs'
+import dragula from 'dragula'
 
 export default class EditorAutocomplete {
   constructor() {
@@ -22,6 +23,7 @@ export default class EditorAutocomplete {
     this._handleRemove = this._remove.bind(this)
     this._handleDocumentClick = this._documentClick.bind(this)
     this._handleSelectValue = this._selectValue.bind(this)
+    this._handleChangeSelect = this._changeSelect.bind(this)
     this._handleRefresh = this._refresh.bind(this)
 
     this._currentInput = null
@@ -30,10 +32,28 @@ export default class EditorAutocomplete {
 
     this._visible = false
 
+    this._dragAutocomplete = document.querySelectorAll('.autocomplete-result-wrapper')
+    Array.prototype.forEach.call(this._dragAutocomplete, (drag) => {
+      var drake = dragula([drag])
+      drake.on('drag', (el, source) => {
+        el.classList.add('moving')
+      })
+      drake.on('dragend', (el) => {
+        el.classList.remove('moving')
+        var input = el.parentNode.parentNode.querySelector('input')
+        if(input == null) {
+          input = el.parentNode.parentNode.querySelector('select')
+        }
+        this._currentInput = input
+        this._saveData()
+      })
+    })
+
     this.rebind()
   }
 
   rebind() {
+    this._selectsMultiple = [].slice.call(document.querySelectorAll('select[data-multiple="multiple"]'))
     this._autocompletesRemove = [].slice.call(document.querySelectorAll('[data-autocomplete-remove=true]'))
     this._autocompletes = [].slice.call(document.querySelectorAll('[data-autocomplete=true]'))
     this._autocompletesRefresh = [].slice.call(document.querySelectorAll('[data-autocomplete-refresh=true]'))
@@ -60,6 +80,19 @@ export default class EditorAutocomplete {
       autocomplete.removeEventListener('blur', this._handleBlur)
       autocomplete.addEventListener('blur', this._handleBlur)
     })
+
+    Array.prototype.forEach.call(this._selectsMultiple, (select) => {
+      select.removeEventListener('change', this._handleChangeSelect)
+      select.addEventListener('change', this._handleChangeSelect)
+    })
+  }
+
+  _changeSelect(e) {
+    var target = e.currentTarget
+    var option = target.querySelector('option:checked')
+    this._currentInput = target
+    this._addResult(option, target.getAttribute('data-display'), target.parentNode.querySelector('.autocomplete-result-wrapper'))
+    target.selectedIndex = 0
   }
 
   _saveData() {
@@ -149,6 +182,10 @@ export default class EditorAutocomplete {
   }
 
   _select(target) {
+    this._addResult(target, this._currentInput.getAttribute('data-display'), this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper'))
+  }
+
+  _addResult(target, display, resultWrapper) {
     var json = target.getAttribute('data-value').replace(/&quote;/g, '\'')
     if (json.indexOf('{') > -1) {
       json = JSON.parse(json)
@@ -163,13 +200,12 @@ export default class EditorAutocomplete {
     }
 
     this._add(
-      this._currentInput.getAttribute('data-display'),
+      display,
       target.getAttribute('data-value'),
       json,
-      this._divWrapper.parentNode.querySelector('.autocomplete-result-wrapper')
+      resultWrapper
     )
     this._saveData()
-
   }
 
   _selectValue(e) {
