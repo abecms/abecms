@@ -1,7 +1,21 @@
 
+## [2.16.0] - 2017-2-4
+* [[`2b5b2ac638`](https://github.com/abecms/abecms/commit/2b5b2ac638)] - Merge pull request #133 from nicolaslabbe/drag_autocomplete (Greg Besson) 
+* [[`df9cf42fbf`](https://github.com/abecms/abecms/commit/df9cf42fbf)] - **fix**: {{#each}} statement when {{/each}} was on the same line produced bugs (gregorybesson) 
+* [[`5a9d13f740`](https://github.com/abecms/abecms/commit/5a9d13f740)] - **feature**: drag and drop (nicolaslabbe) 
+* [[`9b71c65c51`](https://github.com/abecms/abecms/commit/9b71c65c51)] - **enhancement**: each data in slug (gregorybesson) 
+
 ## [2.15.1] - 2017-2-2
+* [[`d2a2e75249`](https://github.com/abecms/abecms/commit/d2a2e75249)] - Merge branch 'master' (nicolaslabbe) 
+* [[`5305d6557e`](https://github.com/abecms/abecms/commit/5305d6557e)] - **fix**: bug on save with input select multiple (nicolaslabbe) 
 * [[`c6bbd01808`](https://github.com/abecms/abecms/commit/c6bbd01808)] - Merge pull request #132 from nicolaslabbe/issue_33 (Greg Besson) 
+* [[`662daf328f`](https://github.com/abecms/abecms/commit/662daf328f)] - **fix**: bug on select multiple when abe attribute required is set to true (nicolaslabbe) 
+* [[`61aa68bf05`](https://github.com/abecms/abecms/commit/61aa68bf05)] - **fix**: remove console.log (nicolaslabbe) 
+* [[`ac62926f1b`](https://github.com/abecms/abecms/commit/ac62926f1b)] - **fix**: data-display js on input type select multiple (nicolaslabbe) 
+* [[`a00934f919`](https://github.com/abecms/abecms/commit/a00934f919)] - **qa**: UT e2e for autocomplete field and input select with click to add action (nicolaslabbe) 
 * [[`1e241e391b`](https://github.com/abecms/abecms/commit/1e241e391b)] - **fix**: each on tab slug (nicolaslabbe) 
+* [[`ff1330f08a`](https://github.com/abecms/abecms/commit/ff1330f08a)] - Merged branch master into drag_autocomplete (nicolaslabbe) 
+* [[`36d1e4180b`](https://github.com/abecms/abecms/commit/36d1e4180b)] - **feature**: drag and drop autocomplete result (nicolaslabbe) 
 * [[`deef941f1c`](https://github.com/abecms/abecms/commit/deef941f1c)] - Merge pull request #131 from nicolaslabbe/issue_33 (Greg Besson) 
 * [[`2738f45144`](https://github.com/abecms/abecms/commit/2738f45144)] - **fix**: issue_33 (nicolaslabbe) 
 * [[`5faa3ca460`](https://github.com/abecms/abecms/commit/5faa3ca460)] - **fix**: variable missing variables (nicolaslabbe) 
