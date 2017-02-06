@@ -37,7 +37,7 @@ export default class Json {
         this.canSave = true
         return
       }
-      var jsonSave = this.data
+      var jsonSave = JSON.parse(JSON.stringify(this.data).replace(/&quote;/g, "\'"))
 
       if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
         delete json.abe_source
