@@ -12,6 +12,7 @@ import EditorAutocomplete from './modules/EditorAutocomplete'
 import EditorReload from './modules/EditorReload'
 import EditorReferences from './modules/EditorReferences'
 import EditorStructures from './modules/EditorStructures'
+import TaskRepublish from './modules/TaskRepublish'
 
 var htmlTag = document.querySelector('html')
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
@@ -51,6 +52,7 @@ class Engine {
     this._dev = new Devtool()
     this.reference = new EditorReferences()
     this.structure = new EditorStructures()
+    this.republish = new TaskRepublish()
 
     this.json = EditorJson.instance
 

@@ -4,7 +4,11 @@ import {
 
 var route = function(req, res) {
   var result
-  if (abeExtend.process('generate-posts', [''])) {
+  var proc = abeExtend.process('generate-posts', [''], (data) => {
+    res.app.emit("generate-posts", data)
+  })
+  if (proc) {
+    res.app.emit("generate-posts", {percent: 0, time: "00:00sec"})
     result = {
       success: 1,
       msg: 'generate-posts is running'

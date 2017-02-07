@@ -13,7 +13,6 @@ export default class EditorManager {
     this.remove = on(this)
 
     // event handlers
-    this._handleBtnGeneratePostsClick = this._btnGeneratePostsClick.bind(this)
     this._handleBtnCloseManagerClick = this._btnCloseManagerClick.bind(this)
     this._handleBtnManagerTabClick = this._btnManagerTabClick.bind(this)
     this._handleBtnManagerClick = this._btnManagerClick.bind(this)
@@ -46,7 +45,6 @@ export default class EditorManager {
     this._btnSaveConfig = document.querySelectorAll('[data-save-config]')
 
     // button manager
-    this._btnGeneratePosts = document.querySelector('[data-generate-posts]')
     this._btnCloseManager = document.querySelector('.close-manager')
     this._btnManager = document.querySelector('.btn-manager')
     this._btnDataFile = document.querySelector('[data-file="true"]')
@@ -66,11 +64,6 @@ export default class EditorManager {
     if (this._btnManager != null) {
       this._btnManager.removeEventListener('click', this._handleBtnManagerClick)
       this._btnManager.addEventListener('click', this._handleBtnManagerClick)
-    }
-    
-    if(typeof this._btnGeneratePosts !== 'undefined' && this._btnGeneratePosts !== null) {
-      this._btnGeneratePosts.removeEventListener('click', this._handleBtnGeneratePostsClick)
-      this._btnGeneratePosts.addEventListener('click', this._handleBtnGeneratePostsClick)
     }
 
     if(typeof this._btnCloseManager !== 'undefined' && this._btnCloseManager !== null) {
@@ -127,23 +120,6 @@ export default class EditorManager {
           this.remove._fire(target.parentNode.parentNode.parentNode)
         }
       })
-  }
-
-  _btnGeneratePostsClick(e) {
-    e.preventDefault()
-    this._btnGeneratePosts.querySelector('[data-not-clicked]').className = 'hidden'
-    this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
-    this._ajax(
-      {
-        url: document.location.origin + '/abe/generate-posts',
-        method: 'get'
-      },
-        (e, responseText) => {
-          var response = JSON.parse(responseText)
-          if (response.success !== 1) {
-            alert(response.msg)
-          }
-        })
   }
 
   _btnCloseManagerClick() {
