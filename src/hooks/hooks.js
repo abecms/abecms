@@ -41,7 +41,7 @@ var hooks = {
   beforePublish: (json, filePath, tplPath, abe) => {
     return json
   },
-  afterPublish: (result, abe) => {
+  afterPublish: (result, filePath, abe) => {
     return result
   },
 
