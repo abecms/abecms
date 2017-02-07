@@ -45,6 +45,8 @@ var abeProcess = function(name, args = [], callback) {
 
   if(typeof proc !== 'undefined' && proc !== null) {
     proc.on('message', function(data) {
+      console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * *')
+      console.log('data', data)
       var data = JSON.parse(data)
       callback(data)
       if (data.msg == 'exit') {
