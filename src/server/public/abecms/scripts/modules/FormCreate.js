@@ -212,7 +212,7 @@ export default class FormCreate {
       var slug = slugs[this._selectedTemplate]
       var template = Handlebars.compile(slug)
       slug = template(values)
-      slug = slug.replace(/\/g/, '__abe_escape_slash__')
+      slug = slug.replace(/\//g, '__abe_escape_slash__')
       slug = limax(slug, {separateNumbers: false})
       slug = slug.replace(/__abe_escape_slash__/g, '/')
 
