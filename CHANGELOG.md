@@ -1,5 +1,11 @@
 
+## [2.16.2] - 2017-2-7
+* [[`f342a9570e`](https://github.com/abecms/abecms/commit/f342a9570e)] - **doc**: CHANGELOG (gregorybesson) 
+* [[`a18b0accab`](https://github.com/abecms/abecms/commit/a18b0accab)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+
 ## [2.16.1] - 2017-2-7
+* [[`8cd5b039d1`](https://github.com/abecms/abecms/commit/8cd5b039d1)] - Merge pull request #145 from wonknu/bug_slug_w_slash (Greg Besson) 
+* [[`0fad2fd85a`](https://github.com/abecms/abecms/commit/0fad2fd85a)] - **fix**: wrong regex w slashes (wonknu10) 
 * [[`70f99c21d4`](https://github.com/abecms/abecms/commit/70f99c21d4)] - Merge pull request #144 from wonknu/master (Greg Besson) 
 * [[`3859519b01`](https://github.com/abecms/abecms/commit/3859519b01)] - **fix**: autocomplete source attributes doesn't escape single quote (wonknu10) 
 * [[`81427b7ad8`](https://github.com/abecms/abecms/commit/81427b7ad8)] - **doc**: CHANGELOG (gregorybesson) 
