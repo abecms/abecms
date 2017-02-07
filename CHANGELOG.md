@@ -1,4 +1,9 @@
 
+## [2.16.3] - 2017-2-7
+* [[`b4c353567a`](https://github.com/abecms/abecms/commit/b4c353567a)] - **fix**: error in unpublish event (gregorybesson) 
+* [[`f3bc9cc3e9`](https://github.com/abecms/abecms/commit/f3bc9cc3e9)] - **fix**: error in unpublish event (gregorybesson) 
+* [[`febc3db8c0`](https://github.com/abecms/abecms/commit/febc3db8c0)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.16.2] - 2017-2-7
 * [[`f342a9570e`](https://github.com/abecms/abecms/commit/f342a9570e)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`a18b0accab`](https://github.com/abecms/abecms/commit/a18b0accab)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
