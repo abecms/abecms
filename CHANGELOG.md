@@ -1,4 +1,9 @@
 
+## [2.16.1] - 2017-2-7
+* [[`70f99c21d4`](https://github.com/abecms/abecms/commit/70f99c21d4)] - Merge pull request #144 from wonknu/master (Greg Besson) 
+* [[`3859519b01`](https://github.com/abecms/abecms/commit/3859519b01)] - **fix**: autocomplete source attributes doesn't escape single quote (wonknu10) 
+* [[`81427b7ad8`](https://github.com/abecms/abecms/commit/81427b7ad8)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [2.16.0] - 2017-2-4
 * [[`2b5b2ac638`](https://github.com/abecms/abecms/commit/2b5b2ac638)] - Merge pull request #133 from nicolaslabbe/drag_autocomplete (Greg Besson) 
 * [[`df9cf42fbf`](https://github.com/abecms/abecms/commit/df9cf42fbf)] - **fix**: {{#each}} statement when {{/each}} was on the same line produced bugs (gregorybesson) 
