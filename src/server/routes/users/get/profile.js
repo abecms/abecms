@@ -11,7 +11,7 @@ import {
 var route = function route(req, res) {
   var resHtml = ''
 
-  var page = path.join(__dirname + '/../../../views/users/profil.html')
+  var page = path.join(__dirname + '/../../../views/users/profile.html')
   if (coreUtils.file.exist(page)) {
     resHtml = fs.readFileSync(page, 'utf8')
   }

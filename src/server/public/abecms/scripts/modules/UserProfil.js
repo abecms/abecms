@@ -3,9 +3,9 @@
 import Nanoajax from 'nanoajax'
 import qs from 'qs'
 
-var userProfil = {
+var userProfile = {
   init: function () {
-    var scope = document.querySelector('.user-profil')
+    var scope = document.querySelector('.user-profile')
     if (scope != null) {
       this._ajax = Nanoajax.ajax
 
@@ -64,4 +64,4 @@ var userProfil = {
   }
 }
 
-export default userProfil
+export default userProfile

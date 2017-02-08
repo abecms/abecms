@@ -10,10 +10,10 @@
   </head>
   <body>
     
-    <div class="user-profil row col-xs-offset-1 col-xs-10">
+    <div class="user-profile row col-xs-offset-1 col-xs-10">
       <ol class="breadcrumb">
         <li><a href="/abe/editor/">Home</a></li>
-        <li class="active">User profil</li>
+        <li class="active">User profile</li>
       </ol>
 
       <div class="alert alert-danger hidden" data-info-msg="true" role="alert">
@@ -21,7 +21,7 @@
       </div>
 
       <div class="">
-        <form action="/abe/users/profil" method="post">
+        <form action="/abe/users/profile" method="post">
           {{#each user}}
             {{#ifCond @key 'password'}}
             {{else}}
