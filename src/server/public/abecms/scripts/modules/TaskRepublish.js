@@ -22,36 +22,37 @@ export default class TaskRepublish {
     if(typeof this._btnGeneratePosts !== 'undefined' && this._btnGeneratePosts !== null) {
       this._btnGeneratePosts.removeEventListener('click', this._handleBtnGeneratePostsClick)
       this._btnGeneratePosts.addEventListener('click', this._handleBtnGeneratePostsClick)
-    }
 
-    if (!!window.EventSource) {
-      var source = new EventSource('/abe/generate/post');
-      source.addEventListener('message', (e, data) => {
-        var json = JSON.parse(e.data)
-        if (json.percent != null && json.time != null) {
-          this._btnGeneratePosts.classList.add('disabled')
-          this._btnGeneratePosts.querySelector('[data-not-clicked]').className = 'hidden'
-          this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
-          this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = `publish site... ${json.percent}% (${json.time})`
-        }else if (json.msg != "") {
-          this._btnGeneratePosts.classList.remove('disabled')
-          this._btnGeneratePosts.querySelector('[data-not-clicked]').className = ''
-          this._btnGeneratePosts.querySelector('[data-clicked]').className = 'hidden'
-        }
-      }, false);
+      // don't watch if btn source not present
+      if (!!window.EventSource) {
+        var source = new EventSource('/abe/generate/post');
+        source.addEventListener('message', (e, data) => {
+          var json = JSON.parse(e.data)
+          if (json.percent != null && json.time != null) {
+            this._btnGeneratePosts.classList.add('disabled')
+            this._btnGeneratePosts.querySelector('[data-not-clicked]').className = 'hidden'
+            this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
+            this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = `publish site... ${json.percent}% (${json.time})`
+          }else if (json.msg != "") {
+            this._btnGeneratePosts.classList.remove('disabled')
+            this._btnGeneratePosts.querySelector('[data-not-clicked]').className = ''
+            this._btnGeneratePosts.querySelector('[data-clicked]').className = 'hidden'
+          }
+        }, false);
 
-      source.addEventListener('open', (e) => {
-        // Connection was opened.
-      }, false);
+        source.addEventListener('open', (e) => {
+          // Connection was opened.
+        }, false);
 
-      source.addEventListener('error', (e) => {
-        if (e.readyState == EventSource.CLOSED) {
-          // Connection was closed.
-        }
-      }, false);
+        source.addEventListener('error', (e) => {
+          if (e.readyState == EventSource.CLOSED) {
+            // Connection was closed.
+          }
+        }, false);
 
-    } else {
-      // Result to xhr polling :(
+      } else {
+        // Result to xhr polling :(
+      }
     }
   }
 
