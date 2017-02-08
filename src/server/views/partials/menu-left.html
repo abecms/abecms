@@ -29,6 +29,11 @@
       </li>
     {{/isAuthorized}}
   {{/if}}
+  {{#if @root.config.users.enable}}
+    <li class="list-group-item pointer">
+      <a href="/abe/users/profil">Profil</a> 
+    </li>
+  {{/if}}
   {{abeImport 'menu-left-addons' manager.config this}}
 </ul>
 {{/if}}

@@ -12,6 +12,7 @@ import EditorAutocomplete from './modules/EditorAutocomplete'
 import EditorReload from './modules/EditorReload'
 import EditorReferences from './modules/EditorReferences'
 import EditorStructures from './modules/EditorStructures'
+import TaskRepublish from './modules/TaskRepublish'
 
 var htmlTag = document.querySelector('html')
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
@@ -51,6 +52,7 @@ class Engine {
     this._dev = new Devtool()
     this.reference = new EditorReferences()
     this.structure = new EditorStructures()
+    this.republish = new TaskRepublish()
 
     this.json = EditorJson.instance
 
@@ -75,14 +77,16 @@ class Engine {
       }
     ]
 
-    Array.prototype.forEach.call(workflow, (flow) => {
-      this.columns.push( 
-        { 'data': null,
-          'defaultContent': '',
-          'orderable': false
-        } 
-      )
-    })
+    if (typeof workflow != 'undefined' && workflow !== null) {
+      Array.prototype.forEach.call(workflow, (flow) => {
+        this.columns.push( 
+          { 'data': null,
+            'defaultContent': '',
+            'orderable': false
+          } 
+        )
+      })
+    }
 
     this.columns.push(
       { 
@@ -93,62 +97,65 @@ class Engine {
     )
 
     $(document).ready(() => {
-      this.table = $('#navigation-list').DataTable( {
-        'pageLength': 50,
-        'processing': true,
-        'serverSide': true,
-        'ajax': '/abe/paginate',
-        'columns': this.columns,
-        'order': [[ 3, 'desc' ]],
-        'stateSave': true,
-        'drawCallback': function(settings) {
-          window.abe.manager.rebind()
-        },
-        stateSaveCallback: function(settings,data) {
-          localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
-        },
-        stateLoadCallback: function(settings) {
-          return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
-        },
-        'createdRow': function (row, data, index) {
-          var actions = '<div class="row icons-action">'
-          if(data.publish != null) {
-            actions += `<a href="/abe/operations/unpublish${data.abe_meta.link}"
-                 title="Unpublish"
-                 class="icon" data-unpublish="true" data-text="Are you sure you want to unpublish : ${data.abe_meta.link}"
-                 title="unpublish">
-                <span class="glyphicon glyphicon-eye-close"></span>
-              </a>`
-          }
-  
-          actions += `<a href="/abe/operations/delete/${data.abe_meta.status}${data.abe_meta.link}"
-               title="Delete"
-               class="icon"
-               data-delete="true"
-               data-text="Are you sure you want to delete : ${data.abe_meta.link}"
-               title="remove">
-              <span class="glyphicon glyphicon-trash"></span>
-            </a></div>`
-          
-          var i = 4
-          Array.prototype.forEach.call(workflow, (flow) => {
-            var wkf = ''
-            if(typeof data[flow] !== 'undefined' && flow === 'publish') {
-              wkf = `<a href="/abe/editor${data[flow].html}" class="checkmark label-published" title="${data[flow].cleanDate}">&#10004;</a>`
-            } 
-            if(data.abe_meta.status == flow && flow !== 'publish') {  
-              wkf = `<a href="/abe/editor${data[flow].html}" class="label label-default label-draft" title="${data[flow].cleanDate}">${flow}</a>`
+      if (document.querySelector('#navigation-list') != null) {
+        this.table = $('#navigation-list').DataTable( {
+          'pageLength': 50,
+          'processing': true,
+          'serverSide': true,
+          'ajax': '/abe/paginate',
+          'columns': this.columns,
+          'order': [[ 3, 'desc' ]],
+          'stateSave': true,
+          'drawCallback': function(settings) {
+            window.abe.manager.rebind()
+          },
+          stateSaveCallback: function(settings,data) {
+            localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+          },
+          stateLoadCallback: function(settings) {
+            return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+          },
+          'createdRow': function (row, data, index) {
+            var actions = '<div class="row icons-action">'
+            if(data.publish != null) {
+              actions += `<a href="/abe/operations/unpublish${data.abe_meta.link}"
+                   title="Unpublish"
+                   class="icon" data-unpublish="true" data-text="Are you sure you want to unpublish : ${data.abe_meta.link}"
+                   title="unpublish">
+                  <span class="glyphicon glyphicon-eye-close"></span>
+                </a>`
             }
-            $('td', row).eq(i).html(wkf)
-            ++i
-          })
+    
+            actions += `<a href="/abe/operations/delete/${data.abe_meta.status}${data.abe_meta.link}"
+                 title="Delete"
+                 class="icon"
+                 data-delete="true"
+                 data-text="Are you sure you want to delete : ${data.abe_meta.link}"
+                 title="remove">
+                <span class="glyphicon glyphicon-trash"></span>
+              </a></div>`
+            
+            var i = 4
+            Array.prototype.forEach.call(workflow, (flow) => {
+              var wkf = ''
+              if(typeof data[flow] !== 'undefined' && flow === 'publish') {
+                wkf = `<a href="/abe/editor${data[flow].html}" class="checkmark label-published" title="${data[flow].cleanDate}">&#10004;</a>`
+              } 
+              if(data.abe_meta.status == flow && flow !== 'publish') {  
+                wkf = `<a href="/abe/editor${data[flow].html}" class="label label-default label-draft" title="${data[flow].cleanDate}">${flow}</a>`
+              }
+              $('td', row).eq(i).html(wkf)
+              ++i
+            })
 
-          $('td', row).eq(0).html(index + 1)
-          $('td', row).eq(1).html('<a href="/abe/editor'+data.abe_meta.link+'" class="file-path">'+data.abe_meta.link+'</a>')
-          $('td', row).eq(3).html(moment(data.date).format('YYYY/MM/DD'))
-          $('td', row).eq(i).html(actions)
-        }
-      })
+            $('td', row).eq(0).html(index + 1)
+            $('td', row).eq(1).html('<a href="/abe/editor'+data.abe_meta.link+'" class="file-path">'+data.abe_meta.link+'</a>')
+            $('td', row).eq(3).html(moment(data.date).format('YYYY/MM/DD'))
+            $('td', row).eq(i).html(actions)
+          }
+        })
+        
+      }
       $('#navigation-list')
       .on('processing.dt', function ( e, settings, processing ) {
         $('#navigation-list_processing')

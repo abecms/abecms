@@ -34,6 +34,7 @@ class Manager {
   }
 
   init() {
+    this._processesRunning = {}
     this._pathPartials = path.join(config.root, config.partials)
     this._pathTemplate = path.join(config.root, config.templates.url)
     this._pathStructure = path.join(config.root, config.structure.url)
@@ -402,6 +403,22 @@ class Manager {
         } 
       }
     })
+  }
+
+  addProcess(name) {
+    this._processesRunning[name] = true
+  }
+
+  removeProcess(name) {
+    delete this._processesRunning[name]
+  }
+
+  isProcessRunning(name) {
+    if(this._processesRunning[name] !== null && this._processesRunning[name] === true) {
+      return true
+    }else {
+      return false
+    }
   }
 }
 

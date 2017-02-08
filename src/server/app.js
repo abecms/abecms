@@ -51,8 +51,6 @@ var abePort = null
 if(config.port) abePort = config.port
 if(process.env.PORT) abePort = process.env.PORT
 
-abeExtend.lock.deleteAll() // delete all process .lock when abe start
-
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 var html = exphbs.create({

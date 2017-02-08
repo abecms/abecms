@@ -15,6 +15,8 @@ var templatesTexts = {}
 function publishNext(files, tt, cb, i = 0) {
   var pub = files.shift()
   if(typeof pub !== 'undefined' && pub !== null) {
+    // process.send(`publishing... ${Math.round(((i+1)*100/tt) * 100) / 100}%`)
+    process.send(JSON.stringify({percent: Math.round(((i+1)*100/tt) * 100) / 100, time: getTime()}))
     
     var jsonObject = fse.readJsonSync(pub[processConfig.ABE_STATUS].path)
     i++
@@ -76,6 +78,7 @@ function startProcess() {
   publishNext(files, files.length, function (i) {
     log('total ' + i + ' files')
     log('publish process finished ' + getTime())
+    process.send(JSON.stringify({msg: "exit"}))
     process.exit(0)
   })
 }
@@ -88,6 +91,7 @@ init('generate-posts',
   })
   .then(startProcess,
   (msg) => {
+    process.send(JSON.stringify({msg: "exit"}))
     error(msg)
     process.exit(0)
   })
