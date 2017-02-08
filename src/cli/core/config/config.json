@@ -54,7 +54,7 @@
     "strike": ["style"],
     "i": ["style"],
     "u": ["style"],
-    "a": ["style", "href"],
+    "a": ["style", "href", "target", "rel"],
     "br": [],
     "h1": ["style"],
     "h2": ["style"],
