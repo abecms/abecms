@@ -3,6 +3,7 @@ let singleton = Symbol()
 let singletonEnforcer = Symbol()
 
 import usersList from './modules/UserList'
+import usersProfil from './modules/UserProfil'
 
 export default class UserLogin {
 
@@ -20,6 +21,7 @@ export default class UserLogin {
 
   init() {
     usersList.init()
+    usersProfil.init()
     
     this.isInit = true
     // const

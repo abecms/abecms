@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/abecms/css/styles.css">
+    <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
+    <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
+    <link rel="stylesheet" href="/abecms/style-login.css">
+  </head>
+  <body>
+    
+    <div class="user-profil row col-xs-offset-1 col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="/abe/editor/">Home</a></li>
+        <li class="active">User profil</li>
+      </ol>
+
+      <div class="alert alert-danger hidden" data-info-msg="true" role="alert">
+        
+      </div>
+
+      <div class="">
+        <form action="/abe/users/profil" method="post">
+          {{#each user}}
+            {{#ifCond @key 'password'}}
+            {{else}}
+              <div class="form-group">
+                <label for="{{@key}}">{{@key}}</label>
+                <input type="input" required="true" class="form-control" name="{{@key}}" placeholder="" value="{{this}}">
+              </div>
+            {{/ifCond}}
+          {{/each}}
+
+          <hr>
+
+          <div class="form-group">
+            <label for="oldpassword">Old password</label>
+            <input type="password" class="form-control" name="oldpassword" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="password">News Password</label>
+            <input type="password" class="form-control" name="password" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="repeat-password">Repeat password</label>
+            <input type="password" class="form-control" name="repeat-password" placeholder="">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
