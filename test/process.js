@@ -1,5 +1,11 @@
 var chai = require('chai');
+var sinonChai = require('sinon-chai')
+var expect = chai.expect
+chai.use(sinonChai)
+var sinon = require('sinon');
 var path = require('path');
+var events = require('events')
+var child_process = require('child_process');
 
 var config = require('../src/cli').config
 config.set({root: path.join(__dirname,'fixtures')})
@@ -23,7 +29,21 @@ describe('Process', function() {
   });
 
   it('abeExtend.process', function() {
-    var res = abeExtend.process('test', [])
-    // chai.assert.equal(res, 'test', 'Hook test failed !')
+    this.sinon = sinon.sandbox.create();
+    var fakeChild = this.fakeChild = {
+      'stdout': new events.EventEmitter(),
+      'stderr': new events.EventEmitter(),
+      'on': function () {}
+    };
+
+    this.sinon.stub(child_process, 'fork', function(){
+      return fakeChild;
+    });
+
+    var proc = abeExtend.process('generate-posts', [''], () => {
+    })
+    chai.expect(proc).to.be.true;
+
+    this.sinon.restore();
   });
 });

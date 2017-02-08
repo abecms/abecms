@@ -4,6 +4,7 @@ import fse from 'fs-extra'
 import {
   config
   ,abeExtend
+  ,Manager
 } from '../'
 
 function prepend(value, array) {
@@ -12,13 +13,15 @@ function prepend(value, array) {
   return newArray
 }
 
-var abeProcess = function(name, args = []) {
+var abeProcess = function(name, args = [], callback) {
   args = prepend(`ABE_WEBSITE=${config.root}`, args)
   args = prepend(`ABECMS_PATH=${__dirname}/../../../dist`, args)
 
-  if (!abeExtend.lock.create(name)) {
+  if (Manager.instance.isProcessRunning(name)) {
     return false
   }
+
+  Manager.instance.addProcess(name)
 
   var proc
   var file = `${__dirname}/../../cli/process/${name}.js`
@@ -35,14 +38,19 @@ var abeProcess = function(name, args = []) {
         proc = process.fork(file, args)
       }
     }catch(err) {
+      Manager.instance.removeProcess(name)
       console.log('process fork failed')
     }
   }
 
   if(typeof proc !== 'undefined' && proc !== null) {
-    proc.on('message', function() {
-      abeExtend.lock.remove(name)
-      proc.kill()
+    proc.on('message', function(data) {
+      var data = JSON.parse(data)
+      callback(data)
+      if (data.msg == 'exit') {
+        Manager.instance.removeProcess(name)
+        proc.kill()
+      }
     })
     return true
   }

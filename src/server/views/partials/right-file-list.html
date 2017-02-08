@@ -9,10 +9,12 @@
       <a href="/abe/page{{@root.json.abe_meta.link}}" target="_blank" class="btn-visit-site" data-href="/site/">
         {{@root.text.visit_site}}
       </a>
+      {{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
       <a href="#" class="btn-generate-posts pull-right btn btn-info btn-xs" data-generate-posts="true">
         <span data-not-clicked>Republish site</span>
-        <span class="hidden" data-clicked>Done</span>
+        <span class="hidden" data-clicked>publishing...</span>
       </a>
+      {{/isAuthorized}}
     </div>
     <table class="table table-striped table-bordered table-responsive" id="navigation-list" style="width:100%">
       <thead>
