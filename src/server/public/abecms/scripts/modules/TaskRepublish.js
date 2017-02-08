@@ -25,7 +25,7 @@ export default class TaskRepublish {
 
       // don't watch if btn source not present
       if (!!window.EventSource) {
-        var source = new EventSource('/abe/generate/post');
+        var source = new EventSource('/abe/generate-posts');
         source.addEventListener('message', (e, data) => {
           var json = JSON.parse(e.data)
           if (json.percent != null && json.time != null) {
@@ -63,7 +63,10 @@ export default class TaskRepublish {
     this._ajax(
       {
         url: document.location.origin + '/abe/generate-posts',
-        method: 'get'
+        method: 'get',
+        headers: {
+          'Accept':'application/json'
+        }
       },
       (e, responseText) => {
         var response = JSON.parse(responseText)

@@ -20,7 +20,6 @@ import getPaginate from './get-paginate'
 import getThumbs from './get-thumbs'
 import getImage from './get-image'
 import getHome from './get-home'
-import * as generate from './generate'
 import * as users from './users'
 import * as operations from './operations'
 
@@ -47,7 +46,6 @@ export {
 	getPaginate,
 	getThumbs,
 	getImage,
-	generate,
 	users,
 	operations
 }

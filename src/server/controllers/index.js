@@ -24,7 +24,6 @@ import {
   ,getThumbs
   ,getImage
   ,users
-  ,generate
   ,getHome
 } from '../routes'
 
@@ -50,8 +49,6 @@ router.post('/abe/users/login', users.postLogin)
 router.post('/abe/users/remove', users.postRemove)
 router.post('/abe/users/reset', users.postReset)
 router.post('/abe/users/update', users.postUpdate)
-
-router.get('/abe/generate/post', generate.eventPost)
 
 router.get('/abe/paginate', getPaginate)
 router.post('/abe/create*', postCreate)
