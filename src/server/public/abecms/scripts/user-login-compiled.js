@@ -1095,11 +1095,97 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _nanoajax = require('nanoajax');
+
+var _nanoajax2 = _interopRequireDefault(_nanoajax);
+
+var _qs = require('qs');
+
+var _qs2 = _interopRequireDefault(_qs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*global document, confirm, $ */
+
+var userProfil = {
+  init: function init() {
+    var scope = document.querySelector('.user-profil');
+    if (scope != null) {
+      this._ajax = _nanoajax2.default.ajax;
+
+      this._scope = scope;
+      this._form = this._scope.querySelector('form');
+      this._info = this._scope.querySelector('[data-info-msg="true"]');
+      this._handleSubmit = this._submit.bind(this);
+
+      this._bindEvents();
+    }
+  },
+  _bindEvents: function _bindEvents() {
+
+    this._form.addEventListener('submit', this._handleSubmit);
+  },
+  _submit: function _submit(e) {
+    var _this = this;
+
+    e.preventDefault();
+
+    var inputs = this._form.querySelectorAll('input,select');
+    var data = {};
+    var isValid = true;
+    Array.prototype.forEach.call(inputs, function (input) {
+      if (!input.disabled) {
+        var name = input.getAttribute('name');
+        var value = input.value;
+        var required = input.getAttribute('required');
+        if (value == null && required == "true") {
+          isValid = false;
+        } else if (value !== null && value !== "") {
+          data[name] = value;
+        }
+      }
+    });
+
+    var toSave = _qs2.default.stringify(data);
+
+    if (isValid) {
+      this._ajax({
+        url: this._form.getAttribute('action'),
+        body: toSave,
+        method: 'post'
+      }, function (code, responseText) {
+        var res = JSON.parse(responseText);
+        if (res.success === 1) {
+          _this._info.classList.add('hidden');
+        } else {
+          _this._info.classList.remove('hidden');
+          _this._info.innerHTML = res.message;
+        }
+      });
+    }
+
+    return false;
+  }
+};
+
+exports.default = userProfil;
+
+},{"nanoajax":1,"qs":3}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _UserList = require('./modules/UserList');
 
 var _UserList2 = _interopRequireDefault(_UserList);
+
+var _UserProfil = require('./modules/UserProfil');
+
+var _UserProfil2 = _interopRequireDefault(_UserProfil);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1121,6 +1207,7 @@ var UserLogin = function () {
     key: 'init',
     value: function init() {
       _UserList2.default.init();
+      _UserProfil2.default.init();
 
       this.isInit = true;
       // const
@@ -1309,4 +1396,4 @@ document.addEventListener('DOMContentLoaded', function () {
   UserLogin.instance._csrfToken();
 });
 
-},{"./modules/UserList":7}]},{},[8]);
+},{"./modules/UserList":7,"./modules/UserProfil":8}]},{},[9]);

@@ -25,6 +25,7 @@ import {
   ,getImage
   ,users
   ,getHome
+  ,postProfil
 } from '../routes'
 
 import {
@@ -42,6 +43,7 @@ router.get('/abe/users/list', users.getList)
 router.get('/abe/users/login', users.getLogin)
 router.get('/abe/users/logout', users.getLogout)
 router.get('/abe/users/reset', users.getReset)
+router.get('/abe/users/profil', users.getProfil)
 router.post('/abe/users/activate', users.postActivate)
 router.post('/abe/users/add', users.postAdd)
 router.post('/abe/users/deactivate', users.postDeactivate)
@@ -49,6 +51,7 @@ router.post('/abe/users/login', users.postLogin)
 router.post('/abe/users/remove', users.postRemove)
 router.post('/abe/users/reset', users.postReset)
 router.post('/abe/users/update', users.postUpdate)
+router.post('/abe/users/profil', users.postProfil)
 
 router.get('/abe/paginate', getPaginate)
 router.post('/abe/create*', postCreate)
