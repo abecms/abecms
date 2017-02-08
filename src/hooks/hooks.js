@@ -21,7 +21,7 @@ var hooks = {
     return html
   },
 
-  /***************** create *****************/
+  /***************** delete *****************/
   beforeDeleteFile: (filePath, abe) => {
     return filePath
   },
@@ -29,7 +29,7 @@ var hooks = {
     return path
   },
 
-  /***************** publish *****************/
+  /***************** reject *****************/
   beforeReject: (json, filePath, tplPath, abe) => {
     return json
   },
@@ -41,7 +41,7 @@ var hooks = {
   beforePublish: (json, filePath, tplPath, abe) => {
     return json
   },
-  afterPublish: (result, abe) => {
+  afterPublish: (result, filePath, abe) => {
     return result
   },
 
@@ -49,7 +49,7 @@ var hooks = {
   beforeUnpublish: (filePath, abe) => {
     return filePath
   },
-  afterUnpublish: (path, json, abe) => {
+  afterUnpublish: (path, postPath, json, abe) => {
     return path
   },
 
