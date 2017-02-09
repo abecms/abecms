@@ -1,4 +1,3 @@
-import debug from 'debug'
 import extend from 'extend'
 import moment from 'moment'
 
