@@ -9,7 +9,7 @@ export default function setVariable(varName, varValue, options){
   if (varValue === 'false') {
     varValue = false
   }
-  if (varValue.indexOf('{') > -1) {
+  if (typeof varValue == 'string' && varValue.indexOf('{') > -1) {
     varValue = JSON.parse(varValue)
   }
 
