@@ -15,9 +15,11 @@ var templatesTexts = {}
 function publishNext(files, tt, cb, i = 0) {
   var pub = files.shift()
   if(typeof pub !== 'undefined' && pub !== null) {
-    // process.send(`publishing... ${Math.round(((i+1)*100/tt) * 100) / 100}%`)
-    process.send(JSON.stringify({percent: Math.round(((i+1)*100/tt) * 100) / 100, time: getTime()}))
-    
+    // process.send is only defined in a child process
+    if(typeof process.send === 'function'){
+      process.send(JSON.stringify({percent: Math.round(((i+1)*100/tt) * 100) / 100, time: getTime()}))
+    }
+
     var jsonObject = fse.readJsonSync(pub[processConfig.ABE_STATUS].path)
     i++
     var p = new Promise((resolve) => {
@@ -30,6 +32,7 @@ function publishNext(files, tt, cb, i = 0) {
           jsonObject = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', jsonObject)
 
           var obj = {
+            publishAll: true,
             type: jsonObject.abe_meta.status,
             json: {
               content: jsonObject
@@ -78,7 +81,9 @@ function startProcess() {
   publishNext(files, files.length, function (i) {
     log('total ' + i + ' files')
     log('publish process finished ' + getTime())
-    process.send(JSON.stringify({msg: "exit"}))
+    if(typeof process.send === 'function'){
+      process.send(JSON.stringify({msg: "exit"}))
+    }
     process.exit(0)
   })
 }
@@ -91,7 +96,9 @@ init('generate-posts',
   })
   .then(startProcess,
   (msg) => {
-    process.send(JSON.stringify({msg: "exit"}))
+    if(typeof process.send === 'function'){
+      process.send(JSON.stringify({msg: "exit"}))
+    }
     error(msg)
     process.exit(0)
   })

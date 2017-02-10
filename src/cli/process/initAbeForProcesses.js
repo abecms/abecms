@@ -1,5 +1,6 @@
 import extend from 'extend'
 import moment from 'moment'
+import debug from 'debug'
 
 var Manager = require('../../cli').Manager
 var Handlebars = require('../../cli').Handlebars
@@ -50,7 +51,7 @@ export function init(processName, conf) {
         error(processName + ' ' + e)
       })
     }else {
-      error('ABE_WEBSITE is not defined use node process.js ABE_WEBSITE=/pat/to/website')
+      error('ABE_WEBSITE is not defined use node process.js ABE_WEBSITE=/path/to/website')
       process.exit(0)
     }
   })

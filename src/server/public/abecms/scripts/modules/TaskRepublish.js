@@ -32,8 +32,11 @@ export default class TaskRepublish {
             this._btnGeneratePosts.classList.add('disabled')
             this._btnGeneratePosts.querySelector('[data-not-clicked]').className = 'hidden'
             this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
-            this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = `publish site... ${json.percent}% (${json.time})`
-          }else if (json.msg != "") {
+            if(json.percent == 0)
+              this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = `Initializing republish...`
+            else
+              this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = `Republish in progress... ${json.percent}% (${json.time})`
+          } else if (json.msg != "") {
             this._btnGeneratePosts.classList.remove('disabled')
             this._btnGeneratePosts.querySelector('[data-not-clicked]').className = ''
             this._btnGeneratePosts.querySelector('[data-clicked]').className = 'hidden'
@@ -62,7 +65,7 @@ export default class TaskRepublish {
     // this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
     this._ajax(
       {
-        url: document.location.origin + '/abe/generate-posts',
+        url: document.location.origin + '/abe/generate-posts?imNotSse=true',
         method: 'get',
         headers: {
           'Accept':'application/json'

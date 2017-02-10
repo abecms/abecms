@@ -56,6 +56,7 @@
     "cookie-parser": "^1.4.1",
     "cookies": "^0.6.1",
     "csurf": "^1.8.3",
+    "debug": "^2.6.0",
     "deepmerge": "^1.3.2",
     "dir-compare": "^1.2.0",
     "dragula": "^3.7.2",
