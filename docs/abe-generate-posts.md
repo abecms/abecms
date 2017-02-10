@@ -11,10 +11,10 @@ Options:
   
 `--destination=` [ path to some/folder ]
   
-`--status=` [ draft / review / approve]
+`--type=` [ draft / review / approve]
 
 # cli
 
 ```shell
-abe generate-posts --path=be --destination=publish --status=publish
+abe generate-posts --path=be --destination=publish --type=publish
 ```
