@@ -363,6 +363,3 @@ git clone abe outside of your blog directory (not in abesite) :
 to launch your blog using Abe, under Linux or Mac, you have to set an Environment variable pointing to your blog :
 
 ```$ ROOT=/my_path_to_the_blog npm run startdev ```
-
-=======
-# abe-test-plugin
