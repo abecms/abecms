@@ -22,10 +22,9 @@ Deploy your own Abe demo on Heroku
 # Presentation
 I've designed this CMS because I wanted to simplify and optimize the way we're creating content. Wordpress is way too complex for what it does. Welcome to ABE (A Better Engine) : This CMS will make you create content in a snap and publish it on the web in no time !
 
-# Contributing
-We've bet on Abe 1 year ago, investing more than 100 000,00EUR in this project. We have decided to open source it so that our customers and you can freely use Abe to create wonderful experiences in a snap !
-
-We will maintain Abe for the next 3 years and have a dedicated 20% Full Time Equivalent developer on it. We need you to improve Abe, feel free to join us and submit PR's !
+# Introduction
+I've bet on Abe 18 months ago. I've designed and organized the first versions of Abe as a personal side project. Soon, I've been able to win a project including this technology with a big french company. We've then worked on this project (and new ones) based on AbeJS (its name at this time) with a sub-team of AdFab Connect, including Emmanuel Gonzalez, Fabrice Labbé, Nicolas Labbé, Olivier Pompilius. This project has been open sourced as a MIT licenced project since the beginning so that you can freely use Abe to create wonderful experiences in a snap and I decided to host this project on Adfab Connect's Github at this time.
+I've decided to fork my own project to regain freedom on its future with no dependency to direct needs of customers. I will de velop this project in its own organization with your help. Feel free to send PR's.
 
 # Roadmap
 We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
