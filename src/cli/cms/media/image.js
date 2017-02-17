@@ -125,15 +125,21 @@ export function saveFile(req) {
       fstream.on('finish', function() {
         if(hasSentHeader) return
 
+        resp.filePath = (/^win/.test(process.platform)) ? resp.filePath.replace(/\\/g, '/').replace(/\/\//g, '/').replace(/\/$/, "") : resp.filePath;
         resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
 
         if(mediaType === 'image') {
           var thumbPromise = generateThumbnail(filePath)
           thumbPromise.then(function (thumbResp) {
-            resp.thumbnail = thumbResp.thumb
+            resp.thumbnail = (/^win/.test(process.platform)) ? thumbResp.thumb.replace(/\\/g, '/') : thumbResp.thumb;
             if(req.query.input.indexOf('data-size') > -1){
               var thumbsSizes = cmsData.regex.getAttr(req.query.input, 'data-size').split(',')
               cropAndSaveFiles(thumbsSizes, filePath, resp).then(function (resp) {
+                if(/^win/.test(process.platform)){
+                  for (var i = 0; i < resp.thumbs.length; i++) {
+                    resp.thumbs[i].name = resp.thumbs[i].name.replace(/\\/g, '/')
+                  }
+                }
                 resolve(resp)
               })
             }
