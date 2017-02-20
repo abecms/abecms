@@ -131,7 +131,7 @@ export function saveFile(req) {
           var thumbPromise = generateThumbnail(filePath)
           thumbPromise.then(function (thumbResp) {
             resp.thumbnail = thumbResp.thumb
-            if(req.query.input.indexOf('data-size') > -1){
+            if(req && req.query && req.query.input && ( req.query.input.indexOf('data-size') > -1 )){
               var thumbsSizes = cmsData.regex.getAttr(req.query.input, 'data-size').split(',')
               cropAndSaveFiles(thumbsSizes, filePath, resp).then(function (resp) {
                 resolve(resp)
