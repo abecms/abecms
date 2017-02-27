@@ -99,6 +99,7 @@ export default class EditorSave {
           }
           if(emptyObject === 0) {
             delete this._json.data[obj][index]
+            if(this._json.data[obj].length == 1) delete this._json.data[obj]
           }
         } else {
           if (input.getAttribute('data-autocomplete') === 'true' || input.getAttribute('data-multiple') === 'multiple') {
