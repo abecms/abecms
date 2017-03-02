@@ -123,10 +123,84 @@ export function createInputRich(attributes, inputClass, params) {
     { icon: 'ti-image',              title: 'media',                  action: 'media',        param: '',         popup: 'image' },
     { icon: 'ti-face-smile',         title: 'smiley',                 action: 'smiley',       param: '',         popup: 'smiley' },
   ]
+
+  var selects = [{
+    name: 'Formating',
+    id: 'format',
+    options: [
+      {name: 'Heading 1', regexp: '<h1>$1</h1>'},
+      {name: 'Heading 2', regexp: '<h2>$1</h2>'},
+      {name: 'Heading 3', regexp: '<h3>$1</h3>'},
+      {name: 'Heading 4', regexp: '<h4>$1</h4>'},
+      {name: 'Heading 5', regexp: '<h5>$1</h5>'},
+      {name: 'Heading 6', regexp: '<h6>$1</h6>'},
+      {name: 'Paragraph', regexp: '<p>$1</p>'},
+    ]
+  },{
+    name: 'Font',
+    id: 'font',
+    options: [
+      {name: 'Georgia', regexp: '<span style=\"font-family:Georgia;\">$1</span>'},
+      {name: 'serif', regexp: '<span style=\"font-family:serif;\">$1</span>'},
+      {name: 'Helvetica', regexp: '<span style=\"font-family:Helvetica;\">$1</span>'},
+      {name: 'Times', regexp: '<span style=\"font-family:Times;\">$1</span>'},
+      {name: 'Times New Roman', regexp: '<span style=\"font-family:Times New Roman;\">$1</span>'},
+      {name: 'Arial', regexp: '<span style=\"font-family:Arial;\">$1</span>'},
+      {name: 'Arial Black', regexp: '<span style=\"font-family:Arial Black;\">$1</span>'},
+      {name: 'Verdana', regexp: '<span style=\"font-family:Verdana;\">$1</span>'},
+      {name: 'monospace', regexp: '<span style=\"font-family:monospace;\">$1</span>'},
+      {name: 'fantasy', regexp: '<span style=\"font-family:fantasy;\">$1</span>'},
+    ]
+  },{
+    name: 'Font size',
+    id: 'fontsize',
+    options: [
+      {name: '5', regexp: '<span style=\"font-size:5;\">$1</span>'},
+      {name: '6', regexp: '<span style=\"font-size:6;\">$1</span>'},
+      {name: '7', regexp: '<span style=\"font-size:7;\">$1</span>'},
+      {name: '8', regexp: '<span style=\"font-size:8;\">$1</span>'},
+      {name: '9', regexp: '<span style=\"font-size:9;\">$1</span>'},
+      {name: '10', regexp: '<span style=\"font-size:10;\">$1</span>'},
+      {name: '11', regexp: '<span style=\"font-size:11;\">$1</span>'},
+      {name: '12', regexp: '<span style=\"font-size:12;\">$1</span>'},
+      {name: '14', regexp: '<span style=\"font-size:14;\">$1</span>'},
+      {name: '16', regexp: '<span style=\"font-size:16;\">$1</span>'},
+      {name: '18', regexp: '<span style=\"font-size:18;\">$1</span>'},
+      {name: '20', regexp: '<span style=\"font-size:20;\">$1</span>'},
+      {name: '22', regexp: '<span style=\"font-size:22;\">$1</span>'},
+      {name: '24', regexp: '<span style=\"font-size:24;\">$1</span>'},
+      {name: '26', regexp: '<span style=\"font-size:26;\">$1</span>'},
+      {name: '28', regexp: '<span style=\"font-size:28;\">$1</span>'},
+      {name: '36', regexp: '<span style=\"font-size:36;\">$1</span>'},
+      {name: '48', regexp: '<span style=\"font-size:48;\">$1</span>'},
+      {name: '72', regexp: '<span style=\"font-size:72;\">$1</span>'},
+    ]
+  }]
+
   if(params.toolbar !== '*') params.toolbar = params.toolbar.split(',')
   var inputRich = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
                   <div class="wysiwyg-container rich">
                     <div class="wysiwyg-toolbar wysiwyg-toolbar-top">`
+
+  selects.forEach(function (select) {
+    if(params.toolbar === '*' || params.toolbar.indexOf(select.id) > -1){
+      inputRich += `<div class="dropdown">
+                      <button id="${select.id}" class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ${select.name}
+                        <span class="caret"></span>
+                      </button>
+                    <ul class="dropdown-menu" aria-labelledby="${select.id}">`
+      select.options.forEach(function (option) {
+        inputRich += `<li>
+                        <a href='#' class='wysiwyg-dropdown-option' data-regexp='${option.regexp}'>
+                          ${option.name}
+                        </a>
+                      </li>`
+      })
+     inputRich += `</ul>
+                  </div>`
+    }
+  })
 
   buttons.forEach(function (button) {
     if(params.toolbar === '*' || params.toolbar.indexOf(button.action) > -1){
@@ -151,7 +225,6 @@ export function createInputRich(attributes, inputClass, params) {
                 </div>
                 ${hint(params)}
               </div>`
-
   return inputRich
 }
 
