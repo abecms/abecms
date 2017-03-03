@@ -29,6 +29,9 @@ A toolbar attribut allow to customize the rich textarea (display / hide customiz
 - code
 - list (ordered & unordered)
 - media (upload image & video)
+- format (h1, h2 ...)
+- font (font-family)
+- fontsize
 
 exemple :
 
