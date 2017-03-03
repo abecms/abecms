@@ -103,8 +103,8 @@ export function saveFile(req) {
         folderWebPath = '/' + config.upload[mediaType]  
       }
       
-      filePath = path.join(folderFilePath, slug)
-      resp['filePath'] = path.join('/' + folderWebPath, slug)
+      filePath = path.posix.join(folderFilePath, slug)
+      resp['filePath'] = path.posix.join('/' + folderWebPath, slug)
 
       file.on('limit', function() {
         hasSentHeader = true
@@ -130,10 +130,15 @@ export function saveFile(req) {
         if(mediaType === 'image') {
           var thumbPromise = generateThumbnail(filePath)
           thumbPromise.then(function (thumbResp) {
-            resp.thumbnail = thumbResp.thumb
+            resp.thumbnail = (/^win/.test(process.platform)) ? thumbResp.thumb.replace(/\\/g, '/') : thumbResp.thumb;
             if(req.query.input.indexOf('data-size') > -1){
               var thumbsSizes = cmsData.regex.getAttr(req.query.input, 'data-size').split(',')
               cropAndSaveFiles(thumbsSizes, filePath, resp).then(function (resp) {
+                if(/^win/.test(process.platform)){
+                  for (var i = 0; i < resp.thumbs.length; i++) {
+                    resp.thumbs[i].name = resp.thumbs[i].name.replace(/\\/g, '/')
+                  }
+                }
                 resolve(resp)
               })
             }
