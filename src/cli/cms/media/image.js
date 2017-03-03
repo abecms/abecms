@@ -103,8 +103,8 @@ export function saveFile(req) {
         folderWebPath = '/' + config.upload[mediaType]  
       }
       
-      filePath = path.join(folderFilePath, slug)
-      resp['filePath'] = path.join('/' + folderWebPath, slug)
+      filePath = path.posix.join(folderFilePath, slug)
+      resp['filePath'] = path.posix.join('/' + folderWebPath, slug)
 
       file.on('limit', function() {
         hasSentHeader = true
@@ -125,7 +125,6 @@ export function saveFile(req) {
       fstream.on('finish', function() {
         if(hasSentHeader) return
 
-        resp.filePath = (/^win/.test(process.platform)) ? resp.filePath.replace(/\\/g, '/').replace(/\/\//g, '/').replace(/\/$/, "") : resp.filePath;
         resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
 
         if(mediaType === 'image') {
