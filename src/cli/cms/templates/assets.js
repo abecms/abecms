@@ -23,7 +23,7 @@ export function copy() {
   }
 
   Array.prototype.forEach.call(publicFolders, (publicFolder) => {
-    var res = dircompare.compareSync(publicFolder, dest, {compareSize: true})
+    var res = dircompare.compareSync(publicFolder, dest, {compareDate: true})
 
     res.diffSet.forEach(function (entry) {
       var state = {
