@@ -10,6 +10,7 @@ export default class RichTexarea {
     this.wrapper = wrapper
     this.textarea = wrapper.querySelector('.form-rich')
     this.btns = this.wrapper.querySelectorAll('.wysiwyg-toolbar-icon')
+    this.selects = this.wrapper.querySelectorAll('.wysiwyg-dropdown-option')
     
     if (this.textarea.getAttribute('disabled') !== 'disabled') {
       this.textEditor = wysiwyg({
@@ -24,6 +25,11 @@ export default class RichTexarea {
       Array.prototype.forEach.call(this.btns, (btn) => {
         btn.addEventListener('click', this._action)
       })
+
+      Array.prototype.forEach.call(this.selects, (select) => {
+        select.addEventListener('click', this.dropdownAction.bind(this))
+      })
+
     }
   }
 
@@ -57,6 +63,12 @@ export default class RichTexarea {
       this.wrapper.querySelector('[contenteditable]').focus()
       this._replaceSelectionWithHtml(html)
     }
+  }
+
+  dropdownAction(e) {
+    var newValue = e.target.getAttribute('data-regexp').replace('$1', window.getSelection().toString())
+    this._replaceSelectionWithHtml(newValue)
+    this.setHTML()
   }
 
   action(e) {

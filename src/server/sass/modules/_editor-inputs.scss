@@ -121,6 +121,34 @@ select[multiple], select[size] {
   }
 }
 
+.wysiwyg-container {
+  .dropdown {
+    display: inline-block;
+  }
+  .dropdown-toggle {
+    background: none;
+    border: none;
+    line-height: 25px;
+    padding-bottom: 0;
+  }
+  .wysiwyg-toolbar-top {
+    overflow: visible;
+  }
+
+  .dropdown-menu {
+    max-height: 200px;
+    overflow: auto;
+    border-radius: 0px 4px 4px 4px;
+    font-size: 13px;
+    margin: 0;
+    >li {
+      >a {
+        padding: 0px 10px;
+      }
+    }
+  }
+}
+
 .wysiwyg-popup {
   &.image {
     border-radius: 0;
