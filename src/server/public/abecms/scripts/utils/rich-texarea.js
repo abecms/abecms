@@ -117,8 +117,7 @@ export default class RichTexarea {
             html = this.textEditor.getHTML().replace('[MEDIA]', `<video controls><source src="${obj.image}" type="video/mp4"></source></video>`)
           }
           else{
-            this.textEditor[this.action](obj.image) 
-            html = this.textEditor.getHTML().replace('[MEDIA]', '')
+            html = this.textEditor.getHTML().replace('[MEDIA]', `<img src="${obj.image}" >`)
           }
           this.textEditor.setHTML(html)
           this.setHTML()
