@@ -14,7 +14,15 @@
 }
 
 .navbar-nav .dropdown-menu {
-    background-color: #000;
+    background-color: #3C3C3C;
+}
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {
+    background-color: #3C3C3C;
+}
+
+.navbar-inverse .navbar-nav .dropdown-menu li a:hover {
+    color: #3C3C3C;
 }
 
 .page-header {
