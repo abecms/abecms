@@ -1,5 +1,42 @@
+import pkg from '../../../package'
+import {
+  config,
+  Page,
+  cmsData,
+  cmsTemplates,
+  coreUtils,
+  abeExtend,
+  Manager,
+  User
+} from '../../cli'
+
 var route = function(req, res, next) {
-  res.redirect('/abe/editor')
+  var manager = {}
+  manager.home = {files: []}
+  manager.list = Manager.instance.getStructureAndTemplates()
+  manager.config = JSON.stringify(config)
+
+  var isHome = true
+  var jsonPath = null
+  var linkPath = null
+  var template = null
+  var fileName = null
+  var folderPath = null
+
+  var EditorVariables = {
+    user: res.user,
+    slugs: Manager.instance.getSlugs(),
+    filename: fileName,
+    folderPath: folderPath,
+    abeUrl: '/abe/editor/',
+    isHome: isHome,
+    config: config,
+    Locales: coreUtils.locales.instance.i18n,
+    abeVersion: pkg.version,
+    manager: manager
+  }
+
+  res.render('../views/template-home', EditorVariables)
 }
 
 export default route

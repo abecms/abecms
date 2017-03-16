@@ -1,31 +1,28 @@
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h1>
-          <small class="manager-header-title">Abe</small>
-        </h1>
-      </div>
-      <div class="panel-body">
+<div class="">
+  <div class="">
+    <h1>
+      <small class="manager-header-title">New content</small>
+    </h1>
+  </div>
 
-        <form class="form-create" data-form-abe-create="true">
-          
-          {{&setVariable "precontrib" "true"}}
+  <form class="form-create" data-form-abe-create="true">
+    
+    {{&setVariable "precontrib" "true"}}
 
-          {{&folders @root.manager.list.structure 1 null @root.text}}
-          {{abeImport 'create-form-template' @root.manager.config @root}}
-          {{abeImport 'create-form-tplname' @root.manager.config @root}}
+    {{&folders @root.manager.list.structure 1 null @root.text}}
+    {{abeImport 'create-form-template' @root.manager.config @root}}
+    {{abeImport 'create-form-tplname' @root.manager.config @root}}
 
-          {{&setVariable "precontrib" "false"}}
+    {{&setVariable "precontrib" "false"}}
 
-          <div class="">
-            <div class="">
-              <button type="submit" class="btn btn-primary" data-abe-create="true">{{@root.text.create}}</button>
-            </div>
-          </div>
-
-          <div data-post-path-preview="true" class="breadcrumb"></div>
-
-        </form>
+    <div class="">
+      <div class="">
+        <button type="submit" class="btn btn-primary" data-abe-create="true">{{@root.text.create}}</button>
       </div>
     </div>
+
+    <div data-post-path-preview="true" class="breadcrumb"></div>
+  </form>
+</div>
     

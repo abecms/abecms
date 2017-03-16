@@ -99,6 +99,7 @@ class Engine {
     $(document).ready(() => {
       if (document.querySelector('#navigation-list') != null) {
         this.table = $('#navigation-list').DataTable( {
+          'lengthChange': false,
           'pageLength': 50,
           'processing': true,
           'serverSide': true,
@@ -113,7 +114,9 @@ class Engine {
             localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
           },
           stateLoadCallback: function(settings) {
-            return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            let params = JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ))
+            $('#abeSearch').val(params.search.search)
+            return params
           },
           'createdRow': function (row, data, index) {
             var actions = '<div class="row icons-action">'
@@ -162,7 +165,10 @@ class Engine {
         .css( 'display', processing ? 'block' : 'none' )
         .css( {top:'150px'})
       })
-      
+      $('#navigation-list')
+      .on('draw.dt', function ( e, settings, data ) {
+        $('#navigation-list_filter').css('display','none')
+      })
       $('#navigation-list')
       .on('preXhr.dt', function ( e, settings, data ) {
         if(settings.jqXHR) {
@@ -258,4 +264,7 @@ window.abe = {
 
 document.addEventListener('DOMContentLoaded', function() {
   if(document.querySelector('#page-template')) engine.inject()
+  $('#abeSearch').on( 'keyup', function () {
+    engine.table.search( this.value ).draw();
+  });
 })

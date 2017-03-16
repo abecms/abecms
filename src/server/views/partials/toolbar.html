@@ -1,6 +1,7 @@
 {{#each @root.workflows}}
   {{#isAuthorized this.url @root.user.role.workflow}}
-    <button class='btn btn-info btn-save' data-action="{{this.status}}" data-url="{{this.url}}">
+    <button class='btn btn-info btn-save btn-{{this.status}}' data-action="{{this.status}}" data-url="{{this.url}}">
+      <span class="fa {{#ifCond this.status 'publish'}}fa-paper-plane-o{{else}}{{#ifCond this.status 'edit'}}fa-reply{{else}}fa-save{{/ifCond}}{{/ifCond}} pull-left"></span>
       <span class="before">
         {{this.status}}
       </span>

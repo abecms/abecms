@@ -2,7 +2,7 @@
 <div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
 
   <!-- *************** left admin manager *************** -->
-  <div class="left form-wrapper">
+  <div class="manager-left form-wrapper">
     {{#if isHome}}
     {{else}}
     <div class="clearfix">
@@ -19,7 +19,7 @@
   </div><!-- *************** /end left admin manager *************** -->
 
   <!-- *************** right admin manager *************** -->
-  <div class="right">
+  <div class="manager-right">
     {{abeImport 'right-file-list' manager.config this}}
 
     {{abeImport 'right-config' manager.config this}}        

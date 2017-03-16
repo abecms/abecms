@@ -14,7 +14,8 @@ import {
 	moduloIf,
 	attrAbe,
 	ifIn,
-	ifCond
+	ifCond,
+	isAuthorized
 } from './cms/templates/index'
 
 import {
@@ -63,6 +64,7 @@ export {
 	Handlebars,
 	clc,
 	printInput,
+	isAuthorized,
 	abeImport,
 	math,
 	Create,

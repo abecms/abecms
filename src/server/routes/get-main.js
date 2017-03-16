@@ -72,8 +72,10 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   if (filePath != null && filePath.indexOf('.json') > -1) {
     EditorVariables.express.res.set('Content-Type', 'application/json')
     EditorVariables.express.res.send(JSON.stringify(_json))
-  }else {
+  }else if(EditorVariables.pageHtml != ''){
     EditorVariables.express.res.render(config.abeEngine, EditorVariables)
+  } else {
+    EditorVariables.express.res.render('../views/template-manager', EditorVariables)
   }
 }
 
