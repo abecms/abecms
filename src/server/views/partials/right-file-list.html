@@ -1,11 +1,19 @@
 {{#if manager.home}}
 <div class="manager-tab manager-files visible">
-    <div class="page-header">
-      <div class="text-uppercase">
-        {{@root.text.navigation}}
+<br/>
+<br/>
+  <div class="form-horizontal">
+    <div class="form-group form-group-lg">
+      <div class="col-sm-12">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-search"></i></span>
+          <input class="form-control" type="search"  id="abeSearch" placeholder="Search your content">
+        </div>
       </div>
     </div>
-    <div class="well well-sm">
+  </div>
+
+    <!--div class="well well-sm">
       <a href="/abe/page{{@root.json.abe_meta.link}}" target="_blank" class="btn-visit-site" data-href="/site/">
         {{@root.text.visit_site}}
       </a>
@@ -15,8 +23,8 @@
         <span class="hidden" data-clicked>publishing...</span>
       </a>
       {{/isAuthorized}}
-    </div>
-    <table class="table table-striped table-bordered table-responsive" id="navigation-list" style="width:100%">
+    </div-->
+    <table class="table table-striped table-bordered table-responsive table-hover" id="navigation-list" style="width:100%">
       <thead>
         <tr>
         
@@ -37,6 +45,12 @@
       </tbody>
     </table>
   <br />
+  {{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
+  <a href="#" class="btn-generate-posts pull-right btn btn-info btn-xs" data-generate-posts="true">
+    <span data-not-clicked>Republish site</span>
+    <span class="hidden" data-clicked>publishing...</span>
+  </a>
+  {{/isAuthorized}}
 </div>
 <script>
   var workflow = []

@@ -9,21 +9,30 @@ import {
 } from '../../cli'
 
 var route = function(req, res){
-  var resHtml = ''
+  var manager = {}
+  manager.home = {files: []}
+  manager.list = Manager.instance.getStructureAndTemplates()
+  manager.config = JSON.stringify(config)
 
-  var page = path.join(__dirname + '/../views/list-structure.html')
-  if (coreUtils.file.exist(page)) {
-    resHtml = fs.readFileSync(page, 'utf8')
-  }
-  
+  var isHome = true
+  var jsonPath = null
+  var linkPath = null
+  var template = null
+  var fileName = null
+  var folderPath = null
   var structure = Manager.instance.getStructureAndTemplates().structure
   structure = JSON.stringify(structure).replace(new RegExp(config.root, 'g'), '')
-  var template = Handlebars.compile(resHtml, {noEscape: true})
-  var tmp = template({
+
+  var EditorVariables = {
+    user: res.user,
+    slugs: Manager.instance.getSlugs(),
+    abeUrl: '/abe/editor/',
+    Locales: coreUtils.locales.instance.i18n,
+    manager: manager,
     config: JSON.stringify(config),
     structure: structure
-  })
-  return res.send(tmp)
+  }
+  res.render('../views/list-structure.html', EditorVariables)
 }
 
 export default route

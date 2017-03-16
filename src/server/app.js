@@ -31,6 +31,7 @@ import {
   listPage,
   ifIn,
   ifCond,
+  isAuthorized,
   moduloIf,
   attrAbe,
   folders,
@@ -70,7 +71,8 @@ var html = exphbs.create({
     folders: folders,
     printConfig: printConfig,
     ifIn: ifIn,
-    ifCond: ifCond
+    ifCond: ifCond,
+    isAuthorized: isAuthorized
   }
 })
 
@@ -93,11 +95,7 @@ app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
-app.use(csrf({
-  cookie: {
-    secure: config.cookie.secure
-  }
-}))
+app.use(csrf({cookie: {secure: config.cookie.secure}}))
 app.use(function(req, res, next) {
   if (req.url.indexOf('/abe/') > -1 ) {
     res.locals._csrf = req.csrfToken()
@@ -106,15 +104,6 @@ app.use(function(req, res, next) {
 })
 
 app.use(bodyParser.json({limit: '1gb'}))
-// app.use(function (req, res, next) {
-//   crypto.randomBytes(Math.ceil(6), function(err, buffer){
-//     res.locals.nonce = buffer
-//       .toString('hex')
-//       .slice(0,12)
-//   })
-//   //res.locals.nonce = uuid.v4()
-//   next()
-// })
 
 if(config.security === true){
   app.use(helmet())

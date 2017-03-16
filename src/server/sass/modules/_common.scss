@@ -1,15 +1,18 @@
 html,
 body{
-  overflow: auto;
+  /*overflow: auto;*/
   height: 100%;
 }
 
 html,
 .abe-body{
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
-.container-main,
+.container-main{
+  height: calc(100% - 55px);
+}
+
 .container-main > .row,
 .half-view,
 .half-view > form{

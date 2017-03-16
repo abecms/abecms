@@ -9,18 +9,15 @@
     <link rel="stylesheet" href="/abecms/css/styles.css">
     <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
     <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
+    <script src="https://use.fontawesome.com/6e9b081f7f.js"></script>
   </head>
   <body class="engine-open abe-body">
-
+    {{abeImport 'header-menu' manager.config this}}
     <div class="container-main">
       <div class="container-table">
-
         {{abeImport 'engine' manager.config this}}
 
         {{abeImport 'page' manager.config this}}
-
-        {{abeImport 'manager' manager.config this}}
-
       </div>
       <div class="wysiwyg-popup color"></div>
       <div class="wysiwyg-popup link"></div>

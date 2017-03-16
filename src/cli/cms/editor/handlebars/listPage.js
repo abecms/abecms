@@ -23,7 +23,7 @@ export default function listPage(file, index, text) {
     res += `<td align="center">
               ${file.abe_meta.template}
             </td>`
-  }else {
+  } else {
     res += '<td align="center"></td>'
   }
   
