@@ -49,32 +49,31 @@
         </div>
         <button type='submit' class='hidden' data-action="draft"></button>
         {{abeImport 'engine-more' manager.config this}}
-        <footer class="footer">
-          <div class="display-status">
-            current status : <span data-display-status="true">{{@root.json.abe_meta.status}}</span>
-          </div>
-          <!-- *************** btn toolbar *************** -->
-          <div class="toolbar">
-            <a href="/abe/editor">
-              <button type="button" class="btn btn-default text-center"><span class="fa fa-list"></span><br>{{@root.text.manager}}</button>
-            </a>    
-              {{#ifCond @root.json.abe_meta.status 'publish'}}
-              <a href="{{@root.json.abe_meta.link}}" target="_blank">
-                <button type="button" class="btn btn-default text-center"><span class="fa fa-eye"></span><br>{{@root.text.preview}}</button>
-              </a>
-              {{else}}
-              <a href="/abe/page{{@root.json.abe_meta.link}}" target="_blank">
-                <button type="button" class="btn btn-default text-center"><span class="fa fa-eye"></span><br>{{@root.text.preview}}</button>
-              </a>
-              {{/ifCond}}
-            <div class="btns">
-              {{abeImport 'toolbar' manager.config this}}
-              {{abeImport 'toolbar-more' manager.config this}}
-            </div>
-          </div><!-- *************** /end btn toolbar *************** -->
-        </footer>
       </form><!-- *************** /end form edit *************** -->
-
+      <footer class="footer">
+        <div class="display-status">
+          current status : <span data-display-status="true">{{@root.json.abe_meta.status}}</span>
+        </div>
+        <!-- *************** btn toolbar *************** -->
+        <div class="toolbar">
+          <a href="/abe/editor">
+            <button type="button" class="btn btn-default text-center"><span class="fa fa-list"></span><br>{{@root.text.manager}}</button>
+          </a>    
+            {{#ifCond @root.json.abe_meta.status 'publish'}}
+            <a href="{{@root.json.abe_meta.link}}" target="_blank">
+              <button type="button" class="btn btn-default text-center"><span class="fa fa-eye"></span><br>{{@root.text.preview}}</button>
+            </a>
+            {{else}}
+            <a href="/abe/page{{@root.json.abe_meta.link}}" target="_blank">
+              <button type="button" class="btn btn-default text-center"><span class="fa fa-eye"></span><br>{{@root.text.preview}}</button>
+            </a>
+            {{/ifCond}}
+          <div class="btns">
+            {{abeImport 'toolbar' manager.config this}}
+            {{abeImport 'toolbar-more' manager.config this}}
+          </div>
+        </div><!-- *************** /end btn toolbar *************** -->
+      </footer>
     </div>
   <div class="close-engine">
     <i class="fa fa-chevron-left"></i>
