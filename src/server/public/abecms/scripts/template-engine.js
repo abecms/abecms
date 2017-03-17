@@ -115,7 +115,8 @@ class Engine {
           },
           stateLoadCallback: function(settings) {
             let params = JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ))
-            $('#abeSearch').val(params.search.search)
+            if(params)
+              $('#abeSearch').val(params.search.search)
             return params
           },
           'createdRow': function (row, data, index) {
