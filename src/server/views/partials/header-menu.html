@@ -9,6 +9,11 @@
       <a class="navbar-brand" href="/abe" title="abe@{{abeVersion}}"><img src="/abecms/image/white_logo_transparent_background_small.png" width="40"/></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-center">
+        <li><a href="javascript:iframeResize('page-template', 320)"><span class="fa fa-mobile"></span></a></li>
+        <li><a href="javascript:iframeResize('page-template', 768)"><span class="fa fa-tablet"></span></a></li>
+        <li><a href="javascript:iframeReset('page-template')"><span class="fa fa-desktop"></span></a></li>
+      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/abe/editor"><span class="fa fa-list"></span> Manager</a></li>
         <li class="dropdown">
@@ -42,3 +47,12 @@
     </div>
   </div>
 </nav>
+<script type="text/javascript">
+  function iframeResize(frameId, width){
+      document.querySelector('#'+frameId).style.width = width + "px";
+  }
+
+  function iframeReset(frameId){
+      document.querySelector('#'+frameId).style.width = "100%";
+  }
+</script>

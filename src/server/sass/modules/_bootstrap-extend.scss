@@ -25,6 +25,14 @@
     color: #3C3C3C;
 }
 
+@media (min-width: 768px) {
+  .navbar-nav.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+  }
+}
+
 .page-header {
 	padding-bottom: 5px;
 	margin: 20px 0 6px 10px;

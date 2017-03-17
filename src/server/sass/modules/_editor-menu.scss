@@ -52,15 +52,24 @@
       border-color: #F95655;
       }
       .btn-save {
-        background-color: #6CC788;
+        background-color: #4CAF50;
         padding-left: 7px;
         padding-right: 7px;
+      }
+      .btn-save:hover {
+        background-color: #388E3C;
       }
       .btn-publish {
         background-color: #2196F3;
       }
+      .btn-publish:hover {
+        background-color: #1976D2;
+      }
       .btn-reject {
-        background-color: #FFAB00;
+        background-color: #FF9800;
+      }
+      .btn-reject:hover {
+        background-color: #F57C00;
       }
     }
 
