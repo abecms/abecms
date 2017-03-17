@@ -45,7 +45,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
     pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
   }
     
-  var editorWidth = '33%'
+  var editorWidth = '25%'
   EditorVariables.express.req.headers && EditorVariables.express.req.headers.cookie && EditorVariables.express.req.headers.cookie.split(';').forEach(function(cookie) {
     var parts = cookie.match(/(.*?)=(.*)$/)
     if ( typeof parts !== 'undefined' && parts !== null && ( parts.length > 2 ) && ( parts[1] === 'editorWidth' ) ) editorWidth = parts[2]
