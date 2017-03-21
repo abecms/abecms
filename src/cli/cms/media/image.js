@@ -37,29 +37,48 @@ export function cropAndSaveFiles(images, file, resp) {
   resp.thumbs = []
   var p = new Promise((resolve) => {
     for (var i = 0; i < length; i++) {
-      var image = images[i]
-      var ext = path.extname(file)
-      var newFile = file.replace(ext, `_${images[i]}${ext}`)
+      let image = images[i]
+      let ext = path.extname(file)
+      let newFile = file.replace(ext, `_${images[i]}${ext}`)
       resp.thumbs.push({
         name: newFile.replace(path.join(config.root, config.publish.url), ''),
         size: image
       })
-      smartCropAndSaveFile(image.split('x'), file, newFile)
-        .then(function (result) {
-          if(result.stderr) {
-            cropAndSaveFile(image.split('x'), file, newFile).then(function () {
-              if(++cropedImage === length) {
+
+      let newWidth = image.split('x')[0]
+      let newHeight = image.split('x')[1]
+
+      Jimp.read(file).then(function (originalImage) {
+        var originalWidth = originalImage.bitmap.width
+        var originalHeight = originalImage.bitmap.height
+        var ratio = originalWidth*newHeight/newWidth
+        if(parseInt(ratio - 1) <= parseInt(originalHeight) && parseInt(ratio + 1) >= parseInt(originalHeight)){
+          originalImage.resize(parseInt(image.split('x')[0]), parseInt(image.split('x')[1])).write(newFile)
+          if(++cropedImage === length) {
+            resolve(resp)
+          }
+        }
+        else {
+          smartCropAndSaveFile(image.split('x'), file, newFile)
+            .then(function (result) {
+              if(result.stderr) {
+                cropAndSaveFile(image.split('x'), file, newFile).then(function () {
+                  if(++cropedImage === length) {
+                    resolve(resp)
+                  }
+                })
+              }
+              else if(++cropedImage === length) {
                 resolve(resp)
               }
             })
+            .catch(function (err) {
+              console.log(err)
+            })
           }
-          else if(++cropedImage === length) {
-            resolve(resp)
-          }
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
+      }).catch(function (err) {
+        console.log(err)
+      });
     }
   })
 
