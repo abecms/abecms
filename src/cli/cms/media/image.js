@@ -16,7 +16,6 @@ import {
 export function cropAndSaveFile(imageSize, file, newFile) {
   var p = new Promise((resolve) => {
     Jimp.read(file).then(function (lenna) {
-      console.log("lenna", newFile)
       lenna.crop(0, 0, parseInt(imageSize[0]), parseInt(imageSize[1])).write(newFile)
     }).catch(function (err) {
       console.error(err)
