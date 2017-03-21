@@ -18,7 +18,19 @@ export default class RichTexarea {
         onKeyUp: () => {
           this.setHTML()
         },
-        hijackContextmenu: false
+        hijackContextmenu: false,
+        onSelection: (collapsed, rect, nodes, rightclick) => {
+          if(typeof window.getSelection().anchorNode === 'undefined' || window.getSelection().anchorNode === null) return
+          var node = window.getSelection().anchorNode.parentNode
+          if(node.tagName === 'A'){
+            var parentTextarea = node.parentNode
+            var i = 10
+            while(!parentTextarea.classList.contains('wysiwyg-container')){
+              parentTextarea = parentTextarea.parentNode
+            }
+            this._action({target: parentTextarea.querySelector('[data-popup="link"]')}, node)
+          }
+        }
       })
 
       this._action = this.action.bind(this)
@@ -71,7 +83,7 @@ export default class RichTexarea {
     this.setHTML()
   }
 
-  action(e) {
+  action(e, selection = null) {
     this.el = e.target
     if(this.el.tagName.toLowerCase() === 'span') this.el = this.el.parentNode
 
@@ -93,9 +105,19 @@ export default class RichTexarea {
         break
       case 'link':
         var html = this.textEditor.getHTML()
-        this._replaceSelectionWithHtml(`<a href="[LINK]" target="[TARGET]" rel="[REL]">${window.getSelection().toString()}</a>`)
+        var currentSelection = null
+        if(selection != null) currentSelection = selection.outerHTML
+        else this._replaceSelectionWithHtml(`<a href="[LINK]" target="[TARGET]" rel="[REL]">${window.getSelection().toString()}</a>`)
         off = this.link.onLink((obj) => {
           if(obj.link !== null) {
+            if(currentSelection != null) {
+              this.textEditor.setHTML(
+                this.textEditor.getHTML().replace(
+                  currentSelection,
+                  `<a href="[LINK]" target="[TARGET]" rel="[REL]">${selection.innerHTML}</a>`
+                )
+              )
+            }
             html = this.textEditor.getHTML().replace('[LINK]', obj.link)
             if(obj.target)    html = html.replace(/\[TARGET\]/, '_blank')
             else              html = html.replace(/target=\"\[TARGET\]\"/, '')
