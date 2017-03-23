@@ -33,7 +33,7 @@ export default function compileAbe(){
       value = ''
     }
     if(typeof value === 'function' || value == null) {
-      value = ''
+      value = (hash.value != null) ? hash.value : ''
     }
     if(hash.type != null && hash.type === 'rich'){
       testXSS = xss(value.replace(/&quot;/g, '"'), {
