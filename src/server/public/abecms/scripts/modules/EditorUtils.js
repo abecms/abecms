@@ -40,39 +40,31 @@ export default class EditorUtils {
 
     if(typeof nodes === 'undefined' || nodes === null || nodes.length === 0) {
       var nodesComment = [].slice.call(IframeCommentNode('#page-template', id.split('[')[0]))
-      if(typeof nodesComment !== 'undefined' && nodesComment !== null
-        && typeof nodesComment.textContent !== 'undefined' && nodesComment.textContent !== null) {
-        var blockHtml = unescape(nodesComment.textContent.replace(/\[\[([\S\s]*?)\]\]/, ''))
-
-        var newBlock = document.createElement('abe')
-        newBlock.innerHTML = blockHtml
-        
-        var childs = [].slice.call(newBlock.childNodes)
-        Array.prototype.forEach.call(childs, (child) => {
-          nodesComment.parentNode.insertBefore(child, nodesComment)
-        })
-      }else if(typeof nodesComment !== 'undefined' && nodesComment !== null) {
+      if(typeof nodesComment !== 'undefined' && nodesComment !== null) {
         Array.prototype.forEach.call(nodesComment, (nodeComment) => {
-          if(typeof nodeComment.parentNode.offsetParent !== 'undefined' && nodeComment.parentNode.offsetParent !== null) {
-            var bounds = nodeComment.parentNode.getBoundingClientRect()
-            var w = document.getElementById('page-template').contentWindow
-            w.scroll(0, w.scrollY + bounds.top + (bounds.height * 0.5) - (window.innerHeight * 0.5))
+          var attrId = target.getAttribute('data-id').replace(/\./g, '-').replace(/\[/g, '').replace(/\]/g, '')
+          if(nodeComment.data.substring(0, 3) === 'ABE' && nodeComment.data.indexOf(attrId) > -1){
+            nodeComment.parentNode.classList.add('select-border')
+            if(typeof nodeComment.parentNode.offsetParent !== 'undefined' && nodeComment.parentNode.offsetParent !== null) {
+              var bounds = nodeComment.parentNode.getBoundingClientRect()
+              var w = document.getElementById('page-template').contentWindow
+              w.scroll(0, w.scrollY + bounds.top + (bounds.height * 0.5) - (window.innerHeight * 0.5))
+            }
           }
         })
       }
       
       nodes = IframeNode('#page-template', '[data-abe-' + id + ']')
-    }
-
-    Array.prototype.forEach.call(nodes, (node) => {
-      node.classList.add('select-border')
-    })
-    
-    // scroll to DOM node
-    if(typeof nodes[0] !== 'undefined' && nodes[0] !== null) {
-      var bounds = nodes[0].getBoundingClientRect()
-      var w = document.getElementById('page-template').contentWindow
-      w.scroll(0, w.scrollY + bounds.top + (bounds.height * 0.5) - (window.innerHeight * 0.5))
+    } else {
+      Array.prototype.forEach.call(nodes, (node) => {
+        node.classList.add('select-border')
+        // scroll to DOM node
+        if(typeof nodes[0] !== 'undefined' && nodes[0] !== null) {
+          var bounds = nodes[0].getBoundingClientRect()
+          var w = document.getElementById('page-template').contentWindow
+          w.scroll(0, w.scrollY + bounds.top + (bounds.height * 0.5) - (window.innerHeight * 0.5))
+        }
+      })
     }
   }
 
@@ -96,7 +88,10 @@ export default class EditorUtils {
     }
 
     Array.prototype.forEach.call(nodes, (node) => {
-      node.classList.add('select-border')
+      if (node.nodeType === 8){
+        node.parentNode.classList.add('select-border')
+      } else
+        node.classList.add('select-border')
     })
 
     return nodes
@@ -125,12 +120,32 @@ export default class EditorUtils {
       dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
       if(typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
         node.setAttribute(dataAbeAttr, val)
-      }else {
-        node.innerHTML = val
+      } else {
+        if(node.nodeType === 8){
+          var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?/ABE--->)')
+          var res = commentPattern.exec(node.parentNode.innerHTML)
+          var repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + val + '<!--/ABE--->')
+
+          node.parentNode.innerHTML = repl
+        } else
+          node.innerHTML = val
       }
       break
     case 'textarea':
-      node.innerHTML = (input.classList.contains('form-rich')) ? input.parentNode.querySelector('[contenteditable]').innerHTML : val
+      if(node.nodeType === 8){
+        var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?/ABE--->)')
+        var res = commentPattern.exec(node.parentNode.innerHTML)
+        var repl
+        if((input.classList.contains('form-rich'))){
+          repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + input.parentNode.querySelector('[contenteditable]').innerHTML + '<!--/ABE--->')
+        } else {
+          repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + val + '<!--/ABE--->')
+        }
+
+        node.parentNode.innerHTML = repl
+      }
+      else
+        node.innerHTML = (input.classList.contains('form-rich')) ? input.parentNode.querySelector('[contenteditable]').innerHTML : val
       break
     case 'select':
       var key = node.getAttribute('data-abe-' + id)

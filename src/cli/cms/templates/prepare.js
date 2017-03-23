@@ -230,11 +230,11 @@ export function addAbeHtmlTagBetweenAbeTags(template) {
   
   // {{#each tags may be declared outside of an html Tag}}
   while (match = cmsData.regex.eachBlockPattern.exec(template)) {
-    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<!--ABE--->' + match[1].trim() + '<!--/ABE--->')
   }
   
   while (match = cmsData.regex.abeAsTagPattern.exec(templateNoDom)) {
-    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<abe>' + match[1].trim() + '</abe>')
+    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<!--ABE--->' + match[1].trim() + '<!--/ABE--->')
   }
 
   return template

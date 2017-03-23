@@ -105,7 +105,7 @@ export default class EditorAutocomplete {
       var countLength = [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')).length
       if(countLength === maxLength) {
         this._currentInput.value = ''
-        this._divWrapper.parentNode.removeChild(this._divWrapper)
+        //this._divWrapper.parentNode.removeChild(this._divWrapper)
         this._currentInput.setAttribute('disabled', 'disabled')
       }else {
         this._currentInput.removeAttribute('disabled')

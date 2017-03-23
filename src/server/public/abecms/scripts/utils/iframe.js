@@ -6,10 +6,41 @@ export function IframeDocument (frameId){
   return iframeDocument
 }
 
+/**
+ * This function search dom nodes including comments
+ * @param {[type]} frameId  [description]
+ * @param {[type]} selector [description]
+ */
 export function IframeNode (frameId, selector){
   var iframe = IframeDocument(frameId)
+  var result
   if (iframe) {
-    return iframe.querySelectorAll(selector.replace(/\[([0-9]*)\]/g, '$1'))
+    try{
+      result = iframe.querySelectorAll(selector.replace(/\[([0-9]*)\]/g, '$1'))
+    } catch(e){
+      result = []
+    }
+    // No DOM node found
+    if (result.length === 0) {
+      let key
+      if (selector[0] === '[')
+        key = selector.slice(1, -1)
+      else
+        key = selector
+      result = IframeCommentNode(frameId, key)
+      Array.prototype.forEach.call(result, (node, index) => {
+        if(node.nodeType === 8 && node.data.substring(0, 4) !== 'ABE ')
+          result.splice(index, 1)
+        node.getAttribute = function(attr) {
+          if(node.textContent.indexOf(attr) > -1) {
+            return node.textContent
+          } else {
+            return null
+          }
+        };
+      })
+    }
+    return result
   }
   return []
 }

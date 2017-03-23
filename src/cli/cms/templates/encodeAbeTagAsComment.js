@@ -8,13 +8,13 @@ import {
  * @return {String} escaped string
  */
 export default function encodeAbeTagAsComment(block){
-  var matchAbe = block.match(/>\s*\{\{abe .*\}\}/g)
+  var matchAbe = block.match(/--->\s*\{\{abe .*\}\}/g)
   if(matchAbe){
     for (var i = 0; i < matchAbe.length; i++){
       var getattr = cmsData.regex.getAttr(matchAbe[i], 'key').replace('.', '[0]-')
       block = block.replace(
         matchAbe[i],
-        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" >'
+        ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" --->'
       )
     }
   }

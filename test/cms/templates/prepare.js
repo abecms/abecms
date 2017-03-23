@@ -48,22 +48,23 @@ describe('cmsTemplates.prepare', function() {
 
     // test
     var template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(this.fixture.text)
-    chai.expect(template.indexOf('<span data-abe-text_visible="text_visible" >')).to.be.above(-1);
+    console.log(template)
+    chai.expect(template.indexOf('<span><!--ABE data-abe-text_visible="text_visible" --->')).to.be.above(-1);
 
     template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(this.fixture.each)
     chai.expect(template.indexOf('data-abe-test{{@index}}-title="test{{@index}}-title"')).to.be.above(-1)
 
-    //
     try{
       template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.fixture.noHtml)
       template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(template)
     } catch (e) {
       console.log(e.stack)
     }
-    chai.expect(template.indexOf('"<abe data-abe-stores{{@index}}-lat="stores{{@index}}-lat"')).to.be.above(-1)
-    chai.expect(template.indexOf('<abe data-abe-stores2{{@index}}-lat="stores2{{@index}}-lat" >')).to.be.above(-1)
-    chai.expect(template.indexOf('<abe data-abe-text2="text2" >{{abe type="text" key="text2" desc="name"}}</abe>')).to.be.above(-1)
-    chai.expect(template.indexOf('"<abe data-abe-text3="text3" >{{abe type="text" key="text3" desc="name"}}</abe>"')).to.be.above(-1)
+
+    chai.expect(template.indexOf('"<!--ABE data-abe-stores{{@index}}-lat="stores{{@index}}-lat"')).to.be.above(-1)
+    chai.expect(template.indexOf('<!--ABE data-abe-stores2{{@index}}-lat="stores2{{@index}}-lat" --->')).to.be.above(-1)
+    chai.expect(template.indexOf('<!--ABE data-abe-text2="text2" --->{{abe type="text" key="text2" desc="name"}}<!--/ABE--->')).to.be.above(-1)
+    chai.expect(template.indexOf('"<!--ABE data-abe-text3="text3" --->{{abe type="text" key="text3" desc="name"}}<!--/ABE--->"')).to.be.above(-1)
   });
 
   /**
@@ -180,14 +181,14 @@ describe('cmsTemplates.prepare', function() {
 
     // test
     var template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.fixture.text)
-    chai.expect(template.indexOf('<abe>{{')).to.be.above(-1);
-    chai.expect(template.indexOf('}}</abe>')).to.be.above(-1);
+    chai.expect(template.indexOf('<!--ABE--->{{')).to.be.above(-1);
+    chai.expect(template.indexOf('}}<!--/ABE--->')).to.be.above(-1);
 
     template = cmsTemplates.prepare.addAbeHtmlTagBetweenAbeTags(this.fixture.noHtml)
-    chai.expect(template.indexOf('"lat": "<abe>{{abe type="text" key="stores.lat" desc="lat"}}</abe>"')).to.be.above(-1)
-    chai.expect(template.indexOf('<abe>{{abe type="text" key="stores2.lat" desc="lat"}}</abe>')).to.be.above(-1)
-    chai.expect(template.indexOf('<abe>{{abe type="text" key="text2" desc="name"}}</abe>')).to.be.above(-1)
-    chai.expect(template.indexOf('"<abe>{{abe type="text" key="text3" desc="name"}}</abe>"')).to.be.above(-1)
+    chai.expect(template.indexOf('"lat": "<!--ABE--->{{abe type="text" key="stores.lat" desc="lat"}}<!--/ABE--->"')).to.be.above(-1)
+    chai.expect(template.indexOf('<!--ABE--->{{abe type="text" key="stores2.lat" desc="lat"}}<!--/ABE--->')).to.be.above(-1)
+    chai.expect(template.indexOf('<!--ABE--->{{abe type="text" key="text2" desc="name"}}<!--/ABE--->')).to.be.above(-1)
+    chai.expect(template.indexOf('"<!--ABE--->{{abe type="text" key="text3" desc="name"}}<!--/ABE--->"')).to.be.above(-1)
 
   });
 

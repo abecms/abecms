@@ -81,7 +81,9 @@ export default class EditorInputs {
   }
 
   _hideIfEmpty(node, value) {
-    var hide = IframeNode('#page-template', '[data-if-empty-clear="' + node.getAttribute('data-abe-') + '"]')[0]
+    let attr
+    attr = node.getAttribute('data-abe-')
+    var hide = IframeNode('#page-template', '[data-if-empty-clear="' + attr + '"]')[0]
 
     if(typeof hide !== 'undefined' && hide !== null) {
       if(value === '') {
@@ -104,9 +106,14 @@ export default class EditorInputs {
     var nodes = EditorUtils.getNode(EditorUtils.getAttr(e.target))
     Array.prototype.forEach.call(nodes, (node) => {
       this._hideIfEmpty(node, e.target.value)
+      if(node.nodeType === 8){
+        node.parentNode.classList.remove('select-border')
+        node.parentNode.classList.remove('display-attr')
+      } else {
+        node.classList.remove('select-border')
+        node.classList.remove('display-attr')
+      }
       EditorUtils.formToHtml(node, e.target)
-      node.classList.remove('select-border')
-      node.classList.remove('display-attr')
     })
 
     this.onBlur._fire(nodes, e.target)
@@ -206,8 +213,6 @@ export default class EditorInputs {
         target.setAttribute('last-values', lastValues)
       }
     }
-
-    // var blockContent = IframeNode('#page-template', '.select-' + attr.id)[0]
 
     var nodeComments = IframeCommentNode('#page-template', attr.id)
 

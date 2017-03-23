@@ -266,7 +266,7 @@ export default class EditorBlock {
    * @return {[type]}           [description]
    */
   _insertNewBlock(dataBlock, newNumber) {
-    var blockContent = IframeCommentNode('#page-template', dataBlock)
+    var blockContent = IframeCommentNode('#page-template', '[['+dataBlock+']]')
     if(typeof blockContent !== 'undefined' && blockContent !== null && blockContent.length > 0) {
       blockContent = blockContent[0]
       var blockHtml = unescape(blockContent.textContent.replace(/\[\[([\S\s]*?)\]\]/, ''))
@@ -329,7 +329,6 @@ export default class EditorBlock {
    */
   _createNewBlock(prevListItem, itemNumber, newNumber) {
     var htmlBlockItem = prevListItem.innerHTML
-
     htmlBlockItem = htmlBlockItem.replace(/\[(\d*)\]/g, function(val, $_1) {
       itemNumber = parseInt($_1)
       newNumber = itemNumber + 1
