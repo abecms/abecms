@@ -52,7 +52,7 @@ export default function compileAbe(){
     try {
       value = eval('content.' + hash.key)
     }catch(e) {
-      value = hash.key
+      value = ''
     }
   }else {
     value = hash.key
