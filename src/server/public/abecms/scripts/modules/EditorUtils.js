@@ -37,18 +37,13 @@ export default class EditorUtils {
     }
     var id = target.getAttribute('data-id').replace(/\./g, '-')
     var nodes = IframeNode('#page-template', '[data-abe-' + id + ']')
-console.log('-------scrollToInputElement-------')
-console.log(id)
-console.log(nodes)
+
     if(typeof nodes === 'undefined' || nodes === null || nodes.length === 0) {
       var nodesComment = [].slice.call(IframeCommentNode('#page-template', id.split('[')[0]))
-console.log(nodes)
+      
       if(typeof nodesComment !== 'undefined' && nodesComment !== null) {
         Array.prototype.forEach.call(nodesComment, (nodeComment) => {
-console.log(nodeComment)
           var attrId = target.getAttribute('data-id').replace(/\./g, '-').replace(/\[/g, '').replace(/\]/g, '')
-console.log('attrId')
-console.log(attrId)
           if(nodeComment.data.substring(0, 3) === 'ABE' && nodeComment.data.indexOf(attrId) > -1){
             nodeComment.parentNode.classList.add('select-border')
             if(typeof nodeComment.parentNode.offsetParent !== 'undefined' && nodeComment.parentNode.offsetParent !== null) {
@@ -62,9 +57,7 @@ console.log(attrId)
       
       nodes = IframeNode('#page-template', '[data-abe-' + id + ']')
     } else {
-      console.log('PAS COMMENT')
       Array.prototype.forEach.call(nodes, (node) => {
-      console.log(node)
         if(node.nodeType === 8){
           var attrId = target.getAttribute('data-id').replace(/\./g, '-').replace(/\[/g, '').replace(/\]/g, '')
           if(node.data.substring(0, 3) === 'ABE' && node.data.indexOf(attrId) > -1){
