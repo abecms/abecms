@@ -1,26 +1,106 @@
 <style>
-/* Carousel base class */
-.carousel {
-  height: 500px;
-  margin-bottom: 60px;
-}
-/* Since positioning the image, we need to help out the caption */
-.carousel-caption {
-  z-index: 10;
+
+[data-scribe="element:name"],
+[data-scribe="element:user_link"],
+[data-scribe="element:screen_name"]{
+  display: block;
 }
 
-/* Declare heights because of positioning of img element */
-.carousel .item {
-  height: 500px;
-  background-color: #777;
+[data-scribe="element:verified_badge"]{
+  display: none;
 }
-.carousel-inner > .item > img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  height: 500px;
+
+[data-scribe="component:author"],
+.timePosted,
+.tweet{
+  text-align: center;
 }
+
+[data-scribe="element:avatar"]{
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+[data-scribe="element:name"]:active,
+[data-scribe="element:name"]:visited,
+[data-scribe="element:name"]:hover,
+[data-scribe="element:name"]{
+  color: #6a757a;
+  text-decoration: none;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+[data-scribe="element:screen_name"]:active,
+[data-scribe="element:screen_name"]:visited,
+[data-scribe="element:screen_name"]:hover,
+[data-scribe="element:screen_name"]{
+  color: #b0adaf;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 5px 0 15px 0;
+}
+
+.timePosted{
+  margin-bottom: 35px;
+}
+
+.timePosted a:active,
+.timePosted a:visited,
+.timePosted a:hover,
+.timePosted a{
+  color: #acb4bf;
+  text-decoration: none;
+  font-size: 10px;
+}
+
+.tweet{
+  color: #868688;
+  font-size: 14px;
+  padding: 0 50px;
+  margin: 0;
+  word-break: break-word;
+}
+
+.tweet a:active,
+.tweet a:visited,
+.tweet a:hover,
+.tweet a{
+  text-decoration: none;
+  color: #2dadeb;
+}
+
+.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
+  margin: 0 8px;
+}
+
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+}
+
+.swiper-pagination-bullet {
+  background: #d7d7d7;
+  opacity: 1;
+}
+.swiper-pagination-bullet-active {
+  background: #7f9791;
+}
+
+.tweet-title{
+  text-align: center;
+  font-size: 34px;
+  color: #435980;
+  font-weight: 200;
+}
+
+.tweet-subtitle{
+  text-align: center;
+  font-size: 20px;
+  color: #a0a3ab;
+  margin-bottom: 20px;
+}
+
 </style>
 <div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
 
@@ -53,6 +133,19 @@
         </p>
         <p></p>
       </div>
+
+      <div class="tweet-title">
+        Title tweet abe
+      </div>
+
+      <div class="tweet-subtitle">
+        Subtitle tweet abe
+      </div>
+
+      <div id="tweets-slider" class="swiper-container">
+        
+      </div>
+
     </div>
   </div>
 </div><!-- *************** /end right admin manager *************** -->
