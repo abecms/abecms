@@ -29,7 +29,7 @@ export function getAll(str, json) {
     source: null,
     tab: 'default',
     type: 'text',
-    value: '',
+    value: null,
     file: '',
     visible: true
   }

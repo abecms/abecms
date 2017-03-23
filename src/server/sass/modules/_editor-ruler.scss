@@ -72,18 +72,15 @@ body {
     }
   }
 
-  .form-wrapper {
-    form {
-      display: none;
-    }
+  footer.footer,
+  .form-wrapper form {
+    display: none;
   }
 
   &.engine-open {
-    
-    .form-wrapper {
-      form {
-        display: block;
-      }
+    footer.footer,    
+    .form-wrapper form {
+      display: block;
     }
   }
 }

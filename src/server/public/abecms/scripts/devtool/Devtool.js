@@ -62,12 +62,20 @@ export class Devtool {
     })
 
     $('.close-engine').on('click', () => {
-      this.body.removeClass('engine-open')
-      this.form.width(0)
+      this.body.addClass('abeform-anim')
+      this.form.width('0%')
+      setTimeout(() => {
+        this.body.removeClass('engine-open')
+      }, 10)
     })
     $('.open-engine').on('click', () => {
       this.body.addClass('engine-open')
-      this.form.width(this.form.attr('data-width'))
+      setTimeout(() => {
+        this.form.width(this.form.attr('data-width'))
+      }, 10)
+      setTimeout(() => {
+        this.body.removeClass('abeform-anim')
+      }, 300)
     })
   }
 
