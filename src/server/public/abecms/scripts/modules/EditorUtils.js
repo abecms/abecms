@@ -37,12 +37,18 @@ export default class EditorUtils {
     }
     var id = target.getAttribute('data-id').replace(/\./g, '-')
     var nodes = IframeNode('#page-template', '[data-abe-' + id + ']')
-
+console.log('-------scrollToInputElement-------')
+console.log(id)
+console.log(nodes)
     if(typeof nodes === 'undefined' || nodes === null || nodes.length === 0) {
       var nodesComment = [].slice.call(IframeCommentNode('#page-template', id.split('[')[0]))
+console.log(nodes)
       if(typeof nodesComment !== 'undefined' && nodesComment !== null) {
         Array.prototype.forEach.call(nodesComment, (nodeComment) => {
+console.log(nodeComment)
           var attrId = target.getAttribute('data-id').replace(/\./g, '-').replace(/\[/g, '').replace(/\]/g, '')
+console.log('attrId')
+console.log(attrId)
           if(nodeComment.data.substring(0, 3) === 'ABE' && nodeComment.data.indexOf(attrId) > -1){
             nodeComment.parentNode.classList.add('select-border')
             if(typeof nodeComment.parentNode.offsetParent !== 'undefined' && nodeComment.parentNode.offsetParent !== null) {
@@ -56,13 +62,27 @@ export default class EditorUtils {
       
       nodes = IframeNode('#page-template', '[data-abe-' + id + ']')
     } else {
+      console.log('PAS COMMENT')
       Array.prototype.forEach.call(nodes, (node) => {
-        node.classList.add('select-border')
-        // scroll to DOM node
-        if(typeof nodes[0] !== 'undefined' && nodes[0] !== null) {
-          var bounds = nodes[0].getBoundingClientRect()
-          var w = document.getElementById('page-template').contentWindow
-          w.scroll(0, w.scrollY + bounds.top + (bounds.height * 0.5) - (window.innerHeight * 0.5))
+      console.log(node)
+        if(node.nodeType === 8){
+          var attrId = target.getAttribute('data-id').replace(/\./g, '-').replace(/\[/g, '').replace(/\]/g, '')
+          if(node.data.substring(0, 3) === 'ABE' && node.data.indexOf(attrId) > -1){
+            node.parentNode.classList.add('select-border')
+            if(typeof node.parentNode.offsetParent !== 'undefined' && node.parentNode.offsetParent !== null) {
+              var bounds = node.parentNode.getBoundingClientRect()
+              var w = document.getElementById('page-template').contentWindow
+              w.scroll(0, w.scrollY + bounds.top + (bounds.height * 0.5) - (window.innerHeight * 0.5))
+            }
+          }
+        } else {
+          node.classList.add('select-border')
+          // scroll to DOM node
+          if(typeof nodes[0] !== 'undefined' && nodes[0] !== null) {
+            var bounds = nodes[0].getBoundingClientRect()
+            var w = document.getElementById('page-template').contentWindow
+            w.scroll(0, w.scrollY + bounds.top + (bounds.height * 0.5) - (window.innerHeight * 0.5))
+          }
         }
       })
     }
