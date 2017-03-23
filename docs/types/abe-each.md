@@ -19,7 +19,7 @@
 
 *Result :*
 
-![Each](assets/abe-each.png)
+![Each](../assets/abe-each.png)
 
 We have now a block each myblock that can be repeated as many time as we want with the '+' icon
 
@@ -49,4 +49,4 @@ Notice groupdesc attribut that is use to write a description for our single grou
 
 *Result :*
 
-![SIngleEach](assets/single-group.png)
+![SIngleEach](../assets/single-group.png)
