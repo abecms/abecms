@@ -34,7 +34,7 @@ export default class EditorFiles {
       return false
     }
     EditorUtils.scrollToInputElement(target)
-    var parentTarget = target.parentNode.parentNode.parentNode
+    var parentTarget = target.parentNode.parentNode.parentNode.parentNode
     var percent = parentTarget.querySelector('.percent')
     var percentHtml = percent.innerHTML
     var file = target.files[0]
