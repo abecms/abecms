@@ -316,6 +316,7 @@ export function printInput (params, root) {
   var inputClass = 'form-control form-abe'
   res += getLabel(params)
 
+  if(params.value === null && params.defaultvalue != null) params.value = params.defaultvalue
   params.placeholder = params.placeholder || ''
   params.value = params.value || ''
   

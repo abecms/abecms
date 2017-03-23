@@ -54,7 +54,7 @@ export default class Form {
       source: null,
       tab: 'default',
       type: 'text',
-      value: '',
+      value: null,
       visible: true,
       precontribTemplate: ''
     }
