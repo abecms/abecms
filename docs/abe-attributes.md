@@ -48,6 +48,7 @@ are always required for all content type
 - [locale](#locale)
 - [prefill](#prefill)
 - [prefill-quantity](#prefill-quantity)
+- [value](#value)
 
 ## <a name="tab"></a>tab (String)
 
@@ -424,3 +425,14 @@ prefill-quantity="3"
 ```
 
 How many default values to prefill
+
+
+## <a name="value"></a>value (String)
+
+Default: none
+
+```html
+value="default text value"
+```
+
+Add a default value inside input, if the input value changes the default value won't be used anymore unless the value of the input become an empty string
