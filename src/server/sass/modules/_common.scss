@@ -10,6 +10,10 @@ html,
 }
 
 .container-main{
+  height: 100%;
+}
+
+.engine-open .container-main{
   height: calc(100% - 55px);
 }
 
