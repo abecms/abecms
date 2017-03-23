@@ -97,8 +97,14 @@
   }
 }
 
-.open-engine {
+.engine-open .open-engine {
   right: -14px;
+  top: -16px;
+}
+
+.open-engine {
+  right: -24px;
+  top: -6px;
   padding-left: 10px;
   padding-right: 7px;
   z-index: 12;
