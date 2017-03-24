@@ -19,18 +19,18 @@ function add(obj, json, text, util) {
     key = getDataIdWithNoSlash(key)
 
     try {
-      obj.value = eval('json[key][index].' + prop)
+      obj.value = eval(`json[key][index]["${prop}"]`)
     } catch(e) {
 
       try {
-        eval(`json[key][index].${prop} = ` + JSON.stringify(value))
+        eval(`json[key][index]["${prop}"] = ` + JSON.stringify(value))
       }catch(e) {
         // no value found inside json OKEY
       }
     }
   }else {
     try {
-      obj.value = eval(`json.${getDataIdWithNoSlash(obj.key)}`)
+      obj.value = eval(`json["${getDataIdWithNoSlash(obj.key)}"]`)
     } catch(e) {
       // no value found inside json OKEY
     }
@@ -79,7 +79,7 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
   }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
     realKey = obj.key//.replace(/\./g, '-')
     try {
-      obj.value = eval(`json.${getDataIdWithNoSlash(realKey)}`)
+      obj.value = eval(`json["${getDataIdWithNoSlash(realKey)}"]`)
     }catch(e) {
       obj.value = null
     }
