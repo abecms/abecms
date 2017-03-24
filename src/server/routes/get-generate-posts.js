@@ -21,6 +21,8 @@ var count = 0
 var route = function(req, res) {
   // if event-stream
   if (req.accepts('text/event-stream')) {
+    // Approximately 24 days...
+    req.socket.setTimeout(0x7FFFFFFF);
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -38,7 +40,7 @@ var route = function(req, res) {
       res.app.removeListener("generate-posts", evt)
     }, false);
 
-  }else { // if get
+  } else { // if get
     var result
     var proc = abeExtend.process('generate-posts', [''], (data) => {
       res.app.emit("generate-posts", data)
