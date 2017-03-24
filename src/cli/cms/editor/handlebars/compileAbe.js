@@ -25,7 +25,7 @@ export default function compileAbe(){
     // hash.key = hash.key.replace(/\{\{@index\}\}/, '[{{@index}}]')
     hash.key = hash.key.replace(/\{\{@index\}\}/, `[${arguments[0].data.index}]`)
     try{
-      value = content ? eval(`content.${hash.dictionnary}[${arguments[0].data.index}].${key}`) : hash.key
+      value = content ? eval(`content["${hash.dictionnary}"][${arguments[0].data.index}]["${key}"]`) : hash.key
       // value = content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key
     }
     catch(e){
@@ -50,7 +50,8 @@ export default function compileAbe(){
   hash = arguments[0].hash
   if(content) {
     try {
-      value = eval('content.' + hash.key)
+      if(hash.key.indexOf('.') > -1) value = eval(`content["${hash.key.split('.').join('"]["')}"]`)
+      else value = eval(`content["${hash.key}"]`)
     }catch(e) {
       value = ''
     }
