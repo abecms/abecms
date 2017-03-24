@@ -1,0 +1,5 @@
+{
+	"obj": {"desc":"test hyphen","display":null,"editable":true,"key":"test-hyphen","tab":"default","type":"text","value":null},
+	"json": {"test-hyphen":"some text"},
+	"text": "{{abe type='text' key='test-hyphen' desc='test hyphen' tab='default' order='0'}}"
+}
