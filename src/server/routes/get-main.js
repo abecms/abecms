@@ -23,6 +23,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
     files: []//Manager.instance.getList()
   }
 
+  manager.nbPosts = Manager.instance.getList().length
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.editConfig = EditorVariables.express.req.app.get('config')
   manager.config = JSON.stringify(config)
@@ -128,6 +129,7 @@ var route = function(req, res, next) {
       folderPath = path.dirname(filePath)
 
       EditorVariables.isHome = false
+      EditorVariables.isEditor = true
       var filePathTest = cmsData.revision.getDocumentRevision(filePath)
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
         jsonPath = filePathTest.path

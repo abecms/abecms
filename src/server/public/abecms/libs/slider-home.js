@@ -1,5 +1,4 @@
 var tweets = twitterFetcher.fetch({
-  // "profile": {"screenName": 'rihanna'},
   "profile": {"screenName": 'abe_cms'},
   "domId": 'tweets-slider',
   "maxTweets": 10,
