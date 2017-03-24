@@ -1,7 +1,9 @@
 import {
-  cmsOperations
-  ,abeExtend
-  ,cmsData
+  cmsOperations,
+  abeExtend,
+  cmsData,
+  Manager,
+  config
 } from '../../../../cli'
 
 var route = function(req, res, next){
@@ -17,6 +19,20 @@ var route = function(req, res, next){
   )
 
   p.then((result) => {
+    // Auto-republish if the config is setup and the posts limit is not reached
+    if(operation.workflow === 'publish' && config.publish['auto-republish'] && config.publish['auto-republish'].active){
+      var nbPosts = Manager.instance.getList().length
+      if(config.publish['auto-republish'].limit >= nbPosts){
+        var proc = abeExtend.process('generate-posts', [''], (data) => {
+          res.app.emit("generate-posts", data)
+        })
+        if (proc) {
+          res.app.emit("generate-posts", {percent: 0, time: "00:00sec"})
+          console.log('generate-posts emitted')
+        }
+      }
+    }
+
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },
@@ -24,7 +40,7 @@ var route = function(req, res, next){
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   }).catch(function(e) {
-    console.error('[ERROR] post-save.js', e)
+    console.error('[ERROR] submit.js', e)
   })
 }
 

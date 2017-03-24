@@ -23,7 +23,11 @@
     "url": "data"
   },
   "publish": {
-    "url": "site"
+    "url": "site",
+    "auto-republish": {
+      "active": true,
+      "limit": 500
+    }
   },
   "reference": {
     "url": "reference"
