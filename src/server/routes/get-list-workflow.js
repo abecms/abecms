@@ -7,6 +7,14 @@ import {
   ,config
 } from '../../cli'
 
+/**
+ * this route returns the workflow list in HTML format
+ * @param  {[type]}   router [description]
+ * @param  {[type]}   req    [description]
+ * @param  {[type]}   res    [description]
+ * @param  {Function} next   [description]
+ * @return {[type]}          [description]
+ */
 var route = function(router, req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   var routes = router.stack

@@ -2,7 +2,7 @@ import {
   config,
   abeExtend,
   Manager
-} from '../../cli'
+} from '../../../cli'
 
 /**
  * This route returns filtered list of posts in JSON format

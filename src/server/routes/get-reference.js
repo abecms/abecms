@@ -8,6 +8,12 @@ import {
   Handlebars
 } from '../../cli'
 
+/**
+ * This route returns the references files in HTML format
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
 var route = function(req, res){
   var manager = {}
   manager.home = {files: []}

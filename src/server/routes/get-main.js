@@ -80,6 +80,13 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   }
 }
 
+/**
+ * This route returns the editor page as HTML
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
 var route = function(req, res, next) {
   var filePath = req.originalUrl.replace('/abe/editor', '')
   if (filePath === '' || filePath === '/') {
