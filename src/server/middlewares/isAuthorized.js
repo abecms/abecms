@@ -20,7 +20,7 @@ var middleware = function(req, res, next) {
 
   if(!User.utils.isAbeRestrictedUrl(req.url)) {
     if (user != null && req.url.indexOf('/abe/users/login') > -1 && req.method === 'GET' ) {
-      res.redirect('/abe/editor')
+      res.redirect('/abe')
       return
     }else {
       next()
