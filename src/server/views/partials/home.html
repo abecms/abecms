@@ -138,5 +138,25 @@
 
     </div>
   </div>
-</div><!-- *************** /end right admin manager *************** -->
+</div>
+ <script type="text/javascript">
+   if (!!window.EventSource) {
+    var source = new EventSource('/abe/rest/activity-stream');
+    source.addEventListener('message', (e, data) => {
+      var json = JSON.parse(e.data)
+      console.log(json)
+    }, false);
+
+    source.addEventListener('open', (e) => {
+      // Connection was opened.
+    }, false);
+
+    source.addEventListener('error', (e) => {
+      if (e.readyState == EventSource.CLOSED) {
+        // Connection was closed.
+      }
+    }, false);
+
+  }
+ </script>
        

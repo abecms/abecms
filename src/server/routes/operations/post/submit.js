@@ -32,7 +32,7 @@ var route = function(req, res, next){
         }
       }
     }
-
+    res.app.emit("activity-stream", {operation: operation.workflow, post: operation.postUrl, user: res.user.username})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },

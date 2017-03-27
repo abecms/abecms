@@ -41,6 +41,7 @@ abeExtend.hooks.instance.trigger('beforeAddRoute', router)
 
 router.get('/abe/rest/posts*', rest.posts)
 router.get('/abe/rest/post*', rest.post)
+router.get('/abe/rest/activity-stream', rest.activityStream)
 
 router.get('/abe/users/forgot', users.getForgot)
 router.get('/abe/users/list', users.getList)
