@@ -45,14 +45,24 @@ export function cropAndSaveFiles(images, file, resp) {
         size: image
       })
 
-      let newWidth = image.split('x')[0]
-      let newHeight = image.split('x')[1]
+      let splitedImage = image.split('x')
+      let newWidth = null
+      let newHeight = null
+
+      if(splitedImage[0] != null && splitedImage[0] != '') newWidth = parseInt(image.split('x')[0])
+      if(splitedImage[1] != null && splitedImage[1] != '') newHeight = parseInt(image.split('x')[1])
 
       Jimp.read(file).then(function (originalImage) {
         var originalWidth = originalImage.bitmap.width
         var originalHeight = originalImage.bitmap.height
         var ratio = originalWidth*newHeight/newWidth
-        if(parseInt(ratio - 1) <= parseInt(originalHeight) && parseInt(ratio + 1) >= parseInt(originalHeight)){
+        if(newWidth === null || newHeight === null){
+          originalImage.resize(newWidth != null ? newWidth : Jimp.AUTO, newHeight != null ? newHeight : Jimp.AUTO).write(newFile)
+          if(++cropedImage === length) {
+            resolve(resp)
+          }
+        }
+        else if(parseInt(ratio - 1) <= parseInt(originalHeight) && parseInt(ratio + 1) >= parseInt(originalHeight)){
           originalImage.resize(parseInt(image.split('x')[0]), parseInt(image.split('x')[1])).write(newFile)
           if(++cropedImage === length) {
             resolve(resp)
