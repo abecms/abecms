@@ -1,3 +1,6 @@
+* [[`c5ebc689d6`](https://github.com/abecms/abecms/commit/c5ebc689d6)] - **enhancement**: The republish all button only appear when necessary. (gregorybesson) 
+* [[`efb756c00a`](https://github.com/abecms/abecms/commit/efb756c00a)] - **feature**: Auto-republish for blogs containing less than 500 posts (gregorybesson) 
+* [[`533fc2a89f`](https://github.com/abecms/abecms/commit/533fc2a89f)] - **doc**: CHANGELOG update (gregorybesson) 
 * [[`9bad6b9607`](https://github.com/abecms/abecms/commit/9bad6b9607)] - **fix**: scrollTo (gregorybesson) 
 * [[`7f2507e035`](https://github.com/abecms/abecms/commit/7f2507e035)] - **fix**: scrollTo (gregorybesson) 
 * [[`a5e63cc521`](https://github.com/abecms/abecms/commit/a5e63cc521)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 

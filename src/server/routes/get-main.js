@@ -23,6 +23,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
     files: []//Manager.instance.getList()
   }
 
+  manager.nbPosts = Manager.instance.getList().length
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.editConfig = EditorVariables.express.req.app.get('config')
   manager.config = JSON.stringify(config)
@@ -79,6 +80,13 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   }
 }
 
+/**
+ * This route returns the editor page as HTML
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
 var route = function(req, res, next) {
   var filePath = req.originalUrl.replace('/abe/editor', '')
   if (filePath === '' || filePath === '/') {
@@ -128,6 +136,7 @@ var route = function(req, res, next) {
       folderPath = path.dirname(filePath)
 
       EditorVariables.isHome = false
+      EditorVariables.isEditor = true
       var filePathTest = cmsData.revision.getDocumentRevision(filePath)
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
         jsonPath = filePathTest.path

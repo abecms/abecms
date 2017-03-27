@@ -9,7 +9,7 @@ import {
   abeExtend
 } from '../../cli'
 
-function add(obj, json, text, util) {
+export function add(obj, json, text, util) {
   var value = obj.value
 
   if(obj.key.indexOf('[') > -1) {
@@ -44,7 +44,7 @@ function add(obj, json, text, util) {
 
   util.add(obj)
 
-  return value
+  return obj.value
 }
 
 function getDataIdWithNoSlash(key) {

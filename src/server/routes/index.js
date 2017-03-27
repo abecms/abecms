@@ -22,6 +22,7 @@ import getImage from './get-image'
 import getHome from './get-home'
 import * as users from './users'
 import * as operations from './operations'
+import * as rest from './rest'
 
 export {
 	getHome,
@@ -47,5 +48,6 @@ export {
 	getThumbs,
 	getImage,
 	users,
-	operations
+	operations,
+	rest
 }

@@ -7,6 +7,13 @@ import {
   ,coreUtils
 } from '../../cli'
 
+/**
+ * This route returns the hooks list as html
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
 var route = function(req, res, next) {
   var html = ''
 

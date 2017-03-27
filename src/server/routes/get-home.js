@@ -10,6 +10,13 @@ import {
   User
 } from '../../cli'
 
+/**
+ * This route returns the homepage HTML
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
 var route = function(req, res, next) {
   var manager = {}
   manager.home = {files: []}
