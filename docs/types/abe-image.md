@@ -45,6 +45,8 @@ uploading a image named *my_image.jpg* will create a thumbs by default named my_
 
 if the tag contains ```thumbs='250x250,350x350'``` this will also create *my_image_thumb_250x250.jpg* & *my_image_thumb_350x350.jpg*
 
+if the tag contains ```thumbs='250x'``` or ```thumbs='x250'``` this will create an image that have the with / height specified and the other side no specified will be resized to keep the same ratio as the original image
+
 ###Important
 
 thumb are created using https://github.com/jwagner/smartcrop-cli which require to have imagemagick installed on your computer, if you don't a fallback library full JS is used (https://github.com/oliver-moran/jimp) but doesn't crop in a smart way your images
