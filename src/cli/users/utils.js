@@ -192,12 +192,13 @@ export function getTokenFromCookies(req, res) {
   return cookies.get('x-access-token')
 }
 
+// the last test !/^\/abe\//.test(currentRoute + '/') has a "+ '/'" to take /abe route into account
 export function isAbeRestrictedUrl(currentRoute) {
   if( currentRoute.indexOf('/abe/users/forgot') > -1
     || currentRoute.indexOf('/abe/users/login') > -1
     || currentRoute.indexOf('/abe/users/reset') > -1
     || currentRoute.indexOf('/abe/rest/') > -1
-    || !/^\/abe\//.test(currentRoute)) {
+    || !/^\/abe\//.test(currentRoute + '/')) {
     return false
   }
 
