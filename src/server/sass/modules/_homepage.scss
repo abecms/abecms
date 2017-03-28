@@ -1,0 +1,267 @@
+[data-scribe="element:name"],
+[data-scribe="element:user_link"],
+[data-scribe="element:screen_name"]{
+  display: block;
+}
+
+[data-scribe="element:verified_badge"]{
+  display: none;
+}
+
+[data-scribe="component:author"],
+.timePosted,
+.tweet{
+  text-align: center;
+}
+
+[data-scribe="element:avatar"]{
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+[data-scribe="element:name"]:active,
+[data-scribe="element:name"]:visited,
+[data-scribe="element:name"]:hover,
+[data-scribe="element:name"]{
+  color: #6a757a;
+  text-decoration: none;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+[data-scribe="element:screen_name"]:active,
+[data-scribe="element:screen_name"]:visited,
+[data-scribe="element:screen_name"]:hover,
+[data-scribe="element:screen_name"]{
+  color: #b0adaf;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 5px 0 15px 0;
+}
+
+.timePosted{
+  margin-bottom: 35px;
+}
+
+.timePosted{
+   a:active,
+   a:visited,
+   a:hover,
+   a{
+    color: #acb4bf;
+    text-decoration: none;
+    font-size: 10px;
+  }
+}
+
+.tweet{
+  color: #868688;
+  font-size: 14px;
+  padding: 0 50px;
+  margin: 0;
+  word-break: break-word;
+}
+
+.tweet {
+  a:active,
+  a:visited,
+  a:hover,
+  a{
+    text-decoration: none;
+    color: #2dadeb;
+  }
+}
+
+.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
+  margin: 0 8px;
+}
+
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+}
+
+.swiper-pagination-bullet {
+  background: #d7d7d7;
+  opacity: 1;
+}
+.swiper-pagination-bullet-active {
+  background: #7f9791;
+}
+
+.tweet-title{
+  text-align: center;
+  font-size: 34px;
+  color: #435980;
+  font-weight: 200;
+}
+
+.tweet-subtitle{
+  text-align: center;
+  font-size: 20px;
+  color: #a0a3ab;
+  margin-bottom: 20px;
+}
+
+
+
+
+@-webkit-keyframes load {
+  0% {
+    stroke-dashoffset: 0;
+  }
+}
+@-moz-keyframes load {
+  0% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes load {
+  0% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.progress-stat{
+  display: table;
+  .progress-text,
+  .progress-element {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .progress-element {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    color: #93A2AC;
+    font-weight: 100;
+    &:after {
+      content: attr(data-percent);
+      position: absolute;
+      width: 100%;
+      top: 4.1rem;
+      left: 0;
+      font-size: 2rem;
+      text-align: center;
+      font-weight: 500;
+      font-size: 15px;
+    }
+  }
+  .progress-text {
+    color: #3C3C3C;
+    font-size: 15px;
+    padding-left: 15px;
+    span {
+      font-size: 40px;
+      font-weight: bold;
+    }
+  }
+  svg {
+    width: 10rem;
+    height: 10rem;
+    padding: 5px;
+    &:nth-child(2) {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: rotate(-90deg);
+      -webkit-transform: rotate(-90deg);
+      -moz-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+      path {
+        fill: none;
+        stroke-width: 31;
+        stroke-dasharray: 629;
+        stroke: #F1F1F1;
+        -webkit-animation: load 1750ms ease-in-out;
+        -moz-animation: load 1750ms ease-in-out;
+        -o-animation: load 1750ms ease-in-out;
+        animation: load 1750ms ease-in-out;
+      }
+    }
+  }
+}
+
+.statistics{
+  margin-top: 70px;
+  margin-bottom: 70px;
+  .text-uppercase{
+    padding-bottom: 25px;
+  }
+}
+
+// stream
+
+.stream{
+  display: inline-block;
+  position: relative;
+  max-height: 220px;
+  overflow: auto;
+  padding-right: 20px;
+  width: auto;
+  .remove{
+    opacity: 0;
+  }
+}
+
+.stream-item{
+  padding-left: 30px;
+  position: relative;
+  margin-bottom: 25px;
+  transition: opacity 750ms ease-in-out;
+  opacity: 1;
+  position: relative;
+  &:before{
+    border-radius: 50%;
+    content: " ";
+    background: #F1F1F1;
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    height: 15px;
+    width: 14px;
+    z-index: 33;
+  }
+  &:after{
+    content: " ";
+    background: #F1F1F1;
+    position: absolute;
+    top: 30px;
+    left: 6px;
+    width: 1px;
+    height: 135%;
+    margin-bottom: 25px;
+    z-index: 22;
+  }
+  &.created{
+    &:before{
+      background: #B8E986;
+    }
+  }
+  &.approved,
+  &.reviewed,
+  &.published{
+    &:before{
+      background: #40B7E2;
+    }
+  }
+  &.deleted{
+    &:before{
+      background: #F6A623;
+    }
+  }
+}
+
+
+.stream-page:active,
+.stream-page:visited,
+.stream-page:hover,
+.stream-page{
+  color: #4990E2;
+  text-decoration: none;
+}
+
+.stream-time{
+  color: #929090;
+  font-size: 11px;
+}

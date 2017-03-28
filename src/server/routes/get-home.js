@@ -19,7 +19,7 @@ import {
  */
 var route = function(req, res, next) {
   var manager = {}
-  manager.home = {files: []}
+  manager.home = {files: Manager.instance.getList(), publishedFiles : Manager.instance.getListWithStatusOnFolder('publish')}
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.config = JSON.stringify(config)
 
@@ -29,6 +29,13 @@ var route = function(req, res, next) {
   var template = null
   var fileName = null
   var folderPath = null
+  var percent = (manager.home.publishedFiles.length / manager.home.files.length * 100).toFixed(1)
+  var statistics = {
+    totalPage: manager.home.files.length,
+    totalPublishedPage: manager.home.publishedFiles.length,
+    percentPublishedPages: percent,
+    svgCirclePercent: 629 * (percent/100)
+  }
 
   var EditorVariables = {
     user: res.user,
@@ -40,7 +47,8 @@ var route = function(req, res, next) {
     config: config,
     Locales: coreUtils.locales.instance.i18n,
     abeVersion: pkg.version,
-    manager: manager
+    manager: manager,
+    statistics: statistics
   }
 
   res.render('../views/template-home', EditorVariables)

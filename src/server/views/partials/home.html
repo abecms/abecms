@@ -1,107 +1,3 @@
-<style>
-
-[data-scribe="element:name"],
-[data-scribe="element:user_link"],
-[data-scribe="element:screen_name"]{
-  display: block;
-}
-
-[data-scribe="element:verified_badge"]{
-  display: none;
-}
-
-[data-scribe="component:author"],
-.timePosted,
-.tweet{
-  text-align: center;
-}
-
-[data-scribe="element:avatar"]{
-  display: inline-block;
-  margin-bottom: 5px;
-}
-
-[data-scribe="element:name"]:active,
-[data-scribe="element:name"]:visited,
-[data-scribe="element:name"]:hover,
-[data-scribe="element:name"]{
-  color: #6a757a;
-  text-decoration: none;
-  font-weight: bolder;
-  font-size: 15px;
-}
-
-[data-scribe="element:screen_name"]:active,
-[data-scribe="element:screen_name"]:visited,
-[data-scribe="element:screen_name"]:hover,
-[data-scribe="element:screen_name"]{
-  color: #b0adaf;
-  text-decoration: none;
-  font-size: 12px;
-  padding: 5px 0 15px 0;
-}
-
-.timePosted{
-  margin-bottom: 35px;
-}
-
-.timePosted a:active,
-.timePosted a:visited,
-.timePosted a:hover,
-.timePosted a{
-  color: #acb4bf;
-  text-decoration: none;
-  font-size: 10px;
-}
-
-.tweet{
-  color: #868688;
-  font-size: 14px;
-  padding: 0 50px;
-  margin: 0;
-  word-break: break-word;
-}
-
-.tweet a:active,
-.tweet a:visited,
-.tweet a:hover,
-.tweet a{
-  text-decoration: none;
-  color: #2dadeb;
-}
-
-.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
-  margin: 0 8px;
-}
-
-.swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-}
-
-.swiper-pagination-bullet {
-  background: #d7d7d7;
-  opacity: 1;
-}
-.swiper-pagination-bullet-active {
-  background: #7f9791;
-}
-
-.tweet-title{
-  text-align: center;
-  font-size: 34px;
-  color: #435980;
-  font-weight: 200;
-}
-
-.tweet-subtitle{
-  text-align: center;
-  font-size: 20px;
-  color: #a0a3ab;
-  margin-bottom: 20px;
-}
-
-</style>
 <div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
 
   <!-- *************** left admin manager *************** -->
@@ -117,15 +13,63 @@
   <!-- *************** right admin manager *************** -->
   <div class="manager-right">
     <div class="container">
-      <div class="jumbotron">
-        <img src="/abecms/image/dark_logo_transparent_background_small.png" style="float: left;margin-right: 30px;">
-        AbeJS becomes AbeCMS and is now hosted on its own repository in github : <a href="https://github.com/abecms">https://github.com/abecms</a>
-        <br/>
-        This brand new version is full of new features and has been redesigned to be more comfortable and easy to use.
-        <br/><br/><br/>
-        This page will be your dashboard. We're working hard to cook you awesome widgets... Stay tuned !
-        </p>
-        <p></p>
+      
+      <div class="row statistics">
+        <div class="col-xs-6">
+          <div class="text-uppercase">
+            Key numbers
+          </div>
+          <div class="progress-stat">
+            <div class="progress-element" data-percent="{{statistics.percentPublishedPages}}%" style="color:#40B7E2">
+              <svg viewBox="-10 -10 220 220">
+                <g fill="none" stroke-width="30" transform="translate(100,100)">
+                  <path d="M 0,-100 A 100,100 0 0,1 86.6,-50" stroke="#40B7E2"/>
+                  <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50" stroke="#40B7E2"/>
+                  <path d="M 86.6,50 A 100,100 0 0,1 0,100" stroke="#40B7E2"/>
+                  <path d="M 0,100 A 100,100 0 0,1 -86.6,50" stroke="#40B7E2"/>
+                  <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50" stroke="#40B7E2"/>
+                  <path d="M -86.6,-50 A 100,100 0 0,1 0,-100" stroke="#40B7E2"/>
+                </g>
+              </svg>
+              <svg viewBox="-10 -10 220 220">
+                <path stroke="#F1F1F1" d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="{{statistics.svgCirclePercent}}"></path>
+              </svg>
+            </div>
+            <div class="progress-text">
+              <span>{{statistics.totalPublishedPage}}</span> published pages
+            </div>
+          </div>
+          <div class="progress-stat">
+            <div class="progress-element" data-percent="100%" style="color:#B8E986">
+              <svg viewBox="-10 -10 220 220">
+                <g fill="none" stroke-width="30" transform="translate(100,100)">
+                  <path d="M 0,-100 A 100,100 0 0,1 86.6,-50" stroke="#B8E986"/>
+                  <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50" stroke="#B8E986"/>
+                  <path d="M 86.6,50 A 100,100 0 0,1 0,100" stroke="#B8E986"/>
+                  <path d="M 0,100 A 100,100 0 0,1 -86.6,50" stroke="#B8E986"/>
+                  <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50" stroke="#B8E986"/>
+                  <path d="M -86.6,-50 A 100,100 0 0,1 0,-100" stroke="#B8E986"/>
+                </g>
+              </svg>
+              <svg viewBox="-10 -10 220 220">
+                <path d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="629"></path>
+              </svg>
+            </div>
+            <div class="progress-text">
+              <span>0/0</span> connected / users
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="text-uppercase">
+            Activity stream
+          </div>
+
+          <div class="stream">
+            
+          </div>
+          
+        </div>
       </div>
 
       <div class="tweet-subtitle">
@@ -139,12 +83,139 @@
     </div>
   </div>
 </div>
- <script type="text/javascript">
-   if (!!window.EventSource) {
+<script type="text/javascript" src="/abecms/libs/moment-with-locales.js"></script>
+<script type="text/javascript">
+
+  var StreamParent = document.querySelector('.stream');
+  var streams = [];
+
+  var actionsType = {
+    PUBLISH: 'publish',
+    REVIEW: 'review',
+    CREATE: 'create',
+    DELETE: 'delete',
+  };
+
+  function timer(){
+    setInterval(function () {
+      Array.prototype.forEach.call(streams, (stream) => {
+        stream.updateTime();
+      });
+    }, 1000*60);
+  }
+
+  function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var interval = Math.floor(seconds / 31536000);
+    if (interval >= 1) return interval + "y ago";
+    interval = Math.floor(seconds / 2592000);
+    if (interval >= 1) return interval + "m ago";
+    interval = Math.floor(seconds / 86400);
+    if (interval >= 1) return interval + "d ago";
+    interval = Math.floor(seconds / 3600);
+    if (interval >= 1) return interval + "h ago";
+    interval = Math.floor(seconds / 60);
+    if (interval >= 1) return interval + "mn ago";
+    return "now";
+  }
+
+  function removeStream(callBack){
+    if(streams.length > 3){
+      var oldestStream = streams.shift();
+      var node = oldestStream.getNode();
+      // node.classList.add('remove');
+      setTimeout(function () {
+        // oldestStream.destroy();
+        callBack();
+      }, 750);
+    }
+    else setTimeout(function () {
+      callBack();
+    }, 100);
+  }
+
+  var StreamItem = function StreamItem (data) {
+    this.data = data;
+    this.createNode();
+  };
+
+  StreamItem.prototype.getNode = function getNode () {
+    return this.streamItem;
+  };
+
+  StreamItem.prototype.updateTime = function updateTime () {
+    this.time.textContent = timeSince(new Date(this.time.getAttribute('data-time')));
+  };
+
+  StreamItem.prototype.destroy = function destroy () {
+    this.streamItem.parentNode.removeChild(this.streamItem);
+  };
+
+  StreamItem.prototype.createNode = function createNode () {
+    // parent stream
+    this.streamItem = document.createElement('div');
+    this.streamItem.classList.add('stream-item');
+    this.streamItem.classList.add('remove');
+    this.streamItem.classList.add(this.getActionClass());
+
+    // clock
+    this.time = document.createElement('div');
+    this.time.classList.add('stream-time');
+    this.time.textContent = 'now';
+    this.time.setAttribute('data-time', new Date().toISOString());
+
+    // content
+    var content = document.createElement('div');
+    content.classList.add('stream-content');
+    content.innerHTML = '<strong class="name">' + this.data.user + '</strong> ' +
+                        '<span class="stream-action">' + this.getTextContent() + '</span> : ' +
+                        '<a href="' + this.data.post + '" class="stream-page">' + this.data.post + '</a>';
+
+    this.streamItem.appendChild(this.time);
+    this.streamItem.appendChild(content);
+
+    StreamParent.insertBefore(this.streamItem, StreamParent.firstChild);
+
+    setTimeout(function () {
+      this.streamItem.classList.remove('remove');
+    }.bind(this), 100);
+  };
+
+  StreamItem.prototype.getActionClass = function getActionClass () {
+    var action;
+
+    switch(this.data.operation){
+      case actionsType.PUBLISH: action = 'published'; break;
+      case actionsType.REVIEW: action = 'reviewed'; break;
+      case actionsType.CREATE: action = 'created'; break;
+      case actionsType.DELETE: action = 'deleted'; break;
+      default: action = 'default';
+    }
+
+    return action
+  };
+
+  StreamItem.prototype.getTextContent = function getTextContent () {
+    var text;
+
+    switch(this.data.operation){
+      case actionsType.PUBLISH: text = 'has published a page'; break;
+      case actionsType.REVIEW: text = 'has reviewed a page'; break;
+      case actionsType.CREATE: text = 'has created a new page'; break;
+      case actionsType.DELETE: text = 'has deleted a page'; break;
+      default: text = '';
+    }
+
+    return text
+  };
+
+  if (!!window.EventSource) {
+    var stream = document.querySelector('.stream')
     var source = new EventSource('/abe/rest/activity-stream');
     source.addEventListener('message', (e, data) => {
       var json = JSON.parse(e.data)
-      console.log(json)
+      if(json.user != null) streams.push(new StreamItem(json));
+      if(streams.length === 1) timer();
     }, false);
 
     source.addEventListener('open', (e) => {
@@ -156,7 +227,6 @@
         // Connection was closed.
       }
     }, false);
-
   }
- </script>
-       
+
+</script>
