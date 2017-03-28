@@ -9,7 +9,7 @@ var fse = require('fs-extra');
 var config = require('../../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'test', 'fixtures')})
 
-import data from '../../../fixtures/editor/add.json'
+import data from '../../../fixtures/editor/compileAbeData.json'
 import compileAbe from '../../../../src/cli/cms/editor/handlebars/compileAbe'
 import Handlebars from 'handlebars'
 import abeEngine from '../../../../src/cli/cms/editor/handlebars/abeEngine'
@@ -24,46 +24,26 @@ describe('compileAbe', function() {
    * compileAbe.group
    * 
    */
-  it('compileAbe.group', function() {
-
-    compileAbe()
+  it('compileAbe.text', function() {
     this.sinon = sinon.sandbox.create();
-    var stub = sinon.stub(abeEngine, 'instance')
-    stub.returns({
-      content: {
-        name: 'test',
-        testgroup_1: 'val 11111111',
-        testgroup_2: 'val 22222222',
-        abeEditor: true
-      }
-    });
-    var result = compileAbe({
-      name: 'abe',
-      hash: {
-        order: '0',
-        group: 'testgroup',
-        desc: 'test 1',
-        key: 'testgroup_1',
-        type: 'text'
-      },
-      data: {
-        intl: [Object],
-        _parent: [Object],
-        root: [Object]
-      }
-    })
-
-
-    abeEngine.instance.restore()
-
-    // var result = add(
-    //   data.obj,
-    //   data.json,
-    //   data.text,
-    //   {add:function () {}}
-    // )
-
-    // chai.expect(result).to.be.a('string');
-    // chai.expect(result).to.be.equal('some text');
+    var stub = sinon.stub(abeEngine, 'instance', { get: function () { return {content: data.compileSimpleText.content} } })
+    var result = compileAbe(data.compileSimpleText.argumentSimpleText)
+    stub.restore()
+    chai.expect(result).to.be.a('string');
+    chai.expect(result).to.be.equal('test value');
   });
+
+  /**
+   * compileAbe.group
+   * 
+   */
+  it('compileAbe.rte', function() {
+    this.sinon = sinon.sandbox.create();
+    var stub = sinon.stub(abeEngine, 'instance', { get: function () { return {content: data.compileRTE.content} } })
+    var result = compileAbe(data.compileRTE.argumentRTE)
+    stub.restore()
+    chai.expect(result).to.be.a('object');
+    chai.expect(result.string).to.be.equal('alert(1);<div>value</div>');
+  });
+
 });
