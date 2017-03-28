@@ -37,9 +37,11 @@
               </div>
             {{else}}
               {{#each this}}
+                {{#if this.0.firstgroup}}<div class='single-block well well-sm'>{{/if}}
                 <div class="{{cleanTab @key}}">
                 {{{printBlock this @root}}}
                 </div>
+                {{#if this.0.lastgroup}}</div>{{/if}}
               {{/each}}
             {{/ifCond}}
 

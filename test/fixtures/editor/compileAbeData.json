@@ -1,0 +1,42 @@
+{
+	"compileSimpleText": {
+    "content": {
+      "name": "test",
+      "test_key": "test value",
+      "abeEditor": true
+    },
+		"argumentSimpleText": {
+	    "name": "abe",
+	    "hash": {
+	      "order": "0",
+	      "key": "test_key",
+	      "type": "text"
+	    },
+	    "data": {
+	      "intl": [],
+	      "_parent": [],
+	      "root": []
+	    }
+	  }
+	},
+	"compileRTE": {
+    "content": {
+      "name": "test",
+      "test_rte_key": "<script>alert(1);</script><div>value</div>",
+      "abeEditor": true
+    },
+		"argumentRTE": {
+	    "name": "abe",
+	    "hash": {
+	      "order": "0",
+	      "key": "test_rte_key",
+	      "type": "rich"
+	    },
+	    "data": {
+	      "intl": [],
+	      "_parent": [],
+	      "root": []
+	    }
+	  }
+	}
+}

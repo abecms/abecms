@@ -30,7 +30,8 @@ export function add(obj, json, text, util) {
     }
   }else {
     try {
-      obj.value = eval(`json["${getDataIdWithNoSlash(obj.key)}"]`)
+      if(obj.key.indexOf('.') > -1) obj.value = eval(`json["${getDataIdWithNoSlash(obj.key).split('.').join('"]["')}"]`)
+      else obj.value = eval(`json["${getDataIdWithNoSlash(obj.key)}"]`)
     } catch(e) {
       // no value found inside json OKEY
     }
@@ -188,6 +189,35 @@ function orderByTabindex(a, b) {
   return 0
 }
 
+export function orderByGroup(form) {
+  var noGroup = []
+  var groups = {}
+  var groupIndex = {}
+  var index = 0
+
+  Array.prototype.forEach.call(form.item, (item) => {
+    if(item.group != null) {
+      if(typeof groups[item.group] === 'undefined' || groups[item.group] === null){
+        groupIndex[item.group] = index
+        groups[item.group] = []
+      }
+      item.order = -1
+      groups[item.group].push(item)
+    }
+    else noGroup.push(item)
+    index++
+  })
+
+  for(var prop in groups){
+    var group = groups[prop]
+    group[0].firstgroup = 1
+    group[group.length - 1].lastgroup = 1
+    noGroup = noGroup.splice(0, groupIndex[group[0].group]).concat(group).concat(noGroup)
+  }
+
+  return {item: noGroup}
+}
+
 function orderBlock(util) {
     
   var formBlock = {}
@@ -195,15 +225,16 @@ function orderBlock(util) {
   for(var tab in util.form) {
 
     var formBlockTab = {}
-    for (var i = 0; i < util.form[tab].item.length; i++) {
-      var blockName = (util.form[tab].item[i].block === '') ? 'default_' + i : util.form[tab].item[i].block
-      if(util.form[tab].item[i].key.indexOf('[') > -1){
-        blockName = util.form[tab].item[i].key.split('[')[0]
+    var utilFormTab = orderByGroup(util.form[tab])
+    for (var i = 0; i < utilFormTab.item.length; i++) {
+      var blockName = (utilFormTab.item[i].block === '') ? 'default_' + i : utilFormTab.item[i].block
+      if(utilFormTab.item[i].key.indexOf('[') > -1){
+        blockName = utilFormTab.item[i].key.split('[')[0]
       }
       if(typeof formBlockTab[blockName] === 'undefined' || formBlockTab[blockName] === null) {
         formBlockTab[blockName] = []
       }
-      formBlockTab[blockName].push(util.form[tab].item[i])
+      formBlockTab[blockName].push(utilFormTab.item[i])
     }
     if(typeof blockName !== 'undefined' && blockName !== null) {
       formBlockTab[blockName].sort(orderByTabindex)
@@ -211,7 +242,6 @@ function orderBlock(util) {
     if(typeof formBlock[tab] === 'undefined' || formBlock[tab] === null) {
       formBlock[tab] = {}
     }
-
     var formBlockOrdered = {}
     var arKeys = Object.keys(formBlockTab).sort((a,b) => {
       if(parseFloat(formBlockTab[a][0].order) < parseFloat(formBlockTab[b][0].order)) {
