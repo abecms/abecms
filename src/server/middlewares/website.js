@@ -16,7 +16,7 @@ var middleware = function(req, res, next) {
     res.redirect('/abe')
   } else if (req.originalUrl.indexOf('.' + config.files.templates.extension) > -1) {
 
-    html = ''
+    var html = ''
 
     var page = path.join(config.root, config.publish.url, req.originalUrl)
     if (coreUtils.file.exist(page)) {
