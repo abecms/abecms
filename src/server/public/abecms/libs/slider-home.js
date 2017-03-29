@@ -27,8 +27,7 @@ var tweets = twitterFetcher.fetch({
 		var swiper = new Swiper('.swiper-container', {
 		  pagination: '.swiper-pagination',
 		  slidesPerView: 3,
-		  paginationClickable: true,
-		  spaceBetween: 30
+		  paginationClickable: true
 		});
   }
 })

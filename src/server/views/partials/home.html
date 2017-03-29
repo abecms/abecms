@@ -1,131 +1,71 @@
-<style>
-
-[data-scribe="element:name"],
-[data-scribe="element:user_link"],
-[data-scribe="element:screen_name"]{
-  display: block;
-}
-
-[data-scribe="element:verified_badge"]{
-  display: none;
-}
-
-[data-scribe="component:author"],
-.timePosted,
-.tweet{
-  text-align: center;
-}
-
-[data-scribe="element:avatar"]{
-  display: inline-block;
-  margin-bottom: 5px;
-}
-
-[data-scribe="element:name"]:active,
-[data-scribe="element:name"]:visited,
-[data-scribe="element:name"]:hover,
-[data-scribe="element:name"]{
-  color: #6a757a;
-  text-decoration: none;
-  font-weight: bolder;
-  font-size: 15px;
-}
-
-[data-scribe="element:screen_name"]:active,
-[data-scribe="element:screen_name"]:visited,
-[data-scribe="element:screen_name"]:hover,
-[data-scribe="element:screen_name"]{
-  color: #b0adaf;
-  text-decoration: none;
-  font-size: 12px;
-  padding: 5px 0 15px 0;
-}
-
-.timePosted{
-  margin-bottom: 35px;
-}
-
-.timePosted a:active,
-.timePosted a:visited,
-.timePosted a:hover,
-.timePosted a{
-  color: #acb4bf;
-  text-decoration: none;
-  font-size: 10px;
-}
-
-.tweet{
-  color: #868688;
-  font-size: 14px;
-  padding: 0 50px;
-  margin: 0;
-  word-break: break-word;
-}
-
-.tweet a:active,
-.tweet a:visited,
-.tweet a:hover,
-.tweet a{
-  text-decoration: none;
-  color: #2dadeb;
-}
-
-.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
-  margin: 0 8px;
-}
-
-.swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-}
-
-.swiper-pagination-bullet {
-  background: #d7d7d7;
-  opacity: 1;
-}
-.swiper-pagination-bullet-active {
-  background: #7f9791;
-}
-
-.tweet-title{
-  text-align: center;
-  font-size: 34px;
-  color: #435980;
-  font-weight: 200;
-}
-
-.tweet-subtitle{
-  text-align: center;
-  font-size: 20px;
-  color: #a0a3ab;
-  margin-bottom: 20px;
-}
-
-</style>
 <div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
 
   <!-- *************** left admin manager *************** -->
   <div class="manager-left form-wrapper">
-    {{abeImport 'create' manager.config this}}
-
-    {{abeImport 'menu-left' manager.config this}}
-
-    {{abeImport 'left-addons' manager.config this}}
+    {{abeImport 'menu-home-left' manager.config this}}
     <div class="abe-version">abe@{{abeVersion}}</div>
   </div><!-- *************** /end left admin manager *************** -->
 
   <!-- *************** right admin manager *************** -->
   <div class="manager-right">
     <div class="container">
-      <div class="jumbotron">
-        <img src="/abecms/image/dark_logo_transparent_background_small.png" style="float: left;margin-right: 30px;">
-        AbeJS becomes AbeCMS and is now hosted on its own repository in github : <a href="https://github.com/abecms">https://github.com/abecms</a>
-        <br/>
-        This brand new version is full of new features and has been redesigned to be more comfortable and easy to use.
-        <br/><br/><br/>
-        This page will be your dashboard. We're working hard to cook you awesome widgets... Stay tuned !
-        </p>
-        <p></p>
+      
+      <div class="row statistics">
+        <div class="col-xs-6">
+          <div class="text-uppercase">
+            Key numbers
+          </div>
+          <div class="progress-stat">
+            <div class="progress-element" data-percent="{{statistics.percentPublishedPages}}%" style="color:#40B7E2">
+              <svg viewBox="-10 -10 220 220">
+                <g fill="none" stroke-width="30" transform="translate(100,100)">
+                  <path d="M 0,-100 A 100,100 0 0,1 86.6,-50" stroke="#40B7E2"/>
+                  <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50" stroke="#40B7E2"/>
+                  <path d="M 86.6,50 A 100,100 0 0,1 0,100" stroke="#40B7E2"/>
+                  <path d="M 0,100 A 100,100 0 0,1 -86.6,50" stroke="#40B7E2"/>
+                  <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50" stroke="#40B7E2"/>
+                  <path d="M -86.6,-50 A 100,100 0 0,1 0,-100" stroke="#40B7E2"/>
+                </g>
+              </svg>
+              <svg viewBox="-10 -10 220 220">
+                <path stroke="#F1F1F1" d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="{{statistics.svgCirclePercent}}"></path>
+              </svg>
+            </div>
+            <div class="progress-text">
+              <span>{{statistics.totalPublishedPage}}</span> published pages
+            </div>
+          </div>
+          <div class="progress-stat">
+            <div class="progress-element" data-percent="100%" style="color:#B8E986">
+              <svg viewBox="-10 -10 220 220">
+                <g fill="none" stroke-width="30" transform="translate(100,100)">
+                  <path d="M 0,-100 A 100,100 0 0,1 86.6,-50" stroke="#B8E986"/>
+                  <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50" stroke="#B8E986"/>
+                  <path d="M 86.6,50 A 100,100 0 0,1 0,100" stroke="#B8E986"/>
+                  <path d="M 0,100 A 100,100 0 0,1 -86.6,50" stroke="#B8E986"/>
+                  <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50" stroke="#B8E986"/>
+                  <path d="M -86.6,-50 A 100,100 0 0,1 0,-100" stroke="#B8E986"/>
+                </g>
+              </svg>
+              <svg viewBox="-10 -10 220 220">
+                <path d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="629"></path>
+              </svg>
+            </div>
+            <div class="progress-text">
+              <span>0/0</span> connected / users
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="text-uppercase">
+            Activity stream
+          </div>
+
+          <div class="stream">
+            
+          </div>
+          
+        </div>
       </div>
 
       <div class="tweet-subtitle">
@@ -139,24 +79,3 @@
     </div>
   </div>
 </div>
- <script type="text/javascript">
-   if (!!window.EventSource) {
-    var source = new EventSource('/abe/rest/activity-stream');
-    source.addEventListener('message', (e, data) => {
-      var json = JSON.parse(e.data)
-      console.log(json)
-    }, false);
-
-    source.addEventListener('open', (e) => {
-      // Connection was opened.
-    }, false);
-
-    source.addEventListener('error', (e) => {
-      if (e.readyState == EventSource.CLOSED) {
-        // Connection was closed.
-      }
-    }, false);
-
-  }
- </script>
-       

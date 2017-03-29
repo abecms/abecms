@@ -1,0 +1,50 @@
+<div class="menu-home-left">
+  <div class="text-uppercase">
+    Content
+  </div>
+
+  <ul>
+    <li class="">
+      <a href="/abe/editor">
+        Manager
+      </a>
+    </li>
+    {{#isAuthorized '/abe/structure' @root.user.role.workflow}}
+    <li class="">
+      <a href="/abe/structure">
+        Structure
+      </a>
+    </li>
+    {{/isAuthorized}}
+    {{#isAuthorized '/abe/references' @root.user.role.workflow}}
+    <li class="">
+      <a href="/abe/reference">
+        References
+      </a>
+    </li>
+    {{/isAuthorized}}
+  </ul>
+
+  <div class="text-uppercase">
+    Team
+  </div>
+
+  <ul>
+    {{#if @root.config.users.enable}}
+      <li class="">
+        <a href="/abe/users/profile">Profile</a> 
+      </li>
+      {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+      <li class="">
+        <a href="/abe/users/list">Members</a> 
+      </li>
+      {{/isAuthorized}}
+      {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+      <li class="">
+        <a href="/abe/list-url">Roles</a> 
+      </li>
+      {{/isAuthorized}}
+    {{/if}}
+  </ul>
+
+</div>
