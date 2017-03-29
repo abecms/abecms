@@ -306,16 +306,9 @@ body.homepage{
   li{
     list-style: none;
     padding: 4px 20px;
-    &:before,
     a{
       display: inline-block;
       vertical-align: middle;
-    }
-    &:before{
-      content: " ";
-      background: url(/abecms/image/question-mark.png) no-repeat 0 0 transparent;
-      height: 14px;
-      width: 14px;
     }
     a:active,
     a:visited,
@@ -326,8 +319,8 @@ body.homepage{
     }
     &:hover{
       background: #4A4A4A;
-      &:before{
-        background: url(/abecms/image/question-mark-white.png) no-repeat 0 0 transparent;
+      .fa{
+        color: #FFF;
       }
       a{
         color: #FFF;
@@ -337,6 +330,8 @@ body.homepage{
 }
 .nav-user{
   display: table;
+  padding-top: 5px!important;
+  padding-bottom: 0!important;
   > div{
     display: table-cell;
     vertical-align: middle;
@@ -376,16 +371,9 @@ body.homepage{
   }
   li{
     padding: 0 15px;
-    &:before,
     a{
       display: inline-block;
       vertical-align: middle;
-    }
-    &:before{
-      content: " ";
-      background: url(/abecms/image/question-mark.png) no-repeat 0 0 transparent;
-      height: 14px;
-      width: 14px;
     }
     a:active,
     a:visited,
@@ -398,8 +386,8 @@ body.homepage{
     }
     &:hover{
       background: #4A4A4A;
-      &:before{
-        background: url(/abecms/image/question-mark-white.png) no-repeat 0 0 transparent;
+      .fa{
+        color: #FFF;
       }
       a{
         color: #FFF!important;
