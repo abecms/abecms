@@ -31,7 +31,7 @@ describe('Cms', function() {
    * 
    */
   it('new Page()', function() {
-    var page = new Page(this.fixture.jsonArticle.abe_meta.template, this.fixture.templateArticle, this.fixture.jsonArticle, true)
+    var page = new Page(this.fixture.templateArticle, this.fixture.jsonArticle, true)
     chai.expect(page.html).to.not.be.undefined;
   });
 
