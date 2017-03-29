@@ -19,7 +19,7 @@ import {
  */
 var route = function(req, res, next) {
   var manager = {}
-  manager.home = {files: Manager.instance.getList(), publishedFiles : Manager.instance.getListWithStatusOnFolder('publish')}
+  manager.home = {files: []}
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.config = JSON.stringify(config)
 
@@ -29,10 +29,12 @@ var route = function(req, res, next) {
   var template = null
   var fileName = null
   var folderPath = null
-  var percent = (manager.home.publishedFiles.length / manager.home.files.length * 100).toFixed(1)
+  var files = Manager.instance.getList()
+  var publishedFiles = Manager.instance.getListWithStatusOnFolder('publish')
+  var percent = (publishedFiles.length / files.length * 100).toFixed(1)
   var statistics = {
-    totalPage: manager.home.files.length,
-    totalPublishedPage: manager.home.publishedFiles.length,
+    totalPage: files.length,
+    totalPublishedPage: publishedFiles.length,
     percentPublishedPages: percent,
     svgCirclePercent: 629 * (percent/100)
   }

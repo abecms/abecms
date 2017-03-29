@@ -38,29 +38,6 @@ describe("Helpers", function () {
             chai.expect(rendered).to.eql(expected);
         });
     });
-    describe("truncate", function () {
-        it('properly truncate string', function() {
-            var value = 'ThiS IS mY String',
-                length = 10,
-                rendered = Handlebars.helpers.truncate(value, length),
-                expected = 'ThiS IS mY...';
-            chai.expect(rendered).to.eql(expected);
-        });
-        it('properly return full string', function() {
-            var value = 'ThiS IS mY String',
-                length = 20,
-                rendered = Handlebars.helpers.truncate(value, length),
-                expected = 'ThiS IS mY String';
-            chai.expect(rendered).to.eql(expected);
-        });
-        it('properly return empty string', function() {
-            var value = null,
-                length = 10,
-                rendered = Handlebars.helpers.truncate(value, length),
-                expected = '';
-            chai.expect(rendered).to.eql(expected);
-        });
-    });
     describe("isTrue", function () {
         it('properly eval ==', function() {
             var value1 = 'str1',

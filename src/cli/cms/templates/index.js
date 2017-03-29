@@ -17,7 +17,6 @@ import notEmpty 	from './handlebars/notEmpty'
 import printJson 	from './handlebars/printJson'
 import translate 	from './handlebars/translate'
 import times 			from './handlebars/times'
-import truncate 	from './handlebars/truncate'
 import lowercase 	from './handlebars/lowercase'
 import uppercase 	from './handlebars/uppercase'
 import setVariable 	from './handlebars/setVariable'
@@ -48,7 +47,6 @@ Handlebars.registerHelper('notEmpty', 	notEmpty)
 Handlebars.registerHelper('printJson', 	printJson)
 Handlebars.registerHelper('i18nAbe', 		translate)
 Handlebars.registerHelper('times', 			times)
-Handlebars.registerHelper('truncate', 	truncate)
 Handlebars.registerHelper('lowercase', 	lowercase)
 Handlebars.registerHelper('uppercase', 	uppercase)
 Handlebars.registerHelper('setVariable', 	setVariable)
@@ -72,7 +70,6 @@ export {
 	ifIn,
 	isTrue,
 	eachGroup,
-	truncate,
 	lowercase,
 	uppercase,
 	setVariable,
