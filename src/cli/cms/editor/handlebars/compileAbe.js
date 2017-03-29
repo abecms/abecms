@@ -50,7 +50,8 @@ export default function compileAbe(){
   hash = arguments[0].hash
   if(content) {
     try {
-      value = eval(`content["${hash.key}"]`)
+      if(hash.key.indexOf('.') > -1) value = eval(`content["${hash.key.split('.').join('"]["')}"]`)
+      else value = eval(`content["${hash.key}"]`)
     }catch(e) {
       value = ''
     }
