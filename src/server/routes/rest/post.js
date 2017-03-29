@@ -26,7 +26,7 @@ var route = function(req, res, next) {
     var filePathTest = cmsData.revision.getDocumentRevision(filePath)
     if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
       var jsonPath = filePathTest.path
-      console.log(jsonPath)
+
       if(coreUtils.file.exist(jsonPath)) {
         var json = cmsData.file.get(jsonPath, 'utf8')
         res.set('Content-Type', 'application/json')

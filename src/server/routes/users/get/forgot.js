@@ -53,7 +53,6 @@ var route = function route(req, res) {
 
         var requestedUrl = req.protocol + '://' + req.get('Host') + '/abe/users/reset?token=' + resetPasswordToken
 
-        var smtp = config.users.smtp
         var emailConf = config.users.email
         html = emailConf.html || ''
 
@@ -76,42 +75,14 @@ var route = function route(req, res) {
           user: user
         })
 
-        if(typeof smtp === 'undefined' || smtp === null) {
-          var transport = nodemailer.createTransport({
-            name: 'localhost',
-            direct: true
-          })
-          transport.sendMail({
-            from: emailConf.from, // sender address
-            to: user.email, // list of receivers
-            subject: emailConf.subject, // Subject line
-            text: emailConf.text.replace(/\{\{forgotUrl\}\}/g, requestedUrl), // plaintext body
-            html: html.replace(/\{\{forgotUrl\}\}/g, requestedUrl) // html body
-          }, console.error)
-
-          showHtml(res, req, 'Check your inbox')
-        }else if(typeof smtp !== 'string') {
-          // create reusable transporter object using the default SMTP transport
-          var transporter = nodemailer.createTransport(smtp)
-
-          // setup e-mail data with unicode symbols
-          var mailOptions = {
-            from: emailConf.from, // sender address
-            to: user.email, // list of receivers
-            subject: emailConf.subject, // Subject line
-            text: emailConf.text.replace(/\{\{forgotUrl\}\}/g, requestedUrl), // plaintext body
-            html: html.replace(/\{\{forgotUrl\}\}/g, requestedUrl) // html body
-          }
-
-          // send mail with defined transport object
-          transporter.sendMail(mailOptions, function(error, info){
-            if(error){
-              return console.log(error)
-            }
-
-            showHtml(res, req, 'Check your inbox')
-          })
-        }
+        var from = emailConf.from
+        var to = user.email
+        var subject = emailConf.subject
+        var text = emailConf.text.replace(/\{\{forgotUrl\}\}/g, requestedUrl)
+        var html = html.replace(/\{\{forgotUrl\}\}/g, requestedUrl)
+        
+        coreUtils.mail.send(from, to, subject, text, html)
+        showHtml(res, req, 'Check your inbox')
       })
     })
   }else {

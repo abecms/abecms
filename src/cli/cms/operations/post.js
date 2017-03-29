@@ -27,7 +27,6 @@ export function draft(filePath, json, workflow = 'draft') {
 
       json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
 
-      // var page = new Page(json.abe_meta.template, template, json, true)
       var result
       if (!cmsOperations.save.saveJson(revisionPath, json)) {
         result = {
@@ -63,7 +62,7 @@ export function publish(filePath, json) {
     .then(() => {
       json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
 
-      var page = new Page(json.abe_meta.template, template, json, true)
+      var page = new Page(template, json, true)
       
       var result
       if (!cmsOperations.save.saveHtml(postPath, page.html)) {
