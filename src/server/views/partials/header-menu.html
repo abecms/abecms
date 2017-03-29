@@ -17,29 +17,18 @@
       </ul>
       {{/if}}
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/abe/editor"><span class="fa fa-list"></span> Manager</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span> Settings <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            {{#isAuthorized '/abe/references' @root.user.role.workflow}}
-            <li><a href="/abe/reference">Reference</a></li>
-            {{/isAuthorized}}
-            {{#isAuthorized '/abe/structure' @root.user.role.workflow}}
-            <li><a href="/abe/structure">Structure</a></li>
-            {{/isAuthorized}}
-            {{#if @root.config.users.enable}}
-              {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-                <li><a href="/abe/users/list">users</a></li>
-              {{/isAuthorized}}
-            {{/if}}
-          </ul>
-        </li>
         {{#if @root.config.users.enable}}
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="fa fa-user"></span> {{@root.user.username}} <span class="caret"></span>
+          <a href="#" class="dropdown-toggle nav-user" data-toggle="dropdown">
+            <div class="user-circle text-uppercase">
+              {{truncate @root.user.username 1 ''}}
+            </div>
+            <div class="user">
+              {{@root.user.username}} <span class="caret"></span>
+              <span class="user-role">{{@root.user.role.name}}</span>
+            </div>
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu dropdown-user">
             <li><a href="/abe/users/profile">Profile</a></li>
             <li><a href="/abe/users/logout">logout</a></li>
           </ul>
@@ -57,4 +46,9 @@
   function iframeReset(frameId){
       document.querySelector('#'+frameId).style.width = "100%";
   }
+  var colors = {a:'#e53935',b:'#b71c1c',c:'#d81b60',d:'#880e4f',e:'#8e24aa',f:'#4a148c',g:'#5e35b1',h:'#311b92',i:'#3949ab',j:'#1a237e',k:'#1e88e5',l:'#0d47a1',m:'#039be5',n:'#01579b',o:'#00acc1',p:'#006064',q:'#00897b',r:'#004d40',s:'#43a047',t:'#1b5e20',u:'#7cb342',v:'#33691e',w:'#c0ca33',x:'#827717',y:'#fdd835',z:'#f57f17','':''};
+  var circleLetters = document.querySelectorAll('.user-circle');
+  Array.prototype.forEach.call(circleLetters, function (circleLetter) {
+    circleLetter.style.background = colors[circleLetter.textContent.trim().toLowerCase()];
+  });
 </script>

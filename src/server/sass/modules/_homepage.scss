@@ -1,3 +1,21 @@
+body.homepage{
+  .manager-wrapper{
+    .manager-left{
+      border: 1px solid #F1F1F1;
+      padding: 0;
+      width: auto;
+    }
+    .manager-right{
+      width: calc(100% - 210px);
+      margin-left: 0;
+      .container{
+        width: 100%;
+        padding-bottom: 60px;
+      }
+    }
+  }
+}
+
 [data-scribe="element:name"],
 [data-scribe="element:user_link"],
 [data-scribe="element:screen_name"]{
@@ -54,6 +72,12 @@
   }
 }
 
+#tweets-slider{
+  .user{
+    display: none;
+  }
+}
+
 .tweet{
   color: #868688;
   font-size: 14px;
@@ -76,17 +100,17 @@
   margin: 0 8px;
 }
 
-.swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-}
-
-.swiper-pagination-bullet {
-  background: #d7d7d7;
-  opacity: 1;
-}
-.swiper-pagination-bullet-active {
-  background: #7f9791;
+#tweets-slider{
+  .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background: #FFF;
+    border: 1px solid #D8D8D8;
+    opacity: 1;
+  }
+  .swiper-pagination-bullet-active {
+    background: #D8D8D8;
+  }
 }
 
 .tweet-title{
@@ -252,7 +276,6 @@
   }
 }
 
-
 .stream-page:active,
 .stream-page:visited,
 .stream-page:hover,
@@ -264,4 +287,138 @@
 .stream-time{
   color: #929090;
   font-size: 11px;
+}
+
+.menu-home-left{
+  height: calc(100% - 90px);
+  min-width: 200px;
+  margin-top: 45px;
+  .text-uppercase{
+    padding: 0 20px;
+  }
+  .text-uppercase{
+    padding-top: 20px;
+  }
+  ul{
+    border-top: 1px solid #F1F1F1;
+    padding: 0;
+  }
+  li{
+    list-style: none;
+    padding: 4px 20px;
+    &:before,
+    a{
+      display: inline-block;
+      vertical-align: middle;
+    }
+    &:before{
+      content: " ";
+      background: url(/abecms/image/question-mark.png) no-repeat 0 0 transparent;
+      height: 14px;
+      width: 14px;
+    }
+    a:active,
+    a:visited,
+    a:hover,
+    a{
+      color: #3C3C3C;
+      text-decoration: none;
+    }
+    &:hover{
+      background: #4A4A4A;
+      &:before{
+        background: url(/abecms/image/question-mark-white.png) no-repeat 0 0 transparent;
+      }
+      a{
+        color: #FFF;
+      }
+    }
+  }
+}
+.nav-user{
+  display: table;
+  > div{
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .user-role{
+    display: block;
+    font-size: 10px;
+    color: #D6D2D7;
+    text-transform: lowercase;
+    line-height: 5px;
+  }
+  .user{
+    padding-left: 10px;
+    text-transform: capitalize;
+  }
+}
+
+.navbar-nav .dropdown-user{
+  background: #FFF;
+  border: 1px solid rgba(0,0,0,.05);
+  box-shadow: 0 2px 7px rgba(0,0,0,.03);
+  min-width: 70px;
+  padding: 10px 0;
+  top: 94%;
+  &:before{
+    content: " ";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 7px 13px 7px;
+    border-color: transparent transparent #FFF transparent;
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+  }
+  li{
+    padding: 0 15px;
+    &:before,
+    a{
+      display: inline-block;
+      vertical-align: middle;
+    }
+    &:before{
+      content: " ";
+      background: url(/abecms/image/question-mark.png) no-repeat 0 0 transparent;
+      height: 14px;
+      width: 14px;
+    }
+    a:active,
+    a:visited,
+    a:hover,
+    a{
+      color: #3C3C3C;
+      text-decoration: none;
+      background: none;
+      padding: 0 0 0 5px;
+    }
+    &:hover{
+      background: #4A4A4A;
+      &:before{
+        background: url(/abecms/image/question-mark-white.png) no-repeat 0 0 transparent;
+      }
+      a{
+        color: #FFF!important;
+      }
+    }
+  }
+}
+
+.navbar-nav>li>.dropdown-user{
+  border-radius: 4px;
+}
+
+.user-circle{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 25px;
+  font-weight: 300;
+  display: inline-block;
 }
