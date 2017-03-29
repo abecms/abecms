@@ -5,6 +5,7 @@ import locales from './locales'
 import * as slug from './slug'
 import * as file from './file'
 import * as random from './random'
+import * as mail from './mail'
 
 export {
   array,
@@ -13,5 +14,6 @@ export {
   locales,
   slug,
   file,
-  random
+  random,
+  mail
 }

@@ -46,7 +46,7 @@ var page = function (req, res) {
     var templateId = ''
     if(json[meta] && json[meta].template) {
       templateId = json[meta].template
-    }else {
+    } else {
       templateId = req.params[0]
     }
     var text = cmsTemplates.template.getTemplate(templateId, json)
@@ -54,20 +54,20 @@ var page = function (req, res) {
     if (!editor) {
 
       cmsData.source.getDataList(path.dirname(linkPath), text, json)
-        .then(() => {
-          var page = new Page(templateId, text, json, html)
-          res.set('Content-Type', 'text/html')
-          res.send(page.html)
-        }).catch(function(e) {
-          console.error(e)
-        })
-    }else {
+      .then(() => {
+        var page = new Page(text, json, html)
+        res.set('Content-Type', 'text/html')
+        res.send(page.html)
+      }).catch(function(e) {
+        console.error(e)
+      })
+    } else {
       text = cmsData.source.removeDataList(text)
-      var page = new Page(templateId, text, json, html)
+      var page = new Page(text, json, html)
       res.set('Content-Type', 'text/html')
       res.send(page.html)
     }
-  }else {
+  } else {
     // not 404 page if tag abe image upload into each block
     if(/upload%20image/g.test(req.url)) {
       var b64str = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='

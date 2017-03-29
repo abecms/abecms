@@ -39,7 +39,7 @@ function publishNext(files, tt, cb, i = 0) {
             }
           }
 
-          var page = new Page(obj.json.content.abe_meta.template, templatesTexts[jsonObject.abe_meta.template], obj.json.content, true)
+          var page = new Page(templatesTexts[jsonObject.abe_meta.template], obj.json.content, true)
 
           cmsOperations.save.saveHtml(
             path.join(config.root, processConfig.ABE_DESTINATION, jsonObject.abe_meta.link),

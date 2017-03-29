@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars'
+//import Handlebars from 'handlebars'
 import fse from 'fs-extra'
 import mkdirp from 'mkdirp'
 import events from 'events'
@@ -22,8 +22,9 @@ class Manager {
 
     if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
     
-    Handlebars.templates = Handlebars.templates || {}
-    this.loadHbsTemplates()
+
+    //Handlebars.templates = Handlebars.templates || {}
+    //this.loadHbsTemplates()
   }
 
   static get instance() {
@@ -359,12 +360,23 @@ class Manager {
     }
   }
 
+  /**
+   * DEPRECATED
+   * @param {[type]} templateId [description]
+   */
+  /*
   addHbsTemplate(templateId) {
     const pathTemplate = path.join(config.root, config.templates.url, 'hbs', templateId) + '.hbs'
     var tmpl = eval('(function(){return ' + fse.readFileSync(pathTemplate) + '}());')
     Handlebars.templates[templateId] = Handlebars.template(tmpl)
   }
+  */
 
+  /**
+   * DEPRECATED
+   * @return {[type]} [description]
+   */
+  /*
   loadHbsTemplates() {
     const pathTemplate = path.join(config.root, config.templates.url, 'hbs')
 
@@ -404,7 +416,8 @@ class Manager {
       }
     })
   }
-
+  */
+ 
   addProcess(name) {
     this._processesRunning[name] = true
   }

@@ -42,7 +42,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   if(typeof _json !== 'undefined' && _json !== null && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) {
 
     var text = cmsTemplates.template.getTemplate(_json.abe_meta.template, _json) 
-    var page = new Page(_json.abe_meta.template, text, _json, false) 
+    var page = new Page(text, _json, false) 
     pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
   }
     

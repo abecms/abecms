@@ -75,8 +75,7 @@
     "templates": {
       "extension": "html",
       "assets": "_files",
-      "check": "\\.hbs|\\.shtml|\\.html|\\.htm",
-      "precompile": false
+      "check": "\\.hbs|\\.shtml|\\.html|\\.htm"
     }
   },
   "log": {
@@ -107,7 +106,6 @@
   "users": {
     "enable": false,
     "secret": "GoNinjaGo",
-    "smtp": null,
     "forgotExpire": 60,
     "email": {
       "from": "ABE Support <no-reply@abecms.io>",
@@ -152,5 +150,6 @@
         "name":"Admin"
       }
     }
-  }
+  },
+  "smtp": null
 }
