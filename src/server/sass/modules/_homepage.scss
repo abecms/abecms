@@ -1,7 +1,7 @@
 body.homepage{
   .manager-wrapper{
     .manager-left{
-      border: 1px solid #F1F1F1;
+      border-right: 1px solid #F1F1F1;
       padding: 0;
       width: auto;
     }
@@ -12,6 +12,26 @@ body.homepage{
         width: 100%;
         padding-bottom: 60px;
       }
+    }
+  }
+}
+
+body.homepage-engine{
+  .manager-wrapper.visible{
+    .form-wrapper{
+      width: 200px;
+    }
+    .form-create-wrapper{
+      width: 250px;
+    }
+    .form-wrapper,
+    .form-create-wrapper,
+    .manager-right{
+      overflow: auto;
+      height: calc(100% - 52px);
+    }
+    .manager-right{
+      width: calc(100% - 460px);
     }
   }
 }
@@ -293,6 +313,13 @@ body.homepage{
   height: calc(100% - 90px);
   min-width: 200px;
   margin-top: 45px;
+  position: relative;
+  .abe-version{
+    position: absolute;
+    bottom: -45px;
+    left: 20px;
+  }
+
   .text-uppercase{
     padding: 0 20px;
   }
@@ -309,6 +336,7 @@ body.homepage{
     a{
       display: inline-block;
       vertical-align: middle;
+      width: calc(100% - 20px);
     }
     a:active,
     a:visited,

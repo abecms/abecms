@@ -1,29 +1,33 @@
 
-<div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
+<div>
+  
+  <div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
 
-  <!-- *************** left admin manager *************** -->
-  <div class="manager-left form-wrapper">
     {{#if isHome}}
-    {{else}}
-    <div class="clearfix">
-      <button type="button" class="close close-manager" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    </div>
+      <div class="manager-left form-wrapper">
+      {{abeImport 'menu-home-left' manager.config this}}
+      </div>
     {{/if}}
+    <!-- *************** left admin manager *************** -->
+    <div class="manager-left form-wrapper form-create-wrapper">
+      {{#if isHome}}
+      {{else}}
+      <div class="clearfix">
+        <button type="button" class="close close-manager" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      {{/if}}
+      {{abeImport 'create' manager.config this}}
 
-    {{abeImport 'create' manager.config this}}
+    </div><!-- *************** /end left admin manager *************** -->
 
-    {{abeImport 'menu-left' manager.config this}}
+    <!-- *************** right admin manager *************** -->
+    <div class="manager-right">
+      {{abeImport 'right-file-list' manager.config this}}
 
-    {{abeImport 'left-addons' manager.config this}}
-    <div class="abe-version">abe@{{abeVersion}}</div>
-  </div><!-- *************** /end left admin manager *************** -->
+      {{abeImport 'right-config' manager.config this}}        
 
-  <!-- *************** right admin manager *************** -->
-  <div class="manager-right">
-    {{abeImport 'right-file-list' manager.config this}}
+      {{abeImport 'right-revisions' manager.config this}}    
+    </div>
+  </div><!-- *************** /end right admin manager *************** -->
 
-    {{abeImport 'right-config' manager.config this}}        
-
-    {{abeImport 'right-revisions' manager.config this}}    
-  </div>
-</div><!-- *************** /end right admin manager *************** -->
+</div>
