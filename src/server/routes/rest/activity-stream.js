@@ -1,11 +1,15 @@
 import {
-  abeExtend
+  abeExtend,
+  Manager
 } from '../../../cli'
 
 var eventOnActivity = function(data) {
+  Manager.instance.addActivity(data)
+  var activities = Manager.instance.getActivities()
   this.write('data: {\n')
   var i = 0
   var size = Object.keys(data).length
+  this.write('data: "id": "' + activities.length + '",\n')
   Array.prototype.forEach.call(Object.keys(data), (key) => {
     i++
     if (size == i) {
@@ -32,12 +36,43 @@ var route = function(req, res) {
     let evt = eventOnActivity.bind(res)
     res.app.on("activity-stream", evt)
 
-    res.write('data: {\n')
-    res.write(`data: "msg": "open"\n`)
-    res.write('data: }\n\n')
+    if (!req.headers['last-event-id']) {
+      var activities = Manager.instance.getActivities()
+      var j = 0
+      if(activities.length > 0){
+        Array.prototype.forEach.call(activities, (activity) => {
+          var jsonActivity = JSON.parse(JSON.stringify(activity))
+          j++
+          var i = 0
+          var size = Object.keys(jsonActivity).length
+          res.write('data: {\n')
+          res.write('data: "id": "' + j + '",\n')
+          Array.prototype.forEach.call(Object.keys(jsonActivity), (key) => {
+            i++
+            if (size == i) {
+              res.write('data: "' + key + '": "' + jsonActivity[key] + '"\n')
+            }else {
+              res.write('data: "' + key + '": "' + jsonActivity[key] + '",\n')
+            }
+          })
+          res.write('data: }\n\n')
+        })
+      } else {
+        res.write('data: {\n')
+        res.write(`data: "msg": "open"\n`)
+        res.write('data: }\n\n')
+      }
+    } else {
+      res.write('data: {\n')
+      res.write(`data: "msg": "open"\n`)
+      res.write('data: }\n\n')
+    }
+
+    Manager.instance.addConnection(res)
 
     req.connection.addListener("close", function () {
       res.app.removeListener("activity-stream", evt)
+      Manager.instance.removeConnection(res)
     }, false);
 
   } else { // if get

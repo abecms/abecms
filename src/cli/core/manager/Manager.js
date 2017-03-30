@@ -42,6 +42,8 @@ class Manager {
     this._pathReference = path.join(config.root, config.reference.url)
     this._pathData = path.join(config.root, config.data.url)
     this._watchersStart()
+    this.connections = [],
+    this.activities = [],
 
     this.updateStructureAndTemplates()
     var p = new Promise((resolve) => {
@@ -431,6 +433,32 @@ class Manager {
       return true
     }else {
       return false
+    }
+  }
+
+  getActivities() {
+    return this.activities
+  }
+
+  addActivity(activity) {
+    if (this.activities.length > 50)
+      this.activities.shift()
+
+    this.activities.push(activity)
+  }
+
+  getConnections() {
+    return this.connections
+  }
+
+  addConnection(res) {
+    this.connections.push(res);
+  }
+
+  removeConnection(res) {
+    var i = this.connections.indexOf(res);
+    if (i !== -1) {
+      this.connections.splice(i, 1);
     }
   }
 }
