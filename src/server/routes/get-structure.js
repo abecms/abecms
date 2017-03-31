@@ -35,8 +35,9 @@ var route = function(req, res){
     abeUrl: '/abe/editor/',
     Locales: coreUtils.locales.instance.i18n,
     manager: manager,
-    config: JSON.stringify(config),
-    structure: structure
+    config: config,
+    structure: structure,
+    isStructure: true
   }
   res.render('../views/list-structure.html', EditorVariables)
 }

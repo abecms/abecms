@@ -23,7 +23,8 @@ var route = function route(req, res) {
     users: User.utils.getAll(),
     user: res.user,
     config: JSON.stringify(config),
-    roles: roles
+    roles: roles,
+    isMembers: true
   })
   
   return res.send(tmp)

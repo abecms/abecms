@@ -1,7 +1,6 @@
 body.homepage{
   .manager-wrapper{
     .manager-left{
-      border-right: 1px solid #F1F1F1;
       padding: 0;
       width: auto;
     }
@@ -16,10 +15,12 @@ body.homepage{
   }
 }
 
-body.homepage-engine{
+body.with-menu{
   .manager-wrapper.visible{
     .form-wrapper{
+      border-right: 1px solid #F1F1F1;
       width: 200px;
+      padding: 0;
     }
     .form-create-wrapper{
       width: 250px;
@@ -345,6 +346,7 @@ body.homepage-engine{
       color: #3C3C3C;
       text-decoration: none;
     }
+    &.selected,
     &:hover{
       background: #4A4A4A;
       .fa{
@@ -356,6 +358,33 @@ body.homepage-engine{
     }
   }
 }
+
+.homepage:not(.homepage-engine){
+
+  .menu-home-left{
+    li{
+      &.selected{
+        background: #FFF;
+        .fa{
+          color: #4A4A4A;
+        }
+        a{
+          color: #4A4A4A;
+        }
+      }
+      &:hover{
+        background: #4A4A4A;
+        .fa{
+          color: #FFF;
+        }
+        a{
+          color: #FFF;
+        }
+      }
+    }
+  }
+}
+
 .nav-user{
   display: table;
   padding-top: 5px!important;

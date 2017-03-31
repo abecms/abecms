@@ -4,14 +4,14 @@
   </div>
 
   <ul>
-    <li class="">
+    <li class="{{#if isHome}}selected{{/if}}">
       <i class="fa fa-list-alt" aria-hidden="true"></i>
       <a href="/abe/editor">
         Manager
       </a>
     </li>
     {{#isAuthorized '/abe/structure' @root.user.role.workflow}}
-    <li class="">
+    <li class="{{#if isStructure}}selected{{/if}}">
       <i class="fa fa-sitemap" aria-hidden="true"></i>
       <a href="/abe/structure">
         Structure
@@ -19,7 +19,7 @@
     </li>
     {{/isAuthorized}}
     {{#isAuthorized '/abe/references' @root.user.role.workflow}}
-    <li class="">
+    <li class="{{#if isReference}}selected{{/if}}">
       <i class="fa fa-file-code-o" aria-hidden="true"></i>
       <a href="/abe/reference">
         References
@@ -34,18 +34,18 @@
 
   <ul>
     {{#if @root.config.users.enable}}
-      <li class="">
+      <li class="{{#if isProfile}}selected{{/if}}">
         <i class="fa fa-user" aria-hidden="true"></i>
         <a href="/abe/users/profile">Profile</a> 
       </li>
       {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-      <li class="">
+      <li class="{{#if isMembers}}selected{{/if}}">
         <i class="fa fa-users" aria-hidden="true"></i>
         <a href="/abe/users/list">Members</a> 
       </li>
       {{/isAuthorized}}
       {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-      <li class="">
+      <li class="{{#if isRoles}}selected{{/if}}">
         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
         <a href="/abe/list-url">Roles</a> 
       </li>

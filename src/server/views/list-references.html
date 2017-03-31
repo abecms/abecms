@@ -11,41 +11,56 @@
     <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
     <script src="https://use.fontawesome.com/6e9b081f7f.js"></script>
   </head>
-  <body>
+  <body class="with-menu engine-open">
     {{abeImport 'header-menu' manager.config this}}
-    <div class="manager-left form-wrapper">
-      <div class="references-list row col-xs-offset-1 col-xs-10">
-        <div class="manager-tab references-files">
-          <div class="references-files-wrapper">
-            <ul class="list-group">
-              {{#each reference}}
-              <li class="list-group-item" data-error="0" data-href='{{@key}}' data-ref-json='{{printJson this}}' data-init='0'>
-                {{@key}}
-              </li>
-              {{/each}}
-              <li class="list-group-item last btn-add-reference">
-                <div class="input-group">
-                  <div class="input-group-addon">
-                    <span class="">
-                      Add +
-                    </span>
+    <div class="container-main">
+      <div class="container-table">
+        <div>
+          <div class="no-gutter manager-wrapper visible">
+            
+            <div class="manager-left form-wrapper">
+              {{abeImport 'main-menu' manager.config this}}
+            </div>
+
+            <div class="manager-right">
+              <div class="references-list row">
+                <div class="manager-tab references-files">
+                  <div class="references-files-wrapper">
+                    <ul class="list-group">
+                      {{#each reference}}
+                      <li class="list-group-item" data-error="0" data-href='{{@key}}' data-ref-json='{{printJson this}}' data-init='0'>
+                        {{@key}}
+                      </li>
+                      {{/each}}
+                      <li class="list-group-item last btn-add-reference">
+                        <div class="input-group">
+                          <div class="input-group-addon">
+                            <span class="">
+                              Add +
+                            </span>
+                          </div>
+                          <input class="form-control filename-input" type="text" placeholder="filename.json">
+                        </div>
+                        <div class="error-display"></div>
+                      </li>
+                      </ul>
+                      <div class="display-json-wrapper">
+                        <textarea class="form-control display-json"></textarea>
+                        <div class="text-saved">✔ saved</div>
+                        <div class="json-error">
+                          &nbsp;
+                        </div>
+                      </div>
                   </div>
-                  <input class="form-control filename-input" type="text" placeholder="filename.json">
-                </div>
-                <div class="error-display"></div>
-              </li>
-              </ul>
-              <div class="display-json-wrapper">
-                <textarea class="form-control display-json"></textarea>
-                <div class="text-saved">✔ saved</div>
-                <div class="json-error">
-                  &nbsp;
                 </div>
               </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
+
     <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="/abecms/scripts/template-engine-compiled.js"></script>
     <script type="text/javascript" src="/abecms/scripts/admin-compiled.js"></script>

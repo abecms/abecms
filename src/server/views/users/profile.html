@@ -8,47 +8,62 @@
     <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
     <link rel="stylesheet" href="/abecms/style-login.css">
   </head>
-  <body>
-    
-    <div class="user-profile row col-xs-offset-1 col-xs-10">
-      <ol class="breadcrumb">
-        <li><a href="/abe/editor/">Home</a></li>
-        <li class="active">User profile</li>
-      </ol>
+  <body class="with-menu engine-open">
+    {{abeImport 'header-menu' manager.config this}}
+    <div class="container-main">
+      <div class="container-table">
+        <div>
+          <div class="no-gutter manager-wrapper visible">
+            
+            <div class="manager-left form-wrapper">
+              {{abeImport 'main-menu' manager.config this}}
+            </div>
 
-      <div class="alert alert-danger hidden" data-info-msg="true" role="alert">
-        
-      </div>
+            <div class="manager-right">
+              <div class="manager-tabuser-profile row col-xs-offset-1 col-xs-10">
+              <ol class="breadcrumb">
+                <li><a href="/abe/editor/">Home</a></li>
+                <li class="active">User profile</li>
+              </ol>
 
-      <div class="">
-        <form action="/abe/users/profile" method="post">
-          {{#each user}}
-            {{#ifCond @key 'password'}}
-            {{else}}
-              <div class="form-group">
-                <label for="{{@key}}">{{@key}}</label>
-                <input type="input" required="true" class="form-control" name="{{@key}}" placeholder="" value="{{this}}">
+              <div class="alert alert-danger hidden" data-info-msg="true" role="alert">
+                
               </div>
-            {{/ifCond}}
-          {{/each}}
 
-          <hr>
+              <div class="">
+                <form action="/abe/users/profile" method="post">
+                  {{#each user}}
+                    {{#ifCond @key 'password'}}
+                    {{else}}
+                      <div class="form-group">
+                        <label for="{{@key}}">{{@key}}</label>
+                        <input type="input" required="true" class="form-control" name="{{@key}}" placeholder="" value="{{this}}">
+                      </div>
+                    {{/ifCond}}
+                  {{/each}}
 
-          <div class="form-group">
-            <label for="oldpassword">Old password</label>
-            <input type="password" class="form-control" name="oldpassword" placeholder="">
+                  <hr>
+
+                  <div class="form-group">
+                    <label for="oldpassword">Old password</label>
+                    <input type="password" class="form-control" name="oldpassword" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="password">New Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="repeat-password">Repeat password</label>
+                    <input type="password" class="form-control" name="repeat-password" placeholder="">
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="password">New Password</label>
-            <input type="password" class="form-control" name="password" placeholder="">
-          </div>
-          <div class="form-group">
-            <label for="repeat-password">Repeat password</label>
-            <input type="password" class="form-control" name="repeat-password" placeholder="">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </form>
+        </div>
       </div>
     </div>
+
   </body>
 </html>

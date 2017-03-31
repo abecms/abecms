@@ -38,12 +38,11 @@
       width: 100%;
     }
     &.form-create-wrapper{
-      border-left:0;
+      border: none !important;
       min-width: 250px;
       padding: 65px 0 0px 0!important;
       margin-left: -4px;
       .text-uppercase{
-        border-bottom: 1px solid #F1F1F1;
         padding: 0 20px;
       }
       .form-create{

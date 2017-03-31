@@ -48,7 +48,8 @@ var route = function(router, req, res, next) {
     config: JSON.stringify(config),
     roles: config.users.roles,
     workflow: config.users.workflow,
-    workflowUrl: workflowUrl
+    workflowUrl: workflowUrl,
+    isRoles: true
   })
   
   res.cookie('csrf-token', res.locals.csrfToken)
