@@ -28,30 +28,31 @@
     {{/isAuthorized}}
   </ul>
 
+
+  {{#if @root.config.users.enable}}
   <div class="text-uppercase">
     Team
   </div>
 
   <ul>
-    {{#if @root.config.users.enable}}
-      <li class="{{#if isProfile}}selected{{/if}}">
-        <i class="fa fa-user" aria-hidden="true"></i>
-        <a href="/abe/users/profile">Profile</a> 
-      </li>
-      {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-      <li class="{{#if isMembers}}selected{{/if}}">
-        <i class="fa fa-users" aria-hidden="true"></i>
-        <a href="/abe/users/list">Members</a> 
-      </li>
-      {{/isAuthorized}}
-      {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-      <li class="{{#if isRoles}}selected{{/if}}">
-        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-        <a href="/abe/list-url">Roles</a> 
-      </li>
-      {{/isAuthorized}}
-    {{/if}}
+    <li class="{{#if isProfile}}selected{{/if}}">
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <a href="/abe/users/profile">Profile</a> 
+    </li>
+    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+    <li class="{{#if isMembers}}selected{{/if}}">
+      <i class="fa fa-users" aria-hidden="true"></i>
+      <a href="/abe/users/list">Members</a> 
+    </li>
+    {{/isAuthorized}}
+    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+    <li class="{{#if isRoles}}selected{{/if}}">
+      <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+      <a href="/abe/list-url">Roles</a> 
+    </li>
+    {{/isAuthorized}}
   </ul>
+  {{/if}}
 
   {{abeImport 'menu-addons' manager.config this}}
 
