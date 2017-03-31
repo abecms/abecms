@@ -21,7 +21,6 @@ var route = function(req, res, next) {
 
   var filePath = req.originalUrl.replace('/abe/rest/post', '')
 
-  console.log(filePath)
   if(filePath !== '' && filePath !== '/' && filePath != null) {
     var filePathTest = cmsData.revision.getDocumentRevision(filePath)
     if(typeof filePathTest !== 'undefined' && filePathTest !== null) {

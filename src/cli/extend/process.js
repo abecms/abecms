@@ -39,7 +39,7 @@ var abeProcess = function(name, args = [], callback) {
       }
     }catch(err) {
       Manager.instance.removeProcess(name)
-      console.log('process fork failed')
+      console.log(`Manager.instance.addProcess : process fork failed on ${__dirname}/../../cli/process/${name}.js`)
     }
   }
 

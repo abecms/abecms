@@ -94,7 +94,7 @@ app.use(flash())
 app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 10000 }))
+app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000}))
 app.use(csrf({cookie: {secure: config.cookie.secure}}))
 app.use(function(req, res, next) {
   if (req.url.indexOf('/abe/') > -1 ) {
