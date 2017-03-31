@@ -19,45 +19,46 @@
               {{abeImport 'main-menu' manager.config this}}
             </div>
 
-            <div class="manager-right">
-              <div class="manager-tabuser-profile row col-xs-offset-1 col-xs-10">
-              <ol class="breadcrumb">
-                <li><a href="/abe/editor/">Home</a></li>
-                <li class="active">User profile</li>
-              </ol>
+            <div class="manager-right tab">
+              <div class="manager-tab">
+                <div class="text-uppercase">
+                  Profile
+                </div>
+                <div class="manager-tab-content" >
+                  <div class="alert alert-danger hidden" data-info-msg="true" role="alert">
+                    
+                  </div>
 
-              <div class="alert alert-danger hidden" data-info-msg="true" role="alert">
-                
-              </div>
+                  <div class="">
+                    <form action="/abe/users/profile" method="post">
+                      {{#each userEditable}}
+                        {{#ifCond @key 'password'}}
+                        {{else}}
+                          <div class="form-group">
+                            <label for="{{@key}}">{{@key}}</label>
+                            <input type="input" required="true" class="form-control" name="{{@key}}" placeholder="" value="{{this}}">
+                          </div>
+                        {{/ifCond}}
+                      {{/each}}
 
-              <div class="">
-                <form action="/abe/users/profile" method="post">
-                  {{#each user}}
-                    {{#ifCond @key 'password'}}
-                    {{else}}
+                      <hr>
+
                       <div class="form-group">
-                        <label for="{{@key}}">{{@key}}</label>
-                        <input type="input" required="true" class="form-control" name="{{@key}}" placeholder="" value="{{this}}">
+                        <label for="oldpassword">Old password</label>
+                        <input type="password" class="form-control" name="oldpassword" placeholder="">
                       </div>
-                    {{/ifCond}}
-                  {{/each}}
-
-                  <hr>
-
-                  <div class="form-group">
-                    <label for="oldpassword">Old password</label>
-                    <input type="password" class="form-control" name="oldpassword" placeholder="">
+                      <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="">
+                      </div>
+                      <div class="form-group">
+                        <label for="repeat-password">Repeat password</label>
+                        <input type="password" class="form-control" name="repeat-password" placeholder="">
+                      </div>
+                      <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
                   </div>
-                  <div class="form-group">
-                    <label for="password">New Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="">
-                  </div>
-                  <div class="form-group">
-                    <label for="repeat-password">Repeat password</label>
-                    <input type="password" class="form-control" name="repeat-password" placeholder="">
-                  </div>
-                  <button type="submit" class="btn btn-default">Submit</button>
-                </form>
+                </div>
               </div>
             </div>
           </div>

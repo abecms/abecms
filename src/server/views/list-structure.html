@@ -22,9 +22,12 @@
               {{abeImport 'main-menu' manager.config this}}
             </div>
 
-            <div class="manager-right">
+            <div class="manager-right tab">
               <div class="manager-tab structure-folders">
-                <div class="structure-editor">
+                <div class="text-uppercase">
+                  Structure editor
+                </div>
+                <div class="structure-editor manager-tab-content">
                   <input type="hidden" class="structure-json" value='{{@root.structure}}'>
                   <input type="text" class="form-control folder-name" value="" placeholder="folder name" data-folder="" disabled="disabled">
                   <div class="help-info">
@@ -35,8 +38,8 @@
                   </div>
                 </div>
               </div>
-            </div>
 
+            </div>
           </div>
         </div>
       </div>

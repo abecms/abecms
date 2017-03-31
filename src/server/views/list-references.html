@@ -22,10 +22,13 @@
               {{abeImport 'main-menu' manager.config this}}
             </div>
 
-            <div class="manager-right">
+            <div class="manager-right tab">
               <div class="references-list row">
                 <div class="manager-tab references-files">
-                  <div class="references-files-wrapper">
+                  <div class="text-uppercase">
+                    Structure editor
+                  </div>
+                  <div class="manager-tab-content references-files-wrapper">
                     <ul class="list-group">
                       {{#each reference}}
                       <li class="list-group-item" data-error="0" data-href='{{@key}}' data-ref-json='{{printJson this}}' data-init='0'>

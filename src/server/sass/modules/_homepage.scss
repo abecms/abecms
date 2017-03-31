@@ -33,6 +33,9 @@ body.with-menu{
     }
     .manager-right{
       width: calc(100% - 460px);
+      &.tab{
+        width: calc(100% - 200px);
+      }
     }
   }
 }
@@ -309,7 +312,16 @@ body.with-menu{
   color: #929090;
   font-size: 11px;
 }
-
+.manager-tab-content{
+  padding-top: 20px;
+  padding-left: 20px;
+}
+.manager-tab,
+.menu-home-left{
+  .text-uppercase{
+    padding: 20px 20px 0px 20px;
+  }
+}
 .menu-home-left{
   height: calc(100% - 90px);
   min-width: 200px;
@@ -321,12 +333,6 @@ body.with-menu{
     left: 20px;
   }
 
-  .text-uppercase{
-    padding: 0 20px;
-  }
-  .text-uppercase{
-    padding-top: 20px;
-  }
   ul{
     border-top: 1px solid #F1F1F1;
     padding: 0;

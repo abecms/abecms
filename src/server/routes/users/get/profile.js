@@ -27,15 +27,16 @@ var route = function route(req, res) {
   var tmp = template({
     csrfToken: res.locals.csrfToken,
     config: config,
-    user: userEditable,
+    userEditable: userEditable,
     express: {
       req: req,
       res: res
     },
     info: req.flash('info'),
     isProfile: true,
+    user: res.user,
     manager: {
-      config: config
+      config: JSON.stringify(config)
     }
   })
 
