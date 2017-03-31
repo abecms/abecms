@@ -22,8 +22,12 @@ var route = function route(req, res) {
   var tmp = template({
     users: User.utils.getAll(),
     user: res.user,
-    config: JSON.stringify(config),
-    roles: roles
+    config: config,
+    roles: roles,
+    isMembers: true,
+    manager: {
+      config: JSON.stringify(config)
+    }
   })
   
   return res.send(tmp)

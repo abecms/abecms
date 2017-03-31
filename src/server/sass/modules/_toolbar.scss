@@ -108,6 +108,9 @@
   padding-left: 10px;
   padding-right: 7px;
   z-index: 12;
+  .fa-compress{
+    transform: rotate(90deg);
+  }
 }
 
 .close-engine{
