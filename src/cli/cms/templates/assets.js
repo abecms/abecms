@@ -2,6 +2,7 @@ import fse from 'fs-extra'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import path from 'path'
+import execPromise from 'child-process-promise'
 
 import {
   coreUtils,
@@ -15,7 +16,7 @@ export function copy() {
   var dest = path.join(config.root, publish)
   try {
     var directory = fse.lstatSync(dest)
-    if (!directory.isDirectory()) {
+    if (!directory.isDirectory() && !directory.isSymbolicLink()) {
       mkdirp.sync(dest)
     }
   } catch (e) {
@@ -23,6 +24,8 @@ export function copy() {
   }
 
   Array.prototype.forEach.call(publicFolders, (publicFolder) => {
+    var directory = fse.lstatSync(dest)
+    if(directory.isSymbolicLink()) dest = fse.readlinkSync(dest)
     var res = dircompare.compareSync(publicFolder, dest, {compareDate: true})
 
     res.diffSet.forEach(function (entry) {
