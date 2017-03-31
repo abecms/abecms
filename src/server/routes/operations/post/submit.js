@@ -36,7 +36,7 @@ var route = function(req, res, next){
     if(res.user && res.user.username){
       username = res.user.username
     }
-    res.app.emit("activity-stream", {operation: operation.workflow, post: operation.postUrl, user: username})
+    Manager.instance.events.activity.emit("activity", {operation: operation.workflow, post: operation.postUrl, user: username})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },

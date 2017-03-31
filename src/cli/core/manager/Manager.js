@@ -68,7 +68,13 @@ class Manager {
       template: new events.EventEmitter(0),
       structure: new events.EventEmitter(0),
       reference: new events.EventEmitter(0),
+      activity: new events.EventEmitter(0),
     }
+
+    this.events.activity.on('activity', function(data) {
+      this.addActivity(data)
+      this.events.activity.emit("activity-stream", data)
+    }.bind(this));
 
     // watch template folder
     try {

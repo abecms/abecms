@@ -4,7 +4,6 @@ import {
 } from '../../../cli'
 
 var eventOnActivity = function(data) {
-  Manager.instance.addActivity(data)
   var activities = Manager.instance.getActivities()
   this.write('data: {\n')
   var i = 0
@@ -34,7 +33,7 @@ var route = function(req, res) {
     })
 
     let evt = eventOnActivity.bind(res)
-    res.app.on("activity-stream", evt)
+    Manager.instance.events.activity.on("activity-stream", evt)
 
     if (!req.headers['last-event-id']) {
       var activities = Manager.instance.getActivities()
