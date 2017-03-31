@@ -7,78 +7,71 @@
     <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
     <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
 </head>
-<body>
-  
-  <div class="user-list row col-xs-offset-1 col-xs-10">
-    <ol class="breadcrumb">
-      <li><a href="/abe/editor/">Home</a></li>
-      <li class="active">Url list</li>
-    </ol>
+  <body class="with-menu engine-open">
+    {{abeImport 'header-menu' manager.config this}}
+    <div class="container-main">
+      <div class="container-table">
+        <div>
+          <div class="no-gutter manager-wrapper visible">
+            
+            <div class="manager-left form-wrapper">
+              {{abeImport 'main-menu' manager.config this}}
+            </div>
 
-    <div>
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
-        {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-          <li role="presentation">
-            <a href="/abe/users/list">list</a> 
-          </li>
-        {{/isAuthorized}}
-        {{#isAuthorized '/abe/list-url' @root.user.role.workflow}}
-          <li role="presentation" class="active">
-            <a href="/abe/list-url">Roles</a> 
-          </li>
-        {{/isAuthorized}}
-        {{#isAuthorized '/abe/list-workflow' @root.user.role.workflow}}
-          <li role="presentation" >
-            <a href="/abe/list-workflow">Graph</a> 
-          </li>
-        {{/isAuthorized}}
-      </ul>
+            <div class="manager-right tab">
 
+              <div class="manager-tab">
+                <div class="text-uppercase">
+                  List url
+                </div>
+                <div class="manager-tab-content">
+                  <form classs="form-inline" action="/abe/list-url/save" data-user-role="true" method="post" id="filtered-list-url">
+                    <div class="form-group">
+                      <input class='btn btn-info btn-save pull-right' type="submit" value="save" data-save-user-role="true" />
+                      <br />
+                      <br />
+                    </div>
+                    <table class="table table-condensed table-striped table-bordered table-responsive">
+                      <thead>
+                        <tr>
+                          <th>method</th>
+                          <th>link</th>
+                          {{#each @root.roles}}
+                          <th align="center" class="text-center">{{this.name}}</th>
+                          {{/each}}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {{#each urls}}
+                        <tr>
+                          <td>{{method}}</td>
+                          <td>{{url}}</td>
+                          {{#each @root.roles}}
+                          <td align="center" class="text-center">
+                            {{#ifCond this.workflow "admin"}}
+                            <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" disabled="disabled" />
+                            {{else}}
+                              {{#isAuthorized ../url this.workflow}}
+                                <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" />
+                              {{else}}
+                                <input type="checkbox" name="{{this.workflow}}" value="{{../regex}}" />
+                              {{/isAuthorized}}
+                            {{/ifCond}}
+                          </td>
+                          {{/each}}
+                        </tr>
+                        {{/each}}
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <br />
-
-    <form classs="form-inline" action="/abe/list-url/save" data-user-role="true" method="post" id="filtered-list-url">
-      <div class="form-group">
-        <input class='btn btn-info btn-save pull-right' type="submit" value="save" data-save-user-role="true" />
-        <br />
-        <br />
-      </div>
-      <table class="table table-condensed table-striped table-bordered table-responsive">
-        <thead>
-          <tr>
-            <th>method</th>
-            <th>link</th>
-            {{#each @root.roles}}
-            <th align="center" class="text-center">{{this.name}}</th>
-            {{/each}}
-          </tr>
-        </thead>
-        <tbody>
-          {{#each urls}}
-          <tr>
-            <td>{{method}}</td>
-            <td>{{url}}</td>
-            {{#each @root.roles}}
-            <td align="center" class="text-center">
-              {{#ifCond this.workflow "admin"}}
-              <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" disabled="disabled" />
-              {{else}}
-                {{#isAuthorized ../url this.workflow}}
-                  <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" />
-                {{else}}
-                  <input type="checkbox" name="{{this.workflow}}" value="{{../regex}}" />
-                {{/isAuthorized}}
-              {{/ifCond}}
-            </td>
-            {{/each}}
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </form>
-  </div>
   <script type="text/javascript" src="/abecms/libs/jquery.dataTables.min.js"></script>
   <script type="text/javascript" src="/abecms/libs/dataTables.bootstrap.min.js"></script>
   

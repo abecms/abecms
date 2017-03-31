@@ -5,7 +5,7 @@
 
     {{#if isHome}}
       <div class="manager-left form-wrapper">
-      {{abeImport 'menu-home-left' manager.config this}}
+      {{abeImport 'main-menu' manager.config this}}
       </div>
     {{/if}}
     <!-- *************** left admin manager *************** -->
@@ -23,8 +23,6 @@
     <!-- *************** right admin manager *************** -->
     <div class="manager-right">
       {{abeImport 'right-file-list' manager.config this}}
-
-      {{abeImport 'right-config' manager.config this}}        
 
       {{abeImport 'right-revisions' manager.config this}}    
     </div>

@@ -67,10 +67,13 @@ var route = function(router, req, res, next) {
   var tmp = template({
     urls: urls,
     user: res.user,
-    config: JSON.stringify(config),
+    config: config,
     roles: config.users.roles,
     workflow: config.users.workflow,
-    workflowUrl: workflowUrl
+    workflowUrl: workflowUrl,
+    manager: {
+      config: JSON.stringify(config)
+    }
   })
   
   res.cookie('csrf-token', res.locals.csrfToken)

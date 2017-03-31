@@ -33,8 +33,9 @@ var route = function(req, res){
     abeUrl: '/abe/editor/',
     Locales: coreUtils.locales.instance.i18n,
     manager: manager,
-    config: JSON.stringify(config),
-    reference: Manager.instance.getReferences()
+    config: config,
+    reference: Manager.instance.getReferences(),
+    isReference: true
   }
   res.render('../views/list-references.html', EditorVariables)
 }
