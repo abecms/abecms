@@ -1,5 +1,4 @@
 import fse from 'fs-extra'
-import fs from 'fs'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import path from 'path'
@@ -26,7 +25,7 @@ export function copy() {
 
   Array.prototype.forEach.call(publicFolders, (publicFolder) => {
     var directory = fse.lstatSync(dest)
-    if(directory.isSymbolicLink()) dest = fs.readlinkSync(dest)
+    if(directory.isSymbolicLink()) dest = fse.readlinkSync(dest)
     var res = dircompare.compareSync(publicFolder, dest, {compareDate: true})
 
     res.diffSet.forEach(function (entry) {
