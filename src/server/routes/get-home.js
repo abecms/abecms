@@ -33,7 +33,7 @@ var route = function(req, res, next) {
   var publishedFiles = Manager.instance.getListWithStatusOnFolder('publish')
   var percent = (publishedFiles.length / files.length * 100).toFixed(1)
   var connectedUsers = Manager.instance.getConnections()
-  var totalUsers = config.users
+  var totalUsers = User.utils.getAll()
   var statistics = {
     totalUsers:totalUsers.length,
     connectedUsers:connectedUsers.length,
