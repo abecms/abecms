@@ -21,7 +21,11 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle nav-user" data-toggle="dropdown">
             <div class="user-circle text-uppercase">
-              {{truncate @root.user.username 1 ''}}
+              {{#if @root.user.avatar}}
+                <img src={{@root.user.avatar}} width="45"/>
+              {{else}}
+                {{truncate @root.user.username 1 ''}}
+              {{/if}}
             </div>
             <div class="user">
               {{@root.user.username}} <span class="caret"></span>

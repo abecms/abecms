@@ -21,6 +21,7 @@ export function add(newUser) {
   }
   newUser.id = lastId+1
   newUser.actif = 0
+  newUser.avatar = User.utils.getGravatarImage(newUser.email, ".jpg?s=200")
   var cPassword = User.utils.commonPassword(newUser)
   if(cPassword.success === 0) {
     return cPassword

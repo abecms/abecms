@@ -315,3 +315,15 @@ export function loginLimitTry(username) {
 
   return p
 }
+
+/**
+ * getGravatarImage("bessong@gmail.com", ".jpg?s=200")
+ * @param  {[type]} email [description]
+ * @param  {[type]} args  [description]
+ * @return {[type]}       [description]
+ */
+export function getGravatarImage(email, args) {
+    args = args || "";
+    var BASE_URL = "//www.gravatar.com/avatar/";
+    return (BASE_URL + coreUtils.text.md5(email) + args).trim();
+}
