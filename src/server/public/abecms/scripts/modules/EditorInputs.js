@@ -82,7 +82,12 @@ export default class EditorInputs {
 
   _hideIfEmpty(node, value) {
     let attr
-    attr = node.getAttribute('data-abe-')
+
+    //attr = node.getAttribute('data-abe-')
+    attr = /data-abe-(.*?)=/.exec(node.nodeValue)
+    if(Array.isArray(attr) && attr.length > 1)
+      attr = attr[1]
+
     var hide = IframeNode('#page-template', '[data-if-empty-clear="' + attr + '"]')[0]
 
     if(typeof hide !== 'undefined' && hide !== null) {

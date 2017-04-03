@@ -130,18 +130,20 @@ export default class EditorUtils {
     var dataAbeAttr
     switch(input.nodeName.toLowerCase()){
     case 'input':
-      dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
-      if(typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
-        node.setAttribute(dataAbeAttr, val)
-      } else {
-        if(node.nodeType === 8){
-          var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?/ABE--->)')
-          var res = commentPattern.exec(node.parentNode.innerHTML)
-          var repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + val + '<!--/ABE--->')
-
-          node.parentNode.innerHTML = repl
-        } else
+      
+      if(node.nodeType !== 8){
+        dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
+        if( typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
+          node.setAttribute(dataAbeAttr, val)
+        } else {
           node.innerHTML = val
+        }
+      } else {
+        var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?/ABE--->)')
+        var res = commentPattern.exec(node.parentNode.innerHTML)
+        var repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + val + '<!--/ABE--->')
+
+        node.parentNode.innerHTML = repl
       }
       break
     case 'textarea':
