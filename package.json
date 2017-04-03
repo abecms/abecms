@@ -65,6 +65,7 @@
     "express-secure-handlebars": "^2.1.0",
     "express-session": "^1.13.0",
     "extend": "^3.0.0",
+    "fs-compare": "0.0.4",
     "fs-extra": "^2.0.0",
     "handlebars": "^4.0.3",
     "handlebars-helper-slugify": "^0.3.2",
