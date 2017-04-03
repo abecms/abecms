@@ -1,4 +1,5 @@
 import fse from 'fs-extra'
+import fsCompare from 'fs-compare'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import path from 'path'
@@ -47,7 +48,25 @@ export function copy() {
           var basePath = original.replace(publicFolder, '')
           var move = path.join(dest, basePath)
 
-          if(entry.type2 === 'missing' || entry.state === 'distinct') {
+          if(move === dest){
+            fse.readdir(original, function (res, items) {
+              Array.prototype.forEach.call(items, (item) => {
+                var lstat = fse.lstatSync(path.join(original, item))
+                var originalItem = path.join(original, item)
+                var destItem = path.join(dest, item)
+                if (!lstat.isDirectory()) {
+                  try {
+                    fsCompare(modifiedTime, originalItem, destItem, function (err, diff) {
+                      if(diff > 0) fse.copySync(originalItem, destItem)
+                    })
+                  } catch (e) {
+                    fse.copySync(originalItem, destItem)
+                  }
+                }
+              })
+            })
+          }
+          else if(entry.type2 === 'missing' || entry.state === 'distinct') {
             fse.removeSync(move)
             fse.copySync(original, move)
           }
@@ -57,6 +76,15 @@ export function copy() {
   })
 
   return publicFolders
+}
+
+function modifiedTime(fileName, cb) {
+  fse.stat(fileName, function (err, stat) {
+    if (err) {
+      return cb(err);
+    }
+    return cb(null, stat.mtime);
+  });
 }
 
 export function getFolders() {
