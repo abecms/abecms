@@ -70,6 +70,7 @@ var route = function(router, req, res, next) {
     config: config,
     roles: config.users.roles,
     workflow: config.users.workflow,
+    isWorkflow: 1,
     workflowUrl: workflowUrl,
     manager: {
       config: JSON.stringify(config)

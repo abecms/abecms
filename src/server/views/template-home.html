@@ -5,13 +5,10 @@
       data-Locales='{{{printJson Locales}}}' >
   <head>
     <title>Abe</title>
-    <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/abecms/css/styles.css">
+    {{abeImport 'common-styles' manager.config this}}
     <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/css/swiper.min.css">
   </head>
-    <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
-    <script src="https://use.fontawesome.com/6e9b081f7f.js"></script>
   <body class="engine-open abe-body homepage with-menu">
     {{abeImport 'header-menu' manager.config this}}
     <div class="container-main">
@@ -22,9 +19,7 @@
       <div class="wysiwyg-popup link"></div>
       <div class="wysiwyg-popup image"></div>
       <div class="wysiwyg-popup smiley"></div>
-    <script type="text/javascript" src="/abecms/libs/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/dataTables.bootstrap.min.js"></script>
+    {{abeImport 'common-scripts' manager.config this}}
     <script type="text/javascript" src="/abecms/libs/standalone.min.js"></script>
     <script type="text/javascript" src="/abecms/libs/moment-with-locales.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/js/swiper.js"></script>

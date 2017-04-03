@@ -2,10 +2,7 @@
 <html>
   <head>
     <title></title>
-    <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/abecms/css/styles.css">
-    <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
-    <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
+    {{abeImport 'common-styles' manager.config this}}
     <link rel="stylesheet" href="/abecms/style-login.css">
   </head>
   <body class="with-menu engine-open">
@@ -65,6 +62,6 @@
         </div>
       </div>
     </div>
-
+  {{abeImport 'common-scripts' manager.config this}}
   </body>
 </html>

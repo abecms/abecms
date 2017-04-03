@@ -51,6 +51,12 @@
       <a href="/abe/list-url">Roles</a> 
     </li>
     {{/isAuthorized}}
+    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+    <li class="{{#if isWorkflow}}selected{{/if}}">
+      <i class="fa fa-bar-chart" aria-hidden="true"></i>
+      <a href="/abe/list-workflow">Graph</a> 
+    </li>
+    {{/isAuthorized}}
   </ul>
   {{/if}}
 
