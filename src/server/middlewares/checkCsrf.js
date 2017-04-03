@@ -2,7 +2,12 @@ var middleware = function(err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') {
     return next(err)
   }else {
-    if( req.url.indexOf('/abe/users/forgot') > -1 || req.url.indexOf('/abe/users/login') > -1 || !/^\/abe/.test(req.url)) {
+    if( req.url.indexOf('/abe/users/forgot') > -1 ||
+        req.url.indexOf('/abe/users/login') > -1 ||
+        req.url.indexOf('/abe/rest/authenticate') > -1 ||
+        !/^\/abe/.test(req.url) ||
+        !/^\/abe/.test(req.url)
+      ) {
       return next()
     }
   }
