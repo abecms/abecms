@@ -37,122 +37,11 @@ body.with-menu{
         width: calc(100% - 200px);
       }
     }
+    .manager-right.large{
+      width: calc(100% - 210px)!important;
+    }
   }
 }
-
-[data-scribe="element:name"],
-[data-scribe="element:user_link"],
-[data-scribe="element:screen_name"]{
-  display: block;
-}
-
-[data-scribe="element:verified_badge"]{
-  display: none;
-}
-
-[data-scribe="component:author"],
-.timePosted,
-.tweet{
-  text-align: center;
-}
-
-[data-scribe="element:avatar"]{
-  display: inline-block;
-  margin-bottom: 5px;
-}
-
-[data-scribe="element:name"]:active,
-[data-scribe="element:name"]:visited,
-[data-scribe="element:name"]:hover,
-[data-scribe="element:name"]{
-  color: #6a757a;
-  text-decoration: none;
-  font-weight: bolder;
-  font-size: 15px;
-}
-
-[data-scribe="element:screen_name"]:active,
-[data-scribe="element:screen_name"]:visited,
-[data-scribe="element:screen_name"]:hover,
-[data-scribe="element:screen_name"]{
-  color: #b0adaf;
-  text-decoration: none;
-  font-size: 12px;
-  padding: 5px 0 15px 0;
-}
-
-.timePosted{
-  margin-bottom: 35px;
-}
-
-.timePosted{
-   a:active,
-   a:visited,
-   a:hover,
-   a{
-    color: #acb4bf;
-    text-decoration: none;
-    font-size: 10px;
-  }
-}
-
-#tweets-slider{
-  .user{
-    display: none;
-  }
-}
-
-.tweet{
-  color: #868688;
-  font-size: 14px;
-  padding: 0 50px;
-  margin: 0;
-  word-break: break-word;
-}
-
-.tweet {
-  a:active,
-  a:visited,
-  a:hover,
-  a{
-    text-decoration: none;
-    color: #2dadeb;
-  }
-}
-
-.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
-  margin: 0 8px;
-}
-
-#tweets-slider{
-  .swiper-pagination-bullet {
-    width: 12px;
-    height: 12px;
-    background: #FFF;
-    border: 1px solid #D8D8D8;
-    opacity: 1;
-  }
-  .swiper-pagination-bullet-active {
-    background: #D8D8D8;
-  }
-}
-
-.tweet-title{
-  text-align: center;
-  font-size: 34px;
-  color: #435980;
-  font-weight: 200;
-}
-
-.tweet-subtitle{
-  text-align: center;
-  font-size: 20px;
-  color: #a0a3ab;
-  margin-bottom: 20px;
-}
-
-
-
 
 @-webkit-keyframes load {
   0% {
@@ -241,10 +130,9 @@ body.with-menu{
 // stream
 
 .stream{
-  display: inline-block;
+  display: block;
   position: relative;
-  max-height: 220px;
-  overflow: auto;
+  overflow: hidden;
   padding-right: 20px;
   width: auto;
   .remove{
@@ -258,7 +146,6 @@ body.with-menu{
   margin-bottom: 25px;
   transition: opacity 750ms ease-in-out;
   opacity: 1;
-  position: relative;
   &:before{
     border-radius: 50%;
     content: " ";
@@ -472,4 +359,10 @@ body.with-menu{
   font-weight: 300;
   display: inline-block;
   overflow: hidden;
+}
+
+.tweet-wrapper{
+  padding-top: 30px;
+  width: 75%;
+  margin-left: 10px;
 }
