@@ -5,14 +5,14 @@
 
   <ul>
     <li class="{{#if isHome}}selected{{/if}}">
-      <i class="fa fa-list-alt" aria-hidden="true"></i>
+      <i class="fa fa-list-alt fa-fw" aria-hidden="true"></i>
       <a href="/abe/editor">
         Manager
       </a>
     </li>
     {{#isAuthorized '/abe/structure' @root.user.role.workflow}}
     <li class="{{#if isStructure}}selected{{/if}}">
-      <i class="fa fa-sitemap" aria-hidden="true"></i>
+      <i class="fa fa-sitemap fa-fw" aria-hidden="true"></i>
       <a href="/abe/structure">
         Structure
       </a>
@@ -20,7 +20,7 @@
     {{/isAuthorized}}
     {{#isAuthorized '/abe/references' @root.user.role.workflow}}
     <li class="{{#if isReference}}selected{{/if}}">
-      <i class="fa fa-file-code-o" aria-hidden="true"></i>
+      <i class="fa fa-file-code-o fa-fw" aria-hidden="true"></i>
       <a href="/abe/reference">
         References
       </a>
@@ -36,24 +36,24 @@
 
   <ul>
     <li class="{{#if isProfile}}selected{{/if}}">
-      <i class="fa fa-user" aria-hidden="true"></i>
+      <i class="fa fa-user fa-fw" aria-hidden="true"></i>
       <a href="/abe/users/profile">Profile</a> 
     </li>
     {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
     <li class="{{#if isMembers}}selected{{/if}}">
-      <i class="fa fa-users" aria-hidden="true"></i>
+      <i class="fa fa-users fa-fw" aria-hidden="true"></i>
       <a href="/abe/users/list">Members</a> 
     </li>
     {{/isAuthorized}}
     {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
     <li class="{{#if isRoles}}selected{{/if}}">
-      <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+      <i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i>
       <a href="/abe/list-url">Roles</a> 
     </li>
     {{/isAuthorized}}
     {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
     <li class="{{#if isWorkflow}}selected{{/if}}">
-      <i class="fa fa-bar-chart" aria-hidden="true"></i>
+      <i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i>
       <a href="/abe/list-workflow">Graph</a> 
     </li>
     {{/isAuthorized}}
