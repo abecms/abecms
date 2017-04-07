@@ -1,7 +1,8 @@
 import {
-  cmsOperations
-  ,abeExtend
-  ,cmsData
+  Manager,
+  cmsOperations,
+  abeExtend,
+  cmsData
 } from '../../../../cli'
 
 var route = function(req, res, next){
@@ -17,6 +18,11 @@ var route = function(req, res, next){
   )
 
   p.then((result) => {
+    var username = ''
+    if(res.user && res.user.username){
+      username = res.user.username
+    }
+    Manager.instance.events.activity.emit("activity", {operation: 'reject', post: operation.postUrl, user: username})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },

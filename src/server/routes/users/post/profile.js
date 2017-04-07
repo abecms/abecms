@@ -30,7 +30,6 @@ var route = function(req, res) {
 				username: user.username
 			}
 			var resultUpdatePassword = User.operations.updatePassword(toUpdate, toUpdate.password)
-  			// return res.status(200).json(resultUpdate)
 		}
 	}
 
@@ -42,10 +41,6 @@ var route = function(req, res) {
 
 	var resultUpdate = User.operations.update(body)
 	return res.status(200).json(resultUpdate)
-		
-  // return res.status(200).json({
-  // 	success: 1
-  // })
 }
 
 export default route

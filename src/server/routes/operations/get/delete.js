@@ -1,7 +1,8 @@
 import {
-  abeExtend
-  ,cmsOperations
-  ,cmsData
+  abeExtend,
+  Manager,
+  cmsOperations,
+  cmsData
 } from '../../../../cli'
 
 var route = function(req, res, next){
@@ -16,6 +17,11 @@ var route = function(req, res, next){
     success: 1,
     file: operation.postUrl
   }
+  var username = ''
+  if(res.user && res.user.username){
+    username = res.user.username
+  }
+  Manager.instance.events.activity.emit("activity", {operation: operation.workflow, post: operation.postUrl, user: username})
   res.set('Content-Type', 'application/json')
   res.send(JSON.stringify(result))
 }

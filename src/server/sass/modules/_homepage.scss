@@ -173,11 +173,21 @@ body.with-menu{
       background: #B8E986;
     }
   }
+  &.unpublished,
+  &.rejected{
+    &:before{
+      background: #FF9800;
+    }
+  }
   &.approved,
-  &.reviewed,
-  &.published{
+  &.reviewed{
     &:before{
       background: #40B7E2;
+    }
+  }
+  &.published{
+    &:before{
+      background: #4CAF50;
     }
   }
   &.deleted{

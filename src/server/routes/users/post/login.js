@@ -6,6 +6,7 @@ import jwt from 'jwt-simple'
 
 import {
   config,
+  Manager,
   User
 } from '../../../../cli'
 
@@ -73,6 +74,11 @@ var route = function(req, res, next) {
         })
         cookies.set( 'x-access-token', token )
 
+        var username = ''
+        if(user && user.username){
+          username = user.username
+        }
+        Manager.instance.events.activity.emit("activity", {operation: 'connect', post: '', user: username})
         res.redirect('/abe/editor/')
       })(req, res, next)
   })

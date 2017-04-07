@@ -3,9 +3,13 @@ var streams = [];
 
 var actionsType = {
   PUBLISH: 'publish',
+  UNPUBLISH: 'unpublish',
   REVIEW: 'review',
   CREATE: 'create',
   DELETE: 'delete',
+  REJECT: 'reject',
+  DRAFT: 'draft',
+  CONNECT: 'connect'
 };
 
 function timer(){
@@ -79,9 +83,14 @@ StreamItem.prototype.createNode = function createNode () {
   // content
   var content = document.createElement('div');
   content.classList.add('stream-content');
-  content.innerHTML = '<strong class="name">' + this.data.user + '</strong> ' +
+  if(this.data.post){
+    content.innerHTML = '<strong class="name">' + this.data.user + '</strong> ' +
                       '<span class="stream-action">' + this.getTextContent() + '</span> : ' +
                       '<a href="' + this.data.post + '" class="stream-page">' + this.data.post + '</a>';
+  } else {
+    content.innerHTML = '<strong class="name">' + this.data.user + '</strong> ' +
+                      '<span class="stream-action">' + this.getTextContent() + '</span>';
+  }
 
   this.streamItem.appendChild(this.time);
   this.streamItem.appendChild(content);
@@ -101,6 +110,10 @@ StreamItem.prototype.getActionClass = function getActionClass () {
     case actionsType.REVIEW: action = 'reviewed'; break;
     case actionsType.CREATE: action = 'created'; break;
     case actionsType.DELETE: action = 'deleted'; break;
+    case actionsType.REJECT: action = 'rejected'; break;
+    case actionsType.UNPUBLISH: action = 'unpublished'; break;
+    case actionsType.DRAFT: action = 'saved'; break;
+    case actionsType.CONNECT: action = 'connected'; break;
     default: action = 'default';
   }
 
@@ -115,7 +128,11 @@ StreamItem.prototype.getTextContent = function getTextContent () {
     case actionsType.REVIEW: text = 'has reviewed a page'; break;
     case actionsType.CREATE: text = 'has created a new page'; break;
     case actionsType.DELETE: text = 'has deleted a page'; break;
-    default: text = '';
+    case actionsType.REJECT: text = 'has rejected a page'; break;
+    case actionsType.UNPUBLISH: text = 'has unpublished a page'; break;
+    case actionsType.DRAFT: text = 'has saved a page as draft'; break;
+    case actionsType.CONNECT: text = 'is connected'; break;
+    default: text = this.data.operation;
   }
 
   return text
