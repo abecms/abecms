@@ -10,7 +10,8 @@ import {
   config,
   cmsTemplates,
   cmsReference,
-  cmsMedia
+  cmsMedia,
+  cmsOperations
 } from '../../'
 
 let singleton = Symbol()
@@ -283,6 +284,7 @@ class Manager {
     const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + path.sep, '')
     const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
     const json = cmsData.file.get(pathFile)
+    let index
     let merged = {}
     let revision = cmsData.file.getFileObject(pathFile)
     revision = cmsData.file.getAbeMeta(revision, json)
@@ -292,8 +294,16 @@ class Manager {
     })
 
     if(found.length > 0){
-      const index = found[0]
+      index = found[0]
       merged[parentRelativePath] = this._list[index]
+      // If I publish, I remove the previous published versions
+      if(revision.abe_meta.status === 'publish'){
+        Array.prototype.forEach.call(merged[parentRelativePath].revisions, (revision, revIndex) => {
+          if(revision.abe_meta.status === 'publish'){
+            merged[parentRelativePath].revisions.splice(revIndex,1)
+          }
+        })
+      }
       merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(revision)))
       const sortedResult = cmsData.revision.sortRevisions(merged)
       // Does the publish version has been removed (in the case of unpublish) ? 
@@ -302,6 +312,7 @@ class Manager {
       }
       this._list[index] = sortedResult[0]
     } else {
+      index = this._list.length
       let rev = []
       rev.push(revision)
       merged = cmsData.revision.mergeRevisions(rev)
@@ -310,6 +321,36 @@ class Manager {
     }
 
     this._list.sort(coreUtils.sort.predicatBy('date', -1))
+    this.historize(index)
+  }
+
+  /**
+   * When data.history is set, we do keep the number of revisions = history in the most recent date order
+   * @param  {[type]} index [description]
+   * @return {[type]}       [description]
+   */
+  historize(index){
+    if(config.data.history && config.data.history > 0){
+      let arStatus = []
+      if(this._list[index].revisions.length > config.data.history){
+        Array.prototype.forEach.call(this._list[index].revisions, (revision, revIndex) => {
+          if(revIndex >= config.data.history){
+            if(revision.abe_meta.status === 'publish'){
+              if(arStatus.indexOf(revision.abe_meta.status) < 0){
+                arStatus.push(revision.abe_meta.status)
+              } else {
+                this._list[index].revisions.splice(revIndex,1)
+              }
+            } else {
+              this._list[index].revisions.splice(revIndex,1)
+              cmsOperations.remove.removeFile(revision.path)
+            }
+          } else if(arStatus.indexOf(revision.abe_meta.status) < 0){
+              arStatus.push(revision.abe_meta.status)
+          }
+        })
+      }
+    }
   }
 
   /**

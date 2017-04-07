@@ -20,7 +20,8 @@
     "mimetypes": ["image/gif", "image/jpeg", "image/png", "image/svg+xml", "video/mp4"]
   },
   "data": {
-    "url": "data"
+    "url": "data",
+    "history": 0
   },
   "publish": {
     "url": "site",
