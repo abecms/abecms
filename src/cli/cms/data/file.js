@@ -111,11 +111,9 @@ export function fromUrl(url) {
   if(url != null) {
     const dir = path.dirname(url).replace(config.root, '')
     const filename = path.basename(url)
-    const pathDraft = path.join(config.root,config.draft.url,path.sep)
     const pathPublish = path.join(config.root,config.publish.url,path.sep)
     
-    let link = url.replace(pathDraft, '')
-    link = link.replace(pathPublish, '')
+    let link = url.replace(pathPublish, '')
     link = link.replace(new RegExp('\\' + path.sep, 'g'), '/')
     link = cmsData.fileAttr.delete('/'+link)
 
