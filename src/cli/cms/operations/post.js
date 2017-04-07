@@ -111,7 +111,8 @@ export function unpublish(filePath) {
       )
 
       p.then((result) => {
-        cmsOperations.remove.removeFile(revisionPath, postPath)
+        cmsOperations.remove.removeFile(revisionPath)
+        cmsOperations.remove.removeFile(postPath)
         abeExtend.hooks.instance.trigger('afterUnpublish', revisionPath, postPath, result.json)
         var newRevisionPath = path.join(config.root, config.data.url, result.json.abe_meta.latest.abeUrl.replace(`.${config.files.templates.extension}`, '.json'))
         Manager.instance.updatePostInList(newRevisionPath)

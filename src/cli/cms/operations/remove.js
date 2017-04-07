@@ -16,7 +16,8 @@ export function remove(filePath) {
   var revisions = cmsData.revision.getVersions(filePath)
 
   Array.prototype.forEach.call(revisions, (revision) => {
-    cmsOperations.remove.removeFile(revision.path, revision.htmlPath)
+    cmsOperations.remove.removeFile(revision.path)
+    cmsOperations.remove.removeFile(revision.htmlPath)
   })
 
   filePath = abeExtend.hooks.instance.trigger('afterDeleteFile', filePath, {})
@@ -24,12 +25,8 @@ export function remove(filePath) {
   Manager.instance.removePostFromList(filePath.replace(new RegExp('\\/', 'g'), path.sep))
 }
 
-export function removeFile(file, json) {
+export function removeFile(file) {
   if(coreUtils.file.exist(file)) {
     fse.removeSync(file)
-  }
-
-  if(coreUtils.file.exist(json)) {
-    fse.removeSync(json)
   }
 }
