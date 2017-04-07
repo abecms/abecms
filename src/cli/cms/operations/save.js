@@ -7,8 +7,8 @@ import {
   config
 } from '../../'
 
-export function saveJson(url, json) {
-  mkdirp.sync(path.dirname(url))
+export function saveJson(jsonPath, json) {
+  mkdirp.sync(path.dirname(jsonPath))
 
   if(json.abe_source != null) delete json.abe_source
   if(json.abeEditor != null) delete json.abeEditor
@@ -25,10 +25,11 @@ export function saveJson(url, json) {
 
   eachRecursive(json)
 
-  fse.writeJsonSync(url, json, {
+  fse.writeJsonSync(jsonPath, json, {
     space: 2,
     encoding: 'utf-8'
   })
+
   return true
 }
 
