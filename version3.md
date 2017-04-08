@@ -32,7 +32,7 @@ You'll find a menu on this homepage making all the features of AbeCMS easy to fi
 We've decided to add a header on AbeCMS. It will display your profile (with your gravatar avatar if you have one) and responsive options when you'll be on the editor. Have a try and let us know how you feel with this new design.
 
 ## Activity stream
-The activity stream displays in real time all the activity which occur on your blog. Really useful when you have several editors working on your AbeCMS website.
+The activity stream displays in real time all the activity which occur on your blog. Really useful when you have several users working on your AbeCMS website.
 
 ## Pixel tracker
 We've added a pixel tracker to make statistics on the use of AbeCMS Back-office. It will help us improve your experience. We only count the number of times you go on your back-office, and the pages you use (is the structure page used or not, this kind of stats). If you don't want us to track your connection to the Back-office, you can remove the tracker by deleting the ligne 9 of server/views/partials/header-menu.html. We'll add an option in abe.json to deactivate the tracker in a future version.
