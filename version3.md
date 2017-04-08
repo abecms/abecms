@@ -42,6 +42,7 @@ But if you keep it, great ! It's a way for you to contribute to the improvement 
 
 ### Responsive preview added
 You can now see your page in mobile, tablet and desktop version in your editor with just one click
+![Screenshot](/tests/demo/site/images/ss-responsive.png.png?raw=true)
 
 ### Auto-republish
 If you have pages that depend on other pages (ie. a homepage listing your last published posts), you had previously to launch a button "republish all" in the manager to re-index these pages. We've automatized it in version 3. Forget it: All your pages will be dynamically updated when you publish a new post!
