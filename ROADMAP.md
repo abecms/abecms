@@ -1,6 +1,7 @@
 We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
 
 The 2.x releases have been focused on quality and stability and covered by Unit tests + functional tests.
+
 The 3.x releases will focus on the REST layer of AbeCMS.
 
 ## Roadmap of the next 3.x releases
