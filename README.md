@@ -10,6 +10,8 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/abe_cms.svg?style=social)](https://twitter.com/abe_cms)
 
 # AbeCMS
+> **The version 3 is here ! See the [release notes here](./version3.md)**
+
 > AbeCMS is your __static websites generator__ with revolutionary __self-descriptive__ templates
 
 When creating blogs becomes as easy as 1-2-3. A static site generator with a great back-office for users.
