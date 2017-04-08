@@ -21,7 +21,7 @@ Enjoy! (and come contribute)
 # Contributors
 Thank you to all contributors to this version:
 - @opompilius for the design and the long hours of brainstorming early in the morning and during the week-ends
-- @wonknu who's contributing on this projects with many PR's inspired by the projects he's working on @adfabconnect
+- @wonknu who's contributing on this project with many PR's inspired by the projects he's working on @adfabconnect
 - @gonzalezemmanuel, the man who created 1 great deployers plugin to deploy Abe sites with SFTP! and with whom I spend hours discussing devops
 - @AlexandreBeaurain for his first PR (and hopefully not the last ;)
 - @nicolaslabbe who - with @wonknu - is a key contributor to this project (even if there is nothing yet from him in this version 3!)
