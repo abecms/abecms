@@ -1,6 +1,5 @@
 > **The version 3 is here ! See the [release notes here](./version3.md)**
-
-
+_______________
 
 [![Develop Branch Build Status](https://travis-ci.org/abecms/abecms.svg)](https://travis-ci.org/abecms/abecms)
 [![Build status](https://ci.appveyor.com/api/projects/status/o22xl2y3tc2javh2/branch/master?svg=true)](https://ci.appveyor.com/project/gregorybesson/abecms-d118d/branch/master)
