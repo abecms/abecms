@@ -1,3 +1,5 @@
+> **The version 3 is here ! See the [release notes here](./version3.md)**
+
 [![Develop Branch Build Status](https://travis-ci.org/abecms/abecms.svg)](https://travis-ci.org/abecms/abecms)
 [![Build status](https://ci.appveyor.com/api/projects/status/o22xl2y3tc2javh2/branch/master?svg=true)](https://ci.appveyor.com/project/gregorybesson/abecms-d118d/branch/master)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/abecms/abecms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/abecms/abecms/)
@@ -10,7 +12,6 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/abe_cms.svg?style=social)](https://twitter.com/abe_cms)
 
 # AbeCMS
-> **The version 3 is here ! See the [release notes here](./version3.md)**
 
 > AbeCMS is your __static websites generator__ with revolutionary __self-descriptive__ templates
 
