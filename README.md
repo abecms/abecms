@@ -3,57 +3,88 @@
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/abecms/abecms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/abecms/abecms/)
 [![Coverage Status](https://coveralls.io/repos/github/abecms/abecms/badge.svg?branch=master)](https://coveralls.io/github/abecms/abecms?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/587a81915450ea0034dffa93/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/587a81915450ea0034dffa93)
-[![Inline docs](http://inch-ci.org/github/abecms/abecms.svg?branch=master)](http://inch-ci.org/github/abecms/abecms)
 [![Latest Stable Version](https://img.shields.io/npm/v/abecms.svg)](https://www.npmjs.com/package/abecms)
-[![Total Downloads](https://img.shields.io/npm/dt/abecms.svg)](https://www.npmjs.com/package/abecms)
+
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/abecms/abecms/master/LICENSE)
-# Abe, A better engine
+[![Total Downloads](https://img.shields.io/npm/dt/abecms.svg)](https://www.npmjs.com/package/abecms)
+[![Twitter Follow](https://img.shields.io/twitter/follow/abe_cms.svg?style=social)](https://twitter.com/abe_cms)
 
-> Abe is your __static websites generator__ with revolutionnary __self-descriptive__ templates
+# AbeCMS
+> AbeCMS is your __static websites generator__ with revolutionnary __self-descriptive__ templates
 
-[![NPM](https://nodei.co/npm/abecms.png?downloads=true&downloadRank=true)](https://nodei.co/npm/abecms/)
-[![NPM](https://nodei.co/npm-dl/abecms.png?months=3&height=3)](https://nodei.co/npm/abecms/)
+When creating blogs becomes as easy as 1-2-3. A static site generator with a great back-office for users.
+
+For agencies: Go 7X faster than with Wordpress or Drupal to create websites and blogs
+For devs: A js full stack dev for js full stack devs with extensibility and efficiency in mind
+
+- Markup your html templates with specific handlebars tags, and your back-office is ready to go: It's time to contribute for your users!
+- Add a complete workflow of validation and permissions with ease, using the state of the art oAuth2 stack.
+- Deploy automagically to AWS S3, Github.io, or any web server via SFTP
+- Create multi-languages, multi-locales, complex web structures in no time
+- Add plugins like abe-algolia, abe-elasticsearch... or create your own with just js skill
+
+
+# Goals
+- Being the easiest CMS on the planet for the developpers by providing 1 clear api stack to rule them all and using a html markup usable by non-devs to create a full website:
+  - Develop your HTML templates with hot reload and see changes in real time
+  - Develop your plugins with hor reload and see also changes in real time
+  - Directory-based URLs. Create directories and subdirectories in AbeCMS, the URL page will be expressed from its spot on the filesystem.
+  - Focus on your HTML integration, dynamizing it becomes a breeze with AbeCMS
+- Being the easiest CMS on the planet for the users by using hyper clean pages and A REAL wysiwyg editor fast and easy to use:
+  - One Dashboard for your analytics
+  - One Manager page for listing and searching all your posts
+  - One editor with a REAL wysiwyg of your post
+  - One page for managing your users and their authorizations
+  - THAT'S ALL !
+- Being content focused (the C in CMS):
+  - Data are created as JSON documents
+  - An API-first Server to serve your documents as json
+  - Or a static website generator
+  - Or both !
+
+# Why use AbeCMS instead of other CMS or Static Site Generators ?
+- Designed for users
+- A real Wysiwyg Editor
+- A real workflow and authorization engine based on oAuth2
+- Auto-generation of the back-office editor based on your markup
+- Live editing on each part of your site during development dramatically increasing the dev speed
+- A strong separation of data and templates making the reuse of data a breeze
+- A API-first REST server: You create html pages and can consume data for your mobile, emails or whatever
+
+# Sites built with AbeCMS
+
+# Recipes, plugins, videos and blogs
+We have created recipes which are how-to's on specific subjects. If you wan't us to add your recipes, just send us a PR of this README:
 
 # Demo
 Deploy your own Abe demo on Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/abecms/demo)
 
-# Presentation
-I've designed this CMS because I wanted to simplify and optimize the way we're creating content. Wordpress is way too complex for what it does. Welcome to ABE (A Better Engine) : This CMS will make you create content in a snap and publish it on the web in no time !
-
-# Introduction
-I've bet on Abe 18 months ago. I've designed and organized the first versions of Abe as a personal side project. Soon, I've been able to win a project including this technology with a big french company. We've then worked on this project (and new ones) based on AbeJS (its name at this time) with a sub-team of AdFab Connect, including Emmanuel Gonzalez, Fabrice Labbé, Nicolas Labbé, Olivier Pompilius. This project has been open sourced as a MIT licenced project since the beginning so that you can freely use Abe to create wonderful experiences in a snap and I decided to host this project on Adfab Connect's Github at this time.
-I've decided to fork my own project to regain freedom on its future with no dependency to direct needs of customers. I will de velop this project in its own organization with your help. Feel free to send PR's.
-
-# Roadmap
-See the complete [roadmap](./ROADMAP.md)
-
 # Getting started
 
 With __npm__ : ```$ npm install -g abecms ```
 
-## Unix
+## Unix and Mac Prerequisites
 
 - nodejs
 - git
 
-## Windows
+## Windows Prerequisites
 
 - Git Bash
 - nodejs
 
 ## Abe command line tool
 
-Create website a  ```$ abe create mysite ```
+Create a website  ```$ abe create mysite ```
 this create your __website structure__ that can be overridden with a json config file
 
 Default project structure :
 
 ```
 - mysite
- |_ data (contains json data)
- |_ draft (contains file saved as draft)
+ |_ data (contains your json documents)
  |_ site (contains published files, this is your static website)
  |_ structure (add as many folders and subfolders to create your website structure)
  |_ templates (put your templates here)
@@ -71,26 +102,23 @@ start server with nodemon (dev)
 
 ```$ abe servedev ```
 
-> default config
-
-
 ## Options
 
 ```
-Usage: abe [commande] {OPTIONS}
+Usage: abe [command] {OPTIONS}
 
 Standard Options:
 
    --port, -p <port> 	Use a specific port
    
-   --interactive , -i   Open abe inside browser (use with serve command)
+   --interactive , -i   Open abe inside your browser (use with serve command)
 
 ```
 
 ## Usage
 
 ```
-Usage: abe [commande] {OPTIONS}
+Usage: abe [command] {OPTIONS}
 
 Standard Options:
 
@@ -166,12 +194,11 @@ List of self-descriptive Abe tag
 - [abe plugin hook list](docs/abe-hooks.md)
 - [abe attributes](docs/abe-attributes.md)
 
-More detailled documentation comming soon
+More detailed documentation coming soon
 
 ## Adding a template and assets (css / js / images ...)
 
-to add a template just paste it inside of templates directory
-
+to add a template just paste it inside the /templates directory
 ```
 - mysite
  |_ templates 
@@ -179,9 +206,9 @@ to add a template just paste it inside of templates directory
 	|_ template_files
 ```
 
-Assets must be in the same folder of your project and have the same name followed by `_files`
+Assets must be in the same folder of your template and have the same name followed by `_files`
 
-More detailled documentation comming soon
+More detailed documentation coming soon
 
 ## user management
 
@@ -246,3 +273,6 @@ git clone abe outside of your blog directory (not in abesite) :
 to launch your blog using Abe, under Linux or Mac, you have to set an Environment variable pointing to your blog :
 
 ```$ ROOT=/my_path_to_the_blog npm run startdev ```
+
+# Roadmap
+See the complete [roadmap](./ROADMAP.md)
