@@ -1,29 +1,24 @@
 We have a 1 year roadmap (estimation) with the following versions. You'll notice that as we're developing in agile mode, we've chosen to create and present groups of features but no date of delivery (feature-driven release planning : http://www.scrum-institute.org/Release_Planning.php). This roadmap doesn't take into account the bugs which could be opened during this timeframe. Depending on the severity of these bugs, we'll be able to fix shortly after their discovery and include those fixes in specific Hotfix versions or include these bugs in the roadmap.
 
-The 2.x releases will focus on quality and stability and will be covered by Unit tests + functional tests.
-The separation between the engine, the API server and the front will be reinforced by putting each part in its own repository
-The documentation will be rewritten and included in the modules
-As a major new feature, it will be possible to create a template from partials.
+The 2.x releases have been focused on quality and stability and covered by Unit tests + functional tests.
+The 3.x releases will focus on the REST layer of AbeCMS.
 
-## Roadmap of the next 2.x releases
-- A homepage will arrive (at last !) on the frontend
+## Roadmap of the next 3.x releases
 - It will be possible to create filtered views on the manager frontend
-- Refactoring the editor has to be done
-- Precompiling of templates has to be fully tested
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
 - Add template creation from partials
-- Structure will be editable from abe, as references
 - templates and partials will be uploadable
 - Video training will be produced
-
-## Roadmap of the 3.x releases
-- Separate the engine, the REST server and the client
-- rewrite the client in react
-- create an Electron version
-- More to come !
+- Create an Electron version
+- Refactor the REST layer
 
 ## Changelog
 See the complete [changelog](./CHANGELOG.md)
+
+### 3.0.0
+See the complete [v3.0.0 release notes](./version3.md)
+
+### 2.16.*
 
 ### 2.15.*
 - The order by statement in abe type="data" is now fully usable on any property of the json post. usage of order by date ASC is deprecated. Please use order by abe_meta.date ASC instead. And you can now limit a set of record without having to use the 'where' statement
