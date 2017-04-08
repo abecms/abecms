@@ -51,10 +51,46 @@ For devs: A js full stack dev for js full stack devs with extensibility and effi
 - A strong separation of data and templates making the reuse of data a breeze
 - A API-first REST server: You create html pages and can consume data for your mobile, emails or whatever
 
-# Sites built with AbeCMS
+# Some sites built with AbeCMS
+If you want us to add your sites, submit a PR of this README.
 
-# Recipes, plugins, videos and blogs
+- accorhotels.com magazine (multi-languages, many contributors): http://www.accorhotels.com/fr/france/magazine/index.shtml
+- Gemo storelocators: http://www.gemo-shop.be/, http://www.gemo.tn/, http://www.gemo.gp/, http://www.gemo.ma/, http://www.gemo.gf/, http://www.gemo.mq/, http://www.gemo.re/
+- https://onadates.com/
+- Hautes Pyrenées: http://neige.hautes-pyrenees.fr/
+- blablacar: https://www.blablacar.fr/offre/voitures/
+- Sofitel destinations: http://www.sofitel.com/fr/destinations/index.shtml
+- Château d'Angles: http://www.chateaudangles.com/en/index.html
+- Thai Kitchen: https://www.thaikitchen.fr
+- Askja: http://www.askja-audio.com/
+- eNewsletters Novotel (become a member to see the newsletters ;)
+- eNewsletters Accor Club (become a member to see the newsletters ;)
+- ...
+
+# Recipes, plugins, blogs
 We have created recipes which are how-to's on specific subjects. If you wan't us to add your recipes, just send us a PR of this README:
+
+## Recipes
+- Recipe abemail: https://github.com/abecms/recipe-abemail
+- Recipe Googlemaps: https://github.com/abecms/recipe-googlemaps
+- Recipe abedynamicblocks: https://github.com/abecms/recipe-abedynamicblocks
+- Recipe elacticsearch:https://github.com/abecms/recipe-elasticsearch
+- Recipe PM2: https://github.com/abecms/recipe-pm2
+- Recipe abe types: https://github.com/abecms/recipe-abetypes
+- Recipe abe data: https://github.com/abecms/recipe-abedata1
+
+## Plugins
+- abe-deployer-sftp: https://github.com/abecms/abe-deployer-sftp
+- abe-deployer-git: https://github.com/abecms/abe-deployer-git
+- abe-deployer-s3: https://github.com/abecms/abe-deployer-s3
+- abe-sitemap: https://github.com/abecms/abe-sitemap
+- abe-algolia: https://github.com/abecms/abe-algolia
+- abe-elasticsearch: https://github.com/abecms/abe-elasticsearch
+- abe-packagz: https://github.com/abecms/abe-packagz
+- abe-calendar: https://github.com/abecms/abe-calendar
+
+## blogs
+- http://www.disko.fr/reflexions/technique/abecms/
 
 # Demo
 Deploy your own Abe demo on Heroku
