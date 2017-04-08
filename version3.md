@@ -14,7 +14,7 @@ The version 3.0.0 I propose you here is exactly that: The result of a deep refac
 
 Furthermore, I've decided to drop the support of versions 4 & 5 of NodeJS. It doesn't mean AbeCMS won't work anymore in these versions (actually, I did develop AbeCMS 3.0.0 with NodeJS 4.x as a platform), but it means that I'll remove the Travis Unit Testing during the evolutions of the version 3. So migrate to version 6+ of NodeJS in the meantime.
 
-The following chapters will introduce you to the main new feature of this version 3.
+The following chapters will introduce you to the main new features of this version 3.
 
 Enjoy! (and come contribute)
 
