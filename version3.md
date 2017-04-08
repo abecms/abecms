@@ -45,7 +45,9 @@ You can now see your page in mobile, tablet and desktop version in your editor w
 ![Screenshot](/tests/demo/site/images/ss-responsive.png?raw=true)
 
 ### Auto-republish
-If you have pages that depend on other pages (ie. a homepage listing your last published posts), you had previously to launch a button "republish all" in the manager to re-index these pages. We've automatized it in version 3. Forget it: All your pages will be dynamically updated when you publish a new post!
+If you have pages that depend on other pages (ie. a homepage listing your last published posts), you had previously to launch a button "republish all" in the manager to re-index these pages. 
+
+We've automatized it in version 3. Forget it: All your pages will be dynamically updated when you publish a new post!
 This new feature is set for blog < 500 published posts. This feature is configurable in abe.json:
 
 ```
@@ -58,7 +60,10 @@ This new feature is set for blog < 500 published posts. This feature is configur
 },
 ```
 
-You can deactivate this feature with ```"active": false``` and change the limit. Above this limit, the auto-republish is replaced with a button thaht you'll click manually when you want your whole blog to be updated. We're working to optimize the recalculation of the new pages so that this auto-republish can be set for any number of posts you have in your blog. For now, a republish of your whole website take around 1' for 1000 posts.
+You can deactivate this feature with ```"active": false``` and change the limit. Above this limit, the auto-republish is replaced with a button thaht you'll click manually when you want your whole blog to be updated. 
+
+We're working to optimize the recalculation of the new pages so that this auto-republish can be set for any number of posts you have in your blog. For now, a republish of your whole website take around 1' for 1000 posts.
+
 When the button is set, if a user triggers it, all users on the back-office will be informed in real time and the button will be disabled while the republish operation takes place.
 
 ### RTE
