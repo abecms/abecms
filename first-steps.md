@@ -134,5 +134,50 @@ More detailed documentation coming soon
 
 
 ## Abe command to build all pages
-
 coming soon
+
+## Build from source
+
+### Windows User
+
+- python (2.7.x)
+
+Setup path to python
+
+Open git bash then run
+
+```shell
+PATH=$PATH:/c/Python27/
+npm config set python /C/Python27/
+```
+
+Install visual studio community edition
+
+> [https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop](https://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-desktop)
+
+install windows sdk
+
+> [https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk](https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk)
+
+Tell node-sass which version of 
+Open git bash then run
+
+```shell
+# npm config set msvs_version [ VISUAL STUDIO VERSION ] --global
+npm config set msvs_version 2015 --global
+```
+
+### Clone
+
+Create a blog directory (ie. "abesite") with the default project structure (see below). It will contain your blog.
+git clone abe outside of your blog directory (not in abesite) :
+
+```$ git clone https://github.com/abecms/abecms.git ```
+
+```$ cd abecms ```
+
+```$ npm i ```
+
+to launch your blog using Abe, under Linux or Mac, you have to set an Environment variable pointing to your blog :
+
+```$ ROOT=/my_path_to_the_blog npm run startdev ```
