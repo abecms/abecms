@@ -108,3 +108,31 @@ List of self-descriptive Abe tag
 ​	{{abe type='text' key='key_name.text_key' desc='give some tips' tab='default'}}
 {{/each}}
 ```
+
+## Adding a template and assets (css / js / images ...)
+
+to add a template just paste it inside the /templates directory
+```
+- mysite
+ |_ templates 
+	|_ template.html
+	|_ template_files
+```
+
+Assets must be in the same folder of your template and have the same name followed by `_files`
+
+More detailed documentation coming soon
+
+## user management
+
+[doc abe user, custom actions & workflow](docs/abe-users.md)
+
+
+## Custom Abe admin engine
+
+[doc abe admin override](docs/abe-users.md)
+
+
+## Abe command to build all pages
+
+coming soon
