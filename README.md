@@ -23,6 +23,7 @@ For devs: A js full stack dev for js full stack devs with extensibility and effi
 - Create multi-languages, multi-locales, complex web structures in no time
 - Add plugins like abe-algolia, abe-elasticsearch... or create your own with just js skill
 
+![From template abification to publication example](/tests/demo/site/images/abeCMS-demo.gif)
 
 # Goals
 - Being the easiest CMS on the planet for the developpers by providing 1 clear api stack to rule them all and using a html markup usable by non-devs to create a full website:
