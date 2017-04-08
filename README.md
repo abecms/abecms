@@ -70,8 +70,8 @@ Deploy your own Abe demo on Heroku
 ## Usage
 1. Create a new website `abe create my-website`
 2. `cd my-website`
-3. abe serve -i
-4. Enjoy! (and see the tutorial below for details)
+3. `abe serve -i`
+4. Enjoy! (and see the documentation below for details)
 
 # Complete documentation
 
