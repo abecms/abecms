@@ -11,7 +11,13 @@ The 3.x releases will focus on the REST layer of AbeCMS.
 - templates and partials will be uploadable
 - Video training will be produced
 - Create an Electron version
-- Refactor the REST layer
+- Refactor the REST layer:
+  - Usage of oAuth2 for REST routes
+- Add robots.txt + URL redirection features in Abe
+- A JSON document could be associated with more than 1 template: AMP template, mobile, template, instant article template, desktop template...
+- We must be able to chose a theme (composed by templates) from the admin
+- We should be able to sync data, templates, ... from a distant Abe install
+- Let's improve the republish-all so that we boost the performance.
 
 ## Changelog
 See the complete [changelog](./CHANGELOG.md)
