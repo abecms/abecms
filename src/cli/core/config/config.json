@@ -17,7 +17,7 @@
     "sound": "sound",
     "fileSizelimit": 10485760,
     "extensions":[".gif", ".jpg", ".jpeg", ".png", ".svg", ".mp4"],
-    "mimetypes": ["image/gif", "image/jpeg", "image/png", "image/svg+xml", "video/mp4"]
+    "mimetypes": ["image/gif", "image/jpeg", "image/png", "image/svg+xml", "video/mp4", "application/octet-stream"]
   },
   "data": {
     "url": "data",
