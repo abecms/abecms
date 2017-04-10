@@ -148,7 +148,7 @@ describe('image', function() {
     var result2 = cmsMedia.image.isValidMedia('wrong/mimetype', '.exe')
     chai.expect(result.error).to.equal(false)
     chai.expect(result2.error).to.be.a('string')
-    chai.expect(result2.error).to.equal('.exe is not an authorized extension')
+    chai.expect(result2.error).to.equal('.exe is not an authorized mimetype')
   });
 
   /**
