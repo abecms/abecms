@@ -11,7 +11,7 @@ export default function printBlock (ctx, root) {
   if(ctx[0].block != null && ctx[0].block !== '') {
     res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
               <label class="title">
-                ${(ctx[0].groupdesc != null) ? ctx[0].groupdesc : ctx[0].block}
+                ${(ctx[0].group != null) ? ctx[0].group : ctx[0].block}
               </label>
               <div class='single-block well well-sm'>`
     Array.prototype.forEach.call(ctx, (item) => {

@@ -2,6 +2,7 @@ import {Promise} from 'bluebird'
 import path from 'path'
 
 import {
+  coreUtils,
   cmsData,
   cmsEditor,
   abeEngine,
@@ -196,12 +197,12 @@ export function orderByGroup(form) {
   var index = 0
 
   Array.prototype.forEach.call(form.item, (item) => {
-    if(item.group != null) {
+    if(item.group != null && (item.block === '' || item.block == null)) {
       if(typeof groups[item.group] === 'undefined' || groups[item.group] === null){
         groupIndex[item.group] = index
         groups[item.group] = []
       }
-      item.order = -1
+
       groups[item.group].push(item)
     }
     else noGroup.push(item)
@@ -210,6 +211,10 @@ export function orderByGroup(form) {
 
   for(var prop in groups){
     var group = groups[prop]
+    group.sort(coreUtils.sort.predicatBy('order'))
+    Array.prototype.forEach.call(group, (elt, index) => {
+      group[index].order = group[0].order
+    })
     group[0].firstgroup = 1
     group[group.length - 1].lastgroup = 1
     noGroup = noGroup.splice(0, groupIndex[group[0].group]).concat(group).concat(noGroup)
@@ -246,7 +251,7 @@ function orderBlock(util) {
     var arKeys = Object.keys(formBlockTab).sort((a,b) => {
       if(parseFloat(formBlockTab[a][0].order) < parseFloat(formBlockTab[b][0].order)) {
         return -1
-      }else if(parseFloat(formBlockTab[a][0].order) > parseFloat(formBlockTab[b][0].order)) {
+      } else if(parseFloat(formBlockTab[a][0].order) > parseFloat(formBlockTab[b][0].order)) {
         return 1
       }
       return 0

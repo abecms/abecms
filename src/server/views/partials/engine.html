@@ -37,7 +37,14 @@
               </div>
             {{else}}
               {{#each this}}
-                {{#if this.0.firstgroup}}<div class='single-block well well-sm'>{{/if}}
+                {{#if this.0.firstgroup}}
+                  {{#if this.0.group}}
+                    <label class="title">
+                      {{this.0.group}}
+                    </label>
+                  {{/if}}
+                  <div class='single-block well well-sm'>
+                {{/if}}
                 <div class="{{cleanTab @key}}">
                 {{{printBlock this @root}}}
                 </div>
