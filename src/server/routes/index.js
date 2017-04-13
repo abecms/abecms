@@ -20,6 +20,8 @@ import getPaginate from './get-paginate'
 import getThumbs from './get-thumbs'
 import getImage from './get-image'
 import getHome from './get-home'
+import getThemes from './get-themes'
+import postThemes from './post-themes'
 import * as users from './users'
 import * as operations from './operations'
 import * as rest from './rest'
@@ -47,6 +49,8 @@ export {
 	getPaginate,
 	getThumbs,
 	getImage,
+	getThemes,
+	postThemes,
 	users,
 	operations,
 	rest
