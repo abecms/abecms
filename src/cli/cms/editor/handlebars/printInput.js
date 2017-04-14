@@ -236,12 +236,19 @@ export function createInputFile(attributes, inputClass, params) {
               <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
             </div>
             <input type="text" ${attributes} class="${inputClass} file-input" />
-            <div class="upload-wrapper">
-              <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload a file"/>
-              <span class="percent">
-                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+            
+            <div class="input-group-btn">
+              <span class="border">
+                <div class="upload-wrapper">
+                  <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload file"/>
+                  <span class="percent">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                  </span>
+                </div>
               </span>
+              <span class="image-icon"></span>
             </div>
+
           </div>
           <div class="input-error"></div>
           ${hint(params)}
