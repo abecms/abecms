@@ -13,6 +13,7 @@ import EditorReload from './modules/EditorReload'
 import EditorReferences from './modules/EditorReferences'
 import EditorStructures from './modules/EditorStructures'
 import TaskRepublish from './modules/TaskRepublish'
+import EditorThemes from './modules/EditorThemes'
 
 var htmlTag = document.querySelector('html')
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
@@ -53,6 +54,7 @@ class Engine {
     this.reference = new EditorReferences()
     this.structure = new EditorStructures()
     this.republish = new TaskRepublish()
+    this.themes = new EditorThemes()
 
     this.json = EditorJson.instance
 

@@ -17,7 +17,7 @@
     }
   }
 }
-
+.file-upload,
 .img-upload{
   input[type="text"]{
     
@@ -42,6 +42,7 @@
   }
 }
 
+.file-upload,
 .img-upload{
   &:hover{
     cursor: pointer;
@@ -85,7 +86,7 @@ select[multiple], select[size] {
       }
     }
   }
-
+  .file-upload,
   .img-upload {
     .upload-wrapper {
       .glyphicon {
