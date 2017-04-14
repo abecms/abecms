@@ -23,6 +23,8 @@ import {
   getPaginate,
   getThumbs,
   getImage,
+  getThemes,
+  postThemes,
   users,
   getHome,
   postProfile,
@@ -77,6 +79,8 @@ router.post('/abe/reference/*', postReference)
 router.post('/abe/structure/*', postStructure)
 router.get('/abe/editor*', getMain)
 router.post('/abe/list-url/save*', postListUrlSave)
+router.get('/abe/themes', getThemes)
+router.post('/abe/themes', postThemes)
 
 router.get('/abe/list-workflow*', function (req, res, next) {
   getListWorkflow(router, req, res, next) 
