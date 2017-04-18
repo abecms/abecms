@@ -4,6 +4,10 @@
   "intlData": {
     "locales": "en-US"
   },
+  "themes": {
+    "active":false,
+    "repository": "http://themes.abecms.io"
+  },
   "templates": {
     "url": "templates"
   },

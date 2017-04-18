@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
+import pkg from '../../../package'
 
 import {
 	Manager,
@@ -36,7 +37,8 @@ var route = function(req, res){
     manager: manager,
     config: config,
     reference: Manager.instance.getReferences(),
-    isThemes: true
+    isThemes: true,
+    abeVersion: pkg.version
   }
 
   cmsThemes.themes.getThemeInfos().then((json) =>  {

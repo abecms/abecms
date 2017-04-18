@@ -27,12 +27,14 @@
     </li>
     {{/isAuthorized}}
     {{#isAuthorized '/abe/themes' @root.user.role.workflow}}
-    <li class="{{#if isThemes}}selected{{/if}}">
-      <i class="fa fa-picture-o fa-fw" aria-hidden="true"></i>
-      <a href="/abe/themes">
-        Themes
-      </a>
-    </li>
+      {{#if config.themes.active}}
+        <li class="{{#if isThemes}}selected{{/if}}">
+          <i class="fa fa-picture-o fa-fw" aria-hidden="true"></i>
+          <a href="/abe/themes">
+            Themes
+          </a>
+        </li>
+      {{/if}}
     {{/isAuthorized}}
   </ul>
 

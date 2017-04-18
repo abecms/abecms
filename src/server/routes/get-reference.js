@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
+import pkg from '../../../package'
 
 import {
 	Manager,
@@ -35,7 +36,8 @@ var route = function(req, res){
     manager: manager,
     config: config,
     reference: Manager.instance.getReferences(),
-    isReference: true
+    isReference: true,
+    abeVersion: pkg.version
   }
   res.render('../views/list-references.html', EditorVariables)
 }

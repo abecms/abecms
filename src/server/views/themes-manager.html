@@ -84,10 +84,9 @@
                       </button>
                     </p>
                   </div>
-                  
                 </div>
               </div>
-
+              <div class="grid"></div>
             </div>
           </div>
         </div>
@@ -96,5 +95,52 @@
     {{abeImport 'common-scripts' manager.config this}}
     <script type="text/javascript" src="/abecms/scripts/admin-compiled.js"></script>
     <script type="text/javascript" src="/abecms/scripts/template-engine-compiled.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.1/masonry.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js"></script>
+    <script>
+      function getImages(arg1, arg2) {
+
+        var elems = $('.grid').masonry('getItemElements');
+
+        $.each(elems, function(index,elem) {
+          $('.grid').masonry('remove', elem ).masonry('layout');
+        });
+
+        $.ajax ({
+          url:'{{config.themes.repository}}/abe/rest/posts?start=0&length=50&search%5Bvalue%5D=theme',
+          type:'GET',
+          dataType:'json',
+          success: function(data) {
+            var html = "";
+            $.each(data.data, function(index,item) {
+              console.log(item.publish.thumbnail)
+              html += "<div class='image grid-item'><img width=200 height=200 style='z-index:100;' src='" + item.publish.thumbnail + "' alt='' /><h3>"+item.publish.title+"</h3></div>";
+            });
+
+            var $moreBlocks = jQuery( html ).filter('div.grid-item');
+
+            jQuery('.grid').append( $moreBlocks );
+
+            $('.grid').imagesLoaded( function() {
+              jQuery('.grid').masonry( 'appended', $moreBlocks );
+            });
+          }
+        })
+      }
+
+      $(document).ready(function(){
+        var $grid = $('.grid').masonry({
+          itemSelector: '.grid-item',
+          gutter: 30,
+          columnWidth: 200
+        });
+        getImages()
+        $grid.imagesLoaded().progress( function() {
+          $grid.masonry('layout')
+          
+        });
+      })
+
+    </script>
   </body>
 </html>
