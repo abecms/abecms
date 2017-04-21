@@ -108,7 +108,7 @@ result.set = (json) => {
 }
 
 result.save = (json) => {
-  // extend(true, result, json)
+  extend(true, result, json)
 
   if (result.localConfigExist()){
     // var abeJson = fse.readJsonSync(path.join(result.root,'abe.json'))
