@@ -6,7 +6,8 @@ import {
   coreUtils,
   cmsData,
   abeExtend,
-  cmsTemplates
+  cmsTemplates,
+  cmsOperations
 } from '../../'
 import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 
@@ -370,6 +371,68 @@ export function getAbePrecontribFromTemplates(templatesList) {
     // fields: fields,
     template: precontributionTemplate
   }
+}
+
+export function getAutoGeneratePathAndName(templateTag) {
+  var source = cmsData.regex.getAttr(templateTag, 'source')
+  var name = ''
+  var pathName = ''
+  if(source != null){
+    source = source.split('/')
+    name = source.pop()
+    pathName = source.join('/')
+  }
+  return {
+    pathName: pathName,
+    name: name,
+  }
+}
+
+export function generateTemplateAuto(data, templatePath) {
+  var tplInfos = getAutoGeneratePathAndName(cmsData.regex.getTagAbeWithType(data, 'slug'))
+  var tplName = templatePath.split('/')
+  tplName = tplName[tplName.length - 1]
+  coreUtils.file.getFilesAsync(path.join(config.root, config.data.url, tplInfos.pathName), false).then(function(items) {
+    var found = false
+    for(var key in items){
+      var file = cmsData.fileAttr.delete(items[key])
+      if(file === path.join(config.root, config.data.url, tplInfos.pathName, tplInfos.name + '.json')){
+        found = true
+        break;
+      }
+    }
+    if(!found) cmsOperations.create(tplName, tplInfos.pathName, tplInfos.name, {body: {}})
+  })
+}
+
+export function getAutoGenerateTemplates(templatePaths) {
+  let autoGenerateTemplates = []
+  var index = 0
+  var p = new Promise((resolve) => {
+    Array.prototype.forEach.call(templatePaths, (templatePath) => {
+      fse.readFile(templatePath.path,'utf8', function read(err, data) {
+        var isEditable = true
+        if(err) console.log("Error getStructureAndTemplates() : ", err)
+        var templateTag = cmsData.regex.getTagAbeWithType(data, 'template')
+        if(templateTag.length > 0) {
+          var templateTagAttrs = cmsData.attributes.getAll(templateTag[0])
+          if(templateTagAttrs.generate != null && JSON.parse(templateTagAttrs.generate.toLowerCase()) === true) {
+
+            autoGenerateTemplates.push({data, templatePath: templatePath.path})
+          }
+          if(templateTagAttrs.editable != null && templateTagAttrs.editable === false) isEditable = false
+        }
+        if(++index === templatePaths.length) {
+          Array.prototype.forEach.call(autoGenerateTemplates, (autoGenerateTemplate) => {
+            cmsTemplates.template.generateTemplateAuto(autoGenerateTemplate.data, autoGenerateTemplate.templatePath)
+          })
+          resolve(autoGenerateTemplates)
+        }
+      })
+    })
+  })
+
+  return p
 }
 
 export function getStructureAndTemplates() {

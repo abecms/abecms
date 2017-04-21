@@ -426,4 +426,55 @@ describe('cmsTemplates', function() {
     var txt = cmsTemplates.encodeAbeTagAsComment(this.fixture.articleEach);
     chai.expect(txt.indexOf('{')).to.equal(-1);
   });
+
+  /**
+   * getAutoGeneratePathAndName
+   * 
+   */
+  it('cmsTemplates.template.getAutoGeneratePathAndName()', function() {
+    // stub
+    var sinonInstance = sinon.sandbox.create();
+    var getAttr = sinonInstance.stub(cmsData.regex, 'getAttr');
+    getAttr.returns('long/path/to/file')
+
+    // test
+    var result = cmsTemplates.template.getAutoGeneratePathAndName([ '{{abe type="slug" source="long/path/to/file"}}' ])
+    chai.expect(result).to.not.be.undefined;
+    chai.expect(result.pathName).to.not.be.undefined;
+    chai.expect(result.name).to.not.be.undefined;
+    chai.expect(result.pathName).to.be.equal('long/path/to');
+    chai.expect(result.name).to.be.equal('file');
+
+    getAttr.restore()
+  });
+
+  /**
+   * getAutoGenerateTemplates
+   * 
+   */
+  it('cmsTemplates.template.getAutoGenerateTemplates()', function(done) {
+    // stub
+    var sinonInstance = sinon.sandbox.create();
+    var getTagAbeWithType = sinonInstance.stub(cmsData.regex, 'getTagAbeWithType');
+    var getAll = sinonInstance.stub(cmsData.attributes, 'getAll');
+    var generateTemplateAuto = sinonInstance.stub(cmsTemplates.template, 'generateTemplateAuto');
+    getTagAbeWithType.returns([ '{{abe type="template" generate="true" editable="false"}}' ])
+    getAll.returns({type: 'template', generate: 'true'})
+    generateTemplateAuto.returns({})
+
+    // test
+    cmsTemplates.template.getAutoGenerateTemplates([{
+      path: path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article.html'), name: 'auto-generate'}
+    ]).then(function (result) {
+      chai.expect(result).to.not.be.undefined;
+      chai.expect(result.length).to.be.equal(1);
+      chai.expect(result[0].templatePath).to.not.be.undefined;
+      chai.expect(result[0].templatePath).to.be.equal('/Applications/MAMP/htdocs/abecms/test/fixtures/templates/article.html');
+      done()
+      getTagAbeWithType.restore()
+      getAll.restore()
+      generateTemplateAuto.restore()
+    })
+  });
+
 });
