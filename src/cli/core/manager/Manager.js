@@ -47,6 +47,7 @@ class Manager {
     this.activities = [],
 
     this.updateStructureAndTemplates()
+    this.getAutoGenerateTemplates()
     var p = new Promise((resolve) => {
       this.getKeysFromSelect()
         .then(() => {
@@ -209,6 +210,11 @@ class Manager {
     this._structureAndTemplates = cmsTemplates.template.getStructureAndTemplates()
   }
 
+  getAutoGenerateTemplates() {
+    this.updateStructureAndTemplates()
+    cmsTemplates.template.getAutoGenerateTemplates(this._structureAndTemplates.templates)
+  }
+
   getThumbsList() {
     if(typeof this._thumbs === 'undefined' || this._thumbs === null) this._thumbs = cmsMedia.image.getThumbsList()
     return this._thumbs
@@ -282,6 +288,7 @@ class Manager {
    */
   updatePostInList(pathFile){
     const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + path.sep, '')
+    if(typeof this._list === 'undefined' || this._list === null) this.updateList()
     const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
     const json = cmsData.file.get(pathFile)
     let index
