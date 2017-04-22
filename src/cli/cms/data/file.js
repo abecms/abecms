@@ -11,17 +11,15 @@ import {
 } from '../../'
 
 export function getAbeMeta(fileObject, json) {
-  const fileStatusIsPublish = cmsData.fileAttr.get(fileObject.cleanPath)
-
   if(json.abe_meta.latest.date != null) {
     fileObject.date = json.abe_meta.latest.date
-    fileObject.cleanDate = moment(json.abe_meta.latest.date).format('YYYY/MM/DD HH:mm:ss')
+  }
+
+  if(json.name != null) {
+    fileObject.name = json.name
   }
 
   if(json.abe_meta != null) {
-    if (json.abe_meta.status === 'publish') {
-      fileObject.htmlPath = path.join(config.root, config.publish.url, path.join('/', fileObject.filePath.replace(/\.json/, `.${config.files.templates.extension}`)))
-    }
     var date = null
     if (json.abe_meta.latest.date !== null) {
       date = json.abe_meta.latest.date
@@ -30,15 +28,9 @@ export function getAbeMeta(fileObject, json) {
     }
     fileObject.abe_meta = {
       date: date,
-      type: (json.abe_meta.type != null) ? json.abe_meta.type : null,
       link: (json.abe_meta.link != null) ? json.abe_meta.link : null,
       template: (json.abe_meta.template != null) ? json.abe_meta.template : null,
-      cleanName: (json.abe_meta.cleanName != null) ? json.abe_meta.cleanName : null,
-      cleanFilename: (json.abe_meta.cleanFilename != null) ? json.abe_meta.cleanFilename : null,
       status: (json.abe_meta.status != null) ? json.abe_meta.status : null
-    }
-    if(fileStatusIsPublish.s != null && json.abe_meta.status === 'publish') {
-      fileObject.abe_meta.status = 'draft'
     }
   }
 
@@ -56,7 +48,6 @@ export function getAllWithKeys(withKeys) {
     const json = cmsData.file.get(pathFile)
     let fileObject = cmsData.file.getFileObject(pathFile)
     fileObject = cmsData.file.getAbeMeta(fileObject, json)
-    
     Array.prototype.forEach.call(withKeys, (key) => {
       fileObject[key] = json[key]
     })
@@ -159,43 +150,28 @@ export function getFilesByType(pathFile, type = null) {
   return result
 }
 
-export function getFileObject(pathFile) {
-  const pathData = path.join(config.root, config.data.url)
-  const extension = '.json'
-  const templateExtension = '.' + config.files.templates.extension
+export function getFileObject(jsonPath) {
 
-  const name = path.basename(pathFile)
-  const relativePath = pathFile.replace(pathData + path.sep, '')
-
-  const parentName = cmsData.fileAttr.delete(name)
-  const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(pathData + path.sep, '')
-
+  let name = path.basename(jsonPath)
   const fileData = cmsData.fileAttr.get(name)
+  name = cmsData.fileAttr.delete(name)
 
   let date
   if (fileData.d) {
     date = fileData.d
-  }else {
-    const stat = fse.statSync(pathFile)
+  } else {
+    const stat = fse.statSync(jsonPath)
     date = stat.mtime
   }
 
   const fileDate = moment(date)
-  const duration = moment.duration(moment(fileDate).diff(new Date())).humanize(true)
 
-  const htmlUrl = path.join('/', relativePath.replace(extension, templateExtension))
+  const postUrl = cmsData.utils.getPostUrl(jsonPath)
   
   let fileObject = {
     'name': name,
-    'path': pathFile,
-    'cleanPath': relativePath,
-    'filePath': relativePath,
+    'path': jsonPath,
     'date': date,
-    'cleanDate': fileDate.format('YYYY/MM/DD HH:mm:ss'),
-    'duration': duration,
-    'cleanName': parentName,
-    'parentRelativePath': parentRelativePath,
-    'html': htmlUrl
   }
 
   return fileObject

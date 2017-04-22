@@ -8,7 +8,6 @@ import {
 
 export default function listPage(file, index, text) {
   var res = ''
-
   file = abeExtend.hooks.instance.trigger('beforeListPage', file, index, text)
 
   res += '<tr>'
@@ -49,10 +48,11 @@ export default function listPage(file, index, text) {
 
     workflow += `<td align="center" class="${flow}">`
     if(file[flow]) {
+      var fDate = moment(file[flow].date).format('YYYY-MM-DD HH:mm:ss')
       if (flow === 'publish') {
-        workflow += `<a href="/abe/editor${file[flow].html}" class="checkmark label-published" title="${file[flow].cleanDate}">&#10004;</a>`
+        workflow += `<a href="/abe/editor${file[flow].link}" class="checkmark label-published" title="${fDate}">&#10004;</a>`
       }else {
-        workflow += `<a href="/abe/editor${file[flow].html}" class="${hidden} label label-default label-draft" title="${file[flow].cleanDate}">${flow}</a>`
+        workflow += `<a href="/abe/editor${file[flow].link}" class="${hidden} label label-default label-draft" title="${fDate}">${flow}</a>`
       }
     }else {
 

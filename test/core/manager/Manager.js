@@ -60,7 +60,7 @@ describe('Manager', function() {
     chai.assert.equal(list.length, 0, 'failed !')
   });
 
-  it('getListWithStatusOnFolder() status publish /0-1', function() {
+  it('getListWithStatusOnFolder() status draft /0-1', function() {
     const list = Manager.instance.getListWithStatusOnFolder('draft', '0-1')
     chai.assert.equal(list[0].name, 'article-2.json', 'failed !')
     chai.assert.equal(list.length, 1, 'failed !')

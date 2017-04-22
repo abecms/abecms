@@ -145,17 +145,19 @@ class Engine {
             Array.prototype.forEach.call(workflow, (flow) => {
               var wkf = ''
               if(typeof data[flow] !== 'undefined' && flow === 'publish') {
-                wkf = `<a href="/abe/editor${data[flow].html}" class="checkmark label-published" title="${data[flow].cleanDate}">&#10004;</a>`
+                var fDate = moment(data[flow].date).format('YYYY-MM-DD HH:mm:ss')
+                wkf = `<a href="/abe/editor${data[flow].link}" class="checkmark label-published" title="${fDate}">&#10004;</a>`
               } 
-              if(data.abe_meta.status == flow && flow !== 'publish') {  
-                wkf = `<a href="/abe/editor${data[flow].html}" class="label label-default label-draft" title="${data[flow].cleanDate}">${flow}</a>`
+              if(data.abe_meta.status == flow && flow !== 'publish') {
+                var fDate = moment(data[flow].date).format('YYYY-MM-DD HH:mm:ss')
+                wkf = `<a href="/abe/editor${data[flow].link}" class="label label-default label-draft" title="${fDate}">${flow}</a>`
               }
               $('td', row).eq(i).html(wkf)
               ++i
             })
 
             $('td', row).eq(0).html(index + 1)
-            $('td', row).eq(1).html('<a href="/abe/editor'+data.abe_meta.link+'" class="file-path">'+data.abe_meta.link+'</a>')
+            $('td', row).eq(1).html('<a href="/abe/editor'+data.abe_meta.link+'" class="file-path" title="'+((typeof data.name !== 'undefined')?data.name:data.abe_meta.link)+'">'+ data.abe_meta.link +'</a>')
             $('td', row).eq(3).html(moment(data.date).format('YYYY/MM/DD'))
             $('td', row).eq(i).html(actions)
           }

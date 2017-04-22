@@ -33,7 +33,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
       abeExtend.hooks.instance.trigger('afterCreate', result)
       resolve(result.json)
     }).catch(function(e) {
-      console.error('[ERROR] create.js', e)
+      console.error('[ERROR] create.js', e.stack)
     })
   }).catch(function(e) {
     console.error(e)

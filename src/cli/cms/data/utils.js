@@ -1,4 +1,7 @@
+import path from 'path'
+
 import {
+  config,
   cmsData
 } from '../../'
 
@@ -34,4 +37,91 @@ export function getPercentOfRequiredTagsFilled(text, json) {
   }
 
   return Math.round((requiredValue > 0) ? complete * 100 / requiredValue : 100)
+}
+
+/**
+ * Remove the data absolute path from the jsonPath
+ * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
+ * return fr/test-abe-d20170418T130602280Z.json
+ * and returns this relative path to the json revision
+ * @param  {[type]} jsonPath [description]
+ * @return {[type]}          [description]
+ */
+export function getRevisionRelativePath(jsonPath){
+  const pathData = path.join(config.root, config.data.url) + path.sep
+  return jsonPath.replace(pathData, '')
+}
+
+/**
+ * Return the absolute path of the doc from the post URL
+ * @param  {[type]} postUrl [description]
+ * @return {[type]}         [description]
+ */
+export function getDocPathFromPostUrl(postUrl){
+  const pathData = path.join(config.root, config.data.url)
+  const extension = '.json'
+  const templateExtension = '.' + config.files.templates.extension
+  const osJsonPath = postUrl.replace(templateExtension, extension).replace('/', path.sep)
+  return path.join(pathData, osJsonPath)
+}
+
+/**
+ * Remove the date revision from the jsonPath and returns the doc full path (which is the published json)
+ * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
+ * return /Users/grg/programmation/git/abetesttheme/data/fr/test.json
+ * @param  {[type]} jsonPath [description]
+ * @return {[type]}          [description]
+ */
+export function getDocPath(jsonPath){
+  return cmsData.fileAttr.delete(jsonPath)
+}
+
+/**
+ * Remove the date revision from the jsonPath and returns the doc relative path (which is the published json)
+ * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
+ * return fr/test.json
+ * @param  {[type]} jsonPath [description]
+ * @return {[type]}          [description]
+ */
+export function getDocRelativePath(jsonPath){
+  return cmsData.fileAttr.delete(getRevisionRelativePath(jsonPath))
+}
+
+/**
+ * Remove the date revision from the jsonPath and returns the html full path (which is the published post)
+ * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
+ * return /Users/grg/programmation/git/abetesttheme/site/fr/test.html
+ * @param  {[type]} jsonPath [description]
+ * @return {[type]}          [description]
+ */
+export function getPostPath(jsonPath){
+  return path.join(config.root, config.publish.url, getPostRelativePath(jsonPath))
+}
+
+/**
+ * Remove the date revision from the jsonPath and returns the html relative path (which is the published post)
+ * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
+ * return fr/test.html (under window it could be fr\test.html)
+ * @param  {[type]} jsonPath [description]
+ * @return {[type]}          [description]
+ */
+export function getPostRelativePath(jsonPath){
+  const extension = '.json'
+  const templateExtension = '.' + config.files.templates.extension
+
+  return getDocRelativePath(jsonPath).replace(extension, templateExtension)
+}
+
+/**
+ * Remove the date revision from the jsonPath and returns the URL absolute path of the published post)
+ * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
+ * return fr/test.html
+ * @param  {[type]} jsonPath [description]
+ * @return {[type]}          [description]
+ */
+export function getPostUrl(jsonPath){
+  const extension = '.json'
+  const templateExtension = '.' + config.files.templates.extension
+
+  return path.join('/', getPostRelativePath(jsonPath).replace(extension, templateExtension))
 }

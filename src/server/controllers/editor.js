@@ -302,12 +302,6 @@ export function editor(text, json, documentLink, precontrib = false) {
         each(text, json, util, arrayBlock)
 
         text = cmsData.source.removeDataList(text)
-        if(typeof json.abe_meta !== 'undefined' && json.abe_meta !== null) {
-          var links = json.abe_meta.link.split('/')
-          var link = links.pop()
-          json.abe_meta.cleanName = link.replace(/\..+$/, '')
-          json.abe_meta.cleanFilename = links.join('/').replace(/\..+$/, '')
-        }
 
         if (!precontrib) {
           // HOOKS beforeEditorFormBlocks

@@ -20,12 +20,7 @@ let singletonEnforcer = Symbol()
 class Manager {
 
   constructor(enforcer) {
-
     if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
-    
-
-    //Handlebars.templates = Handlebars.templates || {}
-    //this.loadHbsTemplates()
   }
 
   static get instance() {
@@ -187,14 +182,14 @@ class Manager {
             this.updateList()
             resolve()
           },
-          (e) => { console.log('Reject: Manager.findRequestColumns', e) })
-          .catch((e) => { console.log('Error: Manager.findRequestColumns', e) })
+          (e) => { console.log('Reject: Manager.findRequestColumns', e.stack) })
+          .catch((e) => { console.log('Error: Manager.findRequestColumns', e.stack) })
         },
-        (e) => { console.log('Reject: Manager.getTemplatesTexts', e) })
-        .catch((e) => { console.log('Error: Manager.getTemplatesTexts', e) })
+        (e) => { console.log('Reject: Manager.getTemplatesTexts', e.stack) })
+        .catch((e) => { console.log('Error: Manager.getTemplatesTexts', e.stack) })
       },
-      (e) => { console.log('Manager.getKeysFromSelect', e) })
-      .catch((e) => { console.log('Manager.getKeysFromSelect', e) })
+      (e) => { console.log('Manager.getKeysFromSelect', e.stack) })
+      .catch((e) => { console.log('Manager.getKeysFromSelect', e.stack) })
     })
 
     return p
@@ -267,8 +262,8 @@ class Manager {
    * @param {String} postUrl The url path of the file
    */
   postExist(postUrl){
-    var parentRelativePath = cmsData.fileAttr.delete(postUrl.split('/').join(path.sep).replace(`.${config.files.templates.extension}`, '.json')).replace(/^\//, '')
-    const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
+    const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
+    const found = coreUtils.array.find(this._list, 'path', docPath)
 
     if (found.length > 0) {
       return true
@@ -278,15 +273,15 @@ class Manager {
 
   /**
    * When a post is modified or created, this method is called so that the manager updates the list with the updated/new item
-   * @param {String} pathFile The full path to the post
+   * @param {String} revisionPath The full path to the post
    */
-  updatePostInList(pathFile){
-    const parentRelativePath = cmsData.fileAttr.delete(pathFile).replace(this._pathData + path.sep, '')
-    const found = coreUtils.array.find(this._list, 'parentRelativePath', parentRelativePath)
-    const json = cmsData.file.get(pathFile)
+  updatePostInList(revisionPath){
+    const docPath = cmsData.utils.getDocPath(revisionPath)
+    const found = coreUtils.array.find(this._list, 'path', docPath)
+    const json = cmsData.file.get(revisionPath)
     let index
     let merged = {}
-    let revision = cmsData.file.getFileObject(pathFile)
+    let revision = cmsData.file.getFileObject(revisionPath)
     revision = cmsData.file.getAbeMeta(revision, json)
     Array.prototype.forEach.call(this._whereKeys, (key) => {
       var keyFirst = key.split('.')[0]
@@ -295,16 +290,16 @@ class Manager {
 
     if(found.length > 0){
       index = found[0]
-      merged[parentRelativePath] = this._list[index]
+      merged[docPath] = this._list[index]
       // If I publish, I remove the previous published versions
       if(revision.abe_meta.status === 'publish'){
-        Array.prototype.forEach.call(merged[parentRelativePath].revisions, (revision, revIndex) => {
+        Array.prototype.forEach.call(merged[docPath].revisions, (revision, revIndex) => {
           if(revision.abe_meta.status === 'publish'){
-            merged[parentRelativePath].revisions.splice(revIndex,1)
+            merged[docPath].revisions.splice(revIndex,1)
           }
         })
       }
-      merged[parentRelativePath].revisions.push(JSON.parse(JSON.stringify(revision)))
+      merged[docPath].revisions.push(JSON.parse(JSON.stringify(revision)))
       const sortedResult = cmsData.revision.sortRevisions(merged)
       // Does the publish version has been removed (in the case of unpublish) ? 
       if(sortedResult[0]['publish'] && !coreUtils.file.exist(sortedResult[0]['publish']['path'])){
@@ -355,13 +350,11 @@ class Manager {
 
   /**
    * When a post is deleted, this method is called so that the manager updates the list with the removed item
-   * @param {String} pathFile The full path to the post
+   * @param {String} postUrl The URL of the post
    */
-  removePostFromList(pathFile){
-    let parentRelativePath = cmsData.fileAttr.delete(pathFile)
-    parentRelativePath = (pathFile.indexOf(path.sep) === 0) ? parentRelativePath.substring(1):parentRelativePath
-    parentRelativePath = parentRelativePath.replace('.' + config.files.templates.extension, '.json')
-    this._list = coreUtils.array.removeByAttr(this._list, 'parentRelativePath', parentRelativePath)
+  removePostFromList(postUrl){
+    const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
+    this._list = coreUtils.array.removeByAttr(this._list, 'path', docPath)
   }
 
   /**
@@ -381,7 +374,7 @@ class Manager {
     sortField = 'date',
     sortDir = -1,
     search = '',
-    searchFields = ['abe_meta.link', 'abe_meta.template']
+    searchFields = ['abe_meta.link', 'abe_meta.template', 'name']
   ){
     const total = this._list.length
     let totalFiltered = total
@@ -408,64 +401,6 @@ class Manager {
       'data': list
     }
   }
-
-  /**
-   * DEPRECATED
-   * @param {[type]} templateId [description]
-   */
-  /*
-  addHbsTemplate(templateId) {
-    const pathTemplate = path.join(config.root, config.templates.url, 'hbs', templateId) + '.hbs'
-    var tmpl = eval('(function(){return ' + fse.readFileSync(pathTemplate) + '}());')
-    Handlebars.templates[templateId] = Handlebars.template(tmpl)
-  }
-  */
-
-  /**
-   * DEPRECATED
-   * @return {[type]} [description]
-   */
-  /*
-  loadHbsTemplates() {
-    const pathTemplate = path.join(config.root, config.templates.url, 'hbs')
-
-    try {
-      var directory = fse.lstatSync(pathTemplate)
-      if (!directory.isDirectory()) {
-        mkdirp.sync(pathTemplate)
-      }
-    } catch (e) {
-      mkdirp.sync(pathTemplate)
-    }
-
-    fse.readdirSync(pathTemplate).forEach(function (file) {
-      if (file.indexOf('.hbs') > -1) {
-        let originalTemplatePath = path.join(config.root, config.templates.url) + '/' + file.replace('.hbs', '.' + config.files.templates.extension)
-        
-        try{
-          let originalTemplateStat = fse.statSync(originalTemplatePath)
-          let originalTemplateMdate = originalTemplateStat.mtime
-          let stat = fse.statSync(path.join(pathTemplate, file))
-          let mdate = stat.mtime
-
-          // if the original template has been updated after precompilation, I delete the precompiled file
-          // else I add it to the hbs template array
-          if(originalTemplateMdate>mdate){
-            fse.unlinkSync(path.join(pathTemplate, file))
-          } else {
-            var tmpl = eval('(function(){return ' + fse.readFileSync(path.join(pathTemplate, file)) + '}());')
-            Handlebars.templates[file.replace('.hbs', '')] = Handlebars.template(tmpl)
-          }
-        }
-        catch(err) {
-          console.log('The original template has not been found or the hbs template is corrupted')
-          console.log(originalTemplatePath)
-          console.log(err)
-        } 
-      }
-    })
-  }
-  */
  
   addProcess(name) {
     this._processesRunning[name] = true

@@ -11,16 +11,16 @@ import {
   Manager
 } from '../../'
 
-export function draft(filePath, json, workflow = 'draft') {
+export function draft(postUrl, json, workflow = 'draft') {
   var p = new Promise((resolve) => {
-    abeExtend.hooks.instance.trigger('beforeDraft', json, filePath)
+    abeExtend.hooks.instance.trigger('beforeDraft', json, postUrl)
 
-    var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
-    revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
-    var date = coreUtils.file.getDate(revisionPath)
+    const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
+    const revisionPath = coreUtils.file.addDateIsoToRevisionPath(docPath, workflow)
+    const date = coreUtils.file.getDate(revisionPath)
     cmsData.metas.add(json, workflow, date)
 
-    var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
+    const template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
     cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
     .then(() => {
@@ -47,13 +47,12 @@ export function draft(filePath, json, workflow = 'draft') {
   return p
 }
 
-export function publish(filePath, json) {
+export function publish(postUrl, json) {
   var p = new Promise((resolve) => {
-    abeExtend.hooks.instance.trigger('beforePublish', json, filePath)
+    abeExtend.hooks.instance.trigger('beforePublish', json, postUrl)
 
-    var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
-    var postPath = path.join(config.root, config.publish.url, filePath)
-    // revisionPath = coreUtils.file.addDateIsoToRevisionPath(revisionPath, workflow)
+    const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
+    const postPath = path.join(config.root, config.publish.url, postUrl)
     cmsData.metas.add(json, 'publish')
 
     var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
@@ -70,15 +69,15 @@ export function publish(filePath, json) {
           success: 0,
           error: 'cannot save html file'
         }
-      }else {
-        if (!cmsOperations.save.saveJson(revisionPath, json)) {
+      } else {
+        if (!cmsOperations.save.saveJson(docPath, json)) {
           result = {
             success: 0,
             error: 'cannot save json file'
           }
-        }else {
-          Manager.instance.updatePostInList(revisionPath)
-          abeExtend.hooks.instance.trigger('afterPublish', json, filePath)
+        } else {
+          Manager.instance.updatePostInList(docPath)
+          abeExtend.hooks.instance.trigger('afterPublish', json, postUrl)
           result = {
             success: 1,
             json: json
@@ -92,30 +91,30 @@ export function publish(filePath, json) {
   return p
 }
 
-export function unpublish(filePath) {
-  abeExtend.hooks.instance.trigger('beforeUnpublish', filePath)
+export function unpublish(postUrl) {
+  abeExtend.hooks.instance.trigger('beforeUnpublish', postUrl)
 
   var p = new Promise((resolve, reject) => {
-    var revisionPath = path.join(config.root, config.data.url, filePath.replace(`.${config.files.templates.extension}`, '.json'))
-    var postPath = path.join(config.root, config.publish.url, filePath)
-    if(coreUtils.file.exist(revisionPath)) {
-      var json = JSON.parse(JSON.stringify(cmsData.file.get(revisionPath)))
+    const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
+    const postPath = path.join(config.root, config.publish.url, postUrl)
+    if(coreUtils.file.exist(docPath)) {
+      var json = JSON.parse(JSON.stringify(cmsData.file.get(docPath)))
       if(json.abe_meta.publish != null) {
         delete json.abe_meta.publish
       }
 
       var p = cmsOperations.post.draft(
-        filePath, 
+        postUrl, 
         json,
         'draft'
       )
 
       p.then((result) => {
-        cmsOperations.remove.removeFile(revisionPath)
+        cmsOperations.remove.removeFile(docPath)
         cmsOperations.remove.removeFile(postPath)
-        abeExtend.hooks.instance.trigger('afterUnpublish', revisionPath, postPath, result.json)
-        var newRevisionPath = path.join(config.root, config.data.url, result.json.abe_meta.latest.abeUrl.replace(`.${config.files.templates.extension}`, '.json'))
-        Manager.instance.updatePostInList(newRevisionPath)
+        abeExtend.hooks.instance.trigger('afterUnpublish', docPath, postPath, result.json)
+        const newdocPath = cmsData.utils.getDocPathFromPostUrl(result.json.abe_meta.latest.abeUrl)
+        Manager.instance.updatePostInList(newdocPath)
         resolve(result)
       }).catch(function(e) {
         console.error('[ERROR] unpublish', e)
@@ -127,12 +126,12 @@ export function unpublish(filePath) {
   return p
 }
 
-export function submit(filePath, json, workflow) {
+export function submit(postUrl, json, workflow) {
   var p
   if (workflow === 'publish') {
-    p = cmsOperations.post.publish(filePath, json)
+    p = cmsOperations.post.publish(postUrl, json)
   }else {
-    p = cmsOperations.post.draft(filePath, json, workflow)
+    p = cmsOperations.post.draft(postUrl, json, workflow)
   }
 
   return p
