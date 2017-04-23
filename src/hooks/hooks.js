@@ -54,8 +54,8 @@ var hooks = {
   },
 
   /***************** create *****************/
-  beforeCreate: (filePath, template, path, name, req, forceJson, abe) => {
-    return filePath
+  beforeCreate: (json, postUrl, template, abe) => {
+    return json
   },
   afterCreate: (json, text, path, name, req, forceJson, abe) => {
     return json

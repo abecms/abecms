@@ -4,16 +4,11 @@ import {
   abeExtend
 } from '../../../../cli'
 
-var route = function(req, res, next) {
+const route = function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
 
-  var filepath = req.originalUrl.replace('/abe/operations/create', '')
-  var folderName = filepath.split('/')
-  var postName = folderName.pop()
-  folderName = folderName.join('/')
-
-console.log(filepath)
-  var p = cmsOperations.create(req.body.abe_meta.template, folderName, postName, req, req.body)
+  const postUrl = req.originalUrl.replace('/abe/operations/create', '')
+  const p = cmsOperations.create(req.body.abe_meta.template, postUrl, req.body)
 
   p.then((resSave) => {
     var result = {

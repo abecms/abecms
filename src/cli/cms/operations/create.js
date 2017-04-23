@@ -7,16 +7,14 @@ import {
   cmsData
 } from '../../'
 
-var create = function(template, pathCreate, name, req, forceJson = {}) {
+var create = function(template, postUrl, forceJson = {}) {
   var p = new Promise((resolve) => {
-    abeExtend.hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
-    var postUrl = path.join('/', pathCreate, name)
+    abeExtend.hooks.instance.trigger('beforeCreate', forceJson, postUrl, template)
     postUrl = coreUtils.slug.clean(postUrl)
-    var json = (forceJson) ? forceJson : {}
-    json = cmsData.metas.create(json, template, postUrl)
+    var json = cmsData.metas.create(forceJson, template, postUrl)
 
-    json = abeExtend.hooks.instance.trigger('beforeFirstSave', json, req.body)
+    json = abeExtend.hooks.instance.trigger('beforeFirstSave', json, forceJson)
     var p2 = cmsOperations.post.draft(
       json.abe_meta.link,
       json,
@@ -29,7 +27,7 @@ var create = function(template, pathCreate, name, req, forceJson = {}) {
       console.error('[ERROR] create.js', e.stack)
     })
   }).catch(function(e) {
-    console.error(e)
+    console.error(e.stack)
   })
 
   return p
