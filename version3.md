@@ -151,5 +151,9 @@ To migrate from a version 2, you'll have to make sure to refactore (if used) the
 - Some attributes have been removed from an Abe document:
   - cleanDate
   - type
+- 3 routes have a new endpoint:
+  - abe/create => abe/operations/create
+  - abe/update => abe/operations/update
+  - abe/duplicate => abe/operations/duplicate
 
 
