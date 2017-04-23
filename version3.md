@@ -155,5 +155,6 @@ To migrate from a version 2, you'll have to make sure to refactore (if used) the
   - abe/create => abe/operations/create
   - abe/update => abe/operations/update
   - abe/duplicate => abe/operations/duplicate
-
+- The following hooks have changed:
+  - beforeCreate: (filePath, template, path, name, req, forceJson, abe)  => beforeCreate: (template, postUrl, forceJson, abe)
 
