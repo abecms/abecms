@@ -8,7 +8,7 @@ const route = function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
 
   const postUrl = req.originalUrl.replace('/abe/operations/create', '')
-  const p = cmsOperations.create(req.body.abe_meta.template, postUrl, req.body)
+  const p = cmsOperations.create(req.body.abe_meta.template, postUrl, req.body, res.user)
 
   p.then((resSave) => {
     var result = {

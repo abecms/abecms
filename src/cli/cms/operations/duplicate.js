@@ -11,7 +11,7 @@ import {
   cmsOperations
 } from '../../'
 
-const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = false) {
+const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = false, user) {
   const p = new Promise((resolve, reject) => {
     abeExtend.hooks.instance.trigger('beforeDuplicate', oldPostUrl, template, newPath, name, req, isUpdate)
 
@@ -43,7 +43,7 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
       json = cmsData.values.removeDuplicate(templateText, json)
     }
 
-    var pCreate = cmsOperations.create(template, newPostUrl, json)
+    var pCreate = cmsOperations.create(template, newPostUrl, json, user)
     pCreate.then((resSave) => {
       if (isUpdate && oldPostUrl !== newPostUrl) {
         abeExtend.hooks.instance.trigger('beforeUpdate', json, oldPostUrl, template, newPath, name, req, isUpdate)

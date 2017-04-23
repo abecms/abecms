@@ -11,14 +11,14 @@ import {
   Manager
 } from '../../'
 
-export function draft(postUrl, json, workflow = 'draft') {
+export function draft(postUrl, json, workflow = 'draft', user) {
   var p = new Promise((resolve) => {
     abeExtend.hooks.instance.trigger('beforeDraft', json, postUrl)
 
     const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
     const revisionPath = coreUtils.file.addDateIsoToRevisionPath(docPath, workflow)
     const date = coreUtils.file.getDate(revisionPath)
-    cmsData.metas.add(json, workflow, date)
+    cmsData.metas.add(json, workflow, date, user)
 
     const template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
@@ -47,13 +47,13 @@ export function draft(postUrl, json, workflow = 'draft') {
   return p
 }
 
-export function publish(postUrl, json) {
+export function publish(postUrl, json, user) {
   var p = new Promise((resolve) => {
     abeExtend.hooks.instance.trigger('beforePublish', json, postUrl)
 
     const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
     const postPath = path.join(config.root, config.publish.url, postUrl)
-    cmsData.metas.add(json, 'publish')
+    cmsData.metas.add(json, 'publish', null, user)
 
     var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
@@ -91,7 +91,7 @@ export function publish(postUrl, json) {
   return p
 }
 
-export function unpublish(postUrl) {
+export function unpublish(postUrl, user) {
   abeExtend.hooks.instance.trigger('beforeUnpublish', postUrl)
 
   var p = new Promise((resolve, reject) => {
@@ -106,15 +106,15 @@ export function unpublish(postUrl) {
       var p = cmsOperations.post.draft(
         postUrl, 
         json,
-        'draft'
+        'draft',
+        user
       )
 
       p.then((result) => {
         cmsOperations.remove.removeFile(docPath)
         cmsOperations.remove.removeFile(postPath)
         abeExtend.hooks.instance.trigger('afterUnpublish', docPath, postPath, result.json)
-        const newdocPath = cmsData.utils.getDocPathFromPostUrl(result.json.abe_meta.latest.abeUrl)
-        Manager.instance.updatePostInList(newdocPath)
+        Manager.instance.updatePostInList(docPath)
         resolve(result)
       }).catch(function(e) {
         console.error('[ERROR] unpublish', e)
@@ -126,18 +126,18 @@ export function unpublish(postUrl) {
   return p
 }
 
-export function submit(postUrl, json, workflow) {
+export function submit(postUrl, json, workflow, user) {
   var p
   if (workflow === 'publish') {
-    p = cmsOperations.post.publish(postUrl, json)
+    p = cmsOperations.post.publish(postUrl, json, user)
   }else {
-    p = cmsOperations.post.draft(postUrl, json, workflow)
+    p = cmsOperations.post.draft(postUrl, json, workflow, user)
   }
 
   return p
 }
 
-export function reject(filePath, json, workflow) {
+export function reject(filePath, json, workflow, user) {
   abeExtend.hooks.instance.trigger('beforeReject', filePath)
 
   var rejectToWorkflow
@@ -161,7 +161,8 @@ export function reject(filePath, json, workflow) {
     var p2 = cmsOperations.post.draft(
         filePath, 
         json,
-        rejectToWorkflow
+        rejectToWorkflow,
+        user
       )
     p2.then((result) => {
       abeExtend.hooks.instance.trigger('afterReject', result)

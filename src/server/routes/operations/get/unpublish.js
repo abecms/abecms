@@ -10,7 +10,7 @@ var route = function(req, res, next){
 
   var postUrl = req.originalUrl.replace(/\/abe\/operations\/unpublish\//, '')
 
-  cmsOperations.post.unpublish(postUrl)
+  cmsOperations.post.unpublish(postUrl, res.user)
 
   var result = {
     success: 1,

@@ -15,7 +15,7 @@ var route = function(req, res, next) {
   var oldFilePath = req.body.oldFilePath 
   delete req.body.oldFilePath 
  
-  var p = cmsOperations.duplicate(oldFilePath, req.body.abe_meta.template, folderName, postName, req)
+  var p = cmsOperations.duplicate(oldFilePath, req.body.abe_meta.template, folderName, postName, req, false, res.user)
 
   p.then((resSave) => {
     var result = {

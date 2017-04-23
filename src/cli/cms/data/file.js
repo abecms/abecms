@@ -11,7 +11,9 @@ import {
 } from '../../'
 
 export function getAbeMeta(fileObject, json) {
-  if(json.abe_meta.latest.date != null) {
+  if(json.abe_meta.updatedDate != null) {
+    fileObject.date = json.abe_meta.updatedDate
+  } else if(json.abe_meta.latest.date != null) {
     fileObject.date = json.abe_meta.latest.date
   }
 
@@ -21,11 +23,14 @@ export function getAbeMeta(fileObject, json) {
 
   if(json.abe_meta != null) {
     var date = null
-    if (json.abe_meta.latest.date !== null) {
+    if(json.abe_meta.updatedDate != null) {
+      date = json.abe_meta.updatedDate
+    } else if (json.abe_meta.latest.date !== null) {
       date = json.abe_meta.latest.date
     } else if (json.abe_meta.date !== null) {
       date = json.abe_meta.date
     }
+
     fileObject.abe_meta = {
       date: date,
       link: (json.abe_meta.link != null) ? json.abe_meta.link : null,
@@ -150,9 +155,9 @@ export function getFilesByType(pathFile, type = null) {
   return result
 }
 
-export function getFileObject(jsonPath) {
+export function getFileObject(revisionPath) {
 
-  let name = path.basename(jsonPath)
+  let name = path.basename(revisionPath)
   const fileData = cmsData.fileAttr.get(name)
   name = cmsData.fileAttr.delete(name)
 
@@ -160,17 +165,13 @@ export function getFileObject(jsonPath) {
   if (fileData.d) {
     date = fileData.d
   } else {
-    const stat = fse.statSync(jsonPath)
+    const stat = fse.statSync(revisionPath)
     date = stat.mtime
   }
-
-  const fileDate = moment(date)
-
-  const postUrl = cmsData.utils.getPostUrl(jsonPath)
   
-  let fileObject = {
+  const fileObject = {
     'name': name,
-    'path': jsonPath,
+    'path': revisionPath,
     'date': date,
   }
 

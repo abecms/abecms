@@ -14,7 +14,8 @@ var route = function(req, res, next){
   var p = cmsOperations.post.submit(
     operation.postUrl, 
     req.body.json, 
-    operation.workflow
+    operation.workflow,
+    res.user
   )
 
   p.then((result) => {

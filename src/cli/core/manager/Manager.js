@@ -370,6 +370,7 @@ class Manager {
   updateList() {
     this._list = cmsData.file.getAllWithKeys(this._whereKeys)
     this._list.sort(coreUtils.sort.predicatBy('date', -1))
+    console.log(this._list)
     console.log('Manager updated')
   }
 
