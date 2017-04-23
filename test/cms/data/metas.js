@@ -31,7 +31,7 @@ describe('Meta', function() {
   it('cmsData.metas.add()', function() {
     var json = {abe_meta: {link: 'article.html'}};
     cmsData.metas.add(json, 'draft');
-    chai.expect(json.abe_meta.date).to.not.be.undefined;
+    chai.expect(json.abe_meta.updatedDate).to.not.be.undefined;
   });
 
   /**

@@ -50,7 +50,7 @@ describe('cmsOperations', function() {
       return Promise.resolve({json: JSON.parse(JSON.stringify(this.fixture.jsonArticle))})
     }.bind(this));
 
-    cmsOperations.create('article', '', 'article-2.html', {query: ''}, JSON.parse(JSON.stringify(this.fixture.jsonArticle)), false)
+    cmsOperations.create('article', '/article-2.html', JSON.parse(JSON.stringify(this.fixture.jsonArticle)))
       .then(function(resSave) {
         var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
         
