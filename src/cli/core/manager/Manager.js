@@ -68,6 +68,11 @@ class Manager {
     }
 
     this.events.activity.on('activity', function(data) {
+      if(data.user && data.user.username){
+        data.user = data.user.username
+      } else {
+        data.user = 'admin'
+      }
       this.addActivity(data)
       this.events.activity.emit("activity-stream", data)
     }.bind(this));

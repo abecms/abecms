@@ -4,6 +4,7 @@ import {
 } from '../../cli'
 
 var middleware = function(req, res, next) {
+  res.user = null
   if (!config.users.enable) {
     if (req.url.indexOf('/abe/users/login') > -1) {
       res.redirect('/abe/editor')

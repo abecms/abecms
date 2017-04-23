@@ -1,4 +1,5 @@
 import {
+  Manager,
   cmsOperations,
   abeExtend
 } from '../../../../cli'
@@ -21,6 +22,8 @@ var route = function(req, res, next) {
       success: 1,
       json: resSave
     }
+
+    Manager.instance.events.activity.emit("activity", {operation: 'update', post: resSave.link, user: res.user})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },
@@ -31,7 +34,7 @@ var route = function(req, res, next) {
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   }).catch(function(e) {
-    console.error(e)
+    console.error(e.stack)
   })
 }
 

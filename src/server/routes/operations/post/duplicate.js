@@ -22,11 +22,8 @@ var route = function(req, res, next) {
       success: 1,
       json: resSave
     }
-    var username = ''
-    if(res.user && res.user.username){
-      username = res.user.username
-    }
-    Manager.instance.events.activity.emit("activity", {operation: 'duplicate', post: resSave.link, user: username})
+
+    Manager.instance.events.activity.emit("activity", {operation: 'duplicate', post: resSave.link, user: res.user})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },
