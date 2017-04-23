@@ -91,6 +91,15 @@ export function getDocRelativePath(jsonPath){
  * Remove the date revision from the jsonPath and returns the html full path (which is the published post)
  * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
  * return /Users/grg/programmation/git/abetesttheme/site/fr/test.html
+ * can be:
+ * - the full path to the revision : /Users/myname/myAbeBlog/data/fr/abe/is/awesome-d-20170808020202TZ.json
+ * - the relative path to the revision : fr/abe/is/awesome-d-20170808020202TZ.json
+ * - the full path to the doc : /Users/myname/myAbeBlog/data/fr/abe/is/awesome.json
+ * - the relative path to the doc : fr/abe/is/awesome.json
+ * - the relative path to the post : fr/abe/is/awesome.html
+ *
+ * will return : /Users/myname/myAbeBlog/site/fr/abe/is/awesome.html
+ * 
  * @param  {[type]} jsonPath [description]
  * @return {[type]}          [description]
  */

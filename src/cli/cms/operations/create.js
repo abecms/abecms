@@ -7,7 +7,7 @@ import {
   cmsData
 } from '../../'
 
-var create = function(template, pathCreate, name, req, forceJson = {}, duplicate = false) {
+var create = function(template, pathCreate, name, req, forceJson = {}) {
   var p = new Promise((resolve) => {
     abeExtend.hooks.instance.trigger('beforeCreate', template, pathCreate, name, req, forceJson)
 
@@ -16,13 +16,6 @@ var create = function(template, pathCreate, name, req, forceJson = {}, duplicate
     var json = (forceJson) ? forceJson : {}
     json = cmsData.metas.create(json, template, postUrl)
 
-    if (duplicate) {
-      if(json.abe_meta.publish != null) {
-        delete json.abe_meta.publish
-      }
-      var templateText = cmsTemplates.template.getTemplate(template)
-      json = cmsData.values.removeDuplicate(templateText, json)
-    }
     json = abeExtend.hooks.instance.trigger('beforeFirstSave', json, req.body)
     var p2 = cmsOperations.post.draft(
       json.abe_meta.link,

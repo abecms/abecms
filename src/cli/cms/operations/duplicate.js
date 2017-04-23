@@ -7,6 +7,7 @@ import {
   config,
   coreUtils,
   cmsData,
+  cmsTemplates,
   cmsOperations
 } from '../../'
 
@@ -19,9 +20,9 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
     const newPostUrl = path.posix.join(newPath, coreUtils.slug.clean(name))
     if(oldPostUrl != null) {
       const files = Manager.instance.getList()
-      const oldPostDataPath = path.join(config.root, config.data.url, oldPostUrl.replace('.' + config.files.templates.extension, '.json'))
+      const oldDocPath = cmsData.utils.getDocPathFromPostUrl(oldPostUrl)
       let posts = []
-      posts = coreUtils.array.filter(files, 'path', oldPostDataPath)
+      posts = coreUtils.array.filter(files, 'path', oldDocPath)
 
       if(posts.length > 0 && posts[0].revisions != null) {
         revisions = posts[0].revisions
@@ -36,7 +37,13 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
 
     abeExtend.hooks.instance.trigger('afterDuplicate', json, oldPostUrl, template, newPath, name, req, isUpdate)
 
-    var pCreate = cmsOperations.create(template, newPath, name, req, json, (isUpdate) ? false : true)
+    // If duplicate, I remove the unwanted values during duplication (attribute "duplicate='false'" in Abe tags)
+    if (!isUpdate) {
+      var templateText = cmsTemplates.template.getTemplate(template)
+      json = cmsData.values.removeDuplicate(templateText, json)
+    }
+
+    var pCreate = cmsOperations.create(template, newPath, name, req, json)
     pCreate.then((resSave) => {
       if (isUpdate && oldPostUrl !== path.posix.join('/', newPostUrl)) {
         abeExtend.hooks.instance.trigger('beforeUpdate', json, oldPostUrl, template, newPath, name, req, isUpdate)
@@ -47,7 +54,7 @@ const duplicate = function(oldPostUrl, template, newPath, name, req, isUpdate = 
     () => {
       reject()
     }).catch(function(e) {
-      console.error('[ERROR] abe-duplicate.js', e)
+      console.error('[ERROR] abe-duplicate.js', e.stack)
       reject()
     })
   })

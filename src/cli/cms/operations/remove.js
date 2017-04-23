@@ -17,9 +17,9 @@ export function remove(postUrl) {
   var revisions = cmsData.revision.getVersions(postUrl)
 
   Array.prototype.forEach.call(revisions, (revision) => {
-    const htmlPath = path.join(config.root, config.publish.url, revision.path.replace(/\.json/, `.${config.files.templates.extension}`))
+    const postPath = cmsData.utils.getPostPath(revision.path)
     cmsOperations.remove.removeFile(revision.path)
-    cmsOperations.remove.removeFile(htmlPath)
+    cmsOperations.remove.removeFile(postPath)
   })
 
   postUrl = abeExtend.hooks.instance.trigger('afterDeleteFile', postUrl, {})
