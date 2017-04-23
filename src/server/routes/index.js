@@ -1,7 +1,4 @@
 import getMain from './get-main'
-import postCreate from './post-create'
-import postDuplicate from './post-duplicate'
-import postUpdate from './post-update'
 import postListUrlSave from './post-list-url-save'
 import getListUrl from './get-list-url'
 import getListWorkflow from './get-list-workflow'
@@ -29,13 +26,10 @@ import * as rest from './rest'
 export {
 	getHome,
 	getMain,
-	postCreate,
 	postListUrlSave,
 	getListUrl,
 	getListWorkflow,
 	getListHooks,
-	postDuplicate,
-	postUpdate,
 	getPage,
 	postPage,
 	getGeneratePost,

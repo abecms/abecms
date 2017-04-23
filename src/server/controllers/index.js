@@ -62,9 +62,6 @@ router.post('/abe/users/update', users.postUpdate)
 router.post('/abe/users/profile', users.postProfile)
 
 router.get('/abe/paginate', getPaginate)
-router.post('/abe/create*', postCreate)
-router.post('/abe/duplicate*', postDuplicate)
-router.post('/abe/update*', postUpdate)
 router.post('/abe/sql-request*', postSqlRequest)
 router.post('/abe/page/*', postPage)
 router.get('/abe/page/*', getPage)
@@ -89,6 +86,23 @@ router.get('/abe/list-url*', function (req, res, next) {
   getListUrl(router, req, res, next) 
 })
 router.get('/abe/list-hooks*', getListHooks)
+
+
+/**
+ * Operations
+ * - create : create a post
+ * - update : update a post, changing its name (or path or template)
+ * - delete : delete a post
+ * - duplicate : duplicate a revision
+ * - reject : reject a workflow step (else but the publish)
+ * - unpublish : unpublish a published post (=== reject a published post)
+ * - submit : submit a workflow step (including draft and publish)
+ * - edit : save a post keeping it in its status
+ */
+
+router.post('/abe/operations/create*', operations.postCreate)
+router.post('/abe/operations/duplicate*', operations.postDuplicate)
+router.post('/abe/operations/update*', operations.postUpdate)
 
 var workflows = config.users.workflow
 Array.prototype.forEach.call(workflows, (workflow) => {

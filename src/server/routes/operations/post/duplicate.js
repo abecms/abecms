@@ -2,17 +2,20 @@ import {
   Manager,
   cmsOperations,
   abeExtend
-} from '../../cli'
+} from '../../../../cli'
 
 var route = function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
 
-  var filepath = req.originalUrl.replace('/abe/create', '')
+  var filepath = req.originalUrl.replace('/abe/operations/duplicate', '')
   var folderName = filepath.split('/')
   var postName = folderName.pop()
   folderName = folderName.join('/')
 
-  var p = cmsOperations.create(req.body.abe_meta.template, folderName, postName, req, req.body)
+  var oldFilePath = req.body.oldFilePath 
+  delete req.body.oldFilePath 
+ 
+  var p = cmsOperations.duplicate(oldFilePath, req.body.abe_meta.template, folderName, postName, req)
 
   p.then((resSave) => {
     var result = {
@@ -23,7 +26,7 @@ var route = function(req, res, next) {
     if(res.user && res.user.username){
       username = res.user.username
     }
-    Manager.instance.events.activity.emit("activity", {operation: 'creation', post: resSave.link, user: username})
+    Manager.instance.events.activity.emit("activity", {operation: 'duplicate', post: resSave.link, user: username})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },
@@ -33,6 +36,8 @@ var route = function(req, res, next) {
     }
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
+  }).catch(function(e) {
+    console.error('[ERROR] get-duplicate.js', e)
   })
 }
 

@@ -261,7 +261,7 @@ export default class FormCreate {
       this._isSaving = true
       this._ajax(
         {
-          url: document.location.origin + '/abe/' + type + '/' + res.postPath,
+          url: document.location.origin + '/abe/operations/' + type + '/' + res.postPath,
           body: toSave,
           headers: {},
           method: 'post'
