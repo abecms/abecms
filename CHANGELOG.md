@@ -1,4 +1,7 @@
 
+## [3.1.0] - 2017-4-25
+* [[`9be9216be6`](https://github.com/abecms/abecms/commit/9be9216be6)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [3.0.3] - 2017-4-25
 * [[`80ede26392`](https://github.com/abecms/abecms/commit/80ede26392)] - **fix**: UT (gregorybesson) 
 * [[`633033dea6`](https://github.com/abecms/abecms/commit/633033dea6)] - **enhancement**: CSRF validation doesn't occur on /abe/rest routes and oAuth token can now be extracted from body, uery, cookie or headers x-access-token or authorization (gregorybesson) 
