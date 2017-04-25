@@ -1,6 +1,6 @@
 {
   "name": "abecms",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Abe: The lightning fast CMS",
   "main": "src/server/app.js",
   "repository": {
