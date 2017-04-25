@@ -1,12 +1,13 @@
 var middleware = function(err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') {
     return next(err)
-  }else {
+  } else {
     if( req.url.indexOf('/abe/users/forgot') > -1 ||
         req.url.indexOf('/abe/users/login') > -1 ||
-        req.url.indexOf('/abe/rest/authenticate') > -1 ||
+        req.url.indexOf('/abe/rest/') > -1 ||
         !/^\/abe/.test(req.url) ||
-        !/^\/abe/.test(req.url)
+        !/^\/abe/.test(req.url) ||
+        typeof req.header('Referer') === 'undefined' // to be removed once all routes are under /abe/rest
       ) {
       return next()
     }
@@ -15,7 +16,7 @@ var middleware = function(err, req, res, next) {
   var isHtml = /text\/html/.test(req.get('accept')) ? true : false
   if(isHtml) {
     res.redirect('/abe/users/login')
-  }else {
+  } else {
     var notAuthorized = {
       success: 0,
       message: 'form tampered with !'

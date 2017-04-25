@@ -174,7 +174,12 @@ export function isValid(user, password) {
 
 export function decodeUser(req, res) {
   var decoded = {}
-  var token = User.utils.getTokenFromCookies(req, res)
+  var token = req.body.token || 
+              req.query.token || 
+              req.headers['x-access-token'] || 
+              User.utils.getTokenFromCookies(req, res) ||
+              User.utils.getTokenFromAuthHeader(req, res)
+
   if(typeof token !== 'undefined' && token !== null && token !== '') {
     try {
       var secret = config.users.secret
@@ -183,6 +188,12 @@ export function decodeUser(req, res) {
   }
 
   return decoded
+}
+
+export function getTokenFromAuthHeader(req, res){
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    return req.headers.authorization.split(' ')[1];
+  }
 }
 
 export function getTokenFromCookies(req, res) {

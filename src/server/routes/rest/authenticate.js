@@ -80,7 +80,7 @@ var route = function(req, res, next) {
         })
         cookies.set( 'x-access-token', token )
 
-        var result = {}
+        var result = {id_token:token}
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(result))
       })(req, res, next)
