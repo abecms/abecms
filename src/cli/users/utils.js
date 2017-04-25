@@ -174,9 +174,7 @@ export function isValid(user, password) {
 
 export function decodeUser(req, res) {
   var decoded = {}
-  var token = req.body.token || 
-              req.query.token || 
-              req.headers['x-access-token'] || 
+  var token = User.utils.getTokenFromQuery(req, res) ||
               User.utils.getTokenFromCookies(req, res) ||
               User.utils.getTokenFromAuthHeader(req, res)
 
@@ -190,8 +188,18 @@ export function decodeUser(req, res) {
   return decoded
 }
 
+export function getTokenFromQuery(req, res){
+  if (req.body && req.body.token) {
+    return req.body.token
+  } else if(req.query && req.query.token){
+    return req.query.token
+  } else if(req.headers && req.headers['x-access-token']){
+    return req.headers['x-access-token']
+  }
+}
+
 export function getTokenFromAuthHeader(req, res){
-  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
     return req.headers.authorization.split(' ')[1];
   }
 }

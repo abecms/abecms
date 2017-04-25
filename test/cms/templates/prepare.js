@@ -48,7 +48,7 @@ describe('cmsTemplates.prepare', function() {
 
     // test
     var template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(this.fixture.text)
-    console.log(template)
+
     chai.expect(template.indexOf('<span><!--ABE data-abe-text_visible="text_visible" --->')).to.be.above(-1);
 
     template = cmsTemplates.prepare.addAbeDataAttrForHtmlTag(this.fixture.each)
