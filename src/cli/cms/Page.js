@@ -30,7 +30,9 @@ export default class Page {
     json = abeExtend.hooks.instance.trigger('beforePageJson', json)
 
     abeEngine.instance.content = json
-      
+    
+    this._onlyHTML = onlyHTML
+    
     if(typeof Handlebars.templates[templateId] !== 'undefined' && 
         Handlebars.templates[templateId] !== null && 
         config.files.templates.precompile
@@ -39,7 +41,6 @@ export default class Page {
       this.html = template(json, {data: {intl: config.intlData}})
     } else {
 
-      this._onlyHTML = onlyHTML
       this.template = template
       this.HbsTemplatePath = path.join(config.root, config.templates.url, 'hbs/'+templateId+'.hbs')
 
