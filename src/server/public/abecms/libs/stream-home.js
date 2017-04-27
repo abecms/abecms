@@ -51,6 +51,8 @@ function removeStream(callBack){
 }
 
 var StreamItem = function StreamItem (data) {
+  var noActivity = document.querySelector('.no-activity')
+  if(noActivity != null) noActivity.remove()
   this.data = data;
   this.createNode();
 };
@@ -137,6 +139,11 @@ StreamItem.prototype.getTextContent = function getTextContent () {
 
   return text
 };
+
+setTimeout(function () {
+  var noActivity = document.querySelector('.no-activity')
+  if(noActivity != null) noActivity.textContent = 'No activity yet'
+}, 2000)
 
 if (!!window.EventSource) {
   var stream = document.querySelector('.stream')
