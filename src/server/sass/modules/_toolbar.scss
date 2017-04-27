@@ -50,6 +50,9 @@
     }
 
     span.fa {
+      min-height: 1px;
+      min-width: 20px;
+      margin-right: 0;
       font-size: 16px;
       line-height: 1;
     }
@@ -97,28 +100,35 @@
   }
 }
 
-.engine-open .open-engine {
+.open-engine {
   right: -14px;
   top: -16px;
-}
-
-.open-engine {
-  right: -24px;
-  top: -6px;
   padding-left: 10px;
   padding-right: 7px;
   z-index: 12;
   .fa-compress{
     transform: rotate(90deg);
+    min-width: 13px;
+    min-height: 1px;
+    &:before{
+      min-width: 13px;
+      min-height: 1px;
+    }
   }
 }
 
 .close-engine{
-  right: -14px;
-  z-index: 11;
-  .fa-expand:before {
-    transform: rotate(90deg);
-    display: block;
+  right: -24px;
+  top: -6px;
+  .fa-expand{
+    min-width: 13px;
+    min-height: 1px;
+    :before {
+      transform: rotate(90deg);
+      display: block;
+      min-width: 13px;
+      min-height: 1px;
+    }
   }
 }
 
@@ -138,9 +148,26 @@ body {
     display: block;
   }
 
+  &.abeform-anim{
+    .open-engine{
+      right: -24px;
+      top: -6px;
+      z-index: 11;
+    }
+  }
+
   &.engine-open{
     .open-engine{
-      display: none;
+      right: -14px;
+      top: -16px;
+      pointer-events: none;
+      visibility: hidden;
+      z-index: 11;
+    }
+    .close-engine{
+      z-index: 11;
+      right: -14px;
+      top: -16px;
     }
     .abe-navbar{
       position: relative;
