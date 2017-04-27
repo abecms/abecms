@@ -3,14 +3,14 @@ body{
 }
 
 body.engine-open .ruler{
-  width: 1px;
+  width: 5px;
 }
 
 .ruler{
-  background-color: #f0f0f0;
+  
   position: absolute;
   top: 0;
-  left: 0;
+  left: -2.5px;
   width: 0;
   height: 100%;
   -webkit-transition: all 200ms ease-in-out;
@@ -19,9 +19,22 @@ body.engine-open .ruler{
   -o-transition: all 200ms ease-in-out;
   transition: all 200ms ease-in-out;
 
+  &:after{
+    content: " ";
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 2.5px;
+    background-color: #f0f0f0;
+    transition: background-color 200ms ease-in-out;
+  }
+
   &:hover{
-    background-color: #DCDADA;
     cursor: ew-resize;
+    &:after{
+       background-color: #c1c1c1;
+    }
   }
 }
 

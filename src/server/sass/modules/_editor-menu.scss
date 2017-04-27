@@ -51,10 +51,16 @@
       background-color: #F95655;
       border-color: #F95655;
       }
+      .btn-edit {
+        text-align: left;
+        min-width: 60px;
+      }
       .btn-save {
+        text-align: left;
         background-color: #4CAF50;
         padding-left: 7px;
         padding-right: 7px;
+        min-width: 80px;
       }
       .btn-save:hover {
         background-color: #388E3C;
