@@ -1,7 +1,10 @@
+* [[`0e35a029b9`](https://github.com/abecms/abecms/commit/0e35a029b9)] - Merge pull request #209 from wonknu/enhancement_graphic (Greg Besson) 
+* [[`96392e0167`](https://github.com/abecms/abecms/commit/96392e0167)] - **doc**: CHANGELOG (gregorybesson) 
 
 ## [3.1.1] - 2017-4-27
 * [[`1e2d06028d`](https://github.com/abecms/abecms/commit/1e2d06028d)] - **enhancement**: Themes management (gregorybesson) 
 * [[`0240bf95aa`](https://github.com/abecms/abecms/commit/0240bf95aa)] - **fix**: CSRF detection (gregorybesson) 
+* [[`67d3350b11`](https://github.com/abecms/abecms/commit/67d3350b11)] - **enhancement**: fix small UI bug (wonknu10) 
 * [[`a804ecec8f`](https://github.com/abecms/abecms/commit/a804ecec8f)] - **doc**: CHANGELOG (gregorybesson) 
 
 ## [3.1.0] - 2017-4-25
