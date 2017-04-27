@@ -6,7 +6,6 @@ var middleware = function(err, req, res, next) {
         req.url.indexOf('/abe/users/login') > -1 ||
         req.url.indexOf('/abe/rest/') > -1 ||
         !/^\/abe/.test(req.url) ||
-        !/^\/abe/.test(req.url) ||
         typeof req.header('Referer') === 'undefined' // to be removed once all routes are under /abe/rest
       ) {
       return next()

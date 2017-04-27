@@ -113,8 +113,7 @@
           success: function(data) {
             var html = "";
             $.each(data.data, function(index,item) {
-              console.log(item.publish.thumbnail)
-              html += "<div class='image grid-item'><img width=200 height=200 style='z-index:100;' src='" + item.publish.thumbnail + "' alt='' /><h3>"+item.publish.title+"</h3></div>";
+              html += "<div class='image grid-item'><img width=400 style='z-index:100;' src='" + item.publish.thumbnail + "' alt='' /><h3>"+item.publish.title+"  <a href='"+item.publish.demo +"' target='_blank'>Live demo</a> <a href='"+item.publish.download +"' target='_blank'>Install</a></h3></div>";
             });
 
             var $moreBlocks = jQuery( html ).filter('div.grid-item');
