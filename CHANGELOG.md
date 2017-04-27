@@ -1,4 +1,9 @@
 
+## [3.1.1] - 2017-4-27
+* [[`1e2d06028d`](https://github.com/abecms/abecms/commit/1e2d06028d)] - **enhancement**: Themes management (gregorybesson) 
+* [[`0240bf95aa`](https://github.com/abecms/abecms/commit/0240bf95aa)] - **fix**: CSRF detection (gregorybesson) 
+* [[`a804ecec8f`](https://github.com/abecms/abecms/commit/a804ecec8f)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [3.1.0] - 2017-4-25
 * [[`9be9216be6`](https://github.com/abecms/abecms/commit/9be9216be6)] - **doc**: CHANGELOG (gregorybesson) 
 
