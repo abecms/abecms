@@ -7,22 +7,18 @@ var route = function(req, res) {
 	var user = User.utils.findSync(decoded.iss)
 	var body = req.body
 
-	if(body.oldpassword != null
-		&& body.password != null
-		&& body['repeat-password'] != null) {
+	if(body.oldpassword != null && body.oldpassword != ""
+		&& body.password != null && body.password != ""
+		&& body['repeat-password'] != null && body['repeat-password'] != "") {
 
 		if (body.password !== body['repeat-password']) {
-			return res.status(200).json({
-				success: 0,
-				message: 'password must be the same'
-			})
+			req.flash('error', 'password must be the same')
+			return res.redirect('/abe/users/profile')
 		}
 
 		if (!User.utils.isValid(user, body.oldpassword)) {
-			return res.status(200).json({
-				success: 0,
-				message: 'Wrong password'
-			})
+			req.flash('error', 'Wrong password')
+			return res.redirect('/abe/users/profile')
 		}else {
 			var toUpdate = {
 				id: user.id,
@@ -30,6 +26,10 @@ var route = function(req, res) {
 				username: user.username
 			}
 			var resultUpdatePassword = User.operations.updatePassword(toUpdate, toUpdate.password)
+			if(resultUpdatePassword.success === 0) {
+				req.flash('error', resultUpdatePassword.message)
+				return res.redirect('/abe/users/profile')
+			}
 		}
 	}
 
@@ -40,7 +40,8 @@ var route = function(req, res) {
 	body.id = user.id
 
 	var resultUpdate = User.operations.update(body)
-	return res.status(200).json(resultUpdate)
+	req.flash('info', 'Profile updated')
+	return res.redirect('/abe/users/profile')
 }
 
 export default route
