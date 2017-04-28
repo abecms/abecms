@@ -15,7 +15,7 @@
             Key numbers
           </div>
           <div class="progress-stat">
-            <div class="progress-element" data-percent="{{statistics.percentPublishedPages}}%" style="color:#40B7E2">
+            <div class="progress-element" data-percent="{{#ifCond statistics.percentPublishedPages 'NaN'}}0{{else}}{{statistics.percentPublishedPages}}{{/ifCond}}%" style="color:#40B7E2">
               <svg viewBox="-10 -10 220 220">
                 <g fill="none" stroke-width="30" transform="translate(100,100)">
                   <path d="M 0,-100 A 100,100 0 0,1 86.6,-50" stroke="#40B7E2"/>
@@ -27,7 +27,7 @@
                 </g>
               </svg>
               <svg viewBox="-10 -10 220 220">
-                <path stroke="#F1F1F1" d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="{{statistics.svgCirclePercent}}"></path>
+                <path stroke="#F1F1F1" d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="{{#ifCond statistics.svgCirclePercent 'NaN'}}0{{else}}{{statistics.svgCirclePercent}}{{/ifCond}}"></path>
               </svg>
             </div>
             <div class="progress-text">
@@ -66,7 +66,7 @@
           </div>
 
           <div class="stream">
-            
+            <span class="no-activity">Loading activity ...</span>
           </div>
           
         </div>
