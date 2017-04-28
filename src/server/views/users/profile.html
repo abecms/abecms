@@ -22,8 +22,15 @@
                   Profile
                 </div>
                 <div class="manager-tab-content" >
-                  <div class="alert alert-danger hidden" data-info-msg="true" role="alert">
-                    
+                  <div class="alert alert-info {{#unless info}}hidden{{/unless}}" data-info-msg="true" role="alert">
+                    {{#each info}}
+                      {{this}}
+                    {{/each}}
+                  </div>
+                  <div class="alert alert-danger {{#unless error}}hidden{{/unless}}" data-info-msg="true" role="alert">
+                    {{#each error}}
+                      {{this}}
+                    {{/each}}
                   </div>
 
                   <div class="">

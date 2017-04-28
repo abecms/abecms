@@ -33,6 +33,7 @@ var route = function route(req, res) {
       res: res
     },
     info: req.flash('info'),
+    error: req.flash('error'),
     isProfile: true,
     user: res.user,
     manager: {
