@@ -248,6 +248,11 @@ function orderBlock(util) {
       formBlock[tab] = {}
     }
     var formBlockOrdered = {}
+
+    Array.prototype.forEach.call(Object.keys(formBlockTab), (arKey, index) => {
+      formBlockTab[arKey][0].order = (formBlockTab[arKey][0].order == 0)? index : formBlockTab[arKey][0].order
+    })
+
     var arKeys = Object.keys(formBlockTab).sort((a,b) => {
       if(parseFloat(formBlockTab[a][0].order) < parseFloat(formBlockTab[b][0].order)) {
         return -1

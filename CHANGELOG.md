@@ -1,3 +1,6 @@
+
+## [3.1.2] - 2017-4-27
+* [[`beb1e211d5`](https://github.com/abecms/abecms/commit/beb1e211d5)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`0e35a029b9`](https://github.com/abecms/abecms/commit/0e35a029b9)] - Merge pull request #209 from wonknu/enhancement_graphic (Greg Besson) 
 * [[`96392e0167`](https://github.com/abecms/abecms/commit/96392e0167)] - **doc**: CHANGELOG (gregorybesson) 
 
