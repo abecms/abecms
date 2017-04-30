@@ -16,6 +16,9 @@ body {
 
 /* = Form
 ************************************************************/
+.form-horizontal{
+  padding-top: 24px;
+}
 #abeForm{
   padding-bottom: 50px;
 }
@@ -75,7 +78,7 @@ body {
     }
   }
   [data-abe-create="true"]{
-    margin-top: 20px;
+    margin-top: 7px;
   }
 }
 
