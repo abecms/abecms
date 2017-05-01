@@ -1,5 +1,15 @@
 
+## [3.1.3] - 2017-5-1
+* [[`15ee89b6ff`](https://github.com/abecms/abecms/commit/15ee89b6ff)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`7aeba49c77`](https://github.com/abecms/abecms/commit/7aeba49c77)] - **fix**: moduloIf and the ordering of abe tagss and groups in particular (gregorybesson) 
+* [[`0df151860c`](https://github.com/abecms/abecms/commit/0df151860c)] - Update version3.md (Greg Besson) 
+* [[`097eabf124`](https://github.com/abecms/abecms/commit/097eabf124)] - Merge pull request #210 from wonknu/enhancement_graphic (Greg Besson) 
+* [[`ed0dcbc92d`](https://github.com/abecms/abecms/commit/ed0dcbc92d)] - Merge pull request #214 from nicolaslabbe/bug_profile_update (Greg Besson) 
+* [[`0ee3cc196b`](https://github.com/abecms/abecms/commit/0ee3cc196b)] - **Fix**: update profile (nicolaslabbe) 
+
 ## [3.1.2] - 2017-4-27
+* [[`28ff7bfad7`](https://github.com/abecms/abecms/commit/28ff7bfad7)] - **enhancement**: more small UI fix (wonknu10) 
+* [[`6c08eca67e`](https://github.com/abecms/abecms/commit/6c08eca67e)] - Merge remote-tracking branch 'abecms/master' into enhancement_graphic (wonknu10) 
 * [[`beb1e211d5`](https://github.com/abecms/abecms/commit/beb1e211d5)] - **doc**: CHANGELOG (gregorybesson) 
 * [[`0e35a029b9`](https://github.com/abecms/abecms/commit/0e35a029b9)] - Merge pull request #209 from wonknu/enhancement_graphic (Greg Besson) 
 * [[`96392e0167`](https://github.com/abecms/abecms/commit/96392e0167)] - **doc**: CHANGELOG (gregorybesson) 
