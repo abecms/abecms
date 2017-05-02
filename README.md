@@ -97,7 +97,8 @@ We have created recipes which are how-to's on specific subjects. If you wan't us
 - abe-calendar: https://github.com/abecms/abe-calendar
 
 ## blogs
-- http://www.disko.fr/reflexions/technique/abecms/
+- An article on AbeCMS usage (in FR): http://www.disko.fr/reflexions/technique/abecms/
+- A video introduction to AbeCMS by a HackReactor student: https://www.youtube.com/watch?v=J8zQ1s6jAdQ
 
 # Demo
 Deploy your own Abe demo on Heroku
