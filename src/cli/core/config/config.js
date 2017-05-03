@@ -110,12 +110,12 @@ result.set = (json) => {
 result.save = (json) => {
   // extend(true, result, json)
 
-  if (result.localConfigExist()){
+  //if (result.localConfigExist()){
     // var abeJson = fse.readJsonSync(path.join(result.root,'abe.json'))
     // extend(true, abeJson, json)
     var confPath = path.join(result.root,'abe.json')
     fse.writeJsonSync(confPath, json, { space: 2, encoding: 'utf-8' })
-  }
+  //}
 }
 
 result.getConfigByWebsite = () => {
