@@ -105,7 +105,7 @@ program
     }
     process.chdir(__dirname + '/../')
     console.log('website started : ' + dir)
-    var cp = exec(command,{env: environment}, function (err, out, code) {
+    var cp = exec(command,{env: environment, maxBuffer: 1024 * 500}, function (err, out, code) {
       if (err instanceof Error) throw err
       process.stderr.write(err)
       process.stdout.write(out)
