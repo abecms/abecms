@@ -31,22 +31,54 @@ export function getTemplatesAndPartials(templatesPath, partialsPath) {
 export function addOrder(text) {
   var regAbe = /{{abe[\S\s].*?key=['|"]([\S\s].*?['|"| ]}})/g
   var matches = text.match(regAbe)
-  var order = 0
   
   if(typeof matches !== 'undefined' && matches !== null){
+    var orderTab = []
+    var arrayKey = []
+    var max = 0
+    var negIndex = -1
+
+    // We create an array of keys/order and put -1 for keys without order
     Array.prototype.forEach.call(matches, (match) => {
       if(typeof match !== 'undefined' && match !== null) {
-        
         var orderAttr = cmsData.regex.getAttr(match, 'order')
-
+        var keyAttr = cmsData.regex.getAttr(match, 'key')
         if(typeof orderAttr === 'undefined' || orderAttr === null || orderAttr === '') {
-          var matchOrder = match.replace(/\}\}$/, ` order='${order}'}}`)
+          orderTab.push({key:keyAttr, order: negIndex})
+          negIndex = negIndex - 1
+        } else {
+          max = Math.max(parseInt(orderAttr), max)
+          orderTab.push({key:keyAttr, order: orderAttr})
+        }
+      }
+    })
+
+    // We sort the array
+    orderTab.sort(coreUtils.sort.predicatBy('order', -1))
+
+    // And increment the not ordered ones beginning with the last order found + 1
+    Array.prototype.forEach.call(orderTab, (obj) => {
+      if(obj.order < 0){
+        max = max + 1
+        arrayKey[obj.key] = max
+      } else {
+        arrayKey[obj.key] = parseInt(obj.order)
+      }
+    })
+
+    // Then we put order attribute to each abe tag not ordered
+    Array.prototype.forEach.call(matches, (match) => {
+      if(typeof match !== 'undefined' && match !== null) {
+        var orderAttr = cmsData.regex.getAttr(match, 'order')
+        var keyAttr = cmsData.regex.getAttr(match, 'key')
+        if(typeof orderAttr === 'undefined' || orderAttr === null || orderAttr === '') {
+          var matchOrder = match.replace(/\}\}$/, ` order='${arrayKey[keyAttr]}'}}`)
           text = text.replace(match, matchOrder)
         }
-        order++
       }
     })
   }
+
   return text
 }
 

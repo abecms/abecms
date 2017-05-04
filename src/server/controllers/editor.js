@@ -191,36 +191,47 @@ function orderByTabindex(a, b) {
 }
 
 export function orderByGroup(form) {
-  var noGroup = []
+  var finalFields = []
   var groups = {}
   var groupIndex = {}
   var index = 0
+  var items = form.item
+  
+  // sorting items by order
+  items.sort(coreUtils.sort.predicatBy('order'))
 
-  Array.prototype.forEach.call(form.item, (item) => {
+  // grouping each group of elements and remembering there index in the finalOrder
+  Array.prototype.forEach.call(items, (item) => {
     if(item.group != null && (item.block === '' || item.block == null)) {
       if(typeof groups[item.group] === 'undefined' || groups[item.group] === null){
         groupIndex[item.group] = index
         groups[item.group] = []
+        index++
       }
-
       groups[item.group].push(item)
     }
-    else noGroup.push(item)
-    index++
+    else {
+      finalFields.push(item)
+      index++
+    } 
   })
 
+
+  // ordering each group with first/last element and inserting the group elements in the final array at the right index.
+  var shiftElts = 0
   for(var prop in groups){
     var group = groups[prop]
-    group.sort(coreUtils.sort.predicatBy('order'))
-    Array.prototype.forEach.call(group, (elt, index) => {
-      group[index].order = group[0].order
-    })
+
     group[0].firstgroup = 1
     group[group.length - 1].lastgroup = 1
-    noGroup = noGroup.splice(0, groupIndex[group[0].group]).concat(group).concat(noGroup)
+    groupIndex[group[0].group] += shiftElts
+    shiftElts = shiftElts + group.length - 1
+
+    var args = [groupIndex[group[0].group], 0].concat(group);
+    Array.prototype.splice.apply(finalFields, args);
   }
 
-  return {item: noGroup}
+  return {item: finalFields}
 }
 
 function orderBlock(util) {
@@ -247,25 +258,8 @@ function orderBlock(util) {
     if(typeof formBlock[tab] === 'undefined' || formBlock[tab] === null) {
       formBlock[tab] = {}
     }
-    var formBlockOrdered = {}
 
-    Array.prototype.forEach.call(Object.keys(formBlockTab), (arKey, index) => {
-      formBlockTab[arKey][0].order = (formBlockTab[arKey][0].order == 0)? index : formBlockTab[arKey][0].order
-    })
-
-    var arKeys = Object.keys(formBlockTab).sort((a,b) => {
-      if(parseFloat(formBlockTab[a][0].order) < parseFloat(formBlockTab[b][0].order)) {
-        return -1
-      } else if(parseFloat(formBlockTab[a][0].order) > parseFloat(formBlockTab[b][0].order)) {
-        return 1
-      }
-      return 0
-    })
-
-    Array.prototype.forEach.call(arKeys, (arKey) => {
-      formBlockOrdered[arKey] = formBlockTab[arKey]
-    })
-    formBlock[tab] = formBlockOrdered
+    formBlock[tab] = formBlockTab
   }
 
   var formTabsOrdered = {}
