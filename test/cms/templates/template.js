@@ -24,6 +24,7 @@ describe('cmsTemplates', function() {
           article: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article.html'), 'utf-8'),
           local: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'local.html'), 'utf-8'),
           articleSingleAbe: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-single-abe.html'), 'utf-8'),
+          articleOrderAbe: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-order-abe.html'), 'utf-8'),
           articleRequest: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-request.html'), 'utf-8'),
           template: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'import.html'), 'utf-8'),
           articleEach: fse.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-each-abe.html'), 'utf-8'),
@@ -49,7 +50,7 @@ describe('cmsTemplates', function() {
 
     cmsTemplates.template.getTemplatesAndPartials(this.fixture.pathTemplates, this.fixture.pathPartials)
     .then((templatesList) => {
-      chai.expect(templatesList.length).to.be.equal(29);
+      chai.expect(templatesList.length).to.be.equal(30);
       done()
     })
   });
@@ -71,6 +72,21 @@ describe('cmsTemplates', function() {
 
     // unstub
     cmsData.regex.getAttr.restore()
+  });
+
+  /**
+   * 
+   * 
+   */
+  it('cmsTemplates.template.addOrder() more options', function() {
+    var html = cmsTemplates.template.addOrder(this.fixture.articleOrderAbe)
+    chai.expect(html.indexOf("key='key1' desc='key1' order='2'")).to.above(-1);
+    chai.expect(html.indexOf("key='key2' desc='key2' group='1' order='5'")).to.above(-1);
+    chai.expect(html.indexOf("key='key3' desc='key3' order='3' group='1'")).to.above(-1);
+    chai.expect(html.indexOf("key='key4' desc='key4' order='4' group='2'")).to.above(-1);
+    chai.expect(html.indexOf("key='key5' desc='key5' order='6'")).to.above(-1);
+    chai.expect(html.indexOf("key='key6' desc='key6' order='1' group='1'")).to.above(-1);
+    chai.expect(html.indexOf("key='key7' desc='key7' group='2' order='7'")).to.above(-1);
   });
 
   /**

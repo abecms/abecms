@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+
+{{abe type='text' key='key1' desc='key1' order='2'}}
+{{abe type='text' key='key2' desc='key2' group='1'}}
+{{abe type='text' key='key3' desc='key3' order='3' group='1'}}
+{{abe type='text' key='key4' desc='key4' order='4' group='2'}}
+{{abe type='text' key='key5' desc='key5'}}
+{{abe type='text' key='key6' desc='key6' order='1' group='1'}}
+{{abe type='text' key='key7' desc='key7' group='2'}}
+
+
+<h2> The order should be </h2>
+<pre>
+
+1
+________
+key6
+key3
+key2
+
+key1
+
+2
+________
+key4
+key7
+
+key5
+</pre>
+</body>
+</html>
