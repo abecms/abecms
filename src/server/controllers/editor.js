@@ -216,7 +216,6 @@ export function orderByGroup(form) {
     } 
   })
 
-
   // ordering each group with first/last element and inserting the group elements in the final array at the right index.
   var shiftElts = 0
   for(var prop in groups){

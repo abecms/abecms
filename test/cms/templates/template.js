@@ -70,7 +70,6 @@ describe('cmsTemplates', function() {
     chai.expect(html.indexOf('order')).to.above(-1);
 
     // unstub
-    sinon.assert.calledOnce(cmsData.regex.getAttr)
     cmsData.regex.getAttr.restore()
   });
 
