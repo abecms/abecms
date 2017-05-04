@@ -63,6 +63,7 @@ If you want us to add your sites, submit a PR of this README.
 - Gemo storelocators: http://www.gemo-shop.be/, http://www.gemo.tn/, http://www.gemo.gp/, http://www.gemo.ma/, http://www.gemo.gf/, http://www.gemo.mq/, http://www.gemo.re/
 - https://onadates.com/
 - Hautes Pyrenées: http://neige.hautes-pyrenees.fr/
+- Lourdes Pireneje: http://lourdes-pireneje.pl/
 - blablacar: https://www.blablacar.fr/offre/voitures/
 - Sofitel destinations: http://www.sofitel.com/fr/destinations/index.shtml
 - Château d'Angles: http://www.chateaudangles.com/en/index.html
