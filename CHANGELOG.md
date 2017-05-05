@@ -1,4 +1,12 @@
 
+## [3.1.6] - 2017-5-5
+* [[`1566482f0f`](https://github.com/abecms/abecms/commit/1566482f0f)] - **ic**: New UT (gregorybesson) 
+* [[`10d42b543b`](https://github.com/abecms/abecms/commit/10d42b543b)] - **ic**: fix UT (gregorybesson) 
+* [[`a0810ba81a`](https://github.com/abecms/abecms/commit/a0810ba81a)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`b70dda08ca`](https://github.com/abecms/abecms/commit/b70dda08ca)] - **refactoring**: The order of the abe tags has been fully refactored and works in all cases (gregorybesson) 
+* [[`5c2d414a44`](https://github.com/abecms/abecms/commit/5c2d414a44)] - Update README.md (Greg Besson) 
+* [[`1a48e88d09`](https://github.com/abecms/abecms/commit/1a48e88d09)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [3.1.5] - 2017-5-3
 * [[`6de89459bb`](https://github.com/abecms/abecms/commit/6de89459bb)] - **fix**: When installing a plugin and no abe.json exists, an abe.json file is created (gregorybesson) 
 * [[`43f11299d6`](https://github.com/abecms/abecms/commit/43f11299d6)] - **fix**: extending maxbuffers on server start (for s3 plugin for example) (gregorybesson) 
