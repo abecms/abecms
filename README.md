@@ -113,7 +113,7 @@ Deploy your own Abe demo on Heroku
 ```$ npm install -g abecms ```
 
 ## Usage
-1. `abe create my-website` : Create a new website
+1. `abe init` : It launches a wizard to help you create your website
 2. `cd my-website`
 3. `abe serve -i` : launch your website (by default on port 3000)
 
