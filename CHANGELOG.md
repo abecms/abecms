@@ -1,4 +1,8 @@
 
+## [3.2.0] - 2017-5-6
+* [[`decffbe4d0`](https://github.com/abecms/abecms/commit/decffbe4d0)] - **refactoring**: The concept of theme becomes a first class citizen. A new command line option 'init' appears giving the possibility to configure everything (gregorybesson) 
+* [[`eeb9dc321b`](https://github.com/abecms/abecms/commit/eeb9dc321b)] - **doc**: CHANGELOG (gregorybesson) 
+
 ## [3.1.6] - 2017-5-5
 * [[`1566482f0f`](https://github.com/abecms/abecms/commit/1566482f0f)] - **ic**: New UT (gregorybesson) 
 * [[`10d42b543b`](https://github.com/abecms/abecms/commit/10d42b543b)] - **ic**: fix UT (gregorybesson) 
