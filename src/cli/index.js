@@ -32,9 +32,6 @@ import {
 import Manager from './core/manager/Manager'
 import Page from './cms/Page'
 
-// import {getTemplate} from './cms/templates/abe-template'
-import Create from './cms/Create'
-
 import config from './core/config/config'
 
 import * as cmsData from './cms/data'
@@ -69,7 +66,6 @@ export {
 	isAuthorized,
 	abeImport,
 	math,
-	Create,
 	translate,
 	printBlock,
 	notEmpty,

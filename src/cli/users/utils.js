@@ -107,7 +107,6 @@ export function getUserRoutes(workflow) {
   return userRoles
 }
 
-
 export function findSync(id) {
   var bdd = User.manager.instance.get()
   for (var i = 0, len = bdd.length; i < len; i++) {

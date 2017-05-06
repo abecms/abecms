@@ -4,6 +4,7 @@ import * as save from './save'
 import * as post from './post'
 import * as remove from './remove'
 import abify from './abify'
+import initSite from './initSite'
 
 export {
 	create,
@@ -11,5 +12,6 @@ export {
 	save,
 	post,
   remove,
-  abify
+  abify,
+  initSite
 }

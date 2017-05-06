@@ -1,16 +1,92 @@
 #!/usr/bin/env node
-import Create from './cli/cms/Create'
+import {initSite} from './cli/cms/operations'
 import plugins from './cli/extend/plugins'
+import config from './cli/core/config/config'
 import {exec} from 'child_process'
 import {spawn} from 'child_process'
 import path from 'path'
 import program from 'commander'
 import pkg from '../package'
+import inquirer from 'inquirer'
+import clc from 'cli-color'
 
 program
   .version(pkg.version)
   .option('-v, --version', 'version')
-  // .parse(process.argv)
+
+// Dev: ./node_modules/.bin/babel-node --presets es2015 src/index.js init
+program
+  .command('init')
+  .alias('i')
+  .description('init a new abe website')
+  .action(function(options){
+    const create = new initSite()
+    create.askQuestions().then(function(answers){
+      let dir = path.join(process.cwd(), answers.name)
+      if(process.env.ROOT) {
+        dir = path.join(process.env.ROOT, answers.name)
+      }
+      config.root = dir
+      process.env['HOME'] = dir
+
+      if(typeof dir !== 'undefined' && dir !== null && answers.name !== '') {
+        create.init(dir)
+        .then(function(){
+          create.updateSecurity(answers)
+          .then(function(){
+            create.updateTheme(answers)
+            .then(function(){
+              if(answers.plugins.length > 0){
+                Array.prototype.forEach.call(answers.plugins, (plugin) => {
+                  console.log('installing the plugin: ' + plugin)
+
+                  if(typeof plugin !== 'undefined' && plugin !== null) {
+                    plugins.instance.install(dir, plugin)
+                  } else {
+                    plugins.instance.install(dir)
+                  }
+                })
+              }
+              console.log(
+                clc.green('Yeahhh ! Your Abe site ' + answers.name + ' is ready. to launch it:'),
+                clc.cyan('\ncd ' + answers.name + '\nabe serve -i')
+              )
+            })
+          })
+        })
+      }
+    })
+  }).on('--help', function() {
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe create')
+    console.log('    $ abe create [destination]')
+    console.log()
+  })
+
+program
+  .command('create [path]')
+  .alias('c')
+  .description('create new abe project')
+  .action(function(dest){
+    dest = (dest != null) ? dest : ''
+    var dir = path.join(process.cwd(), dest)
+    if(process.env.ROOT) {
+      dir = path.join(process.env.ROOT, dest)
+    }
+    var create = new initSite()
+    if(typeof dir !== 'undefined' && dir !== null && dest !== '') {
+      create.init(dir)
+    } else {
+      console.log('error creating the project')
+    }
+  }).on('--help', function() {
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ abe create')
+    console.log('    $ abe create [destination]')
+    console.log()
+  })
 
 program
   .command('generate-posts')
@@ -51,30 +127,6 @@ program
     console.log('  Examples:')
     console.log()
     console.log('    $ abe generate-posts --path /test --destination result --status publish')
-    console.log()
-  })
-
-program
-  .command('create [path]')
-  .alias('c')
-  .description('create new abe project')
-  .action(function(dest){
-    dest = (dest != null) ? dest : ''
-    var dir = path.join(process.cwd(), dest)
-    if(process.env.ROOT) {
-      dir = path.join(process.env.ROOT, dest)
-    }
-    var create = new Create()
-    if(typeof dir !== 'undefined' && dir !== null) {
-      create.init(dir)
-    }else {
-      console.error('Error: no project path specified')
-    }
-  }).on('--help', function() {
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ abe create')
-    console.log('    $ abe create [destination]')
     console.log()
   })
 
@@ -122,7 +174,6 @@ program
 
 program
   .command('install [plugin]')
-  .alias('i')
   .description('install abe plugin(s)')
   .action(function(plugin){
     var dir = process.cwd()

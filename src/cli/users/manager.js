@@ -17,7 +17,6 @@ class Manager {
 
     if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
 
-    this._isEnable = config.users.enable
     this._file = path.join(config.root, 'users', 'bdd.json')
   }
 
@@ -29,7 +28,7 @@ class Manager {
   }
 
   read() {
-    if (this._isEnable) {
+    if (this.isActive()) {
       if (coreUtils.file.exist(this._file)) {
         return JSON.parse(fs.readFileSync(this._file, 'utf8'))
       }else {
@@ -44,8 +43,8 @@ class Manager {
   }
 
   save() {
-    if (this._isEnable) {
-      mkdirp(path.dirname(this._file))
+    if (this.isActive()) {
+      mkdirp.sync(path.dirname(this._file))
       fs.writeJsonSync(this._file, this._users, { space: 2, encoding: 'utf-8' })
     }
   }
@@ -58,12 +57,18 @@ class Manager {
   }
 
   update(json) {
-    if (this._isEnable) {
+    if (this.isActive()) {
       this._users = json
       this.save()
       return true
     }
+
     return false
+  }
+
+  isActive() {
+
+    return config.users.enable
   }
 }
 

@@ -65,8 +65,8 @@ class Plugins {
     pluginId = path.basename(pluginId)
 
     let plugHook = path.join(dir, pluginId, config.hooks.url, 'hooks.js')
-    let plugPartials = path.join(dir, pluginId, config.pluginsPartials)
-    let plugTemplates = path.join(dir, pluginId, config.templates.url)
+    let plugPartials = path.join(dir, pluginId, 'partials')
+    let plugTemplates = path.join(dir, pluginId, 'templates')
     let plugProcess = path.join(dir, pluginId, 'process')
     let plugRoutes = path.join(dir, pluginId, 'routes')
     let plugin = {

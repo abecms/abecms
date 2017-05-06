@@ -109,7 +109,7 @@ export function includePartials(text, json) {
 
     var file = obj.file
     var partial = ''
-    file = path.join(config.root, config.partials, file)
+    file = path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path, file)
     file = cmsData.attributes.getValueFromAttribute(file, json)
 
     if(Object.prototype.toString.call(file) === '[object Array]' ) {
@@ -209,12 +209,12 @@ export function getTemplate (file, json = {}) {
   // HOOKS beforeGetTemplate
   file = abeExtend.hooks.instance.trigger('beforeGetTemplate', file)
 
-  file = file.replace(path.join(config.root, config.templates.url), '')
+  file = file.replace(path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path), '')
   file = file.replace(config.root, '')
   if (file.indexOf('.') > -1) {
     file = file.replace(/\..+$/, '')
   }
-  file = path.join(config.root, config.templates.url, file + '.' + config.files.templates.extension)
+  file = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path, file + '.' + config.files.templates.extension)
   if(coreUtils.file.exist(file)) {
     text = fse.readFileSync(file, 'utf8')
     text = cmsTemplates.template.includePartials(text, json)
@@ -300,7 +300,7 @@ export function getTemplatesTexts(templatesList, json) {
     Array.prototype.forEach.call(templatesList, (file) => {
       var template = fse.readFileSync(file, 'utf8')
       template = cmsTemplates.template.includePartials(template, json)
-      var name = file.replace(path.join(config.root, config.templates.url, path.sep), '').replace(`.${config.files.templates.extension}`, '')
+      var name = file.replace(path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path, path.sep), '').replace(`.${config.files.templates.extension}`, '')
       templates.push({
         name: name,
         path: file,
@@ -406,7 +406,7 @@ export function getAbePrecontribFromTemplates(templatesList) {
 
 export function getStructureAndTemplates() {
   const pathStructure = path.join(config.root, config.structure.url)
-  const pathTemplates = path.join(config.root, config.templates.url)
+  const pathTemplates = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
   const extension = '.' + config.files.templates.extension
   let result = {'structure': [], 'templates': []}
 

@@ -4,12 +4,19 @@
   "intlData": {
     "locales": "en-US"
   },
-  "themes": {
-    "active":false,
-    "repository": "http://themes.abecms.io"
-  },
-  "templates": {
-    "url": "templates"
+  "themes":{
+    "path":"themes",
+    "name":"default",
+    "templates": {
+      "path": "templates"
+    },
+    "partials": {
+      "path": "partials"
+    },
+    "repository": {
+      "active":true,
+      "url": "https://themes.abecms.io"
+    }
   },
   "structure": {
     "url": "structure"
@@ -103,8 +110,6 @@
   "sessionSecret": "ThIsIsAbE",
   "abeEngine": "../views/template-engine",
   "defaultPartials": "../../../../server/views/partials",
-  "pluginsPartials": "partials",
-  "partials": "partials",
   "custom": "custom",
   "siteUrl": false,
   "sitePort": false,

@@ -1,6 +1,5 @@
 //import Handlebars from 'handlebars'
 import fse from 'fs-extra'
-import mkdirp from 'mkdirp'
 import events from 'events'
 import path from 'path'
 import watch from 'watch'
@@ -32,8 +31,8 @@ class Manager {
 
   init() {
     this._processesRunning = {}
-    this._pathPartials = path.join(config.root, config.partials)
-    this._pathTemplate = path.join(config.root, config.templates.url)
+    this._pathPartials = path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path)
+    this._pathTemplate = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
     this._pathStructure = path.join(config.root, config.structure.url)
     this._pathReference = path.join(config.root, config.reference.url)
     this._pathData = path.join(config.root, config.data.url)

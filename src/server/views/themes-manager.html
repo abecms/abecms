@@ -107,7 +107,7 @@
         });
 
         $.ajax ({
-          url:'{{config.themes.repository}}/abe/rest/posts?start=0&length=50&search%5Bvalue%5D=theme',
+          url:'{{{config.themes.repository.url}}}/abe/rest/posts?start=0&length=50&search%5Bvalue%5D=theme',
           type:'GET',
           dataType:'json',
           success: function(data) {

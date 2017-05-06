@@ -90,7 +90,7 @@ function modifiedTime(fileName, cb) {
 export function getFolders() {
   const templateExtension = '.' + config.files.templates.extension
   const assetsExtension = config.files.templates.assets
-  const pathAssets = path.join(config.root, config.templates.url)
+  const pathAssets = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
   let assetsFolders = []
   let files = coreUtils.file.getFilesSync(pathAssets, false, templateExtension)
 

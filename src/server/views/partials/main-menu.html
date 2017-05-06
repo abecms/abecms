@@ -27,7 +27,7 @@
     </li>
     {{/isAuthorized}}
     {{#isAuthorized '/abe/themes' @root.user.role.workflow}}
-      {{#if config.themes.active}}
+      {{#if config.themes.repository.active}}
         <li class="{{#if isThemes}}selected{{/if}}">
           <i class="fa fa-picture-o fa-fw" aria-hidden="true"></i>
           <a href="/abe/themes">

@@ -1,11 +1,13 @@
 import path from 'path'
 import fse from 'fs-extra'
+import mkdirp from 'mkdirp'
 import request from 'request'
 import extract from 'extract-zip'
 
 import {
   config,
-  cmsTemplates
+  cmsTemplates,
+  coreUtils
 } from '../../'
 
 export function getThemeName(url) {
@@ -15,10 +17,10 @@ export function getThemeName(url) {
 }
 
 export function getThemeInfos() {
-  var pathToSite = path.join(config.root, config.templates.url)
+  var pathToTheme = path.join(config.root, config.themes.path, config.themes.name)
 
   var p = new Promise((resolve) => {
-    fse.readJson(path.join(pathToSite,'theme.json'), (err, json) => {
+    fse.readJson(path.join(pathToTheme,'theme.json'), (err, json) => {
       // if (err) console.error(err)
       var json = json || {theme: {}}
       resolve(json.theme)
@@ -31,12 +33,12 @@ export function getThemeInfos() {
 }
 
 export function deleteTheme() {
-  var pathToSite = path.join(config.root, config.templates.url)
-  fse.readJson(path.join(pathToSite,'theme.json'), (err, json) => {
+  var pathToTheme = path.join(config.root, config.themes.path, config.themes.name)
+  fse.readJson(path.join(pathToTheme,'theme.json'), (err, json) => {
     if (err) console.error(err)
     if(json != null && json.theme != null && json.theme.root_files != null){
       Array.prototype.forEach.call(json.theme.root_files, (file) => {
-        fse.remove(path.join(pathToSite, file), err => {
+        fse.remove(path.join(pathToTheme, file), err => {
           if (err) console.error(err)
         })
       })
@@ -44,12 +46,15 @@ export function deleteTheme() {
   })
 }
 
-export function downloadTheme(url) {
-  var pathToSite = path.join(config.root, config.templates.url)
-  var p = new Promise((resolve) => {
-    var pathToZip = path.join(pathToSite, 'theme.zip')
+export function downloadTheme(url, name) {
+  const pathToThemes = path.join(config.root, config.themes.path)
+  const PathToTmpTheme = path.join(pathToThemes, 'tmp-download')
+  mkdirp.sync(PathToTmpTheme)
 
-    var writeStream = fse.createWriteStream(pathToZip)
+  const p = new Promise((resolve) => {
+    const pathToZip = path.join(PathToTmpTheme, name+'.zip')
+    const writeStream = fse.createWriteStream(pathToZip)
+
     request(url)
       .on('response', (res) => {})
       .on('error', (res) => {
@@ -58,8 +63,13 @@ export function downloadTheme(url) {
       .on('end', (res) => {})
       .pipe(writeStream)
       writeStream.on('finish', function() {
-        extract(pathToZip, {dir: pathToSite}, function (err) {
-          fse.remove(pathToZip, err => {
+        extract(pathToZip, {dir: PathToTmpTheme}, function (err) {
+
+          const dirs = coreUtils.file.getFoldersSync(PathToTmpTheme, false)
+          const currentPathToTheme = dirs[0].path
+          fse.renameSync(currentPathToTheme, path.join(pathToThemes, name))
+
+          fse.remove(PathToTmpTheme, err => {
             if (err) return console.error(err)
           })
 
@@ -68,8 +78,10 @@ export function downloadTheme(url) {
             resolve({res: 'ko', 'error': 'err'})
             return
           }
+
+          config.save({themes:{name:name}})
+          cmsTemplates.assets.copy()
           getThemeInfos().then((json) =>  {
-            cmsTemplates.assets.copy()
             resolve({success: 'ok', theme: json})
           })
         })
