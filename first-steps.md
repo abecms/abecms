@@ -11,8 +11,8 @@
 
 ## Abe command line tool
 
-Create a website  ```$ abe create mysite ```
-this create your __website structure__ that can be overridden with a json config file
+Create a website  ```$ abe init ```
+this wizard helps you to create your __website structure__ that can be overridden with a json config file ```abe.json```
 
 Default project structure :
 
@@ -21,7 +21,7 @@ Default project structure :
  |_ data (contains your json documents)
  |_ site (contains published files, this is your static website)
  |_ structure (add as many folders and subfolders to create your website structure)
- |_ templates (put your templates here)
+ |_ themes/default/templates (put your templates here)
 ```
 
 Launch abe engine 
