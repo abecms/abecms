@@ -142,8 +142,9 @@ To migrate from a version 2, you'll have to make sure to refactore (if used) the
 - src/cli/cms/Page.js class has a new signature. it was previously ```new Page(templateId, template, json, onlyHTML)```. It's now ```new Page(template, json, onlyHTML)```
 - The default 'templates' and 'partials' path have changed: Previously they were at the Abe project's root. Now, they are under /themes/default/. You have 2 options to migrate:
   - Move your /templates and /partials directories under /themes/default (preferred solution)
-  - Or Put in abe.json: 
-  ```
+  - Or Put in abe.json:
+  
+```
     {
       themes:{
         path:"",
@@ -156,7 +157,8 @@ To migrate from a version 2, you'll have to make sure to refactore (if used) the
         }
       }
     }
-  ```
+```
+
 - Some attributes have been removed from the Manager list of posts:
   - htmlPath
   - cleanName
