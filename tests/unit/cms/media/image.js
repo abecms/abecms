@@ -15,7 +15,7 @@ import {
   abeExtend
 } from '../../../../src/cli'
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
-
+console.log(config)
 describe('image', function() {
 
   var pathToImage = path.join(config.root, config.publish.url, config.upload.image, 'chat-1.jpg');
@@ -95,7 +95,6 @@ describe('image', function() {
     var result = cmsMedia.image.getThumbsList()
     chai.expect(result).to.not.be.undefined
     chai.expect(result).to.have.length(1)
-    console.log(result[0])
     chai.expect(result[0]).to.have.property('originalFile').to.equal(path.join(path.sep, 'unitimage', 'img.jpg'))
     chai.expect(result[0]).to.have.property('thumbFile').to.equal(path.join(path.sep, 'unitimage', 'img_thumb.jpg'))
     sinon.assert.calledOnce(coreUtils.file.getFilesSync)
