@@ -140,6 +140,25 @@ For now:
 To migrate from a version 2, you'll have to make sure to refactore (if used) these methods
 - src/cli/cms/operations/remove.js function has a new signature. It was previously ```cmsOperations.remove(jsonPath, htmlPath)```. It's now ```cmsOperations.remove(filePath)```. You'll have to call it 2 times if you want to remove a json file and a html file.
 - src/cli/cms/Page.js class has a new signature. it was previously ```new Page(templateId, template, json, onlyHTML)```. It's now ```new Page(template, json, onlyHTML)```
+- The default 'templates' and 'partials' path have changed: Previously they were at the Abe project's root. Now, they are under /themes/default/. You have 2 options to migrate:
+  - Move your /templates and /partials directories under /themes/default (preferred solution)
+  - Or Put in abe.json:
+  
+```
+    {
+      themes:{
+        path:"",
+        name:"",
+        templates:{
+          url:"templates"
+        },
+        partials:{
+          url:"partials"
+        }
+      }
+    }
+```
+
 - Some attributes have been removed from the Manager list of posts:
   - htmlPath
   - cleanName
