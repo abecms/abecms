@@ -79,7 +79,11 @@ export function downloadTheme(url, name) {
             return
           }
 
-          config.save({themes:{name:name}})
+          let json = config.getLocalConfig()
+          json.themes = {
+            name:name
+          }
+          config.save(json)
           cmsTemplates.assets.copy()
           getThemeInfos().then((json) =>  {
             resolve({success: 'ok', theme: json})

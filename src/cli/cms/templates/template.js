@@ -94,7 +94,7 @@ export function getAbeImport(text) {
 }
 
 /**
- * it will include recurively each encountered type=import
+ * it will include recursively each encountered type=import
  * and proceed to a foreach when the file={{some[]}} is an array of values
  * @param  {[type]} text [description]
  * @param  {[type]} json [description]

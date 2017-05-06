@@ -27,11 +27,11 @@ var loadLocalConfig = (result) => {
         }catch(e) {
           if (!hintAbeJson) {
             hintAbeJson = true
-            console.log(
-              clc.green('[ Hint ]'),
-              'you can create a specific config file named abe.json to customize your abe install',
-              clc.cyan.underline('https://github.com/abecms/abecms/blob/master/docs/abe-config.md')
-            )
+            // console.log(
+            //   clc.green('[ Hint ]'),
+            //   'you can create a specific config file named abe.json to customize your abe install',
+            //   clc.cyan.underline('https://github.com/abecms/abecms/blob/master/docs/abe-config.md')
+            // )
           }
         }
       }
@@ -108,10 +108,8 @@ result.set = (json) => {
 }
 
 result.save = (json) => {
-  const jsonConf = result.getLocalConfig()
   const confPath = path.join(result.root,'abe.json')
-  extend(true, jsonConf, json)
-  fse.writeJsonSync(confPath, jsonConf, { space: 2, encoding: 'utf-8' })
+  fse.writeJsonSync(confPath, json, { space: 2, encoding: 'utf-8' })
   loadLocalConfig(result)
 }
 
