@@ -24,7 +24,8 @@ var loadLocalConfig = (result) => {
             var json = fse.readJsonSync(path.join(result.root,'abe.json'))
             result = extend(true, result, json)
           }
-        }catch(e) {
+        } catch(e) {
+          console.log(e.stack)
           if (!hintAbeJson) {
             hintAbeJson = true
             // console.log(

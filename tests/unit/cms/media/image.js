@@ -15,7 +15,7 @@ import {
   abeExtend
 } from '../../../../src/cli'
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
-console.log(config)
+
 describe('image', function() {
 
   var pathToImage = path.join(config.root, config.publish.url, config.upload.image, 'chat-1.jpg');
