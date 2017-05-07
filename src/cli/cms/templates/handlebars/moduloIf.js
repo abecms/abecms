@@ -10,4 +10,5 @@ export default function moduloIf(num, mod, block) {
   if (parseInt(num) % parseInt(mod) === 0) {
     return block.fn(this)
   }
+  return block.inverse(this)
 }

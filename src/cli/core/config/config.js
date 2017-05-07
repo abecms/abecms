@@ -25,7 +25,6 @@ var loadLocalConfig = (result) => {
             result = extend(true, result, json)
           }
         } catch(e) {
-          console.log(e.stack)
           if (!hintAbeJson) {
             hintAbeJson = true
             // console.log(
