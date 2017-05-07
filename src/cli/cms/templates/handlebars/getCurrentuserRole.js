@@ -6,9 +6,6 @@ import {
 	User
 } from '../../../'
 
-/**
- * Handlebars helper, to print className and escape it string
- */
 export default function getCurrentuserRole(obj) {
   if(typeof obj.express !== 'undefined' && obj.express !== null) {
     var cookies = new Cookies(obj.express.req, obj.express.res, {

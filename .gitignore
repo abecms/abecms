@@ -27,5 +27,5 @@ tests/demo/data/autocomplete*
 dist
 
 #config
-abe.json
+./abe.json
 plugins/

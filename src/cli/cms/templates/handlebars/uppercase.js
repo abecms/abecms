@@ -1,7 +1,7 @@
 /**
  * Handlebars helper, uppercase the str
  */
-export default function lowercase(str) {
+export default function uppercase(str) {
   if(typeof str === 'undefined' || str === null){
     return ''
   } else {
