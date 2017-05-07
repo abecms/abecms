@@ -23,7 +23,7 @@ describe('setVariable 1', function() {
 
   it("should setVariable name={a:1}", function() {
     var fn = hbs.compile("{{setVariable val1 val2}}{{name}}");
-    var json = {a:1}
+    var json = '{"a":"1"}'
     var res = fn({val1: 'name', val2: json})
     chai.expect(res).to.be.equal('[object Object]')
   });

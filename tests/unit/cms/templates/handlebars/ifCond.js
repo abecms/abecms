@@ -15,4 +15,10 @@ describe('ifCond 1', function() {
     chai.expect(res).to.be.equal('a');
   });
 
+    it("should be equal for null values", function() {
+    var fn = hbs.compile("{{#ifCond v1 v2}}a{{else}}b{{/ifCond}}");
+    var res = fn({v1: null, v2: null})
+    chai.expect(res).to.be.equal('a');
+  });
+
 });

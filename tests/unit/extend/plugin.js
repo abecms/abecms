@@ -10,12 +10,12 @@ var events = require('events')
 import which from 'which'
 const npm = which.sync('npm')
 
-var config = require('../../src/cli').config
+var config = require('../../../src/cli').config
 config.set({root: path.join(__dirname,'fixtures')})
 
-var abeExtend = require('../../src/cli').abeExtend;
-var Plugins = require('../../src/cli').Plugins;
-var Manager = require('../../src/cli').Manager;
+var abeExtend = require('../../../src/cli').abeExtend;
+var Plugins = require('../../../src/cli').Plugins;
+var Manager = require('../../../src/cli').Manager;
 var fse = require('fs-extra');
 
 describe('Plugin', function() {
