@@ -19,7 +19,7 @@ export default function printBlock (ctx, root) {
       res += printInput(item, root)
     })
     res += '</div></div>'
-  }else if(ctx[0].key.indexOf('[') > -1) {
+  } else if(ctx[0].key.indexOf('[') > -1) {
     var ctxBlock = ctx[0].key.split('[')[0]
     res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
               <div class="list-group" data-block="${ctxBlock}" >
