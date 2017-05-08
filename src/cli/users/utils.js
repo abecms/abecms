@@ -199,7 +199,7 @@ export function getTokenFromQuery(req, res){
 
 export function getTokenFromAuthHeader(req, res){
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-    return req.headers.authorization.split(' ')[1];
+    return req.headers.authorization.split(' ')[1]
   }
 }
 
@@ -341,7 +341,7 @@ export function loginLimitTry(username) {
  * @return {[type]}       [description]
  */
 export function getGravatarImage(email, args) {
-    args = args || "";
-    var BASE_URL = "//www.gravatar.com/avatar/";
-    return (BASE_URL + coreUtils.text.md5(email) + args).trim();
+  args = args || ''
+  var BASE_URL = '//www.gravatar.com/avatar/'
+  return (BASE_URL + coreUtils.text.md5(email) + args).trim()
 }

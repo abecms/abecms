@@ -60,7 +60,7 @@ export default class initSite {
           createLocalConfig = false
         }
 
-        const confUsers = {"enable": true}
+        const confUsers = {'enable': true}
 
         if(!createLocalConfig){
           if(typeof json.users === 'undefined' || json.users === null) {
@@ -81,13 +81,13 @@ export default class initSite {
 
         config.save(json)
         const u = {
-          "username": answers.username,
-          "name": answers.username,
-          "email": answers.email,
-          "password": answers.password,
-          "role": {
-            "workflow":"admin",
-            "name":"Admin"
+          'username': answers.username,
+          'name': answers.username,
+          'email': answers.email,
+          'password': answers.password,
+          'role': {
+            'workflow':'admin',
+            'name':'Admin'
           }
         }
         User.manager.instance.update([])
@@ -118,9 +118,9 @@ export default class initSite {
             console.log('installing the theme ' + answers.url + ' from themes.abecms.io')
             cmsThemes.themes.downloadTheme('https://github.com/abecms/theme-'+answers.which+'/archive/master.zip', answers.which).then(function (resp) {
             
-          }).catch(function(e) {
+            }).catch(function(e) {
             
-          })
+            })
           }
         }
       }
@@ -135,70 +135,70 @@ export default class initSite {
     var p = new Promise((resolve) => {
       inquirer.prompt([
         {
-          type : "input",
-          name : "name",
-          message : "Enter the name of the project you want to create (only letters and '-' allowed)"
+          type : 'input',
+          name : 'name',
+          message : 'Enter the name of the project you want to create (only letters and \'-\' allowed)'
         },
         {
-          type : "confirm",
-          name : "theme",
-          message : "Do you want to install a theme ?",
+          type : 'confirm',
+          name : 'theme',
+          message : 'Do you want to install a theme ?',
           default: true
         },
         {
-          type : "list",
-          name : "which",
+          type : 'list',
+          name : 'which',
           choices: ['default', 'multiverse', 'lens', 'Your own template'],
-          message : "Please select a theme",
+          message : 'Please select a theme',
           default: 0,
           when: function (answers) {
             return answers.theme
           }
         },
         {
-          type : "input",
-          name : "url",
-          message : "Enter the url of the theme or enter a theme name from ",
+          type : 'input',
+          name : 'url',
+          message : 'Enter the url of the theme or enter a theme name from ',
           when: function (answers) {
             return (answers.which == 'Your own template') ? true:false
           }
         },
         {
-          type : "confirm",
-          name : "security",
-          message : "Do you activate the user management ?",
+          type : 'confirm',
+          name : 'security',
+          message : 'Do you activate the user management ?',
           default: true
         },
         {
-          type : "input",
-          name : "username",
-          message : "Enter the username",
+          type : 'input',
+          name : 'username',
+          message : 'Enter the username',
           default : 'admin',
           when: function (answers) {
             return answers.security
           }
         },
         {
-          type : "input",
-          name : "email",
-          message : "Enter the email address",
+          type : 'input',
+          name : 'email',
+          message : 'Enter the email address',
           default : 'admin@test.com',
           when: function (answers) {
             return answers.security
           },
           validate: function (value) {
-            var pass = value.match(coreUtils.mail.regexEmail);
+            var pass = value.match(coreUtils.mail.regexEmail)
             if (pass) {
-              return true;
+              return true
             }
 
-            return 'Please enter a valid email address';
+            return 'Please enter a valid email address'
           }
         },
         {
-          type : "password",
-          name : "password",
-          message : "Enter the password",
+          type : 'password',
+          name : 'password',
+          message : 'Enter the password',
           default : 'Adm1n@test',
           when: function (answers) {
             return answers.security
@@ -213,8 +213,8 @@ export default class initSite {
           }
         },
         {
-          type : "checkbox",
-          name : "plugins",
+          type : 'checkbox',
+          name : 'plugins',
           choices: [
             'abecms/abe-deployer-git', 
             'abecms/abe-deployer-sftp', 
@@ -224,11 +224,11 @@ export default class initSite {
             'abecms/abe-elasticsearch', 
             'abecms/abe-algolia'
           ],
-          message : "Select the plugins you want to install"
+          message : 'Select the plugins you want to install'
         }
       ]).then(function (answers) {
         resolve(answers)
-      });
+      })
     })
     return p
   }

@@ -81,10 +81,10 @@ export function copy() {
 function modifiedTime(fileName, cb) {
   fse.stat(fileName, function (err, stat) {
     if (err) {
-      return cb(err);
+      return cb(err)
     }
-    return cb(null, stat.mtime);
-  });
+    return cb(null, stat.mtime)
+  })
 }
 
 export function getFolders() {

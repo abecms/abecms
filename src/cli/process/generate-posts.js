@@ -82,7 +82,7 @@ function startProcess() {
     log('total ' + i + ' files')
     log('publish process finished ' + getTime())
     if(typeof process.send === 'function'){
-      process.send(JSON.stringify({msg: "exit"}))
+      process.send(JSON.stringify({msg: 'exit'}))
     }
     process.exit(0)
   })
@@ -97,7 +97,7 @@ init('generate-posts',
   .then(startProcess,
   (msg) => {
     if(typeof process.send === 'function'){
-      process.send(JSON.stringify({msg: "exit"}))
+      process.send(JSON.stringify({msg: 'exit'}))
     }
     error(msg)
     process.exit(0)

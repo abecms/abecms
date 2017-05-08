@@ -25,7 +25,7 @@ var route = function(req, res) {
   // if event-stream
   if (req.accepts('text/event-stream')) {
     // Approximately 24 days...
-    req.socket.setTimeout(0x7FFFFFFF);
+    req.socket.setTimeout(0x7FFFFFFF)
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -33,7 +33,7 @@ var route = function(req, res) {
     })
 
     let evt = eventOnActivity.bind(res)
-    Manager.instance.events.activity.on("activity-stream", evt)
+    Manager.instance.events.activity.on('activity-stream', evt)
 
     if (!req.headers['last-event-id']) {
       var activities = Manager.instance.getActivities()
@@ -58,21 +58,21 @@ var route = function(req, res) {
         })
       } else {
         res.write('data: {\n')
-        res.write(`data: "msg": "open"\n`)
+        res.write('data: "msg": "open"\n')
         res.write('data: }\n\n')
       }
     } else {
       res.write('data: {\n')
-      res.write(`data: "msg": "open"\n`)
+      res.write('data: "msg": "open"\n')
       res.write('data: }\n\n')
     }
 
     Manager.instance.addConnection(res)
 
-    req.connection.addListener("close", function () {
-      res.app.removeListener("activity-stream", evt)
+    req.connection.addListener('close', function () {
+      res.app.removeListener('activity-stream', evt)
       Manager.instance.removeConnection(res)
-    }, false);
+    }, false)
 
   } else { // if get
     var result = {

@@ -393,7 +393,7 @@ export function getAbePrecontribFromTemplates(templatesList) {
       templateText = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(file.template)
     }
 
-    templateText = templateText.replace(/(?!.*?tab=['|"]slug)(\{\{abe.+.*)/g, ``)
+    templateText = templateText.replace(/(?!.*?tab=['|"]slug)(\{\{abe.+.*)/g, '')
     templateText = templateText.replace(/(\{\{abe.+)(\}\})/g, `$1 precontribTemplate="${file.name}"$2`)
     precontributionTemplate.push(templateText)
   })

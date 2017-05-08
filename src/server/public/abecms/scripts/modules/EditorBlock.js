@@ -48,7 +48,7 @@ export default class EditorBlock {
       var drake = dragula([drag],
         {
           moves: function (el, source, handle, sibling) {
-            return handle.getAttribute("data-toggle") != null
+            return handle.getAttribute('data-toggle') != null
           }
         })
       drake.on('drag', (el, source) => {
@@ -79,7 +79,7 @@ export default class EditorBlock {
 
       i++
     })
-      this.onMoveBlock._fire()
+    this.onMoveBlock._fire()
   }
 
   /**

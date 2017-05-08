@@ -37,7 +37,7 @@ export function IframeNode (frameId, selector){
           } else {
             return null
           }
-        };
+        }
       })
     }
     return result

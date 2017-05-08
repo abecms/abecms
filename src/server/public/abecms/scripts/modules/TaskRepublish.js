@@ -24,8 +24,8 @@ export default class TaskRepublish {
       this._btnGeneratePosts.addEventListener('click', this._handleBtnGeneratePostsClick)
 
       // don't watch if btn source not present
-      if (!!window.EventSource) {
-        var source = new EventSource('/abe/generate-posts');
+      if (window.EventSource) {
+        var source = new EventSource('/abe/generate-posts')
         source.addEventListener('message', (e, data) => {
           var json = JSON.parse(e.data)
           if (json.percent != null && json.time != null) {
@@ -33,25 +33,25 @@ export default class TaskRepublish {
             this._btnGeneratePosts.querySelector('[data-not-clicked]').className = 'hidden'
             this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
             if(json.percent == 0)
-              this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = `Initializing republish...`
+              this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = 'Initializing republish...'
             else
               this._btnGeneratePosts.querySelector('[data-clicked]').innerHTML = `Republish in progress... ${json.percent}% (${json.time})`
-          } else if (json.msg != "") {
+          } else if (json.msg != '') {
             this._btnGeneratePosts.classList.remove('disabled')
             this._btnGeneratePosts.querySelector('[data-not-clicked]').className = ''
             this._btnGeneratePosts.querySelector('[data-clicked]').className = 'hidden'
           }
-        }, false);
+        }, false)
 
         source.addEventListener('open', (e) => {
           // Connection was opened.
-        }, false);
+        }, false)
 
         source.addEventListener('error', (e) => {
           if (e.readyState == EventSource.CLOSED) {
             // Connection was closed.
           }
-        }, false);
+        }, false)
 
       } else {
         // Result to xhr polling :(

@@ -17,7 +17,7 @@ var route = function(req, res, next){
     file: postUrl
   }
 
-  Manager.instance.events.activity.emit("activity", {operation: 'unpublish', post: postUrl, user: res.user})
+  Manager.instance.events.activity.emit('activity', {operation: 'unpublish', post: postUrl, user: res.user})
   res.set('Content-Type', 'application/json')
   res.send(JSON.stringify(result))
 }

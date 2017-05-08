@@ -33,5 +33,5 @@ export function checkXss(newUser) {
 */
 export function md5(str) {
   str = str.toLowerCase().trim()
-  return crypto.createHash("md5").update(str).digest("hex");
+  return crypto.createHash('md5').update(str).digest('hex')
 }

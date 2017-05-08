@@ -18,7 +18,7 @@ var route = function(req, res, next){
     file: operation.postUrl
   }
 
-  Manager.instance.events.activity.emit("activity", {operation: operation.workflow, post: operation.postUrl, user: res.user})
+  Manager.instance.events.activity.emit('activity', {operation: operation.workflow, post: operation.postUrl, user: res.user})
   res.set('Content-Type', 'application/json')
   res.send(JSON.stringify(result))
 }

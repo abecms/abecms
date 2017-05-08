@@ -226,8 +226,8 @@ export function orderByGroup(form) {
     groupIndex[group[0].group] += shiftElts
     shiftElts = shiftElts + group.length - 1
 
-    var args = [groupIndex[group[0].group], 0].concat(group);
-    Array.prototype.splice.apply(finalFields, args);
+    var args = [groupIndex[group[0].group], 0].concat(group)
+    Array.prototype.splice.apply(finalFields, args)
   }
 
   return {item: finalFields}

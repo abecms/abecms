@@ -16,7 +16,7 @@ const route = function(req, res, next) {
       json: resSave
     }
 
-    Manager.instance.events.activity.emit("activity", {operation: 'creation', post: resSave.link, user: res.user})
+    Manager.instance.events.activity.emit('activity', {operation: 'creation', post: resSave.link, user: res.user})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },

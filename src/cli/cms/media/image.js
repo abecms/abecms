@@ -85,10 +85,10 @@ export function cropAndSaveFiles(images, file, resp) {
             .catch(function (err) {
               console.log(err)
             })
-          }
+        }
       }).catch(function (err) {
         console.log(err)
-      });
+      })
     }
   })
 
@@ -159,7 +159,7 @@ export function saveFile(req) {
         if(mediaType === 'image') {
           var thumbPromise = generateThumbnail(filePath)
           thumbPromise.then(function (thumbResp) {
-            resp.thumbnail = (/^win/.test(process.platform)) ? thumbResp.thumb.replace(/\\/g, '/') : thumbResp.thumb;
+            resp.thumbnail = (/^win/.test(process.platform)) ? thumbResp.thumb.replace(/\\/g, '/') : thumbResp.thumb
             if(req && req.query && req.query.input && ( req.query.input.indexOf('data-size') > -1 )){
               var thumbsSizes = cmsData.regex.getAttr(req.query.input, 'data-size').split(',')
               cropAndSaveFiles(thumbsSizes, filePath, resp).then(function (resp) {

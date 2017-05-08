@@ -25,16 +25,16 @@ var route = function(req, res, next){
       var nbPosts = Manager.instance.getList().length
       if(config.publish['auto-republish'].limit >= nbPosts){
         var proc = abeExtend.process('generate-posts', [''], (data) => {
-          res.app.emit("generate-posts", data)
+          res.app.emit('generate-posts', data)
         })
         if (proc) {
-          res.app.emit("generate-posts", {percent: 0, time: "00:00sec"})
+          res.app.emit('generate-posts', {percent: 0, time: '00:00sec'})
           console.log('generate-posts emitted')
         }
       }
     }
 
-    Manager.instance.events.activity.emit("activity", {operation: operation.workflow, post: operation.postUrl, user: res.user})
+    Manager.instance.events.activity.emit('activity', {operation: operation.workflow, post: operation.postUrl, user: res.user})
     res.set('Content-Type', 'application/json')
     res.send(JSON.stringify(result))
   },

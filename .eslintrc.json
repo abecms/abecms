@@ -35,6 +35,7 @@
         "no-case-declarations":[1],
         "no-dupe-class-members":[1],
         "no-empty":[1],
-        "valid-typeof":[1]
+        "valid-typeof":[1],
+        "no-control-regex":[1]
     }
 }

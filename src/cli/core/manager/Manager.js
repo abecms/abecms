@@ -73,8 +73,8 @@ class Manager {
         data.user = 'admin'
       }
       this.addActivity(data)
-      this.events.activity.emit("activity-stream", data)
-    }.bind(this));
+      this.events.activity.emit('activity-stream', data)
+    }.bind(this))
 
     // watch template folder
     try {
@@ -345,7 +345,7 @@ class Manager {
               cmsOperations.remove.removeFile(revision.path)
             }
           } else if(arStatus.indexOf(revision.abe_meta.status) < 0){
-              arStatus.push(revision.abe_meta.status)
+            arStatus.push(revision.abe_meta.status)
           }
         })
       }
@@ -438,13 +438,13 @@ class Manager {
   }
 
   addConnection(res) {
-    this.connections.push(res);
+    this.connections.push(res)
   }
 
   removeConnection(res) {
-    var i = this.connections.indexOf(res);
+    var i = this.connections.indexOf(res)
     if (i !== -1) {
-      this.connections.splice(i, 1);
+      this.connections.splice(i, 1)
     }
   }
 }

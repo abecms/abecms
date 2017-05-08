@@ -64,7 +64,7 @@ export function createInputSource(attributes, inputClass, params) {
     Array.prototype.forEach.call(params.value, (val) => {
       inputSource += sourceAutocomplete(val, params)
     })
-    inputSource += `</div>`
+    inputSource += '</div>'
   }
 
   if(params.autocomplete != null && params.autocomplete === 'true') {
@@ -197,7 +197,7 @@ export function createInputRich(attributes, inputClass, params) {
                         </a>
                       </li>`
       })
-     inputRich += `</ul>
+      inputRich += `</ul>
                   </div>`
     }
   })

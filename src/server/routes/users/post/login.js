@@ -78,7 +78,7 @@ var route = function(req, res, next) {
         if(user && user.username){
           username = user.username
         }
-        Manager.instance.events.activity.emit("activity", {operation: 'connect', post: '', user: username})
+        Manager.instance.events.activity.emit('activity', {operation: 'connect', post: '', user: username})
         res.redirect('/abe/editor/')
       })(req, res, next)
   })

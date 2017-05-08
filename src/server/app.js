@@ -146,10 +146,10 @@ app.use(middleWebsite)
 app.use(express.static(__dirname + '/public'))
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Access-Token, X-Requested-With, Content-Type, Accept");
-  next();
-});
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Access-Token, X-Requested-With, Content-Type, Accept')
+  next()
+})
 
 cmsTemplates.assets.copy()
 

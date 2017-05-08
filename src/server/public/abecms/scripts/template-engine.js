@@ -270,6 +270,6 @@ window.abe = {
 document.addEventListener('DOMContentLoaded', function() {
   if(document.querySelector('#page-template')) engine.inject()
   $('#abeSearch').on( 'keyup', function () {
-    engine.table.search( this.value ).draw();
-  });
+    engine.table.search( this.value ).draw()
+  })
 })

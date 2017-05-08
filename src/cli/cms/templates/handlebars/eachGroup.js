@@ -17,7 +17,7 @@ import extend from 'extend'
  * @return {[type]}         html
  */
 export default function eachGroup(context, groups, options) {
-  var fn = options.fn, inverse = options.inverse;
+  var fn = options.fn, inverse = options.inverse
   var ret = ''
   var group = []
   function getLeaf(node) {
@@ -25,7 +25,7 @@ export default function eachGroup(context, groups, options) {
       return node
     } else {
       try{
-        return getLeaf(node[Object.keys(node)[0]]);
+        return getLeaf(node[Object.keys(node)[0]])
       } catch (e){ 
         return null
       }
@@ -40,7 +40,7 @@ export default function eachGroup(context, groups, options) {
       for(var i=0, newCount=0, j=context.length, distribIndex=0, k=0, iteration=0; i<j; i++,newCount++) {
         var o = getLeaf(groups[Object.keys(groups)[distribIndex]])
         if(o == null) break
-        var first = newCount % o['qty'] === 0;
+        var first = newCount % o['qty'] === 0
 
         // Adding index, isFirst, isLast, isNewGroup to each record
         context[i] = extend(true, {
@@ -80,12 +80,12 @@ export default function eachGroup(context, groups, options) {
 
     if(context) {
       for(var i=0, j=context.length, k=0; i<j; i++) {
-        ret += fn(context[i]);
+        ret += fn(context[i])
       }
     } else {
-      ret = inverse(this);
+      ret = inverse(this)
     }
   }
 
-  return ret;
+  return ret
 }

@@ -22,7 +22,7 @@ var route = function(req, res) {
   // if event-stream
   if (req.accepts('text/event-stream')) {
     // Approximately 24 days...
-    req.socket.setTimeout(0x7FFFFFFF);
+    req.socket.setTimeout(0x7FFFFFFF)
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -30,23 +30,23 @@ var route = function(req, res) {
     })
 
     let evt = eventOnGeneratePost.bind(res)
-    res.app.on("generate-posts", evt)
+    res.app.on('generate-posts', evt)
 
     res.write('data: {\n')
-    res.write(`data: "msg": "open"\n`)
+    res.write('data: "msg": "open"\n')
     res.write('data: }\n\n')
 
-    req.connection.addListener("close", function () {
-      res.app.removeListener("generate-posts", evt)
-    }, false);
+    req.connection.addListener('close', function () {
+      res.app.removeListener('generate-posts', evt)
+    }, false)
 
   } else { // if get
     var result
     var proc = abeExtend.process('generate-posts', [''], (data) => {
-      res.app.emit("generate-posts", data)
+      res.app.emit('generate-posts', data)
     })
     if (proc) {
-      res.app.emit("generate-posts", {percent: 0, time: "00:00sec"})
+      res.app.emit('generate-posts', {percent: 0, time: '00:00sec'})
       result = {
         success: 1,
         msg: 'generate-posts is running'

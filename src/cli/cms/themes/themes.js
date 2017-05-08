@@ -62,34 +62,34 @@ export function downloadTheme(url, name) {
       })
       .on('end', (res) => {})
       .pipe(writeStream)
-      writeStream.on('finish', function() {
-        extract(pathToZip, {dir: PathToTmpTheme}, function (err) {
+    writeStream.on('finish', function() {
+      extract(pathToZip, {dir: PathToTmpTheme}, function (err) {
 
-          const dirs = coreUtils.file.getFoldersSync(PathToTmpTheme, false)
-          const currentPathToTheme = dirs[0].path
-          fse.renameSync(currentPathToTheme, path.join(pathToThemes, name))
+        const dirs = coreUtils.file.getFoldersSync(PathToTmpTheme, false)
+        const currentPathToTheme = dirs[0].path
+        fse.renameSync(currentPathToTheme, path.join(pathToThemes, name))
 
-          fse.remove(PathToTmpTheme, err => {
-            if (err) return console.error(err)
-          })
+        fse.remove(PathToTmpTheme, err => {
+          if (err) return console.error(err)
+        })
 
-          if(err != null) {
-            console.log(err)
-            resolve({res: 'ko', 'error': 'err'})
-            return
-          }
+        if(err != null) {
+          console.log(err)
+          resolve({res: 'ko', 'error': 'err'})
+          return
+        }
 
-          let json = config.getLocalConfig()
-          json.themes = {
-            name:name
-          }
-          config.save(json)
-          cmsTemplates.assets.copy()
-          getThemeInfos().then((json) =>  {
-            resolve({success: 'ok', theme: json})
-          })
+        let json = config.getLocalConfig()
+        json.themes = {
+          name:name
+        }
+        config.save(json)
+        cmsTemplates.assets.copy()
+        getThemeInfos().then((json) =>  {
+          resolve({success: 'ok', theme: json})
         })
       })
+    })
   }).catch(function(e) {
     resolve({res: 'ko', 'error': e})
     console.error(e)

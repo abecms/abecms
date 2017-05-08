@@ -33,9 +33,9 @@ var userProfile = {
         var name = input.getAttribute('name')
         var value = input.value
         var required = input.getAttribute('required')
-        if (value == null && required == "true") {
+        if (value == null && required == 'true') {
           isValid = false
-        }else if(value !== null && value !== "") {
+        }else if(value !== null && value !== '') {
           data[name] = value
         }
       }
@@ -50,14 +50,14 @@ var userProfile = {
           body: toSave,
           method: 'post'
         }, (code, responseText) => {
-          var res = JSON.parse(responseText);
-          if (res.success === 1) {
-            this._info.classList.add('hidden')
-          }else {
-            this._info.classList.remove('hidden')
-            this._info.innerHTML = res.message
-          }
-        })
+        var res = JSON.parse(responseText)
+        if (res.success === 1) {
+          this._info.classList.add('hidden')
+        }else {
+          this._info.classList.remove('hidden')
+          this._info.innerHTML = res.message
+        }
+      })
     }
 
     return false

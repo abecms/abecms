@@ -41,12 +41,12 @@ var route = function(req, res, next) {
     if (limit != null) {
       // all good
       if (!limit.remaining) {
-        res.status(401);
+        res.status(401)
         res.json({
-          "status": 401,
-          "message": "Invalid credentials. Rate limit exceeded"
-        });
-        return;
+          'status': 401,
+          'message': 'Invalid credentials. Rate limit exceeded'
+        })
+        return
       }
     }
 
@@ -58,12 +58,12 @@ var route = function(req, res, next) {
         if (err) { return next(err) }
 
         if (!user) {
-          res.status(401);
+          res.status(401)
           res.json({
-            "status": 401,
-            "message": "Invalid credentials"
-          });
-          return;
+            'status': 401,
+            'message': 'Invalid credentials'
+          })
+          return
         }
         var expires = moment().add(7, 'days').valueOf()
         var token = jwt.encode({
