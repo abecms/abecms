@@ -156,10 +156,8 @@ cmsTemplates.assets.copy()
 let publish = path.join(config.root, config.publish.url)
 app.use(express.static(publish))
 
-if(config.themes.partials.path !== '') {
-  if (coreUtils.file.exist(path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path))) {
-    app.use(express.static(path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path)))
-  }
+if (coreUtils.file.exist(Manager.instance.pathPartials)) {
+  app.use(express.static(Manager.instance.pathPartials))
 }
 
 if(config.custom !== '') {

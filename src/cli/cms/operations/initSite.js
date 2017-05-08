@@ -7,6 +7,7 @@ import clc from 'cli-color'
 
 import {
   config,
+  Manager,
   coreUtils,
   cmsThemes,
   User
@@ -28,8 +29,8 @@ export default class initSite {
         this.addFolder(config.structure.url)
         this.addFolder(config.reference.url)
         this.addFolder(config.data.url)
-        this.addFolder(path.join(config.themes.path, config.themes.name, config.themes.templates.path))
-        this.addFolder(path.join(config.themes.path, config.themes.name, config.themes.partials.path))
+        this.addFolder(Manager.instance.pathTemplates.replace(config.root, ''))
+        this.addFolder(Manager.instance.pathPartials.replace(config.root, ''))
       }).catch(function(e) {
         console.error(e)
       })

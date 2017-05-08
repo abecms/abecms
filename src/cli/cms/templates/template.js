@@ -3,6 +3,7 @@ import {Promise} from 'bluebird'
 import path from 'path'
 import {
   config,
+  Manager,
   coreUtils,
   cmsData,
   abeExtend,
@@ -109,7 +110,7 @@ export function includePartials(text, json) {
 
     var file = obj.file
     var partial = ''
-    file = path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path, file)
+    file = path.join(Manager.instance.pathPartials, file)
     file = cmsData.attributes.getValueFromAttribute(file, json)
 
     if(Object.prototype.toString.call(file) === '[object Array]' ) {
@@ -209,12 +210,12 @@ export function getTemplate (file, json = {}) {
   // HOOKS beforeGetTemplate
   file = abeExtend.hooks.instance.trigger('beforeGetTemplate', file)
 
-  file = file.replace(path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path), '')
+  file = file.replace(Manager.instance.pathTemplates, '')
   file = file.replace(config.root, '')
   if (file.indexOf('.') > -1) {
     file = file.replace(/\..+$/, '')
   }
-  file = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path, file + '.' + config.files.templates.extension)
+  file = path.join(Manager.instance.pathTemplates, file + '.' + config.files.templates.extension)
   if(coreUtils.file.exist(file)) {
     text = fse.readFileSync(file, 'utf8')
     text = cmsTemplates.template.includePartials(text, json)
@@ -300,7 +301,7 @@ export function getTemplatesTexts(templatesList, json) {
     Array.prototype.forEach.call(templatesList, (file) => {
       var template = fse.readFileSync(file, 'utf8')
       template = cmsTemplates.template.includePartials(template, json)
-      var name = file.replace(path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path, path.sep), '').replace(`.${config.files.templates.extension}`, '')
+      var name = file.replace(path.join(Manager.instance.pathTemplates, path.sep), '').replace(`.${config.files.templates.extension}`, '')
       templates.push({
         name: name,
         path: file,
@@ -405,15 +406,13 @@ export function getAbePrecontribFromTemplates(templatesList) {
 }
 
 export function getStructureAndTemplates() {
-  const pathStructure = path.join(config.root, config.structure.url)
-  const pathTemplates = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
   const extension = '.' + config.files.templates.extension
   let result = {'structure': [], 'templates': []}
 
-  result.structure = coreUtils.file.getFoldersSync(pathStructure, true)
-  let templatePaths = coreUtils.file.getFilesSync(pathTemplates, true, extension)
+  result.structure = coreUtils.file.getFoldersSync(Manager.instance.pathStructure, true)
+  let templatePaths = coreUtils.file.getFilesSync(Manager.instance.pathTemplates, true, extension)
   Array.prototype.forEach.call(templatePaths, (templatePath) => {
-    let additionalPath = path.dirname(templatePath).replace(pathTemplates,'')
+    let additionalPath = path.dirname(templatePath).replace(Manager.instance.pathTemplates,'')
     if(additionalPath !== '') additionalPath = additionalPath.substring(1)
     let name = path.join(additionalPath,path.basename(templatePath,extension))
     let template = {'path':templatePath, 'name':name}

@@ -31,11 +31,29 @@ class Manager {
 
   init() {
     this._processesRunning = {}
-    this._pathPartials = path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path)
-    this._pathTemplate = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
-    this._pathStructure = path.join(config.root, config.structure.url)
-    this._pathReference = path.join(config.root, config.reference.url)
-    this._pathData = path.join(config.root, config.data.url)
+    // Compatibility for abe version < 3.2.
+    if(config.themes != null && coreUtils.file.exist(path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path))){
+      this.pathTemplates = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
+      this.pathPartials = path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path)
+    } else {
+      // did the users of the versions < 3.2 overriden the default templates path or partials path ?
+      if(config.templates != null && config.templates.url != null){
+        this.pathTemplates = path.join(config.root, config.templates.url)
+      } else {
+        this.pathTemplates = path.join(config.root, 'templates')
+      }
+      if(config.partials != null){
+        this.pathPartials = path.join(config.root, config.partials)
+      } else {
+        this.pathPartials = path.join(config.root, 'partials')
+      }
+    }
+
+console.log(this.pathTemplates)
+console.log(this.pathPartials)
+    this.pathStructure = path.join(config.root, config.structure.url)
+    this.pathReference = path.join(config.root, config.reference.url)
+    this.pathData = path.join(config.root, config.data.url)
     this._watchersStart()
     this.connections = [],
     this.activities = [],
@@ -78,8 +96,8 @@ class Manager {
 
     // watch template folder
     try {
-      fse.accessSync(this._pathTemplate, fse.F_OK)
-      this._watchTemplateFolder = watch.createMonitor(this._pathTemplate, (monitor) => {
+      fse.accessSync(this.pathTemplates, fse.F_OK)
+      this._watchTemplateFolder = watch.createMonitor(this.pathTemplates, (monitor) => {
         monitor.on('created', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
@@ -98,13 +116,13 @@ class Manager {
         })
       })
     } catch (e) {
-      console.log('the directory ' + this._pathTemplate + ' does not exist')
+      console.log('the directory ' + this.pathTemplates + ' does not exist')
     }
 
     // watch partial folder
     try {
-      fse.accessSync(this._pathPartials, fse.F_OK)
-      this._watchPartialsFolder = watch.createMonitor(this._pathPartials, (monitor) => {
+      fse.accessSync(this.pathPartials, fse.F_OK)
+      this._watchPartialsFolder = watch.createMonitor(this.pathPartials, (monitor) => {
         monitor.on('created', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
@@ -123,12 +141,12 @@ class Manager {
         })
       })
     } catch (e) {
-      console.log('the directory ' + this._pathPartials + ' does not exist')
+      console.log('the directory ' + this.pathPartials + ' does not exist')
     }
 
     try {
-      fse.accessSync(this._pathStructure, fse.F_OK)
-      this._watchStructure = watch.createMonitor(this._pathStructure, (monitor) => {
+      fse.accessSync(this.pathStructure, fse.F_OK)
+      this._watchStructure = watch.createMonitor(this.pathStructure, (monitor) => {
         monitor.on('created', () => {
           this.updateStructureAndTemplates()
           this.events.structure.emit('update')
@@ -143,12 +161,12 @@ class Manager {
         })
       })
     } catch (e) {
-      console.log('the directory ' + this._pathStructure + ' does not exist')
+      console.log('the directory ' + this.pathStructure + ' does not exist')
     }
     
     try {
-      fse.accessSync(this._pathReference, fse.F_OK)
-      this._watchReferenceFolder = watch.createMonitor(this._pathReference, (monitor) => {
+      fse.accessSync(this.pathReference, fse.F_OK)
+      this._watchReferenceFolder = watch.createMonitor(this.pathReference, (monitor) => {
         monitor.on('created', (f) => {
           this.updateReferences(f)
           this.events.reference.emit('update')
@@ -164,7 +182,7 @@ class Manager {
         })
       })
     } catch (e) {
-      console.log('the directory ' + this._pathReference + ' does not exist')
+      console.log('the directory ' + this.pathReference + ' does not exist')
     }
   }
 
@@ -172,7 +190,7 @@ class Manager {
     this._whereKeys = []
     var p = new Promise((resolve) => {
 
-      cmsTemplates.template.getTemplatesAndPartials(this._pathTemplate, this._pathPartials)
+      cmsTemplates.template.getTemplatesAndPartials(this.pathTemplates, this.pathPartials)
       .then((templatesList) => {
 
         return cmsTemplates.template.getTemplatesTexts(templatesList)

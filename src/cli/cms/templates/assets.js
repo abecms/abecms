@@ -8,7 +8,8 @@ import execPromise from 'child-process-promise'
 import {
   coreUtils,
   cmsTemplates,
-  config
+  config,
+  Manager
 } from '../../'
 
 export function copy() {
@@ -90,9 +91,8 @@ function modifiedTime(fileName, cb) {
 export function getFolders() {
   const templateExtension = '.' + config.files.templates.extension
   const assetsExtension = config.files.templates.assets
-  const pathAssets = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
   let assetsFolders = []
-  let files = coreUtils.file.getFilesSync(pathAssets, false, templateExtension)
+  let files = coreUtils.file.getFilesSync(Manager.instance.pathTemplates, false, templateExtension)
 
   // now check if corresponding assets folder exist
   Array.prototype.forEach.call(files, (file) => {
