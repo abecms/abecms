@@ -102,4 +102,32 @@ describe('Manager', function() {
     config.set({data: {history: 0}})
     this.sinon.restore()
   });
+
+  it('Connections', function() {
+    Manager.instance.addConnection('usertest1')
+    Manager.instance.addConnection('usertest2')
+    var res = Manager.instance.getConnections()
+    chai.assert.equal(res.length, 2, 'failed !')
+
+    Manager.instance.removeConnection('usertest1')
+    res = Manager.instance.getConnections()
+    chai.assert.equal(res.length, 1, 'failed !')
+    chai.assert.equal(res[0], 'usertest2', 'failed !')
+  });
+
+  it('Activities', function() {
+    Manager.instance.addActivity('a1')
+    Manager.instance.addActivity('a2')
+    var res = Manager.instance.getActivities()
+    chai.assert.equal(res.length, 2, 'failed !')
+
+    for(var i=3; i < 54; i++){
+      Manager.instance.addActivity('a'+i)
+    }
+
+    res = Manager.instance.getActivities()
+    chai.assert.equal(res.length, 50, 'failed !')
+    chai.assert.equal(res[49], 'a53', 'failed !')
+  });
+
 });

@@ -427,7 +427,7 @@ class Manager {
   }
 
   addActivity(activity) {
-    if (this.activities.length > 50)
+    if (this.activities.length >= 50)
       this.activities.shift()
 
     this.activities.push(activity)
