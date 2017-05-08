@@ -19,17 +19,17 @@ export function requestList(obj, tplPath, match, jsonPage) {
         if (!obj.editable) {
           if (obj['max-length']) {
             jsonPage[obj.key] = data.slice(0, obj['max-length'])
-          }else {
+          } else {
             jsonPage[obj.key] = data
           }
         } else if (jsonPage[obj.key] == null && obj.prefill) {
           if (obj['prefill-quantity'] && obj['max-length']) {
             jsonPage[obj.key] = data.slice(0, (obj['prefill-quantity'] > obj['max-length']) ? obj['max-length'] : obj['prefill-quantity'])
-          }else if (obj['prefill-quantity']) {
+          } else if (obj['prefill-quantity']) {
             jsonPage[obj.key] = data.slice(0, obj['prefill-quantity'])
-          }else if (obj['max-length']) {
+          } else if (obj['max-length']) {
             jsonPage[obj.key] = data.slice(0, obj['max-length'])
-          }else {
+          } else {
             jsonPage[obj.key] = data
           }
         }
@@ -106,12 +106,12 @@ export function urlList(obj, tplPath, match, jsonPage) {
               var parsedBody = JSON.parse(body)
               if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Array]') {
                 jsonPage['abe_source'][obj.key] = parsedBody
-              }else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
+              } else if(typeof parsedBody === 'object' && Object.prototype.toString.call(parsedBody) === '[object Object]') {
                 jsonPage['abe_source'][obj.key] = [parsedBody]
               }
-            }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
+            } else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Array]') {
               jsonPage['abe_source'][obj.key] = body
-            }else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
+            } else if(typeof body === 'object' && Object.prototype.toString.call(body) === '[object Object]') {
               jsonPage['abe_source'][obj.key] = body
             }
           } catch(e) {
@@ -129,7 +129,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
       localReq.write('')
       localReq.end()
       
-    }else {
+    } else {
       jsonPage['abe_source'][obj.key] = obj.sourceString
       resolve()
     }

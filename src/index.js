@@ -48,7 +48,7 @@ program
                 })
               }
               console.log(
-                clc.green('Yeahhh ! Your Abe site ' + answers.name + ' is ready. to launch it:'),
+                clc.green('Yeahhh ! Your Abe site ' + answers.name + ' is ready to launch!'),
                 clc.cyan('\ncd ' + answers.name + '\nabe serve -i')
               )
             })
@@ -59,8 +59,7 @@ program
   }).on('--help', function() {
     console.log('  Examples:')
     console.log()
-    console.log('    $ abe create')
-    console.log('    $ abe create [destination]')
+    console.log('    $ abe init')
     console.log()
   })
 

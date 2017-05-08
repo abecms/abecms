@@ -167,6 +167,19 @@ describe('image', function() {
     coreUtils.random.generateUniqueIdentifier.restore()
   });
 
+  it('cmsMedia.image.getMediaType()', function() {
+    var result = cmsMedia.image.getMediaType('.jpg')
+    chai.expect(result).to.equal('image')
+    result = cmsMedia.image.getMediaType('.svg')
+    chai.expect(result).to.equal('image')
+    result = cmsMedia.image.getMediaType('.mp4')
+    chai.expect(result).to.equal('video')
+    result = cmsMedia.image.getMediaType('.mp3')
+    chai.expect(result).to.equal('sound')
+    result = cmsMedia.image.getMediaType('.pdf')
+    chai.expect(result).to.equal('document')
+  });
+
   after(function(done) {
     fse.remove(path.join(config.root, config.publish.url))
     done()
