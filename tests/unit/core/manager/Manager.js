@@ -1,5 +1,8 @@
 var chai = require('chai');
 var path = require('path');
+import sinonChai from'sinon-chai'
+chai.use(sinonChai)
+import sinon from 'sinon'
 
 var Manager = require('../../../../src/cli').Manager
 var config = require('../../../../src/cli').config
@@ -70,5 +73,33 @@ describe('Manager', function() {
     const list = Manager.instance.getPage()
     chai.assert.equal(list.data[0].name, 'article-1.json', 'failed !')
     chai.assert.equal(list.recordsTotal, 3, 'failed !')
+  });
+
+  it('updatePostInList() ', function() {
+    let list = Manager.instance.getList()
+    chai.assert.equal(list[0].revisions.length, 2, 'failed !')
+    Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
+    list = Manager.instance.getList()
+    chai.assert.equal(list[0].revisions.length, 3, 'failed !')
+  });
+
+  it('historize() ', function() {
+    this.sinon = sinon.sandbox.create();
+    this.sinon.stub(cmsOperations.remove, 'removeFile', function(param){
+      return true;
+    })
+    let list = Manager.instance.getList()
+    //chai.assert.equal(list[0].revisions.length, 2, 'failed !')
+    
+    config.set({data: {history: 1}})
+    Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
+    Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
+
+    Manager.instance.historize(0)
+    list = Manager.instance.getList()
+    chai.assert.equal(list[0].revisions.length, 1, 'failed !')
+    
+    config.set({data: {history: 0}})
+    this.sinon.restore()
   });
 });

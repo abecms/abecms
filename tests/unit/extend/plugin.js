@@ -11,7 +11,7 @@ import which from 'which'
 const npm = which.sync('npm')
 
 var config = require('../../../src/cli').config
-config.set({root: path.join(__dirname,'fixtures')})
+config.set({root: path.join(__dirname,'../fixtures')})
 
 var abeExtend = require('../../../src/cli').abeExtend;
 var Plugins = require('../../../src/cli').Plugins;

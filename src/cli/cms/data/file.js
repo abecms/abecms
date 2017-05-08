@@ -11,18 +11,19 @@ import {
 } from '../../'
 
 export function getAbeMeta(fileObject, json) {
-  if(json.abe_meta.updatedDate != null) {
-    fileObject.date = json.abe_meta.updatedDate
-  } else if(json.abe_meta.latest.date != null) {
-    fileObject.date = json.abe_meta.latest.date
-  }
-
   if(json.name != null) {
     fileObject.name = json.name
   }
 
   if(json.abe_meta != null) {
     var date = null
+
+    if(json.abe_meta.updatedDate != null) {
+      fileObject.date = json.abe_meta.updatedDate
+    } else if(json.abe_meta.latest.date != null) {
+      fileObject.date = json.abe_meta.latest.date
+    }
+    
     if(json.abe_meta.updatedDate != null) {
       date = json.abe_meta.updatedDate
     } else if (json.abe_meta.latest.date !== null) {
