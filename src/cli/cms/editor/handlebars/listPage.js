@@ -27,7 +27,7 @@ export default function listPage(file, index, text) {
   }
   
   if(file.date){
-    var dateSearch = moment(file.date).format('YYYY-MM-DD')
+    var dateSearch = moment(file.date).utcOffset(0).format('YYYY-MM-DD')
     var dateOrder = new Date(file.date).getTime()
     res += `<td align="center" data-search="${dateSearch}" data-order="${dateOrder}">
               ${dateSearch}
@@ -48,7 +48,7 @@ export default function listPage(file, index, text) {
 
     workflow += `<td align="center" class="${flow}">`
     if(file[flow]) {
-      var fDate = moment(file[flow].date).format('YYYY-MM-DD HH:mm:ss')
+      var fDate = moment(file[flow].date).utcOffset(0).format('YYYY-MM-DD HH:mm:ss')
       if (flow === 'publish') {
         workflow += `<a href="/abe/editor${file[flow].link}" class="checkmark label-published" title="${fDate}">&#10004;</a>`
       }else {
