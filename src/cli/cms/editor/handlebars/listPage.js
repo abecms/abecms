@@ -32,7 +32,7 @@ export default function listPage(file, index, text) {
     res += `<td align="center" data-search="${dateSearch}" data-order="${dateOrder}">
               ${dateSearch}
             </td>`
-  }else {
+  } else {
     res += '<td align="center" data-search="0000-00-00" data-order="0"></td>'
   }
 
