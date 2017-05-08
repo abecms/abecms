@@ -49,8 +49,6 @@ class Manager {
       }
     }
 
-console.log(this.pathTemplates)
-console.log(this.pathPartials)
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathData = path.join(config.root, config.data.url)
