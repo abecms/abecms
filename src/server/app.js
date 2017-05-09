@@ -151,8 +151,6 @@ app.use(function(req, res, next) {
   next()
 })
 
-cmsTemplates.assets.copy()
-
 let publish = path.join(config.root, config.publish.url)
 app.use(express.static(publish))
 

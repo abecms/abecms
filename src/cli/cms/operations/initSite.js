@@ -91,9 +91,13 @@ export default class initSite {
             'name':'Admin'
           }
         }
+        console.log('1')
         User.manager.instance.update([])
+        console.log('2')
         var admin = User.operations.add(u)
+        console.log('3')
         User.operations.activate(admin.user.id)
+        console.log('4')
       }
       
       resolve()

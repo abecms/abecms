@@ -135,10 +135,14 @@ program
   .description('create http server for abe')
   .option('-p, --port [number]', 'change port of the web server')
   .option('-i, --interactive', 'open browser on web server startup')
+  .option('-d, --dev', 'Abe is launched in developer mode (you may also use a global env variable')
   .action(function(options){
     var dir = process.cwd()
     if(process.env.ROOT) {
       dir = process.env.ROOT
+    }
+    if(options.dev != null) {
+      process.env.NODE_ENV = 'development'
     }
     var environment = process.env
     environment.ROOT = dir

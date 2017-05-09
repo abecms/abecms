@@ -52,11 +52,16 @@ class Manager {
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathData = path.join(config.root, config.data.url)
+    this.assetsFolders = cmsTemplates.assets.getFolders()
     this._watchersStart()
-    this.connections = [],
-    this.activities = [],
+    this.connections = []
+    this.activities = []
 
     this.updateStructureAndTemplates()
+
+    // sync assets from templates to /site
+    cmsTemplates.assets.copy()
+
     var p = new Promise((resolve) => {
       this.getKeysFromSelect()
         .then(() => {
@@ -92,25 +97,46 @@ class Manager {
       this.events.activity.emit('activity-stream', data)
     }.bind(this))
 
+    // watch assets folder
+    console.log('You are in ' + process.env.NODE_ENV + ' mode')
+    if(process.env.NODE_ENV == 'development') {
+      console.log('which means every change in your themes (templates, partials and assets), reference and structure folders will dynamically update your site')
+      console.log('In production, this mode shouldn\'t be used.')
+    }
+
     // watch template folder
     try {
       fse.accessSync(this.pathTemplates, fse.F_OK)
       this._watchTemplateFolder = watch.createMonitor(this.pathTemplates, (monitor) => {
-        monitor.on('created', () => {
-          this.getKeysFromSelect()
-          this.updateStructureAndTemplates()
-          this.events.template.emit('update')
+        monitor.on('created', (f, stat) => {
+          if(f.indexOf(config.files.templates.assets+'/') >= 0){
+            cmsTemplates.assets.copy()
+            console.log('Assets have been synchronized after this creation: ' + f)
+          } else {
+            this.getKeysFromSelect()
+            this.updateStructureAndTemplates()
+            this.events.template.emit('update')
+          }
         })
-        monitor.on('changed', () => {
-          this.getKeysFromSelect()
-          this.updateStructureAndTemplates()
-          this.events.template.emit('update')
-          
+        monitor.on('changed', (f, curr, prev) => {
+          if(f.indexOf(config.files.templates.assets+'/') >= 0){
+            cmsTemplates.assets.copy()
+            console.log('Assets have been synchronized after this modification: ' + f)
+          } else {
+            this.getKeysFromSelect()
+            this.updateStructureAndTemplates()
+            this.events.template.emit('update')
+          }
         })
-        monitor.on('removed', () => {
-          this.getKeysFromSelect()
-          this.updateStructureAndTemplates()
-          this.events.template.emit('update')
+        monitor.on('removed', (f, stat) => {
+          if(f.indexOf(config.files.templates.assets+'/') >= 0){
+            cmsTemplates.assets.copy()
+            console.log('Assets have been synchronized after this deletion: ' + f)
+          } else {
+            this.getKeysFromSelect()
+            this.updateStructureAndTemplates()
+            this.events.template.emit('update')
+          }
         })
       })
     } catch (e) {
