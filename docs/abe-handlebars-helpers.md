@@ -2,6 +2,12 @@
 
 > Abe handlebars helpers will make your template designer life easy !
 
+Abe by defualt contains more than 150 provided by this project: https://github.com/helpers/handlebars-helpers
+
+So you can use each one of these helpers. Refer to their documentation for their usage.
+
+Additionally, the following Abe helpers have been developped for you:
+
 ## attrAbe
 
 ## className
