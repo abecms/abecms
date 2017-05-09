@@ -2,12 +2,32 @@
 
 > Abe handlebars helpers will make your template designer life easy !
 
+Abe by defualt contains more than 150 provided by this project: https://github.com/helpers/handlebars-helpers
+
+So you can use each one of these helpers. Refer to their documentation for their usage.
+
+Additionally, the following Abe helpers have been developped for you:
+
 ## attrAbe
+
 ## className
+### Description
+This helper replaces unwanted characters from a string to make it ressemble a className.
+
+e.g. My string ! => my_string
+
 ## cleanTab
+
 ## slugify
+
 ## ifCond
+### Description
+This helper checks if a condition is true and return the block if it's the case.
+
 ## ifIn
+### Description
+This helper checks if a string is contained inside an array and returns the bloc, if it's  the case.
+
 ## raw
 
 ### usage (in template) :
