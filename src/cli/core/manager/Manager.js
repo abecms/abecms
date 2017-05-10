@@ -97,9 +97,8 @@ class Manager {
       this.events.activity.emit('activity-stream', data)
     }.bind(this))
 
-    // watch assets folder
-    console.log('You are in ' + process.env.NODE_ENV + ' mode')
     if(process.env.NODE_ENV == 'development') {
+      console.log('You are in ' + process.env.NODE_ENV + ' mode')
       console.log('which means every change in your themes (templates, partials and assets), reference and structure folders will dynamically update your site')
       console.log('In production, this mode shouldn\'t be used.')
     }
