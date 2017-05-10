@@ -103,8 +103,8 @@ export function saveFile(req) {
         folderWebPath = '/' + config.upload[mediaType]  
       }
       
-      filePath = path.join(folderFilePath, slug)
-      resp['filePath'] = path.join('/' + folderWebPath, slug)
+      filePath = path.posix.join(folderFilePath, slug)
+      resp['filePath'] = path.posix.join('/' + folderWebPath, slug)
 
       file.on('limit', function() {
         hasSentHeader = true
