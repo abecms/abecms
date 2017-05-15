@@ -71,6 +71,9 @@ If you want us to add your sites, submit a PR of this README.
 - Askja: http://www.askja-audio.com/
 - eNewsletters Novotel (become a member to see the newsletters ;)
 - eNewsletters Accor Club (become a member to see the newsletters ;)
+- http://www.mariderm.com/
+- http://www.peauologie.com/
+- http://paysagementbelisle.com/
 - ...
 
 # Recipes, plugins, blogs
