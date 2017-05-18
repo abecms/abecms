@@ -7,12 +7,10 @@ export default class EditorReferences {
   constructor() {
     this._ajax = Nanoajax.ajax
     this.referenceLinks = document.querySelectorAll('[data-ref-json]')
-    if(!this.referenceLinks || this.referenceLinks.length < 1) return
     this.textArea = document.querySelector('.display-json')
     this.jsonError = document.querySelector('.json-error')
     this.addReference = document.querySelector('.btn-add-reference')
     this.addReferenceInput = document.querySelector('.btn-add-reference input')
-    if(!this.referenceLinks || this.referenceLinks.length < 1) return
     this.nameError = this.addReference.querySelector('.error-display')
     this.rebind()
   }
