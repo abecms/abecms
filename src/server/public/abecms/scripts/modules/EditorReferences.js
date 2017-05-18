@@ -6,6 +6,8 @@ import qs from 'qs'
 export default class EditorReferences {
   constructor() {
     this._ajax = Nanoajax.ajax
+    this.filenameInput = document.querySelector('.filename-input')
+    if(typeof this.filenameInput === 'undefined' || this.filenameInput === null) return
     this.referenceLinks = document.querySelectorAll('[data-ref-json]')
     this.textArea = document.querySelector('.display-json')
     this.jsonError = document.querySelector('.json-error')
