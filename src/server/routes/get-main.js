@@ -160,7 +160,7 @@ var route = function(req, res, next) {
         }).catch(function(e) {
           console.error(e)
         })
-    }else {
+    } else {
       resolve({
         json: {},
         manager: {}

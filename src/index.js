@@ -132,34 +132,49 @@ program
 program
   .command('serve')
   .alias('s')
-  .description('create http server for abe')
+  .description('create a http server for abe in development mode (debugger + livereload). If you want to deactivate development mode, use -e option')
   .option('-p, --port [number]', 'change port of the web server')
   .option('-i, --interactive', 'open browser on web server startup')
-  .option('-d, --dev', 'Abe is launched in developer mode (you may also use a global env variable')
+  .option('-e, --env [development|production|...]', 'Abe is launched in development mode by default. Use another value to deactivate development mode. You may also use a global env variable NODE_ENV.')
   .action(function(options){
-    var dir = process.cwd()
-    if(process.env.ROOT) {
-      dir = process.env.ROOT
-    }
-    if(options.dev != null) {
-      process.env.NODE_ENV = 'development'
-    }
     var environment = process.env
+    var dir = process.cwd()
+    var command
+
+    if(environment.ROOT) {
+      dir = environment.ROOT
+    }
     environment.ROOT = dir
+
+    if(typeof environment.NODE_ENV == 'undefined'){
+      if( options.env != null &&
+          options.env !== 'development' &&
+          options.env !== 'dev'
+        ) {
+        environment.NODE_ENV = options.env
+      } else {
+        environment.NODE_ENV = 'development'
+      }
+    }
+    
     if(options.port != null) {
       environment.PORT = options.port
     }
-    var command
+    
     if (__dirname.indexOf('dist') > -1) {
       command = 'node --harmony ./dist/server/index.js'
-    }else {
+    } else {
       command = path.join(__dirname, '..', 'node_modules', '.bin', 'babel-node') + ' --harmony ./src/server/index.js'
     }
+
     if(options.interactive != null) {
       command = 'OPENURL=1 ' + command
     }
+
     process.chdir(__dirname + '/../')
+
     console.log('website started : ' + dir)
+
     var cp = exec(command,{env: environment, maxBuffer: 1024 * 500}, function (err, out, code) {
       if (err instanceof Error) throw err
       process.stderr.write(err)

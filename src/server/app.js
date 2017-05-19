@@ -44,8 +44,11 @@ import {
   middleWebsite,
   middleLogin,
   middleCheckCsrf,
-  middleIsAuthorized
+  middleIsAuthorized,
+  middleLiveReload
 } from './middlewares'
+
+require('events').EventEmitter.defaultMaxListeners = 100
 
 var abePort = null
 
@@ -86,7 +89,7 @@ if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
 
 var app = express(opts)
   
-  // Instantiate Singleton Manager (which lists all blog files)
+// Instantiate Singleton Manager (which lists all blog files)
 Manager.instance.init()
 app.set('config', config.getConfigByWebsite())
 
@@ -143,6 +146,15 @@ app.use(middleCheckCsrf)
 app.use(middleIsAuthorized)
 app.use(middleLogin)
 app.use(middleWebsite)
+if (process.env.NODE_ENV === 'development') {
+  process.on('uncaughtException', function (err) {
+    // We need to trap this error which is sent on websocket client connection
+    if(err.code !== 'ECONNRESET'){
+      throw err
+    }
+  });
+  app.use(middleLiveReload)
+}
 app.use(express.static(__dirname + '/public'))
 
 app.use(function(req, res, next) {
@@ -197,7 +209,7 @@ if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
     console.log(clc.green(`\nserver running at https://localhost:${port}/`))
     if(process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
   })
-}else {
+} else {
   app.listen(port, function() {
     console.log(clc.green(`\nserver running at http://localhost:${port}/`))
     if(process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)

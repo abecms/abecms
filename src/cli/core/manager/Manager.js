@@ -3,6 +3,7 @@ import fse from 'fs-extra'
 import events from 'events'
 import path from 'path'
 import watch from 'watch'
+import livereload from 'easy-livereload'
 import {
   coreUtils,
   cmsData,
@@ -31,6 +32,8 @@ class Manager {
 
   init() {
     this._processesRunning = {}
+    this.events = {}
+
     // Compatibility for abe version < 3.2.
     if(config.themes != null && coreUtils.file.exist(path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path))){
       this.pathTemplates = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
@@ -53,14 +56,16 @@ class Manager {
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathData = path.join(config.root, config.data.url)
     this.assetsFolders = cmsTemplates.assets.getFolders()
-    this._watchersStart()
+    
     this.connections = []
     this.activities = []
+    this._watcherActivity()
 
     this.updateStructureAndTemplates()
 
-    // sync assets from templates to /site
-    cmsTemplates.assets.copy()
+    if (process.env.NODE_ENV === 'development') {
+      this.initDev()
+    }
 
     var p = new Promise((resolve) => {
       this.getKeysFromSelect()
@@ -79,13 +84,50 @@ class Manager {
     return p
   }
 
-  _watchersStart() {
-    this.events = {
-      template: new events.EventEmitter(0),
-      structure: new events.EventEmitter(0),
-      reference: new events.EventEmitter(0),
-      activity: new events.EventEmitter(0),
-    }
+  initDev() {
+    console.log('You are in ' + process.env.NODE_ENV + ' mode')
+    console.log('which means every change in your themes (templates, partials and assets), reference and structure folders will dynamically update your site')
+    console.log('In production, this mode shouldn\'t be used.')
+
+    this._watchersStart()
+
+    var port = process.env.LIVERELOAD_PORT || 35729
+
+    var file_type_map = {
+      html: 'html',
+      css: 'css',
+      js: 'js'
+    };
+
+    // store the generated regex of the object keys
+    var file_type_regex = new RegExp('\\.(' + Object.keys(file_type_map).join('|') + ')$');
+    
+    livereload({
+      watchDirs: [
+        path.join(this.pathTemplates),
+        path.join(this.pathPartials),
+        path.join(config.root, config.publish.url)
+      ],
+      checkFunc: function(file) {
+        //console.log(file)
+        return file_type_regex.test(file);
+      },
+      renameFunc: function(file) {
+        // remap extension of the file path to one of the extentions in `file_type_map`
+        return file.replace(file_type_regex, function(extension) {
+          return '.' + file_type_map[extension.slice(1)];
+        });
+      },
+      port: port
+    })
+
+    // sync assets from templates to /site
+    cmsTemplates.assets.copy()
+
+  }
+
+  _watcherActivity() {
+    this.events.activity = new events.EventEmitter(0)
 
     this.events.activity.on('activity', function(data) {
       if(data.user && data.user.username){
@@ -96,12 +138,12 @@ class Manager {
       this.addActivity(data)
       this.events.activity.emit('activity-stream', data)
     }.bind(this))
+  }
 
-    if(process.env.NODE_ENV == 'development') {
-      console.log('You are in ' + process.env.NODE_ENV + ' mode')
-      console.log('which means every change in your themes (templates, partials and assets), reference and structure folders will dynamically update your site')
-      console.log('In production, this mode shouldn\'t be used.')
-    }
+  _watchersStart() {
+    this.events.template = new events.EventEmitter(0)
+    this.events.structure = new events.EventEmitter(0)
+    this.events.template = new events.EventEmitter(0)
 
     // watch template folder
     try {
