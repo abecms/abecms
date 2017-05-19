@@ -24,7 +24,16 @@ export function getFiles(name = '') {
 }
 
 export function saveFile(url, json) {
-  fse.writeJson(path.join(config.root, config.reference.url, url), JSON.parse(json), function (err) {
-    if(err) console.log('saveFile reference error: ', err)
+  fse.exists(path.join(config.root, config.reference.url), function (exists) {
+    if(!exists){
+      fse.mkdir(path.join(config.root, config.reference.url), function () {
+        fse.writeJson(path.join(config.root, config.reference.url, url), JSON.parse(json))
+      })
+    }
+    else{
+      fse.writeJson(path.join(config.root, config.reference.url, url), JSON.parse(json), function (err) {
+        if(err) console.log('saveFile reference error: ', err)
+      })
+    }
   })
 }
