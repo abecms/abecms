@@ -10,12 +10,6 @@ import {
   coreUtils
 } from '../../'
 
-export function getThemeName(url) {
-  var name = url.split('/')
-
-  return name[name.length - 1].replace('.zip')
-}
-
 export function getThemeInfos() {
   var pathToTheme = path.join(config.root, config.themes.path, config.themes.name)
 
@@ -67,6 +61,9 @@ export function downloadTheme(url, name) {
 
         const dirs = coreUtils.file.getFoldersSync(PathToTmpTheme, false)
         const currentPathToTheme = dirs[0].path
+        fse.removeSync(path.join(pathToThemes, name), err => {
+          if (err) return console.error(err)
+        })
         fse.renameSync(currentPathToTheme, path.join(pathToThemes, name))
 
         fse.remove(PathToTmpTheme, err => {

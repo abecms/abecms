@@ -36,7 +36,7 @@ program
           .then(function(){
             create.updateTheme(answers)
             .then(function(){
-              if(answers.plugins.length > 0){
+              if(answers.plugins && answers.plugins.length > 0){
                 Array.prototype.forEach.call(answers.plugins, (plugin) => {
                   console.log('installing the plugin: ' + plugin)
 
@@ -48,7 +48,7 @@ program
                 })
               }
               console.log(
-                clc.green('Yeahhh ! Your Abe site ' + answers.name + ' is ready to launch!'),
+                clc.green('Yeahhh! Your Abe site ' + answers.name + ' is ready to launch!  🚀  '),
                 clc.cyan('\ncd ' + answers.name + '\nabe serve -i')
               )
             })

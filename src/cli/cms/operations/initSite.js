@@ -19,22 +19,31 @@ export default class initSite {
 
   init(pathSite) {
     var p = new Promise((resolve) => {
-      pathSite = pathSite.split('/')
-      pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1]) 
-      pathSite = pathSite.join('/')
-      this.addFolder(pathSite)
-      .then(() => {
-        process.chdir(pathSite)
-        this.addFolder(config.publish.url)
-        this.addFolder(config.structure.url)
-        this.addFolder(config.reference.url)
-        this.addFolder(config.data.url)
-        this.addFolder(Manager.instance.pathTemplates.replace(config.root, ''))
-        this.addFolder(Manager.instance.pathPartials.replace(config.root, ''))
+      Manager.instance.init()
+      .then(()=> {
+        Manager.instance.pathTemplates = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
+        Manager.instance.pathPartials = path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path)
+        pathSite = pathSite.split('/')
+        pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1]) 
+        pathSite = pathSite.join('/')
+        this.addFolder(pathSite)
+        .then(() => {
+          process.chdir(pathSite)
+          this.addFolder(config.publish.url)
+          this.addFolder(config.structure.url)
+          this.addFolder(config.reference.url)
+          this.addFolder(config.data.url)
+          this.addFolder(Manager.instance.pathTemplates.replace(config.root + '/', ''))
+          this.addFolder(Manager.instance.pathPartials.replace(config.root + '/', ''))
+          resolve()
+        }).catch(function(e) {
+          console.error(e.stack)
+          resolve()
+        })
       }).catch(function(e) {
-        console.error(e)
+        console.error(e.stack)
+        resolve()
       })
-      resolve()
     })
 
     return p
@@ -74,8 +83,7 @@ export default class initSite {
         } else {
           json.users = confUsers
           console.log(
-            clc.green('[ Hint ]'),
-            'creating a local config abe.json',
+            'Creating a local config file abe.json',
             clc.cyan.underline('https://github.com/abecms/abecms/blob/master/docs/abe-config.md')
           )
         }
@@ -91,13 +99,9 @@ export default class initSite {
             'name':'Admin'
           }
         }
-        console.log('1')
         User.manager.instance.update([])
-        console.log('2')
         var admin = User.operations.add(u)
-        console.log('3')
         User.operations.activate(admin.user.id)
-        console.log('4')
       }
       
       resolve()
@@ -112,30 +116,45 @@ export default class initSite {
         if(answers.which !== 'Your own template'){
           console.log('installing the theme ' + answers.which)
           cmsThemes.themes.downloadTheme('https://github.com/abecms/theme-'+answers.which+'/archive/master.zip', answers.which).then(function (resp) {
-            
+            resolve()
           }).catch(function(e) {
-            
+            resolve()
           })
         } else {
           if(answers.url.indexOf('//') > -1){
             console.log('installing theme from url:' + answers.url)
+            resolve()
           } else {
             console.log('installing the theme ' + answers.url + ' from themes.abecms.io')
             cmsThemes.themes.downloadTheme('https://github.com/abecms/theme-'+answers.which+'/archive/master.zip', answers.which).then(function (resp) {
-            
+              resolve()
             }).catch(function(e) {
-            
+              resolve()
             })
           }
         }
       }
-
-      resolve()
     })
 
     return p
   }
 
+/*
+  {
+    type : 'checkbox',
+    name : 'plugins',
+    choices: [
+      'abecms/abe-deployer-git', 
+      'abecms/abe-deployer-sftp', 
+      'abecms/abe-deployer-s3', 
+      'abecms/abe-packagz', 
+      'abecms/abe-sitemap', 
+      'abecms/abe-elasticsearch', 
+      'abecms/abe-algolia'
+    ],
+    message : 'Select the plugins you want to install'
+  }
+*/
   askQuestions(){
     var p = new Promise((resolve) => {
       inquirer.prompt([
@@ -216,20 +235,6 @@ export default class initSite {
 
             return true
           }
-        },
-        {
-          type : 'checkbox',
-          name : 'plugins',
-          choices: [
-            'abecms/abe-deployer-git', 
-            'abecms/abe-deployer-sftp', 
-            'abecms/abe-deployer-s3', 
-            'abecms/abe-packagz', 
-            'abecms/abe-sitemap', 
-            'abecms/abe-elasticsearch', 
-            'abecms/abe-algolia'
-          ],
-          message : 'Select the plugins you want to install'
         }
       ]).then(function (answers) {
         resolve(answers)
