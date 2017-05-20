@@ -155,6 +155,7 @@ if (process.env.NODE_ENV === 'development') {
   });
   app.use(middleLiveReload)
 }
+
 app.use(express.static(__dirname + '/public'))
 
 app.use(function(req, res, next) {

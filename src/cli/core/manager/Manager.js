@@ -3,7 +3,9 @@ import fse from 'fs-extra'
 import events from 'events'
 import path from 'path'
 import watch from 'watch'
-import livereload from 'easy-livereload'
+import express from 'express'
+import bodyParser from 'body-parser'
+import tinylr from 'tiny-lr'
 import {
   coreUtils,
   cmsData,
@@ -55,6 +57,7 @@ class Manager {
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathData = path.join(config.root, config.data.url)
+    this.pathAssets = path.join(config.root, config.publish.url)
     this.assetsFolders = cmsTemplates.assets.getFolders()
     
     this.connections = []
@@ -91,35 +94,16 @@ class Manager {
 
     this._watchersStart()
 
-    var port = process.env.LIVERELOAD_PORT || 35729
+    var lport = process.env.LIVERELOAD_PORT || 35729
+    this.lserver = express();
 
-    var file_type_map = {
-      html: 'html',
-      css: 'css',
-      js: 'js'
-    };
-
-    // store the generated regex of the object keys
-    var file_type_regex = new RegExp('\\.(' + Object.keys(file_type_map).join('|') + ')$');
-    
-    livereload({
-      watchDirs: [
-        path.join(this.pathTemplates),
-        path.join(this.pathPartials),
-        path.join(config.root, config.publish.url)
-      ],
-      checkFunc: function(file) {
-        //console.log(file)
-        return file_type_regex.test(file);
-      },
-      renameFunc: function(file) {
-        // remap extension of the file path to one of the extentions in `file_type_map`
-        return file.replace(file_type_regex, function(extension) {
-          return '.' + file_type_map[extension.slice(1)];
-        });
-      },
-      port: port
-    })
+    // Launching a Livereload server
+    this.lserver
+    .use(bodyParser())
+    .use(tinylr.middleware({ app: this.lserver }))
+    .listen(lport, function() {
+      console.log('Livereload listening on %d', lport);
+    });
 
     // sync assets from templates to /site
     cmsTemplates.assets.copy()
@@ -152,30 +136,42 @@ class Manager {
         monitor.on('created', (f, stat) => {
           if(f.indexOf(config.files.templates.assets+'/') >= 0){
             cmsTemplates.assets.copy()
+            tinylr.changed(f)
             console.log('Assets have been synchronized after this creation: ' + f)
           } else {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
+            if(typeof this.lserver != 'undefined'){
+              tinylr.changed(f)
+            }
             this.events.template.emit('update')
           }
         })
         monitor.on('changed', (f, curr, prev) => {
           if(f.indexOf(config.files.templates.assets+'/') >= 0){
             cmsTemplates.assets.copy()
+            tinylr.changed(f)
             console.log('Assets have been synchronized after this modification: ' + f)
           } else {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
+            if(typeof this.lserver != 'undefined'){
+              tinylr.changed(f)
+            }
             this.events.template.emit('update')
           }
         })
         monitor.on('removed', (f, stat) => {
           if(f.indexOf(config.files.templates.assets+'/') >= 0){
             cmsTemplates.assets.copy()
+            tinylr.changed(f)
             console.log('Assets have been synchronized after this deletion: ' + f)
           } else {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
+            if(typeof this.lserver != 'undefined'){
+              tinylr.changed(f)
+            }
             this.events.template.emit('update')
           }
         })
@@ -191,17 +187,26 @@ class Manager {
         monitor.on('created', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
+          if(typeof this.lserver != 'undefined'){
+            tinylr.changed(f)
+          }
           this.events.template.emit('update')
         })
         monitor.on('changed', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
+          if(typeof this.lserver != 'undefined'){
+            tinylr.changed(f)
+          }
           this.events.template.emit('update')
           
         })
         monitor.on('removed', () => {
           this.getKeysFromSelect()
           this.updateStructureAndTemplates()
+          if(typeof this.lserver != 'undefined'){
+            tinylr.changed(f)
+          }
           this.events.template.emit('update')
         })
       })

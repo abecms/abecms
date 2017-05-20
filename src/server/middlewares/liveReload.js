@@ -1,5 +1,4 @@
 import path from 'path'
-import livereload from 'easy-livereload'
 import {
   config,
   Manager

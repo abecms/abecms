@@ -3,6 +3,7 @@
   "version": "3.2.3",
   "description": "Abe: The lightning fast CMS",
   "main": "src/server/app.js",
+  "bugs": "https://github.com/abecms/abecms/issues",
   "repository": {
     "type": "git",
     "url": "git://github.com/abecms/abecms.git"
@@ -16,6 +17,8 @@
     "pretest-e2e": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
     "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "posttest-e2e": "kill -9 $(lsof -ti tcp:3003)",
+    "preversion": "npm test",
+    "postversion": "git push origin master --follow-tags && npm publish",
     "start": "node --debug --harmony ./dist/server/index.js",
     "babel": "babelify --presets [ es2015 ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js",
     "watch": "./node_modules/.bin/parallelshell './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/admin.js -o src/server/public/abecms/scripts/admin-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/user-login.js -o src/server/public/abecms/scripts/user-login-compiled.js' 'npm run watch:sass'",
@@ -37,6 +40,24 @@
   },
   "author": "Gregory Besson",
   "license": "MIT",
+  "contributors": [
+    {
+      "name": "Gregory Besson",
+      "url": "https://github.com/gregorybesson"
+    },
+    {
+      "name": "Fabrice Labbe",
+      "url": "https://github.com/wonknu"
+    },
+    {
+      "name": "Nicolas Labbe",
+      "url": "https://github.com/nicolaslabbe"
+    },
+    {
+      "name": "Olivier Pompilius",
+      "url": "https://github.com/opompilius"
+    }
+  ],
   "preferGlobal": true,
   "bin": {
     "abe": "dist/index.js"
@@ -60,7 +81,6 @@
     "deepmerge": "^1.3.2",
     "dir-compare": "^1.2.0",
     "dragula": "^3.7.2",
-    "easy-livereload": "^1.2.0",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
     "express-secure-handlebars": "^2.1.0",
@@ -108,6 +128,7 @@
     "smartcrop-cli": "^1.0.2",
     "smtp-server": "^1.17.0",
     "striptags": "^2.2.1",
+    "tiny-lr": "^1.0.4",
     "uuid": "^3.0.0",
     "watch": "^1.0.1",
     "which": "^1.2.11",
