@@ -179,6 +179,8 @@ if(config.custom !== '') {
 
 var pluginsPartials = abeExtend.plugins.instance.getPartials()
 Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
+  var pluginPath = pluginPartials.split('/')
+  app.use('/abe/plugins/' + pluginPath[pluginPath.length - 1], express.static(pluginPartials))
   app.use(express.static(pluginPartials))
 })
 

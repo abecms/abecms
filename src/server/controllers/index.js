@@ -28,7 +28,8 @@ import {
   users,
   getHome,
   postProfile,
-  rest
+  rest,
+  plugins
 } from '../routes'
 
 import {
@@ -155,6 +156,8 @@ Array.prototype.forEach.call(routes, (route) => {
     })
   }
 })
+
+router.get('/abe/plugins/*', plugins.getPluginsAssets)
 
 router.get('/abe*', getHome)
 
