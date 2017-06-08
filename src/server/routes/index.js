@@ -22,7 +22,7 @@ import postThemes from './post-themes'
 import * as users from './users'
 import * as operations from './operations'
 import * as rest from './rest'
-import * as plugins from './plugins'
+import * as plugins from './plugin'
 
 export {
 	getHome,
