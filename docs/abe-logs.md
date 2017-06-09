@@ -1,14 +1,14 @@
 # Abe logs
 
-> append logs to file (and can be visible on the browser)
+> Append logs to file (and can be visible on the browser).
 
-###Create
+## Create
 
-use ```log.write(filename, 'some', 'log', 'to', 'append')```
+Use `log.write(filename, 'some', 'log', 'to', 'append')`:
 
 ```javascript
 import {
-  log
+    log
 } from '../../cli'
 log.write('test', 'my test')
 
@@ -17,22 +17,22 @@ log.write('test', 'my test')
 abe.log.write('test', 'my test')
 ```
 
-###Run
+## Run
 
-Navigate into logs
+Navigate into logs.
 
 > Go to http://localhost:8000/abe/logs
 
-###Enable/Disable logs
+## Enable/Disable logs
 
-to enable logs add ```?logs=true``` to any url
+To enable logs add `?logs=true` to any URL.
 
-Exemple
+Exemple:
 
 > Go to http://localhost:8000/abe/?logs=true
 
-to disable logs add ```?logs=false``` to any url
+To disable logs add `?logs=false` to any URL.
 
-Exemple
+Exemple:
 
 > Go to http://localhost:8000/abe/?logs=false

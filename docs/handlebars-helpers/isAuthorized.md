@@ -1,18 +1,20 @@
 # Abe handlebars helpers
 
-> Is user authorized for an action
+> Is user authorized for an action.
 
-### Example
+## Example
 
-if user authorized to call url `/abe/deleteAll` show button delete
+If user authorized to call url `/abe/deleteAll` show button delete.
 
+```html
 {{#isAuthorized '/abe/deleteAll' @root.user.role.workflow}}
 <div>
-  I can delete everything !
+    I can delete everything!
 </div>
 {{/isAuthorized}}
+```
 
-### Example of config into abe.json
+## Example of config into `abe.json`
 
 ```json
 {
@@ -34,4 +36,4 @@ if user authorized to call url `/abe/deleteAll` show button delete
       ],
 ```
 
-Because **CustomUser** has an entry with `\/abe\/deleteAll.*` he would not be allowed to call
+Because **CustomUser** has an entry with `\/abe\/deleteAll.*` he would not be allowed to call.
