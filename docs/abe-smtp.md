@@ -12,7 +12,7 @@ Abe includes configuration to send emails. You can use:
 
 ## How to
 
-In the ```abe.json`` "smtp" entry, update the configuration with the infos of your mail provider:
+In the `abe.json` "smtp" entry, update the configuration with the infos of your mail provider:
 
 ### Direct SMTP
 
@@ -20,61 +20,71 @@ In the ```abe.json`` "smtp" entry, update the configuration with the infos of yo
 "smtp": null
 ```
 
-It will send direct mails. This configuration is perfect for development
+It will send direct mails. This configuration is perfect for development.
 
 ### SMTP
 
+```json
 "smtp": {
-  "service": "smtp",
-  "options": {
-  }
+    "service": "smtp",
+    "options": {
+    }
 }
+```
 
 ### Amazon SES
 
+```json
 "smtp": {
-  "service": "ses",
-  "options": {
-    "host": "your host (ie. email-smtp.eu-west-1.amazonaws.com)",
-    "secureConnection": true,
-    "port": 465,
-    "auth": {
-      "user": "your_user",
-      "pass": "your_password"
+    "service": "ses",
+    "options": {
+        "host": "your host (ie. email-smtp.eu-west-1.amazonaws.com)",
+        "secureConnection": true,
+        "port": 465,
+        "auth": {
+            "user": "your_user",
+            "pass": "your_password"
+        }
     }
-  }
 }
+```
 
 ### Mailchimp (Mandrill)
 
+```json
 "smtp": {
     "service": "mandrill",
     "options": {
-      "auth": {
-        "apiKey": "your_mandrill_api_key"
-      }
+        "auth": {
+            "apiKey": "your_mandrill_api_key"
+        }
     }
-  }
+}
+```
 
 ### Sendgrid
 
+```json
 "smtp": {
     "service": "sendgrid",
     "options": {
-      "auth": {
-        "api_key": "SENDGRID_APIKEY"
-      }
+        "auth": {
+            "api_key": "SENDGRID_APIKEY"
+        }
     }
-  }
+}
+```
 
 ### Mailgun
 
+```json
 "smtp": {
-  "service": "mailgun",
-  "options": {
-    "auth": {
-      "api_key" : "your_API_key",
-      "domain": "your_domain"
+    "service": "mailgun",
+    "options": {
+        "auth": {
+            "api_key" : "your_API_key",
+            "domain": "your_domain"
+        }
     }
-  }
 }
+```

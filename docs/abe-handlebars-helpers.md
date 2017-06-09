@@ -1,8 +1,8 @@
 # Abe handlebars helpers
 
-> Abe handlebars helpers will make your template designer life easy !
+> Abe handlebars helpers will make your template designer life easy!
 
-Abe by defualt contains more than 150 provided by this project: https://github.com/helpers/handlebars-helpers
+Abe, by default, contains more than 150 provided by this project: https://github.com/helpers/handlebars-helpers.
 
 So you can use each one of these helpers. Refer to their documentation for their usage.
 
@@ -12,9 +12,10 @@ Additionally, the following Abe helpers have been developped for you:
 
 ## className
 ### Description
+
 This helper replaces unwanted characters from a string to make it ressemble a className.
 
-e.g. My string ! => my_string
+e.g. `My string !` => `my_string`
 
 ## cleanTab
 
@@ -22,27 +23,31 @@ e.g. My string ! => my_string
 
 ## ifCond
 ### Description
+
 This helper checks if a condition is true and return the block if it's the case.
 
 ## ifIn
 ### Description
+
 This helper checks if a string is contained inside an array and returns the bloc, if it's  the case.
 
 ## raw
+### usage (in template)
 
-### usage (in template) :
-```
+```html
 {{{{raw}}}}
-	{{someVariable}}
+    {{someVariable}}
 {{{{/raw}}}}
 ```
-you'll find {{someVariable}} in your html. This helper is for you if you want to use handlebars on your html generated static pages. 
+
+You'll find `{{someVariable}}` in your HTML. This helper is for you if you want to use handlebars on your html generated static pages.
 
 ### Use case
+
 For example http://www.bjornblog.com/web/jquery-store-locator-plugin is a jquery plugin which uses handlebars as its dynamic templating language.
 
-template.html
-```
+`template.html`
+```html
 <div id="infoTemplate" style="display:none">
   {{{{raw}}}}
   {{#location}}
@@ -122,15 +127,15 @@ template.html
 Everything inside raw blocks will be left as is and ready to be compiled client side by handlebars. In this example, it's used to have templates of infowindow and list of stores found on a googlemap.
 
 ## lowercase
-
 ### Example
 
 ```html
 {{lowercase 'my Text IS THERE'}}
 ```
-Result : 'my text is there'
 
-###Description
+Result: `my text is there`
+
+### Description
 
 This helper... lowercases your text.
 
@@ -142,25 +147,26 @@ This helper... lowercases your text.
 {{uppercase 'my Text IS THERE'}}
 ```
 
-Result : 'MY TEXT IS THERE'
+Result: `MY TEXT IS THERE`
 
-###Description
+### Description
 
 This helper... uppercases your text.
 
 ## truncate
 
-###Example
+### Example
 
 ```html
 {{truncate 'my Text which is quite long' 10}}
 ```
 
-###Description
+### Description
 
 This helper remove html tags and truncate it.
 
-###Parameters
+### Parameters
+
 ```html
 {{truncate text len}}
 ```
@@ -170,23 +176,25 @@ This helper remove html tags and truncate it.
 > __len__ = the length of the text to keep
 
 
-###Usage
-The text to pass can of course be a handlebars variable
+### Usage
+
+The text to pass can of course be a handlebars variable:
+
 ```html
 {{truncate nbVariable 10}}
 ```
 
 ## isTrue
 
-###Example
+### Example
 
 ```html
 {{#if (isTrue (isTrue (isTrue top_things_night '||' top_things_cafe) '||' top_things_restaurant_sofitel) '||' top_things_restaurant)}}
 ```
 
-###Description
+### Description
 
-This helper returns a boolean depending on the test it does. The available tests :
+This helper returns a boolean depending on the test it does. The available tests:
 - '==' : test equality between 2 values
 - '===' : test strict equality between 2 values
 - '<' : test if value1 is strictly less than value2
@@ -196,7 +204,8 @@ This helper returns a boolean depending on the test it does. The available tests
 - '&&' : test if value1 and value 2 are true
 - '||' : test if value1 or value2 is true
 
-###Parameters
+### Parameters
+
 ```html
 {{isTrue value1 operator value2}}
 ```
@@ -207,18 +216,24 @@ This helper returns a boolean depending on the test it does. The available tests
 > 
 > __value2__ = The second value to be tested
 
-###Usage
-You can use ifTrue after a {{#if }} statement :
+### Usage
+
+### Usage
+
+You can use ifTrue after a `{{#if }}` statement:
+
 ```html
 {{#if (isTrue object1 '||' object2)}}
 ```
 
-You can chain ifTrue tests if you want to test multiple parameters :
+You can chain ifTrue tests if you want to test multiple parameters:
+
 ```html
 {{#if (isTrue (isTrue 4 '==' 5) '||' object1)}}
 ```
 
-__CAUTION__ : If you want to test a handlebars variable like geocode.code, you'll have to use "../" to access the parent properties
+__CAUTION__: If you want to test a handlebars variable like geocode.code, you'll have to use "../" to access the parent properties.
+
 ```html 
 {{#if (isTrue (isTrue (lowercase hotelCityCodeGeo) "==" ../geocode.code)}}
 ```
