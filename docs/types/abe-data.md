@@ -1,28 +1,26 @@
-# Abe type data
+# Type _data_
 
-> Abe type __data__ allows you to make your static website more __dynamic__
+> Abe type _data_ allows you to make your static website more __dynamic__.
 
-## How does it work ?
+## How does it work?
 
-###Basic example
+### Basic example
 
 ```html
 {{abe type='data' key='colors' desc='Pick a color' source='["red", "green", "yellow"]'}}
 <!DOCTYPE html>
 <html>
-	<head>
-	...
+    <head>
+        ...
 ```
 
-###Parameters
+### Parameters
 
-> __type__ = data
-> 
-> __key__ = references key to use into your html
-> 
-> __source__ = json data of possible values
+- __type__ = data
+- __key__ = references key to use into your html 
+- __source__ = json data of possible values
 
-optional parameters
+Optional parameters:
 
 - desc = (String)
 - editable = (Boolean)
@@ -33,55 +31,55 @@ optional parameters
 - prefill-quantity = (Int)
 - autocomplete = (Boolean)
 
-##Use it
+## Use it
 
-Display user picked values in your html files
+Display user picked values in your html files:
 
 ```html
 {{#each colors}}
-	{{this}}
+    {{this}}
 {{/each}}
 ```
 (*Pure handlebars syntax*)
 
-> remember __colors__ is equal to abe key='colors'
+> remember __colors__ is equal to AbeCMS `key='colors'`.
 
 ## Source attribute
 
-If you want to use more than inline json data, the source attributes can use many values
+If you want to use more than inline JSON data, the source attributes can use many values:
 
-- inline json
+- inline JSON
 - relative json file reference path
-- http webservice
-- Sql like request (use sql SELECT syntax to find published content into abe website)
+- HTTP webservice
+- SQL like request (use SQL `SELECT` syntax to find published content into AbeCMS website)
 
-###Examples
+### Examples
 
-> Inline json
+#### Inline JSON
 
 ```html
 {{abe type='data' key='titles' desc='Pick a title' source='[{"title":"My article"},{"title":"My website"},{"title":"My blog"}]' display="title" editable="true"}}
 ```
 
-this will __display__ (*because editable is true*) an input select with __3 choices__ (*"My article", "My website", "My blog" are values of title choosed with diplay parameter*)
+This will __display__ (*because editable is true*) an input select with __3 choices__ (*"My article", "My website", "My blog" are values of title choosed with diplay parameter*).
 
-> relative json file reference path
+#### Relative JSON file reference path
 
-I have a json file inside my abe website
+I have a JSON file inside my AbeCMS website.
 
-reference/titles.json
+`reference/titles.json`
 
 ```json
 [
-  {
-    "title": "My article"
-  },
-  {
-    "title": "My website"
-  },
-  {
-    "title": "My blog"
-  }
+    {
+        "title": "My article"
+    },
+    {
+        "title": "My website"
+    },
+    {
+        "title": "My blog"
+    }
 ]
 ```
 
@@ -89,39 +87,39 @@ reference/titles.json
 {{abe type='data' key='title' desc='Pick a title' source='reference/titles.json' display="title" editable="true"}}
 ```
 
-> http webservice
+#### HTTP webservice
 
-Same as inline json file but with __http__ request
+Same as inline JSON file but with __HTTP__ request.
 
 ```html
 {{abe type='data' key='title' desc='Pick a title' source='http://mywebsite.url/titles/webservice' display="title" editable="true"}}
 ```
 
-> if you descide to use autocomplete="true"
-> 
-> http request will be made from the browser
+> If you descide to `use autocomplete="true"` HTTP request will be made from the browser.
 > 
 > Exemple: **http://mywebsite.url/titles/webservice/ + my_auto_complete_word_**
 >
-> if not http request is made from the server to show the result inside select multiple html tag
+> If not HTTP request is made from the server to show the result inside select multiple HTML tag.
+>
 > Exemple: **http://mywebsite.url/titles/webservice/**
 
-> How to add a variable after /webservice/ from server side request ?
+> How to add a variable after `/webservice/` from server side request?
 > 
-> create a placeholder
+> Create a placeholder:
+>
 > **{{abe type='text' key='my_variable' desc='some variable' tab='default' visible="false"}}**
 > 
-> don't forget attribute visible="false"
+> Don't forget attribute `visible="false"`.
 > 
-> then you can use the variable inside the url
+> Then you can use the variable inside the URL.
 > 
-> Exemple : **{{abe type='data' key='test' source='http://localhost:8000/plugin/service/json/{{my_variable}}' display="title" editable='true' desc='test'}}**
+> Exemple: **{{abe type='data' key='test' source='http://localhost:8000/plugin/service/json/{{my_variable}}' display="title" editable='true' desc='test'}}**
 > 
-> Warning **my_variable** will be empty on first load the user will need to save at least once with the variable filled
+> Warning **my_variable** will be empty on first load the user will need to save at least once with the variable filled.
 
-##Sql like request
+## SQL like request
 
-For example i have the following website structure
+For example I have the following website structure:
 
 ```
 - mysite/
@@ -135,31 +133,31 @@ For example i have the following website structure
            |_ article-1.html
 ```
 
-> Basic SELECT example
+#### Basic `SELECT` example
 
-Inside index.html __template__ I'll add the request below
+Inside `index.html` __template__ I'll add the request below:
 
 ```html
 {{abe type='data' key='articles' desc='articles' source="select * from articles" editable="true"}}
 ```
-This will return a input select with all the 3 articles I have inside my website
 
-If inside article.html __template__ we have an attribute abe key="title" you can only select the title if you want
+This will return a input select with all the 3 articles I have inside my website.
+
+If inside `article.html` __template__ we have an attribute AbeCMS `key="title"` you can only select the title if you want.
 
 ```html
 {{abe type='data' key='articles' desc='articles' source="select title from articles" editable="true"}}
 ```
 
-> Use the "display" parameter
+#### Use the `display` parameter
 
 ```html
 {{abe type='data' key='articles' desc='articles' source="select title from articles" display="title" editable="true"}}
 ```
-If you want to display inside the input select the "title" value
 
-> More complex SELECT
+If you want to display inside the input select the "title" value.
 
-###FROM
+### `FROM`
 
 ```html
 {{abe type='data' key='articles' desc='articles' source="select * from articles, blog" display="title" editable='true'"}}
@@ -177,41 +175,40 @@ If you want to display inside the input select the "title" value
 - if doesn't start with "/" path absolute from articles (if the template is inside blog. And blog is at the same level as articles no result can be found)
 - if start with "../" same as relative
 
-Notes: You can use variables on from like this
+> Notes: You can use variables on from like this.
 
 ```html
 {{abe type='data' key='articles' desc='articles' source="select * from /{{some_json_key}}/{{some_other}}" display="title" editable='true'"}}
 ```
 
-##Use it
+## Use it
 
 ```html
 {{#each articles}}
-	<span classs="author">{{this.title}}</span>
+    <span classs="author">{{this.title}}</span>
 {{/each}}
 ```
 
-##Other parameter
+## Other parameter
 
-> editable="true"
+### `editable="true"`
 
-will allow user to select from the data source otherwise all data will be used as value
+will allow user to select from the data source otherwise all data will be used as value.
 
-> max-length="2"
+### `max-length="2"`
 
-if the max length is set user will on be able to select N entries (*for example 2*)
+If the max length is set user will on be able to select N entries (*for example 2*).
 
-> autocomplete="true"
+### `autocomplete="true"`
 
-change the form to autocomplete 
+Change the form to autocomplete.
 
-> prefill="true"
+### `prefill="true"`
 
-will add default content values
+will add default content values.
 
-> prefill-quantity="10"
+### `prefill-quantity="10"`
 
-will as many content as the value
+Will as many content as the value.
 
-
-[More documentation about abe sql](abe-sql.md)
+[More documentation about AbeCMS SQL](abe-sql.md)
