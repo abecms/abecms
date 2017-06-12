@@ -1,18 +1,19 @@
-# Abe type rich
+# Type _rich_
 
-> Abe type __rich__
+> AbeCMS type __rich__.
 
-###Basic example
+## Basic example
 
 ```html
 {{abe type='rich' key='rich_key' desc='give some tips' tab='default'}}
 ```
 
-This will display the rich default rich textarea based on [wysiwygjs](http://wysiwygjs.github.io/)
+This will display the rich default rich textarea based on [wysiwygjs](http://wysiwygjs.github.io).
 
-A toolbar attribut allow to customize the rich textarea (display / hide customization buttons), by default toolbar="*"
+A toolbar attribut allow to customize the rich textarea (display / hide customization buttons), by default `toolbar="*"`.
 
-###Toolbar parameters
+## Toolbar parameters
+
 - bold
 - italic
 - underline
@@ -33,7 +34,7 @@ A toolbar attribut allow to customize the rich textarea (display / hide customiz
 - font (font-family)
 - fontsize
 
-exemple :
+Example:
 
 ```html
 {{abe type='rich' key='may_text_rich' desc='some description' toolbar='bold,italic'}}

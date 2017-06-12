@@ -1,16 +1,15 @@
-# Abe template
+# Type _template_
 
-> abe type template allows you to manage the way templates are handled in Abe
+> Type template allows you to manage the way templates are handled in AbeCMS.
 
 ## Example
 
-> inside **template** folder open any template and add
+Inside **template** folder open any template and add:
 
 ```html
 {{abe type="template" generate="true" editable="false"}}
 {{abe type="slug" source="index"}}
 ```
 
-editable="false" : This will hide the template in the dropdown list of the launcher.
-generate="true" : This will create a data file index-abe-xxx.json in the data directory
-
+- `editable="false"`: This will hide the template in the dropdown list of the launcher
+- `generate="true"`: This will create a data file `index-abe-xxx.json` in the data directory
