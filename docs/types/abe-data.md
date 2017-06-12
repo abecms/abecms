@@ -1,6 +1,6 @@
 # Type _data_
 
-> Abe type _data_ allows you to make your static website more __dynamic__.
+> AbeCMS type _data_ allows you to make your static website more __dynamic__.
 
 ## How does it work?
 
