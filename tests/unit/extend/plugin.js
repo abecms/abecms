@@ -165,4 +165,21 @@ describe('Plugin', function() {
     abeExtend.plugins.instance.remove.restore()
     done()
   });
+
+  it('abeExtend.plugins.instance.pluginExistsAtLocation(plugin, location)', function(done){
+    var locationScript = abeExtend.plugins.instance.pluginExistsAtLocation(this.fixture.testScript, './scripts')
+    var locationNodeModules = abeExtend.plugins.instance.pluginExistsAtLocation(this.fixture.testScript, './node_modules')
+    chai.assert.isBoolean(locationScript, 'pluginExistsAtLocation does not return a boolean')
+    chai.assert.isTrue(locationScript, 'pluginExistsAtLocation does not return TRUE when plugins exists at given location')
+    chai.assert.isNotTrue(locationNodeModules, 'pluginExistsAtLocation does not return FALSE when plugin does not exists at given location')
+
+    done()
+  })
+
+  it('abeExtend.plugins.instance.getPluginLocation(plugin)', function(done){
+    var location = abeExtend.plugins.instance.getPluginLocation(this.fixture.testScript)
+    chai.assert.equal(location, 'scripts', 'getPluginLocation does not return correct plugin location')
+
+    done()
+  })
 });
