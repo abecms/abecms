@@ -1,6 +1,6 @@
 # Type _file_
 
-> Abe type __file__.
+> AbeCMS type __file__.
 
 ## Basic example
 
