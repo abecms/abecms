@@ -1,10 +1,10 @@
-# Abe slug
+# Type _slug_
 
-> abe type slug allow you to create custom url easily
+> AbeCMS type slug allow you to create custom URL easily.
 
 ## Example
 
-> inside **template** folder open any template and add
+Inside **template** folder open any template and add:
 
 ```html
 {{abe type="slug" source="name-of-the-page"}}
@@ -20,9 +20,9 @@ Warning:
 > this will be compiled with handlebars
 > You can use single variable, or statements
 
-variables can be added to slug url
+Variables can be added to slug URL:
 
-```slug
+```json
 {{abe type="slug" source="{{variableName}}"}}
 
 {{abe type="text" key="variableName" desc="Name of the post" tab="slug"}}
@@ -30,11 +30,11 @@ variables can be added to slug url
 
 Warning:
 
-- if you don't add `tab=slug` attribute the variable will not be avaliable on the slug form
+If you don't add `tab=slug` attribute the variable will not be avaliable on the slug form.
 
 ## Multiples variables
 
-```slug
+```json
 {{abe type="slug" source="{{folderCustom}}/{{variableName}}"}}
 
 {{abe type="text" key="variableName" desc="Name of the post" tab="slug"}}
@@ -43,10 +43,9 @@ Warning:
 ```
 
 Warning:
-Category is not used in abe slug source `source="{{folderCustom}}/{{variableName}}"` but will be contribued into the slug form
 
--
+Category is not used in abe slug source `source="{{folderCustom}}/{{variableName}}"` but will be contribued into the slug form.
 
-You can use all abe `type` in the slug form
+You can use all abe `type` in the slug form.
 
 [abe-attributes](abe-attributes.md)
