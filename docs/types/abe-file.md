@@ -1,11 +1,13 @@
-# Abe type file
+# Type _file_
 
-> Abe type __file__
+> Abe type __file__.
 
-###Basic example
+## Basic example
 
 ```html
 {{abe type='file' filetype='file_type' key='file_key' desc='give some tips' tab='default'}}
 ```
 
-###Parameters
+## Parameters
+
+_to do_
