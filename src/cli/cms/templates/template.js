@@ -110,9 +110,13 @@ export function includePartials(text, json) {
 
     var file = obj.file
     var partial = ''
-    file = path.join(Manager.instance.pathPartials, file)
+    if(file.charAt(0) == '/'){
+      file = path.join(config.root, file)
+    } else {
+      file = path.join(Manager.instance.pathPartials, file)
+    }
+    
     file = cmsData.attributes.getValueFromAttribute(file, json)
-
     if(Object.prototype.toString.call(file) === '[object Array]' ) {
       Array.prototype.forEach.call(file, (f) => {
         if(coreUtils.file.exist(f)) {
