@@ -65,6 +65,7 @@ class Plugins {
     pluginId = path.basename(pluginId)
 
     let plugHook = path.join(dir, pluginId, config.hooks.url, 'hooks.js')
+    let plugCustom = path.join(dir, pluginId, 'custom')
     let plugPartials = path.join(dir, pluginId, 'partials')
     let plugTemplates = path.join(dir, pluginId, 'templates')
     let plugProcess = path.join(dir, pluginId, 'process')
@@ -94,6 +95,16 @@ class Plugins {
     }catch(e) {
       plugin.hooks = null
     }
+
+    try {
+      var directoryCustom = fse.lstatSync(plugCustom)
+      if (directoryCustom.isDirectory()) {
+        plugin.custom = plugCustom
+      }
+    }catch(e) {
+      plugin.custom = null
+    }
+    console.log(plugin)
     
     try {
       var directoryPartials = fse.lstatSync(plugPartials)
@@ -213,6 +224,17 @@ class Plugins {
     })
 
     return partials
+  }
+
+  getCustoms() {
+    var customs = []
+    Array.prototype.forEach.call(this._plugins, (plugin) => {
+      if(typeof plugin.custom !== 'undefined' && plugin.custom !== null) {
+        customs.push(plugin.custom)
+      }
+    })
+
+    return customs
   }
 
   getRoutes() {

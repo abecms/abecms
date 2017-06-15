@@ -23,9 +23,17 @@ export default function abeImport (file, config, ctx) {
   }
   if (coreUtils.file.exist(pathToPartial)) {
     var html = fse.readFileSync(pathToPartial, 'utf8')
-  }else {
+  } else {
     html = ''
   }
+
+  var pluginsCustoms = abeExtend.plugins.instance.getCustoms()
+  Array.prototype.forEach.call(pluginsCustoms, (pluginCustom) => {
+    var checkFile = path.join(pluginCustom, `${file}.html`)
+    if (coreUtils.file.exist(checkFile)) {
+      html += fse.readFileSync(checkFile, 'utf8')
+    }
+  })
 
   var pluginsPartials = abeExtend.plugins.instance.getPartials()
   Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
