@@ -1,11 +1,13 @@
-# Abe type Link
+# Type _link_
 
-> Abe type __link__
+> AbeCMS type __link__.
 
-###Basic example
+## Basic example
 
 ```html
 {{abe type='link' key='link_key' desc='give some tips' title='html title' tab='default'}}
 ```
 
-###Parameters
+## Parameters
+
+_to do_

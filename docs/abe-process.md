@@ -1,24 +1,24 @@
 # Abe process
 
-> run child process from abe (node child_process.fork)
+> run child process from Abe (node child_process.fork).
 
-###Create
+## Create
 
-Create process ```src/cli/process/my_process.js```
+Create process `src/cli/process/my_process.js`.
 
-###Run
+## Run
 
-Test from cli
+Test from CLI:
 
 ```shell
 ./node_modules/.bin/babel-node src/cli/process/my_process.js ABE_WEBSITE=/path/to/website SOME_PROCESS_VAR=something_text
 ```
 
-Run from abe
+Run from Abe:
 
 ```javascript
 import {
-  abeProcess
+    abeProcess
 } from '../../cli'
 
 abeProcess('my_process', [`SOME_PROCESS_VAR=something_text`])

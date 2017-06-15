@@ -1,17 +1,14 @@
 # Abe attributes
 
-> abe tags can own many attributes
+> abe tags can own many attributes.
 
-for example the type text, some required and other optional
+For example the type text, some are required and other are optional:
 
-```
+```json
 {{abe type='text' key='text_key'}}
 ```
 
-- type
-- key
-
-are always required for all content type
+`type` and `key` are always required for all content type.
 
 ## <a name="abe-type"></a>Type of abe content
 
@@ -57,7 +54,7 @@ Default: "default"
 ```html
 tab="NameOfTheTab"
 ```
-Html input will be displayed into the tab `NameOfTheTab` 
+Html input will be displayed into the tab `NameOfTheTab`.
 
 Allowed:
 
@@ -73,7 +70,7 @@ Default: ""
 ```html
 key="keyData"
 ```
-the key used into json file
+The key used into json file.
 
 Allowed:
 
@@ -89,7 +86,7 @@ Examples:
 
 ```json
 {
-	"title": "value"
+    "title": "value"
 }
 ```
 
@@ -99,9 +96,9 @@ Examples:
 
 ```json
 {
-	"blog": {
-		"title": "value"
-	}
+    "blog": {
+        "title": "value"
+    }
 }
 ```
 
@@ -133,31 +130,31 @@ Default: null
 autocomplete="true"
 ```
 
-Json example for autocomplete
+JSON example for autocomplete:
 
 ```json
 [
-	{
-		"id": 1,
-		"name": "test 1",
-		"lang": "de"
-	},
-	{
-		"id": 2,
-		"name": "test 2",
-		"lang": "fr"
-	},
-	{
-		"id": 3,
-		"name": "test 3",
-		"lang": "es"
-	}
+    {
+        "id": 1,
+        "name": "test 1",
+        "lang": "de"
+    },
+    {
+        "id": 2,
+        "name": "test 2",
+        "lang": "fr"
+    },
+    {
+        "id": 3,
+        "name": "test 3",
+        "lang": "es"
+    }
 ]
 ```
 
 ![MacDown Screenshot](assets/abe-type-autocomplete.png)
 
-for abe type data, display input form autocomplete into admin
+For Abe type data, display input form autocomplete into admin.
 
 ## <a name="desc"></a>desc (String)
 
@@ -166,7 +163,8 @@ Default: ""
 ```html
 desc="some description for the contributor"
 ```
-The admin description over the input
+
+The admin description over the input.
 
 Allowed:
 
@@ -183,7 +181,7 @@ Default: null
 display="variable"
 ```
 
-for abe type data (autocomplete true or false)
+For Abe type data (autocomplete true or false).
 
 Example:
 
@@ -191,29 +189,29 @@ Example:
 display="{{name}}"
 ```
 
-Json
+JSON:
 
 ```json
 [
-	{
-		"id": 1,
-		"name": "test 1",
-		"lang": "de"
-	},
-	{
-		"id": 2,
-		"name": "test 2",
-		"lang": "fr"
-	},
-	{
-		"id": 3,
-		"name": "test 3",
-		"lang": "es"
-	}
+    {
+        "id": 1,
+        "name": "test 1",
+        "lang": "de"
+    },
+    {
+        "id": 2,
+        "name": "test 2",
+        "lang": "fr"
+    },
+    {
+        "id": 3,
+        "name": "test 3",
+        "lang": "es"
+    }
 ]
 ```
 
-the autocomplete value visible under the input will use `name` from json
+The autocomplete value visible under the input will use `name` from JSON:
 
 - test 1
 - test 2
@@ -221,7 +219,7 @@ the autocomplete value visible under the input will use `name` from json
 
 ![Autocomplete 1](assets/abe-type-autocomplete.png)
 
-Multiple variables are allowed for example with our json:
+Multiple variables are allowed for example with our JSON:
 
 ```html
 display="{{name}} - {{lang}}"
@@ -241,7 +239,7 @@ Default: true
 editable="true"
 ```
 
-if editable true user can change the value, if not abe will set the values
+If editable true user can change the value, if not abe will set the values.
 
 ## <a name="max-length"></a>max-length (Int)
 
@@ -251,7 +249,7 @@ Default: null
 max-length="3"
 ```
 
-for abe type data, array max selection
+For Abe type data, array max selection.
 
 ## <a name="min-length"></a>min-length (Int)
 
@@ -261,7 +259,7 @@ Default: 0
 min-length="1"
 ```
 
-for abe type data, array min selection (if required)
+For Abe type data, array min selection (if required).
 
 ## <a name="source"></a>source (String | variables)
 
@@ -271,7 +269,7 @@ Default: null
 source="[ source type ]"
 ```
 
-see abe type [data](abe-data.md)
+See abe type [data](abe-data.md).
 
 ## <a name="duplicate"></a>duplicate (Boolean)
 
@@ -281,7 +279,7 @@ Default: true
 duplicate="true"
 ```
 
-if set to false, when user duplicate a post. The value will not be duplicate into the new post
+If set to false, when user duplicate a post. The value will not be duplicate into the new post.
 
 Example:
 
@@ -289,31 +287,31 @@ Example:
 {{abe type='text' key='title' duplicate="false"}}
 ```
 
-Json before duplicate:
+JSON before duplicate:
 
 ```json
 {
-  "abe_meta": {
-    "template": "autocomplete",
-    "link": "/test.html",
-    "date": "2016-12-15T16:46:22.946Z",
-  },
-  "title": "test"
+    "abe_meta": {
+        "template": "autocomplete",
+        "link": "/test.html",
+        "date": "2016-12-15T16:46:22.946Z",
+    },
+    "title": "test"
 }
 ```
 
-Json after duplicate:
+JSON after duplicate:
 
-value of title is not filled after duplicate the post with name `test-2.html`
+Value of title is not filled after duplicate the post with name `test-2.html`.
 
 ```json
 {
-  "abe_meta": {
-    "template": "autocomplete",
-    "link": "/test-2.html",
-    "date": "2016-12-15T16:46:22.946Z",
-  },
-  "title": ""
+    "abe_meta": {
+        "template": "autocomplete",
+        "link": "/test-2.html",
+        "date": "2016-12-15T16:46:22.946Z",
+    },
+    "title": ""
 }
 ```
 
@@ -325,7 +323,7 @@ Default: false
 reload="true"
 ```
 
-if reload true, on blur event on the input field the post preview will be reloaded
+If reload true, on blur event on the input field the post preview will be reloaded.
 
 ## <a name="required"></a>required (Boolean)
 
@@ -335,7 +333,7 @@ Default: false
 required="true"
 ```
 
-If set to true user cannot publish the post without required field
+If set to true user cannot publish the post without required field.
 
 Example:
 
@@ -343,7 +341,7 @@ Example:
 {{abe type="text" key="title" required="true"}}
 ```
 
-> if submited but empty
+> if submited but empty.
 
 ![Required](assets/abe-required.png)
 
@@ -355,7 +353,7 @@ Default: true
 visible="true"
 ```
 
-if visible set to false, the value will not be set into post page (but will be visible on the admin and set into the json file)
+If visible set to false, the value will not be set into post page (but will be visible on the admin and set into the JSON file).
 
 ## <a name="order"></a>order (Int)
 
@@ -365,14 +363,14 @@ Default: 0
 order="1"
 ```
 
-to order the input in the admin
+To order the input in the admin:
 
 ```html
 {{abe type='text' key='title1' desc='title 1' order="2"}}
 {{abe type='text' key='title2' desc='title 2' order="1"}}
 ```
 
-`title1` is added before on the template but without order the result on the admin is inversed
+`title1` is added before on the template but without order the result on the admin is inversed.
 
 ![Order](assets/abe-order.png)
 
@@ -392,7 +390,7 @@ Default: ""
 file="partial.html"
 ```
 
-see abe [import](abe-import.md)
+See abe [import](abe-import.md).
 
 ## <a name="locale"></a>locale (String | variable)
 
@@ -410,9 +408,9 @@ Default: false
 prefill="true"
 ```
 
-For abe type data, if set to true will add default values
+For abe type data, if set to true will add default values.
 
-On the admin side prefill add a `reload` button on the right
+On the admin side prefill add a `reload` button on the right.
 
 ![Prefill](assets/abe-prefill.png)
 
@@ -424,8 +422,7 @@ Default: null
 prefill-quantity="3"
 ```
 
-How many default values to prefill
-
+How many default values to prefill.
 
 ## <a name="value"></a>value (String)
 
@@ -435,4 +432,4 @@ Default: none
 value="default text value"
 ```
 
-Add a default value inside input, if the input value changes the default value won't be used anymore unless the value of the input become an empty string
+Add a default value inside input, if the input value changes the default value won't be used anymore unless the value of the input become an empty string.
