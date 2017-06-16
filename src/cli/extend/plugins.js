@@ -104,7 +104,6 @@ class Plugins {
     }catch(e) {
       plugin.custom = null
     }
-    console.log(plugin)
     
     try {
       var directoryPartials = fse.lstatSync(plugPartials)
