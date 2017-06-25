@@ -147,6 +147,8 @@ app.use(middleIsAuthorized)
 app.use(middleLogin)
 app.use(middleWebsite)
 if (process.env.NODE_ENV === 'development') {
+  
+  Manager.instance.initDev()
   process.on('uncaughtException', function (err) {
     // We need to trap this error which is sent on websocket client connection
     if(err.code !== 'ECONNRESET'){

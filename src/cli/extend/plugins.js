@@ -75,7 +75,8 @@ class Plugins {
       partials : null,
       templates : null,
       process : null,
-      routes : null
+      routes : null,
+      custom : null
     }
 
     try {

@@ -66,10 +66,6 @@ class Manager {
 
     this.updateStructureAndTemplates()
 
-    if (process.env.NODE_ENV === 'development') {
-      this.initDev()
-    }
-
     var p = new Promise((resolve) => {
       this.getKeysFromSelect()
         .then(() => {
