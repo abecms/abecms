@@ -28,7 +28,7 @@ export default class FileAttr {
 
   /**
    * @param  {String} str the string to get attributes from
-   * @return {object|String} object (all the attributes) if the key is null, if not the value of the atrtibuts
+   * @return {object|String} object (all the attributes) if the key is null, if not the value of the attribute
    */
   static get(str) {
     return new attr(str).val
