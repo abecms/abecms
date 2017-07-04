@@ -153,11 +153,7 @@ export function unpublish(postUrl, user) {
           })
         }
         abeExtend.hooks.instance.trigger('afterUnpublish', docPath, postPath, result.json)
-        const newDocPath = cmsData.utils.getDocPathFromLinkStatusDate(
-          result.json.abe_meta.link,
-          result.json.abe_meta.status,
-          result.json.abe_meta.updatedDate
-        )
+        const newDocPath = cmsData.utils.getDocPathFromLinkStatusDate(result.json)
         Manager.instance.updatePostInList(newDocPath)
         resolve(result)
       }).catch(function(e) {

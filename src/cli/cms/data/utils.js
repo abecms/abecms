@@ -70,14 +70,15 @@ export function getDocPathFromPostUrl(postUrl){
  * @param  {[type]} postUrl [description]
  * @return {[type]}         [description]
  */
-export function getDocPathFromLinkStatusDate(link, status, date){
+export function getDocPathFromLinkStatusDate(jsonData){
   
-  let dateIso = date
+  let jsonObject = cmsData.file.getAbeMeta({}, jsonData)
+  let dateIso = jsonObject.abe_meta.date
   if(typeof dateIso === 'object'){
     dateIso = dateIso.toISOString()
   }
-  const statusDate = status[0] + cmsData.revision.removeStatusAndDateFromFileName(dateIso)
-  return getDocPathFromPostUrl(cmsData.fileAttr.add(link, statusDate))
+  const statusDate = jsonObject.abe_meta.status[0] + cmsData.revision.removeStatusAndDateFromFileName(dateIso)
+  return getDocPathFromPostUrl(cmsData.fileAttr.add(jsonObject.abe_meta.link, statusDate))
 }
 
 /**
