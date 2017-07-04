@@ -33,7 +33,7 @@ export function draft(postUrl, json, workflow = 'draft', user) {
           success: 0,
           error: 'cannot json save file'
         }
-      }else {
+      } else {
         Manager.instance.updatePostInList(revisionPath)
         result = {
           success: 1,
@@ -84,6 +84,29 @@ export function publish(postUrl, json, user) {
           }
         }
       }
+      // are there additional templates to export?
+      if(json.abe_meta.relatedTemplates){
+        Object.keys(json.abe_meta.relatedTemplates).map(function(key, index) {
+          const relatedTemplate = json.abe_meta.relatedTemplates[key]
+
+          if(relatedTemplate.template && relatedTemplate.path){
+            const relTemplate = cmsTemplates.template.getTemplate(relatedTemplate.template, json)
+            let extension = config.files.templates.extension
+            if(relatedTemplate.extension)
+              extension = relatedTemplate.extension
+            const fileName = path.basename(postUrl, '.'+config.files.templates.extension) + '.' + extension
+            const relPath = path.join(config.root, config.publish.url, relatedTemplate.path, fileName)
+
+            cmsData.source.getDataList(path.dirname(json.abe_meta.link), relTemplate, json)
+            .then(() => {
+              const page = new Page(relTemplate, json, true)
+              cmsOperations.save.saveHtml(relPath, page.html)
+              resolve()
+            })
+          }
+        })
+      }
+
       resolve(result)
     })
   })
@@ -113,8 +136,29 @@ export function unpublish(postUrl, user) {
       p.then((result) => {
         cmsOperations.remove.removeFile(docPath)
         cmsOperations.remove.removeFile(postPath)
+        // are there additional templates to export?
+        if(result.json.abe_meta.relatedTemplates){
+          Object.keys(result.json.abe_meta.relatedTemplates).map(function(key, index) {
+            const relatedTemplate = result.json.abe_meta.relatedTemplates[key]
+
+            if(relatedTemplate.template && relatedTemplate.path){
+              const relTemplate = cmsTemplates.template.getTemplate(relatedTemplate.template, json)
+              let extension = config.files.templates.extension
+              if(relatedTemplate.extension)
+                extension = relatedTemplate.extension
+              const fileName = path.basename(postUrl, '.'+config.files.templates.extension) + '.' + extension
+              const relPath = path.join(config.root, config.publish.url, relatedTemplate.path, fileName)
+              cmsOperations.remove.removeFile(relPath)
+            }
+          })
+        }
         abeExtend.hooks.instance.trigger('afterUnpublish', docPath, postPath, result.json)
-        Manager.instance.updatePostInList(docPath)
+        const newDocPath = cmsData.utils.getDocPathFromLinkStatusDate(
+          result.json.abe_meta.link,
+          result.json.abe_meta.status,
+          result.json.abe_meta.updatedDate
+        )
+        Manager.instance.updatePostInList(newDocPath)
         resolve(result)
       }).catch(function(e) {
         console.error('[ERROR] unpublish', e)

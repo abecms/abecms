@@ -46,6 +46,29 @@ function publishNext(files, tt, cb, i = 0) {
             page.html
           )
           
+          // are there additional templates to export?
+          if(obj.json.content.abe_meta.relatedTemplates){
+            Object.keys(obj.json.content.abe_meta.relatedTemplates).map(function(key, index) {
+              const relatedTemplate = obj.json.content.abe_meta.relatedTemplates[key]
+
+              if(relatedTemplate.template && relatedTemplate.path){
+                const relTemplate = cmsTemplates.template.getTemplate(relatedTemplate.template, obj.json.content)
+                let extension = config.files.templates.extension
+                if(relatedTemplate.extension)
+                  extension = relatedTemplate.extension
+                const fileName = path.basename(obj.json.content.abe_meta.link, '.'+config.files.templates.extension) + '.' + extension
+                const relPath = path.join(config.root, processConfig.ABE_DESTINATION, relatedTemplate.path, fileName)
+
+                cmsData.source.getDataList(path.dirname(obj.json.content.abe_meta.link), relTemplate, obj.json.content, true)
+                .then(() => {
+                  const page = new Page(relTemplate, obj.json.content, true)
+                  cmsOperations.save.saveHtml(relPath, page.html)
+                  resolve()
+                })
+              }
+            })
+          }
+
           obj = abeExtend.hooks.instance.trigger('afterSave', obj)
 
           trace('('+ getTime() + ') ' + i + ' - ' + pub[processConfig.ABE_STATUS].path.replace(config.root, '').replace(config.data.url, '') + ' (tpl: ' + jsonObject.abe_meta.template + ')')

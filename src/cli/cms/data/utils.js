@@ -66,6 +66,21 @@ export function getDocPathFromPostUrl(postUrl){
 }
 
 /**
+ * Return the absolute path of the doc from a post URL, a status and a date
+ * @param  {[type]} postUrl [description]
+ * @return {[type]}         [description]
+ */
+export function getDocPathFromLinkStatusDate(link, status, date){
+  
+  let dateIso = date
+  if(typeof dateIso === 'object'){
+    dateIso = dateIso.toISOString()
+  }
+  const statusDate = status[0] + cmsData.revision.removeStatusAndDateFromFileName(dateIso)
+  return getDocPathFromPostUrl(cmsData.fileAttr.add(link, statusDate))
+}
+
+/**
  * Remove the date revision from the jsonPath and returns the doc full path (which is the published json)
  * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
  * return /Users/grg/programmation/git/abetesttheme/data/fr/test.json
