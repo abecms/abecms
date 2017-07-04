@@ -389,7 +389,7 @@ class Manager {
       }
       merged[docPath].revisions.push(JSON.parse(JSON.stringify(revision)))
       const sortedResult = cmsData.revision.sortRevisions(merged)
-      // Does the publish version has been removed (in the case of unpublish) ? 
+      // Does the publish version has been removed (in the case of unpublish) ?
       if(sortedResult[0]['publish'] && !coreUtils.file.exist(sortedResult[0]['publish']['path'])){
         delete sortedResult[0]['publish']
       }
