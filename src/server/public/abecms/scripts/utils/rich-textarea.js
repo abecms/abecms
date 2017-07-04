@@ -1,6 +1,6 @@
 /*global window, document, wysiwyg */
 
-export default class RichTexarea {
+export default class RichTextarea {
 
   constructor(wrapper, color, link, image, smiley) {
     this.color = color

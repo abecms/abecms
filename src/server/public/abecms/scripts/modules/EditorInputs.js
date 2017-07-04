@@ -4,7 +4,7 @@ import EditorUtils from '../modules/EditorUtils'
 import Json from '../modules/EditorJson'
 import {IframeNode, IframeCommentNode} from '../utils/iframe'
 import Handlebars from 'handlebars'
-import RichText from '../utils/rich-texarea'
+import RichText from '../utils/rich-textarea'
 import Color from '../utils/color-picker'
 import Link from '../utils/link-picker'
 import image from '../utils/img-picker'
@@ -138,7 +138,7 @@ export default class EditorInputs {
   }
 
   /**
-   * [_inputFocus description]
+   * [_inputReloadBlur description]
    * @param  {[type]} e [description]
    * @return {[type]}   [description]
    */
@@ -158,7 +158,7 @@ export default class EditorInputs {
     EditorUtils.scrollToInputElement(e.target)
     
     // switch to set appropriate output {text|link|image|...}
-    // listen to user input on ABE from
+    // listen to user input on ABE form
     e.target.addEventListener('keyup', this._handleInputKeyup)
     e.target.addEventListener('blur', this._handleInputBlur)
   }
