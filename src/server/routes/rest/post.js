@@ -1,5 +1,4 @@
 import path from 'path'
-import xss from 'xss'
 
 import {
   cmsData,
