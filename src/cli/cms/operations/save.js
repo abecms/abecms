@@ -18,7 +18,11 @@ export function saveJson(jsonPath, json) {
       if (typeof obj[k] === 'object' && obj[k] !== null){
         eachRecursive(obj[k])
       } else if (typeof obj[k] !== 'undefined' && obj[k] !== null){
-        obj[k] = xss(obj[k].toString().replace(/&quot;/g, '"'), { 'whiteList': config.htmlWhiteList })
+        if (config.xss){
+          obj[k] = xss(obj[k].toString().replace(/&quot;/g, '"'), { 'whiteList': config.htmlWhiteList })
+        } else {
+          obj[k] = obj[k].toString().replace(/&quot;/g, '"')
+        }
       }
     }
   }

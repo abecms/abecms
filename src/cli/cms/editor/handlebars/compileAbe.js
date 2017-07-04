@@ -35,13 +35,18 @@ export default function compileAbe(){
     if(typeof value === 'function' || value == null) {
       value = (hash.value != null) ? hash.value : ''
     }
-    if(hash.type != null && hash.type === 'rich'){
-      testXSS = xss(value.replace(/&quot;/g, '"'), {
-        'whiteList': config.htmlWhiteList,
-        stripIgnoreTag: true
-      })
-      return new Handlebars.SafeString(testXSS)
+    if(hash.type != null && (hash.type === 'rich' || hash.type === 'code')){
+      if(config.xss){
+        testXSS = xss(value.replace(/&quot;/g, '"'), {
+          'whiteList': config.htmlWhiteList,
+          stripIgnoreTag: true
+        })
+        return new Handlebars.SafeString(testXSS)
+       } else {
+         return new Handlebars.SafeString(value.replace(/&quot;/g, '"'))
+       } 
     }
+
     return value.replace(/%27/, '\'')
   }
 
@@ -63,12 +68,17 @@ export default function compileAbe(){
     value = (hash.value != null) ? hash.value : ''
   }
 
-  if(hash.type != null && hash.type === 'rich'){
-    testXSS = xss(value.replace(/&quot;/g, '"'), {
-      'whiteList': config.htmlWhiteList,
-      stripIgnoreTag: true
-    })
-    return new Handlebars.SafeString(testXSS)
+  if(hash.type != null && (hash.type === 'rich' || hash.type === 'code')){
+    if(config.xss){
+      testXSS = xss(value.replace(/&quot;/g, '"'), {
+        'whiteList': config.htmlWhiteList,
+        stripIgnoreTag: true
+      })
+      return new Handlebars.SafeString(testXSS)
+     } else {
+       return new Handlebars.SafeString(value.replace(/&quot;/g, '"'))
+     } 
   }
+
   return value.replace(/%27/, '\'')
 }

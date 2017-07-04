@@ -55,6 +55,7 @@
     "connectSrc": []
   },
   "security": false,
+  "xss": true,
   "htmlWhiteList": {
     "blockquote": ["style"],
     "span": ["style"],
