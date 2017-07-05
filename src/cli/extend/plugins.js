@@ -4,6 +4,7 @@ import path from 'path'
 import fse from 'fs-extra'
 import clc from 'cli-color'
 import which from 'which'
+import extend from 'extend'
 const npm = which.sync('npm')
 
 import {
@@ -269,6 +270,8 @@ class Plugins {
     let createLocalConfig = true
     let pluginName = plugin.split('@')[0]
     pluginName = pluginName.split('#')[0]
+    const pluginIdArray = pluginName.split('/')
+    const pluginId = pluginIdArray[pluginIdArray.length - 1]
 
     if(config.localConfigExist()){
       json = config.getLocalConfig()
@@ -297,6 +300,16 @@ class Plugins {
         clc.cyan.underline('https://github.com/abecms/abecms/blob/master/docs/abe-config.md')
       )
     }
+
+    try {
+      var stat = fse.lstatSync(path.join(this.pluginsDir,pluginId,'abe.json'))
+
+      if (stat.isFile()) {
+        const pluginDefaultConfig = fse.readJsonSync(path.join(this.pluginsDir,pluginId,'abe.json'))
+        extend(true, pluginDefaultConfig, json)
+        json = pluginDefaultConfig
+      }
+    } catch (e) {}
 
     config.save(json)
   }
