@@ -39,6 +39,54 @@ export function IframeNode (frameId, selector){
           }
         }
       })
+
+      // searching Abe tags in <style> tags
+      if (result.length === 0) {
+        let eachStylePattern = new RegExp('[\\S\\s]*?(\\/\\*<!--ABE '+key+'[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)[\\S\\s]*?')
+        let styles = iframe.getElementsByTagName('style')
+        
+        Array.prototype.forEach.call(styles, (style) => {
+          let matchFromExec = eachStylePattern.exec(style.textContent)
+          if(matchFromExec != null && matchFromExec[1] != null) {
+            var node = {classList:{}, inStyle:true, }
+            node.classList.add = function(){}
+            node.classList.remove = function(){}
+            node.getBoundingClientRect = function(){
+              return {height:0, top:0}
+            }
+            node.getAttribute = function(attr) {}
+            node.setHtml = function(val) {
+              style.textContent = style.textContent.replace(matchFromExec[1] + matchFromExec[2] + matchFromExec[3],matchFromExec[1] + val + matchFromExec[3])
+            }
+            result=[]
+            result.push(node)
+          }
+        })
+      }
+
+      // searching Abe tags in <script> tags
+      if (result.length === 0) {
+        let eachScriptPattern = new RegExp('[\\S\\s]*?(\\/\\*<!--ABE '+key+'[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)[\\S\\s]*?')
+        let scripts = iframe.getElementsByTagName('script')
+
+        Array.prototype.forEach.call(scripts, (script) => {
+          let matchFromExec = eachScriptPattern.exec(script.innerHTML)
+          if(matchFromExec != null && matchFromExec[1] != null) {
+            var node = {classList:{}, inScript:true, }
+            node.classList.add = function(){}
+            node.classList.remove = function(){}
+            node.getBoundingClientRect = function(){
+              return {height:0, top:0}
+            }
+            node.getAttribute = function(attr) {}
+            node.setHtml = function(val) {
+              script.innerHTML = script.innerHTML.replace(matchFromExec[1] + matchFromExec[2] + matchFromExec[3],matchFromExec[1] + val + matchFromExec[3])
+            }
+            result=[]
+            result.push(node)
+          }
+        })
+      }
     }
     return result
   }

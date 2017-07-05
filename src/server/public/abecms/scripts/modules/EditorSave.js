@@ -122,8 +122,11 @@ export default class EditorSave {
                 }
               }
             })
-          } else if (input.value.indexOf('{') > -1) {
-            value = JSON.parse(input.value)
+          } else if (
+              input.value.indexOf('{') > -1 &&
+              !input.classList.contains('abe-keep-format')
+            ) {
+              value = JSON.parse(input.value)
           } else {
             value = input.value
           }

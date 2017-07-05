@@ -135,11 +135,13 @@ export default class EditorUtils {
         dataAbeAttr = node.getAttribute('data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1'))
         if( typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
           node.setAttribute(dataAbeAttr, val)
+        } else if(node.inStyle || node.inScript){
+          node.setHtml(val)
         } else {
           node.innerHTML = val
         }
       } else {
-        var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?/ABE--->)')
+        var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?\\/ABE--->)')
         var res = commentPattern.exec(node.parentNode.innerHTML)
         var repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + val + '<!--/ABE--->')
 
@@ -148,19 +150,41 @@ export default class EditorUtils {
       break
     case 'textarea':
       if(node.nodeType === 8){
-        var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?/ABE--->)')
+        var commentPattern = new RegExp('(<!--' + node.data + '-->[\\s\\S]+?\\/ABE--->)')
         var res = commentPattern.exec(node.parentNode.innerHTML)
-        var repl
+        var repl = node.parentNode.innerHTML
+        var newStr
         if((input.classList.contains('form-rich'))){
-          repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + input.parentNode.querySelector('[contenteditable]').innerHTML + '<!--/ABE--->')
+          newStr = '<!--' + node.data + '-->' + input.parentNode.querySelector('[contenteditable]').innerHTML + '<!--/ABE--->'
+          repl = repl.replace(res[0], newStr)
+        } else if((input.classList.contains('abe-format-html'))){
+          // In this case I have to check if the html is well formed 
+          // (it will crash if there is an unclosed tag)
+          // If there is an unclosed tag, I close it
+          var divTemp = document.createElement('div')
+          newStr = '<!--' + node.data + '-->' + val + '<!--/ABE--->'
+          divTemp.innerHTML = newStr
+          if(divTemp.innerHTML == newStr || divTemp.innerHTML.slice(-8) === '/ABE--->'){
+            repl = repl.replace(res[0], newStr)
+          } else if(divTemp.innerHTML.indexOf('/ABE--->') > -1){
+            var pos = divTemp.innerHTML.indexOf('/ABE--->')+8
+            var len = divTemp.innerHTML.length
+            var tag = divTemp.innerHTML.slice(pos - len)
+            newStr = newStr.slice(0, newStr.length - 12) + tag +'<!--/ABE--->'
+            repl = repl.replace(res[0], newStr)
+          }
         } else {
-          repl = node.parentNode.innerHTML.replace(res[0], '<!--' + node.data + '-->' + val + '<!--/ABE--->')
+          newStr = '<!--' + node.data + '-->' + val + '<!--/ABE--->'
+          repl = repl.replace(res[0], newStr)
         }
 
         node.parentNode.innerHTML = repl
       }
       else
-        node.innerHTML = (input.classList.contains('form-rich')) ? input.parentNode.querySelector('[contenteditable]').innerHTML : val
+        if(node.inStyle || node.inScript)
+          node.setHtml(val)
+        else
+          node.innerHTML = (input.classList.contains('form-rich')) ? input.parentNode.querySelector('[contenteditable]').innerHTML : val
       break
     case 'select':
       var key = node.getAttribute('data-abe-' + id)
@@ -179,7 +203,7 @@ export default class EditorUtils {
           } catch(e) {
             console.log(e)
           }
-        }else {
+        } else {
           node.innerHTML = val
         }
       }

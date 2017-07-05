@@ -47,7 +47,7 @@ export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
  * THIS:
 <span>{{abe type='text' key='text_visible'}}</span>
 
- * BECOME:
+ * BECOMES:
 <span data-abe-text_visible="text_visible" >{{abe type='text' key='text_visible'}}</span>
 
  * @param {[type]} template [description]
@@ -57,8 +57,9 @@ export function addAbeDataAttrForHtmlTag(template) {
   var key
   var getattr
   var newTemplate = template
+  var pattern = cmsData.regex.abePattern()
 
-  while (match = cmsData.regex.abePattern.exec(template)) {
+  while (match = pattern.exec(template)) {
     key = cmsData.regex.getAttr(match, 'key')
 
     if (!cmsData.regex.isSingleAbe(match, newTemplate)) {
@@ -101,7 +102,7 @@ export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
  * THIS:
 <img src="{{abe type='image' key='image_key' tab='default'}}" alt="">
 
- * BECOME:
+ * BECOMES:
 <img data-abe-attr-image_key="src" data-abe-image_key="image_key" data-abe-attr-image_key="src"
 data-abe-image_key="image_key" src="{{abe type='image' key='image_key' tab='default' has-abe=1 has-abe=1}}" alt="">
 
@@ -112,7 +113,7 @@ data-abe-image_key="image_key" src="{{abe type='image' key='image_key' tab='defa
   <img src="{{abe type='image' key='test.img' desc='test_img' tab='default'}}" alt="">
 {{/each}}
 
- * BECOME:
+ * BECOMES:
 {{#each test}}
   <img data-abe-attr-test[index].img="src" data-abe-test[index].img="test[index].img" src="{{abe type='image' key='test.img' desc='test_img' tab='default' has-abe=1}}" alt="">
 {{/each}}
@@ -159,7 +160,7 @@ export function addAbeDataAttrForHtmlAttributes(template) {
 {{/each}}
 
  *
- * BECOME THIS
+ * BECOMES
 
 {{abe type='data' key='data_key' source='select title from article' display='title' editable='true' tab='default'}}
 
@@ -215,26 +216,50 @@ export function addAbeSourceComment(template, json) {
   return template
 }
 
+//THIS:
+//<span>{{abe type='text' key='text_visible'}}</span>
+//OR
+//<style>{{abe type='text' key='text_visible'}}</style>
+//OR
+//<script>{{abe type='text' key='text_visible'}}</script>
+//BECOMES:
+//<span><!--ABE--->{{abe type='text' key='text_visible'}}<!--/ABE---></span>
+//OR
+//<style>/*<!--ABE--->*/{{abe type='text' key='text_visible'}}/*<!--/ABE--->*/</style>
+//OR
+//<script>/*<!--ABE--->*/{{abe type='text' key='text_visible'}}/*<!--/ABE--->*/</script>
+
 /**
- * THIS:
-<span>{{abe type='text' key='text_visible'}}</span>
-
- * BECOME:
-<span><abe>{{abe type='text' key='text_visible'}}</abe></span>
-
  * @param {[type]} template [description]
  */
 export function addAbeHtmlTagBetweenAbeTags(template) {
   var match
   var templateNoDom = striptags(template)
+  var pattern = cmsData.regex.abeAsTagPattern()
   
   // {{#each tags may be declared outside of an html Tag}}
   while (match = cmsData.regex.eachBlockPattern.exec(template)) {
     template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<!--ABE--->' + match[1].trim() + '<!--/ABE--->')
   }
   
-  while (match = cmsData.regex.abeAsTagPattern.exec(templateNoDom)) {
+  while (match = pattern.exec(templateNoDom)) {
     template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<!--ABE--->' + match[1].trim() + '<!--/ABE--->')
+  }
+
+  let eachStylePattern = /<style[\S\s]*?(<!--ABE[\S\s]*?--->)[\S\s]*?(<!--\/ABE--->)[\S\s]*?<\/style>/g
+  while (match = eachStylePattern.exec(template)) {
+    var res = match[0]
+    res = res.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '/*' + match[1] + '*/' )
+             .replace(cmsData.regex.escapeTextToRegex(match[2], 'g'), '/*' + match[2] + '*/' )
+    template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
+  }
+
+  let eachScriptPattern = /<script[\S\s]*?(<!--ABE[\S\s]*?--->)[\S\s]*?(<!--\/ABE--->)[\S\s]*?<\/script>/g
+  while (match = eachScriptPattern.exec(template)) {
+    var res = match[0]
+    res = res.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '/*' + match[1] + '*/' )
+             .replace(cmsData.regex.escapeTextToRegex(match[2], 'g'), '/*' + match[2] + '*/' )
+    template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
   }
 
   return template
@@ -244,7 +269,7 @@ export function addAbeHtmlTagBetweenAbeTags(template) {
  * THIS:
 [index].
 
- * BECOME:
+ * BECOMES:
 {{@index}}-
 
  *  @param  {[type]} template [description]
@@ -327,7 +352,7 @@ export function indexEachBlocks(template, json, onlyHtml) {
  * THIS:
   {{abe type='text' key='test.title' desc='test title' tab='default'}}
 
- * BECOME THIS:
+ * BECOMES:
   {{abe dictionnary='test' type='text' key='test.title' desc='test title' tab='default'}}
 
  * 

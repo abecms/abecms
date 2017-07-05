@@ -1,7 +1,28 @@
+import {
+  config
+} from '../../'
+
+export function getAbeTags(){
+  let abeTags = ''
+  Object.keys(config.abeTags).map(function(key, index) {
+    abeTags += (index > 0) ? '|' + key: key
+  })
+
+  return abeTags
+}
+
 export let abeTag = /({{abe.*?[\s\S].*?}})/g
-// 
-export let abePattern = /(--->{{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g
-export let abeAsTagPattern = /({{abe.*?type=[\'|\"][text|rich|textarea]+[\'|\"][\s\S].*?}})/g
+
+// export let abePattern = /(--->(\*\/)?{{abe.*?type=[\'|\"][text|rich|textarea|code]+[\'|\"][\s\S].*?}})/g
+// export let abeAsTagPattern = /({{abe.*?type=[\'|\"][text|rich|textarea|code]+[\'|\"][\s\S].*?}})/g
+export function abePattern(){
+  return new RegExp('(--->(\\*\\/)?{{abe.*?type=[\'|"]['+ getAbeTags() +']+[\'|"][\\s\\S].*?}})', 'g')
+}
+
+export function abeAsTagPattern(){
+  return new RegExp('({{abe.*?type=[\'|"]['+ getAbeTags() +']+[\'|"][\\s\\S].*?}})','g')
+}
+
 // This pattern finds all abe tags enclosed in a HTML tag attribute
 // export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
 // export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})(.*?)({{abe.*?}})/g
@@ -34,8 +55,8 @@ export function getAttr (str, attr) {
  */
 export function getAllAbeHtmlTag (str) {
   var res = []
-
-  var matches = str.match(abePattern)
+  var pattern = abePattern()
+  var matches = str.match(pattern)
   Array.prototype.forEach.call(matches, (match) => {
     res.push(match)
   })

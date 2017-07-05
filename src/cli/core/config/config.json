@@ -163,5 +163,10 @@
       }
     }
   },
-  "smtp": null
+  "smtp": null,
+  "abeTags":{
+    "text": "text",
+    "rich": "rich",
+    "textarea": "textarea"
+  }
 }
