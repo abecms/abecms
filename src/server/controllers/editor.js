@@ -95,7 +95,7 @@ function matchAttrAbe(text, json, util, arrayBlock) {
     match
   // While regexp match HandlebarsJS template item => keepgoing
   while (match = patt.exec(text)) {
-    var matchText = match[0].replace(/value=([\'\"].*?[\'\"])/g, 'defaultvalue=$1')
+    var matchText = match[0].replace(/value=([\'\"].*?[\'\"])/g, 'forcedvalue=$1')
     addToForm(matchText, text, json, util, arrayBlock, null, null)
   }
 }

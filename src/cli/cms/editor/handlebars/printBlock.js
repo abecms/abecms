@@ -9,15 +9,25 @@ export default function printBlock (ctx, root) {
   }
 
   if(ctx[0].block != null && ctx[0].block !== '') {
-    res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
-              <label class="title">
-                ${(ctx[0].group != null) ? ctx[0].group : ctx[0].block}
-              </label>
-              <div class='single-block well well-sm'>`
+    let tmpContent = ''
+    let hidden = true
     Array.prototype.forEach.call(ctx, (item) => {
+      if (item.editable)
+        hidden = false
       if (precontrib) item.value = ''
-      res += printInput(item, root)
+      tmpContent += printInput(item, root)
     })
+
+    if(!hidden)
+      res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
+                <label class="title">
+                  ${(ctx[0].group != null) ? ctx[0].group : ctx[0].block}
+                </label>
+                <div class='single-block well well-sm'>`
+    else 
+      res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
+                <div class='single-block'>`
+    res += tmpContent
     res += '</div></div>'
   } else if(ctx[0].key.indexOf('[') > -1) {
     var ctxBlock = ctx[0].key.split('[')[0]

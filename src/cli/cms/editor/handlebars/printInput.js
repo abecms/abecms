@@ -88,8 +88,8 @@ export function createInputSource(attributes, inputClass, params) {
     if (options.indexOf('selected') > -1) {
       defaultValueSelected = ''
     }
-    if (params.required) inputSource += `<option value=\'\' value="" disabled ${defaultValueSelected}>Select ${params.desc.toLowerCase()}...</option>`
-    if (!params.required) inputSource += `<option value=\'\' value="" ${defaultValueSelected}></option>`
+    if (params.required) inputSource += `<option value="" disabled ${defaultValueSelected}>Select ${params.desc.toLowerCase()}...</option>`
+    if (!params.required) inputSource += `<option value="" ${defaultValueSelected}></option>`
     inputSource += options
 
     inputSource += '</select>'
@@ -300,15 +300,22 @@ export function createInputImage(attributes, inputClass, params) {
 }
 
 export function createInputText(attributes, inputClass, params) {
-  return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
-          <div class="input-group">
-            <div class="input-group-addon">
-              <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
-            </div>
-            <input type="text" ${attributes} class="${inputClass}" />
-            </div>
-            ${hint(params)}
-          </div>`
+  if(params.editable)
+    return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+                </div>
+                <input type="text" ${attributes} class="${inputClass}" />
+              </div>
+              ${hint(params)}
+            </div>`
+  else
+    return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div>
+                <input type="hidden" ${attributes} class="${inputClass}" />
+              </div>
+            </div>`
 }
 
 /**
@@ -318,12 +325,18 @@ export function createInputText(attributes, inputClass, params) {
  */
 export function printInput (params, root) {
   params = abeExtend.hooks.instance.trigger('beforeEditorInput', params)
-  var userWorkflow = (root.user != null) ? root.user.role.workflow : ''
-  var res = `<div class="form-group" data-precontrib-templates="${params.precontribTemplate}">`
-  var inputClass = 'form-control form-abe'
-  res += getLabel(params)
+  let userWorkflow = (root.user != null) ? root.user.role.workflow : ''
+  let inputClass = 'form-control form-abe'
+  let res
+  if(params.editable){
+    res = `<div class="form-group" data-precontrib-templates="${params.precontribTemplate}">`
+    res += getLabel(params)
+  } else {
+    res = `<div data-precontrib-templates="${params.precontribTemplate}">`
+  }
 
-  if(params.value === null && params.defaultvalue != null) params.value = params.defaultvalue
+  if(params.value === null && params.default != null) params.value = params.default
+  if(params.forcedvalue != null) params.value = params.forcedvalue
   params.placeholder = params.placeholder || ''
   params.value = params.value || ''
   
@@ -334,7 +347,7 @@ export function printInput (params, root) {
   if (params.tab !== 'slug' && !User.utils.isUserAllowedOnRoute(userWorkflow, `/abe/operations/edit/${params.status}`)) {
     params.disabled = 'disabled="disabled"'
   }
-  var attributes = getAttributes(params)
+  let attributes = getAttributes(params)
 
   if(params.source != null) {
     params.multiple = ((params['max-length'] == null || params['max-length'] > 1) && params.source.length > 0) ? 'multiple' : ''
