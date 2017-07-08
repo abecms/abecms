@@ -1,7 +1,9 @@
 src/
-test/
+tests/
 plugins/
+docs/
 .travis.yml
+appveyor.yml
 .eslintrc.json
 .eslintignore
 abe.json
