@@ -1,7 +1,7 @@
 {{#if manager.home}}
 <div class="manager-tab manager-files visible">
 {{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
-{{#unless (isTrue @root.config.publish.auto-republish.limit '>=' @root.manager.nbPosts)}}
+{{#unless (isTrue (isTrue @root.config.publish.auto-republish.limit '>=' @root.manager.nbPosts) '&&' (isTrue @root.config.publish.auto-republish.active '==' 1))}}
 <a href="#" class="btn-generate-posts pull-right btn btn-info btn-xs" data-generate-posts="true">
     <span data-not-clicked>Republish site</span>
     <span class="hidden" data-clicked>publishing...</span>
