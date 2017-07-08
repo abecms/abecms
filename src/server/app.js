@@ -15,6 +15,7 @@ import flash from 'connect-flash'
 import cookieParser from 'cookie-parser'
 import csrf from 'csurf'
 import passport from 'passport'
+import {GracefulShutdownManager} from '@moebius/http-graceful-shutdown';
 
 import {
   config,
@@ -88,6 +89,7 @@ if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
 }
 
 var app = express(opts)
+var server
   
 // Instantiate Singleton Manager (which lists all blog files)
 Manager.instance.init()
@@ -207,17 +209,29 @@ app.use(session({
 abeExtend.hooks.instance.trigger('afterExpress', app, express)
 
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
-  var server = https.createServer(opts, app)
+  server = https.createServer(opts, app)
   server.listen(port, function() {
     console.log(clc.green(`\nserver running at https://localhost:${port}/`))
     if(process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
   })
 } else {
-  app.listen(port, function() {
+  server = app.listen(port, function() {
     console.log(clc.green(`\nserver running at http://localhost:${port}/`))
     if(process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
   })
 }
+
+var shutdownManager = new GracefulShutdownManager(server);
+process.on('SIGINT', () => {
+  shutdownManager.terminate(() => {
+    console.log('SIGINT:Server has been gracefully terminated');
+  });
+});
+process.on('SIGTERM', () => {
+  shutdownManager.terminate(() => {
+    console.log('SIGTERM:Server has been gracefully terminated');
+  });
+});
 
 // important : require here so config.root is defined
 var controllers = require('./controllers')
