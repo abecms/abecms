@@ -6,6 +6,8 @@
   <head>
     <title>Abe</title>
     {{abeImport 'common-styles' manager.config this}}
+    <!-- This line below is specific to Electron  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
   </head>
   <body class="with-menu engine-open">
     {{abeImport 'header-menu' manager.config this}}
@@ -43,5 +45,7 @@
     {{abeImport 'common-scripts' manager.config this}}
     <script type="text/javascript" src="/abecms/scripts/admin-compiled.js"></script>
     <script type="text/javascript" src="/abecms/scripts/template-engine-compiled.js"></script>
+    <!-- This line below is specific to Electron  -->
+    <script>if (window.module) module = window.module;</script>
   </body>
 </html>

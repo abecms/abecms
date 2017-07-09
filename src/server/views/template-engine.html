@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
     <link rel="stylesheet" href="/abecms/css/styles.css">
     <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
+    <!-- This line below is specific to Electron  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
     <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
     <script src="https://use.fontawesome.com/6e9b081f7f.js"></script>
     {{abeImport 'head' manager.config this}}
@@ -36,5 +39,7 @@
     <!-- [pageHTML] 
       {{pageHtml}} 
     [pageHTML] -->
+    <!-- This line below is specific to Electron  -->
+    <script>if (window.module) module = window.module;</script>
   </body>
 </html>

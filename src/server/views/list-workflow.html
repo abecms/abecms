@@ -3,6 +3,8 @@
   <head>
     <title></title>
     {{abeImport 'common-styles' manager.config this}}
+    <!-- This line below is specific to Electron  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 </head>
   <body class="with-menu engine-open">
     {{abeImport 'header-menu' manager.config this}}
@@ -95,5 +97,7 @@
       </div>
     </div>
   {{abeImport 'common-scripts' manager.config this}}
+  <!-- This line below is specific to Electron  -->
+  <script>if (window.module) module = window.module;</script>
 </body>
 </html>
