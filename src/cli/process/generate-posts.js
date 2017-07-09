@@ -24,10 +24,10 @@ function publishNext(files, tt, cb, i = 0) {
     i++
     var p = new Promise((resolve) => {
       if(typeof templatesTexts[jsonObject.abe_meta.template] === 'undefined' || templatesTexts[jsonObject.abe_meta.template] === null) {
-        templatesTexts[jsonObject.abe_meta.template] = cmsTemplates.template.getTemplate(jsonObject.abe_meta.template)
+        templatesTexts[jsonObject.abe_meta.template] = cmsTemplates.template.getTemplate(jsonObject.abe_meta.template, jsonObject)
       }
 
-      cmsData.source.getDataList(path.dirname(jsonObject.abe_meta.link), templatesTexts[jsonObject.abe_meta.template], jsonObject, true)
+      cmsData.source.getDataList(path.dirname(jsonObject.abe_meta.link), templatesTexts[jsonObject.abe_meta.template], jsonObject)
         .then(() => {
           jsonObject = abeExtend.hooks.instance.trigger('afterGetDataListOnSave', jsonObject)
 
@@ -59,7 +59,7 @@ function publishNext(files, tt, cb, i = 0) {
                 const fileName = path.basename(obj.json.content.abe_meta.link, '.'+config.files.templates.extension) + '.' + extension
                 const relPath = path.join(config.root, processConfig.ABE_DESTINATION, relatedTemplate.path, fileName)
 
-                cmsData.source.getDataList(path.dirname(obj.json.content.abe_meta.link), relTemplate, obj.json.content, true)
+                cmsData.source.getDataList(path.dirname(obj.json.content.abe_meta.link), relTemplate, obj.json.content)
                 .then(() => {
                   const page = new Page(relTemplate, obj.json.content, true)
                   cmsOperations.save.saveHtml(relPath, page.html)

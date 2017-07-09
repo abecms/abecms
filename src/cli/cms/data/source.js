@@ -147,7 +147,7 @@ export function fileList(obj, tplPath, match, jsonPage) {
   return p
 }
 
-export function nextDataList(tplPath, jsonPage, match, onlyDynamicSelect) {
+export function nextDataList(tplPath, jsonPage, match) {
   var p = new Promise((resolve) => {
     if(jsonPage['abe_source'] == null) {
       jsonPage['abe_source'] = {}
@@ -160,40 +160,36 @@ export function nextDataList(tplPath, jsonPage, match, onlyDynamicSelect) {
     
     switch (type) {
     case 'request':
-      if (onlyDynamicSelect && obj.editable) {
-        resolve()
-      }else {
-        requestList(obj, tplPath, match, jsonPage)
-            .then((jsonPage) => {
-              resolve(jsonPage)
-            }).catch((e) => {
-              console.log('[ERROR] source.js requestList', e)
-            })
-      }
+      requestList(obj, tplPath, match, jsonPage)
+        .then((jsonPage) => {
+          resolve(jsonPage)
+        }).catch((e) => {
+          console.log('[ERROR] source.js requestList', e)
+        })
       break
     case 'value':
       valueList(obj, match, jsonPage)
-          .then(() => {
-            resolve()
-          }).catch((e) => {
-            console.log('[ERROR] source.js valueList', e)
-          })
+        .then(() => {
+          resolve()
+        }).catch((e) => {
+          console.log('[ERROR] source.js valueList', e)
+        })
       break
     case 'url':
       urlList(obj, tplPath, match, jsonPage)
-          .then(() => {
-            resolve()
-          }).catch((e) => {
-            console.log('[ERROR] source.js urlList', e)
-          })
+        .then(() => {
+          resolve()
+        }).catch((e) => {
+          console.log('[ERROR] source.js urlList', e)
+        })
       break
     case 'file':
       fileList(obj, tplPath, match, jsonPage)
-          .then(() => {
-            resolve()
-          }).catch((e) => {
-            console.log('[ERROR] source.js fileList', e)
-          })
+        .then(() => {
+          resolve()
+        }).catch((e) => {
+          console.log('[ERROR] source.js fileList', e)
+        })
       break
     default:
       resolve()
@@ -204,13 +200,13 @@ export function nextDataList(tplPath, jsonPage, match, onlyDynamicSelect) {
   return p
 }
 
-export function getDataList(tplPath, text, jsonPage, onlyDynamicSelect = false) {
+export function getDataList(tplPath, text, jsonPage) {
   var p = new Promise((resolve) => {
 
     var promises = []
     var matches = cmsData.regex.getTagAbeTypeRequest(text)
     Array.prototype.forEach.call(matches, (match) => {
-      promises.push(nextDataList(tplPath, jsonPage, match[0], onlyDynamicSelect))
+      promises.push(nextDataList(tplPath, jsonPage, match[0]))
     })
 
     Promise.all(promises)
