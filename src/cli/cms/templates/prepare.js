@@ -234,6 +234,7 @@ export function addAbeSourceComment(template, json) {
  */
 export function addAbeHtmlTagBetweenAbeTags(template) {
   var match
+  var match2
   var templateNoDom = striptags(template)
   var pattern = cmsData.regex.abeAsTagPattern()
   
@@ -246,20 +247,26 @@ export function addAbeHtmlTagBetweenAbeTags(template) {
     template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<!--ABE--->' + match[1].trim() + '<!--/ABE--->')
   }
 
+  let eachStyles = /<style[\S\s]*?<\/style>/g
   let eachStylePattern = /<style[\S\s]*?(<!--ABE[\S\s]*?--->)[\S\s]*?(<!--\/ABE--->)[\S\s]*?<\/style>/g
-  while (match = eachStylePattern.exec(template)) {
+  while (match = eachStyles.exec(template)) {
     var res = match[0]
-    res = res.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '/*' + match[1] + '*/' )
-             .replace(cmsData.regex.escapeTextToRegex(match[2], 'g'), '/*' + match[2] + '*/' )
-    template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
+    while (match2 = eachStylePattern.exec(res)) {
+      res = res.replace(cmsData.regex.escapeTextToRegex(match2[1], 'g'), '/*' + match2[1] + '*/' )
+               .replace(cmsData.regex.escapeTextToRegex(match2[2], 'g'), '/*' + match2[2] + '*/' )
+      template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
+    }
   }
 
+  let eachScripts = /<script[\S\s]*?<\/script>/g
   let eachScriptPattern = /<script[\S\s]*?(<!--ABE[\S\s]*?--->)[\S\s]*?(<!--\/ABE--->)[\S\s]*?<\/script>/g
-  while (match = eachScriptPattern.exec(template)) {
+  while (match = eachScripts.exec(template)) {
     var res = match[0]
-    res = res.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '/*' + match[1] + '*/' )
-             .replace(cmsData.regex.escapeTextToRegex(match[2], 'g'), '/*' + match[2] + '*/' )
-    template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
+    while (match2 = eachScriptPattern.exec(res)) {
+      res = res.replace(cmsData.regex.escapeTextToRegex(match2[1], 'g'), '/*' + match2[1] + '*/' )
+               .replace(cmsData.regex.escapeTextToRegex(match2[2], 'g'), '/*' + match2[2] + '*/' )
+      template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
+    }
   }
 
   return template
