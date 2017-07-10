@@ -25,12 +25,18 @@ describe('Abe', function() {
         .useXpath()
         .url('http://localhost:3003/abe/editor')
         .click('//*[@id="selectTemplate"]/option[2]')
-        .waitForElementPresent("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 30000)
+        .waitForElementVisible("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 30000)
         .setValue("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 'autocomplete')
         .click("//button[@type='submit']")
         .pause(1000)
-        .waitForElementPresent('//*[@id="abeForm"]', 2000)
+        .waitForElementVisible('//*[@id="abeForm"]', 2000)
         .assert.urlEquals("http://localhost:3003/abe/editor/autocomplete.html", "Clicked URL Matches with URL of the New Window");
+        .click('//*[@id="colors.multiple"]/option[2]')
+        .pause(1000)
+        .assert.containsText('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 'rouge')
+        .click('//*[@id="colors"]/div/div/div/div[2]/div/div/div/span')
+        .pause(1000)
+        .assert.elementNotPresent('//*[@id="colors"]/div/div/div/div[2]/div/div/div')
     });
 
     it('Check input select fields', function(client) {
@@ -38,7 +44,7 @@ describe('Abe', function() {
         .useXpath()
         .url('http://localhost:3003/abe/editor/autocomplete.html')
         .click('//*[@id="colors.multiple"]/option[2]')
-        .waitForElementPresent('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 1000)
+        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 1000)
         .assert.containsText('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 'rouge')
         .click('//*[@id="colors"]/div/div/div/div[2]/div/div/div/span')
         .assert.elementNotPresent('//*[@id="colors"]/div/div/div/div[2]/div/div/div')
