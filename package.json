@@ -154,7 +154,7 @@
     "jsesc": "^2.5.1",
     "json5": "^0.5.1",
     "mocha": "^3.0.2",
-    "nightwatch": "^0.9.11",
+    "nightwatch": "^0.9.16",
     "node-sass": "^4.3.0",
     "nodemon": "^1.8.1",
     "once": "^1.4.0",
