@@ -1,6 +1,6 @@
 os:
-  - osx
   - linux
+  - osx
 language: node_js
 node_js:
   - "4"
@@ -35,11 +35,11 @@ before_install:
 install:
   - npm install
   - npm update
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run install-selenium; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run install-selenium; fi
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run distribute; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run distribute; fi
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then jdk_switcher use oraclejdk8; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then jdk_switcher use oraclejdk8; fi
   - npm run test-coveralls
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run test-e2e; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run lint; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run test-e2e; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run lint; fi
