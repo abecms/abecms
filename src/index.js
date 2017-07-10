@@ -176,9 +176,11 @@ program
     console.log('website started : ' + dir)
 
     var cp = exec(command,{env: environment, maxBuffer: 1024 * 500}, function (err, out, code) {
-      if (err instanceof Error) throw err
-      process.stderr.write(err)
-      process.stdout.write(out)
+      try{
+        if (err instanceof Error) throw err
+        process.stderr.write(err)
+        process.stdout.write(out)
+      } catch(e){}
       process.exit(code)
     })
     cp.stderr.pipe(process.stderr)
