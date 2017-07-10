@@ -25,7 +25,7 @@ describe('Abe', function() {
         .useXpath()
         .url('http://localhost:3003/abe/editor')
         .click('//*[@id="selectTemplate"]/option[2]')
-        .waitForElementVisible("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 1000)
+        .waitForElementVisible("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 30000)
         .setValue("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 'autocomplete')
         .click("//button[@type='submit']")
         .pause(1000)
