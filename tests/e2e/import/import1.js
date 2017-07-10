@@ -42,7 +42,7 @@ describe('Abe', function() {
         .url('http://localhost:3003/abe/editor/import.html')
         .waitForElementVisible('//body')
         .click('//*[@id="language"]/option[2]')
-        .click("//div[@class='toolbar']/div[@class='btns']/button[@class='btn btn-info btn-save'][2]")
+        .click("//div[@class='toolbar']/div[@class='btns']/button[@class='btn btn-info btn-save btn-draft']")
         .assert.urlEquals("http://localhost:3003/abe/editor/import.html", "Clicked URL Matches with URL of the New Window");
     });
 
