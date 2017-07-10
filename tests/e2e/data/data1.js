@@ -20,42 +20,42 @@ describe('Abe', function() {
       done();
     });
 
-    it('Create a autocomplete template post', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor')
-        .click('//*[@id="selectTemplate"]/option[2]')
-        .waitForElementVisible("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 1000)
-        .setValue("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 'autocomplete')
-        .click("//button[@type='submit']")
-        .pause(1000)
-        .waitForElementVisible('//*[@id="abeForm"]', 2000)
-        .assert.urlEquals("http://localhost:3003/abe/editor/autocomplete.html", "Clicked URL Matches with URL of the New Window");
-    });
+    // it('Create a autocomplete template post', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor')
+    //     .click('//*[@id="selectTemplate"]/option[2]')
+    //     .waitForElementVisible("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 1000)
+    //     .setValue("//div[@data-precontrib-templates='autocomplete']//input[@id='name']", 'autocomplete')
+    //     .click("//button[@type='submit']")
+    //     .pause(1000)
+    //     .waitForElementVisible('//*[@id="abeForm"]', 2000)
+    //     .assert.urlEquals("http://localhost:3003/abe/editor/autocomplete.html", "Clicked URL Matches with URL of the New Window");
+    // });
 
-    it('Check input select fields', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor/autocomplete.html')
-        .click('//*[@id="colors.multiple"]/option[2]')
-        .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
-        .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
-        .click('//*[@data-parent-id="colors.multiple"]/span')
-        .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
-    });
+    // it('Check input select fields', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor/autocomplete.html')
+    //     .click('//*[@id="colors.multiple"]/option[2]')
+    //     .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
+    //     .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
+    //     .click('//*[@data-parent-id="colors.multiple"]/span')
+    //     .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
+    // });
 
-    it('Check input autocomplete fields', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor/autocomplete.html')
-        .setValue('//*[@id="colors.colors_autocomplete"]', 'rouge')
-        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div', 1000)
-        .click('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div')
-        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[3]/div/div/div', 1000)
-        .assert.containsText('//*[@id="colors"]/div/div/div/div[3]/div/div/div', 'rouge')
-        .click('//*[@id="colors"]/div/div/div/div[3]/div/div/div/span')
-        .assert.elementNotPresent('//*[@id="colors"]/div/div/div/div[3]/div/div/div')
-    });
+    // it('Check input autocomplete fields', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor/autocomplete.html')
+    //     .setValue('//*[@id="colors.colors_autocomplete"]', 'rouge')
+    //     .waitForElementVisible('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div', 1000)
+    //     .click('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div')
+    //     .waitForElementVisible('//*[@data-parent-id="colors.colors_autocomplete"]', 1000)
+    //     .assert.containsText('//*[@data-parent-id="colors.colors_autocomplete"]', 'rouge')
+    //     .click('//*[@data-parent-id="colors.colors_autocomplete"]/span')
+    //     .assert.elementNotPresent('//*[@data-parent-id="colors.colors_autocomplete"]')
+    // });
 
     // it('Abe type data reference json', function(client) {
     //   client
