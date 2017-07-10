@@ -22,7 +22,7 @@ describe('Abe', function() {
       done();
     });
 
-    it('Create an import post', function(client) {
+    it('import: Create an import post', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')
@@ -36,7 +36,7 @@ describe('Abe', function() {
         .assert.urlEquals("http://localhost:3003/abe/editor/import.html", "Clicked URL Matches with URL of the New Window");
     });
 
-    it('Select a language', function(client) {
+    it('import: Select a language', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor/import.html')
@@ -46,18 +46,18 @@ describe('Abe', function() {
         .assert.urlEquals("http://localhost:3003/abe/editor/import.html", "Clicked URL Matches with URL of the New Window");
     });
 
-    // Does not work in Travis
-    // it('Check that the partial displayed is ok', function(client) {
-    //   client
-    //     .useXpath()
-    //     .url('http://localhost:3003/abe/editor/import.html')
-    //     .waitForElementVisible('//body')
-    //     .pause(2000)
-    //     .frame('page-template')
-    //     .expect.element("//*[@id='fh5co-logo']/a").text.to.contain('Abe demo fr');
-    // });
+    //Does not work in Travis
+    it('import: Check that the partial displayed is ok', function(client) {
+      client
+        .useXpath()
+        .url('http://localhost:3003/abe/editor/import.html')
+        .waitForElementVisible('//body')
+        .pause(2000)
+        .frame('page-template')
+        .expect.element("//*[@id='fh5co-logo']/a").text.to.contain('Abe demo fr');
+    });
     
-    it('The import post is deleted in the manager', function(client) {
+    it('import: The import post is deleted in the manager', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')
