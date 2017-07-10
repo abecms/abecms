@@ -38,10 +38,10 @@ describe('Abe', function() {
         .useXpath()
         .url('http://localhost:3003/abe/editor/autocomplete.html')
         .click('//*[@id="colors.multiple"]/option[2]')
-        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 1000)
-        .assert.containsText('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 'rouge')
-        .click('//*[@id="colors"]/div/div/div/div[2]/div/div/div/span')
-        .assert.elementNotPresent('//*[@id="colors"]/div/div/div/div[2]/div/div/div')
+        .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
+        .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
+        .click('//*[@data-parent-id="colors.multiple"]/span')
+        .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
     });
 
     it('Check input autocomplete fields', function(client) {
