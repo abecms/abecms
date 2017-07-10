@@ -27,17 +27,17 @@ before_install:
  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then sudo apt-get install -y libappindicator1 fonts-liberation; fi
  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; fi
  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then sudo dpkg -i google-chrome*.deb; fi
- - if [[ $TRAVIS_OS_NAME == osx ]] && [[ "$MODE" == "e2e" ]]; then rm '/usr/local/bin/f2py'; fi
- - if [[ $TRAVIS_OS_NAME == osx ]] && [[ "$MODE" == "e2e" ]]; then rm -r '/usr/local/lib/python2.7/site-packages/numpy'; fi
- - if [[ $TRAVIS_OS_NAME == osx ]] && [[ "$MODE" == "e2e" ]]; then brew install homebrew/science/opencv; fi
+ - if [[ $TRAVIS_OS_NAME == "osx" ]] && [[ "$MODE" == "e2e" ]]; then rm '/usr/local/bin/f2py'; fi
+ - if [[ $TRAVIS_OS_NAME == "osx" ]] && [[ "$MODE" == "e2e" ]]; then rm -r '/usr/local/lib/python2.7/site-packages/numpy'; fi
+ - if [[ $TRAVIS_OS_NAME == "osx" ]] && [[ "$MODE" == "e2e" ]]; then brew install homebrew/science/opencv; fi
 install:
   - npm install
   - npm update
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run install-selenium; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run install-selenium; fi
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run distribute; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run distribute; fi
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then jdk_switcher use oraclejdk8; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then jdk_switcher use oraclejdk8; fi
   - npm run test-coveralls
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run test-e2e; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then npm run lint; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run test-e2e; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$MODE" == "e2e" ]]; then npm run lint; fi
