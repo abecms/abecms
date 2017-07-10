@@ -30,21 +30,37 @@ module.exports = {
         "waitForConditionTimeout": 3000
       },
       "desiredCapabilities" : {
+        "loggingPrefs": {
+          "browser":     "ALL",
+          "driver":      "ALL",
+          "performance": "ALL"
+        },
         "browserName" : "chrome",
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "args" : ["start-fullscreen"]
+          "perfLoggingPrefs": {
+            "traceCategories": "v8,blink.console,disabled-by-default-devtools.timeline"
+          },
+          "args" : ["--no-sandbox", "start-fullscreen", "disable-web-security", "allow-running-insecure-content"]
         }
       }
     },
     "chrome": {
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "javascriptEnabled": true,
+      "desiredCapabilities" : {
+        "loggingPrefs": {
+          "browser":     "ALL",
+          "driver":      "ALL",
+          "performance": "ALL"
+        },
+        "browserName" : "chrome",
+        "javascriptEnabled" : true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "args" : ["--no-sandbox","start-fullscreen", "disable-web-security", "allow-running-insecure-content"]
+          "perfLoggingPrefs": {
+            "traceCategories": "v8,blink.console,disabled-by-default-devtools.timeline"
+          },
+          "args" : ["--no-sandbox", "start-fullscreen", "disable-web-security", "allow-running-insecure-content"]
         }
       }
     }
@@ -60,6 +76,19 @@ module.exports = {
     }
   },
 */
+
+/*
+loggingPrefs: {
+  'browser':     'ALL',
+  'driver':      'ALL',
+  'performance': 'ALL'
+},
+chromeOptions: {
+  perfLoggingPrefs: {
+      traceCategories: 'v8,blink.console,disabled-by-default-devtools.timeline'
+  },
+}
+ */
 /**
  * selenium-download does exactly what it's name suggests;
  * downloads (or updates) the version of Selenium (& chromedriver)
