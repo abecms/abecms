@@ -38,19 +38,19 @@ describe('Abe', function() {
         .useXpath()
         .url('http://localhost:3003/abe/editor/autocomplete.html')
         .click('//*[@id="colors.multiple"]/option[2]')
-        .getValue('//*[@id="colors"]', function(result) {
+        // .source(function (result){
+        //     // Source will be stored in result.value
+        //     console.log(result.value);
+        // })
+        .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
+        .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
+        .getText('//*[@id="colors"]', function(result) {
           elementValue = result.value;
-          console.log(result)
+          //console.log(result)
         })
         .perform(function() {
           console.log('elementValue', elementValue);
         })
-        .source(function (result){
-            // Source will be stored in result.value
-            console.log(result.value);
-        })
-        .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
-        .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
         .click('//*[@data-parent-id="colors.multiple"]/span')
         .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
     });
