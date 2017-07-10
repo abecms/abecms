@@ -162,7 +162,7 @@
     "once": "^1.4.0",
     "parallelshell": "^2.0.0",
     "q": "^1.5.0",
-    "selenium-download": "^2.0.7",
+    "selenium-download": "^2.0.10",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "source-map": "^0.5.6",
