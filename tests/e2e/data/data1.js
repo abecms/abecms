@@ -30,7 +30,7 @@ describe('Abe', function() {
         .click("//button[@type='submit']")
         .pause(1000)
         .waitForElementVisible('//*[@id="abeForm"]', 2000)
-        .assert.urlEquals("http://localhost:3003/abe/editor/autocomplete.html", "Clicked URL Matches with URL of the New Window");
+        .assert.urlEquals("http://localhost:3003/abe/editor/autocomplete.html", "Clicked URL Matches with URL of the New Window")
         .click('//*[@id="colors.multiple"]/option[2]')
         .pause(1000)
         .assert.containsText('//*[@id="colors"]/div/div/div/div[2]/div/div/div', 'rouge')

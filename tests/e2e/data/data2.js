@@ -20,7 +20,7 @@ describe('Abe', function() {
       done();
     });
 
-    it('Create a autocomplete template post', function(client) {
+    it('Create a data template post', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')

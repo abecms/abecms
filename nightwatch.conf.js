@@ -6,7 +6,9 @@ module.exports = {
     "tests/e2e"
   ],
   "output_folder": "./reports",
-  "test_runner" : "mocha",
+  "test_runner" : {
+    "type" : "mocha"
+  },
   "selenium": {
     "start_process": true,
     "server_path": "./node_modules/nightwatch/bin/selenium.jar",
@@ -42,12 +44,22 @@ module.exports = {
         "javascriptEnabled": true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "args" : ["start-fullscreen"]
+          "args" : ["--no-sandbox","start-fullscreen", "disable-web-security", "allow-running-insecure-content"]
         }
       }
     }
   }
 }
+
+/*
+// limit tests to one regex
+"test_runner" : {
+    "type" : "mocha",
+    "options" : {
+      "grep" : /import/
+    }
+  },
+*/
 /**
  * selenium-download does exactly what it's name suggests;
  * downloads (or updates) the version of Selenium (& chromedriver)
