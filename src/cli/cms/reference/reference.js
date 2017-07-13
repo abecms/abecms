@@ -11,7 +11,7 @@ export function getFiles(name = '') {
   const pathToReferences = path.join(config.root, config.reference.url)
   let res = {}
 
-  if(name !== '') res[name] = cmsData.file.get(name)
+  if(name !== '') res[name] = cmsData.file.get(path.join(pathToReferences, name))
   else {
     const files = coreUtils.file.getFilesSync(pathToReferences, true, '.json')
     Array.prototype.forEach.call(files, (pathFile) => {
