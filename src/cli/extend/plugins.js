@@ -161,7 +161,7 @@ class Plugins {
         }
         try {
           let posts = path.join(plugRoutes, 'post')
-          let directoryPosts = fse.lstatSync(gets)
+          let directoryPosts = fse.lstatSync(posts)
           if (directoryPosts.isDirectory()) {
             let routesPost = []
             let routePaths = coreUtils.file.getFilesSync(posts, false)
