@@ -336,10 +336,10 @@ export function printInput (params, root) {
   }
 
   if(params.value === null && params.default != null) params.value = params.default
-  if(params.forcedvalue != null) params.value = params.forcedvalue
+  if(params.forcedvalue != null && (params.value == null || params.value === '')) params.value = params.forcedvalue
   params.placeholder = params.placeholder || ''
   params.value = params.value || ''
-  
+
   if(typeof params.value === 'string') params.value = params.value.replace(/\"/g, '&quot;')
   if(!(params.toolbar != null)) params.toolbar = '*'
 
