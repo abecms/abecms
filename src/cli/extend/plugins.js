@@ -432,6 +432,28 @@ class Plugins {
 
     return p
   }
+
+  pluginExistsAtLocation(plugin, location) {
+    try {
+      var pluginDirectory = fse.lstatSync(path.join(config.root, location, plugin))
+      
+      return pluginDirectory.isDirectory() ? true : false
+    } catch (err) {
+
+      return false
+    }
+  }
+
+  getPluginLocation(plugin) {
+    var location = false
+    if (this.pluginExistsAtLocation(plugin, 'scripts')) {
+      location = 'scripts'
+    } else if (this.pluginExistsAtLocation(plugin, 'node_modules')) {
+      location = 'node_modules'
+    }
+
+    return location
+  }
 }
 
 export default Plugins
