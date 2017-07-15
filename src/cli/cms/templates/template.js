@@ -395,15 +395,10 @@ export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
  * @return {object}              [description]
  */
 export function getAbePrecontribFromTemplates(templatesList) {
-  var fields = []
   var precontributionTemplate = []
 
-  // loop over template file
   Array.prototype.forEach.call(templatesList, (file) => {
-    var slugMatch = cmsData.regex.getTagAbeWithType(file.template, 'slug')
-    var templateText = file.template
-
-    templateText = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(file.template)
+    var templateText = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(file.template)
     templateText = templateText.replace(/(?!.*?tab=['|"]slug)(\{\{abe.+.*\}\})/g, '')
     templateText = templateText.replace(/(\{\{abe.+)(\}\})/g, `$1 precontribTemplate="${file.name}"$2`)
     precontributionTemplate.push(templateText)
