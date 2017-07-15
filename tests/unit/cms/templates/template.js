@@ -349,7 +349,7 @@ describe('cmsTemplates', function() {
 
     // test
     var precontrib = cmsTemplates.template.getAbePrecontribFromTemplates([{name: 'slug', template: this.fixture.slug}])
-    chai.expect(precontrib.template[0]).to.not.be.undefined;
+    chai.expect(precontrib[0]).to.not.be.undefined;
   });
 
   /**

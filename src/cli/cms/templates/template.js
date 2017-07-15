@@ -396,7 +396,7 @@ export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
  * then removes all abe tags (but the tab='slug' ones)
  * then adds 'precontribTemplate' with the template name as an attribute to tab='slug' tags
  * @param  {Array} templatesList [description]
- * @return {object}              [description]
+ * @return {Array}              [description]
  */
 export function getAbePrecontribFromTemplates(templatesList) {
   var precontributionTemplate = []
@@ -408,9 +408,7 @@ export function getAbePrecontribFromTemplates(templatesList) {
     precontributionTemplate.push(templateText)
   })
 
-  return {
-    template: precontributionTemplate
-  }
+  return precontributionTemplate
 }
 
 export function getStructureAndTemplates() {

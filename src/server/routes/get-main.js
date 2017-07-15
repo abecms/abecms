@@ -27,9 +27,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.editConfig = EditorVariables.express.req.app.get('config')
   manager.config = JSON.stringify(config)
-    
-  var _hasBlock = (obj) ? obj.hasBlock : false
-  var _hasSingleBlock = (obj) ? obj.hasSingleBlock : false
+
   var _preview = (filePath) ? '/abe/page/' + EditorVariables.express.req.params[0] + `?filePath=${EditorVariables.express.req.query.filePath}` : false
   var _form = (obj) ? obj.form : false
   var _json = (obj) ? obj.json : false
@@ -56,12 +54,9 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   EditorVariables.test = JSON.stringify(locale)
   EditorVariables.text = locale
   EditorVariables.preview = _preview
-  EditorVariables.hasSingleBlock = _hasSingleBlock
-  EditorVariables.hasBlock = _hasBlock
   EditorVariables.form = _form
   EditorVariables.json = _json
   EditorVariables.manager = manager
-//  EditorVariables.nonce = '\'nonce-' + EditorVariables.express.res.locals.nonce + '\''
   EditorVariables.editorWidth = editorWidth
 
   if (_json != null && _json.abe_meta) {
@@ -73,7 +68,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   if (filePath != null && filePath.indexOf('.json') > -1) {
     EditorVariables.express.res.set('Content-Type', 'application/json')
     EditorVariables.express.res.send(JSON.stringify(_json))
-  }else if(EditorVariables.pageHtml != ''){
+  } else if(EditorVariables.pageHtml != ''){
     EditorVariables.express.res.render(config.abeEngine, EditorVariables)
   } else {
     EditorVariables.express.res.render('../views/template-manager', EditorVariables)
@@ -174,7 +169,7 @@ var route = function(req, res, next) {
     var precontribs = Manager.instance.getPrecontribution()
     var promises = []
     EditorVariables.resultPrecontrib = []
-    Array.prototype.forEach.call(precontribs.template, (precontrib) => {
+    Array.prototype.forEach.call(precontribs, (precontrib) => {
       var p = editor(precontrib, obj.json, '', true)
         .then((resultPrecontrib) => {
           EditorVariables.resultPrecontrib.push(resultPrecontrib)

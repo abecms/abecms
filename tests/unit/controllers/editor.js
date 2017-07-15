@@ -27,7 +27,6 @@ describe('editor', function() {
     var result = add(
       data.obj,
       data.json,
-      data.text,
       {add:function () {}}
     )
 
