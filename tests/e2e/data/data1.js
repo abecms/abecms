@@ -55,6 +55,8 @@ describe('Abe', function() {
         .click('//*[@id="colors.multiple"]/option[2]')
         .moveToElement('//*[@id="colors.multiple"]/option[2]', 0, 0)
         .mouseButtonClick(0)
+        .click('//*[@id="colors.multiple"]')
+        .keys(['\uE015', '\uE015', '\uE006'])
         .getText('//*[@id="colors"]', function(result) {
           elementValue = result.value;
           //console.log(result)
