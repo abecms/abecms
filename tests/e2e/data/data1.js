@@ -62,6 +62,9 @@ describe('Abe', function() {
         .click('option[2]') //selects the option but doesn't click
         .pause(5000)
         .keys(['\uE006'])
+        .useCss()
+        .click('#colors.multiple option[2]')
+        .useXpath()
         .getText('//*[@id="colors"]', function(result) {
           elementValue = result.value;
           //console.log(result)
