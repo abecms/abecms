@@ -40,6 +40,7 @@ describe('Abe', function() {
         .execute(function() {
           var sel = document.getElementById('colors.multiple')
           sel.options[1].selected = true;
+          console.log(sel.options[1].value)
 
           if ("createEvent" in document) {
               var evt = document.createEvent("HTMLEvents");
