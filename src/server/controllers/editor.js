@@ -85,7 +85,7 @@ function addAbeTagToForm(match, text, json, util, arrayBlock) {
 
 /**
  * parse every abe tags, 
- * create the forcedvalue attribute if it find a value in 'value' attribute
+ * create the defaultValue attribute if it find a value in 'value' attribute
  * then add this tag to form
  *
  * @param  {[type]} text       [description]
@@ -95,11 +95,12 @@ function addAbeTagToForm(match, text, json, util, arrayBlock) {
  * @return {[type]}            [description]
  */
 function matchAttrAbe(text, json, util, arrayBlock) {
+  // pattern to detect every abe tags
   var patt = /abe [^{{}}]+?(?=\}})/g,
     match
   // While regexp match HandlebarsJS template item => keepgoing
   while (match = patt.exec(text)) {
-    var matchText = match[0].replace(/value=([\'\"].*?[\'\"])/g, 'forcedvalue=$1')
+    var matchText = match[0].replace(/value=([\'\"].*?[\'\"])/g, 'defaultValue=$1')
     addAbeTagToForm(matchText, text, json, util, arrayBlock)
   }
 }

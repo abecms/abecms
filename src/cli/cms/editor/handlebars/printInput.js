@@ -335,8 +335,7 @@ export function printInput (params, root) {
     res = `<div data-precontrib-templates="${params.precontribTemplate}">`
   }
 
-  if(params.value === null && params.default != null) params.value = params.default
-  if(params.forcedvalue != null) params.value = params.forcedvalue
+  if(params.value === null && params.defaultValue != null) params.value = params.defaultValue
   params.placeholder = params.placeholder || ''
   params.value = params.value || ''
   
