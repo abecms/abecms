@@ -296,11 +296,11 @@ export function execQuery(match, jsonPage) {
   return files
 }
 
-export function executeQuerySync(pathQuerySync, match, jsonPage) {
+export function executeQuerySync(match, jsonPage) {
   return execQuery(pathQuerySync, match, jsonPage)
 }
 
-export function executeQuery(pathexecuteQuery, match, jsonPage) {
+export function executeQuery(match, jsonPage) {
   var p = new Promise((resolve) => {
     var res = execQuery(pathexecuteQuery, match, jsonPage)
     resolve(res)
