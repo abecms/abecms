@@ -42,9 +42,9 @@ export default function compileAbe(){
           stripIgnoreTag: true
         })
         return new Handlebars.SafeString(testXSS)
-       } else {
-         return new Handlebars.SafeString(value.replace(/&quot;/g, '"'))
-       } 
+      } else {
+        return new Handlebars.SafeString(value.replace(/&quot;/g, '"'))
+      } 
     }
 
     return value.replace(/%27/, '\'')
@@ -75,9 +75,9 @@ export default function compileAbe(){
         stripIgnoreTag: true
       })
       return new Handlebars.SafeString(testXSS)
-     } else {
-       return new Handlebars.SafeString(value.replace(/&quot;/g, '"'))
-     } 
+    } else {
+      return new Handlebars.SafeString(value.replace(/&quot;/g, '"'))
+    } 
   }
 
   return value.replace(/%27/, '\'')

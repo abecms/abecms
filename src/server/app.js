@@ -16,7 +16,7 @@ import flash from 'connect-flash'
 import cookieParser from 'cookie-parser'
 import csrf from 'csurf'
 import passport from 'passport'
-import {GracefulShutdownManager} from '@moebius/http-graceful-shutdown';
+import {GracefulShutdownManager} from '@moebius/http-graceful-shutdown'
 
 import {
   config,
@@ -101,7 +101,7 @@ app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000}))
-app.use(expressValidator());
+app.use(expressValidator())
 app.use(csrf({cookie: {secure: config.cookie.secure}}))
 app.use(function(req, res, next) {
   if (req.url.indexOf('/abe/') > -1 ) {
@@ -158,7 +158,7 @@ if (process.env.NODE_ENV === 'development') {
     if(err.code !== 'ECONNRESET'){
       throw err
     }
-  });
+  })
   app.use(middleLiveReload)
 }
 
@@ -223,21 +223,21 @@ if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   })
 }
 
-var shutdownManager = new GracefulShutdownManager(server);
+var shutdownManager = new GracefulShutdownManager(server)
 process.on('SIGINT', () => {
   shutdownManager.terminate(() => {
-    console.log('SIGINT:Server has been gracefully terminated');
-  });
-});
+    console.log('SIGINT:Server has been gracefully terminated')
+  })
+})
 process.on('SIGTERM', () => {
   shutdownManager.terminate(() => {
-    console.log('SIGTERM:Server has been gracefully terminated');
-  });
-});
+    console.log('SIGTERM:Server has been gracefully terminated')
+  })
+})
 
 // important : require here so config.root is defined
-var controllers = require('./controllers')
-app.use(controllers.default)
+var routes = require('./routes')
+app.use(routes.default)
 
 // This static path is mandatory for relative path to statics in templates
 app.use('/abe', express.static(publish))

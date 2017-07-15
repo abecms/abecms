@@ -6,6 +6,7 @@ import {
   config,
   Page,
   cmsData,
+  cmsEditor,
   cmsTemplates,
   coreUtils,
   abeExtend,
@@ -13,7 +14,6 @@ import {
   User
 } from '../../cli'
 
-import {editor} from '../controllers/editor'
 import locale from '../helpers/abe-locale'
 
 function renderAbeAdmin(EditorVariables, obj, filePath) {
@@ -147,7 +147,7 @@ var route = function(req, res, next) {
         json = cmsData.file.get(jsonPath, 'utf8')
       }
       var text = cmsTemplates.template.getTemplate(template, json)
-      editor(text, json)
+      cmsEditor.editor.create(text, json)
         .then((result) => {
           resolve(result)
         }).catch(function(e) {
@@ -168,7 +168,7 @@ var route = function(req, res, next) {
     var promises = []
     EditorVariables.resultPrecontrib = []
     Array.prototype.forEach.call(precontribs, (precontrib) => {
-      var p = editor(precontrib, obj.json, true)
+      var p = cmsEditor.editor.create(precontrib, obj.json, true)
         .then((resultPrecontrib) => {
           EditorVariables.resultPrecontrib.push(resultPrecontrib)
         }).catch(function(e) {

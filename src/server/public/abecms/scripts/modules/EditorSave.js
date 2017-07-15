@@ -102,11 +102,11 @@ export default class EditorSave {
             if(this._json.data[obj].length == 1) delete this._json.data[obj]
           }
           else if(typeof input.getAttribute('data-size') !== null && input.getAttribute('data-size') !== null){
-              var sizes = input.getAttribute('data-size').split(',')
-              for (var i = 0; i < sizes.length; i++) {
-                  var sizeValue = value.replace(/\.(jpg|jpeg|png|gif|svg)/, '_' + sizes[i] + '.$1');
-                  setObjByString(this._json.data[obj][index], `${keyJson}_${sizes[i]}`, sizeValue)
-              }
+            var sizes = input.getAttribute('data-size').split(',')
+            for (var i = 0; i < sizes.length; i++) {
+              var sizeValue = value.replace(/\.(jpg|jpeg|png|gif|svg)/, '_' + sizes[i] + '.$1')
+              setObjByString(this._json.data[obj][index], `${keyJson}_${sizes[i]}`, sizeValue)
+            }
           }
         } else {
           if (input.getAttribute('data-autocomplete') === 'true' || input.getAttribute('data-multiple') === 'multiple') {
@@ -126,7 +126,7 @@ export default class EditorSave {
               input.value.indexOf('{') > -1 &&
               !input.classList.contains('abe-keep-format')
             ) {
-              value = JSON.parse(input.value)
+            value = JSON.parse(input.value)
           } else {
             value = input.value
           }

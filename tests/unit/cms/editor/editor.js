@@ -6,12 +6,12 @@ var sinon = require('sinon');
 var path = require('path');
 var fse = require('fs-extra');
 
-var config = require('../../../src/cli').config
+var config = require('../../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
 
-import data from '../fixtures/editor/add.json'
-import {add} from '../../../src/server/controllers/editor'
-var Manager = require('../../../src/cli').Manager;
+import data from '../../fixtures/editor/add.json'
+var cmsEditor = require('../../../../src/cli').cmsEditor;
+var Manager = require('../../../../src/cli').Manager;
 
 describe('editor', function() {
   before( function(done) {
@@ -24,7 +24,7 @@ describe('editor', function() {
    * 
    */
   it('editor.add', function() {
-    var result = add(
+    var result = cmsEditor.editor.add(
       data.obj,
       data.json,
       {add:function () {}}

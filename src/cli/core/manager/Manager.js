@@ -91,15 +91,15 @@ class Manager {
     this._watchersStart()
 
     var lport = process.env.LIVERELOAD_PORT || 35729
-    this.lserver = express();
+    this.lserver = express()
 
     // Launching a Livereload server
     this.lserver
     .use(bodyParser())
     .use(tinylr.middleware({ app: this.lserver }))
     .listen(lport, function() {
-      console.log('Livereload listening on %d', lport);
-    });
+      console.log('Livereload listening on %d', lport)
+    })
 
     // sync assets from templates to /site
     cmsTemplates.assets.copy()

@@ -34,7 +34,7 @@ describe('Form', function() {
     var form = new cmsEditor.form()
     form.add({key: 'test'})
     chai.expect(form._form.default.item[0].key).to.be.equal('test');
-    chai.expect(form.dontHaveKey('test')).to.be.equal(false);
+    chai.expect(form.contains('test')).to.be.equal(true);
     chai.expect(form.form.default.item.length).to.be.above(0);
   });
 });

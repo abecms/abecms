@@ -17,7 +17,7 @@ export let abeTag = /({{abe .*?[\s\S].*?}})/g
 // export let abeAsTagPattern = /({{abe.*?type=[\'|\"][text|rich|textarea|code]+[\'|\"][\s\S].*?}})/g
 
 // pattern to detect every abe tags
-//var patt = /abe [^{{}}]+?(?=\}})/g,
+//var patt = /abe [^{{}}]+?(?=\}})/g
 export function abePattern(){
   return new RegExp('(--->(\\*\\/)?{{abe .*?type=[\'|"]['+ getAbeTags() +']+[\'|"][\\s\\S].*?}})', 'g')
 }
@@ -30,10 +30,13 @@ export function abeAsTagPattern(){
 // export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1}{{abe.*?}})/g;
 // export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})(.*?)({{abe.*?}})/g
 export let abeAsAttributePattern = /( [A-Za-z0-9\-\_]+=["|']{1})([^=]*?)({{abe .*?["|'| ]}})["|']/g
+
 // This pattern finds all {{#each ...}}...{{/each}} blocks
-export let eachBlockPattern = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
+export let eachBlockPattern = /(\{\{#each ([\s\S]*?)}}[\s\S]*?\/each\}\})/g
+
 // This pattern finds all non editable data types
 export let nonEditableDataReg = /({{abe .*(type=[\'|\"]data')?.*editable=[\'|\"]false.*(type=[\'|\"]data')?.*}})/g
+
 // This pattern finds all data types
 export let dataTypeReg = /({{abe .*type=[\'|\"]data.*}})/g
 
@@ -80,6 +83,11 @@ export function escapeTextToRegex(str, params) {
 
 /**
  * Test if a string don't contains string key from ABE block statement
+ * Not contains {{#each keyName}}
+ * nor contains {{#}}
+ * nor contains {{/
+ * nor contains {{/each
+ * 
  * @param  {String}  str string to test
  * @return {Boolean} true = this is not a block content
  */
@@ -120,6 +128,7 @@ export function isEachStatement(str) {
 
 /**
  * Test if a string contains string key from {{#each}} block statement
+ *
  * @param  {String}  str string to test
  * @return {Boolean} true = this is a block content
  */
