@@ -377,6 +377,10 @@ export function getAbeSlugFromTemplates(templatesList) {
   return slugs
 }
 
+/**
+ * if there is no abe tab='slug' in the template, add a default abe tag
+ * @param {[type]} templateText [description]
+ */
 export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
   var matches = cmsData.regex.getTagAbeWithTab(templateText, 'slug')
   if(matches == null || matches[0] == null) {
@@ -388,7 +392,7 @@ export function setAbePrecontribDefaultValueIfDoesntExist(templateText) {
 
 /**
  * Lists all templates, in each template:
- * if no type='slug' replaces the template with default tag {{abe type='text' key='name'...}}
+ * if no tab='slug' replaces the template with default tag {{abe type='text' key='name'...}}
  * then removes all abe tags (but the tab='slug' ones)
  * then adds 'precontribTemplate' with the template name as an attribute to tab='slug' tags
  * @param  {Array} templatesList [description]
