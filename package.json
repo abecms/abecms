@@ -15,7 +15,7 @@
     "test-coveralls": "istanbul cover _mocha --report lcovonly -- --recursive --compilers js:babel-register --require babel-polyfill -R spec tests/unit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "install-selenium": "node nightwatch.conf.js",
     "pretest-e2e": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
-    "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js --verbose",
+    "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "posttest-e2e": "kill -9 $(lsof -ti tcp:3003)",
     "preversion": "npm test",
     "postversion": "git push origin master --follow-tags && npm publish",
