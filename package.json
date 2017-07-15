@@ -84,6 +84,7 @@
     "express-handlebars": "^3.0.0",
     "express-secure-handlebars": "^2.1.0",
     "express-session": "^1.13.0",
+    "express-validator": "^3.2.1",
     "extend": "^3.0.0",
     "extract-zip": "^1.6.0",
     "fs-compare": "0.0.4",
