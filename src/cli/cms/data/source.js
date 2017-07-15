@@ -8,9 +8,9 @@ import {
   cmsData
 } from '../../'
 
-export function requestList(obj, tplPath, match, jsonPage) {
+export function requestList(obj, match, jsonPage) {
   var p = new Promise((resolve) => {
-    cmsData.sql.executeQuery(tplPath, match, jsonPage)
+    cmsData.sql.executeQuery(match, jsonPage)
       .then((data) => {
         if (!jsonPage['abe_source']) {
           jsonPage['abe_source'] = {}
@@ -61,7 +61,7 @@ export function valueList(obj, match, jsonPage) {
   return p
 }
 
-export function urlList(obj, tplPath, match, jsonPage) {
+export function urlList(obj, match, jsonPage) {
   var p = new Promise((resolve) => {
     if(obj.autocomplete !== true && obj.autocomplete !== 'true') {
       var host = obj.sourceString
@@ -138,7 +138,7 @@ export function urlList(obj, tplPath, match, jsonPage) {
   return p
 }
 
-export function fileList(obj, tplPath, match, jsonPage) {
+export function fileList(obj, match, jsonPage) {
   var p = new Promise((resolve) => {
     jsonPage['abe_source'][obj.key] = cmsData.file.get(path.join(config.root, obj.sourceString))
     resolve()
@@ -147,7 +147,7 @@ export function fileList(obj, tplPath, match, jsonPage) {
   return p
 }
 
-export function nextDataList(tplPath, jsonPage, match) {
+export function nextDataList(jsonPage, match) {
   var p = new Promise((resolve) => {
     if(jsonPage['abe_source'] == null) {
       jsonPage['abe_source'] = {}
@@ -160,7 +160,7 @@ export function nextDataList(tplPath, jsonPage, match) {
     
     switch (type) {
     case 'request':
-      requestList(obj, tplPath, match, jsonPage)
+      requestList(obj, match, jsonPage)
         .then((jsonPage) => {
           resolve(jsonPage)
         }).catch((e) => {
@@ -176,7 +176,7 @@ export function nextDataList(tplPath, jsonPage, match) {
         })
       break
     case 'url':
-      urlList(obj, tplPath, match, jsonPage)
+      urlList(obj, match, jsonPage)
         .then(() => {
           resolve()
         }).catch((e) => {
@@ -184,7 +184,7 @@ export function nextDataList(tplPath, jsonPage, match) {
         })
       break
     case 'file':
-      fileList(obj, tplPath, match, jsonPage)
+      fileList(obj, match, jsonPage)
         .then(() => {
           resolve()
         }).catch((e) => {
@@ -200,13 +200,13 @@ export function nextDataList(tplPath, jsonPage, match) {
   return p
 }
 
-export function getDataList(tplPath, text, jsonPage) {
+export function getDataList(text, jsonPage) {
   var p = new Promise((resolve) => {
 
     var promises = []
     var matches = cmsData.regex.getTagAbeTypeRequest(text)
     Array.prototype.forEach.call(matches, (match) => {
-      promises.push(nextDataList(tplPath, jsonPage, match[0]))
+      promises.push(nextDataList(jsonPage, match[0]))
     })
 
     Promise.all(promises)

@@ -53,7 +53,7 @@ var page = function (req, res) {
 
     if (!editor) {
 
-      cmsData.source.getDataList(path.dirname(linkPath), text, json)
+      cmsData.source.getDataList(text, json)
       .then(() => {
         var page = new Page(text, json, html)
         res.set('Content-Type', 'text/html')

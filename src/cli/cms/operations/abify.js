@@ -21,7 +21,7 @@ export function abify(json, template = null) {
       template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
     }
     
-    cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
+    cmsData.source.getDataList(template, json)
     .then(() => {
       var html = new Page(template, json)
       

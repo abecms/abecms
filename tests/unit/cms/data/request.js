@@ -286,7 +286,7 @@ describe('Request', function() {
     chai.expect(matches[0][0]).to.not.be.null
 
     var jsonPage = {}
-    cmsData.source.requestList(attributes, '', matches[0][0], jsonPage)
+    cmsData.source.requestList(attributes, matches[0][0], jsonPage)
       .then(function () {
         chai.expect(jsonPage.abe_source).to.not.be.undefined
         done()

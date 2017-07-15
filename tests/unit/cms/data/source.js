@@ -35,7 +35,7 @@ describe('Source', function() {
     this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
       return Promise.resolve(data)
     }.bind(this));
-    cmsData.source.requestList(obj, 'tplPath', 'match', json)
+    cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
         chai.expect(jsonPage.abe_source.titles[0].a).to.be.equal("1")
@@ -55,7 +55,7 @@ describe('Source', function() {
     this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
       return Promise.resolve(data)
     }.bind(this));
-    cmsData.source.requestList(obj, 'tplPath', 'match', json)
+    cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
         chai.expect(jsonPage.abe_source.titles[0].a).to.be.equal("1")
@@ -75,7 +75,7 @@ describe('Source', function() {
     this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
       return Promise.resolve(data)
     }.bind(this));
-    cmsData.source.requestList(obj, 'tplPath', 'match', json)
+    cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
         chai.expect(jsonPage.abe_source.titles[0].a).to.be.equal("1")
@@ -95,7 +95,7 @@ describe('Source', function() {
     this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
       return Promise.resolve(data)
     }.bind(this));
-    cmsData.source.requestList(obj, 'tplPath', 'match', json)
+    cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
         chai.expect(jsonPage.abe_source.titles[0].a).to.be.equal("1")
@@ -114,7 +114,7 @@ describe('Source', function() {
     this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
       return Promise.resolve(data)
     }.bind(this));
-    cmsData.source.requestList(obj, 'tplPath', 'match', json)
+    cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
         chai.expect(jsonPage.abe_source.titles[0].a).to.be.equal("1")
@@ -134,7 +134,7 @@ describe('Source', function() {
     this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
       return Promise.resolve(data)
     }.bind(this));
-    cmsData.source.requestList(obj, 'tplPath', 'match', json)
+    cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(3)
         chai.expect(jsonPage.abe_source.titles[0].a).to.be.equal("1")
@@ -167,7 +167,7 @@ describe('Source', function() {
   it('cmsData.source.urlList', function(done) {
     var obj = {key:'web', sourceString:'http://www.rest.endpoint/', autocomplete:true}
     var json = {abe_source:{}}
-    cmsData.source.urlList(obj, 'tplPath', 'match', json)
+    cmsData.source.urlList(obj, 'match', json)
       .then(() => {
         chai.expect(json.abe_source.web).to.be.equal("http://www.rest.endpoint/");
         done()
@@ -188,7 +188,7 @@ describe('Source', function() {
     this.request.callsArgWith(1, response)
       .returns(request);
 
-    cmsData.source.urlList(obj, 'tplPath', 'match', json)
+    cmsData.source.urlList(obj, 'match', json)
       .then(() => {
         chai.expect(json.abe_source.web.length).to.be.equal(1);
         this.sinon.restore()
@@ -210,7 +210,7 @@ describe('Source', function() {
     this.request.callsArgWith(1, response)
       .returns(request);
 
-    cmsData.source.urlList(obj, 'tplPath', 'match', json)
+    cmsData.source.urlList(obj, 'match', json)
       .then(() => {
         chai.expect(json.abe_source.web.length).to.be.equal(1);
         this.sinon.restore()
@@ -221,7 +221,7 @@ describe('Source', function() {
   it('cmsData.source.fileList', function(done) {
     var obj = {key:'file', sourceString:'data/article-1.json'}
     var json = {abe_source:{}}
-    cmsData.source.fileList(obj, 'tplpath', 'match', json)
+    cmsData.source.fileList(obj, 'match', json)
       .then(() => {
         chai.expect(json.abe_source.file.title).to.be.equal("article")
 

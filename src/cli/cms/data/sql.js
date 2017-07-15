@@ -183,11 +183,8 @@ export function sanitizeFromStatement(statement){
  * @param  {String} tplPath   the path from the template originator
  * @return {string}           the directory to analyze
  */
-export function getFromDirectory(statement, tplPath){
+export function getFromDirectory(statement, tplPath = '/'){
   var pathFromDir = ''
-  if(!tplPath){
-    tplPath = '/'
-  }
 
   if(statement === '' || statement === '*' || statement === '/') {
     pathFromDir = path.join(config.root, config.data.url)
@@ -283,9 +280,14 @@ export function executeFromClause(files, statement, pathFromClause){
  * @param  {Object} jsonPage  json of post
  * @return {Array}           found object that match
  */
-export function execQuery(pathQuery, match, jsonPage) {
+export function execQuery(match, jsonPage) {
   var files = keepOnlyPublishedPost(Manager.instance.getList())
   var request = handleSqlRequest(cmsData.regex.getAttr(match, 'source'), jsonPage)
+  var pathQuery = (
+    jsonPage &&
+    jsonPage.abe_meta != null &&
+    jsonPage.abe_meta.link != null
+  ) ? path.dirname(jsonPage.abe_meta.link) : '/'
 
   files = executeFromClause(files, request.from, pathQuery)
   files = executeWhereClause(files, request.where, request.columns, jsonPage)

@@ -22,7 +22,7 @@ export function draft(postUrl, json, workflow = 'draft', user) {
 
     const template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
-    cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
+    cmsData.source.getDataList(template, json)
     .then(() => {
 
       json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
@@ -57,7 +57,7 @@ export function publish(postUrl, json, user) {
 
     var template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
 
-    cmsData.source.getDataList(path.dirname(json.abe_meta.link), template, json)
+    cmsData.source.getDataList(template, json)
     .then(() => {
       json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(template, json)
 
@@ -97,7 +97,7 @@ export function publish(postUrl, json, user) {
             const fileName = path.basename(postUrl, '.'+config.files.templates.extension) + '.' + extension
             const relPath = path.join(config.root, config.publish.url, relatedTemplate.path, fileName)
 
-            cmsData.source.getDataList(path.dirname(json.abe_meta.link), relTemplate, json)
+            cmsData.source.getDataList(relTemplate, json)
             .then(() => {
               const page = new Page(relTemplate, json, true)
               cmsOperations.save.saveHtml(relPath, page.html)

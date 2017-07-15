@@ -103,7 +103,6 @@ var route = function(req, res, next) {
 
   var isHome = true
   var jsonPath = null
-  var linkPath = null
   var template = null
   var fileName = null
   var folderPath = null
@@ -135,7 +134,6 @@ var route = function(req, res, next) {
       var filePathTest = cmsData.revision.getDocumentRevision(filePath)
       if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
         jsonPath = filePathTest.path
-        linkPath = filePathTest.abe_meta.link
         template = filePathTest.abe_meta.template
       }
 
@@ -149,7 +147,7 @@ var route = function(req, res, next) {
         json = cmsData.file.get(jsonPath, 'utf8')
       }
       var text = cmsTemplates.template.getTemplate(template, json)
-      editor(text, json, linkPath)
+      editor(text, json)
         .then((result) => {
           resolve(result)
         }).catch(function(e) {
@@ -170,7 +168,7 @@ var route = function(req, res, next) {
     var promises = []
     EditorVariables.resultPrecontrib = []
     Array.prototype.forEach.call(precontribs, (precontrib) => {
-      var p = editor(precontrib, obj.json, '', true)
+      var p = editor(precontrib, obj.json, true)
         .then((resultPrecontrib) => {
           EditorVariables.resultPrecontrib.push(resultPrecontrib)
         }).catch(function(e) {

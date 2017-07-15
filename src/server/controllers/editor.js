@@ -293,7 +293,7 @@ function orderBlock(util) {
   return formTabsOrdered
 }
 
-export function editor(text, json, documentLink, precontrib = false) {
+export function editor(text, json, precontrib = false) {
   let p = new Promise((resolve) => {
     var util = new cmsEditor.form()
     var arrayBlock = []
@@ -301,7 +301,7 @@ export function editor(text, json, documentLink, precontrib = false) {
     // get all data from type='data' (web service, select, ...)
     // and create a key abe_source with all data
     // + modify keys when editable = false or prefill = true
-    cmsData.source.getDataList(path.dirname(documentLink), text, json)
+    cmsData.source.getDataList(text, json)
       .then(() => {
 
         // prepare editor values id editable or put values in json from abe_source
