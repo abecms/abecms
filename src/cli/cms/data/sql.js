@@ -297,12 +297,12 @@ export function execQuery(match, jsonPage) {
 }
 
 export function executeQuerySync(match, jsonPage) {
-  return execQuery(pathQuerySync, match, jsonPage)
+  return execQuery(match, jsonPage)
 }
 
 export function executeQuery(match, jsonPage) {
   var p = new Promise((resolve) => {
-    var res = execQuery(pathexecuteQuery, match, jsonPage)
+    var res = execQuery(match, jsonPage)
     resolve(res)
   }).catch(function(e) {
     console.error(e)
