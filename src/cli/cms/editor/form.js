@@ -3,9 +3,7 @@ import extend from 'extend'
 export default class Form {
 
   constructor() {
-    this._form = {
-      
-    }
+    this._form = {}
     this._key = []
   }
 
@@ -18,7 +16,7 @@ export default class Form {
   }
 
   /**
-   * Check if key is not is the form array
+   * Check if key is not in the form array
    * @param  {[type]} key [description]
    * @return {[type]}     [description]
    */
@@ -60,7 +58,6 @@ export default class Form {
     }
 
     obj = extend(true, defaultValues, obj)
-    obj.key = obj.key//.replace(/\./, '-')
 
     if(obj.key.indexOf('[') < 0 && obj.key.indexOf('.') > -1) {
       obj.block = obj.key.split('.')[0]
