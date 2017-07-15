@@ -10,14 +10,13 @@ import {
   abeExtend
 } from '../../cli'
 
-export function add(obj, json, text, util) {
+export function add(obj, json, util) {
   var value = obj.value
 
   if(obj.key.indexOf('[') > -1) {
     var key = obj.key.split('[')[0]
     var index = obj.key.match(/[^\[]+?(?=\])/)[0]
     var prop = obj.key.replace(/[^\.]+?\./, '')
-    key = getDataIdWithNoSlash(key)
 
     try {
       obj.value = eval(`json[key][index]["${prop}"]`)
@@ -25,20 +24,19 @@ export function add(obj, json, text, util) {
 
       try {
         eval(`json[key][index]["${prop}"] = ` + JSON.stringify(value))
-      }catch(e) {
-        // no value found inside json OKEY
+      } catch(e) {
+        // no value found inside json KEY
       }
     }
-  }else {
+  } else {
     try {
-      if(obj.key.indexOf('.') > -1) obj.value = eval(`json["${getDataIdWithNoSlash(obj.key).split('.').join('"]["')}"]`)
-      else obj.value = eval(`json["${getDataIdWithNoSlash(obj.key)}"]`)
+      if(obj.key.indexOf('.') > -1) obj.value = eval(`json["${obj.key.split('.').join('"]["')}"]`)
+      else obj.value = eval(`json["${obj.key}"]`)
     } catch(e) {
-      // no value found inside json OKEY
+      // no value found inside json KEY
     }
   }
 
-  obj.key = getDataIdWithNoSlash(obj.key)
   if (json != null && json.abe_meta != null) {
     obj.status = json.abe_meta.status
   }
@@ -48,23 +46,13 @@ export function add(obj, json, text, util) {
   return obj.value
 }
 
-function getDataIdWithNoSlash(key) {
-  var trueKey = key
-  if (trueKey.indexOf('/') > -1) {
-    trueKey = trueKey.split('/')
-    trueKey = trueKey[trueKey.length - 1]
-  }
-  return trueKey
-}
+function addAbeCollectionToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) {
 
-function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) {
-  var v = `{{${match}}}`,
-    obj = cmsData.attributes.getAll(v, json)
-
-  var realKey
+  var obj = cmsData.attributes.getAll(`{{${match}}}`, json)
 
   if(typeof keyArray !== 'undefined' && keyArray !== null) {
-    realKey = obj.key.replace(/[^\.]+?\./, '')
+    // removes the first part of the key. ie. 'main.article' becomes 'article'
+    var realKey = obj.key.replace(/[^\.]+?\./, '')
 
     if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
       obj.keyArray = keyArray
@@ -72,31 +60,47 @@ function addToForm(match, text, json, util, arrayBlock, keyArray = null, i = 0) 
       obj.key = keyArray + '[' + i + '].' + realKey
       obj.desc = obj.desc + ' ' + i,
       insertAbeEach(obj, text, json, util, arrayBlock)
-
-    }else if(util.dontHaveKey(obj.key)) {
-      obj.value = json[getDataIdWithNoSlash(obj.key)]
-      json[getDataIdWithNoSlash(obj.key)] = add(obj, json, text, util)
+    } else if(util.dontHaveKey(obj.key)) {
+      obj.value = json[obj.key]
+      json[obj.key] = add(obj, json, util)
     }
-
-  }else if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(v, text)) {
-    realKey = obj.key//.replace(/\./g, '-')
-    try {
-      obj.value = eval(`json["${getDataIdWithNoSlash(realKey)}"]`)
-    }catch(e) {
-      obj.value = null
-    }
-    // json[getDataIdWithNoSlash(obj.key)] = 
-    add(obj, json, text, util)
   }
 }
 
+function addAbeTagToForm(match, text, json, util, arrayBlock) {
+  
+  var obj = cmsData.attributes.getAll(`{{${match}}}`, json)
+
+  if(util.dontHaveKey(obj.key) && cmsData.regex.isSingleAbe(`{{${match}}}`, text)) {
+    var realKey = obj.key
+    try {
+      obj.value = eval(`json["${realKey}"]`)
+    } catch(e) {
+      obj.value = null
+    }
+
+    add(obj, json, util)
+  }
+}
+
+/**
+ * parse every abe tags, 
+ * create the forcedvalue attribute if it find a value in 'value' attribute
+ * then add this tag to form
+ *
+ * @param  {[type]} text       [description]
+ * @param  {[type]} json       [description]
+ * @param  {[type]} util       [description]
+ * @param  {[type]} arrayBlock [description]
+ * @return {[type]}            [description]
+ */
 function matchAttrAbe(text, json, util, arrayBlock) {
   var patt = /abe [^{{}}]+?(?=\}})/g,
     match
   // While regexp match HandlebarsJS template item => keepgoing
   while (match = patt.exec(text)) {
     var matchText = match[0].replace(/value=([\'\"].*?[\'\"])/g, 'forcedvalue=$1')
-    addToForm(matchText, text, json, util, arrayBlock, null, null)
+    addAbeTagToForm(matchText, text, json, util, arrayBlock)
   }
 }
 
@@ -136,10 +140,10 @@ function each(text, json, util, arrayBlock) {
       if(v.indexOf('abe') > -1){
         if(json[keyArray]){
           for (i = 0; i < json[keyArray].length; i++) {
-            addToForm(v, text, json, util, arrayBlock, keyArray, i)
+            addAbeCollectionToForm(v, text, json, util, arrayBlock, keyArray, i)
           }
         }else{
-          addToForm(v, text, json, util, arrayBlock, keyArray, 0)
+          addAbeCollectionToForm(v, text, json, util, arrayBlock, keyArray, 0)
         }
       }
     }
@@ -154,12 +158,21 @@ function each(text, json, util, arrayBlock) {
 
     for (i = 0; i < length; i++) {
       for (var j = 0; j < attrArray.length; j++) {
-        add(arrayBlock[keyArray][attrArray[j]][i], json, text, util)
+        add(arrayBlock[keyArray][attrArray[j]][i], json, util)
       }
     }
   }
 }
 
+/**
+ * Removing all type='data' included in {{#each}} statements
+ * Then if editable, prepare value of the field in the editor with values from source
+ * if not editable, put the json value with values from source
+ *
+ * @param {[type]} text [description]
+ * @param {[type]} json [description]
+ * @param {[type]} util [description]
+ */
 function addSource(text, json, util) {
   // removing each blocks potentially containing abe data type
   let pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
@@ -172,10 +185,10 @@ function addSource(text, json, util) {
     var obj = cmsData.attributes.getAll(match[0], json)
 
     if(obj.editable) {
-      obj.value = json[getDataIdWithNoSlash(obj.key)]
-      add(obj, json, text, util)
-    }else {
-      json[getDataIdWithNoSlash(obj.key)] = obj.source
+      obj.value = json[obj.key]
+      add(obj, json, util)
+    } else {
+      json[obj.key] = obj.source
     }
   }
 }
@@ -284,10 +297,18 @@ export function editor(text, json, documentLink, precontrib = false) {
   let p = new Promise((resolve) => {
     var util = new cmsEditor.form()
     var arrayBlock = []
+
+    // get all data from type='data' (web service, select, ...)
+    // and create a key abe_source with all data
+    // + modify keys when editable = false or prefill = true
     cmsData.source.getDataList(path.dirname(documentLink), text, json)
       .then(() => {
+
+        // prepare editor values id editable or put values in json from abe_source
+        // (don't do this for type='data' included in {{#each}})
         addSource(text, json, util)
 
+        // Remove every abe type='data' tags but those in {{#each}} statements
         text = cmsData.source.removeNonEachDataList(text)
 
         if (!precontrib) {
@@ -295,10 +316,14 @@ export function editor(text, json, documentLink, precontrib = false) {
           text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(text)
         }
 
+        // add to the AST form abe tags
         matchAttrAbe(text, json, util, arrayBlock)
         arrayBlock = []
+
+        // add to the AST the abe tags included in {{#each}}
         each(text, json, util, arrayBlock)
 
+        // removing the type='data' in {{#each}} statements also (no more type='data')
         text = cmsData.source.removeDataList(text)
 
         if (!precontrib) {
@@ -315,7 +340,6 @@ export function editor(text, json, documentLink, precontrib = false) {
 
         abeEngine.instance.content = json
         resolve({
-          text: text,
           form: blocks,
           json: json
         })
