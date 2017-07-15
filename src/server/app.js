@@ -4,6 +4,7 @@ import fse from 'fs-extra'
 import session from 'express-session'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
+import expressValidator from'express-validator'
 import exphbs from 'express-secure-handlebars'
 import path from 'path'
 //import crypto from 'crypto';
@@ -100,6 +101,7 @@ app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000}))
+app.use(expressValidator());
 app.use(csrf({cookie: {secure: config.cookie.secure}}))
 app.use(function(req, res, next) {
   if (req.url.indexOf('/abe/') > -1 ) {
