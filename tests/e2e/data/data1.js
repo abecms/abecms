@@ -37,6 +37,7 @@ describe('Abe', function() {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor/autocomplete.html')
+        .waitForElementVisible('//*[@id="colors.multiple"]', 2000)
         .execute(function() {
           var sel = document.getElementById('colors.multiple')
           sel.options[1].selected = true;
@@ -51,7 +52,9 @@ describe('Abe', function() {
               sel.fireEvent("onchange");
           }
         })
-        //.click('//*[@id="colors.multiple"]/option[2]')
+        .click('//*[@id="colors.multiple"]/option[2]')
+        .moveToElement('//*[@id="colors.multiple"]/option[2]', 0, 0)
+        .mouseButtonClick(0)
         .getText('//*[@id="colors"]', function(result) {
           elementValue = result.value;
           //console.log(result)
