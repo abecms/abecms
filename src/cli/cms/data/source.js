@@ -232,6 +232,11 @@ export function removeNonEditableDataList(text) {
   return text.replace(cmsData.regex.nonEditableDataReg, '')
 }
 
+/**
+ * Remove all type='data' outside {{#each}} statements
+ * @param  {[type]} text [description]
+ * @return {[type]}      [description]
+ */
 export function removeNonEachDataList(text) {
   // removing each blocks potentially containing abe data type
   let pattEach = /(\{\{#each (\r|\t|\n|.)*?\/each\}\})/g
