@@ -57,6 +57,11 @@ describe('Abe', function() {
         .mouseButtonClick(0)
         .click('//*[@id="colors.multiple"]')
         .keys(['\uE015', '\uE015', '\uE006'])
+        .click('//*[@id="colors.multiple"]') 
+        .pause(1000)
+        .click('option[2]') //selects the option but doesn't click
+        .pause(5000)
+        .keys(['\uE006'])
         .getText('//*[@id="colors"]', function(result) {
           elementValue = result.value;
           //console.log(result)
