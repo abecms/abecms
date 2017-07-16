@@ -36,14 +36,52 @@ describe('Abe', function() {
     it('autocomplete: Check input select fields', function(client) {
       client
         .useXpath()
-        .url('http://localhost:3003/abecms/libs/jquery-2.1.0.min.js')
-        .getLog('browser', function(result) {
-          console.log(result);
-        })
-        .source(function (result){
-          // Source will be stored in result.value
-          console.log(result.value);
-        })
+        .url('http://localhost:3003/abe/editor/autocomplete.html')
+        .click('//*[@id="colors.multiple"]/option[2]')
+        .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
+        .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
+        .click('//*[@data-parent-id="colors.multiple"]/span')
+        .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
+    });
+
+    it('autocomplete: Check input autocomplete fields', function(client) {
+      client
+        .useXpath()
+        .url('http://localhost:3003/abe/editor/autocomplete.html')
+        .setValue('//*[@id="colors.colors_autocomplete"]', 'rouge')
+        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div', 1000)
+        .click('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div')
+        .waitForElementVisible('//*[@data-parent-id="colors.colors_autocomplete"]', 1000)
+        .assert.containsText('//*[@data-parent-id="colors.colors_autocomplete"]', 'rouge')
+        .click('//*[@data-parent-id="colors.colors_autocomplete"]/span')
+        .assert.elementNotPresent('//*[@data-parent-id="colors.colors_autocomplete"]')
+    });
+
+    // it('autocomplete: Abe type data reference json', function(client) {
+    //   client
+    //     .useXpath()
+    //     .url('http://localhost:3003/abe/editor/autocomplete.html')
+    //     .waitForElementVisible('//body')
+    //     .pause(1000)
+    //     .click('//*[@id="abeForm"]/ul/li[2]/a')
+    //     .waitForElementVisible('//*[@id="reference"]/div')
+    //     .click('//*[@id="reference.single"]/option[2]')
+    //     .click('//*[@id="reference.multiple"]/option[3]')
+    //     .setValue('//*[@id="reference.autocomplete"]', 'rouge')
+    //     .waitForElementVisible('//*[@id="reference"]/div/div/div/div[3]/div[2]', 2000)
+    //     .click('//*[@id="reference"]/div/div/div/div[3]/div[2]/div[1]')
+    //     .waitForElementVisible('//*[@id="reference"]/div/div/div/div[3]/div/div', 2000);
+    // });
+    // 
+    
+
+        // .getLog('browser', function(result) {
+        //   console.log(result);
+        // })
+        // .source(function (result){
+        //   // Source will be stored in result.value
+        //   console.log(result.value);
+        // })
         // .waitForElementVisible('//*[@id="colors.multiple"]', 2000)
         // .execute(function() {
         //   var sel = document.getElementById('colors.multiple')
@@ -99,38 +137,7 @@ describe('Abe', function() {
         // .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
         // .click('//*[@data-parent-id="colors.multiple"]/span')
         // .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
-    });
-
-    it('autocomplete: Check input autocomplete fields', function(client) {
-      client
-        .useXpath()
-        .url('http://localhost:3003/abe/editor/autocomplete.html')
-        .setValue('//*[@id="colors.colors_autocomplete"]', 'rouge')
-        .waitForElementVisible('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div', 1000)
-        .click('//*[@id="colors"]/div/div/div/div[3]/div/div[2]/div')
-        .waitForElementVisible('//*[@data-parent-id="colors.colors_autocomplete"]', 1000)
-        .assert.containsText('//*[@data-parent-id="colors.colors_autocomplete"]', 'rouge')
-        .click('//*[@data-parent-id="colors.colors_autocomplete"]/span')
-        .assert.elementNotPresent('//*[@data-parent-id="colors.colors_autocomplete"]')
-    });
-
-    // it('autocomplete: Abe type data reference json', function(client) {
-    //   client
-    //     .useXpath()
-    //     .url('http://localhost:3003/abe/editor/autocomplete.html')
-    //     .waitForElementVisible('//body')
-    //     .pause(1000)
-    //     .click('//*[@id="abeForm"]/ul/li[2]/a')
-    //     .waitForElementVisible('//*[@id="reference"]/div')
-    //     .click('//*[@id="reference.single"]/option[2]')
-    //     .click('//*[@id="reference.multiple"]/option[3]')
-    //     .setValue('//*[@id="reference.autocomplete"]', 'rouge')
-    //     .waitForElementVisible('//*[@id="reference"]/div/div/div/div[3]/div[2]', 2000)
-    //     .click('//*[@id="reference"]/div/div/div/div[3]/div[2]/div[1]')
-    //     .waitForElementVisible('//*[@id="reference"]/div/div/div/div[3]/div/div', 2000);
-    // });
-    // 
-    
+        
     it('autocomplete: The autocomplete article is deleted in the manager', function(client) {
       client
         .useXpath()

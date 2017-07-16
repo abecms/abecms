@@ -25,7 +25,7 @@
     "watch:sass": "./node_modules/.bin/watch 'npm run sass' ./src/server/sass",
     "babel-app": "node_modules/.bin/babel-node --presets es2015",
     "build": "node_modules/.bin/babel-node --presets es2015 src/cli/build/template.js",
-    "mvasset": "mkdirp dist/server/public/abecms && cp -r src/server/locale dist/server && cp -r src/server/views dist/server && cp -r src/server/public/abecms/css dist/server/public/abecms && cp -r src/server/public/abecms/fonts dist/server/public/abecms && cp -r src/server/public/abecms/image dist/server/public/abecms",
+    "mvasset": "mkdirp dist/server/public/abecms && cp -r src/server/locale dist/server && cp -r src/server/views dist/server && cp -r src/server/public/abecms/css dist/server/public/abecms && cp -r src/server/public/abecms/libs dist/server/public/abecms && cp -r src/server/public/abecms/fonts dist/server/public/abecms && cp -r src/server/public/abecms/image dist/server/public/abecms",
     "sass": "node ./src/tasks/sass.js",
     "js:users": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/user-login.js -o src/server/public/abecms/scripts/user-login-compiled.js",
     "js:admin": "browserify -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/admin.js -o src/server/public/abecms/scripts/admin-compiled.js",
