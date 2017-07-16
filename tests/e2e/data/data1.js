@@ -40,7 +40,15 @@ describe('Abe', function() {
         .waitForElementVisible('//*[@id="colors.multiple"]', 2000)
         .execute(function() {
           var sel = document.getElementById('colors.multiple')
-          sel.options[1].selected = true;
+          if ("createEvent" in document) {
+              var evt = document.createEvent("HTMLEvents");
+              evt.initEvent("focus", false, true);
+              sel.dispatchEvent(evt);
+          }
+          else {
+              sel.fireEvent("focus");
+          }
+          sel.options[2].selected = true;
           console.log(sel.options[1].value)
 
           if ("createEvent" in document) {
@@ -66,6 +74,9 @@ describe('Abe', function() {
         .click('#colors.multiple option[2]')
         .useXpath()
         .setValue('//*[@data-parent-id="colors.multiple"]', 'rouge')
+        .getLog('browser', function(result) {
+          console.log(result);
+        })
         .getText('//*[@id="colors"]', function(result) {
           elementValue = result.value;
           //console.log(result)
