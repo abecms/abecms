@@ -37,61 +37,64 @@ describe('Abe', function() {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor/autocomplete.html')
-        .waitForElementVisible('//*[@id="colors.multiple"]', 2000)
-        .execute(function() {
-          var sel = document.getElementById('colors.multiple')
-          if ("createEvent" in document) {
-              var evt = document.createEvent("HTMLEvents");
-              evt.initEvent("focus", false, true);
-              sel.dispatchEvent(evt);
-          }
-          else {
-              sel.fireEvent("focus");
-          }
-          sel.options[2].selected = true;
-          console.log(sel.options[1].value)
-
-          if ("createEvent" in document) {
-              var evt = document.createEvent("HTMLEvents");
-              evt.initEvent("change", false, true);
-              sel.dispatchEvent(evt);
-          }
-          else {
-              sel.fireEvent("onchange");
-          }
-        })
-        .click('//*[@id="colors.multiple"]/option[2]')
-        .moveToElement('//*[@id="colors.multiple"]/option[2]', 0, 0)
-        .mouseButtonClick(0)
-        .click('//*[@id="colors.multiple"]')
-        .keys(['\uE015', '\uE015', '\uE006'])
-        .click('//*[@id="colors.multiple"]') 
-        .pause(1000)
-        .click('//*[@id="colors.multiple"]/option[2]') //selects the option but doesn't click
-        .pause(5000)
-        .keys(['\uE006'])
-        .useCss()
-        .click('#colors.multiple option[2]')
-        .useXpath()
-        .setValue('//*[@data-parent-id="colors.multiple"]', 'rouge')
         .getLog('browser', function(result) {
           console.log(result);
         })
-        .getText('//*[@id="colors"]', function(result) {
-          elementValue = result.value;
-          //console.log(result)
-        })
-        .perform(function() {
-          console.log('elementValue', elementValue);
-        })
-        // .source(function (result){
-        //     // Source will be stored in result.value
-        //     console.log(result.value);
+        // .waitForElementVisible('//*[@id="colors.multiple"]', 2000)
+        // .execute(function() {
+        //   var sel = document.getElementById('colors.multiple')
+        //   if ("createEvent" in document) {
+        //       var evt = document.createEvent("HTMLEvents");
+        //       evt.initEvent("focus", false, true);
+        //       sel.dispatchEvent(evt);
+        //   }
+        //   else {
+        //       sel.fireEvent("focus");
+        //   }
+        //   sel.options[2].selected = true;
+        //   console.log(sel.options[1].value)
+
+        //   if ("createEvent" in document) {
+        //       var evt = document.createEvent("HTMLEvents");
+        //       evt.initEvent("change", false, true);
+        //       sel.dispatchEvent(evt);
+        //   }
+        //   else {
+        //       sel.fireEvent("onchange");
+        //   }
         // })
-        .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
-        .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
-        .click('//*[@data-parent-id="colors.multiple"]/span')
-        .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
+        // .click('//*[@id="colors.multiple"]/option[2]')
+        // .moveToElement('//*[@id="colors.multiple"]/option[2]', 0, 0)
+        // .mouseButtonClick(0)
+        // .click('//*[@id="colors.multiple"]')
+        // .keys(['\uE015', '\uE015', '\uE006'])
+        // .click('//*[@id="colors.multiple"]') 
+        // .pause(1000)
+        // .click('//*[@id="colors.multiple"]/option[2]') //selects the option but doesn't click
+        // .pause(5000)
+        // .keys(['\uE006'])
+        // .useCss()
+        // .click('#colors.multiple option[2]')
+        // .useXpath()
+        // .setValue('//*[@data-parent-id="colors.multiple"]', 'rouge')
+        // .getLog('browser', function(result) {
+        //   console.log(result);
+        // })
+        // .getText('//*[@id="colors"]', function(result) {
+        //   elementValue = result.value;
+        //   //console.log(result)
+        // })
+        // .perform(function() {
+        //   console.log('elementValue', elementValue);
+        // })
+        // // .source(function (result){
+        // //     // Source will be stored in result.value
+        // //     console.log(result.value);
+        // // })
+        // .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)
+        // .assert.containsText('//*[@data-parent-id="colors.multiple"]', 'rouge')
+        // .click('//*[@data-parent-id="colors.multiple"]/span')
+        // .assert.elementNotPresent('//*[@data-parent-id="colors.multiple"]')
     });
 
     it('autocomplete: Check input autocomplete fields', function(client) {
