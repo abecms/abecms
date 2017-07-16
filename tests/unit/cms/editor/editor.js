@@ -33,4 +33,22 @@ describe('editor', function() {
     chai.expect(result).to.be.a('string');
     chai.expect(result).to.be.equal('some text');
   });
+
+  /**
+   * editor.add 2
+   * 
+   */
+  it('editor.add 2', function() {
+    var obj = {'key':'test[0]', 'value':'done'}
+    var json = {'key':'test'}
+    var form = new cmsEditor.form()
+    var result = cmsEditor.editor.add(
+      obj,
+      json,
+      form
+    )
+
+    chai.expect(result).to.be.a('string');
+    chai.expect(result).to.be.equal('done');
+  });
 });
