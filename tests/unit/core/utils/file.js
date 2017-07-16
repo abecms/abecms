@@ -10,11 +10,44 @@ import {
   coreUtils,
   abeExtend,
   cmsData,
-  config
+  config,
+  Manager
 } from '../../../../src/cli'
+
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
 
 describe('coreUtils.file', function() {
+
+  before( function(done) {
+    Manager.instance.init()
+      .then(function () {
+        this.fixture = {
+          articleJsoninline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8')
+        }
+        done()
+        
+      }.bind(this))
+  });
+
+  /**
+   * coreUtils.file.addFolder
+   * 
+   */
+  it('coreUtils.file.changePath()', function() {
+    var pathOrigin = '/post/test.html'
+    var change = 'newpost'
+    var result = coreUtils.file.changePath(pathOrigin, change)
+    chai.expect(result).to.be.a('string')
+    chai.expect(result.replace(config.root, '')).to.equal('/newpost/test.html')
+  });
+
+  it('cmsData.source.getContent()', function(done) {
+    var filePath = path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html')
+    var result = coreUtils.file.getContent(filePath)
+    console.log(result)
+    chai.expect(result).to.be.equal(this.fixture.articleJsoninline)
+    done()
+  });
 
   /**
    * coreUtils.file.addFolder
