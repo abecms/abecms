@@ -83,11 +83,8 @@ describe('Abe', function() {
         .useXpath()
         .url('http://localhost:3003/abe/editor/autocomplete.html')
         // colors single
-        // Once again does not work anymore in Travis...
-        // .pause(1000)
-        // .click('//*[@id="colors.single"]/option[3]')
-        // .pause(1000)
-        // .assert.containsText('//*[@id="colors.single"]', "vert")
+        .click('//*[@id="colors.single"]/option[3]')
+        .assert.containsText('//*[@id="colors.single"]', "vert")
         // colors multiple
         .click('//*[@id="colors.multiple"]/option[2]')
         .waitForElementVisible('//*[@data-parent-id="colors.multiple"]', 1000)

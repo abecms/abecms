@@ -38,7 +38,8 @@ export let eachBlockPattern = /(\{\{#each ([\s\S]*?)}}[\s\S]*?\/each\}\})/g
 export let nonEditableDataReg = /({{abe .*(type=[\'|\"]data')?.*editable=[\'|\"]false.*(type=[\'|\"]data')?.*}})/g
 
 // This pattern finds all data types
-export let dataTypeReg = /({{abe .*?type=[\'|\"]data[\s\S].*?}})/g
+//export let dataTypeReg = /({{abe .*?type=[\'|\"]data[\s\S].*?}})/g
+export let dataTypeReg = /({{abe .*type=[\'|\"]data.*}})/g
 
 /**
  * escape a regex
