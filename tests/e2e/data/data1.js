@@ -59,7 +59,7 @@ describe('Abe', function() {
         .keys(['\uE015', '\uE015', '\uE006'])
         .click('//*[@id="colors.multiple"]') 
         .pause(1000)
-        .click('option[2]') //selects the option but doesn't click
+        .click('//*[@id="colors.multiple"]/option[2]') //selects the option but doesn't click
         .pause(5000)
         .keys(['\uE006'])
         .useCss()
