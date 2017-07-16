@@ -65,6 +65,7 @@ describe('Abe', function() {
         .useCss()
         .click('#colors.multiple option[2]')
         .useXpath()
+        .setValue('//*[@data-parent-id="colors.multiple"]', 'rouge')
         .getText('//*[@id="colors"]', function(result) {
           elementValue = result.value;
           //console.log(result)
