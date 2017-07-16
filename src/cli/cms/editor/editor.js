@@ -48,7 +48,7 @@ export function add(obj, json, form) {
 
 export function addAbeTagToCollection(match, text, json, form, arrayBlock, keyArray = null, i = 0) {
 
-  var obj = cmsData.attributes.getAll(`{{${match}}}`, json)
+  var obj = cmsData.attributes.getAll(match, json)
 
   if(typeof keyArray !== 'undefined' && keyArray !== null) {
     // removes the first part of the key. ie. 'main.article' becomes 'article'

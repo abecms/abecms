@@ -44,7 +44,7 @@ describe('coreUtils.file', function() {
   it('cmsData.source.getContent()', function(done) {
     var filePath = path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html')
     var result = coreUtils.file.getContent(filePath)
-    console.log(result)
+
     chai.expect(result).to.be.equal(this.fixture.articleJsoninline)
     done()
   });

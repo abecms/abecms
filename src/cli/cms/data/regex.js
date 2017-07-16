@@ -38,7 +38,7 @@ export let eachBlockPattern = /(\{\{#each ([\s\S]*?)}}[\s\S]*?\/each\}\})/g
 export let nonEditableDataReg = /({{abe .*(type=[\'|\"]data')?.*editable=[\'|\"]false.*(type=[\'|\"]data')?.*}})/g
 
 // This pattern finds all data types
-export let dataTypeReg = /({{abe .*type=[\'|\"]data.*}})/g
+export let dataTypeReg = /({{abe .*?type=[\'|\"]data[\s\S].*?}})/g
 
 /**
  * escape a regex
@@ -133,10 +133,9 @@ export function isEachStatement(str) {
  * @return {Boolean} true = this is a block content
  */
 export function getTagAbeTypeRequest(text) {
-  let listReg = /({{abe .*type=[\'|\"]data.*}})/g
   var matches = []
   var match
-  while (match = listReg.exec(text)) {
+  while (match = dataTypeReg.exec(text)) {
     matches.push(match)
   }
   return matches
