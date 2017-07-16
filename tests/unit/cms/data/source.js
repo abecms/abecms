@@ -229,15 +229,16 @@ describe('Source', function() {
       })
   });
 
-  // it('cmsData.source.getDataList', function(done) {
-  //   // var obj = {key:'titles'}
-  //   // var json = {abe_source:{}}
-  //   // cmsData.source.getDataList(obj, this.fixture.articleJsoninline, json)
-  //   //   .then(() => {
-  //   //     chai.expect(json.abe_source.titles.length).to.be.equal(3);
-  //   //     chai.expect(json.abe_source.titles[0].title).to.be.equal("rouge");
-  //   //   })
-  // });
+  it('cmsData.source.getDataList', function(done) {
+    var obj = {key:'titles'}
+    var json = {abe_source:{}}
+    cmsData.source.getDataList(this.fixture.articleJsoninline, json)
+      .then(() => {
+        chai.expect(json.abe_source.titles.length).to.be.equal(3);
+        chai.expect(json.abe_source.titles[0].title).to.be.equal("rouge");
+        done()
+      })
+  });
 
   it('cmsData.source.removeDataList', function(done) {
     var text = "a{{abe type='data' source='fake'}}b"
