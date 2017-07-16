@@ -83,6 +83,7 @@ describe('Abe', function() {
         .useXpath()
         .url('http://localhost:3003/abe/editor/autocomplete.html')
         // colors single
+        .pause(1000)
         .click('//*[@id="colors.single"]/option[3]')
         .pause(1000)
         .assert.containsText('//*[@id="colors.single"]', "vert")

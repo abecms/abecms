@@ -6,6 +6,7 @@ import watch from 'watch'
 import express from 'express'
 import bodyParser from 'body-parser'
 import tinylr from 'tiny-lr'
+import clc from 'cli-color'
 import {
   coreUtils,
   cmsData,
@@ -95,10 +96,21 @@ class Manager {
 
     // Launching a Livereload server
     this.lserver
-    .use(bodyParser())
+    .use(bodyParser.json())
+    .use(bodyParser.urlencoded({extended: true}))
     .use(tinylr.middleware({ app: this.lserver }))
     .listen(lport, function() {
       console.log('Livereload listening on %d', lport)
+    })
+    .on('error', function(err) {
+      if(err.code == 'EADDRINUSE'){
+        console.error(
+          clc.red('can\'t start the Abe\'s watch server\n'),
+          'This watch server has tried to listen on the port ' + lport + ' but this server is already in use by another process... '
+        )
+      } else {
+        console.error(err)
+      }
     })
 
     // sync assets from templates to /site
