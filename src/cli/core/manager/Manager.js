@@ -123,7 +123,7 @@ class Manager {
   _watchersStart() {
     this.events.template = new events.EventEmitter(0)
     this.events.structure = new events.EventEmitter(0)
-    this.events.template = new events.EventEmitter(0)
+    this.events.reference = new events.EventEmitter(0)
 
     // watch template folder
     try {
