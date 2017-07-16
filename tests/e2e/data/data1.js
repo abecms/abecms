@@ -84,6 +84,7 @@ describe('Abe', function() {
         .url('http://localhost:3003/abe/editor/autocomplete.html')
         // colors single
         .click('//*[@id="colors.single"]/option[3]')
+        .pause(1000)
         .assert.containsText('//*[@id="colors.single"]', "vert")
         // colors multiple
         .click('//*[@id="colors.multiple"]/option[2]')
