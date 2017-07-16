@@ -20,7 +20,7 @@ describe('Abe', function() {
       done();
     });
 
-    it('Create a data template post', function(client) {
+    it('data: Create a data template post', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')
@@ -33,17 +33,18 @@ describe('Abe', function() {
         .assert.urlEquals("http://localhost:3003/abe/editor/data.html", "Clicked URL Matches with URL of the New Window");
     });
 
-    it('Abe type data reference json', function(client) {
+    it('data: Abe type data reference json', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor/data.html')
-        .waitForElementVisible('//body')
-        .pause(1000)
-        .expect.element("//form[@id='abeForm']//li[@class='active']/a").text.to.contain('slug');
+        //.expect.element("//form[@id='abeForm']//li[@class='active']/a").text.to.contain('slug')
+        .frame(0)
+        .assert.containsText('//*[@id="test"]', 'content');
+        //.expect.element("//*[@id='fh5co-logo']/a").text.to.contain('Abe demo fr');
     });
     
     
-    it('The autocomplete article is deleted in the manager', function(client) {
+    it('data: The autocomplete article is deleted in the manager', function(client) {
       client
         .useXpath()
         .url('http://localhost:3003/abe/editor')
