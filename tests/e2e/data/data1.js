@@ -36,9 +36,13 @@ describe('Abe', function() {
     it('autocomplete: Check input select fields', function(client) {
       client
         .useXpath()
-        .url('http://localhost:3003/abe/editor/autocomplete.html')
+        .url('http://localhost:3003/abecms/libs/jquery-2.1.0.min.js')
         .getLog('browser', function(result) {
           console.log(result);
+        })
+        .source(function (result){
+          // Source will be stored in result.value
+          console.log(result.value);
         })
         // .waitForElementVisible('//*[@id="colors.multiple"]', 2000)
         // .execute(function() {
