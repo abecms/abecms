@@ -17,44 +17,58 @@ import extend from 'extend'
  * @return {[type]}         html
  */
 export default function eachGroup(context, groups, options) {
-  var fn = options.fn, inverse = options.inverse
+  var fn = options.fn,
+    inverse = options.inverse
   var ret = ''
   var group = []
   function getLeaf(node) {
     if (node.group && node.qty) {
       return node
     } else {
-      try{
+      try {
         return getLeaf(node[Object.keys(node)[0]])
-      } catch (e){ 
+      } catch (e) {
         return null
       }
     }
   }
 
-  if(typeof groups !== 'undefined'){
-    if(typeof groups === 'string'){
+  if (typeof groups !== 'undefined') {
+    if (typeof groups === 'string') {
       groups = JSON.parse(groups)
     }
-    if(context && context.length > 0) {
-      for(var i=0, newCount=0, j=context.length, distribIndex=0, k=0, iteration=0; i<j; i++,newCount++) {
+    if (context && context.length > 0) {
+      for (
+        var i = 0,
+          newCount = 0,
+          j = context.length,
+          distribIndex = 0,
+          k = 0,
+          iteration = 0;
+        i < j;
+        i++, newCount++
+      ) {
         var o = getLeaf(groups[Object.keys(groups)[distribIndex]])
-        if(o == null) break
+        if (o == null) break
         var first = newCount % o['qty'] === 0
 
         // Adding index, isFirst, isLast, isNewGroup to each record
-        context[i] = extend(true, {
-          index: i,
-          isFirst: first,
-          isNewGroup: first && newCount > 0,
-          isLast: i === context.length - 1
-        }, context[i])
+        context[i] = extend(
+          true,
+          {
+            index: i,
+            isFirst: first,
+            isNewGroup: first && newCount > 0,
+            isLast: i === context.length - 1
+          },
+          context[i]
+        )
 
-        if(first){
-          if(newCount > 0){
+        if (first) {
+          if (newCount > 0) {
             // if the last group has been reached, I reinit the distribIndex
             // and iterate on the result array
-            if(distribIndex === Object.keys(groups).length - 1) {
+            if (distribIndex === Object.keys(groups).length - 1) {
               distribIndex = 0
               var ar = []
             } else {
@@ -67,9 +81,8 @@ export default function eachGroup(context, groups, options) {
 
           o = getLeaf(groups[Object.keys(groups)[distribIndex]])
           var key = o['group']
-          if(group[iteration] == null)
-            group.push([])
-          if(group[iteration][key] == null){
+          if (group[iteration] == null) group.push([])
+          if (group[iteration][key] == null) {
             group[iteration][key] = []
           }
         }
@@ -78,8 +91,8 @@ export default function eachGroup(context, groups, options) {
       context = group
     }
 
-    if(context) {
-      for(var i=0, j=context.length, k=0; i<j; i++) {
+    if (context) {
+      for (var i = 0, j = context.length, k = 0; i < j; i++) {
         ret += fn(context[i])
       }
     } else {

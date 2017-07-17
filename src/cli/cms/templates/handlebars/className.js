@@ -1,4 +1,3 @@
-
 /**
  * Handlebars helper, to print className and escape it string
  */

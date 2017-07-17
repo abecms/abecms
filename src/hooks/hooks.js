@@ -62,16 +62,42 @@ var hooks = {
   },
 
   /***************** duplicate *****************/
-  beforeDuplicate: (oldFilePath, template, path, name, req, deleteFiles, abe) => {
+  beforeDuplicate: (
+    oldFilePath,
+    template,
+    path,
+    name,
+    req,
+    deleteFiles,
+    abe
+  ) => {
     // if deleteFiles this is an update not a duplicate
     return oldFilePath
   },
-  afterDuplicate: (json, oldFilePath, template, path, name, req, deleteFiles, abe) => {
+  afterDuplicate: (
+    json,
+    oldFilePath,
+    template,
+    path,
+    name,
+    req,
+    deleteFiles,
+    abe
+  ) => {
     return json
   },
 
   /***************** update *****************/
-  beforeUpdate: (json, oldFilePath, template, path, name, req, deleteFiles, abe) => {
+  beforeUpdate: (
+    json,
+    oldFilePath,
+    template,
+    path,
+    name,
+    req,
+    deleteFiles,
+    abe
+  ) => {
     return json
   },
 

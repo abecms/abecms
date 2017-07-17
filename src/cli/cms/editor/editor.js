@@ -13,26 +13,26 @@ import {
 export function add(obj, json, form) {
   var value = obj.value
 
-  if(obj.key.indexOf('[') > -1) {
+  if (obj.key.indexOf('[') > -1) {
     var key = obj.key.split('[')[0]
     var index = obj.key.match(/[^\[]+?(?=\])/)[0]
     var prop = obj.key.replace(/[^\.]+?\./, '')
 
     try {
       obj.value = eval(`json[key][index]["${prop}"]`)
-    } catch(e) {
-
+    } catch (e) {
       try {
         eval(`json[key][index]["${prop}"] = ` + JSON.stringify(value))
-      } catch(e) {
+      } catch (e) {
         // no value found inside json KEY
       }
     }
   } else {
     try {
-      if(obj.key.indexOf('.') > -1) obj.value = eval(`json["${obj.key.split('.').join('"]["')}"]`)
+      if (obj.key.indexOf('.') > -1)
+        obj.value = eval(`json["${obj.key.split('.').join('"]["')}"]`)
       else obj.value = eval(`json["${obj.key}"]`)
-    } catch(e) {
+    } catch (e) {
       // no value found inside json KEY
     }
   }
@@ -46,21 +46,33 @@ export function add(obj, json, form) {
   return obj.value
 }
 
-export function addAbeTagToCollection(match, text, json, form, arrayBlock, keyArray = null, i = 0) {
-
+export function addAbeTagToCollection(
+  match,
+  text,
+  json,
+  form,
+  arrayBlock,
+  keyArray = null,
+  i = 0
+) {
   var obj = cmsData.attributes.getAll(match, json)
 
-  if(typeof keyArray !== 'undefined' && keyArray !== null) {
+  if (typeof keyArray !== 'undefined' && keyArray !== null) {
     // removes the first part of the key. ie. 'main.article' becomes 'article'
     var realKey = obj.key.replace(/[^\.]+?\./, '')
 
-    if(obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0){
+    if (obj.key.indexOf(keyArray + '.') >= 0 && realKey.length > 0) {
       obj.keyArray = keyArray
       obj.realKey = realKey
       obj.key = keyArray + '[' + i + '].' + realKey
-      obj.desc = obj.desc + ' ' + i,
-      insertAbeEach(obj, text, json, form, arrayBlock)
-    } else if(!form.contains(obj.key)) {
+      ;(obj.desc = obj.desc + ' ' + i), insertAbeEach(
+        obj,
+        text,
+        json,
+        form,
+        arrayBlock
+      )
+    } else if (!form.contains(obj.key)) {
       obj.value = json[obj.key]
       json[obj.key] = add(obj, json, form)
     }
@@ -82,12 +94,19 @@ export function addAbeTagToCollection(match, text, json, form, arrayBlock, keyAr
 export function addSingleAbeTagsToForm(text, json, form) {
   var match
 
-  while (match = cmsData.regex.abeTag.exec(text)) {
-    var matchText = match[0].replace(/value=([\'\"].*?[\'\"])/g, 'defaultValue=$1')
+  while ((match = cmsData.regex.abeTag.exec(text))) {
+    var matchText = match[0].replace(
+      /value=([\'\"].*?[\'\"])/g,
+      'defaultValue=$1'
+    )
     var obj = cmsData.attributes.getAll(matchText, json)
 
-    if((obj.key != '') && !form.contains(obj.key) && cmsData.regex.isSingleAbe(match, text)) {
-      if(json[obj.key]){
+    if (
+      obj.key != '' &&
+      !form.contains(obj.key) &&
+      cmsData.regex.isSingleAbe(match, text)
+    ) {
+      if (json[obj.key]) {
         obj.value = json[obj.key]
       } else {
         obj.value = null
@@ -98,17 +117,20 @@ export function addSingleAbeTagsToForm(text, json, form) {
   }
 }
 
-export function insertAbeEach (obj, text, json, form, arrayBlock) {
-  if(typeof arrayBlock[obj.keyArray][obj.realKey] === 'undefined' || arrayBlock[obj.keyArray][obj.realKey] === null) {
+export function insertAbeEach(obj, text, json, form, arrayBlock) {
+  if (
+    typeof arrayBlock[obj.keyArray][obj.realKey] === 'undefined' ||
+    arrayBlock[obj.keyArray][obj.realKey] === null
+  ) {
     arrayBlock[obj.keyArray][obj.realKey] = []
   }
   var exist = false
-  Array.prototype.forEach.call(arrayBlock[obj.keyArray][obj.realKey], (block) => {
-    if(block.key === obj.key) {
+  Array.prototype.forEach.call(arrayBlock[obj.keyArray][obj.realKey], block => {
+    if (block.key === obj.key) {
       exist = true
     }
   })
-  if(!exist) {
+  if (!exist) {
     arrayBlock[obj.keyArray][obj.realKey].push(obj)
   }
 }
@@ -128,7 +150,7 @@ export function addAbeTagCollectionToForm(text, json, form, arrayBlock) {
   var textEach
   var match
 
-  while (textEach = cmsData.regex.eachBlockPattern.exec(text)) {
+  while ((textEach = cmsData.regex.eachBlockPattern.exec(text))) {
     var i
     var keyArray = textEach[2].split(' ')[0]
     var attrArray = []
@@ -136,18 +158,34 @@ export function addAbeTagCollectionToForm(text, json, form, arrayBlock) {
 
     arrayBlock[keyArray] = []
 
-    while (match = cmsData.regex.abeTag.exec(textEach[0])) {
-      if(json[keyArray]){
+    while ((match = cmsData.regex.abeTag.exec(textEach[0]))) {
+      if (json[keyArray]) {
         for (i = 0; i < json[keyArray].length; i++) {
-          addAbeTagToCollection(match[0], text, json, form, arrayBlock, keyArray, i)
+          addAbeTagToCollection(
+            match[0],
+            text,
+            json,
+            form,
+            arrayBlock,
+            keyArray,
+            i
+          )
         }
-      } else{
-        addAbeTagToCollection(match[0], text, json, form, arrayBlock, keyArray, 0)
+      } else {
+        addAbeTagToCollection(
+          match[0],
+          text,
+          json,
+          form,
+          arrayBlock,
+          keyArray,
+          0
+        )
       }
     }
 
     // Let's reorder the fields and add it to the form
-    for(var index in arrayBlock[keyArray]) {
+    for (var index in arrayBlock[keyArray]) {
       attrArray.push(index)
       length = arrayBlock[keyArray][index].length
     }
@@ -176,10 +214,10 @@ export function addDataAbeTagsToForm(text, json, form) {
 
   const matches = cmsData.regex.getTagAbeTypeRequest(text)
 
-  Array.prototype.forEach.call(matches, (match) => {
+  Array.prototype.forEach.call(matches, match => {
     var obj = cmsData.attributes.getAll(match[0], json)
 
-    if(obj.editable) {
+    if (obj.editable) {
       obj.value = json[obj.key]
       add(obj, json, form)
     } else {
@@ -189,16 +227,16 @@ export function addDataAbeTagsToForm(text, json, form) {
 }
 
 export function create(text, json, precontrib = false) {
-  let p = new Promise((resolve) => {
+  let p = new Promise(resolve => {
     var form = new cmsEditor.form()
     var arrayBlock = []
 
     // get all data from type='data' (web service, select, ...)
     // and create a key abe_source with all data
     // + modify keys when editable = false or prefill = true
-    cmsData.source.getDataList(text, json)
+    cmsData.source
+      .getDataList(text, json)
       .then(() => {
-
         // prepare editor values id editable or put values in json from abe_source
         // (don't do this for type='data' included in {{#each}})
         addDataAbeTagsToForm(text, json, form)
@@ -208,7 +246,9 @@ export function create(text, json, precontrib = false) {
 
         if (!precontrib) {
           text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(text)
-          text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(text)
+          text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(
+            text
+          )
         }
 
         // add abe tags not in each and with a key to the form
@@ -219,14 +259,23 @@ export function create(text, json, precontrib = false) {
 
         if (!precontrib) {
           // HOOKS beforeEditorFormBlocks
-          json = abeExtend.hooks.instance.trigger('beforeEditorFormBlocks', json, text)
+          json = abeExtend.hooks.instance.trigger(
+            'beforeEditorFormBlocks',
+            json,
+            text
+          )
         }
 
         var blocks = form.orderBlock()
 
         if (!precontrib) {
           // HOOKS afterEditorFormBlocks
-          blocks = abeExtend.hooks.instance.trigger('afterEditorFormBlocks', blocks, json, text)
+          blocks = abeExtend.hooks.instance.trigger(
+            'afterEditorFormBlocks',
+            blocks,
+            json,
+            text
+          )
         }
 
         abeEngine.instance.content = json
@@ -234,7 +283,8 @@ export function create(text, json, precontrib = false) {
           form: blocks,
           json: json
         })
-      }).catch(function(e) {
+      })
+      .catch(function(e) {
         console.error(e)
       })
   })

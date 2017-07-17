@@ -14,12 +14,11 @@ export var processConfig
 export var dateStart
 
 export function getTime() {
-  return (moment(moment() - dateStart).format('mm:ss')) + 'sec'
+  return moment(moment() - dateStart).format('mm:ss') + 'sec'
 }
 
 export function init(processName, conf) {
-  var p = new Promise((resolve) => {
-
+  var p = new Promise(resolve => {
     log = debug(processName + ':log')
     log.color = 2
     trace = debug(processName + ':trace')
@@ -27,31 +26,37 @@ export function init(processName, conf) {
     error.color = 1
 
     processConfig = {}
-    Array.prototype.forEach.call(process.argv, (item) => {
+    Array.prototype.forEach.call(process.argv, item => {
       if (item.indexOf('=') > -1) {
         var ar = item.split('=')
         processConfig[ar[0]] = ar[1]
       }
     })
-    if(processConfig.ABE_WEBSITE) {
+    if (processConfig.ABE_WEBSITE) {
       config.set({root: processConfig.ABE_WEBSITE.replace(/\/$/, '') + '/'})
     }
 
     processConfig = extend(true, conf, processConfig)
 
-    if(typeof processConfig.ABE_WEBSITE !== 'undefined' && processConfig.ABE_WEBSITE !== null) {
+    if (
+      typeof processConfig.ABE_WEBSITE !== 'undefined' &&
+      processConfig.ABE_WEBSITE !== null
+    ) {
       abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
 
-      Manager.instance.init()
-      .then(()=> {
-        dateStart = moment()
-        resolve()
-      })
-      .catch((e) => {
-        error(processName + ' ' + e)
-      })
-    }else {
-      error('ABE_WEBSITE is not defined use node process.js ABE_WEBSITE=/path/to/website')
+      Manager.instance
+        .init()
+        .then(() => {
+          dateStart = moment()
+          resolve()
+        })
+        .catch(e => {
+          error(processName + ' ' + e)
+        })
+    } else {
+      error(
+        'ABE_WEBSITE is not defined use node process.js ABE_WEBSITE=/path/to/website'
+      )
       process.exit(0)
     }
   })

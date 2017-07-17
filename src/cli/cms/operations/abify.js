@@ -1,11 +1,6 @@
 import path from 'path'
 
-import {
-  cmsData,
-  Page,
-  cmsTemplates,
-  abeExtend
-} from '../../'
+import {cmsData, Page, cmsTemplates, abeExtend} from '../../'
 
 /**
  * This function takes a json and optionally a template (in HTML) and returns its abified version (HTML)
@@ -14,17 +9,16 @@ import {
  * @return {[type]}          [description]
  */
 export function abify(json, template = null) {
-  var p = new Promise((resolve) => {
+  var p = new Promise(resolve => {
     abeExtend.hooks.instance.trigger('beforeAbify', json)
 
-    if(template === null) {
+    if (template === null) {
       template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
     }
-    
-    cmsData.source.getDataList(template, json)
-    .then(() => {
+
+    cmsData.source.getDataList(template, json).then(() => {
       var html = new Page(template, json)
-      
+
       resolve(html)
     })
   })

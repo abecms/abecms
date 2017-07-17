@@ -5,7 +5,6 @@ import attr from './attr'
  * Manage string with attributes encoded inside
  */
 export default class FileAttr {
-
   /**
    * Add attributes or modify them if they already exists
    * @param {String} str the string to modify
@@ -40,7 +39,6 @@ export default class FileAttr {
    */
   static test(str) {
     var att = new attr(str).val
-    return (att.s != null)
+    return att.s != null
   }
 }
-

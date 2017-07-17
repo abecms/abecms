@@ -30,7 +30,7 @@ export function filter(arr, attr, value) {
  */
 export function facet(arr, attrs, value) {
   let searches = []
-  Array.prototype.forEach.call(attrs, (attr) => {
+  Array.prototype.forEach.call(attrs, attr => {
     let attrPath = attr.split('.')
     searches.push(attrPath)
   })
@@ -42,10 +42,13 @@ export function facet(arr, attrs, value) {
   for (; i < len; i += 1) {
     let elt = arr[i]
     let found = false
-    Array.prototype.forEach.call(searches, (search) => {
+    Array.prototype.forEach.call(searches, search => {
       let j = 0
       let a = arr[i]
-      while( j < search.length ) { a = a[search[j]]; j++ }
+      while (j < search.length) {
+        a = a[search[j]]
+        j++
+      }
       if (a.indexOf(value) !== -1) {
         found = true
       }
@@ -89,15 +92,15 @@ export function find(arr, attr, value) {
  * @param  {mixed} value the value to compare
  * @return {Array}       the array with corresponding objects removed
  */
-export function removeByAttr(arr, attr, value){
+export function removeByAttr(arr, attr, value) {
   let i = arr.length
-  while (i--){
-    if(  
-      arr[i] && 
+  while (i--) {
+    if (
+      arr[i] &&
       arr[i].hasOwnProperty(attr) &&
-      (arguments.length > 2 && arr[i][attr] === value )
-    ){
-      arr.splice(i,1)
+      (arguments.length > 2 && arr[i][attr] === value)
+    ) {
+      arr.splice(i, 1)
     }
   }
 

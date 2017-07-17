@@ -1,33 +1,33 @@
 import path from 'path'
 
-import {
-  config,
-  cmsData
-} from '../../'
+import {config, cmsData} from '../../'
 
 export function getPercentOfRequiredTagsFilled(text, json) {
   var regAbe = /{{abe[\S\s].*?key=['|"]([\S\s].*?['|"| ]}})/g
   var matches = text.match(regAbe)
   var requiredValue = 0
   var complete = 0
-  if(typeof matches !== 'undefined' && matches !== null){
-    Array.prototype.forEach.call(matches, (match) => {
-      if(typeof match !== 'undefined' && match !== null) {
-        
+  if (typeof matches !== 'undefined' && matches !== null) {
+    Array.prototype.forEach.call(matches, match => {
+      if (typeof match !== 'undefined' && match !== null) {
         var keyAttr = cmsData.regex.getAttr(match, 'key')
         var requiredAttr = cmsData.regex.getAttr(match, 'required')
-        if(requiredAttr === 'true') {
+        if (requiredAttr === 'true') {
           requiredValue++
 
           var minAttr = cmsData.regex.getAttr(match, 'min-length')
-          minAttr = (minAttr !== '') ? minAttr : 0
+          minAttr = minAttr !== '' ? minAttr : 0
 
-          if(typeof json[keyAttr] !== 'undefined' && json[keyAttr] !== null && json[keyAttr] !== '') {
-            if(minAttr > 0) {
-              if(json[keyAttr].length >= minAttr) {
+          if (
+            typeof json[keyAttr] !== 'undefined' &&
+            json[keyAttr] !== null &&
+            json[keyAttr] !== ''
+          ) {
+            if (minAttr > 0) {
+              if (json[keyAttr].length >= minAttr) {
                 complete++
               }
-            }else {
+            } else {
               complete++
             }
           }
@@ -36,7 +36,7 @@ export function getPercentOfRequiredTagsFilled(text, json) {
     })
   }
 
-  return Math.round((requiredValue > 0) ? complete * 100 / requiredValue : 100)
+  return Math.round(requiredValue > 0 ? complete * 100 / requiredValue : 100)
 }
 
 /**
@@ -47,7 +47,7 @@ export function getPercentOfRequiredTagsFilled(text, json) {
  * @param  {[type]} jsonPath [description]
  * @return {[type]}          [description]
  */
-export function getRevisionRelativePath(jsonPath){
+export function getRevisionRelativePath(jsonPath) {
   const pathData = path.join(config.root, config.data.url) + path.sep
   return jsonPath.replace(pathData, '')
 }
@@ -57,11 +57,13 @@ export function getRevisionRelativePath(jsonPath){
  * @param  {[type]} postUrl [description]
  * @return {[type]}         [description]
  */
-export function getDocPathFromPostUrl(postUrl){
+export function getDocPathFromPostUrl(postUrl) {
   const pathData = path.join(config.root, config.data.url)
   const extension = '.json'
   const templateExtension = '.' + config.files.templates.extension
-  const osJsonPath = postUrl.replace(templateExtension, extension).replace('/', path.sep)
+  const osJsonPath = postUrl
+    .replace(templateExtension, extension)
+    .replace('/', path.sep)
   return path.join(pathData, osJsonPath)
 }
 
@@ -70,15 +72,18 @@ export function getDocPathFromPostUrl(postUrl){
  * @param  {[type]} postUrl [description]
  * @return {[type]}         [description]
  */
-export function getDocPathFromLinkStatusDate(jsonData){
-  
+export function getDocPathFromLinkStatusDate(jsonData) {
   let jsonObject = cmsData.file.getAbeMeta({}, jsonData)
   let dateIso = jsonObject.abe_meta.date
-  if(typeof dateIso === 'object'){
+  if (typeof dateIso === 'object') {
     dateIso = dateIso.toISOString()
   }
-  const statusDate = jsonObject.abe_meta.status[0] + cmsData.revision.removeStatusAndDateFromFileName(dateIso)
-  return getDocPathFromPostUrl(cmsData.fileAttr.add(jsonObject.abe_meta.link, statusDate))
+  const statusDate =
+    jsonObject.abe_meta.status[0] +
+    cmsData.revision.removeStatusAndDateFromFileName(dateIso)
+  return getDocPathFromPostUrl(
+    cmsData.fileAttr.add(jsonObject.abe_meta.link, statusDate)
+  )
 }
 
 /**
@@ -88,7 +93,7 @@ export function getDocPathFromLinkStatusDate(jsonData){
  * @param  {[type]} jsonPath [description]
  * @return {[type]}          [description]
  */
-export function getDocPath(jsonPath){
+export function getDocPath(jsonPath) {
   return cmsData.fileAttr.delete(jsonPath)
 }
 
@@ -99,7 +104,7 @@ export function getDocPath(jsonPath){
  * @param  {[type]} jsonPath [description]
  * @return {[type]}          [description]
  */
-export function getDocRelativePath(jsonPath){
+export function getDocRelativePath(jsonPath) {
   return cmsData.fileAttr.delete(getRevisionRelativePath(jsonPath))
 }
 
@@ -119,8 +124,12 @@ export function getDocRelativePath(jsonPath){
  * @param  {[type]} jsonPath [description]
  * @return {[type]}          [description]
  */
-export function getPostPath(jsonPath){
-  return path.join(config.root, config.publish.url, getPostRelativePath(jsonPath))
+export function getPostPath(jsonPath) {
+  return path.join(
+    config.root,
+    config.publish.url,
+    getPostRelativePath(jsonPath)
+  )
 }
 
 /**
@@ -130,7 +139,7 @@ export function getPostPath(jsonPath){
  * @param  {[type]} jsonPath [description]
  * @return {[type]}          [description]
  */
-export function getPostRelativePath(jsonPath){
+export function getPostRelativePath(jsonPath) {
   const extension = '.json'
   const templateExtension = '.' + config.files.templates.extension
 
@@ -144,9 +153,12 @@ export function getPostRelativePath(jsonPath){
  * @param  {[type]} jsonPath [description]
  * @return {[type]}          [description]
  */
-export function getPostUrl(jsonPath){
+export function getPostUrl(jsonPath) {
   const extension = '.json'
   const templateExtension = '.' + config.files.templates.extension
 
-  return path.join('/', getPostRelativePath(jsonPath).replace(extension, templateExtension))
+  return path.join(
+    '/',
+    getPostRelativePath(jsonPath).replace(extension, templateExtension)
+  )
 }

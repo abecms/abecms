@@ -7,11 +7,12 @@
  * @return {Array} array
  */
 export function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
-
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex)
     currentIndex -= 1
@@ -33,36 +34,40 @@ export function shuffle(array) {
  * @param  integer order order ASC if 1, DESC if -1
  * @return integer the ordered value
  */
-export function predicatBy(prop, order){
+export function predicatBy(prop, order) {
   prop = prop.split('.')
   var len = prop.length
 
   if (order !== -1) {
     order = 1
   }
-  if(prop === 'date'){
-    return function(a,b){
+  if (prop === 'date') {
+    return function(a, b) {
       a = new Date(a[prop])
       b = new Date(b[prop])
-      if( a > b){
-        return 1*order
-      }else if( a < b ){
-        return -1*order
+      if (a > b) {
+        return 1 * order
+      } else if (a < b) {
+        return -1 * order
       }
       return 0
     }
   }
 
-  return function (a, b) {
+  return function(a, b) {
     var i = 0
-    while( i < len ) { a = a[prop[i]]; b = b[prop[i]]; i++ }
+    while (i < len) {
+      a = a[prop[i]]
+      b = b[prop[i]]
+      i++
+    }
     if (!isNaN(a)) a = parseFloat(a)
     if (!isNaN(b)) b = parseFloat(b)
     if (a < b) {
-      return -1*order
+      return -1 * order
     } else if (a > b) {
-      return 1*order
+      return 1 * order
     }
     return 0
-  } 
+  }
 }

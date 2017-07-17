@@ -1,11 +1,6 @@
 import path from 'path'
 
-import {
-  config,
-  cmsData,
-  coreUtils,
-  Manager
-} from '../../'
+import {config, cmsData, coreUtils, Manager} from '../../'
 
 /**
  * Create and array of doc file path containing the versions of this doc
@@ -15,8 +10,11 @@ import {
 export function getVersions(docPath) {
   var result = []
   var files = Manager.instance.getList()
-  var dataFile = path.join(config.data.url, docPath.replace('.' + config.files.templates.extension, '.json'))
-  Array.prototype.forEach.call(files, (file) => {
+  var dataFile = path.join(
+    config.data.url,
+    docPath.replace('.' + config.files.templates.extension, '.json')
+  )
+  Array.prototype.forEach.call(files, file => {
     if (file.path.indexOf(dataFile) > -1) {
       result = file.revisions
     }
@@ -38,7 +36,7 @@ export function getDocumentRevision(docPath) {
   var documentPath = docPath
   var latest = true
 
-  if(cmsData.fileAttr.test(documentPath)){
+  if (cmsData.fileAttr.test(documentPath)) {
     latest = false
     documentPath = cmsData.fileAttr.delete(documentPath)
   }
@@ -51,12 +49,18 @@ export function getDocumentRevision(docPath) {
 }
 
 export function getStatusAndDateToFileName(date) {
-  var res = date.substring(0, 4) + '-'
-            + date.substring(4, 6) + '-'
-            + date.substring(6, 11) + ':'
-            + date.substring(11, 13) + ':'
-            + date.substring(13, 15) + '.'
-            + date.substring(15, 19)
+  var res =
+    date.substring(0, 4) +
+    '-' +
+    date.substring(4, 6) +
+    '-' +
+    date.substring(6, 11) +
+    ':' +
+    date.substring(11, 13) +
+    ':' +
+    date.substring(13, 15) +
+    '.' +
+    date.substring(15, 19)
   return res
 }
 
@@ -71,20 +75,20 @@ export function filePathInfos(pathFolder) {
   var rootArr = config.root.split('/')
   var website = rootArr[pathArr.length - 1]
   return {
-    'name': name,
-    'path': pathFolder,
-    'website': website,
-    'type': 'folder'
+    name: name,
+    path: pathFolder,
+    website: website,
+    type: 'folder'
   }
 }
 
 export function mergeRevisions(files) {
   let merged = {}
-  
-  Array.prototype.forEach.call(files, (file) => {
+
+  Array.prototype.forEach.call(files, file => {
     const docRelativePath = cmsData.utils.getDocRelativePath(file.path)
 
-    if(merged[docRelativePath] == null) {
+    if (merged[docRelativePath] == null) {
       merged[docRelativePath] = {
         path: cmsData.utils.getDocPath(file.path),
         revisions: []
@@ -99,23 +103,27 @@ export function mergeRevisions(files) {
 export function sortRevisions(merged) {
   let sortedArray = []
 
-  Array.prototype.forEach.call(Object.keys(merged), (key) => {
+  Array.prototype.forEach.call(Object.keys(merged), key => {
     let revisions = merged[key].revisions
     revisions.sort(coreUtils.sort.predicatBy('date', -1))
     merged[key].revisions = revisions
 
-    if(revisions[0] != null) {
+    if (revisions[0] != null) {
       merged[key].name = revisions[0].name
       merged[key].date = revisions[0].date
       merged[key].abe_meta = revisions[0].abe_meta
     }
 
     let newStatuses = []
-    Array.prototype.forEach.call(revisions, (revision) => {
+    Array.prototype.forEach.call(revisions, revision => {
       const revisionStatus = revision.abe_meta.status
 
-      if(typeof revisionStatus !== 'undefined' && revisionStatus !== null && revisionStatus != '') {
-        if(!(revisionStatus in newStatuses)) {
+      if (
+        typeof revisionStatus !== 'undefined' &&
+        revisionStatus !== null &&
+        revisionStatus != ''
+      ) {
+        if (!(revisionStatus in newStatuses)) {
           if (revisionStatus === 'publish') {
             merged[key][revisionStatus] = revision
           } else {

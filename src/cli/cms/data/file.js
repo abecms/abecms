@@ -3,28 +3,23 @@ import mkdirp from 'mkdirp'
 import fse from 'fs-extra'
 import moment from 'moment'
 
-import {
-  abeExtend,
-  coreUtils,
-  cmsData,
-  config
-} from '../../'
+import {abeExtend, coreUtils, cmsData, config} from '../../'
 
 export function getAbeMeta(fileObject, json) {
-  if(json.name != null) {
+  if (json.name != null) {
     fileObject.name = json.name
   }
 
-  if(json.abe_meta != null) {
+  if (json.abe_meta != null) {
     var date = null
 
-    if(json.abe_meta.updatedDate != null) {
+    if (json.abe_meta.updatedDate != null) {
       fileObject.date = json.abe_meta.updatedDate
-    } else if(json.abe_meta.latest.date != null) {
+    } else if (json.abe_meta.latest.date != null) {
       fileObject.date = json.abe_meta.latest.date
     }
-    
-    if(json.abe_meta.updatedDate != null) {
+
+    if (json.abe_meta.updatedDate != null) {
       date = json.abe_meta.updatedDate
     } else if (json.abe_meta.latest.date !== null) {
       date = json.abe_meta.latest.date
@@ -34,9 +29,9 @@ export function getAbeMeta(fileObject, json) {
 
     fileObject.abe_meta = {
       date: date,
-      link: (json.abe_meta.link != null) ? json.abe_meta.link : null,
-      template: (json.abe_meta.template != null) ? json.abe_meta.template : null,
-      status: (json.abe_meta.status != null) ? json.abe_meta.status : null
+      link: json.abe_meta.link != null ? json.abe_meta.link : null,
+      template: json.abe_meta.template != null ? json.abe_meta.template : null,
+      status: json.abe_meta.status != null ? json.abe_meta.status : null
     }
   }
 
@@ -50,11 +45,11 @@ export function getAllWithKeys(withKeys) {
 
   let filesArr = []
 
-  Array.prototype.forEach.call(files, (pathFile) => {
+  Array.prototype.forEach.call(files, pathFile => {
     const json = cmsData.file.get(pathFile)
     let fileObject = cmsData.file.getFileObject(pathFile)
     fileObject = cmsData.file.getAbeMeta(fileObject, json)
-    Array.prototype.forEach.call(withKeys, (key) => {
+    Array.prototype.forEach.call(withKeys, key => {
       fileObject[key] = json[key]
     })
 
@@ -70,13 +65,13 @@ export function getAllWithKeys(withKeys) {
 export function get(pathJson) {
   let json
   pathJson = abeExtend.hooks.instance.trigger('beforeGetJson', pathJson)
-  
+
   try {
     var stat = fse.statSync(pathJson)
     if (stat) {
       json = fse.readJsonSync(pathJson)
     }
-  }catch(e) {
+  } catch (e) {
     json = {}
   }
 
@@ -105,14 +100,14 @@ export function fromUrl(url) {
     }
   }
 
-  if(url != null) {
+  if (url != null) {
     const dir = path.dirname(url).replace(config.root, '')
     const filename = path.basename(url)
-    const pathPublish = path.join(config.root,config.publish.url,path.sep)
-    
+    const pathPublish = path.join(config.root, config.publish.url, path.sep)
+
     let link = url.replace(pathPublish, '')
     link = link.replace(new RegExp('\\' + path.sep, 'g'), '/')
-    link = cmsData.fileAttr.delete('/'+link)
+    link = cmsData.fileAttr.delete('/' + link)
 
     let publish = config.publish.url
     let data = config.data.url
@@ -125,8 +120,14 @@ export function fromUrl(url) {
 
     res.publish.file = cmsData.fileAttr.delete(filename)
     res.publish.link = link
-    res.json.file = filename.replace(`.${config.files.templates.extension}`, '.json')
-    res.publish.json = path.join(res.json.dir, cmsData.fileAttr.delete(res.json.file))
+    res.json.file = filename.replace(
+      `.${config.files.templates.extension}`,
+      '.json'
+    )
+    res.publish.json = path.join(
+      res.json.dir,
+      cmsData.fileAttr.delete(res.json.file)
+    )
 
     res.publish.path = path.join(res.publish.dir, res.publish.file)
     res.json.path = path.join(res.json.dir, res.json.file)
@@ -137,7 +138,7 @@ export function fromUrl(url) {
 export function getFilesByType(pathFile, type = null) {
   const extension = '.' + config.files.templates.extension
   let result = []
-  
+
   try {
     var directory = fse.lstatSync(pathFile)
     if (!directory.isDirectory()) {
@@ -148,16 +149,15 @@ export function getFilesByType(pathFile, type = null) {
   }
   const files = coreUtils.file.getFilesSync(pathFile, true, extension)
 
-  Array.prototype.forEach.call(files, (file) => {
+  Array.prototype.forEach.call(files, file => {
     var val = cmsData.fileAttr.get(file).s
-    if(type === null || val === type) result.push(file)
+    if (type === null || val === type) result.push(file)
   })
 
   return result
 }
 
 export function getFileObject(revisionPath) {
-
   let name = path.basename(revisionPath)
   const fileData = cmsData.fileAttr.get(name)
   name = cmsData.fileAttr.delete(name)
@@ -169,11 +169,11 @@ export function getFileObject(revisionPath) {
     const stat = fse.statSync(revisionPath)
     date = stat.mtime
   }
-  
+
   const fileObject = {
-    'name': name,
-    'path': revisionPath,
-    'date': date,
+    name: name,
+    path: revisionPath,
+    date: date
   }
 
   return fileObject

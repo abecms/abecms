@@ -1,5 +1,3 @@
 import * as reference from './reference'
 
-export {
-  reference
-}
+export {reference}

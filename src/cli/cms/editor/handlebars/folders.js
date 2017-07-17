@@ -4,11 +4,11 @@ import recursiveFolder from './recursiveFolder'
 export default function folders(obj, index, link, translate) {
   var res
   if (obj && obj.length > 0) {
-    if(link != null && link !== 'null') {
+    if (link != null && link !== 'null') {
       var links = link.replace(/^\//, '').split(path.sep)
       links.pop()
       res = recursiveFolder(obj, 1, '', links, false, translate)
-    }else {
+    } else {
       res = recursiveFolder(obj, 1, '', null, false, translate)
     }
   }

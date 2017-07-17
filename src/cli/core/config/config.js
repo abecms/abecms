@@ -7,24 +7,24 @@ import config from './config.json'
 
 var result = config
 result.root = process.cwd()
-if(process.env.ROOT) {
+if (process.env.ROOT) {
   result.root = process.env.ROOT.replace(/\/$/, '')
 }
 
 var hintAbeJson = false
 
-var loadLocalConfig = (result) => {
-  if(result.root !==''){
-    try{
+var loadLocalConfig = result => {
+  if (result.root !== '') {
+    try {
       var stat = fse.statSync(result.root)
       if (stat && stat.isDirectory()) {
-        try{
-          stat = fse.statSync(path.join(result.root,'abe.json'))
+        try {
+          stat = fse.statSync(path.join(result.root, 'abe.json'))
           if (stat) {
-            var json = fse.readJsonSync(path.join(result.root,'abe.json'))
+            var json = fse.readJsonSync(path.join(result.root, 'abe.json'))
             result = extend(true, result, json)
           }
-        } catch(e) {
+        } catch (e) {
           if (!hintAbeJson) {
             hintAbeJson = true
             // console.log(
@@ -35,7 +35,7 @@ var loadLocalConfig = (result) => {
           }
         }
       }
-    }catch(e){
+    } catch (e) {
       console.log('LoadConfig Error')
       console.log(e)
     }
@@ -47,37 +47,40 @@ loadLocalConfig(result)
 result.exist = (conf, json) => {
   var c = conf.split('.')
   var current = json
-  if(typeof current !== 'undefined' && current !== null) {
-    Array.prototype.forEach.call(c, (c) => {
-      if(current !== false && typeof current[c] !== 'undefined' && current[c] !== null) {
+  if (typeof current !== 'undefined' && current !== null) {
+    Array.prototype.forEach.call(c, c => {
+      if (
+        current !== false &&
+        typeof current[c] !== 'undefined' &&
+        current[c] !== null
+      ) {
         current = current[c]
-      }else {
+      } else {
         current = false
         return false
       }
     })
     return current
-  }else {
+  } else {
     return false
   }
 }
 
 result.localConfigExist = () => {
-  if(result.root !==''){
-    try{
+  if (result.root !== '') {
+    try {
       var stat = fse.statSync(result.root)
       if (stat && stat.isDirectory()) {
-        try{
-          stat = fse.statSync(path.join(result.root,'abe.json'))
+        try {
+          stat = fse.statSync(path.join(result.root, 'abe.json'))
           if (stat) {
             return true
           }
-        }catch(e) {
+        } catch (e) {
           return false
         }
       }
-    }catch(e){
-      
+    } catch (e) {
       return false
     }
   }
@@ -86,72 +89,69 @@ result.localConfigExist = () => {
 }
 
 result.getLocalConfig = () => {
-  if (result.localConfigExist()){
-    return fse.readJsonSync(path.join(result.root,'abe.json'))
+  if (result.localConfigExist()) {
+    return fse.readJsonSync(path.join(result.root, 'abe.json'))
   } else {
     return {}
   }
 }
 
-result.getDefault = (conf) => {
+result.getDefault = conf => {
   return result[conf]
 }
 
-result.get = (conf) => {
-
+result.get = conf => {
   return result.exist(conf, result)
 }
 
-result.set = (json) => {
+result.set = json => {
   extend(true, result, json)
   loadLocalConfig(result)
 }
 
-result.save = (json) => {
-  const confPath = path.join(result.root,'abe.json')
-  fse.writeJsonSync(confPath, json, { space: 2, encoding: 'utf-8' })
+result.save = json => {
+  const confPath = path.join(result.root, 'abe.json')
+  fse.writeJsonSync(confPath, json, {space: 2, encoding: 'utf-8'})
   loadLocalConfig(result)
 }
 
 result.getConfigByWebsite = () => {
   var defaultConfig = extend(true, {}, result)
   var configBySite = {
-    default: {
-			
-    }
+    default: {}
   }
-	
+
   var localConfig = extend(true, {}, defaultConfig)
-  for(var item in localConfig) {
-    switch(item) {
-    case 'intlData':
-      configBySite.default.intlData = localConfig[item]
-      break
-    case 'templates':
-      configBySite.default.templates = localConfig[item]
-      break
-    case 'structure':
-      configBySite.default.structure = localConfig[item]
-      break
-    case 'data':
-      configBySite.default.data = localConfig[item]
-      break
-    case 'publish':
-      configBySite.default.publish = localConfig[item]
-      break
-    case 'files':
-      configBySite.default.files = {
-        templates: {
-          extension: localConfig[item].templates.extension
+  for (var item in localConfig) {
+    switch (item) {
+      case 'intlData':
+        configBySite.default.intlData = localConfig[item]
+        break
+      case 'templates':
+        configBySite.default.templates = localConfig[item]
+        break
+      case 'structure':
+        configBySite.default.structure = localConfig[item]
+        break
+      case 'data':
+        configBySite.default.data = localConfig[item]
+        break
+      case 'publish':
+        configBySite.default.publish = localConfig[item]
+        break
+      case 'files':
+        configBySite.default.files = {
+          templates: {
+            extension: localConfig[item].templates.extension
+          }
         }
-      }
-      break
-    case 'upload':
-      configBySite.default.upload = localConfig[item]
-      break
+        break
+      case 'upload':
+        configBySite.default.upload = localConfig[item]
+        break
     }
   }
-	
+
   return configBySite
 }
 

@@ -14,12 +14,12 @@ export default function sourceAttr(obj, params) {
   var selected = ''
   var displayName = prepareDisplay(obj, str)
   var values = params.value
-  if(Object.prototype.toString.call(params.value) !== '[object Array]') {
+  if (Object.prototype.toString.call(params.value) !== '[object Array]') {
     values = [params.value]
   }
 
   if (params.multiple != 'multiple') {
-    Array.prototype.forEach.call(values, (pValue) => {
+    Array.prototype.forEach.call(values, pValue => {
       if (isSelected(pValue, displayName, str)) {
         selected = 'selected'
       }
@@ -27,7 +27,10 @@ export default function sourceAttr(obj, params) {
   }
 
   return {
-    hiddenVal: (typeof obj == 'object') ? JSON.stringify(obj).replace(/\'/g, '&quote;') : obj,
+    hiddenVal:
+      typeof obj == 'object'
+        ? JSON.stringify(obj).replace(/\'/g, '&quote;')
+        : obj,
     selected: selected,
     val: displayName
   }
@@ -57,13 +60,13 @@ export function get(obj, path) {
  */
 export function prepareDisplay(obj, str = null) {
   var keys = getKeys(str)
-  Array.prototype.forEach.call(keys, (key) => {
+  Array.prototype.forEach.call(keys, key => {
     var val = get(obj, key)
 
-    var pattern = new RegExp('{{'+key+'}}|'+key, 'g')
+    var pattern = new RegExp('{{' + key + '}}|' + key, 'g')
     str = str.replace(pattern, val)
   })
-    // console.log('params.value', params.value)
+  // console.log('params.value', params.value)
 
   if (str == null) {
     str = obj
@@ -77,7 +80,7 @@ export function prepareDisplay(obj, str = null) {
  * @param  {string} str the string containing variables
  * @return {Array}     the array of variables
  */
-export function getKeys(str){
+export function getKeys(str) {
   var regex = /\{\{(.*?)\}\}/g
   var variables = []
   var match
@@ -87,7 +90,7 @@ export function getKeys(str){
       variables.push(match[1])
     }
   }
-  
+
   if (variables.length == 0 && str != null) {
     variables.push(str)
   }

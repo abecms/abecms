@@ -3,23 +3,24 @@ import path from 'path'
 import mkdirp from 'mkdirp'
 var fse = Promise.promisifyAll(require('fs-extra'))
 
-import {
-  config,
-  cmsData,
-  coreUtils
-} from '../../'
+import {config, cmsData, coreUtils} from '../../'
 
 export function exist(pathFile) {
-  try{
+  try {
     fse.statSync(pathFile)
     return true
-  }catch(e){
+  } catch (e) {
     return false
   }
 }
 
 export function changePath(pathEnv, change) {
-  pathEnv = pathEnv.split(path.sep).join('/').replace(config.root, '').replace(/^\//, '').split('/')
+  pathEnv = pathEnv
+    .split(path.sep)
+    .join('/')
+    .replace(config.root, '')
+    .replace(/^\//, '')
+    .split('/')
   pathEnv[0] = change
   return path.join(config.root, pathEnv.join('/'))
 }
@@ -31,7 +32,7 @@ export function changePath(pathEnv, change) {
  */
 export function getContent(pathFile) {
   var res = null
-  if(typeof pathFile !== 'undefined' && pathFile !== null && pathFile !== '') {
+  if (typeof pathFile !== 'undefined' && pathFile !== null && pathFile !== '') {
     if (exist(pathFile)) {
       res = fse.readFileSync(pathFile, 'utf8')
     }
@@ -48,12 +49,12 @@ export function getContent(pathFile) {
  */
 export function getFoldersSync(dirname, recursive = true) {
   let items = []
-  try{
+  try {
     fse.readdirSync(dirname).map(function(fileName) {
       let pathFile = path.join(dirname, fileName)
       let stat = fse.statSync(pathFile)
       if (stat.isDirectory()) {
-        let directory = {'path':pathFile, 'folders':[]}
+        let directory = {path: pathFile, folders: []}
         if (recursive) {
           directory.folders = coreUtils.file.getFoldersSync(pathFile, recursive)
         }
@@ -62,8 +63,7 @@ export function getFoldersSync(dirname, recursive = true) {
     })
 
     return items
-  } catch(e) {
-
+  } catch (e) {
     return items
   }
 }
@@ -77,26 +77,31 @@ export function getFoldersSync(dirname, recursive = true) {
  */
 export function getFoldersAsync(dirname, recursive = true) {
   let items = []
-  return fse.readdirAsync(dirname).map(function(fileName) {
-    let pathFile = path.join(dirname, fileName)
-    return fse.statAsync(pathFile).then(function(stat) {
-      if (stat.isDirectory()) {
-        let directory = {'path':pathFile, 'folders':[]}
-        
-        if (recursive) {
-          return coreUtils.file.getFoldersAsync(pathFile, recursive).then(function(filesInDir) {
-            directory.folders = filesInDir
+  return fse
+    .readdirAsync(dirname)
+    .map(function(fileName) {
+      let pathFile = path.join(dirname, fileName)
+      return fse.statAsync(pathFile).then(function(stat) {
+        if (stat.isDirectory()) {
+          let directory = {path: pathFile, folders: []}
+
+          if (recursive) {
+            return coreUtils.file
+              .getFoldersAsync(pathFile, recursive)
+              .then(function(filesInDir) {
+                directory.folders = filesInDir
+                items.push(directory)
+              })
+          } else {
             items.push(directory)
-          })
-        } else {
-          items.push(directory)
+          }
         }
-      }
-      return
+        return
+      })
     })
-  }).then(function() {
-    return items
-  })
+    .then(function() {
+      return items
+    })
 }
 
 /**
@@ -119,14 +124,17 @@ export function getFilesSync(dirname, recursive = true, filterExt = '') {
         }
       }
       if (stat.isDirectory() && recursive) {
-        let filesInDir = coreUtils.file.getFilesSync(pathFile, recursive, filterExt)
+        let filesInDir = coreUtils.file.getFilesSync(
+          pathFile,
+          recursive,
+          filterExt
+        )
         items = items.concat(filesInDir)
       }
     })
 
     return items
   } catch (e) {
-
     return items
   }
 }
@@ -141,45 +149,52 @@ export function getFilesSync(dirname, recursive = true, filterExt = '') {
 export function getFilesAsync(dirname, recursive = true, filterExt = '') {
   let items = []
 
-  return fse.lstatAsync(dirname).then(stat => {
-    if (stat.isDirectory()) {
-      return fse.readdirAsync(dirname).map(function(fileName) {
-        let pathFile = path.join(dirname, fileName)
-        return fse.statAsync(pathFile).then(function(stat) {
-          if (stat.isFile()) {
-            let extFile = path.extname(fileName)
-            if (filterExt === '' || extFile === filterExt) {
-              return items.push(pathFile)
-            }
-            return 
-          }
-          if (recursive) {
-            return coreUtils.file.getFilesAsync(pathFile, recursive, filterExt).then(function(filesInDir) {
-              items = items.concat(filesInDir)
+  return fse
+    .lstatAsync(dirname)
+    .then(stat => {
+      if (stat.isDirectory()) {
+        return fse
+          .readdirAsync(dirname)
+          .map(function(fileName) {
+            let pathFile = path.join(dirname, fileName)
+            return fse.statAsync(pathFile).then(function(stat) {
+              if (stat.isFile()) {
+                let extFile = path.extname(fileName)
+                if (filterExt === '' || extFile === filterExt) {
+                  return items.push(pathFile)
+                }
+                return
+              }
+              if (recursive) {
+                return coreUtils.file
+                  .getFilesAsync(pathFile, recursive, filterExt)
+                  .then(function(filesInDir) {
+                    items = items.concat(filesInDir)
+                  })
+              }
             })
-          }
-        })
-      }).then(function() {
+          })
+          .then(function() {
+            return items
+          })
+      } else {
         return items
-      })
-    } else {
+      }
+    })
+    .catch(function(e) {
       return items
-    }
-  })
-  .catch(function(e) {
-    return items
-  })
+    })
 }
 
 export function addFolder(folderPath) {
-  mkdirp(path.join(config.root, folderPath), function (err) {
+  mkdirp(path.join(config.root, folderPath), function(err) {
     if (err) console.error(err)
   })
   return folderPath
 }
 
 export function removeFolder(folderPath) {
-  fse.remove(path.join(config.root, folderPath), function (err) {
+  fse.remove(path.join(config.root, folderPath), function(err) {
     if (err) return console.error(err)
   })
   return folderPath
@@ -193,9 +208,9 @@ export function removeFolder(folderPath) {
 export function getDate(revisionPath) {
   var date = cmsData.fileAttr.get(revisionPath).d
 
-  if(typeof date === 'undefined' || date === null || date === '') {
+  if (typeof date === 'undefined' || date === null || date === '') {
     date = new Date()
-  }else {
+  } else {
     date = new Date(date)
   }
 
@@ -214,10 +229,12 @@ export function addDateIsoToRevisionPath(revisionPath, type) {
   if (type === 'publish') {
     return revisionPath
   }
-  
-  dateISO = type[0] + cmsData.revision.removeStatusAndDateFromFileName((new Date().toISOString()))
-  
-  if(dateISO) {
+
+  dateISO =
+    type[0] +
+    cmsData.revision.removeStatusAndDateFromFileName(new Date().toISOString())
+
+  if (dateISO) {
     saveJsonFile = cmsData.fileAttr.add(saveJsonFile, dateISO)
   }
 

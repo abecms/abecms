@@ -2,26 +2,20 @@ import fs from 'fs-extra'
 import mkdirp from 'mkdirp'
 import path from 'path'
 
-import {
-  config
-  ,coreUtils
-  ,User
-} from '../../cli'
+import {config, coreUtils, User} from '../../cli'
 
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
 
 class Manager {
-
   constructor(enforcer) {
-
-    if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
 
     this._file = path.join(config.root, 'users', 'bdd.json')
   }
 
   static get instance() {
-    if(!this[singleton]) {
+    if (!this[singleton]) {
       this[singleton] = new Manager(singletonEnforcer)
     }
     return this[singleton]
@@ -31,7 +25,7 @@ class Manager {
     if (this.isActive()) {
       if (coreUtils.file.exist(this._file)) {
         return JSON.parse(fs.readFileSync(this._file, 'utf8'))
-      }else {
+      } else {
         this._users = []
         var admin = User.operations.add(config.users.default)
         this.save()
@@ -45,7 +39,7 @@ class Manager {
   save() {
     if (this.isActive()) {
       mkdirp.sync(path.dirname(this._file))
-      fs.writeJsonSync(this._file, this._users, { space: 2, encoding: 'utf-8' })
+      fs.writeJsonSync(this._file, this._users, {space: 2, encoding: 'utf-8'})
     }
   }
 
@@ -67,7 +61,6 @@ class Manager {
   }
 
   isActive() {
-
     return config.users.enable
   }
 }

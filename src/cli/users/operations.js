@@ -1,15 +1,12 @@
-import {
-  coreUtils
-  ,User
-} from '../../cli'
+import {coreUtils, User} from '../../cli'
 
 export function add(newUser) {
   var xss = coreUtils.text.checkXss(newUser)
-  if(xss.success === 0) {
+  if (xss.success === 0) {
     return xss
   }
   var sameEmail = User.utils.checkSameEmail(newUser)
-  if(sameEmail.success === 0) {
+  if (sameEmail.success === 0) {
     return sameEmail
   }
 
@@ -19,11 +16,11 @@ export function add(newUser) {
   for (var i = 0, len = bdd.length; i < len; i++) {
     lastId = parseInt(bdd[i].id)
   }
-  newUser.id = lastId+1
+  newUser.id = lastId + 1
   newUser.actif = 0
   newUser.avatar = User.utils.getGravatarImage(newUser.email, '.jpg?s=200')
   var cPassword = User.utils.commonPassword(newUser)
-  if(cPassword.success === 0) {
+  if (cPassword.success === 0) {
     return cPassword
   }
 
@@ -31,9 +28,9 @@ export function add(newUser) {
   bdd.push(newUser)
 
   User.manager.instance.update(bdd)
-  
+
   return {
-    success:1,
+    success: 1,
     user: newUser
   }
 }
@@ -81,11 +78,11 @@ export function remove(id) {
 
 export function update(data) {
   var xss = coreUtils.text.checkXss(data)
-  if(xss.success === 0) {
+  if (xss.success === 0) {
     return xss
   }
   var sameEmail = User.utils.checkSameEmail(data)
-  if(sameEmail.success === 0) {
+  if (sameEmail.success === 0) {
     return sameEmail
   }
 
@@ -104,14 +101,14 @@ export function update(data) {
   bdd = User.manager.instance.update(bdd)
 
   return {
-    success:1,
+    success: 1,
     user: data
   }
 }
 
 export function updatePassword(data, password) {
   var cPassword = User.utils.commonPassword(data)
-  if(cPassword.success === 0) {
+  if (cPassword.success === 0) {
     return cPassword
   }
 
@@ -125,9 +122,9 @@ export function updatePassword(data, password) {
   }
 
   bdd = User.manager.instance.update(bdd)
-  
+
   return {
-    success:1,
+    success: 1,
     user: data
   }
 }

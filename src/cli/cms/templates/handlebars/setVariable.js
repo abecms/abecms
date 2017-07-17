@@ -1,8 +1,7 @@
-
 /**
  * Handlebars helper, to add variable inside template file
  */
-export default function setVariable(varName, varValue, options){
+export default function setVariable(varName, varValue, options) {
   if (varValue === 'true') {
     varValue = true
   }

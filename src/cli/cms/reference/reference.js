@@ -1,20 +1,17 @@
 import path from 'path'
 import fse from 'fs-extra'
 
-import {
-  coreUtils,
-  cmsData,
-  config
-} from '../../'
+import {coreUtils, cmsData, config} from '../../'
 
 export function getFiles(name = '') {
   const pathToReferences = path.join(config.root, config.reference.url)
   let res = {}
 
-  if(name !== '') res[name] = cmsData.file.get(path.join(pathToReferences, name))
+  if (name !== '')
+    res[name] = cmsData.file.get(path.join(pathToReferences, name))
   else {
     const files = coreUtils.file.getFilesSync(pathToReferences, true, '.json')
-    Array.prototype.forEach.call(files, (pathFile) => {
+    Array.prototype.forEach.call(files, pathFile => {
       const fileName = pathFile.split(path.sep)
       res[fileName[fileName.length - 1]] = cmsData.file.get(pathFile)
     })
@@ -24,16 +21,22 @@ export function getFiles(name = '') {
 }
 
 export function saveFile(url, json) {
-  fse.exists(path.join(config.root, config.reference.url), function (exists) {
-    if(!exists){
-      fse.mkdir(path.join(config.root, config.reference.url), function () {
-        fse.writeJson(path.join(config.root, config.reference.url, url), JSON.parse(json))
+  fse.exists(path.join(config.root, config.reference.url), function(exists) {
+    if (!exists) {
+      fse.mkdir(path.join(config.root, config.reference.url), function() {
+        fse.writeJson(
+          path.join(config.root, config.reference.url, url),
+          JSON.parse(json)
+        )
       })
-    }
-    else{
-      fse.writeJson(path.join(config.root, config.reference.url, url), JSON.parse(json), function (err) {
-        if(err) console.log('saveFile reference error: ', err)
-      })
+    } else {
+      fse.writeJson(
+        path.join(config.root, config.reference.url, url),
+        JSON.parse(json),
+        function(err) {
+          if (err) console.log('saveFile reference error: ', err)
+        }
+      )
     }
   })
 }

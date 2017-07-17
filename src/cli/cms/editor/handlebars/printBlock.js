@@ -1,37 +1,39 @@
 import {printInput} from './printInput'
 import abeEngine from './abeEngine'
 
-export default function printBlock (ctx, root) {
+export default function printBlock(ctx, root) {
   var res = ''
   var precontrib = false
   if (root.precontrib != null) {
     precontrib = root.precontrib
   }
 
-  if(ctx[0].block != null && ctx[0].block !== '') {
+  if (ctx[0].block != null && ctx[0].block !== '') {
     let tmpContent = ''
     let hidden = true
-    Array.prototype.forEach.call(ctx, (item) => {
-      if (item.editable)
-        hidden = false
+    Array.prototype.forEach.call(ctx, item => {
+      if (item.editable) hidden = false
       if (precontrib) item.value = ''
       tmpContent += printInput(item, root)
     })
 
-    if(!hidden)
-      res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
+    if (!hidden)
+      res += `<div class="form-group" data-precontrib-templates="${ctx[0]
+        .precontribTemplate}">
                 <label class="title">
-                  ${(ctx[0].group != null) ? ctx[0].group : ctx[0].block}
+                  ${ctx[0].group != null ? ctx[0].group : ctx[0].block}
                 </label>
                 <div class='single-block well well-sm'>`
-    else 
-      res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
+    else
+      res += `<div class="form-group" data-precontrib-templates="${ctx[0]
+        .precontribTemplate}">
                 <div class='single-block'>`
     res += tmpContent
     res += '</div></div>'
-  } else if(ctx[0].key.indexOf('[') > -1) {
+  } else if (ctx[0].key.indexOf('[') > -1) {
     var ctxBlock = ctx[0].key.split('[')[0]
-    res += `<div class="form-group" data-precontrib-templates="${ctx[0].precontribTemplate}">
+    res += `<div class="form-group" data-precontrib-templates="${ctx[0]
+      .precontribTemplate}">
               <div class="list-group" data-block="${ctxBlock}" >
                 <label>
                   ${ctxBlock}
@@ -39,21 +41,23 @@ export default function printBlock (ctx, root) {
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                   </button>
                 </label>`
-    
+
     var arrItem = []
-    Array.prototype.forEach.call(ctx, (item) => {
+    Array.prototype.forEach.call(ctx, item => {
       var index = item.key.match(/[^\[\]]+?(?=\])/)
-      if(arrItem[index] == null) {
+      if (arrItem[index] == null) {
         arrItem[index] = []
       }
       arrItem[index].push(item)
     })
 
-    Array.prototype.forEach.call(Object.keys(arrItem), (i) => {
+    Array.prototype.forEach.call(Object.keys(arrItem), i => {
       var key = arrItem[i][0].key.split('[')[0]
       var display = ''
-      if(abeEngine.instance.content[key] == null
-        || abeEngine.instance.content[key].length === 0) {
+      if (
+        abeEngine.instance.content[key] == null ||
+        abeEngine.instance.content[key].length === 0
+      ) {
         display = 'style="display: none"'
       }
       res += `<div class="list-block" data-block="${key}${i}" ${display}>
@@ -66,17 +70,17 @@ export default function printBlock (ctx, root) {
                 </button>
                 <div id="${key}${i}" class="collapse" >
                 `
-      Array.prototype.forEach.call(arrItem[i], (item) => {
+      Array.prototype.forEach.call(arrItem[i], item => {
         if (precontrib) item.value = ''
         res += printInput(item, root)
       })
       res += '</div></div>'
     })
 
-    res +=  `
+    res += `
           </div>
         </div>`
-  }else {
+  } else {
     if (precontrib) ctx[0].value = ''
     res += printInput(ctx[0], root)
   }

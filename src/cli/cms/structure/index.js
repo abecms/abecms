@@ -1,5 +1,3 @@
 import * as structure from './structure'
 
-export {
-  structure
-}
+export {structure}

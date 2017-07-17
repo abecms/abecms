@@ -1,4 +1,3 @@
-
 /**
  * Handlebars helper, conditionnal modulo
  * @param  {Int} num number to test

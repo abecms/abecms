@@ -7,13 +7,4 @@ import * as file from './file'
 import * as random from './random'
 import * as mail from './mail'
 
-export {
-  array,
-	sort,
-  text,
-  locales,
-  slug,
-  file,
-  random,
-  mail
-}
+export {array, sort, text, locales, slug, file, random, mail}

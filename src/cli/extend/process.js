@@ -1,11 +1,7 @@
 import process from 'child_process'
 import fse from 'fs-extra'
 
-import {
-  config
-  ,abeExtend
-  ,Manager
-} from '../'
+import {config, abeExtend, Manager} from '../'
 
 function prepend(value, array) {
   var newArray = array.slice(0)
@@ -30,20 +26,22 @@ var abeProcess = function(name, args = [], callback) {
     if (stats.isFile()) {
       proc = process.fork(file, args)
     }
-  }catch(err) {
+  } catch (err) {
     try {
       file = abeExtend.plugins.instance.getProcess(name)
       stats = fse.statSync(file)
       if (stats.isFile()) {
         proc = process.fork(file, args)
       }
-    }catch(err) {
+    } catch (err) {
       Manager.instance.removeProcess(name)
-      console.log(`Manager.instance.addProcess : process fork failed on ${__dirname}/../../cli/process/${name}.js`)
+      console.log(
+        `Manager.instance.addProcess : process fork failed on ${__dirname}/../../cli/process/${name}.js`
+      )
     }
   }
 
-  if(typeof proc !== 'undefined' && proc !== null) {
+  if (typeof proc !== 'undefined' && proc !== null) {
     proc.on('message', function(data) {
       var data = JSON.parse(data)
       callback(data)

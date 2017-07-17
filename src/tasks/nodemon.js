@@ -16,7 +16,7 @@ nodemon({
     js: __dirname + '/../../node_modules/.bin/babel-node --presets es2015'
   },
   env: {
-    'NODE_ENV': 'development'
+    NODE_ENV: 'development'
   },
   ignore: [
     // 'docs/*' //TODO: find out why in dev mode this line uncommented break server reload on file change
@@ -45,11 +45,13 @@ nodemon({
   stdout: true
 })
 
-nodemon.on('start', function () {
-}).on('quit', function () {
-  console.log(clc.green('Kill process nodemon'))
-  process.exit()
-}).on('restart', function (files) {
-  console.log('------------------------------------------------------------')
-  console.log(clc.green('App restarted due to: '), files[0])
-})
+nodemon
+  .on('start', function() {})
+  .on('quit', function() {
+    console.log(clc.green('Kill process nodemon'))
+    process.exit()
+  })
+  .on('restart', function(files) {
+    console.log('------------------------------------------------------------')
+    console.log(clc.green('App restarted due to: '), files[0])
+  })

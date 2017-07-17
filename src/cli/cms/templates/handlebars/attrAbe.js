@@ -6,6 +6,6 @@ import Handlebars from 'handlebars'
  * @param  {[type]} value value of the property
  * @return {String} the value to print inside the attribut
  */
-export default function attrAbe (attr, value) {
+export default function attrAbe(attr, value) {
   return new Handlebars.SafeString(value)
 }

@@ -7,26 +7,23 @@ import which from 'which'
 import extend from 'extend'
 const npm = which.sync('npm')
 
-import {
-  coreUtils,
-  config
-} from '../'
+import {coreUtils, config} from '../'
 
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
 
 class Plugins {
-
   constructor(enforcer) {
-    if(enforcer != singletonEnforcer) throw 'Cannot construct Plugins singleton'
+    if (enforcer != singletonEnforcer)
+      throw 'Cannot construct Plugins singleton'
     this.pluginsDir = path.join(config.root, 'node_modules') + path.sep
     this.scriptsDir = path.join(config.root, 'scripts') + path.sep
     this._plugins = []
     this.fn = []
-    
+
     // Plugins
-    if(config.plugins && Array.isArray(config.plugins)){
-      Array.prototype.forEach.call(config.plugins, (pluginEntry) => {
+    if (config.plugins && Array.isArray(config.plugins)) {
+      Array.prototype.forEach.call(config.plugins, pluginEntry => {
         const plugin = this.getPluginConfig(this.pluginsDir, pluginEntry)
         this._plugins.push(plugin)
       })
@@ -37,25 +34,23 @@ class Plugins {
       var directoryScripts = fse.lstatSync(this.scriptsDir)
       if (directoryScripts.isDirectory()) {
         this._scripts = coreUtils.file.getFoldersSync(this.scriptsDir, false)
-        Array.prototype.forEach.call(this._scripts, (scriptEntry) => {
+        Array.prototype.forEach.call(this._scripts, scriptEntry => {
           const name = scriptEntry.path.replace(this.scriptsDir, '')
           const script = this.getPluginConfig(this.scriptsDir, name)
           this._plugins.push(script)
         })
       }
-    } catch (e) {
-      
-    }
+    } catch (e) {}
   }
 
   static get instance() {
-    if(!this[singleton]) {
+    if (!this[singleton]) {
       this[singleton] = new Plugins(singletonEnforcer)
     }
     return this[singleton]
   }
 
-  getPluginConfig(dir, entry){
+  getPluginConfig(dir, entry) {
     // remove npm version if any
     let pluginId = entry.split('@')[0]
 
@@ -72,12 +67,12 @@ class Plugins {
     let plugProcess = path.join(dir, pluginId, 'process')
     let plugRoutes = path.join(dir, pluginId, 'routes')
     let plugin = {
-      hooks : null,
-      partials : null,
-      templates : null,
-      process : null,
-      routes : null,
-      custom : null
+      hooks: null,
+      partials: null,
+      templates: null,
+      process: null,
+      routes: null,
+      custom: null
     }
 
     try {
@@ -85,16 +80,16 @@ class Plugins {
       if (fileHook.isFile()) {
         try {
           var h = require(plugHook)
-        } catch(e){
+        } catch (e) {
           console.log(e.stack)
           console.log(
             clc.green('[ Hint ]'),
-            'It seems that you don\'t have the npm module babel-preset-es2015 installed on your project'
+            "It seems that you don't have the npm module babel-preset-es2015 installed on your project"
           )
         }
         plugin.hooks = h.default
       }
-    }catch(e) {
+    } catch (e) {
       plugin.hooks = null
     }
 
@@ -103,25 +98,25 @@ class Plugins {
       if (directoryCustom.isDirectory()) {
         plugin.custom = plugCustom
       }
-    }catch(e) {
+    } catch (e) {
       plugin.custom = null
     }
-    
+
     try {
       var directoryPartials = fse.lstatSync(plugPartials)
       if (directoryPartials.isDirectory()) {
         plugin.partials = plugPartials
       }
-    }catch(e) {
+    } catch (e) {
       plugin.partials = null
     }
-    
+
     try {
       var directoryTemplates = fse.lstatSync(plugTemplates)
       if (directoryTemplates.isDirectory()) {
         plugin.templates = plugTemplates
       }
-    }catch(e) {
+    } catch (e) {
       plugin.templates = null
     }
 
@@ -130,11 +125,11 @@ class Plugins {
       if (directoryProcess.isDirectory()) {
         plugin.process = {}
         let processFiles = coreUtils.file.getFilesSync(plugProcess, false)
-        Array.prototype.forEach.call(processFiles, (processFile) => {
+        Array.prototype.forEach.call(processFiles, processFile => {
           plugin.process[path.basename(processFile, '.js')] = processFile
         })
       }
-    }catch(e) {
+    } catch (e) {
       plugin.process = null
     }
 
@@ -149,14 +144,17 @@ class Plugins {
           if (directoryGets.isDirectory()) {
             let routesGet = []
             let routePaths = coreUtils.file.getFilesSync(gets, false)
-            Array.prototype.forEach.call(routePaths, (route) => {
-              let pathUrl = `/abe/plugin/${pluginId}/${path.basename(route, '.js')}*`
-              let routeObject = {'path':route, 'routePath':pathUrl}
+            Array.prototype.forEach.call(routePaths, route => {
+              let pathUrl = `/abe/plugin/${pluginId}/${path.basename(
+                route,
+                '.js'
+              )}*`
+              let routeObject = {path: route, routePath: pathUrl}
               routesGet.push(routeObject)
             })
             plugin.routes.get = routesGet
           }
-        }catch(e) {
+        } catch (e) {
           plugin.routes.get = null
         }
         try {
@@ -165,18 +163,21 @@ class Plugins {
           if (directoryPosts.isDirectory()) {
             let routesPost = []
             let routePaths = coreUtils.file.getFilesSync(posts, false)
-            Array.prototype.forEach.call(routePaths, (route) => {
-              let pathUrl = `/abe/plugin/${pluginId}/${path.basename(route, '.js')}*`
-              let routeObject = {'path':route, 'routePath' : pathUrl}
+            Array.prototype.forEach.call(routePaths, route => {
+              let pathUrl = `/abe/plugin/${pluginId}/${path.basename(
+                route,
+                '.js'
+              )}*`
+              let routeObject = {path: route, routePath: pathUrl}
               routesPost.push(routeObject)
             })
             plugin.routes.post = routesPost
           }
-        }catch(e) {
+        } catch (e) {
           plugin.routes.post = null
         }
       }
-    }catch(e) {
+    } catch (e) {
       plugin.routes = null
     }
 
@@ -185,10 +186,14 @@ class Plugins {
 
   getProcess(fn) {
     var proc = null
-    if(typeof this._plugins !== 'undefined' && this._plugins !== null) {
-      Array.prototype.forEach.call(this._plugins, (plugin) => {
-        if(typeof plugin.process !== 'undefined' && plugin.process !== null
-          && typeof plugin.process[fn] !== 'undefined' && plugin.process[fn] !== null) {
+    if (typeof this._plugins !== 'undefined' && this._plugins !== null) {
+      Array.prototype.forEach.call(this._plugins, plugin => {
+        if (
+          typeof plugin.process !== 'undefined' &&
+          plugin.process !== null &&
+          typeof plugin.process[fn] !== 'undefined' &&
+          plugin.process[fn] !== null
+        ) {
           proc = plugin.process[fn]
         }
       })
@@ -198,13 +203,13 @@ class Plugins {
   }
 
   hooks() {
-    if(arguments.length > 0) {
+    if (arguments.length > 0) {
       var args = [].slice.call(arguments)
       var fn = args.shift()
 
-      if(this._plugins != null) {
-        Array.prototype.forEach.call(this._plugins, (plugin) => {
-          if(plugin.hooks != null && plugin.hooks[fn] != null) {
+      if (this._plugins != null) {
+        Array.prototype.forEach.call(this._plugins, plugin => {
+          if (plugin.hooks != null && plugin.hooks[fn] != null) {
             args[0] = plugin.hooks[fn].apply(this, args)
           }
         })
@@ -218,8 +223,8 @@ class Plugins {
 
   getPartials() {
     var partials = []
-    Array.prototype.forEach.call(this._plugins, (plugin) => {
-      if(typeof plugin.partials !== 'undefined' && plugin.partials !== null) {
+    Array.prototype.forEach.call(this._plugins, plugin => {
+      if (typeof plugin.partials !== 'undefined' && plugin.partials !== null) {
         partials.push(plugin.partials)
       }
     })
@@ -229,8 +234,8 @@ class Plugins {
 
   getCustoms() {
     var customs = []
-    Array.prototype.forEach.call(this._plugins, (plugin) => {
-      if(typeof plugin.custom !== 'undefined' && plugin.custom !== null) {
+    Array.prototype.forEach.call(this._plugins, plugin => {
+      if (typeof plugin.custom !== 'undefined' && plugin.custom !== null) {
         customs.push(plugin.custom)
       }
     })
@@ -240,8 +245,8 @@ class Plugins {
 
   getRoutes() {
     var routes = []
-    Array.prototype.forEach.call(this._plugins, (plugin) => {
-      if(typeof plugin.routes !== 'undefined' && plugin.routes !== null) {
+    Array.prototype.forEach.call(this._plugins, plugin => {
+      if (typeof plugin.routes !== 'undefined' && plugin.routes !== null) {
         routes = routes.concat(plugin.routes)
       }
     })
@@ -249,14 +254,16 @@ class Plugins {
     return routes
   }
 
-  removePlugin(plugin){
+  removePlugin(plugin) {
     let pluginName = plugin.split('@')[0]
     pluginName = pluginName.split('#')[0]
-    if(config.localConfigExist()){
+    if (config.localConfigExist()) {
       let json = config.getLocalConfig()
-      if(typeof json.plugins !== 'undefined' && json.plugins !== null) {
+      if (typeof json.plugins !== 'undefined' && json.plugins !== null) {
         Array.prototype.forEach.call(json.plugins, (plugged, index) => {
-          if (pluginName === path.basename(plugged.split('@')[0].split('#')[0])) {
+          if (
+            pluginName === path.basename(plugged.split('@')[0].split('#')[0])
+          ) {
             json.plugins.splice(index, 1)
             config.save(json)
           }
@@ -265,7 +272,7 @@ class Plugins {
     }
   }
 
-  updatePlugin(plugin){
+  updatePlugin(plugin) {
     let json = {}
     let createLocalConfig = true
     let pluginName = plugin.split('@')[0]
@@ -273,12 +280,12 @@ class Plugins {
     const pluginIdArray = pluginName.split('/')
     const pluginId = pluginIdArray[pluginIdArray.length - 1]
 
-    if(config.localConfigExist()){
+    if (config.localConfigExist()) {
       json = config.getLocalConfig()
       createLocalConfig = false
     }
 
-    if(typeof json.plugins === 'undefined' || json.plugins === null) {
+    if (typeof json.plugins === 'undefined' || json.plugins === null) {
       json.plugins = [plugin]
     } else {
       var found = false
@@ -293,19 +300,23 @@ class Plugins {
       }
     }
 
-    if(createLocalConfig){
+    if (createLocalConfig) {
       console.log(
         clc.green('[ Hint ]'),
         'creating a local config abe.json with your plugin definition',
-        clc.cyan.underline('https://github.com/abecms/abecms/blob/master/docs/abe-config.md')
+        clc.cyan.underline(
+          'https://github.com/abecms/abecms/blob/master/docs/abe-config.md'
+        )
       )
     }
 
     try {
-      var stat = fse.lstatSync(path.join(this.pluginsDir,pluginId,'abe.json'))
+      var stat = fse.lstatSync(path.join(this.pluginsDir, pluginId, 'abe.json'))
 
       if (stat.isFile()) {
-        const pluginDefaultConfig = fse.readJsonSync(path.join(this.pluginsDir,pluginId,'abe.json'))
+        const pluginDefaultConfig = fse.readJsonSync(
+          path.join(this.pluginsDir, pluginId, 'abe.json')
+        )
         extend(true, pluginDefaultConfig, json)
         json = pluginDefaultConfig
       }
@@ -315,10 +326,8 @@ class Plugins {
   }
 
   uninstall(dir, plugin) {
-    if(plugin !== null) {
-      this.remove(dir, plugin)
-      .then(function() {
-
+    if (plugin !== null) {
+      this.remove(dir, plugin).then(function() {
         return 0
       })
     } else {
@@ -329,23 +338,19 @@ class Plugins {
   }
 
   install(dir, plugin = null) {
-    if(plugin !== null) {
-      this.add(dir, plugin)
-      .then(function() {
-
+    if (plugin !== null) {
+      this.add(dir, plugin).then(function() {
         return 0
       })
     } else {
-      if(config.plugins && Array.isArray(config.plugins)){
+      if (config.plugins && Array.isArray(config.plugins)) {
         var ps = []
-        Array.prototype.forEach.call(config.plugins, (plugin) => {
+        Array.prototype.forEach.call(config.plugins, plugin => {
           ps.push(this.add(dir, plugin))
         })
-        
-        Promise.all(ps)
-        .then(function() {
 
-          return 0 
+        Promise.all(ps).then(function() {
+          return 0
         })
       } else {
         console.log(clc.cyan('no plugin found'))
@@ -356,31 +361,33 @@ class Plugins {
   }
 
   remove(dir, plugin) {
-    var p = new Promise((resolve) => {
+    var p = new Promise(resolve => {
       try {
         console.log(clc.green('spawn'), clc.cyan('npm uninstall ' + plugin))
         // const npmUninstall = spawn('npm', ['uninstall', pluginDir]);
-        const npmUninstall = spawn(npm, ['uninstall', '--save', plugin], { cwd: dir })
-
-        npmUninstall.stdout.on('data', (data) => {
-          console.log(''+data)
+        const npmUninstall = spawn(npm, ['uninstall', '--save', plugin], {
+          cwd: dir
         })
 
-        npmUninstall.stderr.on('data', (data) => {
-          console.log(''+data)
+        npmUninstall.stdout.on('data', data => {
+          console.log('' + data)
         })
 
-        npmUninstall.on('close', (code) => {
+        npmUninstall.stderr.on('data', data => {
+          console.log('' + data)
+        })
+
+        npmUninstall.on('close', code => {
           console.log(clc.cyan('child process exited with code'), code)
 
-          if(code == 0){
+          if (code == 0) {
             this.removePlugin(plugin)
           }
-          
+
           resolve()
         })
 
-        npmUninstall.on('error', (err) => {
+        npmUninstall.on('error', err => {
           console.log(clc.red('cannot uninstall npm dependencies for'), dir)
           console.log(err)
           resolve(err)
@@ -395,31 +402,31 @@ class Plugins {
   }
 
   add(dir, plugin) {
-    var p = new Promise((resolve) => {
+    var p = new Promise(resolve => {
       try {
         console.log(clc.green('spawn'), clc.cyan('npm install ' + plugin))
         // const npmInstall = spawn('npm', ['install', pluginDir]);
-        const npmInstall = spawn(npm, ['install', '--save', plugin], { cwd: dir })
+        const npmInstall = spawn(npm, ['install', '--save', plugin], {cwd: dir})
 
-        npmInstall.stdout.on('data', (data) => {
-          console.log(''+data)
+        npmInstall.stdout.on('data', data => {
+          console.log('' + data)
         })
 
-        npmInstall.stderr.on('data', (data) => {
-          console.log(''+data)
+        npmInstall.stderr.on('data', data => {
+          console.log('' + data)
         })
 
-        npmInstall.on('close', (code) => {
+        npmInstall.on('close', code => {
           console.log(clc.cyan('child process exited with code'), code)
 
-          if(code == 0){
+          if (code == 0) {
             this.updatePlugin(plugin)
           }
-          
+
           resolve()
         })
 
-        npmInstall.on('error', (err) => {
+        npmInstall.on('error', err => {
           console.log(clc.red('cannot install npm dependencies for'), dir)
           console.log(err)
           resolve(err)

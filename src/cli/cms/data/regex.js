@@ -1,11 +1,9 @@
-import {
-  config
-} from '../../'
+import {config} from '../../'
 
-export function getAbeTags(){
+export function getAbeTags() {
   let abeTags = ''
   Object.keys(config.abeTags).map(function(key, index) {
-    abeTags += (index > 0) ? '|' + key: key
+    abeTags += index > 0 ? '|' + key : key
   })
 
   return abeTags
@@ -18,12 +16,20 @@ export let abeTag = /({{abe .*?[\s\S].*?}})/g
 
 // pattern to detect every abe tags
 //var patt = /abe [^{{}}]+?(?=\}})/g
-export function abePattern(){
-  return new RegExp('(--->(\\*\\/)?{{abe .*?type=[\'|"]['+ getAbeTags() +']+[\'|"][\\s\\S].*?}})', 'g')
+export function abePattern() {
+  return new RegExp(
+    '(--->(\\*\\/)?{{abe .*?type=[\'|"][' +
+      getAbeTags() +
+      ']+[\'|"][\\s\\S].*?}})',
+    'g'
+  )
 }
 
-export function abeAsTagPattern(){
-  return new RegExp('({{abe .*?type=[\'|"]['+ getAbeTags() +']+[\'|"][\\s\\S].*?}})','g')
+export function abeAsTagPattern() {
+  return new RegExp(
+    '({{abe .*?type=[\'|"][' + getAbeTags() + ']+[\'|"][\\s\\S].*?}})',
+    'g'
+  )
 }
 
 // This pattern finds all abe tags enclosed in a HTML tag attribute
@@ -47,10 +53,10 @@ export let dataTypeReg = /({{abe .*type=[\'|\"]data.*}})/g
  * @param  {String} params g,m,i
  * @return {Object} RegExp
  */
-export function getAttr (str, attr) {
+export function getAttr(str, attr) {
   var rex = new RegExp(attr + '=["|\']([\\S\\s]*?)["|\']( +[a-zA-Z0-9-]*?=|}})')
   var res = rex.exec(str)
-  res = (res != null && res.length > 1) ? res[1] : ''
+  res = res != null && res.length > 1 ? res[1] : ''
   return res
 }
 
@@ -60,11 +66,11 @@ export function getAttr (str, attr) {
  * @param  {String} params g,m,i
  * @return {Object} RegExp
  */
-export function getAllAbeHtmlTag (str) {
+export function getAllAbeHtmlTag(str) {
   var res = []
   var pattern = abePattern()
   var matches = str.match(pattern)
-  Array.prototype.forEach.call(matches, (match) => {
+  Array.prototype.forEach.call(matches, match => {
     res.push(match)
   })
 
@@ -92,12 +98,14 @@ export function escapeTextToRegex(str, params) {
  * @param  {String}  str string to test
  * @return {Boolean} true = this is not a block content
  */
-export function isSingleAbe(str, text){
-  return  !new RegExp('#each(.)+?' + getAttr(str, 'key').split('.')[0]).test(text) &&
-          str.indexOf('{{#') < 0 &&
-          str.indexOf('#each') < 0 &&
-          str.indexOf('{{/') < 0 &&
-          str.indexOf('{{/each') < 0
+export function isSingleAbe(str, text) {
+  return (
+    !new RegExp('#each(.)+?' + getAttr(str, 'key').split('.')[0]).test(text) &&
+    str.indexOf('{{#') < 0 &&
+    str.indexOf('#each') < 0 &&
+    str.indexOf('{{/') < 0 &&
+    str.indexOf('{{/each') < 0
+  )
 }
 
 /**
@@ -105,7 +113,7 @@ export function isSingleAbe(str, text){
  * @param  {String}  str string to test
  * @return {Boolean} true = this is not a block content
  */
-export function getEachParentKey(str){
+export function getEachParentKey(str) {
   return getAttr(str, 'key').split('.')[0]
 }
 
@@ -136,7 +144,7 @@ export function isEachStatement(str) {
 export function getTagAbeTypeRequest(text) {
   var matches = []
   var match
-  while (match = dataTypeReg.exec(text)) {
+  while ((match = dataTypeReg.exec(text))) {
     matches.push(match)
   }
   return matches
@@ -148,7 +156,7 @@ export function getTagAbeWithType(text, type) {
   var listReg = new RegExp(`({{abe .*type=[\\'|\\"]${type}.*}})`, 'g')
   var matches = []
   var match
-  while (match = listReg.exec(text)) {
+  while ((match = listReg.exec(text))) {
     matches.push(match[0])
   }
   return matches
@@ -160,17 +168,17 @@ export function getTagAbeWithTab(text, tab) {
   var listReg = new RegExp(`({{abe .*tab=[\\'|\\"]${tab}.*}})`, 'g')
   var matches = []
   var match
-  while (match = listReg.exec(text)) {
+  while ((match = listReg.exec(text))) {
     matches.push(match[0])
   }
   return matches
 }
 
-export function validDataAbe(str){
+export function validDataAbe(str) {
   return str.replace(/\[([0-9]*)\]/g, '$1')
 }
 
-export function getWorkflowFromOperationsUrl(str){
+export function getWorkflowFromOperationsUrl(str) {
   let regUrl = /\/abe\/operations\/(.*?)\/(.*?)\//
   var workflow = 'draft'
   var match = str.match(regUrl)

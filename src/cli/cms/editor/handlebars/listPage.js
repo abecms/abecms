@@ -1,10 +1,6 @@
 import Handlebars from 'handlebars'
 import moment from 'moment'
-import {
-  math
-  ,abeExtend
-  ,config
-} from '../../../'
+import {math, abeExtend, config} from '../../../'
 
 export default function listPage(file, index, text) {
   var res = ''
@@ -17,16 +13,16 @@ export default function listPage(file, index, text) {
             ${file.abe_meta.link}
           </a>
         </td>`
-  
-  if(file.abe_meta.template){
+
+  if (file.abe_meta.template) {
     res += `<td align="center">
               ${file.abe_meta.template}
             </td>`
   } else {
     res += '<td align="center"></td>'
   }
-  
-  if(file.date){
+
+  if (file.date) {
     var dateSearch = moment(file.date).utcOffset(0).format('YYYY-MM-DD')
     var dateOrder = new Date(file.date).getTime()
     res += `<td align="center" data-search="${dateSearch}" data-order="${dateOrder}">
@@ -40,22 +36,25 @@ export default function listPage(file, index, text) {
 
   var status = file.abe_meta.status
   var workflowUser = config.users.workflow
-  Array.prototype.forEach.call(workflowUser, (flow) => {
+  Array.prototype.forEach.call(workflowUser, flow => {
     var hidden = ''
-    if(status !== flow) {
+    if (status !== flow) {
       hidden = 'hidden'
     }
 
     workflow += `<td align="center" class="${flow}">`
-    if(file[flow]) {
-      var fDate = moment(file[flow].date).utcOffset(0).format('YYYY-MM-DD HH:mm:ss')
+    if (file[flow]) {
+      var fDate = moment(file[flow].date)
+        .utcOffset(0)
+        .format('YYYY-MM-DD HH:mm:ss')
       if (flow === 'publish') {
-        workflow += `<a href="/abe/editor${file[flow].link}" class="checkmark label-published" title="${fDate}">&#10004;</a>`
-      }else {
-        workflow += `<a href="/abe/editor${file[flow].link}" class="${hidden} label label-default label-draft" title="${fDate}">${flow}</a>`
+        workflow += `<a href="/abe/editor${file[flow]
+          .link}" class="checkmark label-published" title="${fDate}">&#10004;</a>`
+      } else {
+        workflow += `<a href="/abe/editor${file[flow]
+          .link}" class="${hidden} label label-default label-draft" title="${fDate}">${flow}</a>`
       }
-    }else {
-
+    } else {
     }
     workflow += '</td>'
   })
@@ -65,18 +64,18 @@ export default function listPage(file, index, text) {
   res += `<td align="center">
             <div class="row icons-action">`
 
-  
-  if(file.publish != null) {
+  if (file.publish != null) {
     res += `<a href="/abe/operations/unpublish${file.abe_meta.link}"
                title="${text.unpublish}"
-               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file.abe_meta.link}"
+               class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file
+      .abe_meta.link}"
                title="unpublish">
               <span class="glyphicon glyphicon-eye-close"></span>
             </a>`
   }
-  
 
-  res += `<a href="/abe/operations/delete/${file.abe_meta.status}${file.abe_meta.link}"
+  res += `<a href="/abe/operations/delete/${file.abe_meta.status}${file.abe_meta
+    .link}"
              title="${text.delete}"
              class="icon"
              data-delete="true"
@@ -90,6 +89,12 @@ export default function listPage(file, index, text) {
       </td>
     </tr>`
 
-  res = abeExtend.hooks.instance.trigger('afterListPage', res, file, index, text)
+  res = abeExtend.hooks.instance.trigger(
+    'afterListPage',
+    res,
+    file,
+    index,
+    text
+  )
   return new Handlebars.SafeString(res)
 }

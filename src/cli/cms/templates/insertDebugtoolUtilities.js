@@ -1,11 +1,11 @@
-export default function insertDebugtoolUtilities(text, onlyHTML){
+export default function insertDebugtoolUtilities(text, onlyHTML) {
   if (onlyHTML) {
     text = `{{&setVariable "abeEditor" false}}\n${text}`
-  }else {
+  } else {
     text = `{{&setVariable "abeEditor" true}}\n${text}`
     text = text.replace(
       /<\/body>/,
-        `<style>
+      `<style>
           body [data-abe]{ transition: box-shadow 600ms ease-in-out; box-shadow: 0; }
           body .select-border{ border-color: #007CDE; box-shadow: 0 3px 13px #7CBAEF; }
           body img.display-attr:before { content: attr(alt); }

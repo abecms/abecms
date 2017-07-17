@@ -6,12 +6,4 @@ import * as remove from './remove'
 import abify from './abify'
 import initSite from './initSite'
 
-export {
-	create,
-	duplicate,
-	save,
-	post,
-  remove,
-  abify,
-  initSite
-}
+export {create, duplicate, save, post, remove, abify, initSite}

@@ -12,7 +12,7 @@ import * as utils from './utils'
 import * as sort from './sort'
 
 export {
-	values,
+  values,
   attributes,
   attr,
   fileAttr,

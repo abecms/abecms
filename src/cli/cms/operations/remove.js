@@ -10,13 +10,12 @@ import {
   Manager
 } from '../../'
 
-
 export function remove(postUrl) {
   postUrl = abeExtend.hooks.instance.trigger('beforeDeleteFile', postUrl)
 
   var revisions = cmsData.revision.getVersions(postUrl)
 
-  Array.prototype.forEach.call(revisions, (revision) => {
+  Array.prototype.forEach.call(revisions, revision => {
     const postPath = cmsData.utils.getPostPath(revision.path)
     cmsOperations.remove.removeFile(revision.path)
     cmsOperations.remove.removeFile(postPath)
@@ -24,11 +23,13 @@ export function remove(postUrl) {
 
   postUrl = abeExtend.hooks.instance.trigger('afterDeleteFile', postUrl, {})
 
-  Manager.instance.removePostFromList(postUrl.replace(new RegExp('\\/', 'g'), path.sep))
+  Manager.instance.removePostFromList(
+    postUrl.replace(new RegExp('\\/', 'g'), path.sep)
+  )
 }
 
 export function removeFile(file) {
-  if(coreUtils.file.exist(file)) {
+  if (coreUtils.file.exist(file)) {
     fse.removeSync(file)
   }
 }

@@ -28,23 +28,27 @@ export function send(from, to, subject, text = '', html = '') {
     html: html
   }
 
-  if(typeof smtp === 'undefined' || smtp === null || typeof smtp === 'string') {
+  if (
+    typeof smtp === 'undefined' ||
+    smtp === null ||
+    typeof smtp === 'string'
+  ) {
     transporter = nodemailer.createTransport({
       name: 'localhost',
       direct: true
     })
-  } else{
+  } else {
     service = smtp.service.toLowerCase()
     options = smtp.options
-    if(service === 'ses'){
+    if (service === 'ses') {
       transporter = nodemailer.createTransport(options)
-    } else if(service === 'mandrill' || service === 'mailchimp') {
+    } else if (service === 'mandrill' || service === 'mailchimp') {
       transport = require('nodemailer-mandrill-transport')
       transporter = nodemailer.createTransport(transport(options))
-    } else if(service === 'mailgun') {
+    } else if (service === 'mailgun') {
       transport = require('nodemailer-mailgun-transport')
       transporter = nodemailer.createTransport(transport(options))
-    } else if(service === 'sendgrid') {
+    } else if (service === 'sendgrid') {
       transport = require('nodemailer-sendgrid-transport')
       transporter = nodemailer.createTransport(transport(options))
     } else {
@@ -53,8 +57,8 @@ export function send(from, to, subject, text = '', html = '') {
     }
   }
 
-  transporter.sendMail(mail, function(error, info){
-    if(error){
+  transporter.sendMail(mail, function(error, info) {
+    if (error) {
       return console.log(error)
     }
   })

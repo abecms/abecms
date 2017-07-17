@@ -1,22 +1,29 @@
 import Handlebars from 'handlebars'
 import striptags from 'striptags'
 
-import {
-  cmsData
-  ,config
-  ,cmsTemplates
-} from '../../'
+import {cmsData, config, cmsTemplates} from '../../'
 
 export function addAbeAttrSingleTab(key, elem, htmlAttribute = null) {
   var res = ''
 
   var valueOfAttritube = key.replace(/\./g, '-')
   key = cmsData.regex.validDataAbe(valueOfAttritube)
-  
+
   if (htmlAttribute != null) {
-    res = ' data-abe-attr-' + valueOfAttritube + '="'  + htmlAttribute + '"' + ' data-abe-' + valueOfAttritube + '="'  + key + '"' + elem
-  }else {
-    res = ' data-abe-' + key + '="'  + key + '" ' + elem
+    res =
+      ' data-abe-attr-' +
+      valueOfAttritube +
+      '="' +
+      htmlAttribute +
+      '"' +
+      ' data-abe-' +
+      valueOfAttritube +
+      '="' +
+      key +
+      '"' +
+      elem
+  } else {
+    res = ' data-abe-' + key + '="' + key + '" ' + elem
   }
 
   return res
@@ -27,17 +34,24 @@ export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
 
   var valueOfAttritube = key.split('.')
   var parentKey = valueOfAttritube.shift()
-  valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0].replace(/\./g, '-')}`
-  var valueOfAttritubeIndexed = valueOfAttritube.replace(/\[index\]/, '{{@index}}')
+  valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0].replace(
+    /\./g,
+    '-'
+  )}`
+  var valueOfAttritubeIndexed = valueOfAttritube.replace(
+    /\[index\]/,
+    '{{@index}}'
+  )
   key = cmsData.regex.validDataAbe(valueOfAttritube)
 
   if (htmlAttribute) {
-
-    res = ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"`
-      + ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${elem}`
-  }else {
-    res = ` data-abe-${valueOfAttritube}="${key}"`
-      + ` data-abe-${valueOfAttritubeIndexed}="${key}" ${elem}`
+    res =
+      ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"` +
+      ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${elem}`
+  } else {
+    res =
+      ` data-abe-${valueOfAttritube}="${key}"` +
+      ` data-abe-${valueOfAttritubeIndexed}="${key}" ${elem}`
   }
 
   return res
@@ -59,7 +73,7 @@ export function addAbeDataAttrForHtmlTag(template) {
   var newTemplate = template
   var pattern = cmsData.regex.abePattern()
 
-  while (match = pattern.exec(template)) {
+  while ((match = pattern.exec(template))) {
     key = cmsData.regex.getAttr(match, 'key')
 
     if (!cmsData.regex.isSingleAbe(match, newTemplate)) {
@@ -70,7 +84,12 @@ export function addAbeDataAttrForHtmlTag(template) {
 
     newTemplate = newTemplate.replace(
       cmsData.regex.escapeTextToRegex(match[0], 'g'),
-      ' data-abe-' + cmsData.regex.validDataAbe(getattr) + '="'  + getattr + '" ' + match[0]
+      ' data-abe-' +
+        cmsData.regex.validDataAbe(getattr) +
+        '="' +
+        getattr +
+        '" ' +
+        match[0]
     )
   }
 
@@ -125,11 +144,16 @@ export function addAbeDataAttrForHtmlAttributes(template) {
   let abeTagIntoAttribute = text.match(cmsData.regex.abeAsAttributePattern)
 
   if (abeTagIntoAttribute != null) {
-    Array.prototype.forEach.call(abeTagIntoAttribute, (abeIntoTag) => {
+    Array.prototype.forEach.call(abeTagIntoAttribute, abeIntoTag => {
       let matchAbeTag = /({{abe.*?[\s\S].*?}})/g.exec(abeIntoTag)
 
-      if(matchAbeTag != null && matchAbeTag[1] != null) {
-        var toReplace = cmsTemplates.prepare.getAbeAttributeData(matchAbeTag[1], text, (abeIntoTag.split('=')[0]).trim(), abeIntoTag)
+      if (matchAbeTag != null && matchAbeTag[1] != null) {
+        var toReplace = cmsTemplates.prepare.getAbeAttributeData(
+          matchAbeTag[1],
+          text,
+          abeIntoTag.split('=')[0].trim(),
+          abeIntoTag
+        )
 
         toReplace = toReplace.replace(
           cmsData.regex.escapeTextToRegex(matchAbeTag[1]),
@@ -172,42 +196,61 @@ export function addAbeDataAttrForHtmlAttributes(template) {
  * @param {[type]} json     [description]
  */
 export function addAbeSourceComment(template, json) {
-
-  if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
+  if (typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
     var keys = Object.keys(json.abe_source)
-    
-    for(var i in keys) {
-      var replaceEach = new RegExp(`<!-- \\[\\[${keys[i]}\\]\\][\\s\\S]*?-->`, 'g')
+
+    for (var i in keys) {
+      var replaceEach = new RegExp(
+        `<!-- \\[\\[${keys[i]}\\]\\][\\s\\S]*?-->`,
+        'g'
+      )
       var regexEachKey = new RegExp(`{{#each ${keys[i]}}}`, 'g')
       template = template.replace(replaceEach, '')
 
-      var patAttrSource = new RegExp(' ([A-Za-z0-9\-\_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']', 'g')
+      var patAttrSource = new RegExp(
+        ' ([A-Za-z0-9-_]+)=["|\'].*?({{' + keys[i] + '}}).*?["|\']',
+        'g'
+      )
       var patAttrSourceMatch = template.match(patAttrSource)
 
-      if(patAttrSourceMatch != null) {
+      if (patAttrSourceMatch != null) {
         let checkEscapedRegex = /["|'](.*?)["|']/
-        let patAttrSourceInside = new RegExp('(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' + keys[i] + '}}).*?["|\']', 'g')
-        Array.prototype.forEach.call(patAttrSourceMatch, (pat) => {
+        let patAttrSourceInside = new RegExp(
+          '(\\S+)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.)["\']?({{' +
+            keys[i] +
+            '}}).*?["|\']',
+          'g'
+        )
+        Array.prototype.forEach.call(patAttrSourceMatch, pat => {
           let patAttrSourceCheck = patAttrSourceInside.exec(pat)
-          if(patAttrSourceCheck != null) {
-            
+          if (patAttrSourceCheck != null) {
             let checkEscaped = checkEscapedRegex.exec(patAttrSourceCheck[0])
-            if(checkEscaped != null && checkEscaped.length > 0) {
+            if (checkEscaped != null && checkEscaped.length > 0) {
               checkEscaped = escape(checkEscaped[1])
               template = template.replace(
                 patAttrSourceCheck[0],
-                ` data-abe-attr="${patAttrSourceCheck[1]}" data-abe-attr-escaped="${checkEscaped}" data-abe="${keys[i]}" ${patAttrSourceCheck[0]}`
+                ` data-abe-attr="${patAttrSourceCheck[1]}" data-abe-attr-escaped="${checkEscaped}" data-abe="${keys[
+                  i
+                ]}" ${patAttrSourceCheck[0]}`
               )
             }
           }
         })
       }
 
-      var eachSource = new RegExp(`({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`, 'g')
+      var eachSource = new RegExp(
+        `({{#each ${keys[i]}}[\\s\\S a-z]*?{{\/each}})`,
+        'g'
+      )
       var matches = template.match(eachSource)
-      if(typeof matches !== 'undefined' && matches !== null) {
-        Array.prototype.forEach.call(matches, (match) => {
-          template = template.replace(match, `${match}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(match)} -->`)
+      if (typeof matches !== 'undefined' && matches !== null) {
+        Array.prototype.forEach.call(matches, match => {
+          template = template.replace(
+            match,
+            `${match}<!-- [[${keys[i]}]] ${cmsTemplates.encodeAbeTagAsComment(
+              match
+            )} -->`
+          )
         })
       }
     }
@@ -237,35 +280,61 @@ export function addAbeHtmlTagBetweenAbeTags(template) {
   var match2
   var templateNoDom = striptags(template)
   var pattern = cmsData.regex.abeAsTagPattern()
-  
+
   // {{#each tags may be declared outside of an html Tag}}
-  while (match = cmsData.regex.eachBlockPattern.exec(template)) {
-    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<!--ABE--->' + match[1].trim() + '<!--/ABE--->')
+  while ((match = cmsData.regex.eachBlockPattern.exec(template))) {
+    template = template.replace(
+      cmsData.regex.escapeTextToRegex(match[1], 'g'),
+      '<!--ABE--->' + match[1].trim() + '<!--/ABE--->'
+    )
   }
-  
-  while (match = pattern.exec(templateNoDom)) {
-    template = template.replace(cmsData.regex.escapeTextToRegex(match[1], 'g'), '<!--ABE--->' + match[1].trim() + '<!--/ABE--->')
+
+  while ((match = pattern.exec(templateNoDom))) {
+    template = template.replace(
+      cmsData.regex.escapeTextToRegex(match[1], 'g'),
+      '<!--ABE--->' + match[1].trim() + '<!--/ABE--->'
+    )
   }
 
   let eachStyles = /<style[\S\s]*?<\/style>/g
   let eachStylePattern = /<style[\S\s]*?(<!--ABE[\S\s]*?--->)[\S\s]*?(<!--\/ABE--->)[\S\s]*?<\/style>/g
-  while (match = eachStyles.exec(template)) {
+  while ((match = eachStyles.exec(template))) {
     var res = match[0]
-    while (match2 = eachStylePattern.exec(res)) {
-      res = res.replace(cmsData.regex.escapeTextToRegex(match2[1], 'g'), '/*' + match2[1] + '*/' )
-               .replace(cmsData.regex.escapeTextToRegex(match2[2], 'g'), '/*' + match2[2] + '*/' )
-      template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
+    while ((match2 = eachStylePattern.exec(res))) {
+      res = res
+        .replace(
+          cmsData.regex.escapeTextToRegex(match2[1], 'g'),
+          '/*' + match2[1] + '*/'
+        )
+        .replace(
+          cmsData.regex.escapeTextToRegex(match2[2], 'g'),
+          '/*' + match2[2] + '*/'
+        )
+      template = template.replace(
+        cmsData.regex.escapeTextToRegex(match[0], 'g'),
+        res
+      )
     }
   }
 
   let eachScripts = /<script[\S\s]*?<\/script>/g
   let eachScriptPattern = /<script[\S\s]*?(<!--ABE[\S\s]*?--->)[\S\s]*?(<!--\/ABE--->)[\S\s]*?<\/script>/g
-  while (match = eachScripts.exec(template)) {
+  while ((match = eachScripts.exec(template))) {
     var res = match[0]
-    while (match2 = eachScriptPattern.exec(res)) {
-      res = res.replace(cmsData.regex.escapeTextToRegex(match2[1], 'g'), '/*' + match2[1] + '*/' )
-               .replace(cmsData.regex.escapeTextToRegex(match2[2], 'g'), '/*' + match2[2] + '*/' )
-      template = template.replace(cmsData.regex.escapeTextToRegex(match[0], 'g'), res)
+    while ((match2 = eachScriptPattern.exec(res))) {
+      res = res
+        .replace(
+          cmsData.regex.escapeTextToRegex(match2[1], 'g'),
+          '/*' + match2[1] + '*/'
+        )
+        .replace(
+          cmsData.regex.escapeTextToRegex(match2[2], 'g'),
+          '/*' + match2[2] + '*/'
+        )
+      template = template.replace(
+        cmsData.regex.escapeTextToRegex(match[0], 'g'),
+        res
+      )
     }
   }
 
@@ -309,7 +378,7 @@ export function splitEachBlocks(template) {
   var block
   var blocks = []
 
-  while (block = cmsData.regex.eachBlockPattern.exec(template)) {
+  while ((block = cmsData.regex.eachBlockPattern.exec(template))) {
     blocks.push(block[1])
   }
 
@@ -320,34 +389,51 @@ export function indexEachBlocks(template, json, onlyHtml) {
   // create an array of {{each}} blocks
   var blocks = cmsTemplates.prepare.splitEachBlocks(template)
 
-  Array.prototype.forEach.call(blocks, (block) => {
+  Array.prototype.forEach.call(blocks, block => {
     var key = block.match(/#each (.*?)\}\}/)[1]
     var match
 
-    if(!onlyHtml) {
-
+    if (!onlyHtml) {
       var voidData = {}
       voidData[key] = [{}]
-      var blockCompiled = Handlebars.compile(block.replace(/{{abe (.*?["'])[ ]?( has\-abe=1)?}}/g, '[[abe $1]]').replace(new RegExp(`\\.\\.\/${config.meta.name}`, 'g'), config.meta.name))
-      var blockHtml = blockCompiled(voidData, {data: {intl: config.intlData}}).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
+      var blockCompiled = Handlebars.compile(
+        block
+          .replace(/{{abe (.*?["'])[ ]?( has\-abe=1)?}}/g, '[[abe $1]]')
+          .replace(
+            new RegExp(`\\.\\.\/${config.meta.name}`, 'g'),
+            config.meta.name
+          )
+      )
+      var blockHtml = blockCompiled(voidData, {
+        data: {intl: config.intlData}
+      }).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
 
       // je rajoute un data-abe-block avec index sur tous les tags html du bloc each
-      var textEachWithIndex = block.replace(/(<(?![\/])[A-Za-z0-9!-]*)/g, '$1 data-abe-block="' + key + '{{@index}}"')
+      var textEachWithIndex = block.replace(
+        /(<(?![\/])[A-Za-z0-9!-]*)/g,
+        '$1 data-abe-block="' + key + '{{@index}}"'
+      )
 
       // I add an each block commentary only if the each block key != key of a type=data abe tag
       var keys = []
-      if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
+      if (typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
         keys = Object.keys(json.abe_source)
       }
-      if(keys.indexOf(key) === -1){
-        template = template.replace(block, textEachWithIndex + `<!-- [[${key}]] ${cmsTemplates.encodeAbeTagAsComment(blockHtml)} -->`)
+      if (keys.indexOf(key) === -1) {
+        template = template.replace(
+          block,
+          textEachWithIndex +
+            `<!-- [[${key}]] ${cmsTemplates.encodeAbeTagAsComment(
+              blockHtml
+            )} -->`
+        )
       }
     }
 
     // Pour chaque tag Abe
-    while (match = cmsData.regex.abeTag.exec(block)) {
+    while ((match = cmsData.regex.abeTag.exec(block))) {
       template = cmsTemplates.prepare.addAbeDictionnary(template, match[0], key)
-    } 
+    }
   })
 
   return template
@@ -367,11 +453,15 @@ export function indexEachBlocks(template, json, onlyHtml) {
  * @return {[type]}          [description]
  */
 export function addAbeDictionnary(template, match, key) {
-  if(cmsData.regex.isEachStatement(match)) return
+  if (cmsData.regex.isEachStatement(match)) return
 
-  if(cmsData.regex.isBlockAbe(match)){
-    var abeDictionnary = match.replace(new RegExp('(key=[\'|"])' + key + '.', 'g'), '$1' + key + '[index].')
-                               .replace(/\{\{abe/, '{{abe dictionnary=\'' + key + '\'')
+  if (cmsData.regex.isBlockAbe(match)) {
+    var abeDictionnary = match
+      .replace(
+        new RegExp('(key=[\'|"])' + key + '.', 'g'),
+        '$1' + key + '[index].'
+      )
+      .replace(/\{\{abe/, "{{abe dictionnary='" + key + "'")
 
     template = template.replace(match, abeDictionnary)
   }
