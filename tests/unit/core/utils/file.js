@@ -34,11 +34,12 @@ describe('coreUtils.file', function() {
    * 
    */
   it('coreUtils.file.changePath()', function() {
-    var pathOrigin = '/post/test.html'
+    var pathOrigin = path.join('post','test.html')
+    var pathDest = path.sep + path.join('newpost','test.html')
     var change = 'newpost'
     var result = coreUtils.file.changePath(pathOrigin, change)
     chai.expect(result).to.be.a('string')
-    chai.expect(result.replace(config.root, '')).to.equal('/newpost/test.html')
+    chai.expect(result.replace(config.root, '')).to.equal(pathDest)
   });
 
   it('cmsData.source.getContent()', function(done) {

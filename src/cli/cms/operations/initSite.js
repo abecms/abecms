@@ -23,9 +23,9 @@ export default class initSite {
       .then(()=> {
         Manager.instance.pathTemplates = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
         Manager.instance.pathPartials = path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path)
-        pathSite = pathSite.split('/')
+        pathSite = pathSite.split(path.sep)
         pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1]) 
-        pathSite = pathSite.join('/')
+        pathSite = pathSite.join(path.sep)
         this.addFolder(pathSite)
         .then(() => {
           process.chdir(pathSite)
@@ -33,8 +33,8 @@ export default class initSite {
           this.addFolder(config.structure.url)
           this.addFolder(config.reference.url)
           this.addFolder(config.data.url)
-          this.addFolder(Manager.instance.pathTemplates.replace(config.root + '/', ''))
-          this.addFolder(Manager.instance.pathPartials.replace(config.root + '/', ''))
+          this.addFolder(Manager.instance.pathTemplates.replace(config.root + path.sep, ''))
+          this.addFolder(Manager.instance.pathPartials.replace(config.root + path.sep, ''))
           resolve()
         }).catch(function(e) {
           console.error(e.stack)
