@@ -27,9 +27,30 @@ export default class initSite {
             config.themes.name,
             config.themes.partials.path
           )
+
+          console.log('--------- pathSite 0 ----------')
+          console.log(process.cwd())
+          console.log('--------- /pathSite 0 ----------')
+
+          console.log('--------- pathSite 1 ----------')
+          console.log(pathSite)
+          console.log('--------- /pathSite 1 ----------')
+
           pathSite = pathSite.split(path.sep)
+          console.log('--------- pathSite 2 ----------')
+          console.log(pathSite)
+          console.log('--------- /pathSite 2 ----------')
+
           pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1])
+          console.log('--------- pathSite 3 ----------')
+          console.log(pathSite)
+          console.log('--------- /pathSite 3 ----------')
+
           pathSite = pathSite.join(path.sep)
+          console.log('--------- pathSite 4 ----------')
+          console.log(pathSite)
+          console.log('--------- /pathSite 4 ----------')
+
           this.addFolder(pathSite)
             .then(() => {
               process.chdir(pathSite)
