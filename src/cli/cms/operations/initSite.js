@@ -41,7 +41,7 @@ export default class initSite {
           console.log(pathSite)
           console.log('--------- /pathSite 2 ----------')
 
-          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1])
+          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1], {separateNumbers: false})
           console.log('--------- pathSite 3 ----------')
           console.log(pathSite)
           console.log('--------- /pathSite 3 ----------')
