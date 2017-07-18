@@ -171,6 +171,8 @@ export default class initSite {
               })
           }
         }
+      } else {
+        resolve()
       }
     })
 
@@ -278,6 +280,65 @@ export default class initSite {
 
               return true
             }
+          },
+          {
+            type : 'checkbox',
+            name : 'plugins',
+            choices: [
+              {
+                key: 'a',
+                name: 'abe-deployer-git: Deploy your website on GIT',
+                value: 'abecms/abe-deployer-git'
+              },
+              {
+                key: 'b',
+                name: 'abe-deployer-sftp: Deploy your website through FTP or SFTP',
+                value: 'abecms/abe-deployer-sftp'
+              },
+              {
+                key: 'c',
+                name: 'abe-deployer-s3: Deploy your website to S3',
+                value: 'abecms/abe-deployer-s3'
+              },
+              {
+                key: 'd',
+                name: 'abe-packagz: Create individual zip of a post on publish',
+                value: 'abecms/abe-packagz'
+              },
+              new inquirer.Separator(),
+              {
+                key: 'e',
+                name: 'abe-elasticsearch: Index your posts on ElasticSearch',
+                value: 'abecms/abe-elasticsearch'
+              },
+              {
+                key: 'f',
+                name: 'abe-algolia: Index your posts on Algolia',
+                value: 'abecms/abe-algolia'
+              },
+              new inquirer.Separator(),
+              {
+                key: 'g',
+                name: 'abe-sitemap: Add a XML Sitemap to your website',
+                value: 'abecms/abe-sitemap'
+              },
+              {
+                key: 'h',
+                name: 'abe-mailer: Create contact Forms on your website and send emails',
+                value: 'wonknu/abe-mailer'
+              },
+              {
+                key: 'i',
+                name: 'abe-datepicker: Add a datepicker to your Abe editor',
+                value: 'wonknu/abe-datepicker'
+              },
+              {
+                key: 'i',
+                name: 'abe-rangeslider: Position a abe text with absolute coordinates on images',
+                value: 'wonknu/abe-rangeslider'
+              }
+            ],
+            message : 'Select the plugins you want to install'
           }
         ])
         .then(function(answers) {

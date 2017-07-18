@@ -405,29 +405,39 @@ class Plugins {
     var p = new Promise(resolve => {
       try {
         console.log(clc.green('spawn'), clc.cyan('npm install ' + plugin))
-        // const npmInstall = spawn('npm', ['install', pluginDir]);
-        const npmInstall = spawn(npm, ['install', '--save', plugin], {cwd: dir})
 
-        npmInstall.stdout.on('data', data => {
-          console.log('' + data)
+        const npmPackage = spawn(npm, ['init', '--force', , {cwd: dir}])
+
+        npmPackage.on('close', code => {
+          const npmInstall = spawn(npm, ['install', '--save --prefix ' + dir, plugin])
+
+          npmInstall.stdout.on('data', data => {
+            console.log('' + data)
+          })
+
+          npmInstall.stderr.on('data', data => {
+            console.log('' + data)
+          })
+
+          npmInstall.on('close', code => {
+            console.log(clc.cyan('child process exited with code'), code)
+
+            if (code == 0) {
+              this.updatePlugin(plugin)
+            }
+
+            resolve()
+          })
+
+          npmInstall.on('error', err => {
+            console.log(clc.red('cannot install npm dependencies for'), dir)
+            console.log(err)
+            resolve(err)
+          })
         })
 
-        npmInstall.stderr.on('data', data => {
-          console.log('' + data)
-        })
-
-        npmInstall.on('close', code => {
-          console.log(clc.cyan('child process exited with code'), code)
-
-          if (code == 0) {
-            this.updatePlugin(plugin)
-          }
-
-          resolve()
-        })
-
-        npmInstall.on('error', err => {
-          console.log(clc.red('cannot install npm dependencies for'), dir)
+        npmPackage.on('error', err => {
+          console.log(clc.red('cannot create the package.json file'), dir)
           console.log(err)
           resolve(err)
         })
