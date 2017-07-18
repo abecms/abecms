@@ -35,12 +35,12 @@ var route = function(req, res, next) {
   var connectedUsers = Manager.instance.getConnections()
   var totalUsers = User.utils.getAll()
   var statistics = {
-    totalUsers:totalUsers.length,
-    connectedUsers:connectedUsers.length,
+    totalUsers: totalUsers.length,
+    connectedUsers: connectedUsers.length,
     totalPage: files.length,
     totalPublishedPage: publishedFiles.length,
     percentPublishedPages: percent,
-    svgCirclePercent: 629 * (percent/100)
+    svgCirclePercent: 629 * (percent / 100)
   }
 
   var EditorVariables = {

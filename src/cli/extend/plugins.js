@@ -409,7 +409,11 @@ class Plugins {
         const npmPackage = spawn(npm, ['init', '--force', {cwd: dir}])
 
         npmPackage.on('close', code => {
-          const npmInstall = spawn(npm, ['install', '--save --prefix ' + dir, plugin])
+          const npmInstall = spawn(npm, [
+            'install',
+            '--save --prefix ' + dir,
+            plugin
+          ])
 
           npmInstall.stdout.on('data', data => {
             console.log('' + data)

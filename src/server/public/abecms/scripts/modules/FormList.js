@@ -3,17 +3,21 @@
 export default class FormList {
   constructor() {
     // bind button event click
-    this._btnValidates = [].slice.call(document.querySelectorAll('[data-validate-content]'))
+    this._btnValidates = [].slice.call(
+      document.querySelectorAll('[data-validate-content]')
+    )
     this._handleBtnValidatesClick = this._btnValidatesClick.bind(this)
 
-    this._btnValidates.forEach((input) => {
+    this._btnValidates.forEach(input => {
       input.addEventListener('click', this._handleBtnValidatesClick)
     })
 
     // bind button event click
-    this._btnSetRevisions = [].slice.call(document.querySelectorAll('[data-revisions]'))
+    this._btnSetRevisions = [].slice.call(
+      document.querySelectorAll('[data-revisions]')
+    )
 
-    this._btnSetRevisions.forEach((input) => {
+    this._btnSetRevisions.forEach(input => {
       input.addEventListener('click', this._handleBtnValidatesClick)
     })
   }

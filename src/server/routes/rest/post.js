@@ -1,10 +1,6 @@
 import path from 'path'
 
-import {
-  cmsData,
-  coreUtils,
-  abeExtend
-} from '../../../cli'
+import {cmsData, coreUtils, abeExtend} from '../../../cli'
 
 /**
  * This route returns the editor page as HTML
@@ -15,16 +11,16 @@ import {
  */
 var route = function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
-  if(typeof res._header !== 'undefined' && res._header !== null) return
+  if (typeof res._header !== 'undefined' && res._header !== null) return
 
   var filePath = req.originalUrl.replace('/abe/rest/post', '')
 
-  if(filePath !== '' && filePath !== '/' && filePath != null) {
+  if (filePath !== '' && filePath !== '/' && filePath != null) {
     var filePathTest = cmsData.revision.getDocumentRevision(filePath)
-    if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
+    if (typeof filePathTest !== 'undefined' && filePathTest !== null) {
       var jsonPath = filePathTest.path
 
-      if(coreUtils.file.exist(jsonPath)) {
+      if (coreUtils.file.exist(jsonPath)) {
         var json = cmsData.file.get(jsonPath, 'utf8')
         res.set('Content-Type', 'application/json')
         res.send(JSON.stringify(json))
@@ -33,7 +29,6 @@ var route = function(req, res, next) {
   }
 
   // Error
-
 }
 
 export default route

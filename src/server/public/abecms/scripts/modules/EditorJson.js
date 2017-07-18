@@ -8,7 +8,6 @@ let singleton = Symbol()
 let singletonEnforcer = Symbol()
 
 export default class Json {
-
   constructor(enforcer) {
     this._headers = {}
     this._data = json
@@ -18,33 +17,40 @@ export default class Json {
     this.saving = on(this)
     this.headersSaving = on(this)
 
-    if(enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
+    if (enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
   }
 
   static get instance() {
-    if(!this[singleton]) {
+    if (!this[singleton]) {
       this[singleton] = new Json(singletonEnforcer)
       window.formJson = this[singleton]
     }
     return this[singleton]
   }
 
-  save(type = 'draft', url = '/abe/save/draft/submit', tplPath = null, filePath = null) {
+  save(
+    type = 'draft',
+    url = '/abe/save/draft/submit',
+    tplPath = null,
+    filePath = null
+  ) {
     this.saving._fire({type: type})
-    var p = new Promise((resolve) => {
-      if(!this.canSave){
+    var p = new Promise(resolve => {
+      if (!this.canSave) {
         resolve({})
         this.canSave = true
         return
       }
-      var jsonSave = JSON.parse(JSON.stringify(this.data).replace(/&quote;/g, '\''))
+      var jsonSave = JSON.parse(
+        JSON.stringify(this.data).replace(/&quote;/g, "'")
+      )
 
-      if(typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
+      if (typeof json.abe_source !== 'undefined' && json.abe_source !== null) {
         delete json.abe_source
       }
 
-      tplPath = (tplPath != null) ? tplPath : CONFIG.TPLPATH
-      filePath = (filePath != null) ? filePath : CONFIG.FILEPATH
+      tplPath = tplPath != null ? tplPath : CONFIG.TPLPATH
+      filePath = filePath != null ? filePath : CONFIG.FILEPATH
 
       var toSave = qs.stringify({
         json: jsonSave
@@ -62,25 +68,32 @@ export default class Json {
           method: 'post'
         },
         (code, responseText) => {
-          try{
+          try {
             var jsonRes = JSON.parse(responseText)
-            if(typeof jsonRes.error !== 'undefined' && jsonRes.error !== null) {
+            if (
+              typeof jsonRes.error !== 'undefined' &&
+              jsonRes.error !== null
+            ) {
               alert(jsonRes.error)
               return
             }
             if (jsonRes.success == 1) {
               this.data = jsonRes.json
               location.reload()
-            }else {
+            } else {
               alert(jsonRes.message)
             }
-          }
-          catch(e){
-            alert('The following error happened : \n' + e + '\n if it persist, reload your web page tab.')
+          } catch (e) {
+            alert(
+              'The following error happened : \n' +
+                e +
+                '\n if it persist, reload your web page tab.'
+            )
             jsonRes = {}
           }
           resolve(jsonRes)
-        })
+        }
+      )
     })
 
     return p

@@ -13,11 +13,13 @@ export default class EditorFiles {
   }
 
   rebind() {
-    let files = [].slice.call(document.querySelectorAll(
-      '.img-upload input[type="file"], .file-upload input[type="file"]')
+    let files = [].slice.call(
+      document.querySelectorAll(
+        '.img-upload input[type="file"], .file-upload input[type="file"]'
+      )
     )
 
-    Array.prototype.forEach.call(files, (file) => {
+    Array.prototype.forEach.call(files, file => {
       file.removeEventListener('change', this._handleChangeFiles)
       file.addEventListener('change', this._handleChangeFiles)
     })
@@ -27,7 +29,7 @@ export default class EditorFiles {
     this._uploadFile(e.target)
   }
 
-  _uploadFile(target){
+  _uploadFile(target) {
     var formData = new FormData()
     if (target.value == '') {
       console.log('Please choose file!')
@@ -45,17 +47,25 @@ export default class EditorFiles {
 
     formData.append('uploadfile', file)
     var xhr = new XMLHttpRequest()
-    xhr.open('post', '/abe/upload/?baseUrl=' + CONFIG.FILEPATH + '&input=' + target.outerHTML, true)
-    xhr.upload.onprogress = (e) => {
+    xhr.open(
+      'post',
+      '/abe/upload/?baseUrl=' + CONFIG.FILEPATH + '&input=' + target.outerHTML,
+      true
+    )
+    xhr.upload.onprogress = e => {
       if (e.lengthComputable) {
-        var percentage = (e.loaded / e.total) * 100
+        var percentage = e.loaded / e.total * 100
         percent.textContent = percentage.toFixed(0) + '%'
       }
     }
-    xhr.onerror = () => { console.log('An error occurred while submitting the form. Maybe your file is too big') }
+    xhr.onerror = () => {
+      console.log(
+        'An error occurred while submitting the form. Maybe your file is too big'
+      )
+    }
     xhr.onload = () => {
       var resp = JSON.parse(xhr.responseText)
-      if(resp.error){
+      if (resp.error) {
         uploadError.textContent = resp.response
         uploadError.classList.add('show')
         percent.innerHTML = percentHtml
@@ -63,13 +73,13 @@ export default class EditorFiles {
       }
       var input = parentTarget.querySelector('input.file-input')
       input.value = resp.filePath
-      if(resp.thumbs){
+      if (resp.thumbs) {
         var parent = input.parentNode
         var id = input.id
-        Array.prototype.forEach.call(resp.thumbs, (thumb) => {
+        Array.prototype.forEach.call(resp.thumbs, thumb => {
           var thumdID = `${id}_${thumb.size}`
           var inputThumbs = parent.querySelector(`[data-id="${thumdID}"]`)
-          if(inputThumbs != null) inputThumbs.value = thumb.name
+          if (inputThumbs != null) inputThumbs.value = thumb.name
           else {
             var inputThumbs = document.createElement('input')
             inputThumbs.classList.add('form-control')
@@ -85,13 +95,16 @@ export default class EditorFiles {
       }
       input.focus()
       input.blur()
-      
-      var nodes = IframeNode('#page-template', '[data-abe-' + input.id.replace(/\./g, '-') + ']')
-      Array.prototype.forEach.call(nodes, (node) => {
+
+      var nodes = IframeNode(
+        '#page-template',
+        '[data-abe-' + input.id.replace(/\./g, '-') + ']'
+      )
+      Array.prototype.forEach.call(nodes, node => {
         EditorUtils.formToHtml(node, input)
       })
       this.onUpload._fire(target)
-      setTimeout(function () {
+      setTimeout(function() {
         percent.innerHTML = percentHtml
       }, 1000)
     }

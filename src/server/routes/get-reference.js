@@ -2,12 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import pkg from '../../../package'
 
-import {
-	Manager,
-  coreUtils,
-  config,
-  Handlebars
-} from '../../cli'
+import {Manager, coreUtils, config, Handlebars} from '../../cli'
 
 /**
  * This route returns the references files in HTML format
@@ -15,7 +10,7 @@ import {
  * @param  {[type]} res [description]
  * @return {[type]}     [description]
  */
-var route = function(req, res){
+var route = function(req, res) {
   var manager = {}
   manager.home = {files: []}
   manager.list = Manager.instance.getStructureAndTemplates()

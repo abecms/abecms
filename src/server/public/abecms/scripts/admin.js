@@ -9,7 +9,7 @@ class Admin {
     // this._formCreate = document.querySelector('.form-create')
     var forms = document.querySelectorAll('[data-form-abe-create]')
     Array.prototype.forEach.call(forms, function(form) {
-      new FormCreate(form)      
+      new FormCreate(form)
     })
 
     this._bindEvents()
@@ -20,9 +20,8 @@ class Admin {
    * @return {null}
    */
   _bindEvents() {
-    if(typeof this._formCreate !== 'undefined' && this._formCreate !== null) {
-
-    }else if(this._page === 'list') {
+    if (typeof this._formCreate !== 'undefined' && this._formCreate !== null) {
+    } else if (this._page === 'list') {
       new FormList()
     }
   }

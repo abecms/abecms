@@ -3,12 +3,7 @@ import crypto from 'crypto'
 import nodemailer from 'nodemailer'
 import path from 'path'
 
-import {
-  coreUtils,
-  config,
-  Handlebars,
-  User
-} from '../../../../cli'
+import {coreUtils, config, Handlebars, User} from '../../../../cli'
 
 function showHtml(res, req, info) {
   var resHtml = ''
@@ -35,10 +30,10 @@ function showHtml(res, req, info) {
 
 var route = function route(req, res) {
   var html
-  if(typeof req.query.email !== 'undefined' && req.query.email !== null) {
-    User.utils.findByEmail(req.query.email, function (err, user) {
+  if (typeof req.query.email !== 'undefined' && req.query.email !== null) {
+    User.utils.findByEmail(req.query.email, function(err, user) {
       if (err) {
-        return res.status(200).json({success: 1}) 
+        return res.status(200).json({success: 1})
       }
 
       crypto.randomBytes(20, function(err, buf) {
@@ -46,17 +41,25 @@ var route = function route(req, res) {
         var forgotExpire = config.forgotExpire
 
         User.operations.update({
-          id:user.id,
+          id: user.id,
           resetPasswordToken: resetPasswordToken,
-          resetPasswordExpires: Date.now() + (forgotExpire*60*1000)
+          resetPasswordExpires: Date.now() + forgotExpire * 60 * 1000
         })
 
-        var requestedUrl = req.protocol + '://' + req.get('Host') + '/abe/users/reset?token=' + resetPasswordToken
+        var requestedUrl =
+          req.protocol +
+          '://' +
+          req.get('Host') +
+          '/abe/users/reset?token=' +
+          resetPasswordToken
 
         var emailConf = config.users.email
         html = emailConf.html || ''
 
-        if(typeof emailConf.templateHtml !== 'undefined' && emailConf.templateHtml !== null) {
+        if (
+          typeof emailConf.templateHtml !== 'undefined' &&
+          emailConf.templateHtml !== null
+        ) {
           var fileHtml = path.join(config.root, emailConf.templateHtml)
           if (coreUtils.file.exist(fileHtml)) {
             html = fs.readFileSync(fileHtml, 'utf8')
@@ -80,12 +83,12 @@ var route = function route(req, res) {
         var subject = emailConf.subject
         var text = emailConf.text.replace(/\{\{forgotUrl\}\}/g, requestedUrl)
         var html = html.replace(/\{\{forgotUrl\}\}/g, requestedUrl)
-        
+
         coreUtils.mail.send(from, to, subject, text, html)
         showHtml(res, req, 'Check your inbox')
       })
     })
-  }else {
+  } else {
     showHtml(res, req, req.flash('info'))
   }
 }

@@ -5,9 +5,9 @@ import middleIsAuthorized from './isAuthorized'
 import middleLiveReload from './liveReload'
 
 export {
-	middleWebsite,
-	middleLogin,
-	middleCheckCsrf,
-	middleIsAuthorized,
+  middleWebsite,
+  middleLogin,
+  middleCheckCsrf,
+  middleIsAuthorized,
   middleLiveReload
 }

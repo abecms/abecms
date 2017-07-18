@@ -26,11 +26,7 @@ import * as rest from './rest'
 import express from 'express'
 import * as abe from '../../cli'
 
-import {
-  abeExtend,
-  Handlebars,
-  config
-} from '../../cli'
+import {abeExtend, Handlebars, config} from '../../cli'
 
 var router = express.Router()
 abeExtend.hooks.instance.trigger('afterHandlebarsHelpers', Handlebars)
@@ -74,14 +70,13 @@ router.post('/abe/list-url/save*', postListUrlSave)
 router.get('/abe/themes', getThemes)
 router.post('/abe/themes', postThemes)
 
-router.get('/abe/list-workflow*', function (req, res, next) {
-  getListWorkflow(router, req, res, next) 
+router.get('/abe/list-workflow*', function(req, res, next) {
+  getListWorkflow(router, req, res, next)
 })
-router.get('/abe/list-url*', function (req, res, next) {
-  getListUrl(router, req, res, next) 
+router.get('/abe/list-url*', function(req, res, next) {
+  getListUrl(router, req, res, next)
 })
 router.get('/abe/list-hooks*', getListHooks)
-
 
 /**
  * Operations
@@ -100,12 +95,12 @@ router.post('/abe/operations/duplicate*', operations.postDuplicate)
 router.post('/abe/operations/update*', operations.postUpdate)
 
 var workflows = config.users.workflow
-Array.prototype.forEach.call(workflows, (workflow) => {
+Array.prototype.forEach.call(workflows, workflow => {
   router.get(`/abe/operations/delete/${workflow}*`, operations.getDelete)
 
   if (workflow != 'draft' && workflow != 'publish') {
     router.post(`/abe/operations/reject/${workflow}*`, operations.postReject)
-  }else if (workflow == 'publish') {
+  } else if (workflow == 'publish') {
     router.get('/abe/operations/unpublish*', operations.getUnpublish)
   }
 
@@ -114,57 +109,73 @@ Array.prototype.forEach.call(workflows, (workflow) => {
 })
 
 var routes = abeExtend.plugins.instance.getRoutes()
-Array.prototype.forEach.call(routes, (route) => {
-  if(typeof route.get !== 'undefined' && route.get !== null) {
-    Array.prototype.forEach.call(route.get, (routeGet) => {
+Array.prototype.forEach.call(routes, route => {
+  if (typeof route.get !== 'undefined' && route.get !== null) {
+    Array.prototype.forEach.call(route.get, routeGet => {
       try {
         var pluginRoot = require(routeGet.path)
-        if(typeof pluginRoot.default === 'object') {
-          if(typeof pluginRoot.middleware === 'function') {
-            router.get(routeGet.routePath, pluginRoot.middleware, pluginRoot.default)
+        if (typeof pluginRoot.default === 'object') {
+          if (typeof pluginRoot.middleware === 'function') {
+            router.get(
+              routeGet.routePath,
+              pluginRoot.middleware,
+              pluginRoot.default
+            )
           } else {
             router.get(routeGet.routePath, pluginRoot.default)
           }
         } else {
-          if(typeof pluginRoot.middleware === 'function') {
-            router.get(routeGet.routePath, pluginRoot.middleware, (req, res, next) => {
-              pluginRoot.default(req, res, next, abe)
-            })
+          if (typeof pluginRoot.middleware === 'function') {
+            router.get(
+              routeGet.routePath,
+              pluginRoot.middleware,
+              (req, res, next) => {
+                pluginRoot.default(req, res, next, abe)
+              }
+            )
           } else {
             router.get(routeGet.routePath, (req, res, next) => {
               pluginRoot.default(req, res, next, abe)
             })
           }
         }
-      } catch(e) {
+      } catch (e) {
         // statements
         console.log(e)
       }
     })
   }
-  if(typeof route.post !== 'undefined' && route.post !== null) {
-    Array.prototype.forEach.call(route.post, (routePost) => {
+  if (typeof route.post !== 'undefined' && route.post !== null) {
+    Array.prototype.forEach.call(route.post, routePost => {
       //console.log(routePost.path)
       try {
         var pluginRoot = require(routePost.path)
-        if(typeof pluginRoot.default === 'object') {
-          if(typeof pluginRoot.middleware === 'function') {
-            router.post(routePost.routePath, pluginRoot.middleware, pluginRoot.default)
+        if (typeof pluginRoot.default === 'object') {
+          if (typeof pluginRoot.middleware === 'function') {
+            router.post(
+              routePost.routePath,
+              pluginRoot.middleware,
+              pluginRoot.default
+            )
           } else {
             router.post(routePost.routePath, pluginRoot.default)
           }
         } else {
-          if(typeof pluginRoot.middleware === 'function') {
-            router.post(routePost.routePath, pluginRoot.middleware, (req, res, next) => {
-              pluginRoot.default(req, res, next, abe)
-            })
+          if (typeof pluginRoot.middleware === 'function') {
+            router.post(
+              routePost.routePath,
+              pluginRoot.middleware,
+              (req, res, next) => {
+                pluginRoot.default(req, res, next, abe)
+              }
+            )
           } else {
             router.post(routePost.routePath, (req, res, next) => {
               pluginRoot.default(req, res, next, abe)
             })
-          } 
+          }
         }
-      } catch(e) {
+      } catch (e) {
         // statements
         console.log(e)
       }

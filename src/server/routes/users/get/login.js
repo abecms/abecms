@@ -1,11 +1,7 @@
 import fs from 'fs-extra'
 import path from 'path'
 
-import {
-  coreUtils,
-  config,
-  Handlebars
-} from '../../../../cli'
+import {coreUtils, config, Handlebars} from '../../../../cli'
 
 var route = function route(req, res) {
   var resHtml = ''
@@ -14,9 +10,9 @@ var route = function route(req, res) {
   if (coreUtils.file.exist(page)) {
     resHtml = fs.readFileSync(page, 'utf8')
   }
-  
+
   var template = Handlebars.compile(resHtml, {noEscape: true})
-  
+
   var tmp = template({
     csrfToken: res.locals.csrfToken,
     config: JSON.stringify(config),

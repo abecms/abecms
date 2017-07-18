@@ -18,9 +18,9 @@ import locale from '../helpers/abe-locale'
 
 function renderAbeAdmin(EditorVariables, obj, filePath) {
   var manager = {}
-  
+
   manager.home = {
-    files: []//Manager.instance.getList()
+    files: [] //Manager.instance.getList()
   }
 
   manager.nbPosts = Manager.instance.getList().length
@@ -28,27 +28,49 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   manager.editConfig = EditorVariables.express.req.app.get('config')
   manager.config = JSON.stringify(config)
 
-  var _preview = (filePath) ? '/abe/page/' + EditorVariables.express.req.params[0] + `?filePath=${EditorVariables.express.req.query.filePath}` : false
-  var _form = (obj) ? obj.form : false
-  var _json = (obj) ? obj.json : false
-  var _filePath = (filePath) ? filePath : false
+  var _preview = filePath
+    ? '/abe/page/' +
+      EditorVariables.express.req.params[0] +
+      `?filePath=${EditorVariables.express.req.query.filePath}`
+    : false
+  var _form = obj ? obj.form : false
+  var _json = obj ? obj.json : false
+  var _filePath = filePath ? filePath : false
   if (_filePath) {
     _filePath = '/' + _filePath.replace(/^\/+/, '')
   }
 
   var pageHtml = ''
-  if(typeof _json !== 'undefined' && _json !== null && typeof _json.abe_meta !== 'undefined' && _json.abe_meta !== null) {
-
-    var text = cmsTemplates.template.getTemplate(_json.abe_meta.template, _json) 
-    var page = new Page(text, _json, false) 
-    pageHtml = page.html.replace(/"/g, '"').replace(/'/g, '\'').replace(/<!--/g, '<ABE!--').replace(/-->/g, '--ABE>')
+  if (
+    typeof _json !== 'undefined' &&
+    _json !== null &&
+    typeof _json.abe_meta !== 'undefined' &&
+    _json.abe_meta !== null
+  ) {
+    var text = cmsTemplates.template.getTemplate(_json.abe_meta.template, _json)
+    var page = new Page(text, _json, false)
+    pageHtml = page.html
+      .replace(/"/g, '"')
+      .replace(/'/g, "'")
+      .replace(/<!--/g, '<ABE!--')
+      .replace(/-->/g, '--ABE>')
   }
-    
+
   var editorWidth = '25%'
-  EditorVariables.express.req.headers && EditorVariables.express.req.headers.cookie && EditorVariables.express.req.headers.cookie.split(';').forEach(function(cookie) {
-    var parts = cookie.match(/(.*?)=(.*)$/)
-    if ( typeof parts !== 'undefined' && parts !== null && ( parts.length > 2 ) && ( parts[1] === 'editorWidth' ) ) editorWidth = parts[2]
-  })
+  EditorVariables.express.req.headers &&
+    EditorVariables.express.req.headers.cookie &&
+    EditorVariables.express.req.headers.cookie
+      .split(';')
+      .forEach(function(cookie) {
+        var parts = cookie.match(/(.*?)=(.*)$/)
+        if (
+          typeof parts !== 'undefined' &&
+          parts !== null &&
+          parts.length > 2 &&
+          parts[1] === 'editorWidth'
+        )
+          editorWidth = parts[2]
+      })
 
   EditorVariables.pageHtml = pageHtml
   EditorVariables.test = JSON.stringify(locale)
@@ -60,18 +82,26 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   EditorVariables.editorWidth = editorWidth
 
   if (_json != null && _json.abe_meta) {
-    EditorVariables.workflows = User.utils.getUserWorkflow(_json.abe_meta.status)
+    EditorVariables.workflows = User.utils.getUserWorkflow(
+      _json.abe_meta.status
+    )
   }
 
-  EditorVariables = abeExtend.hooks.instance.trigger('afterVariables', EditorVariables)
+  EditorVariables = abeExtend.hooks.instance.trigger(
+    'afterVariables',
+    EditorVariables
+  )
 
   if (filePath != null && filePath.indexOf('.json') > -1) {
     EditorVariables.express.res.set('Content-Type', 'application/json')
     EditorVariables.express.res.send(JSON.stringify(_json))
-  } else if(EditorVariables.pageHtml != ''){
+  } else if (EditorVariables.pageHtml != '') {
     EditorVariables.express.res.render(config.abeEngine, EditorVariables)
   } else {
-    EditorVariables.express.res.render('../views/template-manager', EditorVariables)
+    EditorVariables.express.res.render(
+      '../views/template-manager',
+      EditorVariables
+    )
   }
 }
 
@@ -88,18 +118,18 @@ var route = function(req, res, next) {
     filePath = null
   }
 
-  if(filePath != null){
+  if (filePath != null) {
     var testXSS = xss(filePath, {
       whiteList: [],
       stripIgnoreTag: true
     })
-    if(testXSS !== filePath){
+    if (testXSS !== filePath) {
       filePath = testXSS
     }
   }
 
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
-  if(typeof res._header !== 'undefined' && res._header !== null) return
+  if (typeof res._header !== 'undefined' && res._header !== null) return
 
   var isHome = true
   var jsonPath = null
@@ -123,34 +153,35 @@ var route = function(req, res, next) {
     abeVersion: pkg.version
   }
 
-  let p = new Promise((resolve) => {
-
-    if(filePath != null) {
+  let p = new Promise(resolve => {
+    if (filePath != null) {
       fileName = path.basename(filePath)
       folderPath = path.dirname(filePath)
 
       EditorVariables.isHome = false
       EditorVariables.isEditor = true
       var filePathTest = cmsData.revision.getDocumentRevision(filePath)
-      if(typeof filePathTest !== 'undefined' && filePathTest !== null) {
+      if (typeof filePathTest !== 'undefined' && filePathTest !== null) {
         jsonPath = filePathTest.path
         template = filePathTest.abe_meta.template
       }
 
-      if(jsonPath === null || !coreUtils.file.exist(jsonPath)) { 
-        res.redirect('/abe/editor') 
-        return 
+      if (jsonPath === null || !coreUtils.file.exist(jsonPath)) {
+        res.redirect('/abe/editor')
+        return
       }
 
       var json = {}
-      if(coreUtils.file.exist(jsonPath)) {
+      if (coreUtils.file.exist(jsonPath)) {
         json = cmsData.file.get(jsonPath, 'utf8')
       }
       var text = cmsTemplates.template.getTemplate(template, json)
-      cmsEditor.editor.create(text, json)
-        .then((result) => {
+      cmsEditor.editor
+        .create(text, json)
+        .then(result => {
           resolve(result)
-        }).catch(function(e) {
+        })
+        .catch(function(e) {
           console.error(e)
         })
     } else {
@@ -163,28 +194,33 @@ var route = function(req, res, next) {
     console.error(e) // "oh, no!"
   })
 
-  p.then((obj) => {
-    var precontribs = Manager.instance.getPrecontribution()
-    var promises = []
-    EditorVariables.resultPrecontrib = []
-    Array.prototype.forEach.call(precontribs, (precontrib) => {
-      var p = cmsEditor.editor.create(precontrib, obj.json, true)
-        .then((resultPrecontrib) => {
-          EditorVariables.resultPrecontrib.push(resultPrecontrib)
-        }).catch(function(e) {
-          console.error(e)
-        })
-      promises.push(p)
-    })
-    Promise.all(promises)
-      .then(() => {
-        renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
-      }).catch(function(e) {
-        console.error('get-main.js getDataList', e.stack)
+  p
+    .then(obj => {
+      var precontribs = Manager.instance.getPrecontribution()
+      var promises = []
+      EditorVariables.resultPrecontrib = []
+      Array.prototype.forEach.call(precontribs, precontrib => {
+        var p = cmsEditor.editor
+          .create(precontrib, obj.json, true)
+          .then(resultPrecontrib => {
+            EditorVariables.resultPrecontrib.push(resultPrecontrib)
+          })
+          .catch(function(e) {
+            console.error(e)
+          })
+        promises.push(p)
       })
-  }).catch((e) => {
-    console.log('error', e)
-  })
+      Promise.all(promises)
+        .then(() => {
+          renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
+        })
+        .catch(function(e) {
+          console.error('get-main.js getDataList', e.stack)
+        })
+    })
+    .catch(e => {
+      console.log('error', e)
+    })
 }
 
 export default route

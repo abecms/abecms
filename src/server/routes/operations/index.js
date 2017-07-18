@@ -11,7 +11,7 @@ export {
   postCreate,
   postUpdate,
   postDuplicate,
-	postSubmit,
+  postSubmit,
   postEdit,
   postReject,
   getUnpublish,

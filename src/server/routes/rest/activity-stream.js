@@ -1,7 +1,4 @@
-import {
-  abeExtend,
-  Manager
-} from '../../../cli'
+import {abeExtend, Manager} from '../../../cli'
 
 var eventOnActivity = function(data) {
   var activities = Manager.instance.getActivities()
@@ -9,11 +6,11 @@ var eventOnActivity = function(data) {
   var i = 0
   var size = Object.keys(data).length
   this.write('data: "id": "' + activities.length + '",\n')
-  Array.prototype.forEach.call(Object.keys(data), (key) => {
+  Array.prototype.forEach.call(Object.keys(data), key => {
     i++
     if (size == i) {
       this.write('data: "' + key + '": "' + data[key] + '"\n')
-    }else {
+    } else {
       this.write('data: "' + key + '": "' + data[key] + '",\n')
     }
   })
@@ -25,11 +22,11 @@ var route = function(req, res) {
   // if event-stream
   if (req.accepts('text/event-stream')) {
     // Approximately 24 days...
-    req.socket.setTimeout(0x7FFFFFFF)
+    req.socket.setTimeout(0x7fffffff)
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive'
+      Connection: 'keep-alive'
     })
 
     let evt = eventOnActivity.bind(res)
@@ -38,19 +35,19 @@ var route = function(req, res) {
     if (!req.headers['last-event-id']) {
       var activities = Manager.instance.getActivities()
       var j = 0
-      if(activities.length > 0){
-        Array.prototype.forEach.call(activities, (activity) => {
+      if (activities.length > 0) {
+        Array.prototype.forEach.call(activities, activity => {
           var jsonActivity = JSON.parse(JSON.stringify(activity))
           j++
           var i = 0
           var size = Object.keys(jsonActivity).length
           res.write('data: {\n')
           res.write('data: "id": "' + j + '",\n')
-          Array.prototype.forEach.call(Object.keys(jsonActivity), (key) => {
+          Array.prototype.forEach.call(Object.keys(jsonActivity), key => {
             i++
             if (size == i) {
               res.write('data: "' + key + '": "' + jsonActivity[key] + '"\n')
-            }else {
+            } else {
               res.write('data: "' + key + '": "' + jsonActivity[key] + '",\n')
             }
           })
@@ -69,12 +66,16 @@ var route = function(req, res) {
 
     Manager.instance.addConnection(res)
 
-    req.connection.addListener('close', function () {
-      res.app.removeListener('activity-stream', evt)
-      Manager.instance.removeConnection(res)
-    }, false)
-
-  } else { // if get
+    req.connection.addListener(
+      'close',
+      function() {
+        res.app.removeListener('activity-stream', evt)
+        Manager.instance.removeConnection(res)
+      },
+      false
+    )
+  } else {
+    // if get
     var result = {
       success: 0,
       msg: 'no event-stream configured'

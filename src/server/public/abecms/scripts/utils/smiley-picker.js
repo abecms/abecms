@@ -7,14 +7,14 @@ export default class SmileyPicker {
     this.popup = new Popup(wrapper)
     this.wrapper = wrapper
     var smileyHTML = '<div class="smiley-title">Emoji</div>'
-    for(var smileys in SmileyData){
+    for (var smileys in SmileyData) {
       var countSmiley = 0
       smileyHTML += `<div class="smiley-subtitle">${smileys} :</div>
                     <table cellpadding="0" cellspacing="0">
                         <tbody>
                           <tr>`
-      SmileyData[smileys].forEach((smiley) => {
-        if(countSmiley > 9) {
+      SmileyData[smileys].forEach(smiley => {
+        if (countSmiley > 9) {
           smileyHTML += '</tr><tr>'
           countSmiley = 0
         }
@@ -23,7 +23,7 @@ export default class SmileyPicker {
                        </td>`
         countSmiley++
       })
-      smileyHTML +=     `</tr>
+      smileyHTML += `</tr>
                       </tbody>
                     </table>`
     }
@@ -31,19 +31,19 @@ export default class SmileyPicker {
     this.bindEvt()
   }
 
-  bindEvt(){
+  bindEvt() {
     this.onSmiley = on(this)
-    this.wrapper.addEventListener('click', (e) => {
+    this.wrapper.addEventListener('click', e => {
       var target = e.target
-      if(target.getAttribute('data-smiley') != null){
+      if (target.getAttribute('data-smiley') != null) {
         this.onSmiley._fire(`&nbsp;${target.getAttribute('data-smiley')}&nbsp;`)
         this.popup.close()
       }
     })
   }
 
-  show(el){
+  show(el) {
     var elBounds = el.getBoundingClientRect()
-    this.popup.open(elBounds.left, (elBounds.top + elBounds.height + 5))
+    this.popup.open(elBounds.left, elBounds.top + elBounds.height + 5)
   }
 }

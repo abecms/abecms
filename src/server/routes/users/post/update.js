@@ -1,6 +1,4 @@
-import {
-  User
-} from '../../../../cli'
+import {User} from '../../../../cli'
 
 var route = function(req, res) {
   var resultUpdate = User.operations.update(req.body)

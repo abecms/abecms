@@ -2,12 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import pkg from '../../../package'
 
-import {
-	Manager,
-  coreUtils,
-  config,
-  Handlebars
-} from '../../cli'
+import {Manager, coreUtils, config, Handlebars} from '../../cli'
 
 /**
  * This route returns the structure as HTML
@@ -15,7 +10,7 @@ import {
  * @param  {[type]} res [description]
  * @return {[type]}     [description]
  */
-var route = function(req, res){
+var route = function(req, res) {
   var manager = {}
   manager.home = {files: []}
   manager.list = Manager.instance.getStructureAndTemplates()
@@ -28,7 +23,10 @@ var route = function(req, res){
   var fileName = null
   var folderPath = null
   var structure = Manager.instance.getStructureAndTemplates().structure
-  structure = JSON.stringify(structure).replace(new RegExp(config.root, 'g'), '')
+  structure = JSON.stringify(structure).replace(
+    new RegExp(config.root, 'g'),
+    ''
+  )
 
   var EditorVariables = {
     user: res.user,

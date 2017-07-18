@@ -3,8 +3,7 @@ import Popup from './popup'
 
 // allow override from plugins
 window.ImagePickerUpload = {
-  getPopup: function () {
-  
+  getPopup: function() {
     return `<div class="form-group" >
               <div class="input-group img-upload">
                 <div class="input-group-addon image">
@@ -25,11 +24,11 @@ window.ImagePickerUpload = {
               </div>
             </div>`
   },
-  init: function (callBack) {
+  init: function(callBack) {
     var wysiwygText = document.querySelector('#wysiwyg-image-text')
     var wysiwygUpload = document.querySelector('#wysiwyg-image-upload')
     var btnAddImg = document.querySelector('.btn-add-img')
-    var uploadImage = function (e) {
+    var uploadImage = function(e) {
       var target = e.target
       var formData = new FormData()
       if (target.value == '') {
@@ -45,17 +44,28 @@ window.ImagePickerUpload = {
       uploadError.textContent = ''
       formData.append('uploadfile', file)
       var xhr = new XMLHttpRequest()
-      xhr.open('post', '/abe/upload/?baseUrl=' + CONFIG.FILEPATH + '&input=' + target.outerHTML, true)
-      xhr.upload.onprogress = (e) => {
+      xhr.open(
+        'post',
+        '/abe/upload/?baseUrl=' +
+          CONFIG.FILEPATH +
+          '&input=' +
+          target.outerHTML,
+        true
+      )
+      xhr.upload.onprogress = e => {
         if (e.lengthComputable) {
-          var percentage = (e.loaded / e.total) * 100
+          var percentage = e.loaded / e.total * 100
           percent.textContent = percentage.toFixed(0) + '%'
         }
       }
-      xhr.onerror = () => { console.log('An error occurred while submitting the form. Maybe your file is too big') }
+      xhr.onerror = () => {
+        console.log(
+          'An error occurred while submitting the form. Maybe your file is too big'
+        )
+      }
       xhr.onload = () => {
         var resp = JSON.parse(xhr.responseText)
-        if(resp.error){
+        if (resp.error) {
           uploadError.textContent = resp.response
           uploadError.classList.add('show')
           percent.innerHTML = percentHtml
@@ -65,7 +75,7 @@ window.ImagePickerUpload = {
         input.value = resp.filePath
         input.focus()
         input.blur()
-        setTimeout(function () {
+        setTimeout(function() {
           percent.innerHTML = percentHtml
         }, 1000)
         wysiwygUpload.removeEventListener('change', uploadImage)
@@ -76,7 +86,7 @@ window.ImagePickerUpload = {
       xhr.send(formData)
     }
 
-    var addImg = function () {
+    var addImg = function() {
       callBack(wysiwygText.value)
     }
 
@@ -87,25 +97,23 @@ window.ImagePickerUpload = {
   }
 }
 
-
 export default class ImagePicker {
-
   constructor(wrapper) {
     this.popup = new Popup(wrapper)
     this.wrapper = wrapper
     this.bindEvt()
   }
 
-  bindEvt(){
+  bindEvt() {
     this.onImg = on(this)
   }
 
-  show(el){
+  show(el) {
     this.wrapper.innerHTML = window.ImagePickerUpload.getPopup()
     var elBounds = el.getBoundingClientRect()
-    this.popup.open(elBounds.left, (elBounds.top + elBounds.height + 5))
+    this.popup.open(elBounds.left, elBounds.top + elBounds.height + 5)
 
-    window.ImagePickerUpload.init((value) => {
+    window.ImagePickerUpload.init(value => {
       this.onImg._fire({image: value})
       this.popup.close()
     })

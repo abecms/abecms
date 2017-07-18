@@ -1,16 +1,14 @@
-import {
-  abeExtend
-} from '../../cli'
+import {abeExtend} from '../../cli'
 
 var eventOnGeneratePost = function(data) {
   this.write('data: {\n')
   var i = 0
   var size = Object.keys(data).length
-  Array.prototype.forEach.call(Object.keys(data), (key) => {
+  Array.prototype.forEach.call(Object.keys(data), key => {
     i++
     if (size == i) {
       this.write('data: "' + key + '": "' + data[key] + '"\n')
-    }else {
+    } else {
       this.write('data: "' + key + '": "' + data[key] + '",\n')
     }
   })
@@ -22,11 +20,11 @@ var route = function(req, res) {
   // if event-stream
   if (req.accepts('text/event-stream')) {
     // Approximately 24 days...
-    req.socket.setTimeout(0x7FFFFFFF)
+    req.socket.setTimeout(0x7fffffff)
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive'
+      Connection: 'keep-alive'
     })
 
     let evt = eventOnGeneratePost.bind(res)
@@ -36,13 +34,17 @@ var route = function(req, res) {
     res.write('data: "msg": "open"\n')
     res.write('data: }\n\n')
 
-    req.connection.addListener('close', function () {
-      res.app.removeListener('generate-posts', evt)
-    }, false)
-
-  } else { // if get
+    req.connection.addListener(
+      'close',
+      function() {
+        res.app.removeListener('generate-posts', evt)
+      },
+      false
+    )
+  } else {
+    // if get
     var result
-    var proc = abeExtend.process('generate-posts', [''], (data) => {
+    var proc = abeExtend.process('generate-posts', [''], data => {
       res.app.emit('generate-posts', data)
     })
     if (proc) {
@@ -51,10 +53,11 @@ var route = function(req, res) {
         success: 1,
         msg: 'generate-posts is running'
       }
-    }else {
+    } else {
       result = {
         success: 0,
-        msg: 'cannot run process generate-posts, because an other one is already running'
+        msg:
+          'cannot run process generate-posts, because an other one is already running'
       }
     }
     res.set('Content-Type', 'application/json')

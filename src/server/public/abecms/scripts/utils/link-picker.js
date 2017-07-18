@@ -4,7 +4,6 @@ import on from 'on'
 import Popup from './popup'
 
 export default class LinkPicker {
-
   constructor(wrapper) {
     this.popup = new Popup(wrapper)
     this.wrapper = wrapper
@@ -50,8 +49,8 @@ export default class LinkPicker {
     this.onLink = on(this)
   }
 
-  bindEvt(){
-    var sendEvent = (res) => {
+  bindEvt() {
+    var sendEvent = res => {
       this.wrapper.removeEventListener('mousedown', clickWrapper)
       document.body.removeEventListener('mousedown', cancel)
       this.wrapper.querySelector('input').value = ''
@@ -60,28 +59,33 @@ export default class LinkPicker {
       this.onLink._fire(res)
       this.popup.close()
     }
-    var cancel = (e) => {
+    var cancel = e => {
       var target = e.target
-      if(!target.classList.contains('abe-popup') &&
-         !target.parentNode.classList.contains('keep-popup') &&
-         !target.parentNode.classList.contains('abe-popup')) {
+      if (
+        !target.classList.contains('abe-popup') &&
+        !target.parentNode.classList.contains('keep-popup') &&
+        !target.parentNode.classList.contains('abe-popup')
+      ) {
         sendEvent(null)
       }
     }
-    var clickWrapper = (e) => {
+    var clickWrapper = e => {
       var link = this.wrapper.querySelector('input').value
-      if(e.target.classList.contains('btn')){
-        sendEvent({link: link, target: this.target.checked, noFollow: this.noFollow.checked})
+      if (e.target.classList.contains('btn')) {
+        sendEvent({
+          link: link,
+          target: this.target.checked,
+          noFollow: this.noFollow.checked
+        })
       }
     }
     this.wrapper.addEventListener('mousedown', clickWrapper)
     document.body.addEventListener('mousedown', cancel)
   }
 
-  show(el){
+  show(el) {
     var elBounds = el.getBoundingClientRect()
-    this.popup.open(elBounds.left, (elBounds.top + elBounds.height + 5))
+    this.popup.open(elBounds.left, elBounds.top + elBounds.height + 5)
     this.bindEvt()
   }
-
 }

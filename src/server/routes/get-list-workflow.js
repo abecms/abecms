@@ -1,11 +1,7 @@
 import path from 'path'
 import fse from 'fs-extra'
 import Handlebars from 'handlebars'
-import {
-  abeExtend
-  ,coreUtils
-  ,config
-} from '../../cli'
+import {abeExtend, coreUtils, config} from '../../cli'
 
 /**
  * this route returns the workflow list in HTML format
@@ -37,10 +33,10 @@ var route = function(router, req, res, next) {
   var workflowUrl = {}
   var previous = ''
   var nextWorkflow = ''
-  Array.prototype.forEach.call(config.users.workflow, (flow) => {
+  Array.prototype.forEach.call(config.users.workflow, flow => {
     var current = false
     if (flow != 'publish') {
-      Array.prototype.forEach.call(config.users.workflow, (flowCheck) => {
+      Array.prototype.forEach.call(config.users.workflow, flowCheck => {
         if (current) {
           nextWorkflow = flowCheck
           current = false
@@ -49,17 +45,41 @@ var route = function(router, req, res, next) {
           current = true
         }
       })
-    }else {
+    } else {
       nextWorkflow = 'draft'
     }
     workflowUrl[flow] = [
-      {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow, previous: previous, next: nextWorkflow},
-      {url: `/abe/operations/delete/${flow}`, action: 'delete', workflow: flow, previous: previous, next: nextWorkflow},
-      {url: `/abe/operations/submit/${flow}`, action: 'submit', workflow: flow, previous: previous, next: nextWorkflow}
+      {
+        url: `/abe/operations/edit/${flow}`,
+        action: 'edit',
+        workflow: flow,
+        previous: previous,
+        next: nextWorkflow
+      },
+      {
+        url: `/abe/operations/delete/${flow}`,
+        action: 'delete',
+        workflow: flow,
+        previous: previous,
+        next: nextWorkflow
+      },
+      {
+        url: `/abe/operations/submit/${flow}`,
+        action: 'submit',
+        workflow: flow,
+        previous: previous,
+        next: nextWorkflow
+      }
     ]
 
     if (flow !== 'draft') {
-      workflowUrl[flow].push({url: `/abe/operations/reject/${flow}`, action: 'reject', workflow: flow, previous: previous, next: nextWorkflow})
+      workflowUrl[flow].push({
+        url: `/abe/operations/reject/${flow}`,
+        action: 'reject',
+        workflow: flow,
+        previous: previous,
+        next: nextWorkflow
+      })
     }
     previous = flow
   })
@@ -76,7 +96,7 @@ var route = function(router, req, res, next) {
       config: JSON.stringify(config)
     }
   })
-  
+
   res.cookie('csrf-token', res.locals.csrfToken)
   return res.send(tmp)
 }

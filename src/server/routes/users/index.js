@@ -15,18 +15,18 @@ import postUpdate from './post/update'
 import postProfile from './post/profile'
 
 export {
-	getForgot,
-	getList,
-	getLogin,
-	getLogout,
-	getReset,
-	getProfile,
-	postActivate,
-	postAdd,
-	postDeactivate,
-	postLogin,
-	postRemove,
-	postReset,
-	postUpdate,
-	postProfile
+  getForgot,
+  getList,
+  getLogin,
+  getLogout,
+  getReset,
+  getProfile,
+  postActivate,
+  postAdd,
+  postDeactivate,
+  postLogin,
+  postRemove,
+  postReset,
+  postUpdate,
+  postProfile
 }

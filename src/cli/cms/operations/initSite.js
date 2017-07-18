@@ -29,7 +29,9 @@ export default class initSite {
           )
 
           pathSite = pathSite.split(path.sep)
-          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1], {separateNumbers: false})
+          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1], {
+            separateNumbers: false
+          })
           pathSite = pathSite.join(path.sep)
 
           this.addFolder(pathSite)
@@ -282,8 +284,8 @@ export default class initSite {
             }
           },
           {
-            type : 'checkbox',
-            name : 'plugins',
+            type: 'checkbox',
+            name: 'plugins',
             choices: [
               {
                 key: 'a',
@@ -292,7 +294,8 @@ export default class initSite {
               },
               {
                 key: 'b',
-                name: 'abe-deployer-sftp: Deploy your website through FTP or SFTP',
+                name:
+                  'abe-deployer-sftp: Deploy your website through FTP or SFTP',
                 value: 'abecms/abe-deployer-sftp'
               },
               {
@@ -324,7 +327,8 @@ export default class initSite {
               },
               {
                 key: 'h',
-                name: 'abe-mailer: Create contact Forms on your website and send emails',
+                name:
+                  'abe-mailer: Create contact Forms on your website and send emails',
                 value: 'wonknu/abe-mailer'
               },
               {
@@ -334,11 +338,12 @@ export default class initSite {
               },
               {
                 key: 'i',
-                name: 'abe-rangeslider: Position a abe text with absolute coordinates on images',
+                name:
+                  'abe-rangeslider: Position a abe text with absolute coordinates on images',
                 value: 'wonknu/abe-rangeslider'
               }
             ],
-            message : 'Select the plugins you want to install'
+            message: 'Select the plugins you want to install'
           }
         ])
         .then(function(answers) {

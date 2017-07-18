@@ -1,12 +1,7 @@
 import fs from 'fs-extra'
 import path from 'path'
 
-import {
-  coreUtils,
-  config,
-  Handlebars,
-  User
-} from '../../../../cli'
+import {coreUtils, config, Handlebars, User} from '../../../../cli'
 
 var route = function route(req, res) {
   var resHtml = ''
@@ -15,7 +10,7 @@ var route = function route(req, res) {
   if (coreUtils.file.exist(page)) {
     resHtml = fs.readFileSync(page, 'utf8')
   }
-  
+
   var template = Handlebars.compile(resHtml, {noEscape: true})
 
   var roles = config.users.roles
@@ -29,7 +24,7 @@ var route = function route(req, res) {
       config: JSON.stringify(config)
     }
   })
-  
+
   return res.send(tmp)
 }
 

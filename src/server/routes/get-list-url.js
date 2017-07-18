@@ -1,11 +1,7 @@
 import path from 'path'
 import fse from 'fs-extra'
 import Handlebars from 'handlebars'
-import {
-  abeExtend
-  ,coreUtils
-  ,config
-} from '../../cli'
+import {abeExtend, coreUtils, config} from '../../cli'
 
 /**
  * This route returns all the available routes in HTML format
@@ -35,7 +31,7 @@ var route = function(router, req, res, next) {
   }
 
   var workflowUrl = {}
-  Array.prototype.forEach.call(config.users.workflow, (flow) => {
+  Array.prototype.forEach.call(config.users.workflow, flow => {
     workflowUrl[flow] = [
       {url: `/abe/operations/edit/${flow}`, action: 'edit', workflow: flow},
       {url: `/abe/operations/delete/${flow}`, action: 'delete', workflow: flow}
@@ -54,7 +50,7 @@ var route = function(router, req, res, next) {
       config: JSON.stringify(config)
     }
   })
-  
+
   res.cookie('csrf-token', res.locals.csrfToken)
   return res.send(tmp)
 }

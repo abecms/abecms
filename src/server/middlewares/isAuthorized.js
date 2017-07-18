@@ -1,7 +1,4 @@
-import {
-  config,
-  User
-} from '../../cli'
+import {config, User} from '../../cli'
 
 var middleware = function(req, res, next) {
   res.user = null
@@ -9,7 +6,7 @@ var middleware = function(req, res, next) {
     if (req.url.indexOf('/abe/users/login') > -1) {
       res.redirect('/abe/editor')
       return
-    }else {
+    } else {
       next()
       return
     }
@@ -19,11 +16,15 @@ var middleware = function(req, res, next) {
   var user = User.utils.findSync(decoded.iss)
   res.user = user
 
-  if(!User.utils.isAbeRestrictedUrl(req.url)) {
-    if (user != null && req.url.indexOf('/abe/users/login') > -1 && req.method === 'GET' ) {
+  if (!User.utils.isAbeRestrictedUrl(req.url)) {
+    if (
+      user != null &&
+      req.url.indexOf('/abe/users/login') > -1 &&
+      req.method === 'GET'
+    ) {
       res.redirect('/abe')
       return
-    }else {
+    } else {
       next()
       return
     }
@@ -31,12 +32,15 @@ var middleware = function(req, res, next) {
 
   var isHtml = /text\/html/.test(req.get('accept')) ? true : false
 
-  if (user != null && User.utils.isUserAllowedOnRoute(user.role.workflow, req.url)) {
+  if (
+    user != null &&
+    User.utils.isUserAllowedOnRoute(user.role.workflow, req.url)
+  ) {
     next()
-  }else {
-    if(isHtml) {
+  } else {
+    if (isHtml) {
       res.redirect('/abe/users/login')
-    }else {
+    } else {
       var notAuthorized = {
         success: 0,
         message: 'Not authorized !'

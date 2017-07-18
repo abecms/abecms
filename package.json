@@ -147,6 +147,7 @@
     "coveralls": "^2.11.14",
     "diff": "^3.3.0",
     "eslint": "^3.6.0",
+    "eslint-plugin-prettier": "^2.1.2",
     "esutils": "^2.0.2",
     "graceful-fs": "^4.1.11",
     "inflight": "^1.0.6",

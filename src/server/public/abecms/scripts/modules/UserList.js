@@ -4,7 +4,7 @@ import Nanoajax from 'nanoajax'
 import qs from 'qs'
 
 var usersList = {
-  init: function () {
+  init: function() {
     var scope = document.querySelector('.user-list')
     if (scope != null) {
       this._ajax = Nanoajax.ajax
@@ -26,18 +26,18 @@ var usersList = {
     if (document.querySelectorAll('#filtered-list').length > 0) {
       var orderables = document.querySelectorAll('#filtered-list thead th')
       var columns = []
-      Array.prototype.forEach.call(orderables, (orderable) => {
+      Array.prototype.forEach.call(orderables, orderable => {
         var order = orderable.getAttribute('data-orderable')
         if (order != null) {
-          columns.push({ 'orderable': (order == 'true') ? true : false })
-        }else {
+          columns.push({orderable: order == 'true' ? true : false})
+        } else {
           columns.push(null)
         }
       })
       this.table = $('#filtered-list').DataTable({
         paging: false,
-        'info': false,
-        'columns': columns
+        info: false,
+        columns: columns
       })
     }
 
@@ -47,12 +47,18 @@ var usersList = {
       this._formUserRole = document.querySelector('[data-user-role]')
       this._formUserRoleSave = document.querySelector('[data-save-user-role]')
 
-      if(typeof this._formUserRole !== 'undefined' && this._formUserRole !== null) {
-        this._formUserRole.addEventListener('submit', this._handleFormUserRoleSubmit)
+      if (
+        typeof this._formUserRole !== 'undefined' &&
+        this._formUserRole !== null
+      ) {
+        this._formUserRole.addEventListener(
+          'submit',
+          this._handleFormUserRoleSubmit
+        )
       }
     }
   },
-  _bindEvents: function () {
+  _bindEvents: function() {
     this._activateBtn = this._scope.querySelectorAll('[data-activate]')
     this._deactivateBtn = this._scope.querySelectorAll('[data-deactivate]')
     this._removeBtn = this._scope.querySelectorAll('[data-remove]')
@@ -60,41 +66,41 @@ var usersList = {
     this._updateBtn = this._scope.querySelectorAll('[data-update]')
     this._addBtn = this._scope.querySelector('[data-add-user]')
 
-    Array.prototype.forEach.call(this._activateBtn, (btn) => {
+    Array.prototype.forEach.call(this._activateBtn, btn => {
       btn.removeEventListener('click', this._handleActivate)
       btn.addEventListener('click', this._handleActivate)
     })
 
-    Array.prototype.forEach.call(this._deactivateBtn, (btn) => {
+    Array.prototype.forEach.call(this._deactivateBtn, btn => {
       btn.removeEventListener('click', this._handleDeactivate)
       btn.addEventListener('click', this._handleDeactivate)
     })
 
-    Array.prototype.forEach.call(this._removeBtn, (btn) => {
+    Array.prototype.forEach.call(this._removeBtn, btn => {
       btn.removeEventListener('click', this._handleRemove)
       btn.addEventListener('click', this._handleRemove)
     })
 
-    Array.prototype.forEach.call(this._editBtn, (btn) => {
+    Array.prototype.forEach.call(this._editBtn, btn => {
       btn.removeEventListener('click', this._handleEdit, true)
       btn.addEventListener('click', this._handleEdit, true)
     })
 
-    Array.prototype.forEach.call(this._updateBtn, (btn) => {
+    Array.prototype.forEach.call(this._updateBtn, btn => {
       btn.removeEventListener('click', this._handleUpdate, true)
       btn.addEventListener('click', this._handleUpdate, true)
     })
 
-    if(typeof this._addBtn !== 'undefined' && this._addBtn !== null) {
+    if (typeof this._addBtn !== 'undefined' && this._addBtn !== null) {
       this._addBtn.addEventListener('click', this._handleAdd)
     }
   },
-  _formUserRoleSubmit: function (e) {
+  _formUserRoleSubmit: function(e) {
     e.preventDefault()
 
     var inputs = this._formUserRole.querySelectorAll('input[type=checkbox]')
     var data = {}
-    Array.prototype.forEach.call(inputs, (input) => {
+    Array.prototype.forEach.call(inputs, input => {
       if (!input.disabled) {
         var name = input.getAttribute('name')
         if (data[name] == null) {
@@ -107,18 +113,17 @@ var usersList = {
     })
 
     var toSave = qs.stringify(data)
-    
+
     this._ajax(
       {
         url: '/abe/list-url/save',
         body: toSave,
         method: 'post'
       },
-      () => {
-        
-      })
+      () => {}
+    )
   },
-  _activate: function (e) {
+  _activate: function(e) {
     var target = e.currentTarget
     var id = target.getAttribute('data-user-id')
 
@@ -140,16 +145,17 @@ var usersList = {
         target.classList.add('glyphicon-eye-open', 'text-info')
         target.removeEventListener('click', this._handleActivate)
         target.addEventListener('click', this._handleDeactivate)
-      })
+      }
+    )
   },
-  _deactivate: function (e) {
+  _deactivate: function(e) {
     var target = e.currentTarget
     var id = target.getAttribute('data-user-id')
 
     var toSave = qs.stringify({
       id: id
     })
-    
+
     this._ajax(
       {
         url: '/abe/users/deactivate',
@@ -164,9 +170,10 @@ var usersList = {
         target.classList.add('glyphicon-eye-close', 'text-danger')
         target.removeEventListener('click', this._handleDeactivate)
         target.addEventListener('click', this._handleActivate)
-      })
+      }
+    )
   },
-  _edit: function (e) {
+  _edit: function(e) {
     var parent = e.currentTarget.parentNode.parentNode
     e.currentTarget.removeEventListener('click', this._handleEdit, true)
 
@@ -182,10 +189,10 @@ var usersList = {
     edit.addEventListener('click', this._handleEdit, true)
     target.removeEventListener('click', this._handleCloseUpdate)
   },
-  _closeUpdate: function (e) {
+  _closeUpdate: function(e) {
     this._closeFormUpdate(e.currentTarget)
   },
-  _update: function (e) {
+  _update: function(e) {
     var parent = e.currentTarget.parentNode.parentNode.parentNode
     var target = e.currentTarget
     var data = {
@@ -195,35 +202,38 @@ var usersList = {
     var inputs = parent.querySelectorAll('.form-control')
     var msg = ''
     var hasError = false
-    Array.prototype.forEach.call(inputs, function(input) {
-      data[input.name] = input.value
+    Array.prototype.forEach.call(
+      inputs,
+      function(input) {
+        data[input.name] = input.value
 
-      if(input.name === 'email' && !this._validateEmail(input.value)) {
-        hasError = true
-        input.parentNode.classList.add('has-error')
-        this._alert.classList.remove('hidden')
-        msg += 'email is invalid<br />'
-        return
-      }else if (input.value.trim() === '') {
-        hasError = true
-        input.parentNode.classList.add('has-error')
-        this._alert.classList.remove('hidden')
-        msg += input.name + ' is invalid<br />'
-        return
-      }else {
-        input.parentNode.classList.remove('has-error')
-      }
-    }.bind(this))
+        if (input.name === 'email' && !this._validateEmail(input.value)) {
+          hasError = true
+          input.parentNode.classList.add('has-error')
+          this._alert.classList.remove('hidden')
+          msg += 'email is invalid<br />'
+          return
+        } else if (input.value.trim() === '') {
+          hasError = true
+          input.parentNode.classList.add('has-error')
+          this._alert.classList.remove('hidden')
+          msg += input.name + ' is invalid<br />'
+          return
+        } else {
+          input.parentNode.classList.remove('has-error')
+        }
+      }.bind(this)
+    )
 
     if (hasError) {
       this._alert.innerHTML = msg
       return
-    }else {
+    } else {
       this._alert.classList.add('hidden')
       this._alert.innerHTML = ''
     }
     var toSave = qs.stringify(data)
-    
+
     this._ajax(
       {
         url: '/abe/users/update',
@@ -234,16 +244,18 @@ var usersList = {
         var response = JSON.parse(responseText)
         if (response.success === 1) {
           Array.prototype.forEach.call(inputs, function(input) {
-            input.parentNode.parentNode.querySelector('.value').innerHTML = input.value
+            input.parentNode.parentNode.querySelector('.value').innerHTML =
+              input.value
           })
           this._closeFormUpdate(target)
-        }else {
+        } else {
           this._alert.classList.remove('hidden')
           this._alert.innerHTML = response.message
         }
-      })
+      }
+    )
   },
-  _remove: function (e) {
+  _remove: function(e) {
     var confirmDelete = confirm(e.currentTarget.getAttribute('data-text'))
     if (!confirmDelete) return
 
@@ -252,7 +264,7 @@ var usersList = {
     var toSave = qs.stringify({
       id: id
     })
-    
+
     this._ajax(
       {
         url: '/abe/users/remove',
@@ -261,34 +273,47 @@ var usersList = {
       },
       () => {
         target.parentNode.parentNode.remove()
-      })
+      }
+    )
   },
   _validateEmail: function(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(email)
   },
-  _add: function () {
+  _add: function() {
     this._alert.classList.add('hidden')
     var username = document.querySelector('[data-add-user-username]')
-    if(typeof username.value === 'undefined' || username.value === null || username.value === '') {
+    if (
+      typeof username.value === 'undefined' ||
+      username.value === null ||
+      username.value === ''
+    ) {
       username.parentNode.classList.add('has-error')
-      return 
+      return
     }
     username.parentNode.classList.remove('has-error')
 
     var name = document.querySelector('[data-add-user-name]')
-    if(typeof name.value === 'undefined' || name.value === null || name.value === '') {
+    if (
+      typeof name.value === 'undefined' ||
+      name.value === null ||
+      name.value === ''
+    ) {
       name.parentNode.classList.add('has-error')
-      return 
+      return
     }
     name.parentNode.classList.remove('has-error')
 
     var email = document.querySelector('[data-add-user-email]')
-    if(typeof email.value === 'undefined' || email.value === null || email.value === '') {
+    if (
+      typeof email.value === 'undefined' ||
+      email.value === null ||
+      email.value === ''
+    ) {
       email.parentNode.classList.add('has-error')
-      return 
+      return
     }
-    if(!this._validateEmail(email.value)) {
+    if (!this._validateEmail(email.value)) {
       email.parentNode.classList.add('has-error')
       this._alert.classList.remove('hidden')
       this._alert.innerHTML = 'email is invalid'
@@ -297,11 +322,15 @@ var usersList = {
     email.parentNode.classList.remove('has-error')
 
     var password = document.querySelector('[data-add-user-password]')
-    if(typeof password.value === 'undefined' || password.value === null || password.value === '') {
+    if (
+      typeof password.value === 'undefined' ||
+      password.value === null ||
+      password.value === ''
+    ) {
       password.parentNode.classList.add('has-error')
-      return 
+      return
     }
-    
+
     password.parentNode.classList.remove('has-error')
 
     var role = document.querySelector('[data-add-user-role]')
@@ -312,7 +341,7 @@ var usersList = {
       password: password.value,
       role: role.value
     })
-    
+
     this._ajax(
       {
         url: '/abe/users/add',
@@ -321,10 +350,10 @@ var usersList = {
       },
       (code, responseText) => {
         var data = JSON.parse(responseText)
-        if(data.success === 1) {
+        if (data.success === 1) {
           var tr = document.createElement('tr')
           var oldTr = document.querySelector('[data-user-base]')
-          if(typeof oldTr !== 'undefined' && oldTr !== null) {
+          if (typeof oldTr !== 'undefined' && oldTr !== null) {
             tr.innerHTML = oldTr.innerHTML
 
             var tdUsername = tr.querySelector('.td-username')
@@ -343,7 +372,7 @@ var usersList = {
             tdRole.querySelector('.value').innerHTML = data.user.role.name
             var tdRoleOptions = tdRole.querySelectorAll('select option')
             Array.prototype.forEach.call(tdRoleOptions, function(option) {
-              if(option.value === data.user.role.name) {
+              if (option.value === data.user.role.name) {
                 option.selected = 'selected'
               }
             })
@@ -372,16 +401,17 @@ var usersList = {
           }
 
           this._table.appendChild(tr)
-      
+
           username.value = ''
           name.value = ''
           email.value = ''
           password.value = ''
-        }else {
+        } else {
           this._alert.classList.remove('hidden')
           this._alert.innerHTML = data.message
         }
-      })
+      }
+    )
   }
 }
 
