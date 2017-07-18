@@ -406,7 +406,7 @@ class Plugins {
       try {
         console.log(clc.green('spawn'), clc.cyan('npm install ' + plugin))
 
-        const npmPackage = spawn(npm, ['init', '--force', , {cwd: dir}])
+        const npmPackage = spawn(npm, ['init', '--force', {cwd: dir}])
 
         npmPackage.on('close', code => {
           const npmInstall = spawn(npm, ['install', '--save --prefix ' + dir, plugin])

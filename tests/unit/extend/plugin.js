@@ -86,7 +86,7 @@ describe('Plugin', function() {
 
     abeExtend.plugins.instance.add(dir, this.fixture.testPlugin)
     .then(function() {
-      chai.expect(child_process.spawn).to.have.been.calledWith(npm, ["install", "--save", this.fixture.testPlugin], { cwd: "./node_modules/" })
+      chai.expect(child_process.spawn).to.have.been.calledWith(npm, ['init', '--force', {cwd: dir}])
       done()
       this.sinon.restore();
     }.bind(this))
