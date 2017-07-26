@@ -11,26 +11,28 @@ Handlebars.registerHelper('i18nAbe', translate)
 Handlebars.registerHelper('printJson', printJson)
 
 export default class EditorUtils {
-  static checkAttribute() {
-    let formAbes = document.querySelectorAll('.form-abe')
+  // static checkAttribute() {
+  //   let formAbes = document.querySelectorAll('.form-abe')
 
-    Array.prototype.forEach.call(formAbes, formAbe => {
-      var hide = IframeNode(
-        '#page-template',
-        '[data-if-empty-clear="' + formAbe.getAttribute('data-id') + '"]'
-      )
-      if (hide != null) {
-        hide = hide[0]
-        if (typeof hide !== 'undefined' && hide !== null) {
-          if (formAbe.value === '') {
-            hide.style.display = 'none'
-          } else {
-            hide.style.display = ''
-          }
-        }
-      }
-    })
-  }
+  //   Array.prototype.forEach.call(formAbes, formAbe => {
+  //     console.log('checkAttribute')
+  //     console.log(formAbe.getAttribute('data-id'))
+  //     // var hide = IframeNode(
+  //     //   '#page-template',
+  //     //   '[data-if-empty-clear="' + formAbe.getAttribute('data-id') + '"]'
+  //     // )
+  //     // if (hide != null) {
+  //     //   hide = hide[0]
+  //     //   if (typeof hide !== 'undefined' && hide !== null) {
+  //     //     if (formAbe.value === '') {
+  //     //       hide.style.display = 'none'
+  //     //     } else {
+  //     //       hide.style.display = ''
+  //     //     }
+  //     //   }
+  //     // }
+  //   })
+  // }
 
   static scrollToInputElement(target) {
     var visible = target.getAttribute('data-visible')

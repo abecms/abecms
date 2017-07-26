@@ -43,13 +43,17 @@ export function IframeNode(frameId, selector) {
 
       // searching Abe tags in <style> tags
       if (result.length === 0) {
+        // let eachStylePattern = new RegExp(
+        //   '[\\S\\s]*?(\\/\\*<!--ABE ' +
+        //     key +
+        //     '[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)[\\S\\s]*?'
+        // )
         let eachStylePattern = new RegExp(
-          '[\\S\\s]*?(\\/\\*<!--ABE ' +
+          '(\\/\\*<!--ABE ' +
             key +
-            '[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)[\\S\\s]*?'
-        )
+            '[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)'
+        ) 
         let styles = iframe.getElementsByTagName('style')
-
         Array.prototype.forEach.call(styles, style => {
           let matchFromExec = eachStylePattern.exec(style.textContent)
           if (matchFromExec != null && matchFromExec[1] != null) {
@@ -74,10 +78,15 @@ export function IframeNode(frameId, selector) {
 
       // searching Abe tags in <script> tags
       if (result.length === 0) {
+        // let eachScriptPattern = new RegExp(
+        //   '[\\S\\s]*?(\\/\\*<!--ABE ' +
+        //     key +
+        //     '[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)[\\S\\s]*?'
+        // )
         let eachScriptPattern = new RegExp(
-          '[\\S\\s]*?(\\/\\*<!--ABE ' +
+          '(\\/\\*<!--ABE ' +
             key +
-            '[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)[\\S\\s]*?'
+            '[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)'
         )
         let scripts = iframe.getElementsByTagName('script')
 

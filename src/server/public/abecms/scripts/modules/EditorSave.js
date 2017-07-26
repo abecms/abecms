@@ -24,12 +24,12 @@ export default class EditorSave {
       btnSave.addEventListener('click', this._handleSubmitClick)
     })
 
-    var pageTpl = document.querySelector('#page-template')
-    if (typeof pageTpl !== 'undefined' && pageTpl !== null) {
-      document.querySelector('#page-template').addEventListener('load', () => {
-        EditorUtils.checkAttribute()
-      })
-    }
+    // var pageTpl = document.querySelector('#page-template')
+    // if (typeof pageTpl !== 'undefined' && pageTpl !== null) {
+    //   document.querySelector('#page-template').addEventListener('load', () => {
+    //     EditorUtils.checkAttribute()
+    //   })
+    // }
 
     if (typeof this._abeForm !== 'undefined' && this._abeForm !== null) {
       this._formSubmit()

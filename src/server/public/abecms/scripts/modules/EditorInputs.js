@@ -88,26 +88,26 @@ export default class EditorInputs {
     this.rebind()
   }
 
-  _hideIfEmpty(node, value) {
-    let attr
+  // _hideIfEmpty(node, value) {
+  //   let attr
 
-    //attr = node.getAttribute('data-abe-')
-    attr = /data-abe-(.*?)=/.exec(node.nodeValue)
-    if (Array.isArray(attr) && attr.length > 1) attr = attr[1]
+  //   //attr = node.getAttribute('data-abe-')
+  //   attr = /data-abe-(.*?)=/.exec(node.nodeValue)
+  //   if (Array.isArray(attr) && attr.length > 1) attr = attr[1]
 
-    var hide = IframeNode(
-      '#page-template',
-      '[data-if-empty-clear="' + attr + '"]'
-    )[0]
+  //   var hide = IframeNode(
+  //     '#page-template',
+  //     '[data-if-empty-clear="' + attr + '"]'
+  //   )[0]
 
-    if (typeof hide !== 'undefined' && hide !== null) {
-      if (value === '') {
-        hide.style.display = 'none'
-      } else {
-        hide.style.display = ''
-      }
-    }
-  }
+  //   if (typeof hide !== 'undefined' && hide !== null) {
+  //     if (value === '') {
+  //       hide.style.display = 'none'
+  //     } else {
+  //       hide.style.display = ''
+  //     }
+  //   }
+  // }
 
   /**
    * [_inputBlur description]
@@ -120,7 +120,7 @@ export default class EditorInputs {
 
     var nodes = EditorUtils.getNode(EditorUtils.getAttr(e.target))
     Array.prototype.forEach.call(nodes, node => {
-      this._hideIfEmpty(node, e.target.value)
+      //this._hideIfEmpty(node, e.target.value)
       if (node.nodeType === 8) {
         node.parentNode.classList.remove('select-border')
         node.parentNode.classList.remove('display-attr')
@@ -142,7 +142,7 @@ export default class EditorInputs {
   _inputKeyup(e) {
     var nodes = EditorUtils.getNode(EditorUtils.getAttr(e.target))
     Array.prototype.forEach.call(nodes, node => {
-      this._hideIfEmpty(node, e.target.value)
+      //this._hideIfEmpty(node, e.target.value)
       EditorUtils.formToHtml(node, e.target)
     })
   }
@@ -167,7 +167,7 @@ export default class EditorInputs {
    * @return {[type]}   [description]
    */
   _inputFocus(e) {
-    EditorUtils.checkAttribute()
+    //EditorUtils.checkAttribute()
     EditorUtils.scrollToInputElement(e.target)
 
     // switch to set appropriate output {text|link|image|...}

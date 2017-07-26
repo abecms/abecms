@@ -104,11 +104,9 @@ export default class EditorAutocomplete {
   }
 
   _changeSelect(e) {
-    console.log('onchange select triggered')
     var target = e.currentTarget
     var option = target.querySelector('option:checked')
     this._currentInput = target
-    console.log(target)
     this._addResult(
       option,
       target.getAttribute('data-display'),
