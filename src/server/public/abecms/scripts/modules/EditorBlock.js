@@ -108,6 +108,7 @@ export default class EditorBlock {
    * @return {[type]}   [description]
    */
   _clickRemoveBlock(e) {
+    console.log('inthere')
     var target = e.target,
       elem = target,
       parent = null,
@@ -329,10 +330,16 @@ export default class EditorBlock {
       var blocks = $(target)
         .parents('.list-group')
         .find('.list-block > [data-id]')
+
       $(target)
         .parents('.list-group')
         .find('.list-block .collapse')
         .collapse('hide')
+
+      prevListItem
+        .querySelector('button.remove-block')
+        .addEventListener('click', this._handleClickRemoveBlock)
+
       setTimeout(function() {
         $('#' + blocks[blocks.length - 1].id).collapse('show')
       }, 200)
