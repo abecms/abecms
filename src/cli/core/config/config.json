@@ -47,6 +47,7 @@
     "sup": ["style"],
     "sub": ["style"],
     "ul": ["style"],
+    "ol": ["style"],
     "li": ["style"],
     "p": ["style"],
     "b": ["style"],
