@@ -67,19 +67,29 @@ export default class EditorBlock {
     var blocks = target.parentNode.querySelectorAll('[data-block]')
     var parentName = target.parentNode.getAttribute('data-block')
     var i = 0
-    Array.prototype.forEach.call(blocks, (block) => {
+    Array.prototype.forEach.call(blocks, block => {
       var name = block.getAttribute('data-block')
 
       block.setAttribute('data-block', `${parentName}${i}`)
       block.querySelector('.label-count').innerHTML = i
       var replaceHtml = block.innerHTML
-      replaceHtml = replaceHtml.replace(new RegExp(`${parentName}\\[.*?\\]`, 'g'), `${parentName}[${i}]`)
-      replaceHtml = replaceHtml.replace(new RegExp(name, 'g'), `${parentName}${i}`)
+      replaceHtml = replaceHtml.replace(
+        new RegExp(`${parentName}\\[.*?\\]`, 'g'),
+        `${parentName}[${i}]`
+      )
+      replaceHtml = replaceHtml.replace(
+        new RegExp(name, 'g'),
+        `${parentName}${i}`
+      )
       block.innerHTML = replaceHtml
+
+      block
+        .querySelector('button.remove-block')
+        .addEventListener('click', this._handleClickRemoveBlock)
 
       i++
     })
-      this.onMoveBlock._fire()
+    this.onMoveBlock._fire()
   }
 
   /**
@@ -175,6 +185,11 @@ export default class EditorBlock {
             wasFound = true
             startNumber = nb
           }
+
+          block
+              .querySelector('button.remove-block')
+              .addEventListener('click', this._handleClickRemoveBlock)
+ 
         })
 
         toRemove.remove()
