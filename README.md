@@ -92,6 +92,7 @@ We have created recipes which are how-to's on specific subjects. If you wan't us
 ## Plugins
 - **Sublime editor snippets**: https://github.com/wonknu/abe-sublime-snippets
 - **Vim Intellij snippets**: https://github.com/GG31/abecms-plugin-for-vim-intellij
+- **Visual Studio Code snippets**: https://marketplace.visualstudio.com/items?itemName=tamsibesson.abe
 - abe-deployer-sftp: https://github.com/abecms/abe-deployer-sftp
 - abe-deployer-git: https://github.com/abecms/abe-deployer-git
 - abe-deployer-s3: https://github.com/abecms/abe-deployer-s3
