@@ -19,7 +19,6 @@ class Plugins {
     this.pluginsDir = path.join(config.root, 'node_modules') + path.sep
     this.scriptsDir = path.join(config.root, 'scripts') + path.sep
     this._plugins = []
-    this.fn = []
 
     // Plugins
     if (config.plugins && Array.isArray(config.plugins)) {
@@ -79,6 +78,7 @@ class Plugins {
       var fileHook = fse.lstatSync(plugHook)
       if (fileHook.isFile()) {
         try {
+          delete require.cache[require.resolve(plugHook)]
           var h = require(plugHook)
         } catch (e) {
           console.log(e.stack)
@@ -270,6 +270,32 @@ class Plugins {
         })
       }
     }
+  }
+
+  updateScripts() {
+    this._plugins.length = 0
+    this._scripts.length = 0
+
+    // Plugins
+    if (config.plugins && Array.isArray(config.plugins)) {
+      Array.prototype.forEach.call(config.plugins, pluginEntry => {
+        const plugin = this.getPluginConfig(this.pluginsDir, pluginEntry)
+        this._plugins.push(plugin)
+      })
+    }
+
+    // Scripts
+    try {
+      var directoryScripts = fse.lstatSync(this.scriptsDir)
+      if (directoryScripts.isDirectory()) {
+        this._scripts = coreUtils.file.getFoldersSync(this.scriptsDir, false)
+        Array.prototype.forEach.call(this._scripts, scriptEntry => {
+          const name = scriptEntry.path.replace(this.scriptsDir, '')
+          const script = this.getPluginConfig(this.scriptsDir, name)
+          this._plugins.push(script)
+        })
+      }
+    } catch (e) {}
   }
 
   updatePlugin(plugin) {

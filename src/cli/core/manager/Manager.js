@@ -14,7 +14,8 @@ import {
   cmsTemplates,
   cmsReference,
   cmsMedia,
-  cmsOperations
+  cmsOperations,
+  abeExtend
 } from '../../'
 
 let singleton = Symbol()
@@ -74,6 +75,7 @@ class Manager {
       }
     }
 
+    this.pathScripts = path.join(config.root, config.scripts.path)
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathData = path.join(config.root, config.data.url)
@@ -163,6 +165,7 @@ class Manager {
     this.events.template = new events.EventEmitter(0)
     this.events.structure = new events.EventEmitter(0)
     this.events.reference = new events.EventEmitter(0)
+    this.events.scripts = new events.EventEmitter(0)
 
     // watch template folder
     try {
@@ -304,6 +307,29 @@ class Manager {
       )
     } catch (e) {
       console.log('the directory ' + this.pathReference + ' does not exist')
+    }
+
+    try {
+      fse.accessSync(this.pathScripts, fse.F_OK)
+      this._watchScripts = watch.createMonitor(
+        this.pathScripts,
+        monitor => {
+          monitor.on('created', () => {
+            abeExtend.plugins.instance.updateScripts()
+            this.events.scripts.emit('update')
+          })
+          monitor.on('changed', () => {
+            abeExtend.plugins.instance.updateScripts()
+            this.events.scripts.emit('update')
+          })
+          monitor.on('removed', () => {
+            abeExtend.plugins.instance.updateScripts()
+            this.events.scripts.emit('update')
+          })
+        }
+      )
+    } catch (e) {
+      console.log('the directory ' + this.pathScripts + ' does not exist')
     }
   }
 

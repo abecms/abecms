@@ -106,6 +106,9 @@
   "hooks": {
     "url": "hooks"
   },
+  "scripts": {
+    "path": "scripts"
+  },
   "cookie": {
     "secure": false
   },
