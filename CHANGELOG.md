@@ -1,4 +1,14 @@
 
+## [3.4.3] - 2017-8-6
+* [[`791df4494f`](https://github.com/abecms/abecms/commit/791df4494f)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`13f5b0fd14`](https://github.com/abecms/abecms/commit/13f5b0fd14)] - **fix**: removing blocks in the editor for {{#each}} types after a drag&drop was not possible (gregorybesson) 
+* [[`36571bd678`](https://github.com/abecms/abecms/commit/36571bd678)] - Update README.md (Greg Besson) 
+* [[`ea7a9b3b3c`](https://github.com/abecms/abecms/commit/ea7a9b3b3c)] - **doc**: Changelog (gregorybesson) 
+* [[`d86a502f14`](https://github.com/abecms/abecms/commit/d86a502f14)] - **fix**: removing WIP about react :) (gregorybesson) 
+
+## [3.4.2] - 2017-8-2
+* [[`a27fa230e3`](https://github.com/abecms/abecms/commit/a27fa230e3)] - **ic**: package-lock.json updated (gregorybesson) 
+
 ## [3.4.1] - 2017-7-28
 * [[`e8bb1b20a0`](https://github.com/abecms/abecms/commit/e8bb1b20a0)] - **fix**: striptags version (gregorybesson) 
 * [[`f16b9cde20`](https://github.com/abecms/abecms/commit/f16b9cde20)] - **fix**: It was not possible to remove an occurence of block just added in the editor (gregorybesson) 
