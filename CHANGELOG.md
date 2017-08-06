@@ -1,3 +1,29 @@
+
+## [3.4.3] - 2017-8-6
+* [[`791df4494f`](https://github.com/abecms/abecms/commit/791df4494f)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`13f5b0fd14`](https://github.com/abecms/abecms/commit/13f5b0fd14)] - **fix**: removing blocks in the editor for {{#each}} types after a drag&drop was not possible (gregorybesson) 
+* [[`36571bd678`](https://github.com/abecms/abecms/commit/36571bd678)] - Update README.md (Greg Besson) 
+* [[`ea7a9b3b3c`](https://github.com/abecms/abecms/commit/ea7a9b3b3c)] - **doc**: Changelog (gregorybesson) 
+* [[`d86a502f14`](https://github.com/abecms/abecms/commit/d86a502f14)] - **fix**: removing WIP about react :) (gregorybesson) 
+
+## [3.4.2] - 2017-8-2
+* [[`a27fa230e3`](https://github.com/abecms/abecms/commit/a27fa230e3)] - **ic**: package-lock.json updated (gregorybesson) 
+
+## [3.4.1] - 2017-7-28
+* [[`e8bb1b20a0`](https://github.com/abecms/abecms/commit/e8bb1b20a0)] - **fix**: striptags version (gregorybesson) 
+* [[`f16b9cde20`](https://github.com/abecms/abecms/commit/f16b9cde20)] - **fix**: It was not possible to remove an occurence of block just added in the editor (gregorybesson) 
+* [[`366acd5bda`](https://github.com/abecms/abecms/commit/366acd5bda)] - **fix**: each blocks selection (gregorybesson) 
+* [[`4674ec7cae`](https://github.com/abecms/abecms/commit/4674ec7cae)] - **fix**: errors on blocks in editor (gregorybesson) 
+* [[`26c5b257ed`](https://github.com/abecms/abecms/commit/26c5b257ed)] - **doc**: demo gif is back (gregorybesson) 
+* [[`3648dd349f`](https://github.com/abecms/abecms/commit/3648dd349f)] - **qa**: prettier added to eslint (gregorybesson) 
+* [[`02077c2913`](https://github.com/abecms/abecms/commit/02077c2913)] - **ic**: fix UT plugin (gregorybesson) 
+* [[`9a0c1f035c`](https://github.com/abecms/abecms/commit/9a0c1f035c)] - **feature**: Installation of plugins from abe init (gregorybesson) 
+* [[`814b88294f`](https://github.com/abecms/abecms/commit/814b88294f)] - **fix**: windows slug (gregorybesson) 
+* [[`0e5631fcc5`](https://github.com/abecms/abecms/commit/0e5631fcc5)] - **fix**: windows slug (gregorybesson) 
+* [[`fc65a3374c`](https://github.com/abecms/abecms/commit/fc65a3374c)] - **ic**: debug Windows (gregorybesson) 
+* [[`317c3acc23`](https://github.com/abecms/abecms/commit/317c3acc23)] - **ic**: prettier formating (gregorybesson) 
+* [[`6a891fe5e8`](https://github.com/abecms/abecms/commit/6a891fe5e8)] - **ic**: fix Windows UT (gregorybesson) 
+* [[`5e381cbfd4`](https://github.com/abecms/abecms/commit/5e381cbfd4)] - **doc**: Changelog (gregorybesson) 
 * [[`9b7ae38178`](https://github.com/abecms/abecms/commit/9b7ae38178)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
 
 ## [3.4.0] - 2017-7-17
