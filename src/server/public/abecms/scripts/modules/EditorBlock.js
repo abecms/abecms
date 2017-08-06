@@ -84,6 +84,10 @@ export default class EditorBlock {
       )
       block.innerHTML = replaceHtml
 
+      block
+        .querySelector('button.remove-block')
+        .addEventListener('click', this._handleClickRemoveBlock)
+
       i++
     })
     this.onMoveBlock._fire()
@@ -108,7 +112,6 @@ export default class EditorBlock {
    * @return {[type]}   [description]
    */
   _clickRemoveBlock(e) {
-    console.log('inthere')
     var target = e.target,
       elem = target,
       parent = null,
@@ -233,6 +236,10 @@ export default class EditorBlock {
               wasFound = true
               startNumber = nb
             }
+
+            block
+              .querySelector('button.remove-block')
+              .addEventListener('click', this._handleClickRemoveBlock)
           }
         )
 
