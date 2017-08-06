@@ -14,11 +14,11 @@ The 3.x releases will focus on the REST layer of AbeCMS.
 - Refactor the REST layer:
   - Usage of oAuth2 for REST routes
 - Add robots.txt + URL redirection features in Abe
-- A JSON document could be associated with more than 1 template: AMP template, mobile, template, instant article template, desktop template...
+- ~~A JSON document could be associated with more than 1 template: AMP template, mobile, template, instant article template, desktop template...~~
 - We must be able to chose a theme (composed by templates) from the admin
 - We should be able to sync data, templates, ... from a distant Abe install
 - ~~Let's improve the republish-all so that we boost the performance.~~
-- Add an init option to Abe CLI to ease the creation of a project
+- ~~Add an init option to Abe CLI to ease the creation of a project~~
 - Add a deploy option to the web through surge.sh CLI in Abe CLI
 - Add a -d (--dev) option to Abe CLI so that we can have livereload and debug features during template dev
 
