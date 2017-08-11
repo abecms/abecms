@@ -255,7 +255,7 @@ export function isUserAllowedOnRoute(workflow, currentRoute) {
       return true
     }
 
-    if (currentRoute.indexOf('abe/') === -1) {
+    if (currentRoute.indexOf('/abe') === -1) {
       isAllowed = true
     }
 
