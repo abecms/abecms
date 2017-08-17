@@ -233,7 +233,7 @@ class Manager {
       this._watchPartialsFolder = watch.createMonitor(
         this.pathPartials,
         monitor => {
-          monitor.on('created', () => {
+          monitor.on('created', (f) => {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
             if (typeof this.lserver != 'undefined') {
@@ -241,7 +241,7 @@ class Manager {
             }
             this.events.template.emit('update')
           })
-          monitor.on('changed', () => {
+          monitor.on('changed', (f) => {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
             if (typeof this.lserver != 'undefined') {
@@ -249,7 +249,7 @@ class Manager {
             }
             this.events.template.emit('update')
           })
-          monitor.on('removed', () => {
+          monitor.on('removed', (f) => {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
             if (typeof this.lserver != 'undefined') {
