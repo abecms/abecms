@@ -162,6 +162,16 @@ export function getTagAbeWithType(text, type) {
   return matches
 }
 
+export function getTagAbeWithKey(text, key) {
+  var listReg = new RegExp(`({{abe .*key=[\\'|\\"]${key}.*}})`, 'g')
+  var matches = []
+  var match
+  while ((match = listReg.exec(text))) {
+    matches.push(match[0])
+  }
+  return matches
+}
+
 /**
  */
 export function getTagAbeWithTab(text, tab) {
