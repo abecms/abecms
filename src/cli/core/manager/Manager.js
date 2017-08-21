@@ -132,13 +132,30 @@ class Manager {
           console.error(
             clc.red("can't start the Abe's watch server\n"),
             'This watch server has tried to listen on the port ' +
-              lport +
-              ' but this server is already in use by another process... '
+            lport +
+            ' but this server is already in use by another process... '
           )
         } else {
           console.error(err)
         }
       })
+
+    process.on('SIGINT', () => {
+      try {
+        this.lserver.close(() => {
+          console.log('SIGINT:Livereload server has been gracefully terminated')
+          process.exit(0)
+        })
+      } catch(error){}
+    })
+    process.on('SIGTERM', () => {
+      try {
+        this.lserver.close(() => {
+          console.log('SIGTERM:Livereload server has been gracefully terminated')
+          process.exit(0)
+        })
+      } catch(error){}
+    })
 
     // sync assets from templates to /site
     cmsTemplates.assets.copy()

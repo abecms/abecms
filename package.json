@@ -63,7 +63,6 @@
     "abe": "dist/index.js"
   },
   "dependencies": {
-    "@moebius/http-graceful-shutdown": "^1.0.1",
     "ajax-request": "^1.2.1",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.4.6",

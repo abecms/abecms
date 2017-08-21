@@ -16,7 +16,6 @@ import flash from 'connect-flash'
 import cookieParser from 'cookie-parser'
 import csrf from 'csurf'
 import passport from 'passport'
-import {GracefulShutdownManager} from '@moebius/http-graceful-shutdown'
 
 import {
   config,
@@ -239,17 +238,41 @@ if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   })
 }
 
-var shutdownManager = new GracefulShutdownManager(server)
-process.on('SIGINT', () => {
-  shutdownManager.terminate(() => {
-    console.log('SIGINT:Server has been gracefully terminated')
-  })
-})
-process.on('SIGTERM', () => {
-  shutdownManager.terminate(() => {
-    console.log('SIGTERM:Server has been gracefully terminated')
-  })
-})
+server.on("error", onError)
+
+function onError(error) {
+  if (error.syscall !== 'listen') throw error;
+
+  var bind = typeof port === 'string'? 'Pipe ' + port : 'Port ' + port;
+
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+var cleanup = function () {
+    server.close(function () {
+        console.log("Closed out remaining connections.");
+        process.exit();
+    });
+
+    setTimeout(function () {
+        console.log("Could not close connections in time, forcing shut down");
+        process.exit(1);
+    }, 10 * 1000);
+}
+
+process.on('SIGINT', cleanup)
+process.on('SIGTERM', cleanup)
 
 // important : require here so config.root is defined
 var routes = require('./routes')
