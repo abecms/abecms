@@ -17,9 +17,9 @@ export function abify(json, template = null) {
     }
 
     cmsData.source.getDataList(template, json).then(() => {
-      var html = new Page(template, json)
+      var page = new Page(template, json)
 
-      resolve(html)
+      resolve(page.html)
     })
   })
 
