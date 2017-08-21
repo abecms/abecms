@@ -197,6 +197,7 @@ export function saveFile(req) {
             ) {
               var thumbsSizes = cmsData.regex
                 .getAttr(req.query.input, 'data-size')
+                .replace(' ', '')
                 .split(',')
               cropAndSaveFiles(thumbsSizes, filePath, resp).then(function(
                 resp
