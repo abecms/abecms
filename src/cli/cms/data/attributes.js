@@ -1,4 +1,5 @@
 import {abeExtend} from '../../'
+import {cmsData} from '../../'
 import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 /**
 * Get All attributes from a Abe tag
@@ -75,6 +76,18 @@ export function sanitizeSourceAttribute(obj, jsonPage) {
   return obj
 }
 
+export function getAttrValuefromKey(template, key, attr, json) {
+  var value = null
+  var abeTags = cmsData.regex.getTagAbeWithKey(template, key)
+  if (abeTags.length > 0){
+    var attr = cmsData.regex.getAttr(abeTags[0], attr)
+    if(attr !== ''){
+      value = cmsData.attributes.getValueFromAttribute(attr, json)
+    }
+  }
+
+  return value  
+}
 /**
  * This function will take the value of an Abe attribute and analyze its content.
  * If it contains a var {{variable.prop.value}}, it will extract its content with these rules
