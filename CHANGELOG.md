@@ -1,4 +1,23 @@
 
+## [3.4.6] - 2017-8-22
+* [[`d46338ce92`](https://github.com/abecms/abecms/commit/d46338ce92)] - **enhancement**: Removing a dependency + improving server shutdown (gregorybesson) 
+* [[`869dd37ea1`](https://github.com/abecms/abecms/commit/869dd37ea1)] - **fix**: abify should return only the abified html (gregorybesson) 
+* [[`5eee96d735`](https://github.com/abecms/abecms/commit/5eee96d735)] - **enhancement**: new function getTagAbeWithKey to find an array of abe tags identified by a key (gregorybesson) 
+* [[`326a44be19`](https://github.com/abecms/abecms/commit/326a44be19)] - **enhancement**: a new function getAttrValueFromKey to find a specific abe tag from a template and obtain its value (gregorybesson) 
+* [[`5fcf85aac2`](https://github.com/abecms/abecms/commit/5fcf85aac2)] - **fix**: you now can have thumbs='200x100, 100x300' with a space between values (gregorybesson) 
+
+## [3.4.5] - 2017-8-17
+* [[`d62a4cf4e3`](https://github.com/abecms/abecms/commit/d62a4cf4e3)] - **fix**: livereload was corrupted on partials change (gregorybesson) 
+
+## [3.4.4] - 2017-8-11
+* [[`f88e764adb`](https://github.com/abecms/abecms/commit/f88e764adb)] - Merge pull request #231 from wonknu/bug_user_list_save (Greg Besson) 
+* [[`1b160e8ee7`](https://github.com/abecms/abecms/commit/1b160e8ee7)] - **fix**: save on page /abe/list-url give everyone all the right to any route (wonknu10) 
+* [[`683f7ace6f`](https://github.com/abecms/abecms/commit/683f7ace6f)] - **fix**: missing class .user-list break ajax call to save user list route (wonknu10) 
+* [[`f6ba43e177`](https://github.com/abecms/abecms/commit/f6ba43e177)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`5c764f3d94`](https://github.com/abecms/abecms/commit/5c764f3d94)] - **enhancement**: The scripts directory is watched in dev mode (gregorybesson) 
+* [[`c07bddd304`](https://github.com/abecms/abecms/commit/c07bddd304)] - Update ROADMAP.md (Greg Besson) 
+* [[`b9be15a816`](https://github.com/abecms/abecms/commit/b9be15a816)] - **doc**: Changelog (gregorybesson) 
+
 ## [3.4.3] - 2017-8-6
 * [[`791df4494f`](https://github.com/abecms/abecms/commit/791df4494f)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
 * [[`13f5b0fd14`](https://github.com/abecms/abecms/commit/13f5b0fd14)] - **fix**: removing blocks in the editor for {{#each}} types after a drag&drop was not possible (gregorybesson) 
