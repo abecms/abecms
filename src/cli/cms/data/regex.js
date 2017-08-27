@@ -9,7 +9,7 @@ export function getAbeTags() {
   return abeTags
 }
 
-export let abeTag = /({{abe .*?[\s\S].*?}})/g
+export let abeTag = /({{abe .*?[\s\S].*?['|"] *}})/g
 
 // export let abePattern = /(--->(\*\/)?{{abe.*?type=[\'|\"][text|rich|textarea|code]+[\'|\"][\s\S].*?}})/g
 // export let abeAsTagPattern = /({{abe.*?type=[\'|\"][text|rich|textarea|code]+[\'|\"][\s\S].*?}})/g

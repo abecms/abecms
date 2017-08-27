@@ -96,8 +96,9 @@ export function addAbeDataAttrForHtmlTag(template) {
   return newTemplate
 }
 
+// Is this function useful ? What is it used for ?
 export function addHasAbeAttr(text) {
-  return text.replace('}}', ' has-abe=1}}')
+  return text.replace('}}', ' has-abe=\'1\'}}')
 }
 
 export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
@@ -123,7 +124,7 @@ export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
 
  * BECOMES:
 <img data-abe-attr-image_key="src" data-abe-image_key="image_key" data-abe-attr-image_key="src"
-data-abe-image_key="image_key" src="{{abe type='image' key='image_key' tab='default' has-abe=1 has-abe=1}}" alt="">
+data-abe-image_key="image_key" src="{{abe type='image' key='image_key' tab='default' has-abe='1'}}" alt="">
 
  *
  * IF ABE EACH TAG
@@ -134,7 +135,7 @@ data-abe-image_key="image_key" src="{{abe type='image' key='image_key' tab='defa
 
  * BECOMES:
 {{#each test}}
-  <img data-abe-attr-test[index].img="src" data-abe-test[index].img="test[index].img" src="{{abe type='image' key='test.img' desc='test_img' tab='default' has-abe=1}}" alt="">
+  <img data-abe-attr-test[index].img="src" data-abe-test[index].img="test[index].img" src="{{abe type='image' key='test.img' desc='test_img' tab='default' has-abe='1'}}" alt="">
 {{/each}}
 
  * @param {[type]} template [description]

@@ -16,6 +16,7 @@ describe('regex', function() {
         this.fixture = {
           articleSingle: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-single-abe.html'), 'utf8'),
           articleEach: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf8'),
+          articleEachVariable: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'prepare-tag-abe-each-variable.html'), 'utf8'),
           articleRequest: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-request.html'), 'utf8')
         }
         done()
@@ -67,6 +68,14 @@ describe('regex', function() {
     chai.expect(bool).to.be.false;
     bool = cmsData.regex.isEachStatement(this.fixture.articleEach)
     chai.expect(bool).to.be.true;
+  });
+
+  /**
+   * cmsData.regex.abeTag
+   */
+  it('cmsData.regex.abeTag', function() {
+    var match = cmsData.regex.abeTag.exec(this.fixture.articleEachVariable)
+    chai.assert.equal(match[0], '{{abe type="data" key="test.gmaps" source="https://maps.googleapis.com/maps/api/geocode/json?key=gmapskey&address=" autocomplete="true" display="{{formatted_address}} - (lat:{{geometry.location.lat}}-lng:{{geometry.location.lng}})" desc=\'gmaps\'}}');
   });
 
   /**

@@ -93,7 +93,7 @@ describe('cmsTemplates.prepare', function() {
 
     // test
     var template = cmsTemplates.prepare.addHasAbeAttr("}}")
-    chai.expect(template.indexOf('has-abe=1}}')).to.be.above(-1);
+    chai.expect(template.indexOf('has-abe=\'1\'}}')).to.be.above(-1);
   });
 
   /**
