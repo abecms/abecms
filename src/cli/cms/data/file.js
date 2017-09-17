@@ -15,13 +15,9 @@ export function getAbeMeta(fileObject, json) {
 
     if (json.abe_meta.updatedDate != null) {
       fileObject.date = json.abe_meta.updatedDate
-    } else if (json.abe_meta.latest.date != null) {
-      fileObject.date = json.abe_meta.latest.date
-    }
-
-    if (json.abe_meta.updatedDate != null) {
       date = json.abe_meta.updatedDate
-    } else if (json.abe_meta.latest.date !== null) {
+    } else if (json.abe_meta.latest != null && json.abe_meta.latest.date != null) {
+      fileObject.date = json.abe_meta.latest.date
       date = json.abe_meta.latest.date
     } else if (json.abe_meta.date !== null) {
       date = json.abe_meta.date
