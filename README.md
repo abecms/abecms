@@ -75,6 +75,7 @@ If you want us to add your sites, submit a PR of this README.
 - http://www.mariderm.com/
 - http://www.peauologie.com/
 - http://paysagementbelisle.com/
+- http://betasite.coherence45.com/en/
 - ...
 
 # Recipes, plugins, blogs
