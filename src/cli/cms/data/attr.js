@@ -1,8 +1,6 @@
 import {cmsData} from '../../'
 
-var fullAttr = '-abe-(.+?)(?=.'
-var captureAttr = '-abe-(.+?)(?=.'
-
+const captureAttr = '-abe-([a-z A-Z]{1}[0-9]{1}.+?)(?=.'
 /**
  * Class Attr
  * Work string to manage string attributes key/value
@@ -39,7 +37,7 @@ export default class Attr {
   remove() {
     if (this.str != null) {
       return this.str.replace(
-        new RegExp(fullAttr + this.getExtension() + ')'),
+        new RegExp(captureAttr + this.getExtension() + ')'),
         ''
       )
     }

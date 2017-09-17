@@ -27,7 +27,7 @@ describe('Attr', function() {
    * 
    */
   it('new attr', function() {
-    var attr = new cmsData.attr("article-abe-d20160920T125255138Z.shtml")
+    var attr = new cmsData.attr("article-mon-abe-abe-d20160920T125255138Z.shtml")
     chai.expect(attr.str).to.not.be.undefined;
     chai.expect(attr.val.s).to.not.be.undefined;
     chai.expect(attr.val.s).to.be.equal('d');
