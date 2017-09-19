@@ -76,6 +76,7 @@ If you want us to add your sites, submit a PR of this README.
 - http://www.peauologie.com/
 - http://paysagementbelisle.com/
 - http://betasite.coherence45.com/en/
+- http://vibeavenue.com/en/
 - ...
 
 # Recipes, plugins, blogs
