@@ -79,8 +79,6 @@ class Manager {
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathData = path.join(config.root, config.data.url)
-    this.pathAssets = path.join(config.root, config.publish.url)
-    this.assetsFolders = cmsTemplates.assets.getFolders()
 
     this.connections = []
     this.activities = []
@@ -191,7 +189,7 @@ class Manager {
         this.pathTemplates,
         monitor => {
           monitor.on('created', (f, stat) => {
-            if (f.indexOf(config.files.templates.assets + '/') >= 0) {
+            if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
               cmsTemplates.assets.copy()
               tinylr.changed(f)
               console.log(
@@ -207,7 +205,7 @@ class Manager {
             }
           })
           monitor.on('changed', (f, curr, prev) => {
-            if (f.indexOf(config.files.templates.assets + '/') >= 0) {
+            if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
               cmsTemplates.assets.copy()
               tinylr.changed(f)
               console.log(
@@ -223,7 +221,7 @@ class Manager {
             }
           })
           monitor.on('removed', (f, stat) => {
-            if (f.indexOf(config.files.templates.assets + '/') >= 0) {
+            if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
               cmsTemplates.assets.copy()
               tinylr.changed(f)
               console.log(

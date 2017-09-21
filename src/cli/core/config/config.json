@@ -85,11 +85,8 @@
     "source": ["style", "src", "type"]
   },
   "files": {
-    "exclude": "^[.]",
     "templates": {
-      "extension": "html",
-      "assets": "_files",
-      "check": "\\.hbs|\\.shtml|\\.html|\\.htm"
+      "extension": "html"
     }
   },
   "log": {
