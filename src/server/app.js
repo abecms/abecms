@@ -49,6 +49,8 @@ import {
   middleLiveReload
 } from './middlewares'
 
+import getHome from './routes/get-home'
+
 require('events').EventEmitter.defaultMaxListeners = 100
 
 var abePort = null
@@ -279,4 +281,6 @@ var routes = require('./routes')
 app.use(routes.default)
 
 // This static path is mandatory for relative path to statics in templates
-app.use('/abe', express.static(publish))
+app.use('/abe/editor', express.static(publish))
+app.use('/abe/page', express.static(publish))
+app.get('/abe*', getHome)

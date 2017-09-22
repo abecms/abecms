@@ -117,7 +117,10 @@ var route = function(req, res, next) {
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
-
+  if(filePath != null && path.extname(filePath) != `.${config.files.templates.extension}`){
+    next()
+    return
+  }
   if (filePath != null) {
     var testXSS = xss(filePath, {
       whiteList: [],

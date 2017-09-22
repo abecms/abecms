@@ -183,8 +183,6 @@ Array.prototype.forEach.call(routes, route => {
   }
 })
 
-router.get('/abe*', getHome)
-
 abeExtend.hooks.instance.trigger('afterAddRoute', router)
 
 export default router
