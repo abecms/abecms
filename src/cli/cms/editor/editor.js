@@ -65,13 +65,8 @@ export function addAbeTagToCollection(
       obj.keyArray = keyArray
       obj.realKey = realKey
       obj.key = keyArray + '[' + i + '].' + realKey
-      ;(obj.desc = obj.desc + ' ' + i), insertAbeEach(
-        obj,
-        text,
-        json,
-        form,
-        arrayBlock
-      )
+      obj.desc = obj.desc + ' ' + i
+      insertAbeEach(obj, text, json, form, arrayBlock)
     } else if (!form.contains(obj.key)) {
       obj.value = json[obj.key]
       json[obj.key] = add(obj, json, form)
