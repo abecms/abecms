@@ -15,6 +15,8 @@ _______________
 
 # AbeCMS
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/abecms/abecms.svg)](https://greenkeeper.io/)
+
 > AbeCMS is your __static websites generator__ with revolutionary __self-descriptive__ templates
 
 When creating blogs becomes as easy as 1-2-3. A static site generator with a great back-office for users.
