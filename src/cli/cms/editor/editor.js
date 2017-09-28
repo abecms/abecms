@@ -19,10 +19,10 @@ export function add(obj, json, form) {
     var prop = obj.key.replace(/[^\.]+?\./, '')
 
     try {
-      obj.value = eval(`json[key][index]["${prop}"]`)
+      obj.value = eval(`json[key][index].${prop}`)
     } catch (e) {
       try {
-        eval(`json[key][index]["${prop}"] = ` + JSON.stringify(value))
+        eval(`json[key][index].${prop} = ` + JSON.stringify(value))
       } catch (e) {
         // no value found inside json KEY
       }
