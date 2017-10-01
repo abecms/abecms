@@ -32,7 +32,7 @@ nodemon({
     'src/server/index.js',
     //process.env.ROOT + '/scripts/**/**/*.js',
     process.env.ROOT + '/abe.json',
-    process.env.ROOT + '/locales/*',
+    //process.env.ROOT + '/locales/*',
     process.env.ROOT + '/hooks/**/*.js',
     //process.env.ROOT + '/reference/**/*.json'
   ],

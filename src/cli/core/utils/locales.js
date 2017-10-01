@@ -20,7 +20,7 @@ class Locales {
     return this[singleton]
   }
 
-  _reloadLocales() {
+  reloadLocales() {
     this.i18n = this._getLocales()
   }
 

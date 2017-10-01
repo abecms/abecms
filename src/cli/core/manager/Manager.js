@@ -89,6 +89,7 @@ class Manager {
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathData = path.join(config.root, config.data.url)
+    this.pathLocales = path.join(config.root, 'locales')
 
     this.connections = []
     this.activities = []
@@ -191,6 +192,7 @@ class Manager {
     this.events.structure = new events.EventEmitter(0)
     this.events.reference = new events.EventEmitter(0)
     this.events.scripts = new events.EventEmitter(0)
+    this.events.locales = new events.EventEmitter(0)
 
     // watch template folder
     try {
@@ -217,7 +219,9 @@ class Manager {
           monitor.on('changed', (f, curr, prev) => {
             if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
               cmsTemplates.assets.copy()
-              tinylr.changed(f)
+              if (typeof this.lserver != 'undefined') {
+                tinylr.changed(f)
+              }
               console.log(
                 'Assets have been synchronized after this modification: ' + f
               )
@@ -233,7 +237,9 @@ class Manager {
           monitor.on('removed', (f, stat) => {
             if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
               cmsTemplates.assets.copy()
-              tinylr.changed(f)
+              if (typeof this.lserver != 'undefined') {
+                tinylr.changed(f)
+              }
               console.log(
                 'Assets have been synchronized after this deletion: ' + f
               )
@@ -318,20 +324,61 @@ class Manager {
         monitor => {
           monitor.on('created', f => {
             this.updateReferences(f)
+            if (typeof this.lserver != 'undefined') {
+              tinylr.changed(f)
+            }
             this.events.reference.emit('update')
           })
           monitor.on('changed', f => {
             this.updateReferences(f)
+            if (typeof this.lserver != 'undefined') {
+              tinylr.changed(f)
+            }
             this.events.reference.emit('update')
           })
-          monitor.on('removed', () => {
+          monitor.on('removed', (f) => {
             this.updateReferences()
+            if (typeof this.lserver != 'undefined') {
+              tinylr.changed(f)
+            }
             this.events.reference.emit('update')
           })
         }
       )
     } catch (e) {
       console.log('the directory ' + this.pathReference + ' does not exist')
+    }
+
+    try {
+      fse.accessSync(this.pathLocales, fse.F_OK)
+      this._watchLocalesFolder = watch.createMonitor(
+        this.pathLocales,
+        monitor => {
+          monitor.on('created', f => {
+            coreUtils.locales.instance.reloadLocales()
+            if (typeof this.lserver != 'undefined') {
+              tinylr.changed(f)
+            }
+            this.events.locales.emit('update')
+          })
+          monitor.on('changed', f => {
+            coreUtils.locales.instance.reloadLocales()
+            if (typeof this.lserver != 'undefined') {
+              tinylr.changed(f)
+            }
+            this.events.locales.emit('update')
+          })
+          monitor.on('removed', (f) => {
+            coreUtils.locales.instance.reloadLocales()
+            if (typeof this.lserver != 'undefined') {
+              tinylr.changed(f)
+            }
+            this.events.locales.emit('update')
+          })
+        }
+      )
+    } catch (e) {
+      console.log('the directory ' + this.pathLocales + ' does not exist')
     }
 
     try {
