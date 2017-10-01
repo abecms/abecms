@@ -148,10 +148,10 @@ const installPlugins = function(){
     console.log(
       clc.green(
         'Yeahhh! Your Abe site ' +
-          answers.name +
+          websiteName +
           ' is ready to launch!  🚀  '
       ),
-      clc.cyan('\ncd ' + answers.name + '\nabe serve -i')
+      clc.cyan('\ncd ' + websiteName + '\nabe serve -i')
     )
   })
 }
