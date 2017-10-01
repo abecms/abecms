@@ -1,4 +1,25 @@
 
+## [3.5.0] - 2017-10-1
+* [[`4a250a04d8`](https://github.com/abecms/abecms/commit/4a250a04d8)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`102ff10ea8`](https://github.com/abecms/abecms/commit/102ff10ea8)] - **feature**: abe init now includes the deployment step. abe serve has a new option -t to give a specific template path (gregorybesson) 
+* [[`81b01d64b7`](https://github.com/abecms/abecms/commit/81b01d64b7)] - **fix**: fixes #236 (Greg Besson) 
+* [[`2716c30a77`](https://github.com/abecms/abecms/commit/2716c30a77)] - Merge pull request #237 from nicolaslabbe/fix/bug235 (Greg Besson) 
+* [[`08e03bb16e`](https://github.com/abecms/abecms/commit/08e03bb16e)] - Recursive object in a {{#each}} are saved correctly but don't display (nicolaslabbe) 
+* [[`b4b363800a`](https://github.com/abecms/abecms/commit/b4b363800a)] - **refactoring**: cleaning code (gregorybesson) 
+* [[`1e440f9c01`](https://github.com/abecms/abecms/commit/1e440f9c01)] - **enhancement**: You don't have to make your links absolute anymore (gregorybesson) 
+* [[`aa3c9ef1be`](https://github.com/abecms/abecms/commit/aa3c9ef1be)] - **refactoring**: BC! The assets don't have to be grouped under a *_files directory anymore (gregorybesson) 
+* [[`be1298adb9`](https://github.com/abecms/abecms/commit/be1298adb9)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`c65a95f742`](https://github.com/abecms/abecms/commit/c65a95f742)] - **enhancement**: asking for email on login (gregorybesson) 
+* [[`79c3ff52d2`](https://github.com/abecms/abecms/commit/79c3ff52d2)] - Update README.md (Greg Besson) 
+* [[`36bb1d41df`](https://github.com/abecms/abecms/commit/36bb1d41df)] - **fix**: bug on rgeex when end of the file name was -abe (gregorybesson) 
+* [[`d4cef2bc9a`](https://github.com/abecms/abecms/commit/d4cef2bc9a)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`465ec61c6f`](https://github.com/abecms/abecms/commit/465ec61c6f)] - **fix**: bug on post creation + refactoring (gregorybesson) 
+* [[`6fac81a98f`](https://github.com/abecms/abecms/commit/6fac81a98f)] - Merge pull request #233 from nicolaslabbe/bug/prefill (Greg Besson) 
+* [[`69a4e88428`](https://github.com/abecms/abecms/commit/69a4e88428)] - Update README.md (Greg Besson) 
+* [[`fe5e24da00`](https://github.com/abecms/abecms/commit/fe5e24da00)] - **Fix**: bug ask for new prefill on frontend (nicolaslabbe) 
+* [[`57b88e5434`](https://github.com/abecms/abecms/commit/57b88e5434)] - **fix**: Bug on abeTag regex. New Unit test added (gregorybesson) 
+* [[`60ca1126db`](https://github.com/abecms/abecms/commit/60ca1126db)] - **doc**: Changelog (gregorybesson) 
+
 ## [3.4.6] - 2017-8-22
 * [[`d46338ce92`](https://github.com/abecms/abecms/commit/d46338ce92)] - **enhancement**: Removing a dependency + improving server shutdown (gregorybesson) 
 * [[`869dd37ea1`](https://github.com/abecms/abecms/commit/869dd37ea1)] - **fix**: abify should return only the abified html (gregorybesson) 
@@ -25,7 +46,7 @@
 * [[`ea7a9b3b3c`](https://github.com/abecms/abecms/commit/ea7a9b3b3c)] - **doc**: Changelog (gregorybesson) 
 * [[`d86a502f14`](https://github.com/abecms/abecms/commit/d86a502f14)] - **fix**: removing WIP about react :) (gregorybesson) 
 
-## [3.4.2] - 2017-8-2
+## [3.4.2] - 2017-8-1
 * [[`a27fa230e3`](https://github.com/abecms/abecms/commit/a27fa230e3)] - **ic**: package-lock.json updated (gregorybesson) 
 
 ## [3.4.1] - 2017-7-28
@@ -45,7 +66,7 @@
 * [[`5e381cbfd4`](https://github.com/abecms/abecms/commit/5e381cbfd4)] - **doc**: Changelog (gregorybesson) 
 * [[`9b7ae38178`](https://github.com/abecms/abecms/commit/9b7ae38178)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
 
-## [3.4.0] - 2017-7-17
+## [3.4.0] - 2017-7-16
 * [[`a5f07be0f1`](https://github.com/abecms/abecms/commit/a5f07be0f1)] - Update README.md (Greg Besson) 
 * [[`2281219d66`](https://github.com/abecms/abecms/commit/2281219d66)] - Update README.md (Greg Besson) 
 * [[`9d3e70b542`](https://github.com/abecms/abecms/commit/9d3e70b542)] - **fix**: e2e error (gregorybesson) 
@@ -123,10 +144,10 @@
 * [[`56b4f8ab37`](https://github.com/abecms/abecms/commit/56b4f8ab37)] - **ic**: fix e2e (gregorybesson) 
 * [[`f67fe6ffce`](https://github.com/abecms/abecms/commit/f67fe6ffce)] - **ic**: fix e2e (gregorybesson) 
 
-## [3.3.2] - 2017-7-10
+## [3.3.2] - 2017-7-9
 * [[`91ba5b9c9a`](https://github.com/abecms/abecms/commit/91ba5b9c9a)] - **fix**: BC break when script were defined inline and ABE comments did follow these script tags (gregorybesson) 
 
-## [3.3.1] - 2017-7-9
+## [3.3.1] - 2017-7-8
 * [[`d19f1ba9a0`](https://github.com/abecms/abecms/commit/d19f1ba9a0)] - Preparing Abe to Electron (gregorybesson) 
 * [[`08072c8b42`](https://github.com/abecms/abecms/commit/08072c8b42)] - **fix**: The republish-all feature didn't take the type='data' selected by the user (gregorybesson) 
 * [[`8b880a1c8a`](https://github.com/abecms/abecms/commit/8b880a1c8a)] - **fix**: When auto-republish 'active' attribute is set to false in abe.json, We display a republish button on the manager (gregorybesson) 
@@ -184,7 +205,7 @@
 * [[`2edaf31c7a`](https://github.com/abecms/abecms/commit/2edaf31c7a)] - **fix**: create reference folder (wonknu10) 
 * [[`04711cf12d`](https://github.com/abecms/abecms/commit/04711cf12d)] - **fix**: allow user to create reference even when there are no reference yet (wonknu10) 
 
-## [3.2.3] - 2017-5-16
+## [3.2.3] - 2017-5-15
 * [[`b37ef3ef25`](https://github.com/abecms/abecms/commit/b37ef3ef25)] - Update README.md (Greg Besson) 
 * [[`760aac34c7`](https://github.com/abecms/abecms/commit/760aac34c7)] - Update ROADMAP.md (Greg Besson) 
 * [[`dac56050d4`](https://github.com/abecms/abecms/commit/dac56050d4)] - Merge pull request #217 from wonknu/fix_drag_drop_block_each (Greg Besson) 
@@ -251,7 +272,7 @@
 ## [3.1.4] - 2017-5-1
 * [[`c7e94c23de`](https://github.com/abecms/abecms/commit/c7e94c23de)] - **doc**: CHANGELOG (gregorybesson) 
 
-## [3.1.3] - 2017-5-1
+## [3.1.3] - 2017-4-30
 * [[`15ee89b6ff`](https://github.com/abecms/abecms/commit/15ee89b6ff)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
 * [[`7aeba49c77`](https://github.com/abecms/abecms/commit/7aeba49c77)] - **fix**: moduloIf and the ordering of abe tagss and groups in particular (gregorybesson) 
 * [[`0df151860c`](https://github.com/abecms/abecms/commit/0df151860c)] - Update version3.md (Greg Besson) 
@@ -574,7 +595,7 @@
 * [[`d1ca059064`](https://github.com/abecms/abecms/commit/d1ca059064)] - **fix**: bug using each into slug tab (nicolaslabbe) 
 * [[`824345a1fe`](https://github.com/abecms/abecms/commit/824345a1fe)] - **doc**: CHANGELOG (gregorybesson) 
 
-## [2.15.0] - 2017-1-31
+## [2.15.0] - 2017-1-30
 * [[`0f4acd56b1`](https://github.com/abecms/abecms/commit/0f4acd56b1)] - **enhancement**: New HBS Helper eachGroup. This helper divide a json array of objects into groups of objects. Useful to create a set of different layouts to display the list of json objects (gregorybesson) 
 * [[`a36ba3fed1`](https://github.com/abecms/abecms/commit/a36ba3fed1)] - **enhancement**: It's now possible to import the same partial (containing Abe tags with keys) several times. (we update the keys id dynamically) (gregorybesson) 
 * [[`155df3760e`](https://github.com/abecms/abecms/commit/155df3760e)] - Update README.md (Greg Besson) 
@@ -608,7 +629,7 @@
 * [[`93e6f2c28f`](https://github.com/abecms/abecms/commit/93e6f2c28f)] - **fix**: BC break on precontrib fields which were doubled (gregorybesson) 
 * [[`d93cafd398`](https://github.com/abecms/abecms/commit/d93cafd398)] - **doc**: CHANGELOG (gregorybesson) 
 
-## [2.14.1] - 2017-1-13
+## [2.14.1] - 2017-1-12
 * [[`751e351d03`](https://github.com/abecms/abecms/commit/751e351d03)] - **fix**: upload image in the right directory (gregorybesson) 
 * [[`d90db34b94`](https://github.com/abecms/abecms/commit/d90db34b94)] - **fix**: each blocks were not added on the front when a new block was created from the editor (gregorybesson) 
 * [[`cf46b793aa`](https://github.com/abecms/abecms/commit/cf46b793aa)] - **fix**: non editable Abe data tags were improperly displayed in the editor (gregorybesson) 
@@ -1283,7 +1304,7 @@
 * [[`48675a00b6`](https://github.com/abecms/abecms/commit/48675a00b6)] - **refactoring**: process, hooks, plugins (nicolaslabbe) 
 * [[`dc6b63070c`](https://github.com/abecms/abecms/commit/dc6b63070c)] - **refactoring**: lint (nicolaslabbe) 
 
-## [2.5.7] - 2016-10-11
+## [2.5.7] - 2016-10-10
 * [[`f2b2604ca8`](https://github.com/abecms/abecms/commit/f2b2604ca8)] - fix error on reject status (gregorybesson) 
 * [[`5dcd2bcbf2`](https://github.com/abecms/abecms/commit/5dcd2bcbf2)] - missing function readded... (gregorybesson) 
 * [[`1825120b47`](https://github.com/abecms/abecms/commit/1825120b47)] - you can request abe version with -v (gregorybesson) 
@@ -1325,7 +1346,7 @@
 * [[`469e753ed9`](https://github.com/abecms/abecms/commit/469e753ed9)] - **refactoring**: UT revisions (nicolaslabbe) 
 * [[`46e766ea91`](https://github.com/abecms/abecms/commit/46e766ea91)] - **refactoring**:  (nicolaslabbe) 
 
-## [2.5.3] - 2016-10-6
+## [2.5.3] - 2016-10-5
 * [[`2c560fcaf3`](https://github.com/abecms/abecms/commit/2c560fcaf3)] - **fix**: - (gregorybesson) 
 * [[`0b2bf92d10`](https://github.com/abecms/abecms/commit/0b2bf92d10)] - **fix**: limax BC break + refactoring to better handle file saving (gregorybesson) 
 * [[`51d53a5e94`](https://github.com/abecms/abecms/commit/51d53a5e94)] - replace dash with dot in image filename (wonknu10) 
@@ -1730,9 +1751,9 @@
 * [[`7370f95d8c`](https://github.com/abecms/abecms/commit/7370f95d8c)] - update readme (nicolaslabbe) 
 * [[`907a71371c`](https://github.com/abecms/abecms/commit/907a71371c)] - duplicate=false (nicolaslabbe) 
 
-## [1.7.96] - 2016-8-11
+## [1.7.96] - 2016-8-10
 
-## [1.7.95] - 2016-8-11
+## [1.7.95] - 2016-8-10
 * [[`5b1aa50907`](https://github.com/abecms/abecms/commit/5b1aa50907)] - disable multi click on create button (wonknu10) 
 
 ## [1.7.95] - 2016-8-10
