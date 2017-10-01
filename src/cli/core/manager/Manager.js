@@ -38,7 +38,17 @@ class Manager {
     this.events = {}
 
     // Compatibility for abe version < 3.2.
-    if (
+    // It's possible to reference html from any directory
+    if (process.env.ABE_TEMPLATES_PATH) {
+      if(process.env.ABE_TEMPLATES_PATH.charAt(0) === '/'){
+        this.pathTemplates = process.env.ABE_TEMPLATES_PATH
+      } else {
+        this.pathTemplates = path.join(
+          config.root,
+          process.env.ABE_TEMPLATES_PATH
+        )
+      }
+    } else if (
       config.themes != null &&
       coreUtils.file.exist(
         path.join(

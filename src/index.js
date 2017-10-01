@@ -9,6 +9,152 @@ import program from 'commander'
 import pkg from '../package'
 import inquirer from 'inquirer'
 import clc from 'cli-color'
+import Surge from 'surge'
+
+const surge = new Surge
+const hooks = {}
+let deployPlugins = []
+let websiteName = null
+let dir = null
+
+
+const deployWebsite = function(){
+  const create = new initSite()
+  create.askDeploymentQuestions().then(function(answers){
+    if (answers.deploy){
+      let json = null
+      if (answers.which === 'on surge (it\'s free !)') {
+        deployPlugins.push('abecms/abe-deployer-surge')
+        json = {
+          deployers: {
+            surge: {
+              active: true,
+              domain: answers.domain
+            }
+          }
+        }
+        config.save(json)
+        surge.login({
+          postAuth: installPlugins
+        })([])
+      } else if (answers.which === 'a github repository') {
+        deployPlugins.push('abecms/abe-deployer-git')
+        json = {
+          deployers: {
+            git: {
+              active: true,
+              repository: answers.repository,
+              branch: answers.branch,
+              username: answers.username,
+              email: answers.email
+            }
+          }
+        }
+        config.save(json)
+        installPlugins()
+      } else if (answers.which === 'a S3 bucket') {
+        deployPlugins.push('abecms/abe-deployer-s3')
+        json = {
+          deployers: {
+            s3: {
+              active: true,
+              region: answers.region,
+              accessKeyId: answers.accessKeyId,
+              secretAccessKey: answers.secretAccessKey,
+              bucket: answers.bucket,
+              prefix: answers.prefix
+            }
+          }
+        }
+        config.save(json)
+        installPlugins()
+      } else if (answers.which === 'via (S)FTP') {
+        deployPlugins.push('abecms/abe-deployer-sftp')
+        json = {
+          deployers: {
+            sftp: {
+              active: true,
+              host: answers.host,
+              username: answers.username,
+              remoteDir: answers.remoteDir,
+              protocol: answers.protocol
+            }
+          }
+        }
+        if(answers.requiresType === 'It requires a password'){
+          json.deployers.sftp.requiresPassword = true
+          json.deployers.sftp.requireSSHKey = false
+          json.deployers.sftp.password = answers.password
+        } else {
+          json.deployers.sftp.requiresPassword = false
+          json.deployers.sftp.requireSSHKey = true
+          json.deployers.sftp.sshKeyPath = answers.sshKeyPath
+        }
+        config.save(json)
+        installPlugins()
+      }
+    } else {
+      installPlugins()
+    }
+  })
+}
+
+const installWebsite = function(){
+  const create = new initSite()
+  create.askQuestions().then(function(answers) {
+    dir = path.join(process.cwd(), answers.name)
+    websiteName = answers.name
+    if (process.env.ROOT) {
+      dir = path.join(process.env.ROOT, answers.name)
+    }
+    config.root = dir
+    process.env['HOME'] = dir
+
+    if (typeof dir !== 'undefined' && dir !== null && answers.name !== '') {
+      create.init(dir).then(function() {
+        create.updateSecurity(answers).then(function() {
+          create.updateTheme(answers).then(function() {
+            deployWebsite()
+          })
+        })
+      })
+    }
+  })
+}
+
+const installPlugins = function(){
+  const create = new initSite()
+  create.askPluginsQuestions().then(function(answers) {
+    if (answers.plugins && answers.plugins.length > 0) {
+      Array.prototype.forEach.call(answers.plugins, plugin => {
+        console.log('installing the plugin: ' + plugin)
+
+        if (typeof plugin !== 'undefined' && plugin !== null) {
+          plugins.instance.install(dir, plugin)
+        } else {
+          plugins.instance.install(dir)
+        }
+      })
+    }
+    if (deployPlugins && deployPlugins.length > 0) {
+      Array.prototype.forEach.call(deployPlugins, plugin => {
+        console.log('installing the plugin: ' + plugin)
+
+        if (typeof plugin !== 'undefined' && plugin !== null) {
+          plugins.instance.install(dir, plugin)
+        }
+      })
+    }
+    console.log(
+      clc.green(
+        'Yeahhh! Your Abe site ' +
+          answers.name +
+          ' is ready to launch!  🚀  '
+      ),
+      clc.cyan('\ncd ' + answers.name + '\nabe serve -i')
+    )
+  })
+}
 
 program.version(pkg.version).option('-v, --version', 'version')
 
@@ -18,43 +164,7 @@ program
   .alias('i')
   .description('init a new abe website')
   .action(function(options) {
-    const create = new initSite()
-    create.askQuestions().then(function(answers) {
-      let dir = path.join(process.cwd(), answers.name)
-      if (process.env.ROOT) {
-        dir = path.join(process.env.ROOT, answers.name)
-      }
-      config.root = dir
-      process.env['HOME'] = dir
-
-      if (typeof dir !== 'undefined' && dir !== null && answers.name !== '') {
-        create.init(dir).then(function() {
-          create.updateSecurity(answers).then(function() {
-            create.updateTheme(answers).then(function() {
-              if (answers.plugins && answers.plugins.length > 0) {
-                Array.prototype.forEach.call(answers.plugins, plugin => {
-                  console.log('installing the plugin: ' + plugin)
-
-                  if (typeof plugin !== 'undefined' && plugin !== null) {
-                    plugins.instance.install(dir, plugin)
-                  } else {
-                    plugins.instance.install(dir)
-                  }
-                })
-              }
-              console.log(
-                clc.green(
-                  'Yeahhh! Your Abe site ' +
-                    answers.name +
-                    ' is ready to launch!  🚀  '
-                ),
-                clc.cyan('\ncd ' + answers.name + '\nabe serve -i')
-              )
-            })
-          })
-        })
-      }
-    })
+    installWebsite()
   })
   .on('--help', function() {
     console.log('  Examples:')
@@ -149,6 +259,7 @@ program
   )
   .option('-p, --port [number]', 'change port of the web server')
   .option('-i, --interactive', 'open browser on web server startup')
+  .option('-t, --templates', 'give an absolute path to your templates')
   .option(
     '-e, --env [development|production|...]',
     'Abe is launched in development mode by default. Use another value to deactivate development mode. You may also use a global env variable NODE_ENV.'
@@ -177,6 +288,10 @@ program
 
     if (options.port != null) {
       environment.PORT = options.port
+    }
+
+    if (options.templates != null) {
+      environment.ABE_TEMPLATES_PATH = options.templates
     }
 
     if (__dirname.indexOf('dist') > -1) {
@@ -261,5 +376,23 @@ program
     console.log('    $ abe uninstall [plugin]')
     console.log()
   })
+
+// Surge
+program
+  .command('login')
+  .action(surge.login(hooks))
+  .description('Login on Surge to publish projects to the web.')
+
+hooks.preAuth = function (req, next) {
+  console.log('')
+  if (req.authed) {
+    console.log('       Hello ' + req.creds.email + '!')
+  } else {
+    console.log('       Welcome!')
+  }
+  console.log('')
+
+  next()
+}
 
 program.parse(process.argv)
