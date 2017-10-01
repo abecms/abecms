@@ -30,7 +30,7 @@ Variables can be added to slug URL:
 
 Warning:
 
-If you don't add `tab=slug` attribute the variable will not be avaliable on the slug form.
+If you don't add `tab=slug` attribute the variable will not be available on the slug form.
 
 ## Multiples variables
 
