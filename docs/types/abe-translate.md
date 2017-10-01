@@ -21,7 +21,7 @@ Example json
 ```json
 {
   "Home": "Home",
-  "bla bla bla": "anything",
+  "bla bla bla": "anything"
 }
 ```
 
