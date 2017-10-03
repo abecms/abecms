@@ -160,7 +160,7 @@ If you want to display inside the input select the "title" value.
 ### `FROM`
 
 ```html
-{{abe type='data' key='articles' desc='articles' source="select * from articles, blog" display="title" editable='true'"}}
+{{abe type='data' key='articles' desc='articles' source="select title, headline from articles, blog" display="title" editable='true'"}}
 ```
 
 (*select from folder articles and blog*)
