@@ -117,7 +117,9 @@ var route = function(req, res, next) {
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
-  if(filePath != null && path.extname(filePath) != `.${config.files.templates.extension}`){
+  if(filePath != null &&
+    path.extname(filePath) != `.${config.files.templates.extension}` &&
+    path.extname(filePath) != '.json'){
     next()
     return
   }
