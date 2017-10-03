@@ -11,38 +11,37 @@ _______________
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/abecms/abecms/master/LICENSE)
 [![Total Downloads](https://img.shields.io/npm/dt/abecms.svg)](https://www.npmjs.com/package/abecms)
-[![Twitter Follow](https://img.shields.io/twitter/follow/abe_cms.svg?style=social)](https://twitter.com/abe_cms)
 
 # AbeCMS
 
-> AbeCMS is your __static websites generator__ with revolutionary __self-descriptive__ templates
+> AbeCMS is your __new CMS__ with revolutionary __self-descriptive__ templates
 
-When creating blogs becomes as easy as 1-2-3. A static site generator with a great back-office for users.
+When creating blogs becomes as easy as 1-2-3. AbeCMS is an API first + static site generator with a great back-office for users.
 
-For agencies: Go 7X faster than with Wordpress or Drupal to create websites and blogs
-For devs: A js full stack dev for js full stack devs with extensibility and efficiency in mind
+For agencies: Go 10X faster than with Wordpress or Drupal to create websites and blogs
+For devs: A js full stack framework for js full stack devs with extensibility and efficiency in mind
 
-- Markup your html templates with specific handlebars tags, and your back-office is ready to go: It's time to contribute for your users!
-- Add a complete workflow of validation and permissions with ease, using the state of the art oAuth2 stack.
-- Deploy automagically to AWS S3, Github.io, or any web server via SFTP
+- __Markup your html templates with specific tags__, and your back-office is ready to go: It's time to contribute for your users!
+- Add a complete __workflow__ of validation and permissions with ease, using the state of the art oAuth2 stack.
+- __Deploy automagically__ to Surge, AWS S3, Github.io, or any web server via SFTP
 - Create multi-languages, multi-locales, complex web structures in no time
-- Add plugins like abe-algolia, abe-elasticsearch... or create your own with just js skill
+- Add __plugins__ like abe-algolia, abe-elasticsearch... or create your own with just js skill
 
 ![From template abification to publication example](/tests/demo/site/images/abeCMS-demo.gif)
 
 # Goals
-- Being the easiest CMS on the planet for the developpers by providing 1 clear api stack to rule them all and using a html markup usable by non-devs to create a full website:
+- Being the easiest CMS on the planet __for the developpers__ by providing 1 clear api stack to rule them all and using a html markup usable by non-devs to create a full website:
   - Develop your HTML templates with hot reload and see changes in real time
   - Develop your plugins with hor reload and see also changes in real time
   - Directory-based URLs. Create directories and subdirectories in AbeCMS, the URL page will be expressed from its spot on the filesystem.
   - Focus on your HTML integration, dynamizing it becomes a breeze with AbeCMS
-- Being the easiest CMS on the planet for the users by using hyper clean pages and A REAL wysiwyg editor fast and easy to use:
+- Being the easiest CMS on the planet __for the users__ by using hyper clean pages and A REAL wysiwyg editor fast and easy to use:
   - One Dashboard for your analytics
   - One Manager page for listing and searching all your posts
   - One editor with a REAL wysiwyg of your post
   - One page for managing your users and their authorizations
   - THAT'S ALL !
-- Being content focused (the C in CMS):
+- Being __content focused__ (the C in CMS):
   - Data are created as JSON documents
   - An API-first Server to serve your documents as json
   - Or a static website generator
@@ -50,12 +49,12 @@ For devs: A js full stack dev for js full stack devs with extensibility and effi
 
 # Why use AbeCMS instead of other CMS or Static Site Generators ?
 - Designed for users
-- A real Wysiwyg Editor
-- A real workflow and authorization engine based on oAuth2
-- Auto-generation of the back-office editor based on your markup
-- Live editing on each part of your site during development dramatically increasing the dev speed
-- A strong separation of data and templates making the reuse of data a breeze
-- A API-first REST server: You create html pages and can consume data for your mobile, emails or whatever
+- A real __Wysiwyg Editor__
+- A real __workflow__ and authorization engine based on oAuth2
+- __Auto-generation of the back-office__ editor based on your markup
+- __Live editing__ on each part of your site during development dramatically increasing the dev speed
+- A __strong separation of data and templates__ making the reuse of data a breeze
+- A __API-first REST server__: You create html pages and can consume data for your mobile, emails or whatever
 
 # Some sites built with AbeCMS
 If you want us to add your sites, submit a PR of this README.
