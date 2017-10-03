@@ -18,7 +18,7 @@ _______________
 
 When creating blogs becomes as easy as 1-2-3. AbeCMS is an API first + static site generator with a great back-office for users.
 
-For agencies: Go 10X faster than with Wordpress or Drupal to create websites and blogs
+For agencies: Go 12X faster than with Wordpress or Drupal to create websites and blogs
 For devs: A js full stack framework for js full stack devs with extensibility and efficiency in mind
 
 - __Markup your html templates with specific tags__, and your back-office is ready to go: It's time to contribute for your users!
