@@ -229,6 +229,7 @@ class Engine {
         if (typeof base !== 'undefined' && base !== null) {
           base = base.replace(/\[pageHTML\]/g, '')
           base = base.replace(/<ABE!--/g, '<!--').replace(/--ABE>/g, '-->')
+          base = base.replace(/<\/body>/g, '<script src="/abecms/libs/clickEditor.js"></script></body>')
           EditorReload.instance.inject(base)
         }
       }
