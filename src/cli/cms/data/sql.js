@@ -1,6 +1,7 @@
 import {parse} from 'node-sqlparser'
 import {Promise} from 'bluebird'
 import path from 'path'
+import _ from 'lodash'
 import {coreUtils, config, Manager, cmsData} from '../../'
 
 /**
@@ -17,7 +18,7 @@ import {coreUtils, config, Manager, cmsData} from '../../'
  */
 export function escapeAbeValuesFromStringRequest(str, jsonPage) {
   var matchFrom = /from .(.*?) /
-  var matchVariable = /{{([a-zA-Z]*)}}/
+  var matchVariable = /{{(.*?)}}/
 
   var matchFromExec = matchFrom.exec(str)
   if (matchFromExec != null && matchFromExec[1] != null) {
@@ -25,7 +26,8 @@ export function escapeAbeValuesFromStringRequest(str, jsonPage) {
     var toReplace = matchFromExec[1]
     while ((fromMatch = matchVariable.exec(toReplace))) {
       try {
-        var value = eval('jsonPage.' + fromMatch[1])
+        var arFrom = fromMatch[1].split('.')
+        var value = _.get(jsonPage, arFrom)
         if (value != null) {
           toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
         } else {
@@ -429,7 +431,8 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
     if (checkIfLeftIsAVariable != null && checkIfLeftIsAVariable.length > 0) {
       variableLeft = checkIfLeftIsAVariable[1]
     }
-    value = eval('jsonDoc.' + variableLeft)
+    var arVariableLeft = variableLeft.split('.')
+    value = _.get(jsonDoc, arVariableLeft)
   } catch (e) {
     // console.log('e', e)
   }
@@ -443,7 +446,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
       if (key.slice(-2) == '[]') {
         key = key.slice(0, -2)
       }
-      let records = eval('jsonDoc.' + key)
+      let records = _.get(jsonDoc, key)
       whereLeftColumn = arValues[1]
       value = []
       // if yes, value is then an array of values
@@ -463,9 +466,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
       var matchRightVariable = regexIsVariable.exec(right.column)
       if (matchRightVariable != null && matchRightVariable.length > 0) {
         try {
-          var jsonOriginalValues = eval(
-            'jsonOriginalDoc.' + matchRightVariable[1]
-          )
+          var jsonOriginalValues = _.get(jsonOriginalDoc, matchRightVariable[1])
           if (
             Object.prototype.toString.call(jsonOriginalValues) ===
             '[object Array]'
@@ -473,7 +474,7 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
             Array.prototype.forEach.call(
               jsonOriginalValues,
               jsonOriginalValue => {
-                compare.push(eval('jsonOriginalValue.' + whereLeftColumn))
+                compare.push(_.get(jsonOriginalValue, whereLeftColumn))
               }
             )
           } else {
@@ -495,7 +496,8 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
 
     if (matchRightVariable != null && matchRightVariable.length > 0) {
       try {
-        var shouldCompare = eval('jsonOriginalDoc.' + matchRightVariable[1])
+        var arVariableRight = matchRightVariable[1].split('.')
+        var shouldCompare = _.get(jsonOriginalDoc, arVariableRight)
         if (shouldCompare != null) {
           compare = shouldCompare
         } else {
