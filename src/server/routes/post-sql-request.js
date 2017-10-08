@@ -7,10 +7,17 @@ var route = function(req, res, next) {
   if (typeof res._header !== 'undefined' && res._header !== null) return
 
   var sourceString = req.body.sourceString
-  var prefillQuantity = req.body.prefillQuantity != null && req.body.prefillQuantity != 'null' ? `prefill-quantity="${req.body.prefillQuantity}"` : ''
+  var prefillQuantity =
+    req.body.prefillQuantity != null && req.body.prefillQuantity != 'null'
+      ? `prefill-quantity="${req.body.prefillQuantity}"`
+      : ''
   var key = req.body.key
-  var jsonPage = req.body.json ? JSON.parse(JSON.stringify(req.body.json)) : {abe_meta: {}}
-  jsonPage.abe_meta.link = url.parse(req.header('referer')).path.replace('/abe/editor', '')
+  var jsonPage = req.body.json
+    ? JSON.parse(JSON.stringify(req.body.json))
+    : {abe_meta: {}}
+  jsonPage.abe_meta.link = url
+    .parse(req.header('referer'))
+    .path.replace('/abe/editor', '')
 
   jsonPage[key] = null
 

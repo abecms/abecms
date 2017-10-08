@@ -117,9 +117,11 @@ var route = function(req, res, next) {
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
-  if(filePath != null &&
+  if (
+    filePath != null &&
     path.extname(filePath) != `.${config.files.templates.extension}` &&
-    path.extname(filePath) != '.json'){
+    path.extname(filePath) != '.json'
+  ) {
     next()
     return
   }
@@ -204,25 +206,25 @@ var route = function(req, res, next) {
       var precontribs = Manager.instance.getPrecontribution()
       var promises = []
       EditorVariables.resultPrecontrib = []
-      if(precontribs != null){
+      if (precontribs != null) {
         Array.prototype.forEach.call(precontribs, precontrib => {
           var p = cmsEditor.editor
-          .create(precontrib, obj.json, true)
-          .then(resultPrecontrib => {
-            EditorVariables.resultPrecontrib.push(resultPrecontrib)
-          })
-          .catch(function(e) {
-            console.error(e)
-          })
+            .create(precontrib, obj.json, true)
+            .then(resultPrecontrib => {
+              EditorVariables.resultPrecontrib.push(resultPrecontrib)
+            })
+            .catch(function(e) {
+              console.error(e)
+            })
           promises.push(p)
         })
         Promise.all(promises)
-        .then(() => {
-          renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
-        })
-        .catch(function(e) {
-          console.error('get-main.js getDataList', e.stack)
-        })
+          .then(() => {
+            renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
+          })
+          .catch(function(e) {
+            console.error('get-main.js getDataList', e.stack)
+          })
       }
     })
     .catch(e => {

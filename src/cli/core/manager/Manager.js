@@ -40,7 +40,7 @@ class Manager {
     // Compatibility for abe version < 3.2.
     // It's possible to reference html from any directory
     if (process.env.ABE_TEMPLATES_PATH) {
-      if(process.env.ABE_TEMPLATES_PATH.charAt(0) === '/'){
+      if (process.env.ABE_TEMPLATES_PATH.charAt(0) === '/') {
         this.pathTemplates = process.env.ABE_TEMPLATES_PATH
       } else {
         this.pathTemplates = path.join(
@@ -141,8 +141,8 @@ class Manager {
           console.error(
             clc.red("can't start the Abe's watch server\n"),
             'This watch server has tried to listen on the port ' +
-            lport +
-            ' but this server is already in use by another process... '
+              lport +
+              ' but this server is already in use by another process... '
           )
         } else {
           console.error(err)
@@ -155,15 +155,17 @@ class Manager {
           console.log('SIGINT:Livereload server has been gracefully terminated')
           process.exit(0)
         })
-      } catch(error){}
+      } catch (error) {}
     })
     process.on('SIGTERM', () => {
       try {
         this.lserver.close(() => {
-          console.log('SIGTERM:Livereload server has been gracefully terminated')
+          console.log(
+            'SIGTERM:Livereload server has been gracefully terminated'
+          )
           process.exit(0)
         })
-      } catch(error){}
+      } catch (error) {}
     })
 
     // sync assets from templates to /site
@@ -264,7 +266,7 @@ class Manager {
       this._watchPartialsFolder = watch.createMonitor(
         this.pathPartials,
         monitor => {
-          monitor.on('created', (f) => {
+          monitor.on('created', f => {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
             if (typeof this.lserver != 'undefined') {
@@ -272,7 +274,7 @@ class Manager {
             }
             this.events.template.emit('update')
           })
-          monitor.on('changed', (f) => {
+          monitor.on('changed', f => {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
             if (typeof this.lserver != 'undefined') {
@@ -280,7 +282,7 @@ class Manager {
             }
             this.events.template.emit('update')
           })
-          monitor.on('removed', (f) => {
+          monitor.on('removed', f => {
             this.getKeysFromSelect()
             this.updateStructureAndTemplates()
             if (typeof this.lserver != 'undefined') {
@@ -336,7 +338,7 @@ class Manager {
             }
             this.events.reference.emit('update')
           })
-          monitor.on('removed', (f) => {
+          monitor.on('removed', f => {
             this.updateReferences()
             if (typeof this.lserver != 'undefined') {
               tinylr.changed(f)
@@ -368,7 +370,7 @@ class Manager {
             }
             this.events.locales.emit('update')
           })
-          monitor.on('removed', (f) => {
+          monitor.on('removed', f => {
             coreUtils.locales.instance.reloadLocales()
             if (typeof this.lserver != 'undefined') {
               tinylr.changed(f)
@@ -383,23 +385,20 @@ class Manager {
 
     try {
       fse.accessSync(this.pathScripts, fse.F_OK)
-      this._watchScripts = watch.createMonitor(
-        this.pathScripts,
-        monitor => {
-          monitor.on('created', () => {
-            abeExtend.plugins.instance.updateScripts()
-            this.events.scripts.emit('update')
-          })
-          monitor.on('changed', () => {
-            abeExtend.plugins.instance.updateScripts()
-            this.events.scripts.emit('update')
-          })
-          monitor.on('removed', () => {
-            abeExtend.plugins.instance.updateScripts()
-            this.events.scripts.emit('update')
-          })
-        }
-      )
+      this._watchScripts = watch.createMonitor(this.pathScripts, monitor => {
+        monitor.on('created', () => {
+          abeExtend.plugins.instance.updateScripts()
+          this.events.scripts.emit('update')
+        })
+        monitor.on('changed', () => {
+          abeExtend.plugins.instance.updateScripts()
+          this.events.scripts.emit('update')
+        })
+        monitor.on('removed', () => {
+          abeExtend.plugins.instance.updateScripts()
+          this.events.scripts.emit('update')
+        })
+      })
     } catch (e) {
       console.log('the directory ' + this.pathScripts + ' does not exist')
     }

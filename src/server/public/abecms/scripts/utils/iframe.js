@@ -52,7 +52,7 @@ export function IframeNode(frameId, selector) {
           '(\\/\\*<!--ABE ' +
             key +
             '[\\S\\s]*?--->\\*\\/)([\\S\\s]*?)(\\/\\*<!--\\/ABE--->\\*\\/)'
-        ) 
+        )
         let styles = iframe.getElementsByTagName('style')
         Array.prototype.forEach.call(styles, style => {
           let matchFromExec = eachStylePattern.exec(style.textContent)
@@ -151,9 +151,9 @@ export function IframeCommentNode(frameId, key) {
   var nodes = IframeGetComment(frameId, 'nodeType', 8, null, null)
   var found = []
   Array.prototype.forEach.call(nodes, node => {
-    if (key.slice(0,2) !== '[[' && node.textContent.indexOf(`${key}=`) > -1) {
+    if (key.slice(0, 2) !== '[[' && node.textContent.indexOf(`${key}=`) > -1) {
       found.push(node)
-    } else if (key.slice(0,2) === '[[' && node.textContent.indexOf(key) > -1) {
+    } else if (key.slice(0, 2) === '[[' && node.textContent.indexOf(key) > -1) {
       found.push(node)
     }
   })

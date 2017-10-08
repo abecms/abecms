@@ -14,7 +14,7 @@ export function getVersions(docPath) {
     config.data.url,
     docPath.replace('.' + config.files.templates.extension, '.json')
   )
-  if(files != null){
+  if (files != null) {
     Array.prototype.forEach.call(files, file => {
       if (file.path.indexOf(dataFile) > -1) {
         result = file.revisions

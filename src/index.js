@@ -11,19 +11,18 @@ import inquirer from 'inquirer'
 import clc from 'cli-color'
 import Surge from 'surge'
 
-const surge = new Surge
+const surge = new Surge()
 const hooks = {}
 let deployPlugins = []
 let websiteName = null
 let dir = null
 
-
-const deployWebsite = function(){
+const deployWebsite = function() {
   const create = new initSite()
-  create.askDeploymentQuestions().then(function(answers){
-    if (answers.deploy){
+  create.askDeploymentQuestions().then(function(answers) {
+    if (answers.deploy) {
       let json = null
-      if (answers.which === 'on surge (it\'s free !)') {
+      if (answers.which === "on surge (it's free !)") {
         deployPlugins.push('abecms/abe-deployer-surge')
         json = {
           deployers: {
@@ -81,7 +80,7 @@ const deployWebsite = function(){
             }
           }
         }
-        if(answers.requiresType === 'It requires a password'){
+        if (answers.requiresType === 'It requires a password') {
           json.deployers.sftp.requiresPassword = true
           json.deployers.sftp.requireSSHKey = false
           json.deployers.sftp.password = answers.password
@@ -99,7 +98,7 @@ const deployWebsite = function(){
   })
 }
 
-const installWebsite = function(){
+const installWebsite = function() {
   const create = new initSite()
   create.askQuestions().then(function(answers) {
     dir = path.join(process.cwd(), answers.name)
@@ -122,7 +121,7 @@ const installWebsite = function(){
   })
 }
 
-const installPlugins = function(){
+const installPlugins = function() {
   const create = new initSite()
   create.askPluginsQuestions().then(function(answers) {
     if (answers.plugins && answers.plugins.length > 0) {
@@ -147,9 +146,7 @@ const installPlugins = function(){
     }
     console.log(
       clc.green(
-        'Yeahhh! Your Abe site ' +
-          websiteName +
-          ' is ready to launch!  🚀  '
+        'Yeahhh! Your Abe site ' + websiteName + ' is ready to launch!  🚀  '
       ),
       clc.cyan('\ncd ' + websiteName + '\nabe serve -i')
     )
@@ -383,7 +380,7 @@ program
   .action(surge.login(hooks))
   .description('Login on Surge to publish projects to the web.')
 
-hooks.preAuth = function (req, next) {
+hooks.preAuth = function(req, next) {
   console.log('')
   if (req.authed) {
     console.log('       Hello ' + req.creds.email + '!')

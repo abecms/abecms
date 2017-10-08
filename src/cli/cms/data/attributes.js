@@ -79,14 +79,14 @@ export function sanitizeSourceAttribute(obj, jsonPage) {
 export function getAttrValuefromKey(template, key, attr, json) {
   var value = null
   var abeTags = cmsData.regex.getTagAbeWithKey(template, key)
-  if (abeTags.length > 0){
+  if (abeTags.length > 0) {
     var attr = cmsData.regex.getAttr(abeTags[0], attr)
-    if(attr !== ''){
+    if (attr !== '') {
       value = cmsData.attributes.getValueFromAttribute(attr, json)
     }
   }
 
-  return value  
+  return value
 }
 /**
  * This function will take the value of an Abe attribute and analyze its content.

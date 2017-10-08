@@ -189,13 +189,19 @@ export default class initSite {
           {
             type: 'confirm',
             name: 'deploy',
-            message: 'Do you want to publish your amazing contributions on Internet',
+            message:
+              'Do you want to publish your amazing contributions on Internet',
             default: false
           },
           {
             type: 'list',
             name: 'which',
-            choices: ['on surge (it\'s free !)', 'a github repository', 'a S3 bucket', 'via (S)FTP'],
+            choices: [
+              "on surge (it's free !)",
+              'a github repository',
+              'a S3 bucket',
+              'via (S)FTP'
+            ],
             message: 'Please select a deployment method',
             default: 0,
             when: function(answers) {
@@ -205,9 +211,10 @@ export default class initSite {
           {
             type: 'input',
             name: 'domain',
-            message: 'Please enter a domain (either your own domain or a domain.surge.sh)',
+            message:
+              'Please enter a domain (either your own domain or a domain.surge.sh)',
             when: function(answers) {
-              return (answers.which === 'on surge (it\'s free !)')
+              return answers.which === "on surge (it's free !)"
             }
           },
           {
@@ -215,7 +222,7 @@ export default class initSite {
             name: 'repository',
             message: 'Please enter the github repository',
             when: function(answers) {
-              return (answers.which === 'a github repository')
+              return answers.which === 'a github repository'
             }
           },
           {
@@ -224,7 +231,7 @@ export default class initSite {
             message: 'Please enter the github branch',
             default: 'master',
             when: function(answers) {
-              return (answers.which === 'a github repository')
+              return answers.which === 'a github repository'
             }
           },
           {
@@ -232,7 +239,7 @@ export default class initSite {
             name: 'username',
             message: 'Please enter the github username',
             when: function(answers) {
-              return (answers.which === 'a github repository')
+              return answers.which === 'a github repository'
             }
           },
           {
@@ -240,7 +247,7 @@ export default class initSite {
             name: 'email',
             message: 'Please enter the github email',
             when: function(answers) {
-              return (answers.which === 'a github repository')
+              return answers.which === 'a github repository'
             }
           },
           {
@@ -249,7 +256,7 @@ export default class initSite {
             message: 'Please enter the S3 region',
             default: 'eu-central-1',
             when: function(answers) {
-              return (answers.which === 'a S3 bucket')
+              return answers.which === 'a S3 bucket'
             }
           },
           {
@@ -257,7 +264,7 @@ export default class initSite {
             name: 'accessKeyId',
             message: 'Please enter the S3 accessKeyId',
             when: function(answers) {
-              return (answers.which === 'a S3 bucket')
+              return answers.which === 'a S3 bucket'
             }
           },
           {
@@ -265,7 +272,7 @@ export default class initSite {
             name: 'secretAccessKey',
             message: 'Please enter the S3 secretAccessKey',
             when: function(answers) {
-              return (answers.which === 'a S3 bucket')
+              return answers.which === 'a S3 bucket'
             }
           },
           {
@@ -273,7 +280,7 @@ export default class initSite {
             name: 'bucket',
             message: 'Please enter the S3 bucket',
             when: function(answers) {
-              return (answers.which === 'a S3 bucket')
+              return answers.which === 'a S3 bucket'
             }
           },
           {
@@ -281,7 +288,7 @@ export default class initSite {
             name: 'prefix',
             message: 'Please enter the S3 prefix',
             when: function(answers) {
-              return (answers.which === 'a S3 bucket')
+              return answers.which === 'a S3 bucket'
             }
           },
           {
@@ -291,7 +298,7 @@ export default class initSite {
             message: 'Please select the protocol',
             default: 0,
             when: function(answers) {
-              return (answers.which === 'via (S)FTP')
+              return answers.which === 'via (S)FTP'
             }
           },
           {
@@ -299,7 +306,7 @@ export default class initSite {
             name: 'host',
             message: 'Please enter the host',
             when: function(answers) {
-              return (answers.which === 'via (S)FTP')
+              return answers.which === 'via (S)FTP'
             }
           },
           {
@@ -307,7 +314,7 @@ export default class initSite {
             name: 'remoteDir',
             message: 'Please enter the remote directory',
             when: function(answers) {
-              return (answers.which === 'via (S)FTP')
+              return answers.which === 'via (S)FTP'
             }
           },
           {
@@ -317,7 +324,7 @@ export default class initSite {
             message: 'Please select the authentication type',
             default: 1,
             when: function(answers) {
-              return (answers.which === 'via (S)FTP')
+              return answers.which === 'via (S)FTP'
             }
           },
           {
@@ -325,7 +332,7 @@ export default class initSite {
             name: 'username',
             message: 'Please enter the username',
             when: function(answers) {
-              return (answers.which === 'via (S)FTP')
+              return answers.which === 'via (S)FTP'
             }
           },
           {
@@ -333,15 +340,22 @@ export default class initSite {
             name: 'password',
             message: 'Please enter the password',
             when: function(answers) {
-              return (answers.which === 'via (S)FTP' && answers.requiresType === 'It requires a password')
+              return (
+                answers.which === 'via (S)FTP' &&
+                answers.requiresType === 'It requires a password'
+              )
             }
           },
           {
             type: 'input',
             name: 'sshKeyPath',
-            message: 'Please enter the ssh KeyPath on your computer (/path/to/id_rsa_pub)',
+            message:
+              'Please enter the ssh KeyPath on your computer (/path/to/id_rsa_pub)',
             when: function(answers) {
-              return (answers.which === 'via (S)FTP' && answers.requiresType === 'It requires a SSH key')
+              return (
+                answers.which === 'via (S)FTP' &&
+                answers.requiresType === 'It requires a SSH key'
+              )
             }
           }
         ])

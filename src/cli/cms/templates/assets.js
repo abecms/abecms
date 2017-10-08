@@ -21,7 +21,9 @@ export function copy() {
 
   directory = fse.lstatSync(dest)
   if (directory.isSymbolicLink()) dest = fse.readlinkSync(dest)
-  var res = dircompare.compareSync(Manager.instance.pathTemplates, dest, {compareDate: true})
+  var res = dircompare.compareSync(Manager.instance.pathTemplates, dest, {
+    compareDate: true
+  })
 
   res.diffSet.forEach(function(entry) {
     var state = {
@@ -34,7 +36,7 @@ export function copy() {
     var name1 = entry.name1 ? entry.name1 : ''
     var name2 = entry.name2 ? entry.name2 : ''
 
-    let exclude = new RegExp("\."+config.files.templates.extension+"$")
+    let exclude = new RegExp('.' + config.files.templates.extension + '$')
     if (
       !exclude.test(name1) &&
       !exclude.test(name2) &&

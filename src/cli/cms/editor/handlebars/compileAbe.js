@@ -28,8 +28,7 @@ export default function compileAbe() {
     try {
       value = content
         ? eval(
-            `content["${hash.dictionnary}"][${arguments[0].data
-              .index}].${key}`
+            `content["${hash.dictionnary}"][${arguments[0].data.index}].${key}`
           )
         : hash.key
       // value = content ? content[hash['dictionnary']][arguments[0].data.index][key] : hash.key

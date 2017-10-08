@@ -16,7 +16,10 @@ var route = function(req, res, next) {
 
   var filePath = req.originalUrl.replace('/abe/page', '')
 
-  if(filePath != null && path.extname(filePath) != `.${config.files.templates.extension}`){
+  if (
+    filePath != null &&
+    path.extname(filePath) != `.${config.files.templates.extension}`
+  ) {
     next()
     return
   }

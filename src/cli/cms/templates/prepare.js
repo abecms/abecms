@@ -98,7 +98,7 @@ export function addAbeDataAttrForHtmlTag(template) {
 
 // Is this function useful ? What is it used for ?
 export function addHasAbeAttr(text) {
-  return text.replace('}}', ' has-abe=\'1\'}}')
+  return text.replace('}}', " has-abe='1'}}")
 }
 
 export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
