@@ -1,4 +1,24 @@
 
+## [3.5.4] - 2017-10-7
+* [[`3f83729cf3`](https://github.com/abecms/abecms/commit/3f83729cf3)] - **ic**: lint (gregorybesson) 
+* [[`e59fb566ff`](https://github.com/abecms/abecms/commit/e59fb566ff)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`da320b537a`](https://github.com/abecms/abecms/commit/da320b537a)] - **fix**: an abe variable with a '-' (like level-1) did not work in an abe type=data select (gregorybesson) 
+* [[`eb750beb2d`](https://github.com/abecms/abecms/commit/eb750beb2d)] - Update abe-data.md (Greg Besson) 
+
+## [3.5.3] - 2017-10-2
+* [[`78fc3bc7d5`](https://github.com/abecms/abecms/commit/78fc3bc7d5)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`d7e7b692f4`](https://github.com/abecms/abecms/commit/d7e7b692f4)] - **fix**: Editor must be able to display the json version of the post (gregorybesson) 
+* [[`0e4e0dda23`](https://github.com/abecms/abecms/commit/0e4e0dda23)] - Update README.md (Greg Besson) 
+* [[`ecf288bc4d`](https://github.com/abecms/abecms/commit/ecf288bc4d)] - Update README.md (Greg Besson) 
+* [[`63cccebca2`](https://github.com/abecms/abecms/commit/63cccebca2)] - Update abe-slug.md (Greg Besson) 
+
+## [3.5.2] - 2017-10-1
+* [[`51ddfb67cd`](https://github.com/abecms/abecms/commit/51ddfb67cd)] - **enhancement**: The locales and references folders are now watched and livereloaded (gregorybesson) 
+
+## [3.5.1] - 2017-10-1
+* [[`acd52dddb5`](https://github.com/abecms/abecms/commit/acd52dddb5)] - **fix**: blog name after the init was completed was undefined (gregorybesson) 
+* [[`52066b187f`](https://github.com/abecms/abecms/commit/52066b187f)] - **doc**: Updating Changelog (gregorybesson) 
+
 ## [3.5.0] - 2017-10-1
 * [[`4a250a04d8`](https://github.com/abecms/abecms/commit/4a250a04d8)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
 * [[`102ff10ea8`](https://github.com/abecms/abecms/commit/102ff10ea8)] - **feature**: abe init now includes the deployment step. abe serve has a new option -t to give a specific template path (gregorybesson) 
