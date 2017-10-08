@@ -1,4 +1,8 @@
 
+## [3.6.0] - 2017-10-7
+* [[`a6f41f292c`](https://github.com/abecms/abecms/commit/a6f41f292c)] - **feature**: It's now possible to navigate between pages\! (gregorybesson) 
+* [[`fa20942029`](https://github.com/abecms/abecms/commit/fa20942029)] - **doc**: Changelog updated (gregorybesson) 
+
 ## [3.5.4] - 2017-10-7
 * [[`3f83729cf3`](https://github.com/abecms/abecms/commit/3f83729cf3)] - **ic**: lint (gregorybesson) 
 * [[`e59fb566ff`](https://github.com/abecms/abecms/commit/e59fb566ff)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
