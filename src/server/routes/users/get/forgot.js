@@ -35,6 +35,10 @@ var route = function route(req, res) {
       if (err) {
         return res.status(200).json({success: 1})
       }
+      
+      if (!user) {
+        return showHtml(res, req, 'Email not found')
+      }
 
       crypto.randomBytes(20, function(err, buf) {
         var resetPasswordToken = buf.toString('hex')

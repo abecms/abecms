@@ -12,9 +12,8 @@
     <div class="panel-body">
       {{#if info}}
         <span class="text-danger">{{@root.info}}</span>
-        <br /><br />
-        <a href="/abe/users/login">Login</a>
-      {{else}}
+        <br />
+      {{/if}}
       <form action="/abe/users/forgot" method="get">
 
         <div class="form-group">
@@ -24,7 +23,6 @@
         <input type="hidden" class="form-control" name="token" value="{{token}}">
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-      {{/if}}
 
       {{abeImport 'login-more' config this}}
     </div>
