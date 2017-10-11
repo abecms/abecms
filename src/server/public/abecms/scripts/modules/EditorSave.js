@@ -93,6 +93,14 @@ export default class EditorSave {
           }
 
           setObjByString(this._json.data[obj][index], keyJson, value)
+          
+          if(input.classList.contains('file-input') && input.getAttribute('data-size')) {
+            var sizes = input.getAttribute('data-size').split(',')
+            Array.prototype.forEach.call(sizes, (size) => {
+              setObjByString(this._json.data[obj][index], `${keyJson}_${size}`, value.replace(/\.(jpg|jpeg|png|gif|svg)/, `_${size}.$1`))
+            })
+          }
+
           var emptyObject = 0
           for(var prop in this._json.data[obj][index]) {
             if(typeof this._json.data[obj][index][prop] !== 'string' || this._json.data[obj][index][prop].trim() !== '') emptyObject++
