@@ -117,7 +117,7 @@ class Manager {
   }
 
   initDev() {
-    console.log('You are in ' + process.env.NODE_ENV + ' mode')
+    console.log(`You are in ${process.env.NODE_ENV} mode`)
     console.log(
       'which means every change in your themes (templates, partials and assets), reference and structure folders will dynamically update your site'
     )
@@ -140,9 +140,7 @@ class Manager {
         if (err.code == 'EADDRINUSE') {
           console.error(
             clc.red("can't start the Abe's watch server\n"),
-            'This watch server has tried to listen on the port ' +
-              lport +
-              ' but this server is already in use by another process... '
+            `This watch server has tried to listen on the port ${lport} but this server is already in use by another process...`
           )
         } else {
           console.error(err)
