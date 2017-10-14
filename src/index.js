@@ -133,7 +133,7 @@ const installPlugins = function() {
     }
     if (deployPlugins && deployPlugins.length > 0) {
       deployPlugins.forEach(plugin => {
-        console.log('installing the plugin: ' + plugin)
+        console.log(`installing the plugin: ${plugin}`)
 
         if (typeof plugin !== 'undefined' && plugin !== null) {
           plugins.instance.install(dir, plugin)
@@ -142,9 +142,10 @@ const installPlugins = function() {
     }
     console.log(
       clc.green(
-        'Yeahhh! Your Abe site ' + websiteName + ' is ready to launch!  🚀  '
+        `Yeahhh! Your Abe site ${websiteName} is ready to launch!  🚀  \n`
       ),
-      clc.cyan('\ncd ' + websiteName + '\nabe serve -i')
+      clc.cyan(`cd ${websiteName}\n`),
+      clc.cyan(`abe serve -i`)
     )
   })
 }
@@ -160,10 +161,12 @@ program
     installWebsite()
   })
   .on('--help', function() {
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ abe init')
-    console.log()
+    console.log(
+      '  Examples:\n',
+      '\n',
+      '   $ abe init\n',
+      ''
+    )
   })
 
 program
@@ -184,11 +187,13 @@ program
     }
   })
   .on('--help', function() {
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ abe create')
-    console.log('    $ abe create [destination]')
-    console.log()
+    console.log(
+      '  Examples:\n',
+      '\n',
+      '    $ abe create\n',
+      '    $ abe create [destination]\n',
+      ''
+    )
   })
 
 program
@@ -236,12 +241,12 @@ program
     })
   })
   .on('--help', function() {
-    console.log('  Examples:')
-    console.log()
     console.log(
-      '    $ abe generate-posts --path /test --destination result --status publish'
+      '  Examples:\n',
+      '\n',
+      '    $ abe generate-posts --path /test --destination result --status publish\n',
+      ''
     )
-    console.log()
   })
 
 program
@@ -319,10 +324,12 @@ program
     cp.stdout.pipe(process.stdout)
   })
   .on('--help', function() {
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ abe serve')
-    console.log()
+    console.log(
+      '  Examples:\n',
+      '\n',
+      '    $ abe serve\n',
+      ''
+    )
   })
 
 program
@@ -341,11 +348,13 @@ program
     }
   })
   .on('--help', function() {
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ abe install')
-    console.log('    $ abe install [plugin]')
-    console.log()
+    console.log(
+      '  Examples:\n',
+      '\n',
+      '    $ abe install\n',
+      '    $ abe install [plugin]',
+      ''
+    )
   })
 
 program
@@ -363,11 +372,13 @@ program
     }
   })
   .on('--help', function() {
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ abe uninstall')
-    console.log('    $ abe uninstall [plugin]')
-    console.log()
+    console.log([
+      '  Examples:',
+      '',
+      '    $ abe uninstall',
+      '    $ abe uninstall [plugin]',
+      ''
+    ])
   })
 
 // Surge
@@ -379,7 +390,7 @@ program
 hooks.preAuth = function(req, next) {
   console.log('')
   if (req.authed) {
-    console.log('       Hello ' + req.creds.email + '!')
+    console.log(`       Hello ${req.creds.email} !`)
   } else {
     console.log('       Welcome!')
   }
