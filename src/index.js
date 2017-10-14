@@ -100,7 +100,7 @@ const deployWebsite = function() {
 
 const installWebsite = function() {
   const create = new initSite()
-  create.askQuestions().then(function(answers) {
+  create.askQuestions().then( answers => {
     dir = path.join(process.cwd(), answers.name)
     websiteName = answers.name
     if (process.env.ROOT) {
@@ -109,15 +109,11 @@ const installWebsite = function() {
     config.root = dir
     process.env['HOME'] = dir
 
-    if (typeof dir !== 'undefined' && dir !== null && answers.name !== '') {
-      create.init(dir).then(function() {
-        create.updateSecurity(answers).then(function() {
-          create.updateTheme(answers).then(function() {
-            deployWebsite()
-          })
-        })
-      })
-    }
+    create
+      .init(dir)
+      .then(() => create.updateSecurity(answers))
+      .then(() => create.updateTheme(answers))
+      .then(() => deployWebsite())
   })
 }
 
@@ -125,7 +121,7 @@ const installPlugins = function() {
   const create = new initSite()
   create.askPluginsQuestions().then(function(answers) {
     if (answers.plugins && answers.plugins.length > 0) {
-      Array.prototype.forEach.call(answers.plugins, plugin => {
+      answers.plugins.forEach(plugin => {
         console.log('installing the plugin: ' + plugin)
 
         if (typeof plugin !== 'undefined' && plugin !== null) {
@@ -136,7 +132,7 @@ const installPlugins = function() {
       })
     }
     if (deployPlugins && deployPlugins.length > 0) {
-      Array.prototype.forEach.call(deployPlugins, plugin => {
+      deployPlugins.forEach(plugin => {
         console.log('installing the plugin: ' + plugin)
 
         if (typeof plugin !== 'undefined' && plugin !== null) {

@@ -109,6 +109,12 @@ result.set = json => {
   loadLocalConfig(result)
 }
 
+result.extend = json => {
+  const localConf = result.getLocalConfig()
+  extend(true, localConf, json)
+  result.save(localConf)
+}
+
 result.save = json => {
   const confPath = path.join(result.root, 'abe.json')
   fse.writeJsonSync(confPath, json, {space: 2, encoding: 'utf-8'})
