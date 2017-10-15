@@ -8,7 +8,7 @@ generate-posts
 
 Options:
 
-`--path=` [ path to site/some/folder ]  
+`--path=` [ path to site/some/json/folder ]  
 `--destination=` [ path to some/folder ]  
 `--type=` [ draft / review / approve]  
 
