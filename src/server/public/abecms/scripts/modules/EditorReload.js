@@ -71,11 +71,14 @@ export default class Reload {
       document.querySelector('#page-template').getAttribute('data-iframe-src')
     )
 
+    var hasNotWritten = true
+
     var initIframe = function() {
       var doc = iframe.contentWindow.document
       str = str.replace(/<\/head>/, '<base href="/" /></head>')
       doc.open('text/html', 'replace')
       doc.write(str)
+      hasNotWritten = false
       doc.close()
 
       setTimeout(function() {
@@ -92,6 +95,7 @@ export default class Reload {
     }
 
     iframe.onload = function() {
+      if(!hasNotWritten) return
       initIframe()
       setTimeout(function() {
         parent.classList.remove('reloading')
