@@ -96,6 +96,11 @@ class Manager {
         process.env.ABE_DESTINATION_PATH
       )
     }
+
+    this.pathTemplates = this.pathTemplates.replace(/\/$/, "");
+    this.pathPartials = this.pathPartials.replace(/\/$/, "");
+    this.pathAssets = this.pathAssets.replace(/\/$/, "");
+    this.pathPublish = this.pathPublish.replace(/\/$/, "");
     this.pathScripts = path.join(config.root, config.scripts.path)
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
