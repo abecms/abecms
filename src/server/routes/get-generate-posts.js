@@ -1,4 +1,4 @@
-import {abeExtend} from '../../cli'
+import {abeExtend, config, Manager} from '../../cli'
 
 var eventOnGeneratePost = function(data) {
   this.write('data: {\n')
@@ -44,7 +44,9 @@ var route = function(req, res) {
   } else {
     // if get
     var result
-    var proc = abeExtend.process('generate-posts', [''], data => {
+    var generateArgs = []
+    generateArgs.push(`ABE_DESTINATION=${Manager.instance.pathPublish.replace(config.root, '')}`)
+    var proc = abeExtend.process('generate-posts', generateArgs, data => {
       res.app.emit('generate-posts', data)
     })
     if (proc) {

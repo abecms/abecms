@@ -38,9 +38,8 @@ export function getAbeMeta(fileObject, json) {
 }
 
 export function getAllWithKeys(withKeys) {
-  const pathData = path.join(config.root, config.data.url)
   const extension = '.json'
-  const files = coreUtils.file.getFilesSync(pathData, true, extension)
+  const files = coreUtils.file.getFilesSync(Manager.instance.pathData, true, extension)
 
   let filesArr = []
 
@@ -108,13 +107,13 @@ export function fromUrl(url) {
     link = link.replace(new RegExp('\\' + path.sep, 'g'), '/')
     link = cmsData.fileAttr.delete('/' + link)
 
-    let publish = Manager.instance.pathPublish.replace(config.root, '')
-    let data = config.data.url
+    const publishPath = Manager.instance.pathPublish.replace(config.root, '')
+    const dataPath = Manager.instance.pathData.replace(config.root, '')
 
     res.root = config.root
 
-    res.json.dir = coreUtils.file.changePath(dir, data)
-    res.publish.dir = coreUtils.file.changePath(dir, publish)
+    res.json.dir = coreUtils.file.changePath(dir, dataPath)
+    res.publish.dir = coreUtils.file.changePath(dir, publishPath)
     res.publish.json = res.json.dir
 
     res.publish.file = cmsData.fileAttr.delete(filename)

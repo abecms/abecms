@@ -48,8 +48,7 @@ export function getPercentOfRequiredTagsFilled(text, json) {
  * @return {[type]}          [description]
  */
 export function getRevisionRelativePath(jsonPath) {
-  const pathData = path.join(config.root, config.data.url) + path.sep
-  return jsonPath.replace(pathData, '')
+  return jsonPath.replace(Manager.instance.pathData + path.sep, '')
 }
 
 /**
@@ -58,13 +57,12 @@ export function getRevisionRelativePath(jsonPath) {
  * @return {[type]}         [description]
  */
 export function getDocPathFromPostUrl(postUrl) {
-  const pathData = path.join(config.root, config.data.url)
   const extension = '.json'
   const templateExtension = '.' + config.files.templates.extension
   const osJsonPath = postUrl
     .replace(templateExtension, extension)
     .replace('/', path.sep)
-  return path.join(pathData, osJsonPath)
+  return path.join(Manager.instance.pathData, osJsonPath)
 }
 
 /**

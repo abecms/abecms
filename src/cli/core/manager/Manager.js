@@ -44,7 +44,7 @@ class Manager {
         config.root,
         process.env.ABE_TEMPLATES_PATH
       )
-      this.pathPartials = this.pathTemplates
+      this.pathPartials = path.join(this.pathTemplates, 'partials')
     } else if (
       config.themes != null &&
       coreUtils.file.exist(
@@ -97,14 +97,22 @@ class Manager {
       )
     }
 
-    this.pathTemplates = this.pathTemplates.replace(/\/$/, "");
-    this.pathPartials = this.pathPartials.replace(/\/$/, "");
-    this.pathAssets = this.pathAssets.replace(/\/$/, "");
-    this.pathPublish = this.pathPublish.replace(/\/$/, "");
+    this.pathData = path.join(config.root, config.data.url)
+    if (process.env.ABE_JSON_PATH) {
+      this.pathData = path.join(
+        config.root,
+        process.env.ABE_JSON_PATH
+      )
+    }
+
+    this.pathTemplates = this.pathTemplates.replace(/\/$/, "")
+    this.pathPartials = this.pathPartials.replace(/\/$/, "")
+    this.pathAssets = this.pathAssets.replace(/\/$/, "")
+    this.pathPublish = this.pathPublish.replace(/\/$/, "")
+    this.pathData = this.pathData.replace(/\/$/, "");
     this.pathScripts = path.join(config.root, config.scripts.path)
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
-    this.pathData = path.join(config.root, config.data.url)
     this.pathLocales = path.join(config.root, 'locales')
 
     this.connections = []
@@ -521,7 +529,7 @@ class Manager {
 
   getListWithStatusOnFolder(status, folder = '') {
     var list = []
-    folder = path.join(config.root, config.data.url, folder)
+    folder = path.join(Manager.instance.pathData, folder)
     Array.prototype.forEach.call(this._list, file => {
       if (
         typeof file[status] !== 'undefined' &&

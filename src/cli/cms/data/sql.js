@@ -188,13 +188,13 @@ export function getFromDirectory(statement, tplPath = '/') {
   var pathFromDir = ''
 
   if (statement === '' || statement === '*' || statement === '/') {
-    pathFromDir = path.join(config.root, config.data.url)
+    pathFromDir = Manager.instance.pathData
   } else if (statement === './') {
-    pathFromDir = path.join(config.root, config.data.url, tplPath)
+    pathFromDir = path.join(Manager.instance.pathData, tplPath)
   } else if (statement.indexOf('/') === 0) {
-    pathFromDir = path.join(config.root, config.data.url, statement)
+    pathFromDir = path.join(Manager.instance.pathData, statement)
   } else if (statement.indexOf('/') !== 0) {
-    pathFromDir = path.join(config.root, config.data.url, tplPath, statement)
+    pathFromDir = path.join(Manager.instance.pathData, tplPath, statement)
   }
 
   return pathFromDir

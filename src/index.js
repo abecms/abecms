@@ -260,6 +260,7 @@ program
   .option('-t, --templates [path]', 'give an absolute or relative path to your templates')
   .option('-a, --assets [path]', 'give an absolute or relative path to your assets')
   .option('-d, --destination [path]', 'give an absolute or relative path to your destination directory')
+  .option('-j, --json [path]', 'give an absolute or relative path to your data directory')  
   .option(
     '-e, --env [development|production|...]',
     'Abe is launched in development mode by default. Use another value to deactivate development mode. You may also use a global env variable NODE_ENV.'
@@ -300,6 +301,10 @@ program
 
     if (typeof options.destination != 'undefined') {
       environment.ABE_DESTINATION_PATH = options.destination
+    }
+
+    if (typeof options.json != 'undefined') {
+      environment.ABE_JSON_PATH = options.json
     }
 
     if (__dirname.indexOf('dist') > -1) {

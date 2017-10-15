@@ -8,10 +8,11 @@ import {config, cmsData, coreUtils, Manager} from '../../'
  * @return {Array} the versions of the doc
  */
 export function getVersions(docPath) {
-  var result = []
-  var files = Manager.instance.getList()
+  let result = []
+  const files = Manager.instance.getList()
+  const dataPath = Manager.instance.pathData.replace(config.root, '')
   var dataFile = path.join(
-    config.data.url,
+    dataPath,
     docPath.replace('.' + config.files.templates.extension, '.json')
   )
   if (files != null) {
