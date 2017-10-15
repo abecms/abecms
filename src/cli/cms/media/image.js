@@ -6,7 +6,7 @@ import Jimp from 'jimp'
 import path from 'path'
 import {Promise} from 'bluebird'
 
-import {abeExtend, coreUtils, cmsData, config} from '../../'
+import {abeExtend, coreUtils, cmsData, config, Manager} from '../../'
 
 export function cropAndSaveFile(imageSize, file, newFile) {
   var p = new Promise(resolve => {
@@ -42,7 +42,7 @@ export function cropAndSaveFiles(images, file, resp) {
       let ext = path.extname(file)
       let newFile = file.replace(ext, `_${images[i]}${ext}`)
       resp.thumbs.push({
-        name: newFile.replace(path.join(config.root, config.publish.url), ''),
+        name: newFile.replace(Manager.instance.pathPublish, ''),
         size: image
       })
 
@@ -118,7 +118,7 @@ export function generateThumbnail(file) {
   var ext = path.extname(file).toLowerCase()
   var thumbFileName = file.replace(ext, `_thumb${ext}`)
   var thumbFileNameRelative = thumbFileName.replace(
-    path.join(config.root, config.publish.url),
+    Manager.instance.pathPublish,
     ''
   )
   var p = new Promise(resolve => {
@@ -271,7 +271,7 @@ export function createMediaFolder(mediaType) {
     'beforeSaveImage',
     folderWebPath
   )
-  var folderFilePath = path.join(config.root, config.publish.url, folderWebPath)
+  var folderFilePath = path.join(Manager.instance.pathPublish, folderWebPath)
   mkdirp.sync(folderFilePath)
 
   return folderFilePath
@@ -279,14 +279,10 @@ export function createMediaFolder(mediaType) {
 
 export function getThumbsList() {
   var thumbsList = []
-  var pathToThumbs = path.join(
-    config.root,
-    config.publish.url,
-    config.upload.image
-  )
+  var pathToThumbs = path.join(Manager.instance.pathPublish,config.upload.image)
   var files = coreUtils.file.getFilesSync(pathToThumbs, true)
   Array.prototype.forEach.call(files, pathFile => {
-    pathFile = pathFile.replace(path.join(config.root, config.publish.url), '')
+    pathFile = pathFile.replace(Manager.instance.pathPublish, '')
     if (pathFile.indexOf('_thumb.') > -1) {
       thumbsList.push({
         originalFile: pathFile.replace('_thumb.', '.'),
@@ -309,11 +305,11 @@ export function getAssociatedImageFileFromThumb(name) {
   }
   var pathThumb = name.split('/')
   pathThumb.pop()
-  pathThumb = path.join(config.root, config.publish.url, pathThumb.join('/'))
+  pathThumb = path.join(Manager.instance.pathPublish, pathThumb.join('/'))
 
   var files = coreUtils.file.getFilesSync(pathThumb, true)
   Array.prototype.forEach.call(files, pathFile => {
-    pathFile = pathFile.replace(path.join(config.root, config.publish.url), '')
+    pathFile = pathFile.replace(Manager.instance.pathPublish, '')
     if (
       pathFile !== originalName &&
       pathFile !== name &&

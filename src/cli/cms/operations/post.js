@@ -59,7 +59,7 @@ export function publish(postUrl, json, user) {
     abeExtend.hooks.instance.trigger('beforePublish', json, postUrl)
 
     const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
-    const postPath = path.join(config.root, config.publish.url, postUrl)
+    const postPath = path.join(Manager.instance.pathPublish, postUrl)
     cmsData.metas.add(json, 'publish', null, user)
 
     var template = cmsTemplates.template.getTemplate(
@@ -113,8 +113,7 @@ export function publish(postUrl, json, user) {
               '.' +
               extension
             const relPath = path.join(
-              config.root,
-              config.publish.url,
+              Manager.instance.pathPublish,
               relatedTemplate.path,
               fileName
             )
@@ -140,7 +139,7 @@ export function unpublish(postUrl, user) {
 
   var p = new Promise((resolve, reject) => {
     const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
-    const postPath = path.join(config.root, config.publish.url, postUrl)
+    const postPath = path.join(Manager.instance.pathPublish, postUrl)
     if (coreUtils.file.exist(docPath)) {
       var json = JSON.parse(JSON.stringify(cmsData.file.get(docPath)))
       if (json.abe_meta.publish != null) {
@@ -177,8 +176,7 @@ export function unpublish(postUrl, user) {
                   '.' +
                   extension
                 const relPath = path.join(
-                  config.root,
-                  config.publish.url,
+                  Manager.instance.pathPublish,
                   relatedTemplate.path,
                   fileName
                 )

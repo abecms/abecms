@@ -1,6 +1,6 @@
 import path from 'path'
 
-import {config, cmsData} from '../../'
+import {config, cmsData, Manager} from '../../'
 
 export function getPercentOfRequiredTagsFilled(text, json) {
   var regAbe = /{{abe[\S\s].*?key=['|"]([\S\s].*?['|"| ]}})/g
@@ -126,8 +126,7 @@ export function getDocRelativePath(jsonPath) {
  */
 export function getPostPath(jsonPath) {
   return path.join(
-    config.root,
-    config.publish.url,
+    Manager.instance.pathPublish,
     getPostRelativePath(jsonPath)
   )
 }

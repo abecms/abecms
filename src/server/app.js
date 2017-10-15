@@ -183,7 +183,7 @@ app.use(function(req, res, next) {
   next()
 })
 
-let publish = path.join(config.root, config.publish.url)
+let publish = Manager.instance.pathPublish
 app.use(express.static(publish))
 
 if (coreUtils.file.exist(Manager.instance.pathPartials)) {

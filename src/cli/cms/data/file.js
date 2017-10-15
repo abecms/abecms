@@ -3,7 +3,7 @@ import mkdirp from 'mkdirp'
 import fse from 'fs-extra'
 import moment from 'moment'
 
-import {abeExtend, coreUtils, cmsData, config} from '../../'
+import {abeExtend, coreUtils, cmsData, config, Manager} from '../../'
 
 export function getAbeMeta(fileObject, json) {
   if (json.name != null) {
@@ -102,13 +102,13 @@ export function fromUrl(url) {
   if (url != null) {
     const dir = path.dirname(url).replace(config.root, '')
     const filename = path.basename(url)
-    const pathPublish = path.join(config.root, config.publish.url, path.sep)
+    const pathPublish = path.join(Manager.instance.pathPublish, path.sep)
 
     let link = url.replace(pathPublish, '')
     link = link.replace(new RegExp('\\' + path.sep, 'g'), '/')
     link = cmsData.fileAttr.delete('/' + link)
 
-    let publish = config.publish.url
+    let publish = Manager.instance.pathPublish.replace(config.root, '')
     let data = config.data.url
 
     res.root = config.root

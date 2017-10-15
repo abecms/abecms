@@ -8,7 +8,7 @@ import execPromise from 'child-process-promise'
 import {coreUtils, cmsTemplates, config, Manager} from '../../'
 
 export function copy() {
-  let dest = path.join(config.root, config.publish.url)
+  let dest = Manager.instance.pathPublish
   let directory = null
   try {
     directory = fse.lstatSync(dest)
@@ -21,7 +21,7 @@ export function copy() {
 
   directory = fse.lstatSync(dest)
   if (directory.isSymbolicLink()) dest = fse.readlinkSync(dest)
-  var res = dircompare.compareSync(Manager.instance.pathTemplates, dest, {
+  var res = dircompare.compareSync(Manager.instance.pathAssets, dest, {
     compareDate: true
   })
 
@@ -36,7 +36,7 @@ export function copy() {
     var name1 = entry.name1 ? entry.name1 : ''
     var name2 = entry.name2 ? entry.name2 : ''
 
-    let exclude = new RegExp('.' + config.files.templates.extension + '$')
+    let exclude = new RegExp(`.${config.files.templates.extension}$`)
     if (
       !exclude.test(name1) &&
       !exclude.test(name2) &&
@@ -45,7 +45,7 @@ export function copy() {
     ) {
       if (typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
         var original = entry.path1
-        var basePath = original.replace(Manager.instance.pathTemplates, '')
+        var basePath = original.replace(Manager.instance.pathAssets, '')
         var move = path.join(dest, basePath)
 
         if (move === dest) {

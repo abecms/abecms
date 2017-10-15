@@ -40,14 +40,10 @@ class Manager {
     // Compatibility for abe version < 3.2.
     // It's possible to reference html from any directory
     if (process.env.ABE_TEMPLATES_PATH) {
-      if (process.env.ABE_TEMPLATES_PATH.charAt(0) === '/') {
-        this.pathTemplates = process.env.ABE_TEMPLATES_PATH
-      } else {
-        this.pathTemplates = path.join(
-          config.root,
-          process.env.ABE_TEMPLATES_PATH
-        )
-      }
+      this.pathTemplates = path.join(
+        config.root,
+        process.env.ABE_TEMPLATES_PATH
+      )
     } else if (
       config.themes != null &&
       coreUtils.file.exist(
@@ -85,6 +81,20 @@ class Manager {
       }
     }
 
+    this.pathAssets = this.pathTemplates
+    if (process.env.ABE_ASSETS_PATH) {
+      this.pathAssets = path.join(
+        config.root,
+        process.env.ABE_ASSETS_PATH
+      )
+    }
+    this.pathPublish = path.join(config.root, config.publish.url)
+    if (process.env.ABE_DESTINATION_PATH) {
+      this.pathPublish = path.join(
+        config.root,
+        process.env.ABE_DESTINATION_PATH
+      )
+    }
     this.pathScripts = path.join(config.root, config.scripts.path)
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
