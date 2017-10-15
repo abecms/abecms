@@ -21,7 +21,7 @@ export function copy() {
   }
 
   try {
-    dirSource = fse.lstatSync(source)
+    const dirSource = fse.lstatSync(source)
     if (!dirSource.isDirectory() && !dirSource.isSymbolicLink()) {
       source = null
     }
