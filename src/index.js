@@ -257,9 +257,9 @@ program
   )
   .option('-p, --port [number]', 'change port of the web server')
   .option('-i, --interactive', 'open browser on web server startup')
-  .option('-t, --templates', 'give an absolute or relative path to your templates')
-  .option('-a, --assets', 'give an absolute or relative path to your assets')
-  .option('-d, --destination', 'give an absolute or relative path to your destination directory')
+  .option('-t, --templates [path]', 'give an absolute or relative path to your templates')
+  .option('-a, --assets [path]', 'give an absolute or relative path to your assets')
+  .option('-d, --destination [path]', 'give an absolute or relative path to your destination directory')
   .option(
     '-e, --env [development|production|...]',
     'Abe is launched in development mode by default. Use another value to deactivate development mode. You may also use a global env variable NODE_ENV.'
@@ -286,19 +286,19 @@ program
       }
     }
 
-    if (options.port != null) {
+    if (typeof options.port != 'undefined') {
       environment.PORT = options.port
     }
 
-    if (options.templates != null) {
+    if (typeof options.templates != 'undefined') {
       environment.ABE_TEMPLATES_PATH = options.templates
     }
 
-    if (options.assets != null) {
+    if (typeof options.assets != 'undefined') {
       environment.ABE_ASSETS_PATH = options.assets
     }
 
-    if (options.destination != null) {
+    if (typeof options.destination != 'undefined') {
       environment.ABE_DESTINATION_PATH = options.destination
     }
 

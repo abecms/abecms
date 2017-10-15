@@ -44,6 +44,7 @@ class Manager {
         config.root,
         process.env.ABE_TEMPLATES_PATH
       )
+      this.pathPartials = this.pathTemplates
     } else if (
       config.themes != null &&
       coreUtils.file.exist(

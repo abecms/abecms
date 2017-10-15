@@ -10,6 +10,7 @@ import {coreUtils, cmsTemplates, config, Manager} from '../../'
 export function copy() {
   let dest = Manager.instance.pathPublish
   let directory = null
+  let source = Manager.instance.pathAssets
   try {
     directory = fse.lstatSync(dest)
     if (!directory.isDirectory() && !directory.isSymbolicLink()) {
@@ -19,63 +20,75 @@ export function copy() {
     mkdirp.sync(dest)
   }
 
+  try {
+    dirSource = fse.lstatSync(source)
+    if (!dirSource.isDirectory() && !dirSource.isSymbolicLink()) {
+      source = null
+    }
+  } catch (e) {
+    source = null
+  }
+
   directory = fse.lstatSync(dest)
   if (directory.isSymbolicLink()) dest = fse.readlinkSync(dest)
-  var res = dircompare.compareSync(Manager.instance.pathAssets, dest, {
-    compareDate: true
-  })
 
-  res.diffSet.forEach(function(entry) {
-    var state = {
-      equal: '==',
-      left: '->',
-      right: '<-',
-      distinct: '<>'
-    }[entry.state]
+  if(source != null){
+    var res = dircompare.compareSync(source, dest, {
+      compareDate: true
+    })
 
-    var name1 = entry.name1 ? entry.name1 : ''
-    var name2 = entry.name2 ? entry.name2 : ''
+    res.diffSet.forEach(function(entry) {
+      var state = {
+        equal: '==',
+        left: '->',
+        right: '<-',
+        distinct: '<>'
+      }[entry.state]
 
-    let exclude = new RegExp(`.${config.files.templates.extension}$`)
-    if (
-      !exclude.test(name1) &&
-      !exclude.test(name2) &&
-      entry.type1 !== 'directory' &&
-      entry.type2 !== 'directory'
-    ) {
-      if (typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
-        var original = entry.path1
-        var basePath = original.replace(Manager.instance.pathAssets, '')
-        var move = path.join(dest, basePath)
+      var name1 = entry.name1 ? entry.name1 : ''
+      var name2 = entry.name2 ? entry.name2 : ''
 
-        if (move === dest) {
-          fse.readdir(original, function(res, items) {
-            Array.prototype.forEach.call(items, item => {
-              var originalItem = path.join(original, item)
-              var lstat = fse.lstatSync(originalItem)
-              var destItem = path.join(dest, item)
+      let exclude = new RegExp(`.${config.files.templates.extension}$`)
+      if (
+        !exclude.test(name1) &&
+        !exclude.test(name2) &&
+        entry.type1 !== 'directory' &&
+        entry.type2 !== 'directory'
+      ) {
+        if (typeof entry.path1 !== 'undefined' && entry.path1 !== null) {
+          var original = entry.path1
+          var basePath = original.replace(Manager.instance.pathAssets, '')
+          var move = path.join(dest, basePath)
 
-              if (!lstat.isDirectory() && !exclude.test(originalItem)) {
-                try {
-                  fsCompare(modifiedTime, originalItem, destItem, function(
-                    err,
-                    diff
-                  ) {
-                    if (diff > 0) fse.copySync(originalItem, destItem)
-                  })
-                } catch (e) {
-                  fse.copySync(originalItem, destItem)
+          if (move === dest) {
+            fse.readdir(original, function(res, items) {
+              Array.prototype.forEach.call(items, item => {
+                var originalItem = path.join(original, item)
+                var lstat = fse.lstatSync(originalItem)
+                var destItem = path.join(dest, item)
+
+                if (!lstat.isDirectory() && !exclude.test(originalItem)) {
+                  try {
+                    fsCompare(modifiedTime, originalItem, destItem, function(
+                      err,
+                      diff
+                    ) {
+                      if (diff > 0) fse.copySync(originalItem, destItem)
+                    })
+                  } catch (e) {
+                    fse.copySync(originalItem, destItem)
+                  }
                 }
-              }
+              })
             })
-          })
-        } else if (entry.type2 === 'missing' || entry.state === 'distinct') {
-          fse.removeSync(move)
-          fse.copySync(original, move)
+          } else if (entry.type2 === 'missing' || entry.state === 'distinct') {
+            fse.removeSync(move)
+            fse.copySync(original, move)
+          }
         }
       }
-    }
-  })
+    })
+  }
 
   return true
 }
