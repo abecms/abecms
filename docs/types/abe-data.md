@@ -178,7 +178,7 @@ If you want to display inside the input select the "title" value.
 > Notes: You can use variables on from like this.
 
 ```html
-{{abe type='data' key='articles' desc='articles' source="select * from /{{some_json_key}}/{{some_other}}" display="title" editable='true'"}}
+{{abe type='data' key='articles' desc='articles' source="select name from /{{some_json_key}}/{{some_other}}" display="title" editable='true'"}}
 ```
 
 ## Use it
