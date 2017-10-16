@@ -37,9 +37,9 @@ export function saveJson(jsonPath, json) {
   return true
 }
 
-export function saveHtml(url, html) {
-  mkdirp.sync(path.dirname(url))
-  fse.writeFileSync(url, html)
+export function saveHtml(pathFile, html) {
+  mkdirp.sync(path.dirname(pathFile))
+  fse.writeFileSync(pathFile, html)
 
   return true
 }

@@ -77,62 +77,6 @@ export function get(pathJson) {
   return json
 }
 
-export function fromUrl(url) {
-  var res = {
-    root: '',
-    draft: {
-      dir: '',
-      file: '',
-      path: ''
-    },
-    publish: {
-      dir: '',
-      file: '',
-      link: '',
-      path: '',
-      json: ''
-    },
-    json: {
-      path: '',
-      file: ''
-    }
-  }
-
-  if (url != null) {
-    const dir = path.dirname(url).replace(config.root, '')
-    const filename = path.basename(url)
-    const pathPublish = path.join(Manager.instance.pathPublish, path.sep)
-
-    let link = url.replace(pathPublish, '')
-    link = link.replace(new RegExp('\\' + path.sep, 'g'), '/')
-    link = cmsData.fileAttr.delete('/' + link)
-
-    const publishPath = Manager.instance.pathPublish.replace(config.root, '')
-    const dataPath = Manager.instance.pathData.replace(config.root, '')
-
-    res.root = config.root
-
-    res.json.dir = coreUtils.file.changePath(dir, dataPath)
-    res.publish.dir = coreUtils.file.changePath(dir, publishPath)
-    res.publish.json = res.json.dir
-
-    res.publish.file = cmsData.fileAttr.delete(filename)
-    res.publish.link = link
-    res.json.file = filename.replace(
-      `.${config.files.templates.extension}`,
-      '.json'
-    )
-    res.publish.json = path.join(
-      res.json.dir,
-      cmsData.fileAttr.delete(res.json.file)
-    )
-
-    res.publish.path = path.join(res.publish.dir, res.publish.file)
-    res.json.path = path.join(res.json.dir, res.json.file)
-  }
-  return res
-}
-
 export function getFilesByType(pathFile, type = null) {
   const extension = '.' + config.files.templates.extension
   let result = []

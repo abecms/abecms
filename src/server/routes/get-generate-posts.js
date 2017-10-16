@@ -45,7 +45,7 @@ var route = function(req, res) {
     // if get
     var result
     var generateArgs = []
-    generateArgs.push(`ABE_DESTINATION=${Manager.instance.pathPublish.replace(config.root, '')}`)
+    generateArgs.push(`ABE_DESTINATION=${path.relative(config.root, Manager.instance.pathPublish)}`)
     var proc = abeExtend.process('generate-posts', generateArgs, data => {
       res.app.emit('generate-posts', data)
     })
@@ -59,7 +59,7 @@ var route = function(req, res) {
       result = {
         success: 0,
         msg:
-          'cannot run process generate-posts, because an other one is already running'
+          'cannot run process generate-posts, because another one is already running'
       }
     }
     res.set('Content-Type', 'application/json')

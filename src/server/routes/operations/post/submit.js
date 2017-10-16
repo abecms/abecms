@@ -1,3 +1,4 @@
+import path from 'path'
 import {
   cmsOperations,
   abeExtend,
@@ -32,7 +33,7 @@ var route = function(req, res, next) {
           if (config.publish['auto-republish'].limit >= nbPosts) {
 
             var generateArgs = []
-            generateArgs.push(`ABE_DESTINATION=${Manager.instance.pathPublish.replace(config.root, '')}`)
+            generateArgs.push(`ABE_DESTINATION=${path.relative(config.root, Manager.instance.pathPublish)}`)
 
             var proc = abeExtend.process('generate-posts', generateArgs, data => {
               res.app.emit('generate-posts', data)
