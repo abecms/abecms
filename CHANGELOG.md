@@ -1,4 +1,38 @@
 
+## [3.6.9] - 2017-10-15
+* [[`2b3d2da0e9`](https://github.com/abecms/abecms/commit/2b3d2da0e9)] - **fix**: generatePosts (gregorybesson) 
+
+## [3.6.8] - 2017-10-15
+* [[`c7ab92a097`](https://github.com/abecms/abecms/commit/c7ab92a097)] - **fix**: assets not synchronized (gregorybesson) 
+
+## [3.6.7] - 2017-10-15
+
+## [3.6.6] - 2017-10-15
+* [[`71777371dc`](https://github.com/abecms/abecms/commit/71777371dc)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`382d8ae6a6`](https://github.com/abecms/abecms/commit/382d8ae6a6)] - **enhancement**: options to target data folder, templates folder, assets folder, website folder (gregorybesson) 
+* [[`a9e6385b92`](https://github.com/abecms/abecms/commit/a9e6385b92)] - Update abe-generate-posts.md (Greg Besson) 
+* [[`1b71868bb4`](https://github.com/abecms/abecms/commit/1b71868bb4)] - Merge pull request #242 from wonknu/bug_reload_safari (Greg Besson) 
+
+## [3.6.5] - 2017-10-15
+* [[`c34cf66c9c`](https://github.com/abecms/abecms/commit/c34cf66c9c)] - **fix**: template path (gregorybesson) 
+
+## [3.6.4] - 2017-10-14
+* [[`a68bb7f594`](https://github.com/abecms/abecms/commit/a68bb7f594)] - **fix**: options on serve (gregorybesson) 
+
+## [3.6.3] - 2017-10-14
+
+## [3.6.2] - 2017-10-14
+* [[`588459fec3`](https://github.com/abecms/abecms/commit/588459fec3)] - **enhancement**: It\s now possible to give a template directory, an asset directory and the website destination when launching abe serve (gregorybesson) 
+* [[`d0a89b81a1`](https://github.com/abecms/abecms/commit/d0a89b81a1)] - **refactoring**: template strings (gregorybesson) 
+* [[`32915ecc1c`](https://github.com/abecms/abecms/commit/32915ecc1c)] - **refactoring**: following @baptistemanson advices (gregorybesson) 
+* [[`52ed260afe`](https://github.com/abecms/abecms/commit/52ed260afe)] - **refactoring**: following @baptistemanson advices (gregorybesson) 
+* [[`73d7f0d909`](https://github.com/abecms/abecms/commit/73d7f0d909)] - **bug**: iframe reload on safari (wonknu10) 
+
+## [3.6.1] - 2017-10-12
+* [[`2b8524b541`](https://github.com/abecms/abecms/commit/2b8524b541)] - Merge pull request #240 from nicolaslabbe/fix/master-bug-forgot-password (Greg Besson) 
+* [[`2b6b3fe76b`](https://github.com/abecms/abecms/commit/2b6b3fe76b)] - **Fix**: bug forgot password (nicolaslabbe) 
+* [[`cb408cb277`](https://github.com/abecms/abecms/commit/cb408cb277)] - **doc**: Changelog updated (gregorybesson) 
+
 ## [3.6.0] - 2017-10-7
 * [[`a6f41f292c`](https://github.com/abecms/abecms/commit/a6f41f292c)] - **feature**: It's now possible to navigate between pages\! (gregorybesson) 
 * [[`fa20942029`](https://github.com/abecms/abecms/commit/fa20942029)] - **doc**: Changelog updated (gregorybesson) 
