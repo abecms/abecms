@@ -377,8 +377,6 @@ export default class EditorAutocomplete {
           if(selector != null) {
             var value = selector.value
             if(key != null) value = JSON.parse(selector.value)[key]
-            console.log("dataVal", dataVal)
-            console.log("value", value)
             dataVal = dataVal.replace('{{' + match[1] + '}}', value)
           }
         }
