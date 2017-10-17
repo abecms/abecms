@@ -373,7 +373,7 @@ export default class EditorAutocomplete {
             theMatch = match[1].split('.')[0]
             key = match[1].split('.')[1]
           }
-          var selector = target.form.querySelector('[data-id="' + theMatch + '"]')
+          var selector = target.form.querySelector('[data-precontrib-templates="'+document.querySelector('#selectTemplate ').value+'"] [data-id="' + theMatch + '"]')
           if(selector != null) {
             var value = selector.value
             if(key != null) value = JSON.parse(selector.value)[key]
