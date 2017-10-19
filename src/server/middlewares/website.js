@@ -1,7 +1,7 @@
 import path from 'path'
 import fse from 'fs-extra'
 
-import {coreUtils, config, abeExtend} from '../../cli'
+import {coreUtils, config, abeExtend, Manager} from '../../cli'
 
 var middleware = function(req, res, next) {
   if (req.originalUrl.indexOf('/abe') > -1) {
