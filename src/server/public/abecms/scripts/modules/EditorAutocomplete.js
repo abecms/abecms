@@ -438,7 +438,7 @@ export default class EditorAutocomplete {
         }
       }
 
-      if (dataVal.indexOf('http') === 0) {
+      if(/http:\/\/|https:\/\/|\/\/|(\?(.*)=)/.test(dataVal)) { 
         this._ajax(
           {
             url: `${dataVal}${val}`,
