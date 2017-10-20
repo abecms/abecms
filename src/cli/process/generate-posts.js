@@ -56,6 +56,22 @@ function publishNext(files, tt, cb, i = 0) {
               jsonObject
             )
 
+            // removing each blocks potentially containing abe data type then updating the source
+            // ie. You have a reference file in an abe data type source and you update this reference file
+            // then it triggers a generate-posts to rebuild the posts and update the content with these 
+            // new data
+            var textTmp = templatesTexts[jsonObject.abe_meta.template].replace(cmsData.regex.eachBlockPattern, '')
+
+            const matches = cmsData.regex.getTagAbeTypeRequest(textTmp)
+
+            Array.prototype.forEach.call(matches, match => {
+              var obj = cmsData.attributes.getAll(match[0], jsonObject)
+
+              if (!obj.editable) {
+                jsonObject[obj.key] = obj.source
+              }
+            })
+
             var obj = {
               publishAll: true,
               type: jsonObject.abe_meta.status,

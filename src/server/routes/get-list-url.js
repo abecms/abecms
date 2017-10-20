@@ -17,6 +17,12 @@ var route = function(router, req, res, next) {
   var urls = []
   var html = ''
 
+  urls.push({
+    url: '/abe',
+    method: '/GET',
+    regex: '/abe$'
+  })
+
   Array.prototype.forEach.call(routes, function(route) {
     urls.push({
       url: route.route.path,
