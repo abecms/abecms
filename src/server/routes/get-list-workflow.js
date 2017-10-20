@@ -1,3 +1,4 @@
+import pkg from '../../../package'
 import path from 'path'
 import fse from 'fs-extra'
 import Handlebars from 'handlebars'
@@ -94,7 +95,8 @@ var route = function(router, req, res, next) {
     workflowUrl: workflowUrl,
     manager: {
       config: JSON.stringify(config)
-    }
+    },
+    abeVersion: pkg.version
   })
 
   res.cookie('csrf-token', res.locals.csrfToken)

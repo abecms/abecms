@@ -1,3 +1,4 @@
+import pkg from '../../../../../package'
 import fs from 'fs-extra'
 import path from 'path'
 
@@ -22,7 +23,8 @@ var route = function route(req, res) {
     isMembers: true,
     manager: {
       config: JSON.stringify(config)
-    }
+    },
+    abeVersion: pkg.version
   })
 
   return res.send(tmp)
