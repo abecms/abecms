@@ -184,11 +184,11 @@ export function saveFile(req) {
         resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
 
         if (mediaType === 'image') {
-          var thumbPromise = generateThumbnail(filePath)
-          thumbPromise.then(function(thumbResp) {
-            resp.thumbnail = /^win/.test(process.platform)
-              ? thumbResp.thumb.replace(/\\/g, '/')
-              : thumbResp.thumb
+          // var thumbPromise = generateThumbnail(filePath)
+          // thumbPromise.then(function(thumbResp) {
+          //   resp.thumbnail = /^win/.test(process.platform)
+          //     ? thumbResp.thumb.replace(/\\/g, '/')
+          //     : thumbResp.thumb
             if (
               req &&
               req.query &&
@@ -213,7 +213,7 @@ export function saveFile(req) {
                 resolve(resp)
               })
             } else resolve(resp)
-          })
+          //})
         } else {
           resolve(resp)
         }
