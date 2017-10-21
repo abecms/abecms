@@ -1,4 +1,13 @@
 
+## [3.6.10] - 2017-10-20
+* [[`60295676d2`](https://github.com/abecms/abecms/commit/60295676d2)] - **refactoring**: removing the thumbnail creation on every image (gregorybesson) 
+* [[`e2e10fbe40`](https://github.com/abecms/abecms/commit/e2e10fbe40)] - **fix**: abe version was not displayed (gregorybesson) 
+* [[`8d2f3a01da`](https://github.com/abecms/abecms/commit/8d2f3a01da)] - **fix**: the homepage route was not editable in the admin Roles management + we do trigger a generate-posts on reference file update (gregorybesson) 
+* [[`c8458cb1f5`](https://github.com/abecms/abecms/commit/c8458cb1f5)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`124bb0a689`](https://github.com/abecms/abecms/commit/124bb0a689)] - **fix**: preview (gregorybesson) 
+* [[`42a262c7a0`](https://github.com/abecms/abecms/commit/42a262c7a0)] - Update abe-data.md (Greg Besson) 
+* [[`fec99fd5d4`](https://github.com/abecms/abecms/commit/fec99fd5d4)] - **doc**: Changelog (gregorybesson) 
+
 ## [3.6.9] - 2017-10-15
 * [[`2b3d2da0e9`](https://github.com/abecms/abecms/commit/2b3d2da0e9)] - **fix**: generatePosts (gregorybesson) 
 
