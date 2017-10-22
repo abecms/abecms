@@ -114,7 +114,7 @@ var hooks = {
   beforeSaveImage: (folderWebPath, abe) => {
     return folderWebPath
   },
-  afterSaveImage: (resp, abe) => {
+  afterSaveImage: (resp, req, abe) => {
     return resp
   },
   afterPageSaveCompile: (tmp, json, abe) => {
