@@ -180,39 +180,38 @@ export function saveFile(req) {
       var fstream = fse.createWriteStream(filePath)
       fstream.on('finish', function() {
         if (hasSentHeader) return
-
-        resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
-
         if (mediaType === 'image') {
           // var thumbPromise = generateThumbnail(filePath)
           // thumbPromise.then(function(thumbResp) {
           //   resp.thumbnail = /^win/.test(process.platform)
           //     ? thumbResp.thumb.replace(/\\/g, '/')
           //     : thumbResp.thumb
-            if (
-              req &&
-              req.query &&
-              req.query.input &&
-              req.query.input.indexOf('data-size') > -1
+
+          resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
+          if (
+            req &&
+            req.query &&
+            req.query.input &&
+            req.query.input.indexOf('data-size') > -1
+          ) {
+            var thumbsSizes = cmsData.regex
+              .getAttr(req.query.input, 'data-size')
+              .replace(' ', '')
+              .split(',')
+            cropAndSaveFiles(thumbsSizes, filePath, resp).then(function(
+              resp
             ) {
-              var thumbsSizes = cmsData.regex
-                .getAttr(req.query.input, 'data-size')
-                .replace(' ', '')
-                .split(',')
-              cropAndSaveFiles(thumbsSizes, filePath, resp).then(function(
-                resp
-              ) {
-                if (/^win/.test(process.platform)) {
-                  for (var i = 0; i < resp.thumbs.length; i++) {
-                    resp.thumbs[i].name = resp.thumbs[i].name.replace(
-                      /\\/g,
-                      '/'
-                    )
-                  }
+              if (/^win/.test(process.platform)) {
+                for (var i = 0; i < resp.thumbs.length; i++) {
+                  resp.thumbs[i].name = resp.thumbs[i].name.replace(
+                    /\\/g,
+                    '/'
+                  )
                 }
-                resolve(resp)
-              })
-            } else resolve(resp)
+              }
+              resolve(resp)
+            })
+          } else resolve(resp)
           //})
         } else {
           resolve(resp)
