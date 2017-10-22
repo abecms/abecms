@@ -52,7 +52,7 @@ describe('cmsOperations', function() {
 
     cmsOperations.create('article', '/article-2.html', JSON.parse(JSON.stringify(this.fixture.jsonArticle)))
       .then(function(resSave) {
-        var json = path.join(config.root, config.data.url, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
+        var json = path.join(Manager.instance.pathData, resSave.abe_meta.latest.abeUrl.replace('.html', '.json'))
         
         abeExtend.hooks.instance.trigger.restore()
         coreUtils.slug.clean.restore()

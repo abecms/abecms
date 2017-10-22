@@ -41,7 +41,7 @@ export default class initSite {
               this.addFolder(config.publish.url)
               this.addFolder(config.structure.url)
               this.addFolder(config.reference.url)
-              this.addFolder(config.data.url)
+              this.addFolder(config.data.path)
               this.addFolder(
                 Manager.instance.pathTemplates.replace(
                   config.root + path.sep,

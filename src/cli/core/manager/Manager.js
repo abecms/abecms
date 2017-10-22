@@ -97,12 +97,18 @@ class Manager {
       )
     }
 
-    this.pathData = path.join(config.root, config.data.url)
+    // config.data.url was the config prior to v3.7.0
     if (process.env.ABE_JSON_PATH) {
       this.pathData = path.join(
         config.root,
         process.env.ABE_JSON_PATH
       )
+    } else if (config.data.url != null) {
+      this.pathData = path.join(config.root, config.data.url)
+    } else if (coreUtils.file.exist(path.join(config.root, config.data.path))) {
+      this.pathData = path.join(config.root, config.data.path)
+    } else {
+      this.pathData = path.join(config.root, 'data')
     }
 
     this.pathTemplates = this.pathTemplates.replace(/\/$/, "")

@@ -86,7 +86,7 @@ describe('coreUtils.file', function() {
     this.sinon = sinon.sandbox.create();
     var stub = sinon.stub(cmsData.fileAttr, 'get')
     stub.returns({d: '2016-12-07T13:04:18.810Z'});
-    var result = coreUtils.file.getDate(path.join(config.root, config.data.url, 'article-abe-d20161207T130418810Z.json'))
+    var result = coreUtils.file.getDate(path.join(Manager.instance.pathData, 'article-abe-d20161207T130418810Z.json'))
     chai.expect(result.getYear()).to.equal(116)
     cmsData.fileAttr.get.restore()
   });
@@ -97,7 +97,7 @@ describe('coreUtils.file', function() {
    */
   it('coreUtils.file.addDateIsoToRevisionPath()', function() {
     var date = '20161207T132049118Z'
-    var urlRevision = path.join(config.root, config.data.url, 'article-abe-d' + date + '.json')
+    var urlRevision = path.join(Manager.instance.pathData, 'article-abe-d' + date + '.json')
     this.sinon = sinon.sandbox.create();
 
     var stub = sinon.stub(cmsData.revision, 'removeStatusAndDateFromFileName')
@@ -106,7 +106,7 @@ describe('coreUtils.file', function() {
     var stub2 = sinon.stub(cmsData.fileAttr, 'add')
     stub2.returns(urlRevision);
 
-    var result = coreUtils.file.addDateIsoToRevisionPath(path.join(config.root, config.data.url, 'article.json'), 'draft')
+    var result = coreUtils.file.addDateIsoToRevisionPath(path.join(Manager.instance.pathData, 'article.json'), 'draft')
     chai.expect(result).to.be.a('string')
     chai.expect(result).to.equal(urlRevision)
     cmsData.revision.removeStatusAndDateFromFileName.restore()
