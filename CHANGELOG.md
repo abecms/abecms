@@ -1,3 +1,12 @@
+* [[`7ecd0b0be8`](https://github.com/abecms/abecms/commit/7ecd0b0be8)] - **doc**: first steps updated (gregorybesson) 
+
+## [3.7.0] - 2017-10-22
+* [[`71ee2efd4a`](https://github.com/abecms/abecms/commit/71ee2efd4a)] - **refactoring**: thumb creation for each image is not done anymore by default (gregorybesson) 
+* [[`34f36087c7`](https://github.com/abecms/abecms/commit/34f36087c7)] - **enhancement**: On upload, the updated value is sent in the event now (gregorybesson) 
+* [[`aaea98f5f0`](https://github.com/abecms/abecms/commit/aaea98f5f0)] - **fix**: hooks argument missing (gregorybesson) 
+* [[`a132ae0d05`](https://github.com/abecms/abecms/commit/a132ae0d05)] - **refactoring**: the path for data posts has changed, which will make possible to add enities like users or partials in the data folder. (gregorybesson) 
+* [[`6087ca11ca`](https://github.com/abecms/abecms/commit/6087ca11ca)] - **refactoring**: the path for data posts has changed, which will make possible to add enities like users or partials in the data folder. (gregorybesson) 
+* [[`10f63c0a8b`](https://github.com/abecms/abecms/commit/10f63c0a8b)] - **doc**: Changelog (gregorybesson) 
 
 ## [3.6.10] - 2017-10-20
 * [[`60295676d2`](https://github.com/abecms/abecms/commit/60295676d2)] - **refactoring**: removing the thumbnail creation on every image (gregorybesson) 
