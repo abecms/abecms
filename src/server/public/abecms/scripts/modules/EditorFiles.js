@@ -103,7 +103,7 @@ export default class EditorFiles {
       Array.prototype.forEach.call(nodes, node => {
         EditorUtils.formToHtml(node, input)
       })
-      this.onUpload._fire(target)
+      this.onUpload._fire(target, input.value)
       setTimeout(function() {
         percent.innerHTML = percentHtml
       }, 1000)
