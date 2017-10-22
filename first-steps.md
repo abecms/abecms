@@ -18,7 +18,7 @@ Default project structure :
 
 ```
 - mysite
- |_ data (contains your json documents)
+ |_ data/posts (contains your json documents)
  |_ site (contains published files, this is your static website)
  |_ structure (add as many folders and subfolders to create your website structure)
  |_ themes/default/templates (put your templates here)
@@ -80,7 +80,7 @@ List of self-descriptive Abe tag
 - tag __image__
 
 ```
-<img src="{{abe type='image' key='image_key' desc='give some tips' width='100' height='100' alt='html alt' tab='default'}}" />
+<img src="{{abe type='image' key='image_key' desc='give some tips' tab='default'}}" />
 ```
 - tag __textarea__
 
@@ -114,12 +114,15 @@ List of self-descriptive Abe tag
 to add a template just paste it inside the /templates directory
 ```
 - mysite
- |_ templates 
-	|_ template.html
-	|_ template_files
+ |_ themes
+  |_ default
+   |_ templates 
+  	|_ template.html
+  	|_ my.css
+    |_ my.js
 ```
 
-Assets must be in the same folder of your template and have the same name followed by `_files`
+Assets must be in the same folder of your templates if you want to synchronize it: Every assets in the templates directory will be synchronized with the /site directory.
 
 More detailed documentation coming soon
 
