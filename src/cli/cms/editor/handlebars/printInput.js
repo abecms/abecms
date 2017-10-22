@@ -1,6 +1,6 @@
 import sourceAutocomplete from './sourceAutocomplete'
 import sourceOption from './sourceOption'
-import {abeExtend, User} from '../../../'
+import {abeExtend, User, cmsData} from '../../../'
 
 export function getAttributes(params) {
   var attributes = ''
@@ -52,7 +52,7 @@ export function createInputSource(attributes, inputClass, params) {
     (params.autocomplete != null && params.autocomplete === 'true') ||
     (params.multiple != null && params.multiple === 'multiple')
   ) {
-    if (params.sourceString.indexOf('http') === 0) lastValues = params.source
+    if(cmsData.sql.getSourceType(params.sourceString) === "url") lastValues = params.source
     else lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
     inputSource += '<div class="autocomplete-result-wrapper">'
     if (
