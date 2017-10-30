@@ -425,6 +425,8 @@ export default class EditorAutocomplete {
         this._previousValue = val
       }
       var dataVal = target.getAttribute('data-value').replace(/&quote;/g, "'")
+      var template = Handlebars.compile(dataVal, {noEscape: true})
+      dataVal = template(this._json.data)
 
       if (dataVal.indexOf('{{') > -1) {
         var match
