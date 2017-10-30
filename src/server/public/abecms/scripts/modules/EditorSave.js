@@ -41,7 +41,7 @@ export default class EditorSave {
    * @return {Object} json
    */
   serializeForm() {
-    var abeForm = document.querySelector('.abeform-wrapper')
+    var abeForm = document.querySelector('.abeform-wrapper') || document.querySelector('.form-create')
     if (abeForm == null) return
     var e = document.getElementById('selectTemplate')
     var selectedTemplate = e.options[e.selectedIndex].value
@@ -87,7 +87,11 @@ export default class EditorSave {
               }
             })
           } else if (input.value.indexOf('{') > -1 || input.value.indexOf('[') > -1) {
-            value = JSON.parse(input.value)
+            try { 
+              value = JSON.parse(input.value) 
+            }catch(e) { 
+              value = null 
+            }
           } else {
             value = input.value
           }
@@ -123,7 +127,11 @@ export default class EditorSave {
               }
             })
           } else if (input.value.indexOf('{') > -1) {
-            value = JSON.parse(input.value)
+            try { 
+              value = JSON.parse(input.value) 
+            }catch(e) { 
+              value = null 
+            }
           } else {
             value = input.value
           }

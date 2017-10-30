@@ -154,12 +154,12 @@ export function nextDataList(tplPath, jsonPage, match) {
     }
 
     var obj = cmsData.attributes.getAll(match, jsonPage)
-    obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
     
     var type = cmsData.sql.getSourceType(obj.sourceString)
     
     switch (type) {
     case 'request':
+      obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
       requestList(obj, tplPath, match, jsonPage)
           .then((jsonPage) => {
             resolve(jsonPage)
@@ -168,6 +168,7 @@ export function nextDataList(tplPath, jsonPage, match) {
           })
       break
     case 'value':
+      obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
       valueList(obj, match, jsonPage)
           .then(() => {
             resolve()
@@ -184,6 +185,7 @@ export function nextDataList(tplPath, jsonPage, match) {
           })
       break
     case 'file':
+      obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
       fileList(obj, tplPath, match, jsonPage)
           .then(() => {
             resolve()

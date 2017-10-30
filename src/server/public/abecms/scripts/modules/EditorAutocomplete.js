@@ -112,7 +112,7 @@ export default class EditorAutocomplete {
       }
     }
 
-    var results = [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result'))
+    var results = this._currentInput && [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')) || []
     var json = this._json.data
     
     var toSave = []
@@ -146,7 +146,8 @@ export default class EditorAutocomplete {
       }
 
     }else if(typeof id !== 'undefined' && id !== null) {
-      if (this._currentInput.getAttribute('visible') === true) {
+      if (typeof this._currentInput !== 'undefined' && this._currentInput !== null
+        && this._currentInput.getAttribute('visible') === true) {
         var nodes = EditorUtils.getNode(attr)
         Array.prototype.forEach.call(nodes, (node) => {
           EditorUtils.formToHtml(node, this._currentInput)
@@ -362,7 +363,9 @@ export default class EditorAutocomplete {
       }else {
         this._previousValue = val
       }
-      var dataVal = target.getAttribute('data-value').replace(/&quote;/g, '\'')
+      var dataVal = target.getAttribute('data-value').replace(/&quote;/g, "'")
+      var template = Handlebars.compile(dataVal, {noEscape: true}) 
+      dataVal = template(this._json.data)
 
       if(dataVal.indexOf('{{') > -1){
         var match
