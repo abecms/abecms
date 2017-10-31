@@ -218,26 +218,7 @@ export function translate(text) {
           var locale = cmsData.regex.getAttr(currentMatch, 'locale')
           var source = cmsData.regex.getAttr(currentMatch, 'source')
 
-          if (locale.indexOf('{{') === -1) {
-            locale = `'${locale}'`
-          } else {
-            locale = locale.replace(/\{\{(.*?)\}\}/, '$1')
-          }
-
-          if (source.indexOf('{{') === -1) {
-            source = `'${source.replace(/'/g, "\\'")}'`
-          } else {
-            source = source.replace(/\{\{(.*?)\}\}/, '$1')
-          }
-
-          // var replace = `{{{i18nAbe ${locale} ${source}}}}`
-          var replace = currentMatch.replace('{{abe', '{{i18nAbe')
-          replace = replace.replace(/locale=['|"].*?['|"]/, locale)
-          replace = replace.replace(/source=['|"].*?['|"]/, source)
-          replace = replace.replace(
-            /{{i18nAbe.*?}}/,
-            `{{{i18nAbe ${locale} ${source}}}}`
-          )
+          var replace = `{{{i18nAbe "${locale}" "${source}" this}}}`
 
           text = text.replace(
             cmsData.regex.escapeTextToRegex(currentMatch, 'g'),
