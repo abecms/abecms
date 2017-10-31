@@ -41,7 +41,7 @@ export default class EditorInputs {
     this._reloads = [].slice.call(
       document.querySelectorAll('[reload=true]:not([data-multiple="multiple"])')
     )
-    this._inputs = [].slice.call(document.querySelectorAll('input.form-abe'))
+    this._inputs = [].slice.call(document.querySelectorAll('.form-abe'))
     this._inputs = this._inputs.concat(
       [].slice.call(document.querySelectorAll('textarea.form-abe'))
     )

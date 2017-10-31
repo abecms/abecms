@@ -32,7 +32,7 @@ For devs: A js full stack framework for js full stack devs with extensibility an
 # Goals
 - Being the easiest CMS on the planet __for the developpers__ by providing 1 clear api stack to rule them all and using a html markup usable by non-devs to create a full website:
   - Develop your HTML templates with hot reload and see changes in real time
-  - Develop your plugins with hor reload and see also changes in real time
+  - Develop your plugins with hot reload and see also changes in real time
   - Directory-based URLs. Create directories and subdirectories in AbeCMS, the URL page will be expressed from its spot on the filesystem.
   - Focus on your HTML integration, dynamizing it becomes a breeze with AbeCMS
 - Being the easiest CMS on the planet __for the users__ by using hyper clean pages and A REAL wysiwyg editor fast and easy to use:
