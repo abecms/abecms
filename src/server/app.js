@@ -166,6 +166,7 @@ if (process.env.NODE_ENV === 'development') {
   process.on('uncaughtException', function(err) {
     // We need to trap this error which is sent on websocket client connection
     if (err.code !== 'ECONNRESET') {
+      console.log(err.stack)
       throw err
     }
   })
@@ -226,6 +227,11 @@ app.use(
 )
 
 abeExtend.hooks.instance.trigger('afterExpress', app, express)
+
+// if served through pm2 with sockets
+if (fse.existsSync(port) && fse.lstatSync(port).isSocket()) {
+  fse.unlink(port);
+}
 
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   server = https.createServer(opts, app)
