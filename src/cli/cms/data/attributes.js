@@ -65,10 +65,10 @@ export function sanitizeSourceAttribute(obj, jsonPage) {
 
         try {
           val = eval('jsonPage.' + val)
+          obj.sourceString = obj.sourceString.replace(match, val)
         } catch (e) {
           val = ''
         }
-        obj.sourceString = obj.sourceString.replace(match, val)
       })
     }
   }
