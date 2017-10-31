@@ -1,3 +1,16 @@
+
+## [3.7.2] - 2017-10-30
+* [[`6771392640`](https://github.com/abecms/abecms/commit/6771392640)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
+* [[`e61cfb4634`](https://github.com/abecms/abecms/commit/e61cfb4634)] - **enhancement**: PM2 config with sockets (gregorybesson) 
+* [[`9c5a3dcde6`](https://github.com/abecms/abecms/commit/9c5a3dcde6)] - Merge pull request #258 from nicolaslabbe/feature/abe-data-variable-dynamique-precontrib (Greg Besson) 
+* [[`baca9310c9`](https://github.com/abecms/abecms/commit/baca9310c9)] - Feature abe type data (nicolaslabbe) 
+* [[`fbf7465dae`](https://github.com/abecms/abecms/commit/fbf7465dae)] - Update login.html (Greg Besson) 
+* [[`84a2e3b3b6`](https://github.com/abecms/abecms/commit/84a2e3b3b6)] - Merge pull request #255 from paaacman/patch-1 (Greg Besson) 
+* [[`dbd1c81279`](https://github.com/abecms/abecms/commit/dbd1c81279)] - Typo in hot reload (paaacman) 
+* [[`e7f56c100c`](https://github.com/abecms/abecms/commit/e7f56c100c)] - Merge pull request #249 from nicolaslabbe/feature/data-url-relative (Greg Besson) 
+
+## [3.7.1] - 2017-10-22
+* [[`0a5af89d85`](https://github.com/abecms/abecms/commit/0a5af89d85)] - **doc**: changelog (gregorybesson) 
 * [[`7ecd0b0be8`](https://github.com/abecms/abecms/commit/7ecd0b0be8)] - **doc**: first steps updated (gregorybesson) 
 
 ## [3.7.0] - 2017-10-22
@@ -12,6 +25,7 @@
 * [[`60295676d2`](https://github.com/abecms/abecms/commit/60295676d2)] - **refactoring**: removing the thumbnail creation on every image (gregorybesson) 
 * [[`e2e10fbe40`](https://github.com/abecms/abecms/commit/e2e10fbe40)] - **fix**: abe version was not displayed (gregorybesson) 
 * [[`8d2f3a01da`](https://github.com/abecms/abecms/commit/8d2f3a01da)] - **fix**: the homepage route was not editable in the admin Roles management + we do trigger a generate-posts on reference file update (gregorybesson) 
+* [[`238d2fe48e`](https://github.com/abecms/abecms/commit/238d2fe48e)] - feature (nicolaslabbe) 
 * [[`c8458cb1f5`](https://github.com/abecms/abecms/commit/c8458cb1f5)] - Merge branch 'master' of https://github.com/abecms/abecms (gregorybesson) 
 * [[`124bb0a689`](https://github.com/abecms/abecms/commit/124bb0a689)] - **fix**: preview (gregorybesson) 
 * [[`42a262c7a0`](https://github.com/abecms/abecms/commit/42a262c7a0)] - Update abe-data.md (Greg Besson) 
