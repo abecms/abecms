@@ -1,10 +1,30 @@
 import {coreUtils} from '../../../'
+import Handlebars from 'handlebars'
 
-export default function translate(lang, str) {
-  var trad = coreUtils.locales.instance.i18n
-  if(typeof trad[lang] !== 'undefined' && trad[lang] !== null
-    && typeof trad[lang][str] !== 'undefined' && trad[lang][str] !== null) {
-    return trad[lang][str]
+function getVariable(variable, json, options) {
+  if (variable.indexOf('{{') > -1) {
+    var template = Handlebars.compile(variable)
+    var res = template(json)
+
+    if (res === "") {
+      template = Handlebars.compile(variable)
+      res = template(options.data.root)
+    }
+    return res
+  }else {
+    return variable
   }
-  return str
+}
+
+export default function translate(lang, str, json, options) {
+  var resLang = getVariable(lang, json, options)
+  var resStr = getVariable(str, json, options)
+
+  var trad = coreUtils.locales.instance.i18n
+  if(typeof trad[resLang] !== 'undefined' && trad[resLang] !== null
+    && typeof trad[resLang][resStr] !== 'undefined' && trad[resLang][resStr] !== null) {
+    return trad[resLang][resStr]
+  }
+
+  return resStr
 }
