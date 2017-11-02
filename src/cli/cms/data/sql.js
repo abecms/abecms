@@ -321,7 +321,7 @@ export function executeQuery(pathexecuteQuery, match, jsonPage) {
  * @return {String} url | request | value | file | other
  */
 export function getSourceType(str) {
-  if(/http:\/\/|https:\/\/|\/\/|(\?(.*)=)/.test(str)) {
+  if(/^(http:\/\/|https:\/\/|:\/\/)|(\?(.*)=)/.test(str)) {
     return 'url'
   }
 
