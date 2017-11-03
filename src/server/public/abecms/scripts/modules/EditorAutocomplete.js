@@ -365,7 +365,7 @@ export default class EditorAutocomplete {
       var dataVal = target.getAttribute('data-value').replace(/&quote;/g, '\'')
 
       if(dataVal.indexOf('{{') > -1){
-        var match
+        var match 
         while (match = /\{\{(.*?)\}\}/.exec(dataVal)) {
           var key = null
           var theMatch = match[1]
