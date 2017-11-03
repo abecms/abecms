@@ -368,11 +368,19 @@ export default class EditorAutocomplete {
       dataVal = template(this._json.data)
 
       if(dataVal.indexOf('{{') > -1){
-        var match
+        var match 
         while (match = /\{\{(.*?)\}\}/.exec(dataVal)) {
-          var selector = target.form.querySelector('[data-id="' + match[1] + '"]')
+          var key = null
+          var theMatch = match[1]
+          if(match[1].indexOf('.') > -1) {
+            theMatch = match[1].split('.')[0]
+            key = match[1].split('.')[1]
+          }
+          var selector = target.form.querySelector('[data-precontrib-templates][style="display: block;"] [data-id="' + theMatch + '"]')
           if(selector != null) {
-            dataVal = dataVal.replace('{{' + match[1] + '}}', selector.value)
+            var value = selector.value
+            if(key != null) value = JSON.parse(selector.value)[key]
+            dataVal = dataVal.replace('{{' + match[1] + '}}', value)
           }
         }
       }
