@@ -166,7 +166,6 @@ if (process.env.NODE_ENV === 'development') {
   process.on('uncaughtException', function(err) {
     // We need to trap this error which is sent on websocket client connection
     if (err.code !== 'ECONNRESET') {
-      console.log(err.stack)
       throw err
     }
   })
