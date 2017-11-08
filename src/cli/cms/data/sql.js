@@ -1,8 +1,12 @@
 import {parse} from 'node-sqlparser'
 import {Promise} from 'bluebird'
 import path from 'path'
-import _ from 'lodash'
-import {coreUtils, config, Manager, cmsData} from '../../'
+import {
+  coreUtils,
+  config,
+  Manager,
+  cmsData
+} from '../../'
 
 /**
  * take a string and json to escape sql character and convert to sql like syntax
@@ -18,22 +22,23 @@ import {coreUtils, config, Manager, cmsData} from '../../'
  */
 export function escapeAbeValuesFromStringRequest(str, jsonPage) {
   var matchFrom = /from .(.*?) /
-  var matchVariable = /{{(.*?)}}/
+  var matchVariable = /{{([a-zA-Z]*)}}/
 
   var matchFromExec = matchFrom.exec(str)
-  if (matchFromExec != null && matchFromExec[1] != null) {
+  if(matchFromExec != null && matchFromExec[1] != null) {
+
     var fromMatch
     var toReplace = matchFromExec[1]
-    while ((fromMatch = matchVariable.exec(toReplace))) {
+    while (fromMatch = matchVariable.exec(toReplace)) {
       try {
-        var arFrom = fromMatch[1].split('.')
-        var value = _.get(jsonPage, arFrom)
-        if (value != null) {
+        var value = eval('jsonPage.' + fromMatch[1])
+        if(value != null) {
           toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', value)
-        } else {
+        }else {
           toReplace = toReplace.replace('{{' + fromMatch[1] + '}}', '')
         }
-      } catch (e) {}
+      }catch(e) {
+      }
     }
 
     str = str.replace(matchFromExec[1], toReplace)
@@ -42,18 +47,11 @@ export function escapeAbeValuesFromStringRequest(str, jsonPage) {
   var from = /from ([\S\s]+)/.exec(str)
 
   var matches = from
-  if (matches[1]) {
+  if(matches[1]) {
     var res = matches[1]
-    var splitAttr = [
-      ' where ',
-      ' order by ',
-      ' limit ',
-      ' WHERE ',
-      ' ORDER BY ',
-      ' LIMIT '
-    ]
-    for (var i = 0; i < splitAttr.length; i++) {
-      if (res.indexOf(splitAttr[i]) > -1) {
+    var splitAttr = [' where ', ' order by ', ' limit ', ' WHERE ', ' ORDER BY ', ' LIMIT ']
+    for(var i = 0; i < splitAttr.length; i++) {
+      if(res.indexOf(splitAttr[i]) > -1) {
         res = res.substring(0, res.indexOf(splitAttr[i]))
       }
     }
@@ -63,7 +61,7 @@ export function escapeAbeValuesFromStringRequest(str, jsonPage) {
     str = str.replace(res, escapedFrom)
   }
 
-  str = str.replace(/``/g, "''")
+  str = str.replace(/``/g, '\'\'')
 
   return str
 }
@@ -83,17 +81,17 @@ export function handleSqlRequest(str, jsonPage) {
   var reconstructSql = ''
   // SQL TYPE
   var type = ''
-  if (request.type != null) {
+  if(request.type != null) {
     type = request.type
   }
   reconstructSql += `${type} `
   // SQL COLUMNS
   var columns = []
-  if (request.columns != null) {
-    if (request.columns === '*') {
+  if(request.columns != null) {
+    if(request.columns === '*') {
       columns.push('*')
-    } else {
-      Array.prototype.forEach.call(request.columns, item => {
+    }else {
+      Array.prototype.forEach.call(request.columns, (item) => {
         columns.push(item.expr.column)
       })
     }
@@ -101,27 +99,28 @@ export function handleSqlRequest(str, jsonPage) {
   reconstructSql += `${JSON.stringify(columns)} `
   // SQL FROM
   var from = []
-  if (request.from != null) {
-    Array.prototype.forEach.call(request.from, item => {
+  if(request.from != null) {
+
+    Array.prototype.forEach.call(request.from, (item) => {
       from.push(item.table)
     })
-  } else {
+  }else {
     from.push('*')
   }
   reconstructSql += `from ${JSON.stringify(from)} `
 
   var where = null
-  if (request.where != null) {
+  if(request.where != null) {
     where = request.where
   }
 
   var limit = -1
-  if (request.limit != null) {
+  if(request.limit != null) {
     limit = request.limit[request.limit.length - 1].value
   }
 
   var orderby = null
-  if (request.orderby != null && request.orderby.length > 0) {
+  if(request.orderby != null && request.orderby.length > 0) {
     orderby = {
       column: request.orderby[0].expr.column,
       type: request.orderby[0].type
@@ -166,10 +165,10 @@ export function getDataSource(str) {
  * @param  {String} statement the from clause
  * @return {String}           the from sanitized
  */
-export function sanitizeFromStatement(statement) {
+export function sanitizeFromStatement(statement){
   var from = ''
 
-  if (statement != null) {
+  if(statement != null) {
     from = statement[0].replace(/___abe_dot___/g, '.')
     from = from.replace(/___abe___/g, '/')
     from = from.replace(/___abe_dash___/g, '-')
@@ -184,17 +183,20 @@ export function sanitizeFromStatement(statement) {
  * @param  {String} tplPath   the path from the template originator
  * @return {string}           the directory to analyze
  */
-export function getFromDirectory(statement, tplPath = '/') {
+export function getFromDirectory(statement, tplPath){
   var pathFromDir = ''
+  if(!tplPath){
+    tplPath = '/'
+  }
 
-  if (statement === '' || statement === '*' || statement === '/') {
-    pathFromDir = Manager.instance.pathData
-  } else if (statement === './') {
-    pathFromDir = path.join(Manager.instance.pathData, tplPath)
-  } else if (statement.indexOf('/') === 0) {
-    pathFromDir = path.join(Manager.instance.pathData, statement)
-  } else if (statement.indexOf('/') !== 0) {
-    pathFromDir = path.join(Manager.instance.pathData, tplPath, statement)
+  if(statement === '' || statement === '*' || statement === '/') {
+    pathFromDir = path.join(config.root, config.data.url)
+  }else if(statement === './') {
+    pathFromDir = path.join(config.root, config.data.url, tplPath)
+  }else if(statement.indexOf('/') === 0) {
+    pathFromDir = path.join(config.root, config.data.url, statement)
+  }else if(statement.indexOf('/') !== 0) {
+    pathFromDir = path.join(config.root, config.data.url, tplPath, statement)
   }
 
   return pathFromDir
@@ -207,23 +209,18 @@ export function getFromDirectory(statement, tplPath = '/') {
  * @param  {Object} orderby {orderby: {column: 'date'}} | {orderby: {column: 'random', type: 'ASC'}}
  * @return {Array}         sorted array
  */
-export function executeOrderByClause(files, orderby) {
-  if (orderby != null) {
-    if (orderby.column.toLowerCase() === 'random') {
+export function executeOrderByClause(files, orderby){
+  if(orderby != null) {
+    if(orderby.column.toLowerCase() === 'random') {
       files = coreUtils.sort.shuffle(files)
-    } else if (orderby.column.toLowerCase() === 'date') {
-      if (orderby.type.toLowerCase() === 'asc') {
+    } else if(orderby.column.toLowerCase() === 'date') {
+      if(orderby.type.toLowerCase() === 'asc') {
         files.sort(cmsData.sort.byDateAsc)
-      } else if (orderby.type.toLowerCase() === 'desc') {
+      } else if(orderby.type.toLowerCase() === 'desc') {
         files.sort(cmsData.sort.byDateDesc)
       }
     } else {
-      files.sort(
-        coreUtils.sort.predicatBy(
-          orderby.column.toLowerCase(),
-          orderby.type.toLowerCase() === 'desc' ? -1 : 1
-        )
-      )
+      files.sort(coreUtils.sort.predicatBy(orderby.column.toLowerCase(), (orderby.type.toLowerCase() === 'desc')? -1:1 ))
     }
   }
 
@@ -238,9 +235,9 @@ export function executeOrderByClause(files, orderby) {
  * @param  {Array} files      paths
  * @return {Array}                files
  */
-export function keepOnlyPublishedPost(files) {
+export function keepOnlyPublishedPost(files){
   var publishedValue = []
-  Array.prototype.forEach.call(files, file => {
+  Array.prototype.forEach.call(files, (file) => {
     if (file.publish != null) {
       publishedValue.push(file.publish)
     }
@@ -258,17 +255,17 @@ export function keepOnlyPublishedPost(files) {
  * @param  {Array} pathFromClause paths
  * @return {Array}                files
  */
-export function executeFromClause(files, statement, pathFromClause) {
+export function executeFromClause(files, statement, pathFromClause){
   var from = sanitizeFromStatement(statement)
 
   // if the from clause ends with a dot, we won't recurse the directory analyze
-  if (from.slice(-1) === '.') {
+  if(from.slice(-1) === '.'){
     from = from.slice(0, -1)
   }
-
+  
   var fromDirectory = getFromDirectory(from, pathFromClause)
 
-  var files_array = files.filter(element => {
+  var files_array = files.filter((element) => {
     if (element.path.indexOf(fromDirectory) > -1) {
       return true
     }
@@ -286,16 +283,9 @@ export function executeFromClause(files, statement, pathFromClause) {
  * @param  {Object} jsonPage  json of post
  * @return {Array}           found object that match
  */
-export function execQuery(match, jsonPage) {
+export function execQuery(pathQuery, match, jsonPage) {
   var files = keepOnlyPublishedPost(Manager.instance.getList())
-  var request = handleSqlRequest(
-    cmsData.regex.getAttr(match, 'source'),
-    jsonPage
-  )
-  var pathQuery =
-    jsonPage && jsonPage.abe_meta != null && jsonPage.abe_meta.link != null
-      ? path.dirname(jsonPage.abe_meta.link)
-      : '/'
+  var request = handleSqlRequest(cmsData.regex.getAttr(match, 'source'), jsonPage)
 
   files = executeFromClause(files, request.from, pathQuery)
   files = executeWhereClause(files, request.where, request.columns, jsonPage)
@@ -304,13 +294,13 @@ export function execQuery(match, jsonPage) {
   return files
 }
 
-export function executeQuerySync(match, jsonPage) {
-  return execQuery(match, jsonPage)
+export function executeQuerySync(pathQuerySync, match, jsonPage) {
+  return execQuery(pathQuerySync, match, jsonPage)
 }
 
-export function executeQuery(match, jsonPage) {
-  var p = new Promise(resolve => {
-    var res = execQuery(match, jsonPage)
+export function executeQuery(pathexecuteQuery, match, jsonPage) {
+  var p = new Promise((resolve) => {
+    var res = execQuery(pathexecuteQuery, match, jsonPage)
     resolve(res)
   }).catch(function(e) {
     console.error(e)
@@ -331,20 +321,22 @@ export function executeQuery(match, jsonPage) {
  * @return {String} url | request | value | file | other
  */
 export function getSourceType(str) {
-  if(/^(http:\/\/|https:\/\/|:\/\/)|(\?(.*)=)/.test(str)) { 
+  if(/^(http:\/\/|https:\/\/|:\/\/|\/(.*)\?(.*)[^ ]=)/.test(str)) {
     return 'url'
   }
 
-  if (/select[\S\s]*?from/.test(str)) {
+  if(/select[\S\s]*?from/.test(str)) {
     return 'request'
   }
 
   try {
     JSON.parse(str)
     return 'value'
-  } catch (e) {}
+  }catch(e) {
 
-  if (/\.json/.test(str)) {
+  }
+
+  if(/\.json/.test(str)) {
     return 'file'
   }
 
@@ -363,26 +355,26 @@ export function getSourceType(str) {
  * @param  {Object} jsonPage json post
  * @return {Array}          of files
  */
-export function executeWhereClause(files, wheres, columns, jsonPage) {
-  if (typeof wheres === 'undefined' || wheres === null) return files
+export function executeWhereClause(files, wheres, columns, jsonPage){
+  if(typeof wheres === 'undefined' || wheres === null) return files
   var res = []
   var json = {}
   var jsonValues = {}
 
-  for (let file of files) {
-    if (wheres != null) {
-      if (!recurseWhere(wheres, file, jsonPage)) {
+  for(let file of files) {
+    if(wheres != null) {
+      if(!recurseWhere(wheres, file, jsonPage)) {
         json = JSON.parse(JSON.stringify(file))
         jsonValues = {}
 
-        if (columns != null && columns.length > 0 && columns[0] !== '*') {
-          Array.prototype.forEach.call(columns, column => {
-            if (json[column] != null) {
+        if(columns != null && columns.length > 0 && columns[0] !== '*') {
+          Array.prototype.forEach.call(columns, (column) => {
+            if(json[column] != null) {
               jsonValues[column] = json[column]
             }
           })
           jsonValues['abe_meta'] = json['abe_meta']
-        } else {
+        }else {
           jsonValues = json
         }
 
@@ -403,8 +395,8 @@ export function executeWhereClause(files, wheres, columns, jsonPage) {
  * @param  {Int} maxLimit 
  * @return {Array} of files
  */
-export function executeLimitClause(files, maxLimit) {
-  if (files.length > maxLimit && maxLimit > 0) {
+export function executeLimitClause(files, maxLimit){
+  if(files.length > maxLimit && maxLimit > 0) {
     files.splice(maxLimit, files.length - maxLimit)
   }
 
@@ -428,30 +420,29 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
     var variableLeft = where.left.column
     var whereLeftColumn = where.left.column
     var checkIfLeftIsAVariable = regexIsVariable.exec(variableLeft)
-    if (checkIfLeftIsAVariable != null && checkIfLeftIsAVariable.length > 0) {
+    if(checkIfLeftIsAVariable != null && checkIfLeftIsAVariable.length > 0) {
       variableLeft = checkIfLeftIsAVariable[1]
     }
-    var arVariableLeft = variableLeft.split('.')
-    value = _.get(jsonDoc, arVariableLeft)
-  } catch (e) {
+    value = eval('jsonDoc.' + variableLeft)
+  }catch(e) {
     // console.log('e', e)
   }
 
-  if (where.operator === 'IN' || where.operator === 'NOT IN') {
-    if (value == null) {
+  if(where.operator === 'IN' || where.operator === 'NOT IN') {
+    if(value == null) {
       // is the form of variableLeft something like elt.attribute or elt[].attribute?
       // so maybe is elt an array ?
       let arValues = variableLeft.split('.')
       let key = arValues[0]
-      if (key.slice(-2) == '[]') {
+      if(key.slice(-2) == '[]'){
         key = key.slice(0, -2)
       }
-      let records = _.get(jsonDoc, key)
+      let records = eval('jsonDoc.' + key)
       whereLeftColumn = arValues[1]
       value = []
       // if yes, value is then an array of values
-      if (records != null) {
-        Array.prototype.forEach.call(records, record => {
+      if(records != null) {
+        Array.prototype.forEach.call(records, (record) => {
           try {
             let val = record[arValues[1]]
             value.push(val)
@@ -462,48 +453,42 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
       }
     }
     compare = []
-    Array.prototype.forEach.call(where.right.value, right => {
+    Array.prototype.forEach.call(where.right.value, (right) => {
       var matchRightVariable = regexIsVariable.exec(right.column)
-      if (matchRightVariable != null && matchRightVariable.length > 0) {
+      if(matchRightVariable != null && matchRightVariable.length > 0) {
         try {
-          var jsonOriginalValues = _.get(jsonOriginalDoc, matchRightVariable[1])
-          if (
-            Object.prototype.toString.call(jsonOriginalValues) ===
-            '[object Array]'
-          ) {
-            Array.prototype.forEach.call(
-              jsonOriginalValues,
-              jsonOriginalValue => {
-                compare.push(_.get(jsonOriginalValue, whereLeftColumn))
-              }
-            )
+          var jsonOriginalValues = eval('jsonOriginalDoc.' + matchRightVariable[1])
+          if( Object.prototype.toString.call(jsonOriginalValues) === '[object Array]' ) {
+            Array.prototype.forEach.call(jsonOriginalValues, (jsonOriginalValue) => {
+              compare.push(eval('jsonOriginalValue.' + whereLeftColumn))
+            })
           } else {
             compare.push(jsonOriginalValues)
           }
-        } catch (e) {}
-      } else {
+        }catch(e) {}
+      }
+      else{
         compare.push(right.column)
       }
     })
   } else {
-    if (where.right.column != null) {
+    if(where.right.column != null) {
       compare = where.right.column
-    } else if (where.right.value != null) {
+    } else if(where.right.value != null) {
       compare = where.right.value
     }
 
     var matchRightVariable = regexIsVariable.exec(compare)
 
-    if (matchRightVariable != null && matchRightVariable.length > 0) {
+    if(matchRightVariable != null && matchRightVariable.length > 0) {
       try {
-        var arVariableRight = matchRightVariable[1].split('.')
-        var shouldCompare = _.get(jsonOriginalDoc, arVariableRight)
-        if (shouldCompare != null) {
+        var shouldCompare = eval('jsonOriginalDoc.' + matchRightVariable[1])
+        if(shouldCompare != null) {
           compare = shouldCompare
-        } else {
+        }else {
           compare = null
         }
-      } catch (e) {
+      }catch(e) {
         compare = null
       }
     }
@@ -515,25 +500,25 @@ export function getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc) {
   }
 }
 
-export function isInStatementCorrect(values, isCorrect) {
+export function isInStatementCorrect(values, isCorrect){
   let hasPassedTest = false
-  if (Object.prototype.toString.call(values.left) === '[object Array]') {
-    Array.prototype.forEach.call(values.left, left => {
-      Array.prototype.forEach.call(values.right, right => {
-        if (left != null && left === right) {
+  if( Object.prototype.toString.call(values.left) === '[object Array]' ) {
+    Array.prototype.forEach.call(values.left, (left) => {
+      Array.prototype.forEach.call(values.right, (right) => {
+        if(left != null && left === right) {
           hasPassedTest = true
         }
       })
     })
   } else {
-    Array.prototype.forEach.call(values.right, right => {
-      if (values.left === right) {
+    Array.prototype.forEach.call(values.right, (right) => {
+      if(values.left === right) {
         hasPassedTest = true
       }
     })
   }
 
-  if (hasPassedTest) isCorrect = !isCorrect
+  if(hasPassedTest) isCorrect = !isCorrect
 
   return isCorrect
 }
@@ -555,57 +540,57 @@ export function recurseWhere(where, jsonDoc, jsonOriginalDoc) {
   var isNotCorrect = false
   var values
 
-  switch (where.operator) {
-    case '=':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left === values.right)
-      break
-    case '!=':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left !== values.right)
-      break
-    case '>':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left > values.right)
-      break
-    case '>=':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left >= values.right)
-      break
-    case '<':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left < values.right)
-      break
-    case '<=':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left <= values.right)
-      break
-    case 'LIKE':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left && values.left.indexOf(values.right) > -1)
-      break
-    case 'NOT LIKE':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = !(values.left && values.left.indexOf(values.right) === -1)
-      break
-    case 'AND':
-      isNotLeftCorrect = recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
-      isNotRightCorrect = recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = isNotLeftCorrect || isNotRightCorrect ? true : false
-      break
-    case 'OR':
-      isNotLeftCorrect = recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
-      isNotRightCorrect = recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = isNotLeftCorrect && isNotRightCorrect ? true : false
-      break
-    case 'IN':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = isInStatementCorrect(values, true)
-      break
-    case 'NOT IN':
-      values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
-      isNotCorrect = isInStatementCorrect(values, false)
-      break
+  switch(where.operator) {
+  case '=':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left === values.right)
+    break
+  case '!=':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left !== values.right)
+    break
+  case '>':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left > values.right)
+    break
+  case '>=':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left >= values.right)
+    break
+  case '<':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left < values.right)
+    break
+  case '<=':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left <= values.right)
+    break
+  case 'LIKE':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left && values.left.indexOf(values.right) > -1)
+    break
+  case 'NOT LIKE':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = !(values.left && values.left.indexOf(values.right) === -1)
+    break
+  case 'AND':
+    isNotLeftCorrect = recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+    isNotRightCorrect = recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = (isNotLeftCorrect || isNotRightCorrect) ? true : false
+    break
+  case 'OR':
+    isNotLeftCorrect = recurseWhere(where.left, jsonDoc, jsonOriginalDoc)
+    isNotRightCorrect = recurseWhere(where.right, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = (isNotLeftCorrect && isNotRightCorrect) ? true : false
+    break
+  case 'IN':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = isInStatementCorrect(values, true)
+    break
+  case 'NOT IN':
+    values = getWhereValuesToCompare(where, jsonDoc, jsonOriginalDoc)
+    isNotCorrect = isInStatementCorrect(values, false)
+    break
   }
 
   return isNotCorrect
