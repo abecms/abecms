@@ -34,7 +34,7 @@
         <ul class="nav nav-tabs" role="tablist">
           {{#each form}}
             <li role="presentation" class="{{#if @first}}active{{/if}}">
-              <a href="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
+              <a data-target="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
                 {{@key}}
               </a>
             </li>
