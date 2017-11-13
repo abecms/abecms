@@ -34,6 +34,8 @@ var route = function(req, res) {
     res.write('data: "msg": "open"\n')
     res.write('data: }\n\n')
 
+    req.setTimeout(0);
+
     req.connection.addListener(
       'close',
       function() {

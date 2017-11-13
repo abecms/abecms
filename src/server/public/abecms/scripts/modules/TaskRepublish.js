@@ -8,7 +8,7 @@ import on from 'on'
 export default class TaskRepublish {
   constructor() {
     this._ajax = Nanoajax.ajax
-
+    this._sourceOpen = false 
     // this.remove = on(this)
 
     // event handlers
@@ -72,6 +72,7 @@ export default class TaskRepublish {
         source.addEventListener(
           'open',
           e => {
+            this._sourceOpen = true
             // Connection was opened.
           },
           false
@@ -80,8 +81,9 @@ export default class TaskRepublish {
         source.addEventListener(
           'error',
           e => {
-            if (e.readyState == EventSource.CLOSED) {
-              // Connection was closed.
+            if (e.type === "error") { 
+              this._sourceOpen = false 
+              source.close(); 
             }
           },
           false
@@ -94,8 +96,10 @@ export default class TaskRepublish {
 
   _btnGeneratePostsClick(e) {
     e.preventDefault()
-    // this._btnGeneratePosts.querySelector('[data-not-clicked]').className = 'hidden'
-    // this._btnGeneratePosts.querySelector('[data-clicked]').className = ''
+    if (!this._sourceOpen) { 
+      this.rebind() 
+    }
+    
     this._ajax(
       {
         url: document.location.origin + '/abe/generate-posts?imNotSse=true',
