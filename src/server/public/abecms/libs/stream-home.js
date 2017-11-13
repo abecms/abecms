@@ -127,7 +127,7 @@ StreamItem.prototype.getTextContent = function getTextContent () {
 
   switch(this.data.operation){
     case actionsType.PUBLISH: text = 'has published a page'; break;
-    case actionsType.REVIEW: text = 'has reviewed a page'; break;
+    case actionsType.REVIEW: text = 'has sent this page for review'; break;
     case actionsType.CREATE: text = 'has created a new page'; break;
     case actionsType.DELETE: text = 'has deleted a page'; break;
     case actionsType.REJECT: text = 'has rejected a page'; break;
