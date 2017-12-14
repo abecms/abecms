@@ -100,18 +100,6 @@ export default class EditorAutocomplete {
     var nodeComments = IframeCommentNode('#page-template', id.replace(/\./g, '-'))
     var maxLength = this._currentInput.getAttribute('data-maxlength')
 
-    if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
-      maxLength = parseInt(maxLength)
-      var countLength = [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')).length
-      if(countLength === maxLength) {
-        this._currentInput.value = ''
-        this._divWrapper.parentNode.removeChild(this._divWrapper)
-        this._currentInput.setAttribute('disabled', 'disabled')
-      }else {
-        this._currentInput.removeAttribute('disabled')
-      }
-    }
-
     var results = this._currentInput && [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')) || []
     var json = this._json.data
     
@@ -152,6 +140,18 @@ export default class EditorAutocomplete {
         Array.prototype.forEach.call(nodes, (node) => {
           EditorUtils.formToHtml(node, this._currentInput)
         })
+      }
+    }
+
+    if(typeof maxLength !== 'undefined' && maxLength !== null && maxLength !== '') {
+      maxLength = parseInt(maxLength)
+      var countLength = [].slice.call(this._currentInput.parentNode.querySelectorAll('.autocomplete-result-wrapper .autocomplete-result')).length
+      if(countLength === maxLength) {
+        this._currentInput.value = ''
+        this._divWrapper.parentNode.removeChild(this._divWrapper)
+        this._currentInput.setAttribute('disabled', 'disabled')
+      }else {
+        this._currentInput.removeAttribute('disabled')
       }
     }
 
