@@ -90,7 +90,7 @@
     "fs-extra": "^2.0.0",
     "handlebars": "^4.0.3",
     "handlebars-helper-slugify": "^0.3.2",
-    "handlebars-helpers": "^0.8.0",
+    "handlebars-helpers": "^0.10.0",
     "handlebars-intl": "^1.1.1",
     "helmet": "^3.1.0",
     "helper-markdown": "^0.2.1",
