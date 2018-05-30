@@ -163,7 +163,7 @@
     "node-sass": "^4.3.0",
     "nodemon": "^1.8.1",
     "once": "^1.4.0",
-    "parallelshell": "^2.0.0",
+    "parallelshell": "^3.0.2",
     "prettier": "^1.5.3",
     "q": "^1.5.0",
     "selenium-download": "^2.0.10",
