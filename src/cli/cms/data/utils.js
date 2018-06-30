@@ -123,10 +123,7 @@ export function getDocRelativePath(jsonPath) {
  * @return {[type]}          [description]
  */
 export function getPostPath(jsonPath) {
-  return path.join(
-    Manager.instance.pathPublish,
-    getPostRelativePath(jsonPath)
-  )
+  return path.join(Manager.instance.pathPublish, getPostRelativePath(jsonPath))
 }
 
 /**

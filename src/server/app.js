@@ -229,7 +229,7 @@ abeExtend.hooks.instance.trigger('afterExpress', app, express)
 
 // if served through pm2 with sockets
 if (fse.existsSync(port) && fse.lstatSync(port).isSocket()) {
-  fse.unlink(port);
+  fse.unlink(port)
 }
 
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {

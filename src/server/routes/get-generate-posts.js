@@ -34,7 +34,7 @@ var route = function(req, res) {
     res.write('data: "msg": "open"\n')
     res.write('data: }\n\n')
 
-    req.setTimeout(0);
+    req.setTimeout(0)
 
     req.connection.addListener(
       'close',
@@ -47,7 +47,12 @@ var route = function(req, res) {
     // if get
     var result
     var generateArgs = []
-    generateArgs.push(`ABE_DESTINATION=${path.relative(config.root, Manager.instance.pathPublish)}`)
+    generateArgs.push(
+      `ABE_DESTINATION=${path.relative(
+        config.root,
+        Manager.instance.pathPublish
+      )}`
+    )
     var proc = abeExtend.process('generate-posts', generateArgs, data => {
       res.app.emit('generate-posts', data)
     })

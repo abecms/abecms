@@ -35,7 +35,7 @@ var route = function route(req, res) {
       if (err) {
         return res.status(200).json({success: 1})
       }
-      
+
       if (!user) {
         return showHtml(res, req, 'Email not found')
       }

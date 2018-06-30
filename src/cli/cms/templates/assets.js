@@ -32,7 +32,7 @@ export function copy() {
   directory = fse.lstatSync(dest)
   if (directory.isSymbolicLink()) dest = fse.readlinkSync(dest)
 
-  if(source != null){
+  if (source != null) {
     var res = dircompare.compareSync(source, dest, {
       compareDate: true
     })

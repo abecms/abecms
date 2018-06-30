@@ -41,7 +41,9 @@ export default class EditorSave {
    * @return {Object} json
    */
   serializeForm() {
-    var abeForm = document.querySelector('.abeform-wrapper') || document.querySelector('.form-create')
+    var abeForm =
+      document.querySelector('.abeform-wrapper') ||
+      document.querySelector('.form-create')
     if (abeForm == null) return
     var e = document.getElementById('selectTemplate')
     var selectedTemplate = e.options[e.selectedIndex].value
@@ -111,7 +113,7 @@ export default class EditorSave {
           ) {
             try {
               value = JSON.parse(input.value)
-            }catch(e) {
+            } catch (e) {
               value = null
             }
           } else {
@@ -121,10 +123,17 @@ export default class EditorSave {
           setObjByString(this._json.data[obj][index], keyJson, value)
 
           // if thumbs files are draggable in a each structure
-          if(input.classList.contains('file-input') && input.getAttribute('data-size')) {
+          if (
+            input.classList.contains('file-input') &&
+            input.getAttribute('data-size')
+          ) {
             var sizes = input.getAttribute('data-size').split(',')
-            Array.prototype.forEach.call(sizes, (size) => {
-              setObjByString(this._json.data[obj][index], `${keyJson}_${size}`, value.replace(/\.(jpg|jpeg|png|gif|svg)/, `_${size}.$1`))
+            Array.prototype.forEach.call(sizes, size => {
+              setObjByString(
+                this._json.data[obj][index],
+                `${keyJson}_${size}`,
+                value.replace(/\.(jpg|jpeg|png|gif|svg)/, `_${size}.$1`)
+              )
             })
           }
 
@@ -181,7 +190,7 @@ export default class EditorSave {
           ) {
             try {
               value = JSON.parse(input.value)
-            }catch(e) {
+            } catch (e) {
               value = null
             }
           } else {

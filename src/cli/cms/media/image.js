@@ -198,15 +198,10 @@ export function saveFile(req) {
               .getAttr(req.query.input, 'data-size')
               .replace(' ', '')
               .split(',')
-            cropAndSaveFiles(thumbsSizes, filePath, resp).then(function(
-              resp
-            ) {
+            cropAndSaveFiles(thumbsSizes, filePath, resp).then(function(resp) {
               if (/^win/.test(process.platform)) {
                 for (var i = 0; i < resp.thumbs.length; i++) {
-                  resp.thumbs[i].name = resp.thumbs[i].name.replace(
-                    /\\/g,
-                    '/'
-                  )
+                  resp.thumbs[i].name = resp.thumbs[i].name.replace(/\\/g, '/')
                 }
               }
               resolve(resp)
@@ -278,7 +273,10 @@ export function createMediaFolder(mediaType) {
 
 export function getThumbsList() {
   var thumbsList = []
-  var pathToThumbs = path.join(Manager.instance.pathPublish,config.upload.image)
+  var pathToThumbs = path.join(
+    Manager.instance.pathPublish,
+    config.upload.image
+  )
   var files = coreUtils.file.getFilesSync(pathToThumbs, true)
   Array.prototype.forEach.call(files, pathFile => {
     pathFile = pathFile.replace(Manager.instance.pathPublish, '')

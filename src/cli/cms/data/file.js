@@ -39,7 +39,11 @@ export function getAbeMeta(fileObject, json) {
 
 export function getAllWithKeys(withKeys) {
   const extension = '.json'
-  const files = coreUtils.file.getFilesSync(Manager.instance.pathData, true, extension)
+  const files = coreUtils.file.getFilesSync(
+    Manager.instance.pathData,
+    true,
+    extension
+  )
 
   let filesArr = []
 

@@ -31,13 +31,21 @@ var route = function(req, res, next) {
         ) {
           var nbPosts = Manager.instance.getList().length
           if (config.publish['auto-republish'].limit >= nbPosts) {
-
             var generateArgs = []
-            generateArgs.push(`ABE_DESTINATION=${path.relative(config.root, Manager.instance.pathPublish)}`)
+            generateArgs.push(
+              `ABE_DESTINATION=${path.relative(
+                config.root,
+                Manager.instance.pathPublish
+              )}`
+            )
 
-            var proc = abeExtend.process('generate-posts', generateArgs, data => {
-              res.app.emit('generate-posts', data)
-            })
+            var proc = abeExtend.process(
+              'generate-posts',
+              generateArgs,
+              data => {
+                res.app.emit('generate-posts', data)
+              }
+            )
             if (proc) {
               res.app.emit('generate-posts', {percent: 0, time: '00:00sec'})
               console.log('generate-posts emitted')

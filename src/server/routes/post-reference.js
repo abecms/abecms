@@ -10,9 +10,13 @@ var route = function(req, res) {
   ) {
     var nbPosts = Manager.instance.getList().length
     if (config.publish['auto-republish'].limit >= nbPosts) {
-
       var generateArgs = []
-      generateArgs.push(`ABE_DESTINATION=${path.relative(config.root, Manager.instance.pathPublish)}`)
+      generateArgs.push(
+        `ABE_DESTINATION=${path.relative(
+          config.root,
+          Manager.instance.pathPublish
+        )}`
+      )
 
       var proc = abeExtend.process('generate-posts', generateArgs, data => {
         res.app.emit('generate-posts', data)

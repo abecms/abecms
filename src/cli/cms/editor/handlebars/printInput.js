@@ -52,7 +52,8 @@ export function createInputSource(attributes, inputClass, params) {
     (params.autocomplete != null && params.autocomplete === 'true') ||
     (params.multiple != null && params.multiple === 'multiple')
   ) {
-    if(cmsData.sql.getSourceType(params.sourceString) === "url") lastValues = params.source
+    if (cmsData.sql.getSourceType(params.sourceString) === 'url')
+      lastValues = params.source
     else lastValues = JSON.stringify(params.source).replace(/\'/g, '&quote;')
     inputSource += '<div class="autocomplete-result-wrapper">'
     if (

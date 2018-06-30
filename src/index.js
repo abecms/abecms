@@ -100,7 +100,7 @@ const deployWebsite = function() {
 
 const installWebsite = function() {
   const create = new initSite()
-  create.askQuestions().then( answers => {
+  create.askQuestions().then(answers => {
     dir = path.join(process.cwd(), answers.name)
     websiteName = answers.name
     if (process.env.ROOT) {
@@ -161,12 +161,7 @@ program
     installWebsite()
   })
   .on('--help', function() {
-    console.log(
-      '  Examples:\n',
-      '\n',
-      '   $ abe init\n',
-      ''
-    )
+    console.log('  Examples:\n', '\n', '   $ abe init\n', '')
   })
 
 program
@@ -257,10 +252,22 @@ program
   )
   .option('-p, --port [number]', 'change port of the web server')
   .option('-i, --interactive', 'open browser on web server startup')
-  .option('-t, --templates [path]', 'give an absolute or relative path to your templates')
-  .option('-a, --assets [path]', 'give an absolute or relative path to your assets')
-  .option('-d, --destination [path]', 'give an absolute or relative path to your destination directory')
-  .option('-j, --json [path]', 'give an absolute or relative path to your data directory')  
+  .option(
+    '-t, --templates [path]',
+    'give an absolute or relative path to your templates'
+  )
+  .option(
+    '-a, --assets [path]',
+    'give an absolute or relative path to your assets'
+  )
+  .option(
+    '-d, --destination [path]',
+    'give an absolute or relative path to your destination directory'
+  )
+  .option(
+    '-j, --json [path]',
+    'give an absolute or relative path to your data directory'
+  )
   .option(
     '-e, --env [development|production|...]',
     'Abe is launched in development mode by default. Use another value to deactivate development mode. You may also use a global env variable NODE_ENV.'
@@ -339,12 +346,7 @@ program
     cp.stdout.pipe(process.stdout)
   })
   .on('--help', function() {
-    console.log(
-      '  Examples:\n',
-      '\n',
-      '    $ abe serve\n',
-      ''
-    )
+    console.log('  Examples:\n', '\n', '    $ abe serve\n', '')
   })
 
 program

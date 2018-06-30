@@ -84,10 +84,7 @@ class Manager {
 
     this.pathAssets = this.pathTemplates
     if (process.env.ABE_ASSETS_PATH) {
-      this.pathAssets = path.join(
-        config.root,
-        process.env.ABE_ASSETS_PATH
-      )
+      this.pathAssets = path.join(config.root, process.env.ABE_ASSETS_PATH)
     }
     this.pathPublish = path.join(config.root, config.publish.url)
     if (process.env.ABE_DESTINATION_PATH) {
@@ -99,10 +96,7 @@ class Manager {
 
     // config.data.url was the config prior to v3.7.0
     if (process.env.ABE_JSON_PATH) {
-      this.pathData = path.join(
-        config.root,
-        process.env.ABE_JSON_PATH
-      )
+      this.pathData = path.join(config.root, process.env.ABE_JSON_PATH)
     } else if (config.data.url != null) {
       this.pathData = path.join(config.root, config.data.url)
     } else if (coreUtils.file.exist(path.join(config.root, config.data.path))) {
@@ -111,11 +105,11 @@ class Manager {
       this.pathData = path.join(config.root, 'data')
     }
 
-    this.pathTemplates = this.pathTemplates.replace(/\/$/, "")
-    this.pathPartials = this.pathPartials.replace(/\/$/, "")
-    this.pathAssets = this.pathAssets.replace(/\/$/, "")
-    this.pathPublish = this.pathPublish.replace(/\/$/, "")
-    this.pathData = this.pathData.replace(/\/$/, "");
+    this.pathTemplates = this.pathTemplates.replace(/\/$/, '')
+    this.pathPartials = this.pathPartials.replace(/\/$/, '')
+    this.pathAssets = this.pathAssets.replace(/\/$/, '')
+    this.pathPublish = this.pathPublish.replace(/\/$/, '')
+    this.pathData = this.pathData.replace(/\/$/, '')
     this.pathScripts = path.join(config.root, config.scripts.path)
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)

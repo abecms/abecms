@@ -58,9 +58,12 @@ function publishNext(files, tt, cb, i = 0) {
 
             // removing each blocks potentially containing abe data type then updating the source
             // ie. You have a reference file in an abe data type source and you update this reference file
-            // then it triggers a generate-posts to rebuild the posts and update the content with these 
+            // then it triggers a generate-posts to rebuild the posts and update the content with these
             // new data
-            var textTmp = templatesTexts[jsonObject.abe_meta.template].replace(cmsData.regex.eachBlockPattern, '')
+            var textTmp = templatesTexts[jsonObject.abe_meta.template].replace(
+              cmsData.regex.eachBlockPattern,
+              ''
+            )
 
             const matches = cmsData.regex.getTagAbeTypeRequest(textTmp)
 
@@ -144,8 +147,10 @@ function publishNext(files, tt, cb, i = 0) {
                 ') ' +
                 i +
                 ' - ' +
-                pub[processConfig.ABE_STATUS].path
-                  .replace(Manager.instance.pathData, '') +
+                pub[processConfig.ABE_STATUS].path.replace(
+                  Manager.instance.pathData,
+                  ''
+                ) +
                 ' (tpl: ' +
                 jsonObject.abe_meta.template +
                 ')'
@@ -155,8 +160,10 @@ function publishNext(files, tt, cb, i = 0) {
           () => {
             error(
               'generate-posts ERROR on ' +
-                pub[processConfig.ABE_STATUS].path
-                  .replace(Manager.instance.pathData, '')
+                pub[processConfig.ABE_STATUS].path.replace(
+                  Manager.instance.pathData,
+                  ''
+                )
             )
             resolve()
           }
