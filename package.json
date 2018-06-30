@@ -10,7 +10,7 @@
   },
   "scripts": {
     "opencv": "github:peterbraden/node-opencv",
-    "lint": "eslint src --fix",
+    "lint": "eslint --fix --quiet --env node src/",
     "test": "mocha --recursive --compilers js:babel-register --require babel-polyfill tests/unit",
     "test-cov": "istanbul cover _mocha -- --recursive --compilers js:babel-register --require babel-polyfill tests/unit",
     "test-coveralls": "istanbul cover _mocha --report lcovonly -- --recursive --compilers js:babel-register --require babel-polyfill -R spec tests/unit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",

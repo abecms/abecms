@@ -74,23 +74,23 @@ export default class Reload {
     //var hasNotWritten = true
 
     //var initIframe = function() {
-      // var doc = iframe.contentWindow.document
-      // str = str.replace(/<\/head>/, '<base href="/" /></head>')
-      // doc.open('text/html', 'replace')
-      // doc.write(str)
-      // hasNotWritten = false
-      // doc.close()
-      // setTimeout(function() {
-      //   var iframeDoc = IframeDocument('#page-template')
-      //   if (
-      //     typeof iframeDoc !== 'undefined' &&
-      //     iframeDoc !== null &&
-      //     typeof iframeDoc.body !== 'undefined' &&
-      //     iframeDoc.body !== null
-      //   ) {
-      //     iframeDoc.body.scrollTop = scrollTop
-      //   }
-      // }, 1000)
+    // var doc = iframe.contentWindow.document
+    // str = str.replace(/<\/head>/, '<base href="/" /></head>')
+    // doc.open('text/html', 'replace')
+    // doc.write(str)
+    // hasNotWritten = false
+    // doc.close()
+    // setTimeout(function() {
+    //   var iframeDoc = IframeDocument('#page-template')
+    //   if (
+    //     typeof iframeDoc !== 'undefined' &&
+    //     iframeDoc !== null &&
+    //     typeof iframeDoc.body !== 'undefined' &&
+    //     iframeDoc.body !== null
+    //   ) {
+    //     iframeDoc.body.scrollTop = scrollTop
+    //   }
+    // }, 1000)
     //}
 
     iframe.onload = function() {
