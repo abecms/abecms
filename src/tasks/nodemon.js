@@ -7,13 +7,13 @@ var clc = require('cli-color')
 nodemon({
   script: __dirname + '/../../src/server/app.js',
   options: {
-    exec: __dirname + '/../../node_modules/.bin/babel-node --presets es2015'
+    exec: __dirname + '/../../node_modules/.bin/babel-node --presets env'
   },
   nodeArgs: ['--debug'],
   restartable: 'rs',
   colours: true,
   execMap: {
-    js: __dirname + '/../../node_modules/.bin/babel-node --presets es2015'
+    js: __dirname + '/../../node_modules/.bin/babel-node --presets env'
   },
   env: {
     NODE_ENV: 'development'

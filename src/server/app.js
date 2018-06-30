@@ -5,7 +5,7 @@ import session from 'express-session'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import expressValidator from 'express-validator'
-import exphbs from 'express-secure-handlebars'
+import exphbs from 'express-handlebars'
 import path from 'path'
 //import crypto from 'crypto';
 import busboy from 'connect-busboy'
@@ -61,7 +61,7 @@ if (process.env.PORT) abePort = process.env.PORT
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 var html = exphbs.create({
-  extname: '.' + config.files.templates.extension,
+  extname: `.${config.files.templates.extension}`,
   helpers: {
     abe: compileAbe,
     listPage: listPage,

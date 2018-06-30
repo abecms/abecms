@@ -63,7 +63,7 @@ export default class Reload {
     parent.classList.add('reloading')
 
     iframe.id = 'page-template'
-    iframe.src = 'about:blank'
+    iframe.srcdoc = str.replace(/<\/head>/, '<base href="/" /></head>')
     iframe.sandbox =
       'allow-presentation allow-modals allow-pointer-lock allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms allow-top-navigation'
     iframe.setAttribute(
@@ -74,24 +74,24 @@ export default class Reload {
     var hasNotWritten = true
 
     var initIframe = function() {
-      var doc = iframe.contentWindow.document
-      str = str.replace(/<\/head>/, '<base href="/" /></head>')
-      doc.open('text/html', 'replace')
-      doc.write(str)
-      hasNotWritten = false
-      doc.close()
+      // var doc = iframe.contentWindow.document
+      // str = str.replace(/<\/head>/, '<base href="/" /></head>')
+      // doc.open('text/html', 'replace')
+      // doc.write(str)
+      // hasNotWritten = false
+      // doc.close()
 
-      setTimeout(function() {
-        var iframeDoc = IframeDocument('#page-template')
-        if (
-          typeof iframeDoc !== 'undefined' &&
-          iframeDoc !== null &&
-          typeof iframeDoc.body !== 'undefined' &&
-          iframeDoc.body !== null
-        ) {
-          iframeDoc.body.scrollTop = scrollTop
-        }
-      }, 1000)
+      // setTimeout(function() {
+      //   var iframeDoc = IframeDocument('#page-template')
+      //   if (
+      //     typeof iframeDoc !== 'undefined' &&
+      //     iframeDoc !== null &&
+      //     typeof iframeDoc.body !== 'undefined' &&
+      //     iframeDoc.body !== null
+      //   ) {
+      //     iframeDoc.body.scrollTop = scrollTop
+      //   }
+      // }, 1000)
     }
 
     iframe.onload = function() {
@@ -99,7 +99,7 @@ export default class Reload {
       initIframe()
       setTimeout(function() {
         parent.classList.remove('reloading')
-      }, 350)
+      }, 250)
     }
 
     currentIframe.remove()

@@ -152,7 +152,7 @@ const installPlugins = function() {
 
 program.version(pkg.version).option('-v, --version', 'version')
 
-// Dev: ./node_modules/.bin/babel-node --presets es2015 src/index.js init
+// Dev: ./node_modules/.bin/babel-node --presets env src/index.js init
 program
   .command('init')
   .alias('i')
