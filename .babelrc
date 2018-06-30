@@ -1,5 +1,5 @@
 {
-  "presets": ["es2015","stage-0"],
+  "presets": ["env"],
   "ignore": [
     "src/server/public/abecms/libs/*.js"
   ]
