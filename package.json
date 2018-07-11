@@ -18,7 +18,7 @@
     "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "posttest-e2e": "kill -9 $(lsof -ti tcp:3003)",
     "preversion": "npm test",
-    "postversion": "git push origin master --follow-tags && npm publish",
+    "postversion": "git push origin 3.7.x --follow-tags && npm publish",
     "start": "node --debug --harmony ./dist/server/index.js",
     "babel": "babelify --presets [ es2015 ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js",
     "watch": "./node_modules/.bin/parallelshell './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/admin.js -o src/server/public/abecms/scripts/admin-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ es2015 ] ] src/server/public/abecms/scripts/user-login.js -o src/server/public/abecms/scripts/user-login-compiled.js' 'npm run watch:sass'",
