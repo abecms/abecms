@@ -17,7 +17,7 @@
     "pretest-e2e": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
     "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "posttest-e2e": "kill -9 $(lsof -ti tcp:3003)",
-    "preversion": "npm test",
+    "preversion": "npm test && npm run distribute",
     "postversion": "git push origin 3.7.x --follow-tags && npm publish",
     "start": "node --debug --harmony ./dist/server/index.js",
     "babel": "babelify --presets [ es2015 ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js",
