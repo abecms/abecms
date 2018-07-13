@@ -106,6 +106,8 @@ website/
 
 This way, you'll be able to create custom scripts which you don't want to share between your different Abe projects. You can name your module as you want.
 
+You'll have to add ```npm i --save babel-preset-env``` to your script or plugin package.json to make it work properly.
+
 # Dev plugins
 
 > How to create plugins.
