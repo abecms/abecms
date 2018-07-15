@@ -3,12 +3,8 @@ import path from 'path'
 import sinonChai from'sinon-chai'
 chai.use(sinonChai)
 import sinon from 'sinon'
-import execPromise from 'child-process-promise'
-import mkdirp from 'mkdirp'
-import events from 'events'
 import {
   cmsStructure,
-  abeExtend,
   coreUtils,
   config
 } from '../../../../src/cli'

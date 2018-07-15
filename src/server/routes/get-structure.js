@@ -39,7 +39,7 @@ var route = function(req, res) {
     isStructure: true,
     abeVersion: pkg.version
   }
-  res.render('../views/list-structure.html', EditorVariables)
+  res.render('../views/structure.html', EditorVariables)
 }
 
 export default route

@@ -309,7 +309,7 @@ export default class FormCreate {
       breadcrumbsHtml = breadcrumbsHtml.replace(/-$/, '')
       breadcrumbsHtml += '</li>'
     })
-    breadcrumbsHtml += '<span>.' + CONFIG.EXTENSION + '</span>'
+    breadcrumbsHtml += '<span>.' + window.CONFIG.EXTENSION + '</span>'
     this._previewPostPath.innerHTML = '<span>URL : </span>' + breadcrumbsHtml
 
     return {

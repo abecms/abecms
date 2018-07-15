@@ -34,7 +34,7 @@ var route = function(req, res) {
     isReference: true,
     abeVersion: pkg.version
   }
-  res.render('../views/list-references.html', EditorVariables)
+  res.render('../views/reference.html', EditorVariables)
 }
 
 export default route

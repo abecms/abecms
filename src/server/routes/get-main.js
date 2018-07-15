@@ -99,7 +99,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
     EditorVariables.express.res.render(config.abeEngine, EditorVariables)
   } else {
     EditorVariables.express.res.render(
-      '../views/template-manager',
+      '../views/manager',
       EditorVariables
     )
   }

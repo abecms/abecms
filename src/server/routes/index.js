@@ -18,6 +18,8 @@ import getThumbs from './get-thumbs'
 import getImage from './get-image'
 import getHome from './get-home'
 import getThemes from './get-themes'
+import getBuildTemplate from './get-build-template'
+import postBuildTemplate from './post-build-template'
 import postThemes from './post-themes'
 import * as users from './users'
 import * as operations from './operations'
@@ -69,6 +71,8 @@ router.get('/abe/editor*', getMain)
 router.post('/abe/list-url/save*', postListUrlSave)
 router.get('/abe/themes', getThemes)
 router.post('/abe/themes', postThemes)
+router.get('/abe/build-template', getBuildTemplate)
+router.post('/abe/build-template', postBuildTemplate)
 
 router.get('/abe/list-workflow*', function(req, res, next) {
   getListWorkflow(router, req, res, next)

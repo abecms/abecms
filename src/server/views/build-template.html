@@ -1,0 +1,114 @@
+{{#extend "layout"}}
+
+  {{#content "head" mode="append"}}
+    <link rel="stylesheet" href="/abecms/css/site.css">
+  {{/content}}
+
+  {{#content "breadcrumbs"}}
+  {{/content}}
+
+  {{#content "body"}}
+  <div id="app">
+    <div class="container-fluid page-edit">
+      <div class="side app-ui">
+        <h1 class="logo">
+          <a href="http://localhost:3003/" class="logo-a">abecms.io</a>
+          <div class="btn-actions">
+            <a href="https://arainazhang.typeform.com/to/Khc2Zs" target="_blank" class="btn btn-sm btn-default">Leave Feedback</a>
+          </div>
+        </h1>
+        <div class="types">
+          <ul>
+            <li class="type">
+              <div class="type-label">Components</div>
+              <ul class="blocks">
+                {{#each partials}}
+                  <li class="block ui-draggable ui-draggable-handle">
+                    <img class="block-img" src="{{this}}" alt="{{this}}">
+                  </li>
+                {{/each}}
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="delete ui-droppable" style="display: none;">
+          <i class="material-icons">close</i>
+        </div>
+      </div>
+      <div class="main">
+      <div class="title app-ui">
+        <h2>Build your own Abe template <span class="title-info">- See the documentation for more info</span></h2>
+        <div class="btn-actions save-template">
+            <input type="text" name="name">
+            <div class="error-display"></div>
+            <input type="hidden" name="partials" id="partials">
+            <button class="generate btn btn-action btn-sm">Edit Content</button>
+        </div>
+      </div>
+      <div class="preview">
+        <ul class="preview-list app-ui ui-droppable ui-sortable">
+          <li class="preview-empty ui-sortable-handle">
+            <h3>Drag Blocks Here</h3>
+          </li>
+        </ul>
+        <div class="preview-html"></div>
+      </div>
+    </div>
+  </div>
+  {{/content}}
+
+  {{#content "footer"}}
+  {{/content}}
+
+  {{#content "bottom-scripts" mode="append"}}
+  <script>
+    $( document ).ready(function() {
+      var $del = $( document ).find('.delete');
+
+      $( document ).find('.side .block').draggable({
+        helper: 'clone',
+        appendTo: '.preview-list',
+        connectToSortable: '.preview-list'
+      });
+      
+      $( document ).find('.preview-list').droppable({
+        accept: '.side .block',
+        greedy: false
+      }).sortable({
+        appendTo: '.preview-list',
+        placeholder: "preview-placeholder",
+        activate: function(event, ui) {
+          $del.show();
+        },
+        deactivate: function(event, ui) {
+          $del.hide();
+          ui.item.css('z-index', 0);
+        },
+        update( event, ui ) {
+          var partialsOrder = $(this).find('img');
+          var order = []
+          partialsOrder.each(function(){
+            order.push($(this).attr('alt'));
+          })
+          $('#partials').val(order.join())
+        }
+      });
+
+      $( document ).find('.delete').droppable({
+        accept: '.preview-list .block',
+        over: function(event, ui) {
+          $(this).addClass('active');
+        },
+        out: function(event, ui) {
+          $(this).removeClass('active');
+        },
+        drop: function(event, ui) {
+          ui.draggable.eq(0).remove();
+          $(this).removeClass('active').hide();
+        }
+      });
+    });
+
+  </script>
+  {{/content}}
+{{/extend}}

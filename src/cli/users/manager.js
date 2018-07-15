@@ -11,7 +11,7 @@ class Manager {
   constructor(enforcer) {
     if (enforcer != singletonEnforcer) throw 'Cannot construct Json singleton'
 
-    this._file = path.join(config.root, 'users', 'bdd.json')
+    this._file = path.join(config.root, config.users.path)
   }
 
   static get instance() {

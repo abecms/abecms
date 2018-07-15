@@ -1,38 +1,56 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-    <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/abecms/css/styles.css">
-    <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
-    <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
-</head>
-<body>
-  <div class="panel panel-default panel-login">
-    <div class="panel-body">
-      {{#if info}}
-        <span class="text-danger">{{@root.info}}</span>
-        <br /><br />
-      {{/if}}
-      <form action="/abe/users/login" method="post">
-        <div class="form-group">
-          <label for="username">username</label>
-          <input type="username" class="form-control" name="username" placeholder="">
+{{#extend "layout-login"}}
+  {{#content "body"}}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card-group">
+        <div class="card p-4">
+          <form action="/abe/users/login" method="POST">
+            <div class="card-body">
+              {{#if info}}
+                <span class="text-danger">{{@root.info}}</span>
+                <br /><br />
+              {{/if}}
+              <h1>Login</h1>
+              <p class="text-muted">Sign In to your account</p>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="icon-user"></i>
+                  </span>
+                </div>
+                <input class="form-control" type="text" name="username" placeholder="Username">
+              </div>
+              <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="icon-lock"></i>
+                  </span>
+                </div>
+                <input class="form-control" type="password" name="password" placeholder="Password">
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <button class="btn btn-primary px-4" type="submit">Login</button>
+                </div>
+                <div class="col-6 text-right">
+                  <button class="btn btn-link px-0" type="button" onclick="location.href='/abe/users/forgot'">Forgot password?</button>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" name="password" placeholder="">
+        <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+          <div class="card-body text-center">
+            <div>
+              <h2>Sign up</h2>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <button class="btn btn-primary active mt-3" type="button">Register Now!</button>
+            </div>
+          </div>
         </div>
-        <div class="login-footer">
-          <button type="submit" class="btn btn-default">Submit</button>
-          <a class="pull-right" href="/abe/users/forgot">forgot password</a>
-        </div>
-      </form>
-
-      {{abeImport 'login-more' config this}}
+      </div>
     </div>
   </div>
-  <script type="text/javascript" src="/abecms/scripts/template-engine-compiled.js"></script>
-  <script type="text/javascript" src="/abecms/scripts/admin-compiled.js"></script>
-</body>
-</html>
+  {{/content}}
+{{/extend}}<!DOCTYPE html>
+

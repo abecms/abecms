@@ -1,76 +1,73 @@
-<div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
-
-  <!-- *************** left admin manager *************** -->
-  <div class="manager-left form-wrapper">
-    {{abeImport 'main-menu' manager.config this}}
-  </div><!-- *************** /end left admin manager *************** -->
-
-  <!-- *************** right admin manager *************** -->
-  <div class="manager-right large">
-    <div class="container">
-      
-      <div class="row statistics">
-        <div class="col-xs-6">
-          <div class="text-uppercase">
-            Key numbers
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-6 col-lg-3">
+      <div class="card">
+        <div class="card-body p-0 d-flex align-items-center">
+          <i class="fa fa-list bg-primary p-4 font-2xl mr-3"></i>
+          <div>
+            <div class="text-value-sm text-primary">{{statistics.totalPublishedPage}}</div>
+            <div class="text-muted text-uppercase font-weight-bold small">Published posts</div>
           </div>
-          <div class="progress-stat">
-            <div class="progress-element" data-percent="{{#ifCond statistics.percentPublishedPages 'NaN'}}0{{else}}{{statistics.percentPublishedPages}}{{/ifCond}}%" style="color:#40B7E2">
-              <svg viewBox="-10 -10 220 220">
-                <g fill="none" stroke-width="30" transform="translate(100,100)">
-                  <path d="M 0,-100 A 100,100 0 0,1 86.6,-50" stroke="#40B7E2"/>
-                  <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50" stroke="#40B7E2"/>
-                  <path d="M 86.6,50 A 100,100 0 0,1 0,100" stroke="#40B7E2"/>
-                  <path d="M 0,100 A 100,100 0 0,1 -86.6,50" stroke="#40B7E2"/>
-                  <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50" stroke="#40B7E2"/>
-                  <path d="M -86.6,-50 A 100,100 0 0,1 0,-100" stroke="#40B7E2"/>
-                </g>
-              </svg>
-              <svg viewBox="-10 -10 220 220">
-                <path stroke="#F1F1F1" d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="{{#ifCond statistics.svgCirclePercent 'NaN'}}0{{else}}{{statistics.svgCirclePercent}}{{/ifCond}}"></path>
-              </svg>
-            </div>
-            <div class="progress-text">
-              <span>{{statistics.totalPublishedPage}}</span> published pages
-            </div>
-          </div>
-          <div class="progress-stat">
-            <div class="progress-element" data-percent="100%" style="color:#B8E986">
-              <svg viewBox="-10 -10 220 220">
-                <g fill="none" stroke-width="30" transform="translate(100,100)">
-                  <path d="M 0,-100 A 100,100 0 0,1 86.6,-50" stroke="#B8E986"/>
-                  <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50" stroke="#B8E986"/>
-                  <path d="M 86.6,50 A 100,100 0 0,1 0,100" stroke="#B8E986"/>
-                  <path d="M 0,100 A 100,100 0 0,1 -86.6,50" stroke="#B8E986"/>
-                  <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50" stroke="#B8E986"/>
-                  <path d="M -86.6,-50 A 100,100 0 0,1 0,-100" stroke="#B8E986"/>
-                </g>
-              </svg>
-              <svg viewBox="-10 -10 220 220">
-                <path d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="629"></path>
-              </svg>
-            </div>
-            <div class="progress-text">
-              <span>{{statistics.connectedUsers}}/{{statistics.totalUsers}}</span> connected / users
-            </div>
-          </div>
-          <div class="tweet-wrapper">
-            <a class="twitter-timeline" href="https://twitter.com/abe_cms">Tweets by abe_cms</a>
-            <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-          </div>
-
         </div>
-        <div class="col-xs-6">
-          <div class="text-uppercase">
-            Activity stream
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card">
+        <div class="card-body p-0 d-flex align-items-center">
+          <i class="fa fa-list bg-danger p-4 font-2xl mr-3"></i>
+          <div>
+            <div class="text-value-sm text-danger">{{statistics.totalPage}}</div>
+            <div class="text-muted text-uppercase font-weight-bold small">Total posts</div>
           </div>
-
-          <div class="stream">
-            <span class="no-activity">Loading activity ...</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card">
+        <div class="card-body p-0 d-flex align-items-center">
+          <i class="fa fa-users bg-info p-4 font-2xl mr-3"></i>
+          <div>
+            <div class="text-value-sm text-info">{{statistics.connectedUsers}}</div>
+            <div class="text-muted text-uppercase font-weight-bold small">connected users</div>
           </div>
-          
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card">
+        <div class="card-body p-0 d-flex align-items-center">
+          <i class="fa fa-users bg-warning p-4 font-2xl mr-3"></i>
+          <div>
+            <div class="text-value-sm text-warning">{{statistics.totalUsers}}</div>
+            <div class="text-muted text-uppercase font-weight-bold small">Total users</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="tweet-wrapper">
+            <a class="twitter-timeline" href="https://twitter.com/abe_cms">Tweets by abe_cms</a>
+            <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Activity Stream
+        </div>
+        <div class="card-body">
+          <div class="stream">
+            <span class="no-activity">Loading activity ...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
 </div>
+

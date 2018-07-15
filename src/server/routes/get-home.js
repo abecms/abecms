@@ -23,7 +23,7 @@ var route = function(req, res, next) {
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.config = JSON.stringify(config)
 
-  var isHome = true
+  var isDashboard = true
   var jsonPath = null
   var linkPath = null
   var template = null
@@ -49,7 +49,7 @@ var route = function(req, res, next) {
     filename: fileName,
     folderPath: folderPath,
     abeUrl: '/abe/editor/',
-    isHome: isHome,
+    isDashboard: isDashboard,
     config: config,
     Locales: coreUtils.locales.instance.i18n,
     abeVersion: pkg.version,
@@ -57,7 +57,7 @@ var route = function(req, res, next) {
     statistics: statistics
   }
 
-  res.render('../views/template-home', EditorVariables)
+  res.render('../views/home', EditorVariables)
 }
 
 export default route

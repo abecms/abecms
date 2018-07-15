@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{#block "head"}}
+      {{#>head}}{{/head}}
+    {{/block}}
+  </head>
+  <body class="app flex-row align-items-center">
+    <div class="container">
+        {{#block "body"}}{{/block}}
+    </div>
+    {{#block "bottom-scripts"}}
+      {{#>bottom-scripts}}{{/bottom-scripts}}
+    {{/block}}
+  </body>
+</html>
+

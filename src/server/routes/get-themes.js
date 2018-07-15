@@ -37,7 +37,7 @@ var route = function(req, res) {
 
   cmsThemes.themes.getThemeInfos().then(json => {
     EditorVariables['theme'] = json
-    res.render('../views/themes-manager.html', EditorVariables)
+    res.render('../views/themes.html', EditorVariables)
   })
 }
 

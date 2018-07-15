@@ -1,77 +1,64 @@
-<div class="menu-home-left">
-  <div class="text-uppercase">
-    Content
-  </div>
-
-  <ul>
-    <li class="{{#if isHome}}selected{{/if}}">
-      <i class="fa fa-list-alt fa-fw" aria-hidden="true"></i>
-      <a href="/abe/editor">
-        Manager
-      </a>
+<li class="nav-title">Content</li>
+<li class="nav-item">
+  <a class="nav-link{{#if isDashboard}} active{{/if}}" href="/abe">
+    <i class="nav-icon icon-graph"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link{{#if isHome}} active{{/if}}" href="/abe/editor">
+    <i class="nav-icon icon-list"></i> Manager</a>
+</li>
+{{#isAuthorized '/abe/structure' @root.user.role.workflow}}
+<li class="nav-item">
+  <a class="nav-link{{#if isStructure}} active{{/if}}" href="/abe/structure">
+      <i class="nav-icon icon-docs"></i> Structure</a>
+</li>
+{{/isAuthorized}}
+{{#isAuthorized '/abe/references' @root.user.role.workflow}}
+<li class="nav-item">
+  <a class="nav-link{{#if isReference}} active{{/if}}" href="/abe/reference">
+    <i class="nav-icon icon-note"></i> References</a>
+</li>
+{{/isAuthorized}}
+{{#isAuthorized '/abe/themes' @root.user.role.workflow}}
+  {{#if config.themes.repository.active}}
+    <li class="nav-item">
+      <a class="nav-link{{#if isThemes}} active{{/if}}" href="/abe/themes">
+        <i class="nav-icon icon-layers"></i> Themes</a>
     </li>
-    {{#isAuthorized '/abe/structure' @root.user.role.workflow}}
-    <li class="{{#if isStructure}}selected{{/if}}">
-      <i class="fa fa-sitemap fa-fw" aria-hidden="true"></i>
-      <a href="/abe/structure">
-        Structure
-      </a>
-    </li>
-    {{/isAuthorized}}
-    {{#isAuthorized '/abe/references' @root.user.role.workflow}}
-    <li class="{{#if isReference}}selected{{/if}}">
-      <i class="fa fa-file-code-o fa-fw" aria-hidden="true"></i>
-      <a href="/abe/reference">
-        References
-      </a>
-    </li>
-    {{/isAuthorized}}
-    {{#isAuthorized '/abe/themes' @root.user.role.workflow}}
-      {{#if config.themes.repository.active}}
-        <li class="{{#if isThemes}}selected{{/if}}">
-          <i class="fa fa-picture-o fa-fw" aria-hidden="true"></i>
-          <a href="/abe/themes">
-            Themes
-          </a>
-        </li>
-      {{/if}}
-    {{/isAuthorized}}
-  </ul>
-
-
-  {{#if @root.config.users.enable}}
-  <div class="text-uppercase">
-    Team
-  </div>
-
-  <ul>
-    <li class="{{#if isProfile}}selected{{/if}}">
-      <i class="fa fa-user fa-fw" aria-hidden="true"></i>
-      <a href="/abe/users/profile">Profile</a> 
-    </li>
-    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-    <li class="{{#if isMembers}}selected{{/if}}">
-      <i class="fa fa-users fa-fw" aria-hidden="true"></i>
-      <a href="/abe/users/list">Members</a> 
-    </li>
-    {{/isAuthorized}}
-    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-    <li class="{{#if isRoles}}selected{{/if}}">
-      <i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i>
-      <a href="/abe/list-url">Roles</a> 
-    </li>
-    {{/isAuthorized}}
-    {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
-    <li class="{{#if isWorkflow}}selected{{/if}}">
-      <i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i>
-      <a href="/abe/list-workflow">Graph</a> 
-    </li>
-    {{/isAuthorized}}
-  </ul>
   {{/if}}
+{{/isAuthorized}}
+{{#isAuthorized '/abe/themes' @root.user.role.workflow}}
+{{#if config.themes.repository.active}}
+  <li class="nav-item">
+    <a class="nav-link{{#if isBuildTemplate}} active{{/if}}" href="/abe/build-template">
+      <i class="nav-icon icon-puzzle"></i> Design a template</a>
+    </a>
+  </li>
+{{/if}}
+{{/isAuthorized}}
+<li class="divider"></li>
 
-  {{abeImport 'menu-addons' manager.config this}}
+{{#if @root.config.users.enable}}
+  <li class="nav-title">Team</li>
+  {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+  <li class="nav-item">
+    <a class="nav-link{{#if isMembers}} active{{/if}}" href="/abe/users/list">
+      <i class="nav-icon icon-people"></i> Members</a>
+  </li>
+  {{/isAuthorized}}
+  {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+  <li class="nav-item">
+    <a class="nav-link{{#if isRoles}} active{{/if}}" href="/abe/list-url">
+      <i class="nav-icon icon-graduation"></i> Roles</a>
+  </li>
+  {{/isAuthorized}}
+  {{#isAuthorized '/abe/users/list' @root.user.role.workflow}}
+  <li class="nav-item">
+    <a class="nav-link{{#if isWorkflow}} active{{/if}}" href="/abe/list-workflow">
+      <i class="nav-icon icon-directions"></i> graph</a>
+  </li>
+  {{/isAuthorized}}
+{{/if}}
 
-  <div class="abe-version">abe@{{abeVersion}}</div>
+{{#> menu-addons}}{{/menu-addons}}
 
-</div>

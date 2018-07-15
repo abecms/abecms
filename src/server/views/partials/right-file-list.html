@@ -1,48 +1,53 @@
 {{#if manager.home}}
-<div class="manager-tab manager-files visible">
-{{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
-{{#unless (isTrue (isTrue @root.config.publish.auto-republish.limit '>=' @root.manager.nbPosts) '&&' (isTrue @root.config.publish.auto-republish.active '==' 1))}}
-<a href="#" class="btn-generate-posts pull-right btn btn-info btn-xs" data-generate-posts="true">
-    <span data-not-clicked>Republish site</span>
-    <span class="hidden" data-clicked>publishing...</span>
-</a>
-{{/unless}}
-{{/isAuthorized}}
-<br/><br/>
-  <div class="form-horizontal">
-    <div class="form-group">
-      <div class="col-sm-12">
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-search"></i></span>
-          <input class="form-control" type="search"  id="abeSearch" placeholder="Search your content">
+  <style>
+    #navigation-list_wrapper {
+      margin: 0 15px 0 25px;
+    }
+  </style>
+  <div class="manager-tab manager-files visible">
+  {{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
+    {{#unless (isTrue (isTrue @root.config.publish.auto-republish.limit '>=' @root.manager.nbPosts) '&&' (isTrue @root.config.publish.auto-republish.active '==' 1))}}
+    <a href="#" class="btn-generate-posts pull-right btn btn-info btn-xs" data-generate-posts="true">
+        <span data-not-clicked>Republish site</span>
+        <span class="hidden" data-clicked>publishing...</span>
+    </a>
+    {{/unless}}
+  {{/isAuthorized}}
+  <br/><br/>
+    <div class="form-horizontal">
+      <div class="form-group">
+        <div class="col-sm-12">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+            <input class="form-control" type="search"  id="abeSearch" placeholder="Search your content">
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <table class="table table-striped table-bordered table-responsive table-hover" id="navigation-list" style="width:100%">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>File path</th>
-        <th align="center">Template</th>
-        <th align="center" class="daterow">date</th>
-        {{#each @root.config.users.workflow}}
-        <th align="center">{{this}}</th>
+    <table class="table table-striped table-bordered table-hover" id="navigation-list" style="width:100%">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>File path</th>
+          <th align="center">Template</th>
+          <th align="center" class="daterow">date</th>
+          {{#each @root.config.users.workflow}}
+          <th align="center">{{this}}</th>
+          {{/each}}
+          <th align="center">actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each manager.home.files}}
+          {{listPage this @index @root.text}}
         {{/each}}
-        <th align="center">actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each manager.home.files}}
-        {{listPage this @index @root.text}}
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-<script>
-  var workflow = []
-  {{#each @root.config.users.workflow}}
-    workflow.push("{{this}}")
-  {{/each}}
-</script>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    var workflow = []
+    {{#each @root.config.users.workflow}}
+      workflow.push("{{this}}")
+    {{/each}}
+  </script>
 {{/if}}

@@ -15,8 +15,10 @@ import {
   cmsReference,
   cmsMedia,
   cmsOperations,
-  abeExtend
+  abeExtend,
+  User
 } from '../../'
+import { now } from '../../../../node_modules/moment';
 
 let singleton = Symbol()
 let singletonEnforcer = Symbol()
@@ -116,7 +118,9 @@ class Manager {
     this.pathLocales = path.join(config.root, 'locales')
 
     this.connections = []
-    this.activities = []
+
+    this.activities =  User.utils.getActivity()
+   
     this._watcherActivity()
 
     this.updateStructureAndTemplates()
@@ -200,6 +204,7 @@ class Manager {
     this.events.activity.on(
       'activity',
       function(data) {
+        data.time = new Date().toISOString()
         if (data.user && data.user.username) {
           data.user = data.user.username
         } else {
@@ -723,13 +728,11 @@ class Manager {
   }
 
   getActivities() {
-    return this.activities
+    return User.utils.getActivity()
   }
 
   addActivity(activity) {
-    if (this.activities.length >= 50) this.activities.shift()
-
-    this.activities.push(activity)
+    User.utils.addActivity(activity)
   }
 
   getConnections() {

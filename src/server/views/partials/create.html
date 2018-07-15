@@ -7,11 +7,9 @@
   <form class="form-create" data-form-abe-create="true">
     
     {{&setVariable "precontrib" "true"}}
-
     {{&folders @root.manager.list.structure 1 null @root.text}}
-    {{abeImport 'create-form-template' @root.manager.config @root}}
-    {{abeImport 'create-form-tplname' @root.manager.config @root}}
-
+    {{#> create-form-template}}{{/create-form-template}}
+    {{#> create-form-tplname}}{{/create-form-tplname}}
     {{&setVariable "precontrib" "false"}}
 
     <div class="">

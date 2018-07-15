@@ -7,7 +7,6 @@ import {spawn} from 'child_process'
 import path from 'path'
 import program from 'commander'
 import pkg from '../package'
-import inquirer from 'inquirer'
 import clc from 'cli-color'
 import Surge from 'surge'
 

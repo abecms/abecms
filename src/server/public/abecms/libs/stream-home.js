@@ -79,8 +79,8 @@ StreamItem.prototype.createNode = function createNode () {
   // clock
   this.time = document.createElement('div');
   this.time.classList.add('stream-time');
-  this.time.textContent = 'now';
-  this.time.setAttribute('data-time', new Date().toISOString());
+  this.time.textContent = timeSince(new Date(this.data.time));
+  this.time.setAttribute('data-time', this.data.time);
 
   // content
   var content = document.createElement('div');

@@ -7,15 +7,14 @@ import bodyParser from 'body-parser'
 import expressValidator from 'express-validator'
 import exphbs from 'express-handlebars'
 import path from 'path'
-//import crypto from 'crypto';
 import busboy from 'connect-busboy'
 import clc from 'cli-color'
 import openurl from 'openurl'
-//import uuid from 'uuid'
 import flash from 'connect-flash'
 import cookieParser from 'cookie-parser'
 import csrf from 'csurf'
 import passport from 'passport'
+import layouts from 'handlebars-layouts'
 
 import {
   config,
@@ -60,6 +59,15 @@ if (process.env.PORT) abePort = process.env.PORT
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
+var partialsDir = [
+  path.join(__dirname, 'views/partials/'),
+  path.join(config.root, config.custom)
+]
+var pluginsPartialsDir = abeExtend.plugins.instance.getPartials()
+Array.prototype.forEach.call(pluginsPartialsDir, pluginPartialsDir => {
+  partialsDir.push(pluginPartialsDir)
+})
+
 var html = exphbs.create({
   extname: `.${config.files.templates.extension}`,
   helpers: {
@@ -79,7 +87,24 @@ var html = exphbs.create({
     ifIn: ifIn,
     ifCond: ifCond,
     isAuthorized: isAuthorized
-  }
+  },
+  partialsDir: partialsDir
+})
+
+var handlebars = html.handlebars;
+
+// I register the layout plugin
+handlebars.registerHelper(layouts(handlebars));
+
+// I load the partials in Handlebars for the layout plugin
+var partials = path.join(__dirname, 'views/partials/');
+partialsDir.forEach(function(pathDir) {
+  fse.readdirSync(partials).forEach(function (file) {
+    var source = fse.readFileSync(partials + file, "utf8")
+    var partial = /(.+)\.html/.exec(file).pop();
+
+    handlebars.registerPartial(partial, source);
+  });
 })
 
 var opts = {}
@@ -151,7 +176,7 @@ if (config.security === true) {
 var port = abePort !== null ? abePort : 3000
 port = abeExtend.hooks.instance.trigger('beforeExpress', port)
 
-app.set('views', path.join(__dirname, '/templates'))
+app.set('views', path.join(__dirname, '/views'))
 app.engine('.html', html.engine)
 app.set('view engine', '.html')
 
@@ -243,6 +268,14 @@ if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
     console.log(clc.green(`\nserver running at http://localhost:${port}/`))
     if (process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
   })
+}
+
+if (config.websocket.active === true) {
+  const io = require('socket.io')(server);
+  app.use(function(request, response, next) {
+    request.io = io;
+    next();
+  });
 }
 
 server.on('error', onError)

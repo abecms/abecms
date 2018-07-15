@@ -2,18 +2,18 @@
 <html>
   <head>
     <title></title>
-    {{abeImport 'common-styles' manager.config this}}
+    {{#> common-styles}}{{/common-styles}}
 </head>
 <body>
 <body class="with-menu engine-open">
-    {{abeImport 'header-menu' manager.config this}}
+    {{#> header-menu}}{{/header-menu}}
     <div class="container-main user-list">
       <div class="container-table">
         <div>
           <div class="no-gutter manager-wrapper visible">
             
             <div class="manager-left form-wrapper">
-              {{abeImport 'main-menu' manager.config this}}
+              {{#> main-menu}}{{/main-menu}}
             </div>
 
             <div class="manager-right tab">
@@ -203,6 +203,6 @@
         </div>
       </div>
     </div>
-  {{abeImport 'common-scripts' manager.config this}}
+  {{#> common-scripts}}{{/common-scripts}}
 </body>
 </html>

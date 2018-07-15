@@ -1,11 +1,13 @@
 import redis from 'redis'
+import path from 'path'
+import fse from 'fs-extra'
 import Limiter from 'ratelimiter'
 import owasp from 'owasp-password-strength-test'
 import bcrypt from 'bcrypt-nodejs'
 import Cookies from 'cookies'
 import jwt from 'jwt-simple'
 
-import {User, config, coreUtils} from '../../cli'
+import {User, config, coreUtils, cmsData} from '../../cli'
 
 export function checkSameEmail(data) {
   var emailAlreadyUsed = false
@@ -373,4 +375,58 @@ export function getGravatarImage(email, args) {
   args = args || ''
   var BASE_URL = '//www.gravatar.com/avatar/'
   return (BASE_URL + coreUtils.text.md5(email) + args).trim()
+}
+
+/**
+ * getActivity()
+ * @param  {[type]} email [description]
+ * @param  {[type]} args  [description]
+ * @return {[type]}       [description]
+ */
+export function getActivity() {
+  const pathToActivity = path.join(config.root, config.users.activity.path)
+
+  if (config.users.enable && config.users.activity.active) {
+    if (fse.existsSync(path.join(pathToActivity, 'activity.json'))) {
+      const acArray= cmsData.file.get(path.join(pathToActivity, 'activity.json'))
+      return acArray
+    }
+  }
+
+  return []
+}
+
+export function addActivity(activity) {
+  const pathToActivity = path.join(config.root, config.users.activity.path)
+  const pathToActivityFile = path.join(pathToActivity, 'activity.json')
+  const acArray = getActivity()
+
+  if (acArray.length >= config.users/activity.history) acArray.shift()
+  acArray.push(activity)
+
+  if (config.users.enable && config.users.activity.active) {
+    fse.exists(pathToActivityFile, function(exists) {
+      if (!exists) {
+        fse.mkdir(path.join(pathToActivity), function() {
+          fse.writeJson(
+            pathToActivityFile,
+            acArray,
+            function(err) {
+              if (err) console.log('save activity error: ', err)
+            }
+          )
+        })
+      } else {
+        fse.writeJson(
+          pathToActivityFile,
+          acArray,
+          function(err) {
+            if (err) console.log('save activity error: ', err)
+          }
+        )
+      }
+    })
+  }
+
+  return acArray
 }
