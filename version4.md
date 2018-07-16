@@ -16,7 +16,7 @@ And we need a Content Marketing Server for teams. This is what AbeCMS 4 does.
 Creating content needs a dedicated organization, a team of people and a plan. AbeCMS 4 will include the following features
 
 - A project manager "a la Trello" integrated into AbeCMS so that you may organise the task to create / maintain your content marketing tasks
-- A calendar view, so that you ezsily can view what's planned with whom and when.
+- A calendar view, so that you easily can view what's planned with whom and when.
 - Notifications for people involved in the CM projects : On the platform, by mail, through slack. You to choose !
 
 # CREATE (this project)
