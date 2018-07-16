@@ -12,7 +12,7 @@ And we need a Content Marketing Server for teams. This is what AbeCMS 4 does.
 
 **This current project is the CREATE part of AbeCMS 4 Content Marketing as a Service. The remaining parts (PLAN, DISTRIBUTE, ADVERTISE, MEASURE) will be available through our SaaS server. We'll let you know when you'll be able to use it !**
 
-## PLAN
+# PLAN
 Creating content needs a dedicated organization, a team of people and a plan. AbeCMS 4 will include the following features
 
 - A project manager "a la Trello" integrated into AbeCMS so that you may organise the task to create / maintain your content marketing tasks
