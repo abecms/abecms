@@ -54,10 +54,10 @@ We've spent 2 years working with the community to prepare this version. See belo
 - We want to add one-way databinding to the core of Abe. As it's not the case with Handlebars, we will develop a library to make it possible. The outcome is huge: You'll be able to use AbeCMS in the browser, without the help of a server. Furthermore, making AbeCMS engine a one-way databinding lib is a first step toward vue.js or react.
 - We want to remove all synchronous calls and make AbeCMS a 100% asynchronous stack, unleashing the NodeJS performance boost.
 - AbeCMS Rest server is refactored to make it easy to use. It's now a first class citizen in the AbeCMS engine.
-- We've switched to CoreUI template (based on Bootstrap 4) for the back-office. We've worked on the user experience to make AbeCMS much more comfortable to use.
+- ~~We've switched to CoreUI template (based on Bootstrap 4) for the back-office. We've worked on the user experience to make AbeCMS much more comfortable to use.~~
 - remove openCV from the core and put the smartcrop feature as a plugin.
 - components oriented
-- It will be possible to create filtered views on the manager frontend
+- ~~It is possible to create filtered views on the manager frontend~~
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
 - Add template creation from partials
 - templates and partials will be uploadable
@@ -75,11 +75,11 @@ We've spent 2 years working with the community to prepare this version. See belo
 - 'abe-mailer' is not in the npm registry bug #254 opened on 23 Oct 2017 by vaughanwatson 
 - express-session memory leak #250 opened on 20 Oct 2017 by roccomuso 
 - abe-deployer-sftp #247 opened on 18 Oct 2017 by NRAUBER 
-- Special characters in password are not accepted bug #243 opened on 14 Oct 2017 by NRAUBER 
+- ~~Special characters in password are not accepted bug #243 opened on 14 Oct 2017 by NRAUBER~~
 - similar key between abe-each & abe-text bug #241 opened on 13 Oct 2017 by wonknu 
 - search engine like following will be awesome.. #232 opened on 14 Aug 2017 by jkathir 
 - The images doesn't move in the right item when I drag & drop bug #228 opened on 7 Aug 2017 by abderelmaftah 
-- activity stream on homepage is looping #219 opened on 29 May 2017 by opompilius 
+- ~~activity stream on homepage is looping #219 opened on 29 May 2017 by opompilius~~
 - max length not working on rich tag #211 opened on 27 Apr 2017 by mehdidjabri 
 - symlink don't work when they are created with relative path bug #190 opened on 31 Mar 2017 by wonknu 
 - WYSIWYG editor color bug #186 opened on 30 Mar 2017 by julienlegac 
@@ -89,15 +89,15 @@ We've spent 2 years working with the community to prepare this version. See belo
 - Create a debug layer in Abe new feature #122 opened on 25 Jan 2017 by gregorybesson 
 - Functions in select data enhancement #120 opened on 24 Jan 2017 by GG31 
 - Partials included in severals templates with same values enhancement #119 opened on 19 Jan 2017 by GG31  3.0.x
-- each with limit enhancement #118 opened on 19 Jan 2017 by GG31  3.0.x
 - Allow select in json file new feature #109 opened on 5 Jan 2017 by catienza 
 - Plugin system enhancement #107 opened on 4 Jan 2017 by opompilius 
 - Browser does not scroll automatically to an editable zone in the preview bug #102 opened on 27 Dec 2016 by Roatha-Chann 
 - Republish site has no effect on prefill datas enhancement #86 opened on 15 Dec 2016 by opompilius 
-- Refactor : put users database in /database/users.json refactoring #73 opened on 8 Dec 2016 by gregorybesson 
+- ~~Refactor : put users database in /database/users.json refactoring #73 opened on 8 Dec 2016 by gregorybesson ~~
 - New feature : migrations new feature #71 opened on 8 Dec 2016 by gregorybesson 
 - Checkbox type new feature #64 opened on 2 Dec 2016 by GG31 
 - Create a new attribute in abe data type: macro=true new feature #54 opened on 29 Nov 2016 by opompilius 
 - {{#each}} - Title enhancement #36 opened on 21 Nov 2016 by julienlegac  3.0.x
+- {{#each}} - Limit enhancement #118 opened on 19 Jan 2017 by GG31  3.0.x
 - We want shortcuts for draft / publish ... enhancement #8 opened on 18 Oct 2016 by gregorybesson  3.0.x
 
