@@ -114,7 +114,7 @@
     "ratelimiter": "^2.2.0",
     "redis": "^2.6.0-1",
     "request": "^2.87.0",
-    "smartcrop-cli": "^2.0.3",
+    "smartcrop-jimp": "^1.0.1",
     "smtp-server": "^1.17.0",
     "socket.io": "^2.1.1",
     "striptags": "^2.2.1",
