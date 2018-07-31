@@ -1,6 +1,6 @@
 /*global document, window, alert, slugs, CONFIG */
 
-import limax from 'limax'
+import slugify from 'slugify'
 import Nanoajax from 'nanoajax'
 import Handlebars from 'handlebars'
 import qs from 'qs'
@@ -270,7 +270,14 @@ export default class FormCreate {
       var template = Handlebars.compile(slug)
       slug = template(values)
       slug = slug.replace(/\//g, '__abe_escape_slash__')
-      slug = limax(slug, {separateNumbers: false})
+            .replace(/&#x27;/gi,'')
+            .replace(/&quot;/gi,'')
+            .replace(/&#x60;/gi,'')
+            .replace(/&#x3D;/gi,'')
+            .replace(/&amp;/gi,'')
+            .replace(/&lt;/gi,'')
+            .replace(/&gt;/gi,'')
+      slug = slugify(slug, {remove: /[$*+~.()'"!\:@]/g})
       slug = slug.replace(/__abe_escape_slash__/g, '/')
 
       var slugPaths = this._form.querySelectorAll('[data-slug-type=path]')

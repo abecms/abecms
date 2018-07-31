@@ -1,7 +1,7 @@
 import execPromise from 'child-process-promise'
 import mkdirp from 'mkdirp'
 import fse from 'fs-extra'
-import limax from 'limax'
+import slug from 'slugify'
 import Jimp from 'jimp'
 import path from 'path'
 import {Promise} from 'bluebird'
@@ -239,12 +239,7 @@ export function getMediaType(ext) {
 
 export function createMediaSlug(filename, ext) {
   var filenameNoExt = path.basename(filename, ext)
-  return (
-    limax(filenameNoExt, {separateNumbers: false}) +
-    '-' +
-    coreUtils.random.generateUniqueIdentifier(2) +
-    ext
-  )
+  return (` ${slug(filenameNoExt, {remove: /[$*+~.()'"!\:@]/g})}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`)
 }
 
 export function createMediaFolder(mediaType) {
