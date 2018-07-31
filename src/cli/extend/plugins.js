@@ -251,8 +251,6 @@ class Plugins {
       }
     })
 
-    console.log('routes', routes)
-
     return routes
   }
 

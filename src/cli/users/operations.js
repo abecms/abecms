@@ -128,3 +128,38 @@ export function updatePassword(data, password) {
     user: data
   }
 }
+
+export function saveSearch(id, data) {
+  var bdd = User.manager.instance.get()
+  id = parseInt(id)
+  for (var i = 0, len = bdd.length; i < len; i++) {
+    var user = bdd[i]
+    if (parseInt(user.id) === id) {
+      var savedSearches = bdd[i].savedSearches || []
+      savedSearches.push(data)
+      bdd[i].savedSearches = savedSearches
+    }
+  }
+  User.manager.instance.update(bdd)
+  return bdd
+}
+
+export function removeSearch(id, data) {
+  var bdd = User.manager.instance.get()
+  console.log(id)
+  id = parseInt(id)
+  for (var i = 0, len = bdd.length; i < len; i++) {
+    var user = bdd[i]
+    if (parseInt(user.id) === id) {
+      var savedSearches = bdd[i].savedSearches || []
+      savedSearches.forEach(function(search, index) {
+        if (search.title === data.title) {
+          savedSearches.splice(index, 1);
+        }
+      })
+      bdd[i].savedSearches = savedSearches
+    }
+  }
+  User.manager.instance.update(bdd)
+  return bdd
+}

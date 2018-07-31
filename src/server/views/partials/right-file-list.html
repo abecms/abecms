@@ -16,11 +16,32 @@
   <br/><br/>
     <div class="form-horizontal">
       <div class="form-group">
-        <div class="col-sm-12">
-          <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-            <input class="form-control" type="search"  id="abeSearch" placeholder="Search your content">
+          <div class="card-body jsSavedSearches">
+              {{#each @root.user.savedSearches}}
+                <div class="btn-group btn-group-sm" role="group" aria-label="Small button group" style="margin-right: 20px;">
+                  <button type="button" data-id="{{@root.user.id}}" data-search="{{this.search}}" data-title="{{this.title}}" class="btn btn-secondary savedSearches">{{this.title}}</button>
+                  <button type="button" data-id="{{@root.user.id}}" data-search="{{this.search}}" data-title="{{this.title}}" class="btn btn-danger removeSearches">X</button>
+                </div>
+              {{/each}}
           </div>
+        <div class="input-group">
+          <input type="search" id="abeSearch" name="email2" class="form-control" placeholder="Search your content">
+            <span class="input-group-append">
+              <button class="btn btn-block btn-primary dropdown-toggle" type="button" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Bookmark my search
+                </button>
+                <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -352px, 0px);">
+                  <form action="/abe/users/save-search" method="POST" class="px-4 py-3" id="save-search">
+                    <div class="form-group">
+                      <label for="savedSearch">Give it a short title</label>
+                      <input type="text" class="form-control" name="title" id="saveSearchTitle" placeholder="My awesome search">
+                      <input type="hidden" name="id" id="saveSearchId" value="{{@root.user.id}}">
+                      <input type="hidden" name="search" id="saveSearchValue" value="">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </form>
+                </div>
+            </span>
         </div>
       </div>
     </div>

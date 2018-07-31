@@ -228,7 +228,7 @@ export function create(text, json, precontrib = false) {
 
     // get all data from type='data' (web service, select, ...)
     // and create a key abe_source with all data
-    // + modify keys when editable = false or prefill = true
+    // + modify keys when editable = false or prefill = true only in the case of source=select
     cmsData.source
       .getDataList(text, json)
       .then(() => {

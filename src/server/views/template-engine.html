@@ -17,6 +17,15 @@
     </style>
   {{/content}}
 
+  {{#content "body-class"}} engine-open{{/content}}
+
+  {{#content "header"}}
+    {{#>header-editor}}{{/header-editor}}
+  {{/content}}
+  
+  {{#content "breadcrumbs"}}
+  {{/content}}
+
   {{#content "body"}}
     <div class="container-main">
       <div class="container-table">
@@ -28,9 +37,7 @@
       <div class="wysiwyg-popup image"></div>
       <div class="wysiwyg-popup smiley"></div>
     </div>
-    dela
-      {{abeImport 'body' manager.config this}}
-    adela
+    {{abeImport 'body' manager.config this}}
   {{/content}}
 
   {{#content "footer"}}

@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+<link rel="stylesheet" href="http://codemirror.net/theme/material.css">
+<script src="http://codemirror.net/lib/codemirror.js"></script>
+<script src="http://codemirror.net/addon/search/searchcursor.js"></script>
+<script src="http://codemirror.net/addon/search/search.js"></script>
+<script src="http://codemirror.net/addon/dialog/dialog.js"></script>
+<script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+<script src="http://codemirror.net/addon/edit/closebrackets.js"></script>
+<script src="http://codemirror.net/addon/comment/comment.js"></script>
+<script src="http://codemirror.net/addon/wrap/hardwrap.js"></script>
+<script src="http://codemirror.net/addon/fold/foldcode.js"></script>
+<script src="http://codemirror.net/addon/fold/brace-fold.js"></script>
+<script src="http://codemirror.net/keymap/sublime.js"></script>
+<script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+<script type="text/javascript" src="/less.min.js"></script>
+<script type="text/javascript" src="/sass.js"></script>
+<script type="text/javascript">
+  Sass.setWorkerUrl('/sass.worker.js');
+  var sass = new Sass();
+</script>
+<script type="text/javascript" src="/code-textarea.js"></script>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codes = document.querySelectorAll('.code')
+    if(typeof codes !== 'undefined' && codes !== null){
+      Array.prototype.forEach.call(codes, (code) => {
+        new CodeTextarea(code)
+      })
+    }
+  });
+</script>

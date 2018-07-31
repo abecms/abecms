@@ -53,6 +53,8 @@ router.post('/abe/users/remove', users.postRemove)
 router.post('/abe/users/reset', users.postReset)
 router.post('/abe/users/update', users.postUpdate)
 router.post('/abe/users/profile', users.postProfile)
+router.post('/abe/users/save-search', users.postSaveSearch)
+router.post('/abe/users/remove-search', users.postRemoveSearch)
 
 router.get('/abe/paginate', getPaginate)
 router.post('/abe/sql-request*', postSqlRequest)
