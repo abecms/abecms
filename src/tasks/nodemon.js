@@ -9,7 +9,7 @@ nodemon({
   options: {
     exec: __dirname + '/../../node_modules/.bin/babel-node --presets env'
   },
-  nodeArgs: ['--debug'],
+  args: ['--inspect'],
   restartable: 'rs',
   colours: true,
   execMap: {
