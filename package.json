@@ -1,6 +1,6 @@
 {
   "name": "abecms",
-  "version": "3.7.5",
+  "version": "4.0.0",
   "description": "Abe: The lightning fast CMS",
   "main": "src/server/app.js",
   "bugs": "https://github.com/abecms/abecms/issues",
@@ -18,7 +18,7 @@
     "pretest-e2e": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
     "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "posttest-e2e": "kill -9 $(lsof -ti tcp:3003)",
-    "preversion": "npm test",
+    "preversion": "npm test && npm test && npm run distribute",
     "postversion": "git push origin master --follow-tags && npm publish",
     "watch": "./node_modules/.bin/parallelshell './node_modules/.bin/watchify -v -t [ babelify --presets [ env ] ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ env ] ] src/server/public/abecms/scripts/admin.js -o src/server/public/abecms/scripts/admin-compiled.js' './node_modules/.bin/watchify -v -t [ babelify --presets [ env ] ] src/server/public/abecms/scripts/user-login.js -o src/server/public/abecms/scripts/user-login-compiled.js' 'npm run watch:sass'",
     "watch:sass": "./node_modules/.bin/watch 'npm run sass' ./src/server/sass",

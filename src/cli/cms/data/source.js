@@ -2,8 +2,10 @@ import {Promise} from 'bluebird'
 import http from 'http'
 import https from 'https'
 import path from 'path'
+import fse from 'fs-extra'
+import _ from 'lodash'
 
-import {config, cmsData} from '../../'
+import {config, coreUtils, cmsData} from '../../'
 
 export function requestList(obj, match, jsonPage) {
   var p = new Promise(resolve => {
@@ -164,6 +166,61 @@ export function fileList(obj, match, jsonPage) {
   return p
 }
 
+export function nextSourceData(jsonPage, match) {
+  const p = new Promise(resolve => {
+
+    let obj = cmsData.attributes.getAll(match, jsonPage)
+    const sourceType = cmsData.sql.getSourceType(obj.sourceString)
+
+    if (sourceType === 'file' && obj.type !== 'data' && obj.type !== 'import') {
+      obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
+      console.log('obj', obj)
+      let file = obj.sourceString
+
+      if (file.charAt(0) == '/') {
+        file = path.join(config.root, file)
+      } else {
+        file = path.join(config.root, config.reference.url, file)
+      }
+
+      // Do I have to save data
+      if (_.get(jsonPage, obj.key) != null) {
+        let newJson = {}
+        if (coreUtils.file.exist(file)) {
+          newJson = cmsData.file.get(file)
+          if(_.get(newJson, obj.key) !== _.get(jsonPage, obj.key)) {
+            _.set(newJson, obj.key, _.get(jsonPage, obj.key));
+            fse.writeJsonSync(file, newJson)
+          }
+        } else {
+          _.set(newJson, obj.key, _.get(jsonPage, obj.key));
+          fse.mkdir(file.split('/').slice(0, -1).join('/'), function() {
+            fse.writeJsonSync(file, newJson, {
+              space: 2,
+              encoding: 'utf-8'
+            })
+          })
+        }
+        _.unset(jsonPage, obj.key);
+      // Or do I have to only read data
+      } else {
+        if (coreUtils.file.exist(file)) {
+          const newJson = cmsData.file.get(file)
+          console.log('newjson', newJson)
+          if (_.get(newJson, obj.key) != null) {
+            _.set(jsonPage, obj.key, _.get(newJson, obj.key))
+            console.log('jsonpage', jsonPage)
+          }
+        }
+      }
+    }
+
+    resolve()
+  })
+
+  return p
+}
+
 export function nextDataList(jsonPage, match) {
   var p = new Promise(resolve => {
     if (jsonPage['abe_source'] == null) {
@@ -223,6 +280,30 @@ export function nextDataList(jsonPage, match) {
   return p
 }
 
+export function getSourceData(text, jsonPage) {
+  var p = new Promise(resolve => {
+    var promises = []
+    var matches = cmsData.regex.getTagAbeWithSource(text)
+    console.log('matches', matches)
+    Array.prototype.forEach.call(matches, match => {
+      console.log('match', match)
+      promises.push(nextSourceData(jsonPage, match))
+    })
+
+    Promise.all(promises)
+      .then(() => {
+        resolve()
+      })
+      .catch(function(e) {
+        console.error('source.js getSourceData', e)
+      })
+  }).catch(function(e) {
+    console.error('source.js getSourceData', e)
+  })
+
+  return p
+}
+
 export function getDataList(text, jsonPage) {
   var p = new Promise(resolve => {
     var promises = []
@@ -232,6 +313,9 @@ export function getDataList(text, jsonPage) {
     })
 
     Promise.all(promises)
+      .then(() => {
+        return cmsData.source.getSourceData(text, jsonPage)
+      })
       .then(() => {
         resolve()
       })

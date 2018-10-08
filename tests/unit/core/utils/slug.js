@@ -23,7 +23,7 @@ describe('coreUtils.slug', function() {
   it('coreUtils.slug.clean()', function() {
     var result = coreUtils.slug.clean('té§eèàº^^s:t sLuG');
     chai.expect(result).to.be.a('string')
-    chai.expect(result).to.equal('te-eeao-s-t-slug.html')
+    chai.expect(result).to.equal('teeeaost-slug.html')
   });
 
 });

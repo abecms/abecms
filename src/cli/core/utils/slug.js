@@ -11,8 +11,8 @@ export function clean(str) {
 }
 
 function slugify(str) {
-  str = str.replace(/\..+$/, '')
-  str = slug(str, {remove: /[$*+~.()'"!\:@]/g})
+  str = str.replace(/\..+$/, '').toLowerCase()
+  str = slug(str, {remove: /[$*+~.()'"!\:@§^,;]/g})
   str = `${str}.${config.files.templates.extension}`
   return str.toLowerCase()
 }

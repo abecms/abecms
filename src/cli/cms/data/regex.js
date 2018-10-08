@@ -184,6 +184,16 @@ export function getTagAbeWithTab(text, tab) {
   return matches
 }
 
+export function getTagAbeWithSource(text) {
+  var listReg = new RegExp(`({{abe .*source=[\\'|\\"].*}})`, 'g')
+  var matches = []
+  var match
+  while ((match = listReg.exec(text))) {
+    matches.push(match[0])
+  }
+  return matches
+}
+
 export function validDataAbe(str) {
   return str.replace(/\[([0-9]*)\]/g, '$1')
 }

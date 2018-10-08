@@ -30,7 +30,7 @@ export default class initSite {
           )
 
           pathSite = pathSite.split(path.sep)
-          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1], {remove: /[$*+~.()'"!\:@]/g})
+          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1], {remove: /[$*+~.()'"!\:@§^,;]/g})
           pathSite = pathSite.join(path.sep)
 
           this.addFolder(pathSite)

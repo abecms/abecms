@@ -140,7 +140,7 @@ export function saveFile(req) {
       mimetype
     ) {
       var ext = path.extname(filename).toLowerCase()
-      var slug = createMediaSlug(filename, ext)
+      var slug = createMediaSlug(filename.toLowerCase(), ext)
       var mediaType = getMediaType(ext)
 
       var folderFilePath = createMediaFolder(mediaType)
@@ -238,8 +238,8 @@ export function getMediaType(ext) {
 }
 
 export function createMediaSlug(filename, ext) {
-  var filenameNoExt = path.basename(filename, ext)
-  return (` ${slug(filenameNoExt, {remove: /[$*+~.()'"!\:@]/g})}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`)
+  var filenameNoExt = path.basename(filename, ext).toLowerCase()
+  return (`${slug(filenameNoExt, {remove: /[$*+~.()'"!\:@§^,;]/g})}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`)
 }
 
 export function createMediaFolder(mediaType) {

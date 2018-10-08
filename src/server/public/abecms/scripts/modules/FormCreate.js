@@ -277,7 +277,7 @@ export default class FormCreate {
             .replace(/&amp;/gi,'')
             .replace(/&lt;/gi,'')
             .replace(/&gt;/gi,'')
-      slug = slugify(slug, {remove: /[$*+~.()'"!\:@]/g})
+      slug = slugify(slug, {remove: /[$*+~.()'"!\:@§^,;]/g})
       slug = slug.replace(/__abe_escape_slash__/g, '/')
 
       var slugPaths = this._form.querySelectorAll('[data-slug-type=path]')

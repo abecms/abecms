@@ -16,29 +16,29 @@ export default function abeImport(file, config, ctx) {
   // le path vers les locales
   let intlData = config.intlData
 
-  // // le path vers partials
-  // var defaultPartials = `${__dirname.replace(
-  //   /\/$/,
-  //   ''
-  // )}/${config.defaultPartials.replace(/\/$/, '')}`
+  // le path vers partials
+  var defaultPartials = `${__dirname.replace(
+    /\/$/,
+    ''
+  )}/${config.defaultPartials.replace(/\/$/, '')}`
 
-  // // si config.custom pas vide, on rajoute ce path to custom
-  // var custom =
-  //   config.custom !== ''
-  //     ? `${config.root.replace(/\/$/, '')}/${config.custom.replace(/\/$/, '')}`
-  //     : defaultPartials
-  // var pathToPartial = `${custom}/${file}.html`
+  // si config.custom pas vide, on rajoute ce path to custom
+  var custom =
+    config.custom !== ''
+      ? `${config.root.replace(/\/$/, '')}/${config.custom.replace(/\/$/, '')}`
+      : defaultPartials
+  var pathToPartial = `${custom}/${file}.html`
 
-  // // Je cherche d'abord dans custom puis partials
-  // // pour récupérer le template
-  // try {
-  //   fse.statSync(pathToPartial)
-  // } catch (e) {
-  //   pathToPartial = `${defaultPartials}/${file}.html`
-  // }
-  // if (coreUtils.file.exist(pathToPartial)) {
-  //   html = fse.readFileSync(pathToPartial, 'utf8')
-  // }
+  // Je cherche d'abord dans custom puis partials
+  // pour récupérer le template
+  try {
+    fse.statSync(pathToPartial)
+  } catch (e) {
+    pathToPartial = `${defaultPartials}/${file}.html`
+  }
+  if (coreUtils.file.exist(pathToPartial)) {
+    html = fse.readFileSync(pathToPartial, 'utf8')
+  }
 
   // je recherche les customs de plugins. Si je trouve le fichier aussi dans l'un de ces paths,
   // je rajoute le contenu au html deja obtenu

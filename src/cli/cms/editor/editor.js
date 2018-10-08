@@ -79,7 +79,7 @@ export function addAbeTagToCollection(
  * create the defaultValue attribute if it finds a value in 'value' attribute
  * If the abe tag object contains a key and is not already put in the form
  * and is not included in a #each statement, I update its value and
- * add add it to the form
+ * add it to the form
  *
  * @param  {[type]} text       [description]
  * @param  {[type]} json       [description]
@@ -98,6 +98,7 @@ export function addSingleAbeTagsToForm(text, json, form) {
 
     if (
       obj.key != '' &&
+      obj.type != '' &&
       !form.contains(obj.key) &&
       cmsData.regex.isSingleAbe(match, text)
     ) {
@@ -232,11 +233,11 @@ export function create(text, json, precontrib = false) {
     cmsData.source
       .getDataList(text, json)
       .then(() => {
-        // prepare editor values id editable or put values in json from abe_source
+        // prepare editor values if editable or put values in json from abe_source
         // (don't do this for type='data' included in {{#each}})
         addDataAbeTagsToForm(text, json, form)
 
-        // Remove every abe type='data' tags but those in {{#each}} statements
+        // Remove every abe type='data' tags else but those in {{#each}} statements
         text = cmsData.source.removeNonEachDataList(text)
 
         if (!precontrib) {
