@@ -124,9 +124,21 @@ export default class initSite {
         }
         User.manager.instance.update([])
         var admin = User.operations.add(u)
-        User.operations.activate(admin.user.id)
+        if (admin.success == 1)
+          User.operations.activate(admin.user.id)  
+        else if (admin.xssError) {
+          console.log("XSS detected");
+          process.exit(1);
+        }
+        else if (admin.emailTaken) {
+          console.log("Email already in use");
+          process.exit(1);
+        }
+        else {
+          console.log("Data validation error");
+          process.exit(1);
+        }
       }
-
       resolve()
     })
 

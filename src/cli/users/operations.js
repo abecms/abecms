@@ -3,11 +3,17 @@ import {coreUtils, User} from '../../cli'
 export function add(newUser) {
   var xss = coreUtils.text.checkXss(newUser)
   if (xss.success === 0) {
-    return xss
+    return {
+      xssError: 1,
+      success: 0
+    }
   }
   var sameEmail = User.utils.checkSameEmail(newUser)
   if (sameEmail.success === 0) {
-    return sameEmail
+    return {
+      emailTaken: 1,
+      success: 0
+    }
   }
 
   User.utils.getRole(newUser)
