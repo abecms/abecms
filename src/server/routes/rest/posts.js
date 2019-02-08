@@ -13,7 +13,8 @@ var route = function(req, res, next) {
   var sortField = 'date'
   var sortOrder = -1
   var search = ''
-
+  var searchfields = ['abe_meta.link', 'abe_meta.template', 'name']
+  var i = 4
   var values = ['date', 'abe_meta.link', 'abe_meta.template', 'date']
   Array.prototype.forEach.call(config.users.workflow, flow => {
     values[i] = 'abe_meta.' + flow
@@ -31,17 +32,23 @@ var route = function(req, res, next) {
     length = +req.query.length
   }
 
-  var i = 4
   if (typeof req.query.order !== 'undefined') {
-    sortField = values[req.query.order[0]['column']]
-    sortOrder = req.query.order[0]['dir'] === 'desc' ? -1 : 1
+    sortField = req.query.orderfield
+    sortOrder = req.query.order === 'desc' ? -1 : 1
   }
 
   if (
     typeof req.query.search !== 'undefined' &&
-    req.query.search.value !== ''
+    req.query.search !== ''
   ) {
-    search = req.query.search.value
+    search = req.query.search
+  }
+
+  if (
+    typeof req.query.searchfields !== 'undefined' &&
+    req.query.searchfields !== ''
+  ) {
+    searchfields = req.query.searchfields.split(',');
   }
 
   var list = Manager.instance.getPage(
@@ -49,12 +56,9 @@ var route = function(req, res, next) {
     length,
     sortField,
     sortOrder,
-    search
+    search,
+    searchfields
   )
-
-  if (typeof req.query.draw !== 'undefined') {
-    list['draw'] = req.query.draw
-  }
 
   res.set('Content-Type', 'application/json')
   res.send(JSON.stringify(list))

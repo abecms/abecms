@@ -49,7 +49,7 @@ export function facet(arr, attrs, value) {
         a = a[search[j]]
         j++
       }
-      if (a.indexOf(value) !== -1) {
+      if (typeof a !== "undefined" && a.indexOf(value) !== -1) {
         found = true
       }
     })
