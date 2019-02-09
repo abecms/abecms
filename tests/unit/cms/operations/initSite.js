@@ -25,6 +25,7 @@ describe('cmsOperations', function() {
     // stub
     var s = sinon.sandbox.create();
     const create = new cmsOperations.initSite()
+    const chdir = sinon.stub(process, 'chdir');
     const stubadd = s.stub(create, 'addFolder', function () {
       return Promise.resolve()
     }.bind(this));
@@ -33,7 +34,9 @@ describe('cmsOperations', function() {
       .then(function(resSave) {
         
         sinon.assert.callCount(stubadd, 7)
+        sinon.assert.callCount(chdir, 1)
         stubadd.restore()
+        chdir.restore()
 
         done()
       }.bind(this));
