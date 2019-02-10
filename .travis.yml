@@ -4,16 +4,17 @@ os:
 language: node_js
 node_js:
   - "4"
-  - "5"
   - "6"
-  - "7"
+  - "6"
+  - "8"
+  - "10"
 cache:
   directories:
     - node_modules
 matrix:
   include:
-    # Run e2e tests in Node.js 6.x
-    - node_js: '6'
+    # Run e2e tests in Node.js 8.x
+    - node_js: '8'
       env: MODE=e2e
 sudo: required
 dist: trusty
