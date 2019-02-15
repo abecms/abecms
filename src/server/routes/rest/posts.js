@@ -49,9 +49,12 @@ var route = function(req, res, next) {
     req.query.searchfields !== ''
   ) {
     searchfields = req.query.searchfields.split(',');
+    searchfields = searchfields.map((item) => {
+      return ('publish.' + item);
+    });
   }
 
-  var list = Manager.instance.getPage(
+  var result = Manager.instance.getPage(
     start,
     length,
     sortField,
@@ -60,8 +63,12 @@ var route = function(req, res, next) {
     searchfields
   )
 
+  result.data = result.data.map((doc) => {
+    return (doc.publish)
+  })
+
   res.set('Content-Type', 'application/json')
-  res.send(JSON.stringify(list))
+  res.send(JSON.stringify(result))
 }
 
 export default route
