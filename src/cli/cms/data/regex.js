@@ -136,7 +136,7 @@ export function isEachStatement(str) {
 }
 
 /**
- * Test if a string contains string key from {{#each}} block statement
+ * Test if a string contains data type statement
  *
  * @param  {String}  str string to test
  * @return {Boolean} true = this is a block content

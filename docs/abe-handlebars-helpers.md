@@ -218,8 +218,6 @@ This helper returns a boolean depending on the test it does. The available tests
 
 ### Usage
 
-### Usage
-
 You can use ifTrue after a `{{#if }}` statement:
 
 ```html

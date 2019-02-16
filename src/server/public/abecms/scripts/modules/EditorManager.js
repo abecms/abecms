@@ -27,16 +27,16 @@ export default class EditorManager {
       top.location.hash !== ''
     ) {
       var currentTab = document.querySelector(
-        '[href="' + top.location.hash + '"]'
+        '[data-target="' + top.location.hash + '"]'
       )
       if (typeof currentTab !== 'undefined' && currentTab !== null) {
         currentTab.click() // retrieve old selected tab
       }
     }
 
-    // $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-    //   return (location.hash = $(e.target).attr('href').substr(1))
-    // })
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+      return (location.hash = $(e.target).attr('data-target').substr(1))
+    })
 
     this.rebind()
   }
