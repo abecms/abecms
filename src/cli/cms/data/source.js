@@ -14,12 +14,15 @@ export function requestList(obj, match, jsonPage) {
         jsonPage['abe_source'] = {}
       }
       jsonPage['abe_source'][obj.key] = data
+
+      // I update the jsonPage[obj.key] when the tag is not editable
       if (!obj.editable) {
         if (obj['max-length']) {
           jsonPage[obj.key] = data.slice(0, obj['max-length'])
         } else {
           jsonPage[obj.key] = data
         }
+      // I update the jsonPage[obj.key] only if empty or obj.prefill
       } else if (jsonPage[obj.key] == null && obj.prefill) {
         if (obj['prefill-quantity'] && obj['max-length']) {
           jsonPage[obj.key] = data.slice(
@@ -174,7 +177,6 @@ export function nextSourceData(jsonPage, match) {
 
     if (sourceType === 'file' && obj.type !== 'data' && obj.type !== 'import') {
       obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
-      console.log('obj', obj)
       let file = obj.sourceString
 
       if (file.charAt(0) == '/') {
