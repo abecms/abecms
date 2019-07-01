@@ -2,10 +2,9 @@
 
 > translate any type of content
 
-/path/to/abe/project/**partials**
-
 ### structure
 
+1. Files are imported from 'partials' folder (/path/to/abe/project/**partials**) :
 ```
 partials
    |_ head.html
