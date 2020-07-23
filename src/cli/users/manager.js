@@ -21,6 +21,7 @@ class Manager {
     return this[singleton]
   }
 
+  /** TODO MONGO */
   read() {
     if (this.isActive()) {
       if (coreUtils.file.exist(this._file)) {
@@ -36,6 +37,7 @@ class Manager {
     return []
   }
 
+  /** TODO MONGO */
   save() {
     if (this.isActive()) {
       mkdirp.sync(path.dirname(this._file))
@@ -43,6 +45,9 @@ class Manager {
     }
   }
 
+  /**
+   * TODO MONGO
+   */
   get() {
     if (this._users == null) {
       this._users = this.read()
@@ -50,6 +55,49 @@ class Manager {
     return this._users
   }
 
+  findById(id) {
+    var bdd = this.get()
+    id = parseInt(id)
+    for (var i = 0, len = bdd.length; i < len; i++) {
+      var user = bdd[i]
+      if (parseInt(user.id) === id) {
+        return user
+      }
+    }
+
+    return false
+  }
+
+  findByEmail(email) {
+    var bdd = this.get()
+    id = parseInt(id)
+    for (var i = 0, len = bdd.length; i < len; i++) {
+      var user = bdd[i]
+      if (user.email === email) {
+        return user
+      }
+    }
+
+    return false
+  }
+
+  findByResetPasswordToken(resetPasswordToken) {
+    var bdd = this.get()
+    id = parseInt(id)
+    for (var i = 0, len = bdd.length; i < len; i++) {
+      var user = bdd[i]
+      if (user.resetPasswordToken === resetPasswordToken) {
+        return user
+      }
+    }
+  
+    return false
+  }
+
+  /**
+   * TODO MONGO
+   * @param {*} json 
+   */
   update(json) {
     if (this.isActive()) {
       this._users = json

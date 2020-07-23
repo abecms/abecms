@@ -20,52 +20,37 @@ var Manager = require('../../../../src/cli').Manager;
 var Page = require('../../../../src/cli').Page;
 
 describe('cmsOperations', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles']
-        Manager.instance.updateList()
-
-        this.fixture = {
-          htmlArticle: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8'),
-          jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'files', 'article-2.json')),
-          jsonHomepage: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'homepage-1.json'))
-        }
-        done()
-        
-      }.bind(this))
-  });
+  before(async () => {
+    await Manager.instance.init()
+    Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles']
+    await Manager.instance.updateList()
+  })
 
   /**
    * cmsOperations.save.saveJson
    * 
    */
-  it('cmsOperations.save.saveJson()', function() {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(fse, 'writeJsonSync', function () { return null; }.bind(this));
-    // s.stub(xss, 'exist', function () { return null; }.bind(this));
+  it('cmsOperations.save.saveJson()', async () => {
+    sinon.stub(fse, 'writeJsonSync').callsFake( () => { return null; });
+    // sinon.stub(xss, 'exist').callsFake( () => { return null; });
 
-    var res = cmsOperations.save.saveJson('test.json', {})
+    var res = await cmsOperations.save.saveJson('test.json', {})
     chai.expect(res).to.be.equal(true);
 
-    fse.writeJsonSync.restore()
+    sinon.restore()
   });
 
   /**
    * cmsOperations.save.saveHtml
    * 
    */
-  it('cmsOperations.save.saveHtml()', function() {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(fse, 'writeFileSync', function () { return null; }.bind(this));
-    s.stub(mkdirp, 'sync', function () { return null; }.bind(this));
+  it('cmsOperations.save.saveHtml()', async () => {
+    sinon.stub(fse, 'writeFile').callsFake( () => { return null; });
+    sinon.stub(mkdirp, 'sync').callsFake( () => { return null; });
 
-    var res = cmsOperations.save.saveHtml('test.json', {})
+    var res = await cmsOperations.save.saveHtml('test.json', {})
     chai.expect(res).to.be.equal(true);
 
-    fse.writeFileSync.restore()
-    mkdirp.sync.restore()
+    sinon.restore()
   });
 });

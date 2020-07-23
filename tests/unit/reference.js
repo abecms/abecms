@@ -9,20 +9,13 @@ var cmsReference = require('../../src/cli').cmsReference;
 var jsonPath = 'test.json';
 
 describe('cmsReference', function() {
-  /**
-   * cmsReference.reference.getFiles
-   * 
-   */
   it('cmsReference.reference.getFiles()', function() {
     var json = cmsReference.reference.getFiles();
+    console.log(json)
     chai.expect(json).to.be.an('object');
     chai.expect(json[jsonPath].ref1).to.equal('ref1');
   });
 
-  /**
-   * cmsReference.reference.saveFile
-   * 
-   */
   it('cmsReference.reference.saveFile()', function() {
   	var json = cmsReference.reference.getFiles();
     var ref1 = json[jsonPath]['ref1'];

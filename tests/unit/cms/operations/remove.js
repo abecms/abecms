@@ -19,57 +19,39 @@ var Manager = require('../../../../src/cli').Manager;
 var Page = require('../../../../src/cli').Page;
 
 describe('cmsOperations', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles']
-        Manager.instance.updateList()
+  let fixture
+  before(async () => {
+    await Manager.instance.init()
+    Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles']
+    await Manager.instance.updateList()
 
-        this.fixture = {
-          htmlArticle: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8'),
-          jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'files', 'article-2.json')),
-          jsonHomepage: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'homepage-1.json'))
-        }
-        done()
-        
-      }.bind(this))
-  });
+    fixture = {
+      htmlArticle: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8'),
+      jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'files', 'article-2.json')),
+      jsonHomepage: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'homepage-1.json'))
+    }
+  })
 
-  /**
-   * cmsOperations.remove.remove
-   * 
-   */
-  it('cmsOperations.remove.removeFile()', function() {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(fse, 'removeSync', function () { return null; }.bind(this));
-    s.stub(coreUtils.file, 'exist', function () { return null; }.bind(this));
+  it('cmsOperations.remove.removeRevision()', async () => {
+    sinon.stub(fse, 'remove').callsFake( () => { return null; });
+    sinon.stub(coreUtils.file, 'exist').callsFake( () => { return null; });
 
-    var res = cmsOperations.remove.removeFile('test.html')
+    var res = await cmsOperations.remove.removeRevision('test.html')
     chai.expect(res).to.be.equal(undefined);
 
-    fse.removeSync.restore()
-    coreUtils.file.exist.restore()
+    sinon.restore()
   });
 
-  /**
-   * cmsOperations.remove.remove
-   * 
-   */
-  it('cmsOperations.remove.remove()', function() {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj) { return str, obj; }.bind(this));
-    s.stub(cmsOperations.remove, 'removeFile', function () { return null; }.bind(this));
-    s.stub(cmsData.revision, 'getVersions', function () { return []; }.bind(this));
-    s.stub(Manager.instance, 'removePostFromList', function () { return null; }.bind(this));
+  it('cmsOperations.remove.remove()', async () => {
+    sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake( (str, obj) => { return str, obj; });
+    sinon.stub(cmsOperations.remove, 'removeRevision').callsFake( () => { return null; });
+    sinon.stub(cmsOperations.remove, 'removePost').callsFake( () => { return null; });
+    sinon.stub(cmsData.revision, 'getVersions').callsFake( () => { return []; });
+    sinon.stub(Manager.instance, 'removePostFromList').callsFake( () => { return null; });
 
-    var res = cmsOperations.remove.remove('test.html')
+    var res = await cmsOperations.remove.remove('test.html')
     chai.expect(res).to.be.equal(undefined);
 
-    abeExtend.hooks.instance.trigger.restore()
-    cmsOperations.remove.removeFile.restore()
-    cmsData.revision.getVersions.restore()
-    Manager.instance.removePostFromList.restore()
+    sinon.restore()
   });
 });

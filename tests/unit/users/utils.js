@@ -18,9 +18,10 @@ config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
 var User = require('../../../src/cli').User;
 
 describe('User.utils', function() {
+  let fixture
   before( function() {
     config.users.enable = true
-    this.fixture = {
+    fixture = {
       htmlIsAuthorized: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'isAuthorized.html'), 'utf8'),
       htmlIsAuthorizedTrue: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'isAuthorizedTrue.html'), 'utf8'),
       users: JSON.parse(fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'users', 'users.json'), 'utf8'))
@@ -28,17 +29,14 @@ describe('User.utils', function() {
   });
 
   it('User.utils.getUserRoutes', function(){
-    var sinonInstance = sinon.sandbox.create();
     var role = User.utils.getUserRoutes("review")
     chai.expect(role).to.not.be.undefined
     chai.expect(role.length).to.above(0)
   })
 
   it('User.utils.findByUsername', function(done){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stub = sinonInstance.stub(User.manager.instance, 'get');
-    stub.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stub = sinon.stub(User.manager.instance, 'get');
+    stub.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
     User.utils.findByUsername("test", function (err, user) {
@@ -48,16 +46,14 @@ describe('User.utils', function() {
 
       // unstub
       sinon.assert.calledOnce(User.manager.instance.get)
-      User.manager.instance.get.restore()
+      sinon.restore()
       done()
     })
   })
 
   it('User.utils.findByEmail', function(done){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stub = sinonInstance.stub(User.manager.instance, 'get');
-    stub.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stub = sinon.stub(User.manager.instance, 'get');
+    stub.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
     User.utils.findByEmail("admin@test.com", function (err, user) {
@@ -67,16 +63,14 @@ describe('User.utils', function() {
 
       // unstub
       sinon.assert.calledOnce(User.manager.instance.get)
-      User.manager.instance.get.restore()
+      sinon.restore()
       done()
     })
   })
 
   it('User.utils.findByResetPasswordToken', function(done){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stub = sinonInstance.stub(User.manager.instance, 'get');
-    stub.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stub = sinon.stub(User.manager.instance, 'get');
+    stub.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
     User.utils.findByResetPasswordToken("token", function (err, user) {
@@ -86,61 +80,54 @@ describe('User.utils', function() {
 
       //unstub
       sinon.assert.calledOnce(User.manager.instance.get)
-      User.manager.instance.get.restore()
+      sinon.restore()
       done()
     })
   })
 
   it('User.utils.decodeUser', function(){
     // sub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGetTokenFromCookies = sinonInstance.stub(User.utils, 'getTokenFromCookies');
+    var stubGetTokenFromCookies = sinon.stub(User.utils, 'getTokenFromCookies');
     stubGetTokenFromCookies.returns("test")
-    var stubJwt = sinonInstance.stub(jwt, 'decode');
-    stubJwt.returns(JSON.parse(JSON.stringify(this.fixture.users))[0])
+    var stubJwt = sinon.stub(jwt, 'decode');
+    stubJwt.returns(JSON.parse(JSON.stringify(fixture.users))[0])
 
     var user = User.utils.decodeUser(1)
     chai.expect(user.id).to.not.be.null
 
     sinon.assert.calledOnce(User.utils.getTokenFromCookies)
-    User.utils.getTokenFromCookies.restore()
     sinon.assert.calledOnce(jwt.decode)
-    jwt.decode.restore()
+    sinon.restore()
   })
 
   it('User.utils.getAll', function(){
-    var sinonInstance = sinon.sandbox.create();
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stubGet = sinon.stub(User.manager.instance, 'get');
+    stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     var bdd = User.utils.getAll()
     chai.expect(bdd).to.not.be.undefined
     chai.expect(bdd[0].username).to.equal('test')
 
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
+    sinon.restore()
   })
 
   it('User.utils.isValid', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubHashSync = sinonInstance.stub(bcrypt, 'compareSync');
+    var stubHashSync = sinon.stub(bcrypt, 'compareSync');
     stubHashSync.returns(true);
 
     // test
-    var res = User.utils.isValid(JSON.parse(JSON.stringify(this.fixture.users))[0])
+    var res = User.utils.isValid(JSON.parse(JSON.stringify(fixture.users))[0])
     chai.expect(res).to.be.equal(true)
 
     // unstub
     sinon.assert.calledOnce(bcrypt.compareSync)
-    bcrypt.compareSync.restore()
+    sinon.restore()
   })
 
   it('User.utils.findSync', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stubGet = sinon.stub(User.manager.instance, 'get');
+    stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
     var user = User.utils.findSync(1)
@@ -149,14 +136,12 @@ describe('User.utils', function() {
 
     // unstub
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
+    sinon.restore()
   })
 
   it('User.utils.find', function(done){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stubGet = sinon.stub(User.manager.instance, 'get');
+    stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
     var user = User.utils.find(1, function (err, user) {
@@ -165,89 +150,75 @@ describe('User.utils', function() {
 
       // unstub
       sinon.assert.calledOnce(User.manager.instance.get)
-      User.manager.instance.get.restore()
+      sinon.restore()
       done()
     })
   })
 
   it('User.utils.checkSameEmail', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
+    var stubGet = sinon.stub(User.manager.instance, 'get');
+    stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
-    var user = JSON.parse(JSON.stringify(this.fixture.users))[0]
+    var user = JSON.parse(JSON.stringify(fixture.users))[0]
     user.id = 2
     var res = User.utils.checkSameEmail(user)
     chai.expect(res.success).to.equal(0)
 
     // unstub
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
+    sinon.restore()
   })
 
   it('User.utils.getRole', function(){
-    // stub
 
     // test
-    var user = JSON.parse(JSON.stringify(this.fixture.users))[0]
+    var user = JSON.parse(JSON.stringify(fixture.users))[0]
     user.role = "admin"
-    var res = User.utils.getRole(JSON.parse(JSON.stringify(this.fixture.users))[0])
+    var res = User.utils.getRole(JSON.parse(JSON.stringify(fixture.users))[0])
     chai.expect(res.role).to.not.be.equal("admin")
-
-    // unstub
   })
 
   it('User.utils.commonPassword', function(){
-    // stub
 
     // test
-    var user = JSON.parse(JSON.stringify(this.fixture.users))[0]
+    var user = JSON.parse(JSON.stringify(fixture.users))[0]
     user.password = "password"
     var res = User.utils.commonPassword(user)
     chai.expect(res.success).to.be.equal(0)
-
-    // unstub
   })
 
   it('User.utils.encryptPassword', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGenSaltSync = sinonInstance.stub(bcrypt, 'genSaltSync');
+    var stubGenSaltSync = sinon.stub(bcrypt, 'genSaltSync');
     stubGenSaltSync.returns(10)
-    var stubHashSync = sinonInstance.stub(bcrypt, 'hashSync');
+    var stubHashSync = sinon.stub(bcrypt, 'hashSync');
     stubHashSync.returns("test2")
 
     // test
-    var user = JSON.parse(JSON.stringify(this.fixture.users))[0]
+    var user = JSON.parse(JSON.stringify(fixture.users))[0]
     user.password = "password"
     var res = User.utils.encryptPassword(10, "test")
     chai.expect(res).to.not.be.equal("test")
 
     // unstub
     sinon.assert.calledOnce(bcrypt.genSaltSync)
-    bcrypt.genSaltSync.restore()
     sinon.assert.calledOnce(bcrypt.hashSync)
-    bcrypt.hashSync.restore()
+    sinon.restore()
   })
 
   it('User.utils.isUserAllowedOnRoute', function(){
-    // stub
 
     // test
-    var user = JSON.parse(JSON.stringify(this.fixture.users))[0]
+    var user = JSON.parse(JSON.stringify(fixture.users))[0]
     var res = User.utils.isUserAllowedOnRoute("admin", "/abe/test")
     chai.expect(res).to.be.equal(true)
 
     var res = User.utils.isUserAllowedOnRoute("review", "/abe/truc")
     chai.expect(res).to.be.equal(false)
 
-    // unstub
   })
 
   it('User.utils.getUserWorkflow', function(){
-    // stub
 
     // test
     config.users.enable = false
@@ -261,7 +232,6 @@ describe('User.utils', function() {
   })
 
   it('User.utils.loginLimitTry', function(done){
-    // stub
 
     // test
     var res = User.utils.loginLimitTry()

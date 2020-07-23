@@ -3,6 +3,7 @@ import path from 'path'
 
 import {
   config,
+  mongo,
   abeExtend,
   cmsData,
   coreUtils,
@@ -10,16 +11,17 @@ import {
   Manager
 } from '../../'
 
-export function remove(postUrl) {
+export async function remove(postUrl) {
   postUrl = abeExtend.hooks.instance.trigger('beforeDeleteFile', postUrl)
 
-  var revisions = cmsData.revision.getVersions(postUrl)
+  const docRelativePath = cmsData.utils.getDocRelativePathFromPostUrl(postUrl)
+  const revisions = cmsData.revision.getVersions(docRelativePath)
 
-  Array.prototype.forEach.call(revisions, revision => {
+  await Promise.all(revisions.map(async revision => {
     const postPath = cmsData.utils.getPostPath(revision.path)
-    cmsOperations.remove.removeFile(revision.path)
-    cmsOperations.remove.removeFile(postPath)
-  })
+    await cmsOperations.remove.removeRevision(revision.path)
+    await cmsOperations.remove.removePost(postPath)
+  }));
 
   postUrl = abeExtend.hooks.instance.trigger('afterDeleteFile', postUrl, {})
 
@@ -28,8 +30,27 @@ export function remove(postUrl) {
   )
 }
 
-export function removeFile(file) {
+export async function removePost(file) {
   if (coreUtils.file.exist(file)) {
-    fse.removeSync(file)
+    await fse.remove(file)
+  }
+}
+
+export async function removeRevision(jsonPath) {
+
+  let result = false;
+  if (config.database.type == "file") {
+    result = await removeRevisionFile(jsonPath);
+  }
+  else if (config.database.type == "mongo") {
+    result = await mongo.removeRevision(jsonPath);
+  }
+
+  return result
+}
+
+export async function removeRevisionFile(file) {
+  if (coreUtils.file.exist(file)) {
+    await fse.remove(file)
   }
 }

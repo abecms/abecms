@@ -160,7 +160,7 @@ export function urlList(obj, match, jsonPage) {
 
 export function fileList(obj, match, jsonPage) {
   var p = new Promise(resolve => {
-    jsonPage['abe_source'][obj.key] = cmsData.file.get(
+    jsonPage['abe_source'][obj.key] = coreUtils.file.getJson(
       path.join(config.root, obj.sourceString)
     )
     resolve()
@@ -169,9 +169,7 @@ export function fileList(obj, match, jsonPage) {
   return p
 }
 
-export function nextSourceData(jsonPage, match) {
-  const p = new Promise(resolve => {
-
+export async function nextSourceData(jsonPage, match) {
     let obj = cmsData.attributes.getAll(match, jsonPage)
     const sourceType = cmsData.sql.getSourceType(obj.sourceString)
 
@@ -189,38 +187,29 @@ export function nextSourceData(jsonPage, match) {
       if (_.get(jsonPage, obj.key) != null) {
         let newJson = {}
         if (coreUtils.file.exist(file)) {
-          newJson = cmsData.file.get(file)
+          newJson = await cmsData.file.get(file)
           if(_.get(newJson, obj.key) !== _.get(jsonPage, obj.key)) {
             _.set(newJson, obj.key, _.get(jsonPage, obj.key));
-            fse.writeJsonSync(file, newJson)
+            await fse.writeJson(file, newJson)
           }
         } else {
           _.set(newJson, obj.key, _.get(jsonPage, obj.key));
-          fse.mkdir(file.split('/').slice(0, -1).join('/'), function() {
-            fse.writeJsonSync(file, newJson, {
-              space: 2,
-              encoding: 'utf-8'
-            })
-          })
+          await fse.mkdir(file.split('/').slice(0, -1).join('/'))
+          await fse.writeJson(file, newJson, {space: 2, encoding: 'utf-8'})
         }
         _.unset(jsonPage, obj.key);
       // Or do I have to only read data
       } else {
         if (coreUtils.file.exist(file)) {
-          const newJson = cmsData.file.get(file)
-          console.log('newjson', newJson)
+          const newJson = await cmsData.file.get(file)
+
           if (_.get(newJson, obj.key) != null) {
             _.set(jsonPage, obj.key, _.get(newJson, obj.key))
-            console.log('jsonpage', jsonPage)
           }
         }
       }
     }
 
-    resolve()
-  })
-
-  return p
 }
 
 export function nextDataList(jsonPage, match) {
@@ -282,52 +271,27 @@ export function nextDataList(jsonPage, match) {
   return p
 }
 
-export function getSourceData(text, jsonPage) {
-  var p = new Promise(resolve => {
-    var promises = []
-    var matches = cmsData.regex.getTagAbeWithSource(text)
-  
-    Array.prototype.forEach.call(matches, match => {
-      promises.push(nextSourceData(jsonPage, match))
+export async function getSourceData(text, jsonPage) {
+  var matches = cmsData.regex.getTagAbeWithSource(text)
+
+  const result = await Promise.all(
+    matches.map(async match => {
+      await nextSourceData(jsonPage, match)
     })
+  )
 
-    Promise.all(promises)
-      .then(() => {
-        resolve()
-      })
-      .catch(function(e) {
-        console.error('source.js getSourceData', e)
-      })
-  }).catch(function(e) {
-    console.error('source.js getSourceData', e)
-  })
-
-  return p
+  return result
 }
 
-export function getDataList(text, jsonPage) {
-  var p = new Promise(resolve => {
-    var promises = []
-    var matches = cmsData.regex.getTagAbeTypeRequest(text)
-    Array.prototype.forEach.call(matches, match => {
-      promises.push(nextDataList(jsonPage, match[0]))
+export async function getDataList(text, jsonPage) {
+  var matches = cmsData.regex.getTagAbeTypeRequest(text)
+  const result = await Promise.all(
+    matches.map(async match => {
+      await nextDataList(jsonPage, match[0])
     })
+  )
 
-    Promise.all(promises)
-      .then(() => {
-        return cmsData.source.getSourceData(text, jsonPage)
-      })
-      .then(() => {
-        resolve()
-      })
-      .catch(function(e) {
-        console.error('source.js getDataList', e)
-      })
-  }).catch(function(e) {
-    console.error('source.js getDataList', e)
-  })
-
-  return p
+  return cmsData.source.getSourceData(text, jsonPage)
 }
 
 export function removeDataList(text) {

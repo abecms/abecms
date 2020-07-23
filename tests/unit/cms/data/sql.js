@@ -13,10 +13,11 @@ var cmsData = require('../../../../src/cli').cmsData;
 var Manager = require('../../../../src/cli').Manager;
 
 describe('Sql', function() {
+  let fixture
   before( function(done) {
     Manager.instance.init()
       .then(function () {
-        this.fixture = {
+        fixture = {
           articleJsoninline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8'),
           articleArrayinline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-arrayinline.html'), 'utf8')
         }
@@ -28,10 +29,10 @@ describe('Sql', function() {
   it('cmsData.sql.getDataSource', function() {
     var obj = {key:'titles'}
     var json = {abe_source:{}}
-    var jsonString = cmsData.sql.getDataSource(this.fixture.articleJsoninline)
+    var jsonString = cmsData.sql.getDataSource(fixture.articleJsoninline)
     chai.expect(jsonString.indexOf('rouge')).to.be.above(-1);
     JSON.parse(jsonString)
-    jsonString = cmsData.sql.getDataSource(this.fixture.articleArrayinline)
+    jsonString = cmsData.sql.getDataSource(fixture.articleArrayinline)
     chai.expect(jsonString.indexOf('rouge')).to.be.above(-1);
     JSON.parse(jsonString)
   });

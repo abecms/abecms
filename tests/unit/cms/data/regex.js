@@ -9,11 +9,12 @@ var Manager = require('../../../../src/cli').Manager;
 var fse = require('fs-extra');
 
 describe('regex', function() {
+  let fixture
   before( function(done) {
     Manager.instance.init()
       .then(function () {
 
-        this.fixture = {
+        fixture = {
           articleSingle: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-single-abe.html'), 'utf8'),
           articleEach: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf8'),
           articleEachVariable: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'prepare-tag-abe-each-variable.html'), 'utf8'),
@@ -28,7 +29,7 @@ describe('regex', function() {
    * cmsData.regex.getAttr
    */
   it('cmsData.regex.getAttr()', function() {
-    var attribute = cmsData.regex.getAttr(this.fixture.articleSingle, 'key')
+    var attribute = cmsData.regex.getAttr(fixture.articleSingle, 'key')
     chai.assert.equal(attribute, 'title');
   });
 
@@ -36,7 +37,7 @@ describe('regex', function() {
    * cmsData.regex.escapeTextToRegex
    */
   it('cmsData.regex.escapeTextToRegex()', function() {
-    var attribute = cmsData.regex.escapeTextToRegex(this.fixture.articleSingle, 'g')
+    var attribute = cmsData.regex.escapeTextToRegex(fixture.articleSingle, 'g')
     chai.expect(typeof attribute).to.contain('object');
   });
 
@@ -44,9 +45,9 @@ describe('regex', function() {
    * cmsData.regex.isSingleAbe
    */
   it('cmsData.regex.isSingleAbe()', function() {
-    var bool = cmsData.regex.isSingleAbe(this.fixture.articleSingle)
+    var bool = cmsData.regex.isSingleAbe(fixture.articleSingle)
     chai.expect(bool).to.be.true;
-    bool = cmsData.regex.isSingleAbe(this.fixture.articleEach)
+    bool = cmsData.regex.isSingleAbe(fixture.articleEach)
     chai.expect(bool).to.be.false;
   });
 
@@ -54,9 +55,9 @@ describe('regex', function() {
    * cmsData.regex.isBlockAbe
    */
   it('cmsData.regex.isBlockAbe()', function() {
-    var bool = cmsData.regex.isBlockAbe(this.fixture.articleSingle)
+    var bool = cmsData.regex.isBlockAbe(fixture.articleSingle)
     chai.expect(bool).to.be.false;
-    bool = cmsData.regex.isBlockAbe(this.fixture.articleEach)
+    bool = cmsData.regex.isBlockAbe(fixture.articleEach)
     chai.expect(bool).to.be.true;
   });
 
@@ -64,9 +65,9 @@ describe('regex', function() {
    * cmsData.regex.isEachStatement
    */
   it('cmsData.regex.isEachStatement()', function() {
-    var bool = cmsData.regex.isEachStatement(this.fixture.articleSingle)
+    var bool = cmsData.regex.isEachStatement(fixture.articleSingle)
     chai.expect(bool).to.be.false;
-    bool = cmsData.regex.isEachStatement(this.fixture.articleEach)
+    bool = cmsData.regex.isEachStatement(fixture.articleEach)
     chai.expect(bool).to.be.true;
   });
 
@@ -74,7 +75,7 @@ describe('regex', function() {
    * cmsData.regex.abeTag
    */
   it('cmsData.regex.abeTag', function() {
-    var match = cmsData.regex.abeTag.exec(this.fixture.articleEachVariable)
+    var match = cmsData.regex.abeTag.exec(fixture.articleEachVariable)
     chai.assert.equal(match[0], '{{abe type="data" key="test.gmaps" source="https://maps.googleapis.com/maps/api/geocode/json?key=gmapskey&address=" autocomplete="true" display="{{formatted_address}} - (lat:{{geometry.location.lat}}-lng:{{geometry.location.lng}})" desc=\'gmaps\'}}');
   });
 
@@ -82,9 +83,9 @@ describe('regex', function() {
    * cmsData.regex.getTagAbeTypeRequest
    */
   it('cmsData.regex.getTagAbeTypeRequest()', function() {
-    var arr = cmsData.regex.getTagAbeTypeRequest(this.fixture.articleSingle)
+    var arr = cmsData.regex.getTagAbeTypeRequest(fixture.articleSingle)
     chai.expect(arr[0]).to.be.undefined;
-    var arr = cmsData.regex.getTagAbeTypeRequest(this.fixture.articleRequest)
+    var arr = cmsData.regex.getTagAbeTypeRequest(fixture.articleRequest)
     chai.expect(arr[0]).to.not.be.null;
   });
 

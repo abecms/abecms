@@ -177,5 +177,13 @@
     "text": "text",
     "rich": "rich",
     "textarea": "textarea"
+  },
+  "database": {
+    "type": "mongo",
+    "mongo": {
+      "server": "mongodb://localhost",
+      "port": "27017",
+      "database": "abecms_dev"
+    }
   }
 }

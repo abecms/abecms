@@ -1,19 +1,19 @@
 var nodemon = require('nodemon')
 var clc = require('cli-color')
 
-// NODE_ENV=development nodemon --exec npm run babel-app src/server/app.js --kill-others
+// NODE_ENV=development nodemon --exec npm run babel-app src/server/index.js --kill-others
 // ROOT=/path/to/my/abesite node src/tasks/nodemon.js
 
 nodemon({
-  script: __dirname + '/../../src/server/app.js',
+  script: __dirname + '/../../src/server/index.js',
   options: {
-    exec: __dirname + '/../../node_modules/.bin/babel-node --presets env'
+    exec: __dirname + '/../../node_modules/.bin/babel-node --presets @babel/preset-env'
   },
   args: ['--inspect'],
   restartable: 'rs',
   colours: true,
   execMap: {
-    js: __dirname + '/../../node_modules/.bin/babel-node --presets env'
+    js: __dirname + '/../../node_modules/.bin/babel-node --presets @babel/preset-env'
   },
   env: {
     NODE_ENV: 'development'

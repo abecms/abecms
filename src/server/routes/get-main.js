@@ -22,7 +22,6 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   manager.home = {
     files: [] //Manager.instance.getList()
   }
-
   manager.nbPosts = Manager.instance.getList().length
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.editConfig = EditorVariables.express.req.app.get('config')
@@ -112,8 +111,8 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
  * @param  {Function} next [description]
  * @return {[type]}        [description]
  */
-var route = function(req, res, next) {
-  var filePath = req.originalUrl.replace('/abe/editor', '')
+var route = async function(req, res, next) {
+  var filePath = req.originalUrl.replace('/abe/editor/', '')
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
@@ -125,15 +124,15 @@ var route = function(req, res, next) {
     next()
     return
   }
-  if (filePath != null) {
-    var testXSS = xss(filePath, {
-      whiteList: [],
-      stripIgnoreTag: true
-    })
-    if (testXSS !== filePath) {
-      filePath = testXSS
-    }
-  }
+  // if (filePath != null) {
+  //   var filePath = xss(filePath, {
+  //     whiteList: [],
+  //     stripIgnoreTag: true
+  //   })
+  //   if (testXSS !== filePath) {
+  //     filePath = testXSS
+  //   }
+  // }
 
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if (typeof res._header !== 'undefined' && res._header !== null) return
@@ -160,76 +159,50 @@ var route = function(req, res, next) {
     abeVersion: pkg.version
   }
 
-  let p = new Promise(resolve => {
-    if (filePath != null) {
-      fileName = path.basename(filePath)
-      folderPath = path.dirname(filePath)
+  let obj = {
+    json: {},
+    manager: {}
+  }
 
-      EditorVariables.isHome = false
-      EditorVariables.isEditor = true
-      var filePathTest = cmsData.revision.getDocumentRevision(filePath)
-      if (typeof filePathTest !== 'undefined' && filePathTest !== null) {
-        jsonPath = filePathTest.path
-        template = filePathTest.abe_meta.template
-      }
+  if (filePath != null) {
+    fileName = path.basename(filePath)
+    folderPath = path.dirname(filePath)
 
-      if (jsonPath === null || !coreUtils.file.exist(jsonPath)) {
-        res.redirect('/abe/editor')
-        return
-      }
-
-      var json = {}
-      if (coreUtils.file.exist(jsonPath)) {
-        json = cmsData.file.get(jsonPath, 'utf8')
-      }
-      var text = cmsTemplates.template.getTemplate(template, json)
-      cmsEditor.editor
-        .create(text, json)
-        .then(result => {
-          resolve(result)
-        })
-        .catch(function(e) {
-          console.error(e)
-        })
-    } else {
-      resolve({
-        json: {},
-        manager: {}
-      })
+    EditorVariables.isHome = false
+    EditorVariables.isEditor = true
+    var filePathTest = cmsData.revision.getDocumentRevision(filePath)
+    if (typeof filePathTest !== 'undefined' && filePathTest !== null) {
+      jsonPath = filePathTest.path
+      template = filePathTest.abe_meta.template
     }
-  }).catch(function(e) {
-    console.error(e) // "oh, no!"
-  })
 
-  p
-    .then(obj => {
-      var precontribs = Manager.instance.getPrecontribution()
-      var promises = []
-      EditorVariables.resultPrecontrib = []
-      if (precontribs != null) {
-        Array.prototype.forEach.call(precontribs, precontrib => {
-          var p = cmsEditor.editor
-            .create(precontrib, obj.json, true)
-            .then(resultPrecontrib => {
-              EditorVariables.resultPrecontrib.push(resultPrecontrib)
-            })
-            .catch(function(e) {
-              console.error(e)
-            })
-          promises.push(p)
-        })
-        Promise.all(promises)
-          .then(() => {
-            renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
-          })
-          .catch(function(e) {
-            console.error('get-main.js getDataList', e.stack)
-          })
-      }
-    })
-    .catch(e => {
-      console.log('error', e)
-    })
+    if (jsonPath === null) {
+      res.redirect('/abe/editor')
+      return
+    }
+
+    let json = await cmsData.revision.getDoc(jsonPath)
+    const text = cmsTemplates.template.getTemplate(template, json)
+
+    obj = await cmsEditor.editor.create(text, json)
+      .catch(function(e) {
+        console.error(e)
+      })
+  }
+
+  var precontribs = Manager.instance.getPrecontribution()
+  EditorVariables.resultPrecontrib = []
+  if (precontribs != null) {
+    await Promise.all(precontribs.map(async precontrib => {
+      let resultPrecontrib = await cmsEditor.editor.create(precontrib, obj.json, true)
+      .catch(function(e) {
+        console.error(e)
+      })
+      EditorVariables.resultPrecontrib.push(resultPrecontrib)
+    }));
+  }
+
+  renderAbeAdmin(EditorVariables, obj, filePath, isHome, template)
 }
 
 export default route

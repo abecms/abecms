@@ -20,7 +20,7 @@ describe('cmsStructure', function() {
    * 
    */
   it('cmsStructure.structure.editStructure()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(coreUtils.file, "removeFolder")
     stub.returns('')
     var result = cmsStructure.structure.editStructure('remove', folderPath)

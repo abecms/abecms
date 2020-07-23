@@ -101,3 +101,85 @@ OU
 {{abe type="data" key="person" source="/reference/person" editable="false" }}
 {{person.firstname}}
 ```
+
+
+# mongo
+le serveur devrait être lancé depuis cli
+
+
+
+# Migration 3 to 4
+## hooks beforeCreate 
+change params 
+version 3 :
+```
+(
+    'beforeCreate',
+    json,
+    postUrl,
+    template
+)
+```
+
+version 4 :
+```
+(
+    'beforeCreate',
+    template,
+    postUrl,
+    json
+)
+```
+
+1. Terminer Mongo :
+   1. Draft					                  ======> OK
+   2. workflow                        2H
+   3. Publish				                  ======> OK
+   4. Unpublish                       2H
+   5. Update				                  ======> OK
+   6. Duplicate				                ======> OK
+   7. Tests unitaires                 12H
+   8. Tests fonctionnels              0H
+2. Vérifier File :
+   1. Draft                           ======> OK 
+   2. workflow                        2H
+   3. Publish                         ======> OK
+   4. Unpublish                       2H
+   5. Update                          ======> OK  
+   6. Duplicate                       ======> OK
+   7. Tests unitaires                 ======> OK
+   8. Tests fonctionnels              12H
+3. Finaliser le look&feel admin       8H
+4. User dans Mongo                    12H
+5. API routes exposées proprement     24H
+6. Upload de vidéo et transcodage     24H  
+7. API de vote par user / vidéo       12H
+8. Mobile
+   1. Création de compte              8H
+   2. Authent / conservation du token 8H
+   3. On Boarding                     8H
+   4. Player vidéo lecture vidéos     12H
+   5. Interactions du player vidéo    24H
+   6. Formulaire en webview           8H
+   7. Look & feel                     24H
+9. Site web
+   1. Création de compte
+   2. Authent / conservation du token
+   3. Player vidéo lecture vidéos
+   4. Intercations du player vidéo
+   5. Formulaire en iframe
+   6. Look & feel
+
+=> 204H = 25,5j 
+Il reste 15j
+
+MINIMUM => 
+
+"database": {
+  "type": "mongo",
+  "mongo": {
+    "server": "mongodb://localhost",
+    "port": "27017",
+    "database": "abecms_dev"
+  }
+}

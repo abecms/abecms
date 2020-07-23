@@ -9,17 +9,13 @@ var Manager = require('../../../../src/cli').Manager;
 var cmsData = require('../../../../src/cli').cmsData
 
 describe('Sort', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        done()
-        
-      }.bind(this))
-  });
+  before(async () => {
+    await Manager.instance.init()
+  })
 
   it('cmsData.sort.byDateAsc', function() {
-  	var list = Manager.instance.getList()
-  	list.sort(cmsData.sort.byDateAsc)
+    var list = Manager.instance.getList()
+    list.sort(cmsData.sort.byDateAsc)
   	chai.expect(list[0].name).to.contain('homepage-1');
   });
 

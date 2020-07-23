@@ -1,6 +1,6 @@
 import {abeExtend, Manager, cmsOperations, cmsData} from '../../../../cli'
 
-var route = function(req, res, next) {
+var route = async function(req, res, next) {
   abeExtend.hooks.instance.trigger('beforeRoute', req, res, next)
   if (typeof res._header !== 'undefined' && res._header !== null) return
 

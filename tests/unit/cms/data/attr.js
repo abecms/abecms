@@ -10,17 +10,8 @@ var config = require('../../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
 
 var cmsData = require('../../../../src/cli').cmsData;
-var Manager = require('../../../../src/cli').Manager;
 
 describe('Attr', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        this.fixture = {}
-        done()
-        
-      }.bind(this))
-  });
 
   /**
    * 

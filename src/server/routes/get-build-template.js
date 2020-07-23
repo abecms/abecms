@@ -37,7 +37,7 @@ var route = function(req, res) {
   }
 
   let allFiles = []
-  coreUtils.file.getFilesAsync(Manager.instance.pathPartials, true, '.png')
+  coreUtils.file.getFiles(Manager.instance.pathPartials, true, '.png')
   .then(function(files) {
     files.forEach(function(pathPartial, index){
       allFiles = allFiles.concat(pathPartial.replace(Manager.instance.pathPartials, ''))

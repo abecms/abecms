@@ -1,4 +1,8 @@
+import path from 'path'
+import fse from 'fs-extra'
 import attr from './attr'
+
+import {cmsData} from '../../'
 
 /**
  * Class FileAttr
@@ -13,6 +17,7 @@ export default class FileAttr {
    */
   static add(str, options) {
     var att = new attr(str)
+
     return att.insert(options)
   }
 
@@ -39,6 +44,28 @@ export default class FileAttr {
    */
   static test(str) {
     var att = new attr(str).val
+
     return att.s != null
+  }
+
+  /**
+   * 
+   * @param {String} pathFile 
+   */
+  static getDate(pathFile) {
+    let name = path.basename(pathFile)
+    const fileData = cmsData.fileAttr.get(name)
+    name = cmsData.fileAttr.delete(name)
+ 
+    let date
+    if (fileData.d) {
+      date = fileData.d
+    } else {
+      pathFile = cmsData.utils.getRevisionPath(pathFile)
+      const stat = fse.statSync(pathFile)
+      date = stat.mtime
+    }
+
+    return date
   }
 }

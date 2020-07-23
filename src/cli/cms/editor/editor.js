@@ -222,68 +222,59 @@ export function addDataAbeTagsToForm(text, json, form) {
   })
 }
 
-export function create(text, json, precontrib = false) {
-  let p = new Promise(resolve => {
-    var form = new cmsEditor.form()
-    var arrayBlock = []
+export async function create(text, json, precontrib = false) {
+  var form = new cmsEditor.form()
+  var arrayBlock = []
 
-    // get all data from type='data' (web service, select, ...)
-    // and create a key abe_source with all data
-    // + modify keys when editable = false or prefill = true only in the case of source=select
-    cmsData.source
-      .getDataList(text, json)
-      .then(() => {
-        // prepare editor values if editable or put values in json from abe_source
-        // (don't do this for type='data' included in {{#each}})
-        addDataAbeTagsToForm(text, json, form)
+  // get all data from type='data' (web service, select, ...)
+  // and create a key abe_source with all data
+  // + modify keys when editable = false or prefill = true only in the case of source=select
+  await cmsData.source.getDataList(text, json)
 
-        // Remove every abe type='data' tags else but those in {{#each}} statements
-        text = cmsData.source.removeNonEachDataList(text)
+  // prepare editor values if editable or put values in json from abe_source
+  // (don't do this for type='data' included in {{#each}})
+  addDataAbeTagsToForm(text, json, form)
 
-        if (!precontrib) {
-          text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(text)
-          text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(
-            text
-          )
-        }
+  // Remove every abe type='data' tags else but those in {{#each}} statements
+  text = cmsData.source.removeNonEachDataList(text)
 
-        // add abe tags not in each and with a key to the form
-        addSingleAbeTagsToForm(text, json, form)
+  if (!precontrib) {
+    text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(text)
+    text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(
+      text
+    )
+  }
 
-        // add abe tags in each
-        addAbeTagCollectionToForm(text, json, form, arrayBlock)
+  // add abe tags not in each and with a key to the form
+  addSingleAbeTagsToForm(text, json, form)
 
-        if (!precontrib) {
-          // HOOKS beforeEditorFormBlocks
-          json = abeExtend.hooks.instance.trigger(
-            'beforeEditorFormBlocks',
-            json,
-            text
-          )
-        }
+  // add abe tags in each
+  addAbeTagCollectionToForm(text, json, form, arrayBlock)
 
-        var blocks = form.orderBlock()
+  if (!precontrib) {
+    // HOOKS beforeEditorFormBlocks
+    json = abeExtend.hooks.instance.trigger(
+      'beforeEditorFormBlocks',
+      json,
+      text
+    )
+  }
 
-        if (!precontrib) {
-          // HOOKS afterEditorFormBlocks
-          blocks = abeExtend.hooks.instance.trigger(
-            'afterEditorFormBlocks',
-            blocks,
-            json,
-            text
-          )
-        }
+  var blocks = form.orderBlock()
 
-        abeEngine.instance.content = json
-        resolve({
-          form: blocks,
-          json: json
-        })
-      })
-      .catch(function(e) {
-        console.error(e)
-      })
-  })
+  if (!precontrib) {
+    // HOOKS afterEditorFormBlocks
+    blocks = abeExtend.hooks.instance.trigger(
+      'afterEditorFormBlocks',
+      blocks,
+      json,
+      text
+    )
+  }
 
-  return p
+  abeEngine.instance.content = json
+  return {
+    form: blocks,
+    json: json
+  }
 }

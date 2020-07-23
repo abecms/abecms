@@ -220,6 +220,7 @@ export default class EditorSave {
         target.removeAttribute('disabled')
 
         if (result.success === 1) {
+          console.log(result)
           this._abeDisplayStatus.innerHTML = result.json.abe_meta.status
           window.json = result.json
         }

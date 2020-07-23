@@ -3,9 +3,27 @@ import mkdirp from 'mkdirp'
 import xss from 'xss'
 import path from 'path'
 
-import {config} from '../../'
+import {
+  config,
+  mongo,
+  cmsData
+} from '../../'
 
-export function saveJson(jsonPath, json) {
+export async function saveJson(jsonPath, json) {
+
+  let result = false;
+  if (config.database.type == "file") {
+    result = await saveJsonFile(jsonPath, json);
+  }
+  else if (config.database.type == "mongo") {
+    result = await mongo.saveJson(jsonPath, json);
+  }
+
+  return result
+}
+
+export async function saveJsonFile(jsonPath, json) {
+  jsonPath = cmsData.utils.getRevisionPath(jsonPath)
   mkdirp.sync(path.dirname(jsonPath))
 
   if (json.abe_source != null) delete json.abe_source
@@ -37,9 +55,9 @@ export function saveJson(jsonPath, json) {
   return true
 }
 
-export function saveHtml(pathFile, html) {
-  mkdirp.sync(path.dirname(pathFile))
-  fse.writeFileSync(pathFile, html)
+export async function saveHtml(pathFile, html) {
+  await mkdirp(path.dirname(pathFile))
+  await fse.writeFile(pathFile, html)
 
   return true
 }

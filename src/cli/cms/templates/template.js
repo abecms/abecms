@@ -16,11 +16,11 @@ export function getTemplatesAndPartials(templatesPath, partialsPath) {
   var p = new Promise(resolve => {
     const extension = '.' + config.files.templates.extension
     return coreUtils.file
-      .getFilesAsync(templatesPath, true, extension)
+      .getFiles(templatesPath, true, extension)
       .then(function(files) {
         allFiles = allFiles.concat(files)
         return coreUtils.file
-          .getFilesAsync(partialsPath, true, extension)
+          .getFiles(partialsPath, true, extension)
           .then(function(files) {
             allFiles = allFiles.concat(files)
             return resolve(allFiles)

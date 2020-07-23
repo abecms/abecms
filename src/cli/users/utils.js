@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt-nodejs'
 import Cookies from 'cookies'
 import jwt from 'jwt-simple'
 
-import {User, config, coreUtils, cmsData} from '../../cli'
+import {User, config, coreUtils} from '../../cli'
 
 export function checkSameEmail(data) {
   var emailAlreadyUsed = false
@@ -155,25 +155,24 @@ export function findByUsername(username, done) {
   return done(null, null)
 }
 
+
 export function findByEmail(email, done) {
-  var bdd = User.manager.instance.get()
-  for (var i = 0, len = bdd.length; i < len; i++) {
-    var user = bdd[i]
-    if (user.email === email) {
-      return done(null, user)
-    }
+  var user = User.manager.instance.findByEmail(email)
+  
+  if (user) {
+    return done(null, user)
   }
+  
   return done(null, null)
 }
 
 export function findByResetPasswordToken(resetPasswordToken, done) {
-  var bdd = User.manager.instance.get()
-  for (var i = 0, len = bdd.length; i < len; i++) {
-    var user = bdd[i]
-    if (user.resetPasswordToken === resetPasswordToken) {
-      return done(null, user)
-    }
+  var user = User.manager.instance.resetPasswordToken(resetPasswordToken)
+    
+  if (user) {
+    return done(null, user)
   }
+  
   return done(null, null)
 }
 
@@ -388,7 +387,7 @@ export function getActivity() {
 
   if (config.users.enable && config.users.activity.active) {
     if (fse.existsSync(path.join(pathToActivity, 'activity.json'))) {
-      const acArray= cmsData.file.get(path.join(pathToActivity, 'activity.json'))
+      const acArray= coreUtils.file.getJson(path.join(pathToActivity, 'activity.json'))
       return acArray
     }
   }

@@ -37,7 +37,7 @@ describe('image', function() {
    * 
    */
   it('cmsMedia.image.generateThumbnail()', function(done) {
-    // this.sinon = sinon.sandbox.create();
+    // this.sinon = sinon.sandbox;
     // var stub = sinon.stub(cmsMedia.image, 'smartCropAndSaveFile')
     // stub.returns(Promise.resolve(0))
     // var thumb = cmsMedia.image.generateThumbnail(pathToImage)
@@ -58,7 +58,7 @@ describe('image', function() {
    * 
    */
   it('cmsMedia.image.cropAndSaveFiles()', function(done) {
-    // this.sinon = sinon.sandbox.create();
+    // this.sinon = sinon.sandbox;
     // var stub = sinon.stub(cmsMedia.image, 'smartCropAndSaveFile')
     // stub.returns(Promise.resolve({
     //   'stdout': false,
@@ -89,7 +89,7 @@ describe('image', function() {
    * 
    */
   it('cmsMedia.image.getThumbsList()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(coreUtils.file, 'getFilesSync')
     stub.returns(imagesListInFolder)
     var result = cmsMedia.image.getThumbsList()
@@ -106,7 +106,7 @@ describe('image', function() {
    * 
    */
   it('cmsMedia.image.createMediaFolder()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(abeExtend.hooks.instance, 'trigger')
     stub.returns('/myImageFolder')
     var stubDir = sinon.stub(mkdirp, 'sync')
@@ -126,7 +126,7 @@ describe('image', function() {
    * 
    */
   it('cmsMedia.image.getAssociatedImageFileFromThumb()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(coreUtils.file, 'getFilesSync')
     stub.returns(imagesListInFolder)
     var result = cmsMedia.image.getAssociatedImageFileFromThumb(path.join(path.sep, 'unitimage', 'img_thumb.jpg'))
@@ -156,7 +156,7 @@ describe('image', function() {
    * 
    */
   it('cmsMedia.image.createMediaSlug()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(coreUtils.random, 'generateUniqueIdentifier')
     stub.returns(12345)
     var result = cmsMedia.image.createMediaSlug('teSt f1le s l û g', '.jpg')

@@ -1,5 +1,9 @@
 import {coreUtils, User} from '../../cli'
 
+/**
+ * TODO MONGO
+ * @param {*} newUser 
+ */
 export function add(newUser) {
   var xss = coreUtils.text.checkXss(newUser)
   if (xss.success === 0) {
@@ -35,6 +39,10 @@ export function add(newUser) {
   }
 }
 
+/**
+ * TODO MONGO
+ * @param {*} id 
+ */
 export function deactivate(id) {
   var bdd = User.manager.instance.get()
   id = parseInt(id)
@@ -146,7 +154,7 @@ export function saveSearch(id, data) {
 
 export function removeSearch(id, data) {
   var bdd = User.manager.instance.get()
-  console.log(id)
+
   id = parseInt(id)
   for (var i = 0, len = bdd.length; i < len; i++) {
     var user = bdd[i]

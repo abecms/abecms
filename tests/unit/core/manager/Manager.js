@@ -14,19 +14,16 @@ var Manager = require('../../../../src/cli').Manager;
 var fse = require('fs-extra');
 
 describe('Manager', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
+  let fixture
+  before(async () => {
+    await Manager.instance.init()
 
-        this.fixture = {
-          tag: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8'),
-          jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'files', 'article-4.json')),
-          jsonArticle1: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1.json'))
-        }
-        done()
-        
-      }.bind(this))
-  });
+    fixture = {
+      tag: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8'),
+      jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'files', 'article-4.json')),
+      jsonArticle1: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1.json'))
+    }
+  })
 
   it('getStructureAndTemplates()', function() {
     const data = Manager.instance.getStructureAndTemplates()
@@ -75,32 +72,34 @@ describe('Manager', function() {
     chai.assert.equal(list.recordsTotal, 3, 'failed !')
   });
 
-  it('updatePostInList() ', function() {
+  it('updatePostInList() ', async () => {
     let list = Manager.instance.getList()
     chai.assert.equal(list[0].revisions.length, 2, 'failed !')
-    Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
+    await Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
     list = Manager.instance.getList()
     chai.assert.equal(list[0].revisions.length, 3, 'failed !')
   });
 
-  it('historize() ', function() {
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(cmsOperations.remove, 'removeFile', function(param){
+  it('historize() ', async () => {
+    sinon.stub(cmsOperations.remove, 'removeRevision').callsFake( () => {
+      return true;
+    })
+    sinon.stub(cmsOperations.remove, 'removePost').callsFake( () => {
       return true;
     })
     let list = Manager.instance.getList()
     //chai.assert.equal(list[0].revisions.length, 2, 'failed !')
     
     config.set({data: {history: 1}})
-    Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
-    Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
+    await Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
+    await Manager.instance.updatePostInList(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'article-1-abe-d20160919T125255138Z.json'))
 
     Manager.instance.historize(0)
     list = Manager.instance.getList()
     chai.assert.equal(list[0].revisions.length, 1, 'failed !')
     
     config.set({data: {history: 0}})
-    this.sinon.restore()
+    sinon.restore()
   });
 
   it('Connections', function() {
