@@ -109,8 +109,8 @@ le serveur devrait être lancé depuis cli
 
 
 # Migration 3 to 4
-## hooks beforeCreate 
-change params 
+## hooks beforeCreate
+change params
 version 3 :
 ```
 (
@@ -141,18 +141,18 @@ version 4 :
    7. Tests unitaires                 12H
    8. Tests fonctionnels              0H
 2. Vérifier File :
-   1. Draft                           ======> OK 
+   1. Draft                           ======> OK
    2. workflow                        2H
    3. Publish                         ======> OK
    4. Unpublish                       2H
-   5. Update                          ======> OK  
+   5. Update                          ======> OK
    6. Duplicate                       ======> OK
    7. Tests unitaires                 ======> OK
    8. Tests fonctionnels              12H
 3. Finaliser le look&feel admin       8H
 4. User dans Mongo                    12H
 5. API routes exposées proprement     24H
-6. Upload de vidéo et transcodage     24H  
+6. Upload de vidéo et transcodage     24H
 7. API de vote par user / vidéo       12H
 8. Mobile
    1. Création de compte              8H
@@ -170,10 +170,10 @@ version 4 :
    5. Formulaire en iframe
    6. Look & feel
 
-=> 204H = 25,5j 
+=> 204H = 25,5j
 Il reste 15j
 
-MINIMUM => 
+MINIMUM =>
 
 "database": {
   "type": "mongo",
