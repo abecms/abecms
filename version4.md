@@ -19,7 +19,7 @@ Here comes the version 4
 - ~~On peut créer des templates depuis des blocs~~
 - ~~On peut générer plusieurs types de page à partir de la même data~~
 - ~~Une data dans le json peut provenir d'un autre json (factorisation)~~
-- Compatible MongoDB !!!
+- ~~Compatible MongoDB !!!~~
 - On peut abifier un html via un outil dédié
 - Créer une vraie documentation "a la Gatsby"
 
@@ -31,7 +31,7 @@ Here comes the version 4
 - ~~It will be possible to create filtered views on the manager frontend~~
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
 - add the date field
-- Add template creation from partials
+- ~~Add template creation from partials~~
 - templates and partials will be uploadable
 - Video training will be produced
 - Create an Electron version
