@@ -179,7 +179,7 @@
     "textarea": "textarea"
   },
   "database": {
-    "type": "mongo",
+    "type": "file",
     "mongo": {
       "server": "mongodb://localhost",
       "port": "27017",
