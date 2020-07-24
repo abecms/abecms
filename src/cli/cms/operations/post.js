@@ -177,7 +177,7 @@ export async function unpublish(postUrl, user) {
     postPath,
     result.json
   )
-
+  
   return result.json
 }
 
