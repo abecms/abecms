@@ -69,8 +69,8 @@ describe('User.utils', function() {
   })
 
   it('User.utils.findByResetPasswordToken', function(done){
-    var stub = sinon.stub(User.manager.instance, 'get');
-    stub.returns(JSON.parse(JSON.stringify(fixture.users)))
+    // var stub = sinon.stub(User.manager.instance, 'get');
+    // stub.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
     User.utils.findByResetPasswordToken("token", function (err, user) {
