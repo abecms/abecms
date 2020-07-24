@@ -8,12 +8,12 @@ export function getFiles(name = '') {
   let res = {}
 
   if (name !== '')
-    res[name] = cmsData.file.get(path.join(pathToReferences, name))
+    res[name] = coreUtils.file.getJson(path.join(pathToReferences, name))
   else {
     const files = coreUtils.file.getFilesSync(pathToReferences, true, '.json')
     Array.prototype.forEach.call(files, pathFile => {
       const fileName = pathFile.split(path.sep)
-      res[fileName[fileName.length - 1]] = cmsData.file.get(pathFile)
+      res[fileName[fileName.length - 1]] = coreUtils.file.getJson(pathFile)
     })
   }
 

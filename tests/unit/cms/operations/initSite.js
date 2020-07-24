@@ -22,32 +22,33 @@ var User = require('../../../../src/cli').User;
 describe('cmsOperations', function() {
 
   it('cmsOperations.initSite()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
     const create = new cmsOperations.initSite()
-    const stubadd = s.stub(create, 'addFolder', function () {
+    const chdir = sinon.stub(process, 'chdir');
+    const stubadd = sinon.stub(create, 'addFolder').callsFake( () => {
       return Promise.resolve()
-    }.bind(this));
+    })
 
     create.init(process.cwd())
       .then(function(resSave) {
         
         sinon.assert.callCount(stubadd, 7)
+        sinon.assert.callCount(chdir, 1)
         stubadd.restore()
+        chdir.restore()
 
         done()
       }.bind(this));
   });
 
   it('cmsOperations.initSite updateSecurity()', function(done) {
-    // stub
-    const s = sinon.sandbox.create();
     const create = new cmsOperations.initSite()
-    const stubConf = s.stub(config, 'save', function (p) { return p; }.bind(this));
-    const stubRead = s.stub(User.manager.instance, 'read');
-    const stubUpdate = s.stub(User.manager.instance, 'update');
-    const uadd = s.stub(User.operations, 'add')
-    const uactivate = s.stub(User.operations, 'activate')
+    const stubConf = sinon.stub(config, 'save').callsFake( (p) => {
+      return p;
+    })
+    const stubRead = sinon.stub(User.manager.instance, 'read')
+    const stubUpdate = sinon.stub(User.manager.instance, 'update')
+    const uadd = sinon.stub(User.operations, 'add')
+    const uactivate = sinon.stub(User.operations, 'activate')
     uadd.returns({user:{id:1}})
     uactivate.returns(true)
     stubRead.returns({})
@@ -72,11 +73,7 @@ describe('cmsOperations', function() {
         sinon.assert.callCount(uadd, 1)
         sinon.assert.callCount(uactivate, 1)
 
-        stubConf.restore()
-        uadd.restore()
-        uactivate.restore()
-        stubRead.restore()
-        stubUpdate.restore()
+        sinon.restore()
         done()
       }.bind(this));
   });

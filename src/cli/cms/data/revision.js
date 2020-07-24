@@ -1,6 +1,6 @@
 import path from 'path'
 
-import {config, cmsData, coreUtils, Manager} from '../../'
+import {config, mongo, cmsData, abeExtend, coreUtils, Manager} from '../../'
 
 /**
  * Create and array of doc file path containing the versions of this doc
@@ -10,14 +10,10 @@ import {config, cmsData, coreUtils, Manager} from '../../'
 export function getVersions(docPath) {
   let result = []
   const files = Manager.instance.getList()
-  const dataPath = Manager.instance.pathData.replace(config.root, '')
-  var dataFile = path.join(
-    dataPath,
-    docPath.replace('.' + config.files.templates.extension, '.json')
-  )
+  var jsonPath = docPath.replace('.' + config.files.templates.extension, '.json')
   if (files != null) {
     Array.prototype.forEach.call(files, file => {
-      if (file.path.indexOf(dataFile) > -1) {
+      if (file.path.startsWith(jsonPath)) {
         result = file.revisions
       }
     })
@@ -93,7 +89,7 @@ export function mergeRevisions(files) {
 
     if (merged[docRelativePath] == null) {
       merged[docRelativePath] = {
-        path: cmsData.utils.getDocPath(file.path),
+        path: cmsData.utils.getDocRelativePath(file.path),
         revisions: []
       }
     }
@@ -151,4 +147,59 @@ export function getFilesMerged(files) {
   const revisions = cmsData.revision.mergeRevisions(files)
 
   return cmsData.revision.sortRevisions(revisions)
+}
+
+export async function getDoc(relativePath) {
+
+    let json = {}
+    if (config.database.type == "file") {
+      json = await cmsData.file.get(relativePath)
+    } else if (config.database.type == "mongo") {
+      json = await mongo.getDoc(relativePath).catch(
+        (err) => {
+          console.log(err);
+        })
+    }
+
+    return json
+}
+
+export async function getAllWithKeys(withKeys) {
+  let filesArr;
+
+  if (config.database.type == "file") {
+    filesArr = await cmsData.file.getAllWithKeys(withKeys);
+  }
+  else if (config.database.type == "mongo") {
+    filesArr = await mongo.getAllWithKeys(withKeys);
+  }
+
+  var merged = cmsData.revision.getFilesMerged(filesArr)
+
+  abeExtend.hooks.instance.trigger('afterGetAllFiles', merged)
+
+ return merged
+}
+
+export async function exist(jsonPath) {
+  jsonPath = cmsData.utils.getRevisionRelativePath(jsonPath)
+  let exists = false
+  
+  if (config.database.type == "file") {
+    exists = coreUtils.file.exist(path.join(Manager.instance.pathData, jsonPath))
+  }
+  else if (config.database.type == "mongo") {
+    exists = await mongo.exist(jsonPath);
+  }
+}
+
+export function getFileObject(relativePath, json) {
+  let fileObject = {}
+  if (config.database.type == "file") {
+    fileObject = cmsData.file.getFileObject(relativePath, json)
+  } else if (config.database.type == "mongo") {
+    fileObject = mongo.getFileObject(json);
+  }
+
+  return fileObject
 }

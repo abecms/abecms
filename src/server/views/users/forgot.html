@@ -1,32 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-    <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/abecms/css/styles.css">
-    <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
-    <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
-</head>
-<body>
-  <div class="panel panel-default panel-login">
-    <div class="panel-body">
-      {{#if info}}
-        <span class="text-danger">{{@root.info}}</span>
-        <br />
-      {{/if}}
-      <form action="/abe/users/forgot" method="get">
+{{#extend "layout-login"}}
+  {{#content "body"}}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card-group">
+        <div class="card p-4">
+          {{#if info}}
+            <span class="text-danger">{{@root.info}}</span>
+            <br />
+          {{/if}}
+          <form action="/abe/users/forgot" method="get">
+            <h1>Forgotten password</h1>
+            <p class="text-muted">Enter your email</p>
+            <div class="form-group">
+              <input type="email" class="form-control" name="email" placeholder="">
+            </div>
+            <input type="hidden" class="form-control" name="token" value="{{token}}">
+            <button type="submit" class="btn btn-primary px-4">Submit</button>
+          </form>
 
-        <div class="form-group">
-          <label for="email">Enter your email</label>
-          <input type="email" class="form-control" name="email" placeholder="">
+          {{#> login-more}}{{/login-more}}
         </div>
-        <input type="hidden" class="form-control" name="token" value="{{token}}">
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-
-      {{abeImport 'login-more' config this}}
+      </div>
     </div>
   </div>
-  
-</body>
-</html>
+  {{/content}}
+{{/extend}}

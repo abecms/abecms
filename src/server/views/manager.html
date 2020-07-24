@@ -1,0 +1,28 @@
+{{#extend "layout"}}
+
+  {{#content "head" mode="append"}}
+    <link rel="stylesheet" href="/abecms/css/dataTables.bootstrap4.min.css">
+  {{/content}}
+
+  {{#content "breadcrumbs"}}
+  {{/content}}
+
+  {{#content "body"}}
+  <div class="container-main">
+    <div class="container-table">
+      {{#> manager}}{{/manager}}
+    </div>
+  </div>
+  {{/content}}
+
+  {{#content "bottom-scripts" mode="append"}}
+    <script type="text/javascript" src="/abecms/vendors/jquery-datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/abecms/vendors/jquery-datatables/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="/abecms/libs/standalone.min.js"></script>
+    <script type="text/javascript" src="/abecms/libs/moment-with-locales.js"></script>
+    <!-- [pageHTML] 
+      {{{pageHtml}}}
+    [pageHTML] -->
+  {{/content}}
+{{/extend}}
+

@@ -18,9 +18,10 @@ config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
 var User = require('../../../src/cli').User;
 
 describe('User.operations', function() {
+  let fixture
   before( function() {
     config.users.enable = true
-    this.fixture = {
+    fixture = {
       htmlIsAuthorized: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'isAuthorized.html'), 'utf8'),
       htmlIsAuthorizedTrue: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'isAuthorizedTrue.html'), 'utf8'),
       users: JSON.parse(fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'users', 'users.json'), 'utf8'))
@@ -28,11 +29,9 @@ describe('User.operations', function() {
   });
 
   it('User.operations.deactivate', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stub = sinonInstance.stub(User.manager.instance, 'get');
-    stub.returns(JSON.parse(JSON.stringify(this.fixture.users)))
-    var stubSave = sinonInstance.stub(User.manager.instance, 'save');
+    var stub = sinon.stub(User.manager.instance, 'get');
+    stub.returns(JSON.parse(JSON.stringify(fixture.users)))
+    var stubSave = sinon.stub(User.manager.instance, 'save');
     stubSave.returns(null)
 
     // test
@@ -41,17 +40,14 @@ describe('User.operations', function() {
 
     // unstub
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
     sinon.assert.calledOnce(User.manager.instance.save)
-    User.manager.instance.save.restore()
+    sinon.restore()
   })
 
   it('User.operations.activate', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stub = sinonInstance.stub(User.manager.instance, 'get');
-    stub.returns(JSON.parse(JSON.stringify(this.fixture.users)))
-    var stubSave = sinonInstance.stub(User.manager.instance, 'save');
+    var stub = sinon.stub(User.manager.instance, 'get');
+    stub.returns(JSON.parse(JSON.stringify(fixture.users)))
+    var stubSave = sinon.stub(User.manager.instance, 'save');
     stubSave.returns(null)
 
     // test
@@ -60,17 +56,14 @@ describe('User.operations', function() {
 
     // unstub
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
     sinon.assert.calledOnce(User.manager.instance.save)
-    User.manager.instance.save.restore()
+    sinon.restore()
   })
 
   it('User.operations.remove', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stub = sinonInstance.stub(User.manager.instance, 'get');
-    stub.returns(JSON.parse(JSON.stringify(this.fixture.users)))
-    var stubSave = sinonInstance.stub(User.manager.instance, 'save');
+    var stub = sinon.stub(User.manager.instance, 'get');
+    stub.returns(JSON.parse(JSON.stringify(fixture.users)))
+    var stubSave = sinon.stub(User.manager.instance, 'save');
     stubSave.returns(null)
 
     // test
@@ -79,23 +72,20 @@ describe('User.operations', function() {
 
     // unstub
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
     sinon.assert.calledOnce(User.manager.instance.save)
-    User.manager.instance.save.restore()
+    sinon.restore()
   })
 
   it('User.operations.update', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubTextXss = sinonInstance.stub(coreUtils.text, 'checkXss');
+    var stubTextXss = sinon.stub(coreUtils.text, 'checkXss');
     stubTextXss.returns({ success:1 });
-    var stubCheckSameEmail = sinonInstance.stub(User.utils, 'checkSameEmail');
+    var stubCheckSameEmail = sinon.stub(User.utils, 'checkSameEmail');
     stubCheckSameEmail.returns({ success:1 });
-    var stubGetRole = sinonInstance.stub(User.utils, 'getRole');
-    stubGetRole.returns(JSON.parse(JSON.stringify(this.fixture.users))[0].role);
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
-    var stubSave = sinonInstance.stub(User.manager.instance, 'save');
+    var stubGetRole = sinon.stub(User.utils, 'getRole');
+    stubGetRole.returns(JSON.parse(JSON.stringify(fixture.users))[0].role);
+    var stubGet = sinon.stub(User.manager.instance, 'get');
+    stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
+    var stubSave = sinon.stub(User.manager.instance, 'save');
     stubSave.returns(null)
 
     // test
@@ -104,81 +94,64 @@ describe('User.operations', function() {
 
     // unstub
     sinon.assert.calledOnce(coreUtils.text.checkXss)
-    coreUtils.text.checkXss.restore()
     sinon.assert.calledOnce(User.utils.checkSameEmail)
-    User.utils.checkSameEmail.restore()
     sinon.assert.calledOnce(User.utils.getRole)
-    User.utils.getRole.restore()
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
     sinon.assert.calledOnce(User.manager.instance.save)
-    User.manager.instance.save.restore()
+    sinon.restore()
   })
 
   it('User.operations.updatePassword', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubCommonPassword = sinonInstance.stub(User.utils, 'commonPassword');
+    var stubCommonPassword = sinon.stub(User.utils, 'commonPassword');
     stubCommonPassword.returns({ success:1 });
-    var stubEncryptPassword = sinonInstance.stub(User.utils, 'encryptPassword');
+    var stubEncryptPassword = sinon.stub(User.utils, 'encryptPassword');
     stubEncryptPassword.returns("newPassword2");
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
-    var stubSave = sinonInstance.stub(User.manager.instance, 'save');
+    var stubGet = sinon.stub(User.manager.instance, 'get');
+    stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
+    var stubSave = sinon.stub(User.manager.instance, 'save');
     stubSave.returns(null)
 
     // test
-    var oldPassword = JSON.parse(JSON.stringify(this.fixture.users)).password
-    var bdd = User.operations.updatePassword(JSON.parse(JSON.stringify(this.fixture.users))[0], "newPassword")
+    var oldPassword = JSON.parse(JSON.stringify(fixture.users)).password
+    var bdd = User.operations.updatePassword(JSON.parse(JSON.stringify(fixture.users))[0], "newPassword")
     chai.expect(bdd.user.password).to.not.be.equal(oldPassword)
 
     // unstub
     sinon.assert.calledOnce(User.utils.commonPassword)
-    User.utils.commonPassword.restore()
     sinon.assert.calledOnce(User.utils.encryptPassword)
-    User.utils.encryptPassword.restore()
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
     sinon.assert.calledOnce(User.manager.instance.save)
-    User.manager.instance.save.restore()
+    sinon.restore()
   })
 
   it('User.operations.add', function(){
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubTextXss = sinonInstance.stub(coreUtils.text, 'checkXss');
+    var stubTextXss = sinon.stub(coreUtils.text, 'checkXss');
     stubTextXss.returns({ success:1 });
-    var stubCheckSameEmail = sinonInstance.stub(User.utils, 'checkSameEmail');
+    var stubCheckSameEmail = sinon.stub(User.utils, 'checkSameEmail');
     stubCheckSameEmail.returns({ success:1 });
-    var stubCommonPassword = sinonInstance.stub(User.utils, 'commonPassword');
+    var stubCommonPassword = sinon.stub(User.utils, 'commonPassword');
     stubCommonPassword.returns({ success:1 });
-    var stubEncryptPassword = sinonInstance.stub(User.utils, 'encryptPassword');
+    var stubEncryptPassword = sinon.stub(User.utils, 'encryptPassword');
     stubEncryptPassword.returns("newPassword2");
-    var stubGetRole = sinonInstance.stub(User.utils, 'getRole');
-    stubGetRole.returns(JSON.parse(JSON.stringify(this.fixture.users))[0].role);
-    var stubGet = sinonInstance.stub(User.manager.instance, 'get');
-    stubGet.returns(JSON.parse(JSON.stringify(this.fixture.users)))
-    var stubSave = sinonInstance.stub(User.manager.instance, 'save');
+    var stubGetRole = sinon.stub(User.utils, 'getRole');
+    stubGetRole.returns(JSON.parse(JSON.stringify(fixture.users))[0].role);
+    var stubGet = sinon.stub(User.manager.instance, 'get');
+    stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
+    var stubSave = sinon.stub(User.manager.instance, 'save');
     stubSave.returns(null)
     
     // test
-    var res = User.operations.add(JSON.parse(JSON.stringify(this.fixture.users))[0])
+    var res = User.operations.add(JSON.parse(JSON.stringify(fixture.users))[0])
     chai.expect(res.success).to.be.equal(1)
 
     // unstub
     sinon.assert.calledOnce(coreUtils.text.checkXss)
-    coreUtils.text.checkXss.restore()
     sinon.assert.calledOnce(User.utils.checkSameEmail)
-    User.utils.checkSameEmail.restore()
     sinon.assert.calledOnce(User.utils.commonPassword)
-    User.utils.commonPassword.restore()
     sinon.assert.calledOnce(User.utils.encryptPassword)
-    User.utils.encryptPassword.restore()
     sinon.assert.calledOnce(User.utils.getRole)
-    User.utils.getRole.restore()
     sinon.assert.calledOnce(User.manager.instance.get)
-    User.manager.instance.get.restore()
     sinon.assert.calledOnce(User.manager.instance.save)
-    User.manager.instance.save.restore()
+    sinon.restore()
   })
 });

@@ -2,12 +2,15 @@ We have a 1 year roadmap (estimation) with the following versions. You'll notice
 
 The 2.x releases have been focused on quality and stability and covered by Unit tests + functional tests.
 
-The 3.x releases will focus on the REST layer of AbeCMS.
+The 3.x releases have been focused on the REST layer of AbeCMS.
 
-## Roadmap of the next 3.x releases
-- It will be possible to create filtered views on the manager frontend
+The 4.x releases will focus on the transformation of AbeCMS to a full featured Content marketing Services platform.
+
+## Roadmap of the next 4.x releases
+- Abe Engine is 100% compatible with React, Vue.js, Handlebars, Twig
+- ~~It will be possible to create filtered views on the manager frontend~~
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
-- Add template creation from partials
+- ~~Add template creation from partials~~
 - templates and partials will be uploadable
 - Video training will be produced
 - Create an Electron version
@@ -19,7 +22,7 @@ The 3.x releases will focus on the REST layer of AbeCMS.
 - We should be able to sync data, templates, ... from a distant Abe install
 - ~~Let's improve the republish-all so that we boost the performance.~~
 - ~~Add an init option to Abe CLI to ease the creation of a project~~
-- Add a deploy option to the web through surge.sh CLI in Abe CLI
+- ~~Add a deploy option to the web through surge.sh CLI in Abe CLI~~
 - Add a -d (--dev) option to Abe CLI so that we can have livereload and debug features during template dev
 
 ## Changelog
@@ -38,14 +41,14 @@ See the complete [v3.0.0 release notes](./version3.md)
 - Abe type="data" are now usable in {{#each x}} statements. This was a long awaited feature.
 
 ### 2.13.*
-- The manager has been fully ajaxified ; A dedicated REST route is available making the performance on frontend much more performant. the stateful manager of Abe has become responsible of pagination of articles (huge performance boost)
+- The manager has been fully ajaxified ; A dedicated REST route is available making the performance on frontend much more efficient. the stateful manager of Abe has become responsible of pagination of articles (huge performance boost)
 - New core features for the array class (facet + nested sort)
 
 ### 2.12.*
 - 150 handlebars helpers are now available for template designers
 - The engine now detects abe tags with more accuracy and more performance
-- The abe type="file" is available (your users will be able to upload files
-- The "hint" attribute (which produces a comment under the fields in the editor) are now part of the core
+- The abe type="file" is available (your users will be able to upload files)
+- The "hint" attribute (which produces a comment under the fields in the editor) is now part of the core
 - The load testing scenarii have been open sourced (based on Locust)
 
 ### 2.11.*
@@ -75,7 +78,7 @@ See the complete [v3.0.0 release notes](./version3.md)
 - Template designer: 2 new handlebars helpers. uppercase and lowercase
 - Reference files editor available on admin !
 - Manager: On publish and unpublish, we only add/update or remove the concerned file. Huge performance improvement on save steps !
-- Dev: It's now possible to dev Abe under Windows
+- Dev: It's now possible to use Abe under Windows
 
 ### 2.5.*
 - New statement in Abe type="data" AQL format: A select may now contain "IN" or "NOT IN" with variables usage (you can reference another data type).
@@ -89,7 +92,7 @@ See the complete [v3.0.0 release notes](./version3.md)
 - Quality control with esLint added
 - Continuous Integration with [Travis](https://travis-ci.org/abecms/abecms)
 - Unit test coverage added : [coveralls](https://coveralls.io/github/abecms/abecms?branch=master)
-- Select data become a first class citizen in Manager => perf X50 on page display including templates with select statements
+- Select data becomes a first class citizen in Manager => perf X50 on page display including templates with select statements
 
 ### 2.3.*
 - don't block response when upload image file size reaches a predefined limit
@@ -111,13 +114,13 @@ See the complete [v3.0.0 release notes](./version3.md)
 
 ### 1.8.x
 This version will be the last in the 1.x series.
-- Performance improvements: The overall performance of Abe has been optimized. The "Order By" statement in select statement ine the type="data" has been deeply improved. Furthermore, the front was requesting twice the same content (to populate left and main content). It has been fixed. 
+- Performance improvements: The overall performance of Abe has been optimized. The "Order By" statement in select statement in the type="data" has been deeply improved. Furthermore, the front was requesting twice the same content (to populate left and main content). It has been fixed. 
 
 ### 1.7.x
 New features :
 - Duplicate : It's now possible to create a new content form an existing one.
 - Routes refactoring : Each action sent to the Abe engine has its own route
 - Routes refactoring : A new route /list-url display the whole list of available routes exposed by Abe
-- Routes refactoring : publish-all is a new route triggering the republication of all already published content without modifying the modification date oif these contents. This is the first attempt to address the possibility of updating linked content when publishing a content.
+- Routes refactoring : publish-all is a new route triggering the republication of all already published content without modifying the modification date of these contents. This is the first attempt to address the possibility of updating linked content when publishing a content.
 - Content metadata updatable : It's now possible to change the path, the name or the template of an existing file
 - Debugging : It's now possible to trigger logs by adding a parameter in the url

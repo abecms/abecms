@@ -1,94 +1,76 @@
 {{#if form}}
 <div class="no-gutter half-view abeform-wrapper form-wrapper status-{{@root.json.abe_meta.status}}" data-width="{{editorWidth}}" style="width:{{editorWidth}}">
-
-  <!-- *************** form edit *************** -->
-  
-    <div class="abeform-wrapper">
-      <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
-        <ul class="nav nav-tabs" role="tablist">
-          {{#each form}}
-            <li role="presentation" class="{{#if @first}}active{{/if}}">
-              <a data-target="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
-                {{@key}}
-              </a>
-            </li>
-          {{/each}}
-        </ul>
-        <div class="tab-content">
+  <div class="abeform-wrapper">
+    <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
+      <ul class="nav nav-tabs" role="tablist">
         {{#each form}}
-          <div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="{{cleanTab @key}}">
-            {{#ifCond @key 'slug'}}
-              <div class="form-create" data-form-abe-create="true">
-                
-                {{&folders @root.manager.list.structure 1 @root.json.abe_meta.link @root.text}}
-                {{abeImport 'create-form-template' @root.manager.config @root}}
-                {{abeImport 'create-form-tplname' @root.manager.config @root}}
-
-                <input class="form-control" type="hidden" name="oldFilePath" id="oldFilePath" data-id="oldFilePath" value="{{@root.json.abe_meta.link}}" />  
-                <div class="">
-                  <div class="">
-                  <button type="submit" class="btn btn-primary" data-abe-duplicate="true">duplicate</button>
-                  <button type="submit" class="btn btn-primary" data-abe-update="true">update</button>
-                  </div>
-                </div>
-
-                <div data-post-path-preview="true" class="breadcrumb"></div>
-
-              </div>
-            {{else}}
-              {{#each this}}
-                {{#if this.0.firstgroup}}
-                  {{#if this.0.group}}
-                    <label class="title">
-                      {{this.0.group}}
-                    </label>
-                  {{/if}}
-                  <div class='single-block well well-sm'>
-                {{/if}}
-                <div class="{{cleanTab @key}}">
-                {{{printBlock this @root}}}
-                </div>
-                {{#if this.0.lastgroup}}</div>{{/if}}
-              {{/each}}
-            {{/ifCond}}
-
-              <!--small class="text-muted">* Required</small-->
-          </div>
+          <li role="presentation" class="{{#if @first}}active{{/if}}">
+            <a data-target="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
+              {{@key}}
+            </a>
+          </li>
         {{/each}}
+      </ul>
+      <div class="tab-content">
+      {{#each form}}
+        <div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="{{cleanTab @key}}">
+          {{#ifCond @key 'slug'}}
+            <div class="form-create" data-form-abe-create="true">
+              
+              {{&folders @root.manager.list.structure 1 @root.json.abe_meta.link @root.text}}
+              {{#> create-form-template}}{{/create-form-template}}
+              {{#> create-form-tplname}}{{/create-form-tplname}}
+
+              <input class="form-control" type="hidden" name="oldFilePath" id="oldFilePath" data-id="oldFilePath" value="{{@root.json.abe_meta.link}}" />  
+              <div class="">
+                <div class="">
+                <button type="submit" class="btn btn-primary" data-abe-duplicate="true">duplicate</button>
+                <button type="submit" class="btn btn-primary" data-abe-update="true">update</button>
+                </div>
+              </div>
+              <div data-post-path-preview="true" class="breadcrumb"></div>
+            </div>
+          {{else}}
+            {{#each this}}
+              {{#if this.0.firstgroup}}
+                {{#if this.0.group}}
+                  <label class="title">
+                    {{this.0.group}}
+                  </label>
+                {{/if}}
+                <div class='single-block well well-sm'>
+              {{/if}}
+              <div class="{{cleanTab @key}}">
+              {{{printBlock this @root}}}
+              </div>
+              {{#if this.0.lastgroup}}</div>{{/if}}
+            {{/each}}
+          {{/ifCond}}
+
+            <!--small class="text-muted">* Required</small-->
         </div>
-        <!--button type='submit' class='hidden' data-action="draft"></button-->
-        {{abeImport 'engine-more' manager.config this}}
-      </form><!-- *************** /end form edit *************** -->
-      <footer class="footer">
-        <div class="display-status">
-          current status : <span data-display-status="true">{{@root.json.abe_meta.status}}</span>
+      {{/each}}
+      </div>
+      {{#> engine-more}}{{/engine-more}}
+    </form><!-- *************** /end form edit *************** -->
+    <footer class="footer">
+      <div class="display-status">
+        &nbsp;<!--current status : <span data-display-status="true">{{@root.json.abe_meta.status}}</span-->
+      </div>
+      <!-- *************** btn toolbar *************** -->
+      <div class="toolbar">
+        <div class="btns">
+          {{#> toolbar}}{{/toolbar}}
+          {{#> toolbar-more}}{{/toolbar-more}}
         </div>
-        <!-- *************** btn toolbar *************** -->
-        <div class="toolbar">
-          <a href="/abe/editor">
-            <button type="button" class="btn btn-default text-center"><span class="fa fa-list"></span><br>{{@root.text.manager}}</button>
-          </a>    
-            {{#ifCond @root.json.abe_meta.status 'publish'}}
-            <a href="{{@root.json.abe_meta.link}}" target="_blank">
-              <button type="button" class="btn btn-default text-center"><span class="fa fa-eye"></span><br>{{@root.text.preview}}</button>
-            </a>
-            {{else}}
-            <a href="/abe/page{{@root.json.abe_meta.link}}" target="_blank">
-              <button type="button" class="btn btn-default text-center"><span class="fa fa-eye"></span><br>{{@root.text.preview}}</button>
-            </a>
-            {{/ifCond}}
-          <div class="btns">
-            {{abeImport 'toolbar' manager.config this}}
-            {{abeImport 'toolbar-more' manager.config this}}
-          </div>
-        </div><!-- *************** /end btn toolbar *************** -->
-      </footer>
-    </div>
-  <div class="close-engine">
+      </div><!-- *************** /end btn toolbar *************** -->
+    </footer>
+  </div>
+  <!--div class="close-engine">
     <i class="fa fa-expand"></i>
   </div>
   <div class="open-engine">
     <i class="fa fa-compress" aria-hidden="true"></i>
-  </div>
+  </div-->
 </div>
 {{/if}}

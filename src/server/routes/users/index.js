@@ -13,6 +13,8 @@ import postRemove from './post/remove'
 import postReset from './post/reset'
 import postUpdate from './post/update'
 import postProfile from './post/profile'
+import postSaveSearch from './post/save-search'
+import postRemoveSearch from './post/remove-search'
 
 export {
   getForgot,
@@ -28,5 +30,7 @@ export {
   postRemove,
   postReset,
   postUpdate,
-  postProfile
+  postProfile,
+  postSaveSearch,
+  postRemoveSearch
 }

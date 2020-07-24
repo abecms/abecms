@@ -1,7 +1,7 @@
 import path from 'path'
 import mkdirp from 'mkdirp'
 import {Promise} from 'bluebird'
-import slug from 'limax'
+import slug from 'slugify'
 import inquirer from 'inquirer'
 import clc from 'cli-color'
 import Surge from 'surge'
@@ -30,9 +30,7 @@ export default class initSite {
           )
 
           pathSite = pathSite.split(path.sep)
-          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1], {
-            separateNumbers: false
-          })
+          pathSite[pathSite.length - 1] = slug(pathSite[pathSite.length - 1], {remove: /[$*+~.()'"!\:@§^,;]/g})
           pathSite = pathSite.join(path.sep)
 
           this.addFolder(pathSite)

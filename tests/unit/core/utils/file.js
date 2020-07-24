@@ -55,7 +55,7 @@ describe('coreUtils.file', function() {
    * 
    */
   it('coreUtils.file.addFolder()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(mkdirp, 'mkdirP')
     stub.returns({'test':'test'});
     var result = coreUtils.file.addFolder('path/to/folder')
@@ -69,7 +69,7 @@ describe('coreUtils.file', function() {
    * 
    */
   it('coreUtils.file.removeFolder()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(fse, 'remove')
     stub.returns({});
     var result = coreUtils.file.removeFolder('path/to/folder')
@@ -83,7 +83,7 @@ describe('coreUtils.file', function() {
    * 
    */
   it('coreUtils.file.getDate()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(cmsData.fileAttr, 'get')
     stub.returns({d: '2016-12-07T13:04:18.810Z'});
     var result = coreUtils.file.getDate(path.join(Manager.instance.pathData, 'article-abe-d20161207T130418810Z.json'))
@@ -98,7 +98,7 @@ describe('coreUtils.file', function() {
   it('coreUtils.file.addDateIsoToRevisionPath()', function() {
     var date = '20161207T132049118Z'
     var urlRevision = path.join(Manager.instance.pathData, 'article-abe-d' + date + '.json')
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
 
     var stub = sinon.stub(cmsData.revision, 'removeStatusAndDateFromFileName')
     stub.returns(date);
@@ -118,7 +118,7 @@ describe('coreUtils.file', function() {
    * 
    */
   it('coreUtils.file.exist()', function() {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.sandbox;
     var stub = sinon.stub(fse, 'statSync')
     stub.returns('');
     var result = coreUtils.file.exist('path/to/file')

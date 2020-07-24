@@ -2,8 +2,10 @@ import {Promise} from 'bluebird'
 import http from 'http'
 import https from 'https'
 import path from 'path'
+import fse from 'fs-extra'
+import _ from 'lodash'
 
-import {config, cmsData} from '../../'
+import {config, coreUtils, cmsData} from '../../'
 
 export function requestList(obj, match, jsonPage) {
   var p = new Promise(resolve => {
@@ -12,12 +14,15 @@ export function requestList(obj, match, jsonPage) {
         jsonPage['abe_source'] = {}
       }
       jsonPage['abe_source'][obj.key] = data
+
+      // I update the jsonPage[obj.key] when the tag is not editable
       if (!obj.editable) {
         if (obj['max-length']) {
           jsonPage[obj.key] = data.slice(0, obj['max-length'])
         } else {
           jsonPage[obj.key] = data
         }
+      // I update the jsonPage[obj.key] only if empty or obj.prefill
       } else if (jsonPage[obj.key] == null && obj.prefill) {
         if (obj['prefill-quantity'] && obj['max-length']) {
           jsonPage[obj.key] = data.slice(
@@ -155,13 +160,56 @@ export function urlList(obj, match, jsonPage) {
 
 export function fileList(obj, match, jsonPage) {
   var p = new Promise(resolve => {
-    jsonPage['abe_source'][obj.key] = cmsData.file.get(
+    jsonPage['abe_source'][obj.key] = coreUtils.file.getJson(
       path.join(config.root, obj.sourceString)
     )
     resolve()
   })
 
   return p
+}
+
+export async function nextSourceData(jsonPage, match) {
+    let obj = cmsData.attributes.getAll(match, jsonPage)
+    const sourceType = cmsData.sql.getSourceType(obj.sourceString)
+
+    if (sourceType === 'file' && obj.type !== 'data' && obj.type !== 'import') {
+      obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage)
+      let file = obj.sourceString
+
+      if (file.charAt(0) == '/') {
+        file = path.join(config.root, file)
+      } else {
+        file = path.join(config.root, config.reference.url, file)
+      }
+
+      // Do I have to save data
+      if (_.get(jsonPage, obj.key) != null) {
+        let newJson = {}
+        if (coreUtils.file.exist(file)) {
+          newJson = await cmsData.file.get(file)
+          if(_.get(newJson, obj.key) !== _.get(jsonPage, obj.key)) {
+            _.set(newJson, obj.key, _.get(jsonPage, obj.key));
+            await fse.writeJson(file, newJson)
+          }
+        } else {
+          _.set(newJson, obj.key, _.get(jsonPage, obj.key));
+          await fse.mkdir(file.split('/').slice(0, -1).join('/'))
+          await fse.writeJson(file, newJson, {space: 2, encoding: 'utf-8'})
+        }
+        _.unset(jsonPage, obj.key);
+      // Or do I have to only read data
+      } else {
+        if (coreUtils.file.exist(file)) {
+          const newJson = await cmsData.file.get(file)
+
+          if (_.get(newJson, obj.key) != null) {
+            _.set(jsonPage, obj.key, _.get(newJson, obj.key))
+          }
+        }
+      }
+    }
+
 }
 
 export function nextDataList(jsonPage, match) {
@@ -223,26 +271,27 @@ export function nextDataList(jsonPage, match) {
   return p
 }
 
-export function getDataList(text, jsonPage) {
-  var p = new Promise(resolve => {
-    var promises = []
-    var matches = cmsData.regex.getTagAbeTypeRequest(text)
-    Array.prototype.forEach.call(matches, match => {
-      promises.push(nextDataList(jsonPage, match[0]))
+export async function getSourceData(text, jsonPage) {
+  var matches = cmsData.regex.getTagAbeWithSource(text)
+
+  const result = await Promise.all(
+    matches.map(async match => {
+      await nextSourceData(jsonPage, match)
     })
+  )
 
-    Promise.all(promises)
-      .then(() => {
-        resolve()
-      })
-      .catch(function(e) {
-        console.error('source.js getDataList', e)
-      })
-  }).catch(function(e) {
-    console.error('source.js getDataList', e)
-  })
+  return result
+}
 
-  return p
+export async function getDataList(text, jsonPage) {
+  var matches = cmsData.regex.getTagAbeTypeRequest(text)
+  const result = await Promise.all(
+    matches.map(async match => {
+      await nextDataList(jsonPage, match[0])
+    })
+  )
+
+  return cmsData.source.getSourceData(text, jsonPage)
 }
 
 export function removeDataList(text) {

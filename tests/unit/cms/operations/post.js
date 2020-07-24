@@ -19,51 +19,38 @@ var Manager = require('../../../../src/cli').Manager;
 var Page = require('../../../../src/cli').Page;
 
 describe('cmsOperations', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles']
-        Manager.instance.updateList()
+  let fixture
+  before(async () => {
+    await Manager.instance.init()
+    Manager.instance._whereKeys = ['title', 'priority', 'abe_meta', 'articles']
+    await Manager.instance.updateList()
 
-        this.fixture = {
-          htmlArticle: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8'),
-          jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'files', 'article-2.json')),
-          jsonHomepage: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'homepage-1.json'))
-        }
-        done()
-        
-      }.bind(this))
-  });
+    fixture = {
+      htmlArticle: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8'),
+      jsonArticle: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'files', 'article-2.json')),
+      jsonHomepage: fse.readJsonSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'data', 'homepage-1.json'))
+    }
+  })
 
   /**
    * cmsOperations.post.publish
    * 
    */
   it('cmsOperations.post.publish()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj) { return str, obj; }.bind(this));
-    s.stub(cmsTemplates.template, 'getTemplate', function () { return this.fixture.htmlArticle; }.bind(this));
-    s.stub(cmsData.source, 'getDataList', function () {
-      return Promise.resolve(JSON.parse(JSON.stringify(this.fixture.jsonArticle)))
-    }.bind(this));
-    s.stub(cmsData.utils, 'getPercentOfRequiredTagsFilled', function () { return 100; }.bind(this));
-    // s.stub(Page, 'getPercentOfRequiredTagsFilled', function () { return 100; }.bind(this));
-    s.stub(cmsOperations.save, 'saveHtml', function () { return 100; }.bind(this));
-    s.stub(cmsOperations.save, 'saveJson', function () { return 100; }.bind(this));
-    s.stub(Manager.instance, 'updatePostInList', function () { return null; }.bind(this));
+    sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake((str, obj) => { return str, obj; });
+    sinon.stub(cmsTemplates.template, 'getTemplate').callsFake(() => { return fixture.htmlArticle; });
+    sinon.stub(cmsData.source, 'getDataList').callsFake( () => {
+      return Promise.resolve(JSON.parse(JSON.stringify(fixture.jsonArticle)))
+    });
+    sinon.stub(cmsData.utils, 'getPercentOfRequiredTagsFilled').callsFake( () => { return 100; });
+    sinon.stub(cmsOperations.save, 'saveHtml').callsFake( () => { return 100; });
+    sinon.stub(cmsOperations.save, 'saveJson').callsFake( () => { return 100; });
+    sinon.stub(Manager.instance, 'updatePostInList').callsFake( () => { return null; });
 
     // test
-    cmsOperations.post.publish('article-2.html', JSON.parse(JSON.stringify(this.fixture.jsonArticle)))
+    cmsOperations.post.publish('article-2.html', JSON.parse(JSON.stringify(fixture.jsonArticle)))
       .then(function(resSave) {
-      // unstub
-      abeExtend.hooks.instance.trigger.restore()
-      cmsTemplates.template.getTemplate.restore()
-      cmsData.source.getDataList.restore()
-      cmsData.utils.getPercentOfRequiredTagsFilled.restore()
-      cmsOperations.save.saveHtml.restore()
-      cmsOperations.save.saveJson.restore()
-      Manager.instance.updatePostInList.restore()
+      sinon.restore()
       done()
       }.bind(this));
   });
@@ -73,28 +60,21 @@ describe('cmsOperations', function() {
    * 
    */
   it('cmsOperations.post.unpublish()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj) { return str, obj; }.bind(this));
-    s.stub(coreUtils.file, 'exist', function (revisionPath) { return true; }.bind(this));
-    s.stub(cmsData.file, 'get', function () { return JSON.parse(JSON.stringify(this.fixture.jsonArticle)); }.bind(this));
-    s.stub(cmsOperations.post, 'draft', function () {
-      return Promise.resolve({json: JSON.parse(JSON.stringify(this.fixture.jsonArticle))})
-    }.bind(this));
-    s.stub(cmsOperations.remove, 'removeFile', function () { return null; }.bind(this));
-    s.stub(Manager.instance, 'updatePostInList', function () { return null; }.bind(this));
+    sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake( (str, obj) => { return str, obj; });
+    sinon.stub(coreUtils.file, 'exist').callsFake( (revisionPath) => { return true; });
+    sinon.stub(cmsData.file, 'get').callsFake( () => { return JSON.parse(JSON.stringify(fixture.jsonArticle)); });
+    sinon.stub(cmsOperations.post, 'draft').callsFake( () => {
+      return Promise.resolve({json: JSON.parse(JSON.stringify(fixture.jsonArticle))})
+    });
+    sinon.stub(cmsOperations.remove, 'removeRevision').callsFake( () => { return null; });
+    sinon.stub(cmsOperations.remove, 'removePost').callsFake( () => { return null; });
+    sinon.stub(Manager.instance, 'updatePostInList').callsFake( () => { return null; });
 
     // test
     cmsOperations.post.unpublish('article-2.html')
     .then(function(resSave) {
-      
-      // unstub
-      abeExtend.hooks.instance.trigger.restore()
-      coreUtils.file.exist.restore()
-      cmsData.file.get.restore()
-      cmsOperations.post.draft.restore()
-      cmsOperations.remove.removeFile.restore()
-      Manager.instance.updatePostInList.restore()
+
+      sinon.restore()
       done()
     }.bind(this));
   });
@@ -104,41 +84,31 @@ describe('cmsOperations', function() {
    * 
    */
   it('cmsOperations.post.draft()', function(done) {
-    var json = JSON.parse(JSON.stringify(this.fixture.jsonArticle))
+    var json = JSON.parse(JSON.stringify(fixture.jsonArticle))
     var meta = json.abe_meta
     delete json.abe_meta
 
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj) { return str, obj; }.bind(this));
-    s.stub(coreUtils.file, 'addDateIsoToRevisionPath', function (revisionPath) { return revisionPath; }.bind(this));
-    s.stub(cmsData.metas, 'add', function (json) {
+    sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake( (str, obj) => { return str, obj; });
+    sinon.stub(coreUtils.file, 'addDateIsoToRevisionPath').callsFake( (revisionPath) => { return revisionPath; });
+    sinon.stub(cmsData.metas, 'add').callsFake( (json) => {
       json.abe_meta = meta
       return json;
-    }.bind(this));
-    s.stub(cmsTemplates.template, 'getTemplate', function () { return this.fixture.htmlArticle; }.bind(this));
-    s.stub(cmsData.source, 'getDataList', function () {
-      return Promise.resolve(JSON.parse(JSON.stringify(this.fixture.jsonArticle)))
-    }.bind(this));
-    s.stub(cmsOperations.save, 'saveJson', function () { return true; }.bind(this));
-    s.stub(Manager.instance, 'updatePostInList', function () { return null; }.bind(this));
-    s.stub(cmsData.utils, 'getPercentOfRequiredTagsFilled', function () { return 100; }.bind(this));
+    });
+    sinon.stub(cmsTemplates.template, 'getTemplate').callsFake( () => { return fixture.htmlArticle; });
+    sinon.stub(cmsData.source, 'getDataList').callsFake( () => {
+      return Promise.resolve(JSON.parse(JSON.stringify(fixture.jsonArticle)))
+    });
+    sinon.stub(cmsOperations.save, 'saveJson').callsFake( () => { return true; });
+    sinon.stub(Manager.instance, 'updatePostInList').callsFake( () => { return null; });
+    sinon.stub(cmsData.utils, 'getPercentOfRequiredTagsFilled').callsFake( () => { return 100; });
 
     // test
-    cmsOperations.post.draft('article-2.html', JSON.parse(JSON.stringify(this.fixture.jsonArticle)))
+    cmsOperations.post.draft('article-2.html', JSON.parse(JSON.stringify(fixture.jsonArticle)))
       .then(function(resSave) {
         chai.expect(resSave.success).to.be.equal(1);
         chai.expect(resSave.json.abe_meta).to.not.be.undefined;
         
-        // unstub
-        abeExtend.hooks.instance.trigger.restore()
-        coreUtils.file.addDateIsoToRevisionPath.restore()
-        cmsData.utils.getPercentOfRequiredTagsFilled.restore()
-        cmsData.metas.add.restore()
-        cmsTemplates.template.getTemplate.restore()
-        cmsData.source.getDataList.restore()
-        cmsOperations.save.saveJson.restore()
-        Manager.instance.updatePostInList.restore()
+        sinon.restore()
 
         done()
       }.bind(this));
@@ -149,24 +119,22 @@ describe('cmsOperations', function() {
    * 
    */
   it('cmsOperations.post.submit()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(cmsOperations.post, 'draft', function (filePath, json, rejectToWorkflow) {
+    sinon.stub(cmsOperations.post, 'draft').callsFake( (filePath, json, rejectToWorkflow) => {
       return Promise.resolve({
           success: 1,
-          json: this.fixture.jsonArticle
+          json: fixture.jsonArticle
         });
-    }.bind(this));
+    });
 
     // test
-    var json = JSON.parse(JSON.stringify(this.fixture.jsonArticle))
+    var json = JSON.parse(JSON.stringify(fixture.jsonArticle))
     json.abe_meta.status = 'publish'
     cmsOperations.post.submit('article-2.html', json)
       .then(function(resSave) {
         chai.expect(resSave.json.abe_meta).to.not.be.undefined;
 
         // unstub
-        cmsOperations.post.draft.restore()
+        sinon.restore()
         done()
       }.bind(this));
   });
@@ -176,24 +144,21 @@ describe('cmsOperations', function() {
    * 
    */
   it('cmsOperations.post.reject()', function(done) {
-    // stub
-    var s = sinon.sandbox.create();
-    s.stub(abeExtend.hooks.instance, 'trigger', function (str, obj) { return str, obj; }.bind(this));
-    s.stub(cmsOperations.post, 'draft', function (filePath, json, rejectToWorkflow) {
+    sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake( (str, obj) => { return str, obj; });
+    sinon.stub(cmsOperations.post, 'draft').callsFake( (filePath, json, rejectToWorkflow) => {
       chai.expect(rejectToWorkflow).to.be.equal("draft");
-      return Promise.resolve(this.fixture.jsonArticle);
-    }.bind(this));
+      return Promise.resolve(fixture.jsonArticle);
+    });
 
     // test
-    var json = JSON.parse(JSON.stringify(this.fixture.jsonArticle))
+    var json = JSON.parse(JSON.stringify(fixture.jsonArticle))
     json.abe_meta.status = 'publish'
     cmsOperations.post.reject('article-2.html', json)
       .then(function(resSave) {
         chai.expect(resSave.abe_meta).to.not.be.undefined;
 
         // unstub
-        abeExtend.hooks.instance.trigger.restore()
-        cmsOperations.post.draft.restore()
+        sinon.restore()
         done()
       }.bind(this));
   });

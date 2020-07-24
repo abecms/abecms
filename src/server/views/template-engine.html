@@ -1,45 +1,51 @@
-<!DOCTYPE html>
-<html data-config='{"URL":"{{abeUrl}}","EXTENSION":"{{@root.config.files.templates.extension}}","TPLPATH":"{{@root.json.abe_meta.template}}","TPLNAME":"{{tplName}}","FILEPATH":"{{@root.json.abe_meta.link}}"}'
-      data-slugs='{{{printJson @root.slugs}}}'
-      data-json='{{{printJson json 1}}}'
-      data-Locales='{{{printJson Locales}}}' >
-  <head>
-    <title>Abe</title>
-    <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
+{{#extend "layout"}}
+
+  {{#content "head" mode="append"}}
     <link rel="stylesheet" href="/abecms/css/styles.css">
     <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
-    <!-- This line below is specific to Electron  -->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <style>
+      .engine-open .container-main {
+        height: 100%;
+      }
+      .main .container-fluid {
+        padding: 0;
+        height: 100%;
+      }
+      #ui-view {
+        height: 100%;
+      }
+    </style>
+  {{/content}}
 
-    <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
-    <script src="https://use.fontawesome.com/6e9b081f7f.js"></script>
-    {{abeImport 'head' manager.config this}}
-  </head>
-  <body class="engine-open abe-body with-menu">
-    {{abeImport 'header-menu' manager.config this}}
+  {{#content "body-class"}} engine-open{{/content}}
+
+  {{#content "header"}}
+    {{#>header-editor}}{{/header-editor}}
+  {{/content}}
+  
+  {{#content "breadcrumbs"}}
+  {{/content}}
+
+  {{#content "body"}}
     <div class="container-main">
       <div class="container-table">
-        {{abeImport 'engine' manager.config this}}
-
-        {{abeImport 'page' manager.config this}}
+        {{#> engine}}{{/engine}}
+        {{#> page}}{{/page}}
       </div>
       <div class="wysiwyg-popup color"></div>
       <div class="wysiwyg-popup link"></div>
       <div class="wysiwyg-popup image"></div>
       <div class="wysiwyg-popup smiley"></div>
-    <script type="text/javascript" src="/abecms/libs/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/dataTables.bootstrap.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/standalone.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/moment-with-locales.js"></script>
-    <script type="text/javascript" src="/abecms/scripts/template-engine-compiled.js"></script>
-    <script type="text/javascript" src="/abecms/scripts/admin-compiled.js"></script>
-
+    </div>
     {{abeImport 'body' manager.config this}}
+  {{/content}}
+
+  {{#content "footer"}}
+  {{/content}}
+
+  {{#content "bottom-scripts" mode="append"}}
     <!-- [pageHTML] 
       {{{pageHtml}}}
     [pageHTML] -->
-    <!-- This line below is specific to Electron  -->
-    <script>if (window.module) module = window.module;</script>
-  </body>
-</html>
+  {{/content}}
+{{/extend}}

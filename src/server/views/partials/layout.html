@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html 
+  lang="en"
+  data-config='{"URL":"{{abeUrl}}","EXTENSION":"{{@root.config.files.templates.extension}}","TPLPATH":"{{@root.json.abe_meta.template}}","TPLNAME":"{{tplName}}","FILEPATH":"{{@root.json.abe_meta.link}}"}'
+  data-slugs='{{{printJson @root.slugs}}}'
+  data-json='{{{printJson json 1}}}'
+  data-Locales='{{{printJson Locales}}}'>
+  <head>
+    {{#block "head"}}
+      {{#>head}}{{/head}}
+    {{/block}}
+  </head>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show{{#block "body-class"}}{{/block}}">
+    {{#block "header"}}
+      {{#>header}}{{/header}}
+    {{/block}}
+    <div class="app-body">
+      {{#block "sidebar"}}
+        {{#> sidebar}}{{/sidebar}}
+      {{/block}}
+      <main class="main">
+        {{#block "breadcrumbs"}}
+          {{#> breadcrumbs}}{{/breadcrumbs}}
+        {{/block}}
+        <div class="container-fluid">
+          <div id="ui-view">
+            {{#block "body"}}{{/block}}
+          </div>
+        </div>
+      </main>
+      {{#block "aside"}}
+        {{#> aside}}{{/aside}}
+      {{/block}}
+    </div>
+    {{#block "footer"}}
+      {{#>footer}}{{/footer}}
+    {{/block}}
+    {{#block "bottom-scripts"}}
+      {{#>bottom-scripts}}{{/bottom-scripts}}
+    {{/block}}
+  </body>
+</html>

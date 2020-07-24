@@ -131,8 +131,7 @@ describe('printInput', function() {
    */
   it('cmsEditor.printInput()', function() {
     var val = data.text;
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(abeExtend.hooks.instance, 'trigger', function(param, html){
+    sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake( (param, html) => {
       return (param === 'beforeEditorInput') ? val : html;
     })
     var result = cmsEditor.printInput(val, {})
@@ -154,6 +153,6 @@ describe('printInput', function() {
     var placeholder = result.match(/placeholder="[a-zA-Z0-9-]*"/ig)[0]
     chai.expect(placeholder).to.equal('placeholder="val9"')
 
-    this.sinon.restore()
+    sinon.restore()
   });
 });

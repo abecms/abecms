@@ -3,7 +3,6 @@ import fsCompare from 'fs-compare'
 import dircompare from 'dir-compare'
 import mkdirp from 'mkdirp'
 import path from 'path'
-import execPromise from 'child-process-promise'
 
 import {coreUtils, cmsTemplates, config, Manager} from '../../'
 

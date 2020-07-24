@@ -9,20 +9,6 @@ var cmsData = require('../../../../src/cli').cmsData;
 var Manager = require('../../../../src/cli').Manager;
 
 describe('Meta', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        try{
-          this.fixture = {
-            tag: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf8')
-          }
-        }catch(e){
-          console.log("err", e)
-        }
-        done()
-        
-      }.bind(this))
-  });
 
   it('cmsData.file.getAbeMeta() 1', function() {
     var json = {

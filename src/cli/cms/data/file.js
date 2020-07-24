@@ -1,7 +1,6 @@
 import path from 'path'
 import mkdirp from 'mkdirp'
 import fse from 'fs-extra'
-import moment from 'moment'
 
 import {abeExtend, coreUtils, cmsData, config, Manager} from '../../'
 
@@ -37,9 +36,9 @@ export function getAbeMeta(fileObject, json) {
   return fileObject
 }
 
-export function getAllWithKeys(withKeys) {
+export async function getAllWithKeys(withKeys) {
   const extension = '.json'
-  const files = coreUtils.file.getFilesSync(
+  const files = await coreUtils.file.getFiles(
     Manager.instance.pathData,
     true,
     extension
@@ -47,33 +46,33 @@ export function getAllWithKeys(withKeys) {
 
   let filesArr = []
 
-  Array.prototype.forEach.call(files, pathFile => {
-    const json = cmsData.file.get(pathFile)
-    let fileObject = cmsData.file.getFileObject(pathFile)
+  await Promise.all(files.map(async pathFile => {
+    const json = await cmsData.revision.getDoc(pathFile)
+    let fileObject = cmsData.file.getFileObject(pathFile, json)
     fileObject = cmsData.file.getAbeMeta(fileObject, json)
     Array.prototype.forEach.call(withKeys, key => {
       fileObject[key] = json[key]
     })
 
     filesArr.push(fileObject)
-  })
+  }));
 
-  var merged = cmsData.revision.getFilesMerged(filesArr)
-  abeExtend.hooks.instance.trigger('afterGetAllFiles', merged)
-
-  return merged
+  return filesArr
 }
 
-export function get(pathJson) {
-  let json
+export async function get(pathJson) {
+  pathJson = cmsData.utils.getRevisionPath(pathJson)
+  let json = {}
   pathJson = abeExtend.hooks.instance.trigger('beforeGetJson', pathJson)
 
   try {
-    var stat = fse.statSync(pathJson)
+    var stat = await fse.statSync(pathJson)
     if (stat) {
-      json = fse.readJsonSync(pathJson)
+      json = fse.readFileSync(pathJson)
+      json = JSON.parse(json)
     }
   } catch (e) {
+    //console.log('error get', e)
     json = {}
   }
 
@@ -103,23 +102,16 @@ export function getFilesByType(pathFile, type = null) {
   return result
 }
 
-export function getFileObject(revisionPath) {
-  let name = path.basename(revisionPath)
-  const fileData = cmsData.fileAttr.get(name)
+export function getFileObject(relativePath, json) {
+  const pathFile = cmsData.utils.getRevisionPath(relativePath)
+
+  let name = path.basename(pathFile)
   name = cmsData.fileAttr.delete(name)
 
-  let date
-  if (fileData.d) {
-    date = fileData.d
-  } else {
-    const stat = fse.statSync(revisionPath)
-    date = stat.mtime
-  }
-
-  const fileObject = {
+  let fileObject = {
     name: name,
-    path: revisionPath,
-    date: date
+    date: cmsData.fileAttr.getDate(pathFile),
+    path: pathFile
   }
 
   return fileObject

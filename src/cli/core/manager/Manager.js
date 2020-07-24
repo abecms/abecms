@@ -15,7 +15,8 @@ import {
   cmsReference,
   cmsMedia,
   cmsOperations,
-  abeExtend
+  abeExtend,
+  User
 } from '../../'
 
 let singleton = Symbol()
@@ -33,7 +34,7 @@ class Manager {
     return this[singleton]
   }
 
-  init() {
+  async init() {
     this._processesRunning = {}
     this.events = {}
 
@@ -116,28 +117,14 @@ class Manager {
     this.pathLocales = path.join(config.root, 'locales')
 
     this.connections = []
-    this.activities = []
+
+    this.activities =  User.utils.getActivity()
+   
     this._watcherActivity()
 
     this.updateStructureAndTemplates()
 
-    var p = new Promise(resolve => {
-      this.getKeysFromSelect()
-        .then(
-          () => {
-            resolve()
-          },
-          e => {
-            console.log('Manager.init', e)
-            resolve()
-          }
-        )
-        .catch(e => {
-          console.log('Manager.init', e)
-        })
-    })
-
-    return p
+    await this.getKeysFromSelect()
   }
 
   initDev() {
@@ -200,6 +187,7 @@ class Manager {
     this.events.activity.on(
       'activity',
       function(data) {
+        data.time = new Date().toISOString()
         if (data.user && data.user.username) {
           data.user = data.user.username
         } else {
@@ -440,7 +428,7 @@ class Manager {
                   return cmsTemplates.template
                     .getAbeRequestWhereKeysFromTemplates(templatesText)
                     .then(
-                      whereKeys => {
+                      async whereKeys => {
                         this._whereKeys = whereKeys
                         this._slugs = cmsTemplates.template.getAbeSlugFromTemplates(
                           templatesText
@@ -448,7 +436,7 @@ class Manager {
                         this._precontribution = cmsTemplates.template.getAbePrecontribFromTemplates(
                           templatesText
                         )
-                        this.updateList()
+                        await this.updateList()
                         resolve()
                       },
                       e => {
@@ -527,14 +515,15 @@ class Manager {
     return this._list
   }
 
-  getListWithStatusOnFolder(status, folder = '') {
-    var list = []
-    folder = path.join(Manager.instance.pathData, folder)
+  getListWithStatusOnFolder(status, subPath = '') {
+    let list = []
+    const subPathFull = `${subPath.replace(/^\/|\/$/g, '')}/`
+
     Array.prototype.forEach.call(this._list, file => {
       if (
         typeof file[status] !== 'undefined' &&
         file[status] !== null &&
-        file.path.indexOf(folder) > -1
+        ( subPath === '' || file.path.startsWith(subPathFull))
       ) {
         list.push(file)
       }
@@ -554,7 +543,7 @@ class Manager {
    * @param {String} postUrl The url path of the file
    */
   postExist(postUrl) {
-    const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
+    const docPath = cmsData.utils.getDocRelativePathFromPostUrl(postUrl)
     const found = coreUtils.array.find(this._list, 'path', docPath)
 
     if (found.length > 0) {
@@ -567,13 +556,13 @@ class Manager {
    * When a post is modified or created, this method is called so that the manager updates the list with the updated/new item
    * @param {String} revisionPath The full path to the post
    */
-  updatePostInList(revisionPath) {
-    const docPath = cmsData.utils.getDocPath(revisionPath)
+  async updatePostInList(revisionPath) {
+    const docPath = cmsData.utils.getDocRelativePath(revisionPath)
     const found = coreUtils.array.find(this._list, 'path', docPath)
-    const json = cmsData.file.get(revisionPath)
+    const json = await cmsData.revision.getDoc(revisionPath)
     let index
     let merged = {}
-    let revision = cmsData.file.getFileObject(revisionPath)
+    let revision = cmsData.revision.getFileObject(revisionPath, json)
     revision = cmsData.file.getAbeMeta(revision, json)
     Array.prototype.forEach.call(this._whereKeys, key => {
       var keyFirst = key.split('.')[0]
@@ -599,7 +588,7 @@ class Manager {
       // Does the publish version has been removed (in the case of unpublish) ?
       if (
         sortedResult[0]['publish'] &&
-        !coreUtils.file.exist(sortedResult[0]['publish']['path'])
+        !cmsData.revision.exist(sortedResult[0]['publish']['path'])
       ) {
         delete sortedResult[0]['publish']
       }
@@ -638,7 +627,7 @@ class Manager {
                 }
               } else {
                 this._list[index].revisions.splice(revIndex, 1)
-                cmsOperations.remove.removeFile(revision.path)
+                cmsOperations.remove.removeRevision(revision.path)
               }
             } else if (arStatus.indexOf(revision.abe_meta.status) < 0) {
               arStatus.push(revision.abe_meta.status)
@@ -654,7 +643,7 @@ class Manager {
    * @param {String} postUrl The URL of the post
    */
   removePostFromList(postUrl) {
-    const docPath = cmsData.utils.getDocPathFromPostUrl(postUrl)
+    const docPath = cmsData.utils.getDocRelativePathFromPostUrl(postUrl)
     this._list = coreUtils.array.removeByAttr(this._list, 'path', docPath)
   }
 
@@ -663,8 +652,8 @@ class Manager {
    * + abe_meta data
    * @return {Array} Array of objects representing the posts including their revisions
    */
-  updateList() {
-    this._list = cmsData.file.getAllWithKeys(this._whereKeys)
+  async updateList() {
+    this._list = await cmsData.revision.getAllWithKeys(this._whereKeys)
     this._list.sort(coreUtils.sort.predicatBy('date', -1))
     console.log('Manager updated')
   }
@@ -723,13 +712,11 @@ class Manager {
   }
 
   getActivities() {
-    return this.activities
+    return User.utils.getActivity()
   }
 
   addActivity(activity) {
-    if (this.activities.length >= 50) this.activities.shift()
-
-    this.activities.push(activity)
+    User.utils.addActivity(activity)
   }
 
   getConnections() {

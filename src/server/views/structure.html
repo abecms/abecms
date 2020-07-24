@@ -1,0 +1,17 @@
+{{#extend "layout"}}
+  {{#content "body"}}
+  <div class="manager-tab structure-folders">
+    <div class="text-uppercase">
+      Structure editor
+    </div>
+    <div class="structure-editor manager-tab-content">
+      <input type="hidden" class="structure-json" value='{{@root.structure}}'>
+      <input type="text" class="form-control folder-name" value="" placeholder="folder name" data-folder="" disabled="disabled">
+      <div class="help-info">
+        hit <span>ENTER</span> to create folder
+      </div>
+      <div class="structure-wrapper"></div>
+    </div>
+  </div>
+  {{/content}}
+{{/extend}}

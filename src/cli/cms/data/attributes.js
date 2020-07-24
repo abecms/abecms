@@ -27,7 +27,7 @@ export function getAll(str, json) {
     required: false,
     source: null,
     tab: 'default',
-    type: 'text',
+    type: '',
     value: null,
     file: '',
     visible: true

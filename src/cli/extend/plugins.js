@@ -84,7 +84,7 @@ class Plugins {
           console.log(e.stack)
           console.log(
             clc.green('[ Hint ]'),
-            "It seems that you don't have the npm module babel-preset-env installed on your project"
+            "It seems that you don't have the npm module @babel/preset-env installed on your project"
           )
         }
         plugin.hooks = h.default

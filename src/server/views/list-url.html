@@ -1,77 +1,71 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-    {{abeImport 'common-styles' manager.config this}}
-    <!-- This line below is specific to Electron  -->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-</head>
-  <body class="with-menu engine-open user-list">
-    {{abeImport 'header-menu' manager.config this}}
-    <div class="container-main">
-      <div class="container-table">
-        <div>
-          <div class="no-gutter manager-wrapper visible">
-            
-            <div class="manager-left form-wrapper">
-              {{abeImport 'main-menu' manager.config this}}
-            </div>
+{{#extend "layout"}}
 
-            <div class="manager-right tab">
-
-              <div class="manager-tab">
-                <div class="text-uppercase">
-                  List url
-                </div>
-                <div class="manager-tab-content">
-                  <form classs="form-inline" action="/abe/list-url/save" data-user-role="true" method="post" id="filtered-list-url">
-                    <div class="form-group">
-                      <input class='btn btn-info btn-save pull-right' type="submit" value="save" data-save-user-role="true" />
-                      <br />
-                      <br />
-                    </div>
-                    <table class="table table-condensed table-striped table-bordered table-responsive">
-                      <thead>
-                        <tr>
-                          <th>method</th>
-                          <th>link</th>
-                          {{#each @root.roles}}
-                          <th align="center" class="text-center">{{this.name}}</th>
-                          {{/each}}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {{#each urls}}
-                        <tr>
-                          <td>{{method}}</td>
-                          <td>{{url}}</td>
-                          {{#each @root.roles}}
-                          <td align="center" class="text-center">
-                            {{#ifCond this.workflow "admin"}}
-                            <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" disabled="disabled" />
-                            {{else}}
-                              {{#isAuthorized ../url this.workflow}}
-                                <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" />
-                              {{else}}
-                                <input type="checkbox" name="{{this.workflow}}" value="{{../regex}}" />
-                              {{/isAuthorized}}
-                            {{/ifCond}}
-                          </td>
-                          {{/each}}
-                        </tr>
-                        {{/each}}
-                      </tbody>
-                    </table>
-                  </form>
-                </div>
-              </div>
-            </div>
+  {{#content "breadcrumbs"}}
+  <ol class="breadcrumb">
+      <li class="breadcrumb-item">Admin</li>
+      <li class="breadcrumb-item active">routes</li>
+      <!-- Breadcrumb Menu-->
+      <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+          <a class="btn" href="#">
+              <i class="icon-speech"></i>
+          </a>
+          <a class="btn" href="./">
+              <i class="icon-graph"></i>  Dashboard</a>
+          <a class="btn" href="#">
+              <i class="icon-settings"></i>  Settings</a>
           </div>
-        </div>
+      </li>
+  </ol>
+  {{/content}}
+
+  {{#content "body"}}
+  <div class="manager-right tab">
+
+    <div class="manager-tab">
+      <div class="manager-tab-content">
+        <form classs="form-inline" action="/abe/list-url/save" data-user-role="true" method="post" id="filtered-list-url">
+          <div class="form-group">
+            <input class='btn btn-info btn-save pull-right' type="submit" value="save" data-save-user-role="true" />
+            <br />
+            <br />
+          </div>
+          <table class="table table-condensed table-striped table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th>method</th>
+                <th>link</th>
+                {{#each @root.roles}}
+                <th align="center" class="text-center">{{this.name}}</th>
+                {{/each}}
+              </tr>
+            </thead>
+            <tbody>
+              {{#each urls}}
+              <tr>
+                <td>{{method}}</td>
+                <td>{{url}}</td>
+                {{#each @root.roles}}
+                <td align="center" class="text-center">
+                  {{#ifCond this.workflow "admin"}}
+                  <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" disabled="disabled" />
+                  {{else}}
+                    {{#isAuthorized ../url this.workflow}}
+                      <input type="checkbox" checked="checked" name="{{this.workflow}}" value="{{../regex}}" />
+                    {{else}}
+                      <input type="checkbox" name="{{this.workflow}}" value="{{../regex}}" />
+                    {{/isAuthorized}}
+                  {{/ifCond}}
+                </td>
+                {{/each}}
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </form>
       </div>
     </div>
-  {{abeImport 'common-scripts' manager.config this}}
-  <!-- This line below is specific to Electron  -->
-  <script>if (window.module) module = window.module;</script>
-</body>
-</html>
+  </div>
+  {{/content}}
+
+{{/extend}}

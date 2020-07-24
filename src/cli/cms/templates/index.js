@@ -31,7 +31,9 @@ import encodeAbeTagAsComment from './encodeAbeTagAsComment'
 import insertDebugtoolUtilities from './insertDebugtoolUtilities'
 
 /* Register utilities */
-require('handlebars-helpers')()
+require('handlebars-helpers')({
+  handlebars: Handlebars
+});
 Handlebars.registerHelper('markdown', markdown())
 Handlebars.registerHelper('attrAbe', attrAbe)
 Handlebars.registerHelper('className', className)

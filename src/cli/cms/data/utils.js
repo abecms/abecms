@@ -40,6 +40,18 @@ export function getPercentOfRequiredTagsFilled(text, json) {
 }
 
 /**
+ * Adds the data absolute path to the jsonPath
+ * ex. jsonPath = fr/test-abe-d20170418T130602280Z.json
+ * return /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
+ * and returns this relative path to the json revision
+ * @param  {[type]} jsonPath [description]
+ * @return {[type]}          [description]
+ */
+export function getRevisionPath(jsonPath) {
+  return path.join(Manager.instance.pathData, getRevisionRelativePath(jsonPath))
+}
+
+/**
  * Remove the data absolute path from the jsonPath
  * ex. jsonPath = /Users/grg/programmation/git/abetesttheme/data/fr/test-abe-d20170418T130602280Z.json
  * return fr/test-abe-d20170418T130602280Z.json
@@ -63,6 +75,17 @@ export function getDocPathFromPostUrl(postUrl) {
     .replace(templateExtension, extension)
     .replace('/', path.sep)
   return path.join(Manager.instance.pathData, osJsonPath)
+}
+
+/**
+ * Return the relative path of the doc from the post URL
+ * @param  {[type]} postUrl [description]
+ * @return {[type]}         [description]
+ */
+export function getDocRelativePathFromPostUrl(postUrl) {
+  let docPath = getDocPathFromPostUrl(postUrl)
+
+  return getDocRelativePath(docPath)
 }
 
 /**

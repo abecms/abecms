@@ -49,8 +49,8 @@ export default class Json {
         delete json.abe_source
       }
 
-      tplPath = tplPath != null ? tplPath : CONFIG.TPLPATH
-      filePath = filePath != null ? filePath : CONFIG.FILEPATH
+      tplPath = tplPath != null ? tplPath : window.CONFIG.TPLPATH
+      filePath = filePath != null ? filePath : window.CONFIG.FILEPATH
 
       var toSave = qs.stringify({
         json: jsonSave

@@ -1,4 +1,4 @@
-import slug from 'limax'
+import slug from 'slugify'
 import path from 'path'
 
 import {config} from '../../'
@@ -11,8 +11,8 @@ export function clean(str) {
 }
 
 function slugify(str) {
-  str = str.replace(/\..+$/, '')
-  str = slug(str, {separateNumbers: false})
+  str = str.replace(/\..+$/, '').toLowerCase()
+  str = slug(str, {remove: /[$*+~.()'"!\:@§^,;]/g})
   str = `${str}.${config.files.templates.extension}`
   return str.toLowerCase()
 }

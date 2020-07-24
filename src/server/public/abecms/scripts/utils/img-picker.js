@@ -47,7 +47,7 @@ window.ImagePickerUpload = {
       xhr.open(
         'post',
         '/abe/upload/?baseUrl=' +
-          CONFIG.FILEPATH +
+          window.CONFIG.FILEPATH +
           '&input=' +
           target.outerHTML,
         true

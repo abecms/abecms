@@ -29,3 +29,6 @@ dist
 #config
 ./abe.json
 plugins/
+
+#ide
+.vscode

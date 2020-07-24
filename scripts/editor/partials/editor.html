@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html data-config='{"URL":"{{abeUrl}}","EXTENSION":"{{@root.config.files.templates.extension}}","TPLPATH":"{{@root.json.abe_meta.template}}","TPLNAME":"{{tplName}}","FILEPATH":"{{@root.json.abe_meta.link}}"}'
+      data-slugs='{{{printJson @root.slugs}}}'
+      data-json='{{{printJson json 1}}}'
+      data-Locales='{{{printJson Locales}}}' >
+  <head>
+    <title>Abe</title>
+    {{abeImport 'common-styles' manager.config this}}
+    <link href="/codepen/css" rel="stylesheet">
+    <link rel="stylesheet" media="all" href="/codepen/global-NoMQ-f9371f8113efc98c41b6d2a9b56d0912a52e7858f52cc50ff2523fb2e52577af.css">
+    <link rel="stylesheet" media="all" href="/codepen/editor-6bea6a643062afba47731e0bcd1f14ce3f06725ca18626a2c270334216d8ef02.css">
+    <!--link rel="stylesheet" media="screen" href="/codepen/twilight-913694f984ee6a61665648153e2c73cc43af641fe5b14faca0bb1a6febfa9358.css" id="cm-theme"-->
+
+    <style id="cm-font-family" class="cm-font-family">
+      .CodeMirror,
+      .console-logs .console-line,
+      .console-command-line-input,
+      .console-message,
+      .CodeMirror-hint {
+        font-family: Monaco, MonoSpace;
+      }
+    </style>
+
+    <style id="cm-font-size">
+      .CodeMirror,
+      .console-logs .console-line,
+      .console-command-line-input,
+      .console-message,
+      .CodeMirror-hint {
+        font-size: 14px;
+      }
+    </style>
+    <!--link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css"-->
+    <link rel="stylesheet" href="http://codemirror.net/theme/material.css">
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/addon/search/searchcursor.js"></script>
+    <script src="http://codemirror.net/addon/search/search.js"></script>
+    <script src="http://codemirror.net/addon/dialog/dialog.js"></script>
+    <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+    <script src="http://codemirror.net/addon/edit/closebrackets.js"></script>
+    <script src="http://codemirror.net/addon/comment/comment.js"></script>
+    <script src="http://codemirror.net/addon/wrap/hardwrap.js"></script>
+    <script src="http://codemirror.net/addon/fold/foldcode.js"></script>
+    <script src="http://codemirror.net/addon/fold/brace-fold.js"></script>
+    <script src="http://codemirror.net/keymap/sublime.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+  </head>
+  <body class="with-menu engine-open room-editor editor state-htmlOn-cssOn-jsOn layout-top logged-out">
+    {{abeImport 'header-menu' manager.config this}}
+    <div class="container-main">
+      <div class="container-table">
+        <div>
+          <div class="no-gutter manager-wrapper visible">
+            <div class="manager-left form-wrapper">
+              {{abeImport 'main-menu' manager.config this}}
+            </div>
+            <div class="manager-right tab">
+              <header class="main-header" id="main-header">
+                <div class="header-chunk pen-title-area">
+                  <a href="https://codepen.io/" class="pen-title-home-link">
+                    LC
+                  </a>
+                  <div class="pen-title-text">
+                    <h1 id="pen-title" class="pen-title">
+                      <a class="pen-title-link" href="https://livingcolor.io">
+                        This is the component A
+                      </a>
+                    </h1>
+                    <div class="by">
+                      A Component By
+                      <a class="pen-owner-link" href="https://codepen.io/giana">
+                        GrG
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="header-chunk primary-actions secondary-nav">
+                  <button class="button button-editor-solid view-switcher-button" data-dropdown="#opacity" id="view-switcher-button" onclick="switchModel()">
+                    <svg class="icon-view-switcher">
+                      <use xlink:href="#viewswitcher"></use>
+                    </svg>
+                    Switch view the model
+                  </button>
+
+                  <button class="button button-editor-solid view-switcher-button" data-dropdown="#view-switcher" id="view-switcher-button">
+                    <svg class="icon-view-switcher">
+                      <use xlink:href="#viewswitcher"></use>
+                    </svg>
+                    Change View
+                  </button>
+
+
+                  <div class="view-switcher is-dropdown" id="view-switcher" data-dropdown-position="right" role="navigation">
+
+                    <h3>Open this Pen in:</h3>
+
+                    <nav class="link-list">
+
+                      <a id="editor-link" href="https://codepen.io/giana/pen/BZaGyP/" class="view-switcher-row editor-link active">
+                        Editor View
+                        <span class="view-meta">
+                          /pen/
+                          <span data-href="http://blog.codepen.io/documentation/views/editor-view/" class="learn-more inline-q">
+                            <svg class="icon-help">
+                              <use xlink:href="#help"></use>
+                            </svg>
+                          </span>
+                        </span>
+                      </a>
+
+                      <a id="details-link" href="https://codepen.io/giana/details/BZaGyP/" class="view-switcher-row details-link">
+                        Details View
+                        <span class="view-meta">
+                          /details/
+                          <span data-href="http://blog.codepen.io/documentation/views/details-view/" class="learn-more inline-q">
+                            <svg class="icon-help">
+                              <use xlink:href="#help"></use>
+                            </svg>
+                          </span>
+                        </span>
+                      </a>
+
+                      <a id="full-page-link" href="https://codepen.io/giana/full/BZaGyP/" class="view-switcher-row full-page-link">
+                        Full Page
+                        <span class="view-meta">
+                          /full/
+                          <span data-href="http://blog.codepen.io/documentation/views/full-page-view/" class="learn-more inline-q">
+                            <svg class="icon-help">
+                              <use xlink:href="#help"></use>
+                            </svg>
+                          </span>
+                        </span>
+                      </a>
+
+                    </nav>
+
+                    <h3>Editor Layout</h3>
+                    <div class="editor-layout-buttons">
+                      <a id="left-layout" href="https://codepen.io/giana/pen/BZaGyP/left/" class="layout-change-icon" data-layout-type="left">
+                        <span class="screen-reader-text">Use Left Layout</span>
+                        <svg class="icon icon-editor-left rotate-cc90" width="20px" height="20px">
+                          <use xlink:href="#icon-new-pen"></use>
+                        </svg>
+                      </a>
+
+                      <a id="top-layout" href="https://codepen.io/giana/pen/BZaGyP/top/" class="layout-change-icon" data-layout-type="top">
+                        <span class="screen-reader-text">Use Top Layout</span>
+                        <svg class="icon icon-new-pen" width="20px" height="20px">
+                          <use xlink:href="#icon-new-pen"></use>
+                        </svg>
+                      </a>
+
+                      <a id="right-layout" href="https://codepen.io/giana/pen/BZaGyP/right/" class="layout-change-icon" data-layout-type="right">
+                        <span class="screen-reader-text">Use Right Layout</span>
+                        <svg class="icon icon-editor-right rotate-c90" width="20px" height="20px">
+                          <use xlink:href="#icon-new-pen"></use>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              <div class="page-wrap twilight">
+              <div class="boxes">
+                <div class="top-boxes editor-parent">
+                  <div class="editor-resizer" title="Double-click to expand."><h2 class="box-title box-title--resizer" id="html-editor-title"><span class="box-title-name">HTML</span></h2></div>
+
+                  <div id="box-html" class="box box-html none" data-type="html" style="width: 28.5714%;">
+
+                    <div class="powers">
+                      <div class="powers-drag-handle" title="Double-click to expand."></div>
+                    </div>
+
+                    <div class="code-wrap">
+                      <textarea 
+                    class="code" 
+                    name="code" 
+                    id="codert" 
+                    cols="40" 
+                    rows="5" 
+                    placeholder="Enter code here ..." 
+                    style="width: 810px; height: 200px">
+                    </textarea>
+                      
+                    </div>
+
+                  </div>
+
+                  <div class="editor-resizer" title="Drag to resize.
+                  Double-click to expand."><h2 class="box-title box-title--resizer" id="css-editor-title"><span class="box-title-name">CSS</span></h2></div>
+
+                  <div id="box-css" class="box box-css scss autoprefixer" data-type="css" style="width: 34.0476%;">
+
+                    <div class="powers">
+                      <div class="powers-drag-handle" title="Drag to resize.
+                      Double-click to expand."></div>
+                    </div>
+
+                    <div class="code-wrap">
+                      <textarea 
+                        id="code" 
+                        class="code" 
+                        name="codeCSS" 
+                        cols="40" 
+                        rows="5" 
+                        placeholder="Enter code here ..." 
+                        style="width: 810px; height: 200px">
+                      </textarea>
+                    </div>
+
+                  </div>
+
+                  <div class="editor-resizer" title="Drag to resize.
+                  Double-click to expand."><h2 class="box-title box-title--resizer" id="js-editor-title"><span class="box-title-name">JS</span></h2></div>
+
+                  <div id="box-js" class="box box-js none" data-type="js" style="width: 34.1667%;">
+
+                    <div class="powers">
+                      <div class="powers-drag-handle" title="Drag to resize.
+                      Double-click to expand."></div>
+                    </div>
+
+                    <div class="code-wrap">
+                      <textarea 
+                        id="code_js" 
+                        class="code_js" 
+                        name="CodeJS" 
+                        cols="40" 
+                        rows="5" 
+                        placeholder="Enter code here ..." 
+                        style="width: 810px; height: 200px">
+                      </textarea>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div id="resizer" class="resizer"><span></span><div id="width-readout" class="width-readout visible">1680px</div></div>
+
+                <div class="output-container">
+                  <div class="output-sizer"> 
+
+                    <div id="result_div" class="result">
+                      <iframe id="preview" src="/abe/plugin/editor/editor" name="preview" allowfullscreen="true" sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms" allowtransparency="true" class="result-iframe"></iframe>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <script type="text/javascript">
+                var l = document.createElement("link");
+                l.rel = "stylesheet";
+                l.href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css";
+                l.type = "text/css"; 
+
+                var b = document.createElement("script");
+                b.type = "text/javascript";
+                b.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js";
+
+                var t = document.createElement("script");
+                t.type = "text/javascript";
+                t.src = "https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js";
+
+                var j = document.createElement("script");
+                j.type = "text/javascript";
+                j.src = "https://code.jquery.com/jquery-3.1.1.slim.min.js";
+
+                var i = document.createElement("script");
+                i.type = "text/javascript";
+                i.src = "./iframeSizer.contentWindow.min.js";
+
+                var m = document.createElement("meta")
+                m["http-equiv"] = "Content-Security-Policy"
+                m.content="script-src 'self' 'unsafe-inline' http://codemirror.net https://code.jquery.com https://use.fontawesome.com https://cdn.fontawesome.com https://maxcdn.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://npmcdn.com; style-src 'self' 'unsafe-inline' http://codemirror.net https://use.fontawesome.com https://maxcdn.bootstrapcdn.com;"
+
+                function resizeIframe(obj){
+                  var o2 =  obj.contentDocument ||  obj.contentWindow.document;
+                  obj.style.height = 0;
+                  obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+                }
+
+                function loadCSS() {
+                    var $head = $("#preview").contents().find("head");
+                    $head.append(m);
+                    $head.html("<style>" + editor.getValue() + "</style>");
+                    $head.append(l);
+                    $head.append(j);
+                    $head.append(t);
+                    $head.append(b);
+                    //$head.append(i);
+                }; 
+
+                var delay;
+                // Initialize CodeMirror editor with a nice html5 canvas demo.
+                var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+                    lineNumbers: true,
+                    keyMap: "sublime",
+                    styleActiveLine: true,
+                    matchBrackets: true,
+                    mode: 'text.html',
+                    tabSize: 2,
+                    viewportMargin: Infinity,
+                    theme: 'material'
+                });
+                editor.on("change", function() {
+                  clearTimeout(delay);
+                  
+                  delay = setTimeout(updatePreview, 300);
+                });
+
+                function updatePreview() {
+                    loadCSS();
+                }
+                setTimeout(updatePreview, 300);
+
+                var delay2;
+                // Initialize CodeMirror editor with a nice html5 canvas demo.
+                var editor2 = CodeMirror.fromTextArea(document.getElementById('codert'), {
+                    lineNumbers: true,
+                    keyMap: "sublime",
+                    styleActiveLine: true,
+                    matchBrackets: true,
+                    mode: 'text/html',
+                    tabSize: 2,
+                    viewportMargin: Infinity,
+                    theme: 'material'
+                });
+                editor2.on("change", function() {
+                    clearTimeout(delay2);
+                    
+                    delay2 = setTimeout(updatePreview2, 300);
+                });
+
+                function updatePreview2() {
+                    var previewFrame2 = document.getElementById('preview');
+                    var preview2 =  previewFrame2.contentDocument ||  previewFrame2.contentWindow.document;
+                    preview2.open();
+                    preview2.write(editor2.getValue());
+                    //preview2.write('<div style="position:absolute; top:0px; left:0px"><img src="./head_logo.png" style="opacity:0.1"></div>');
+                    //resizeIframe(previewFrame2);
+                    preview2.close();
+                    loadCSS();
+                    //resizeIframe(previewFrame2);
+                    //iFrameResize({log:true, heightCalculationMethod: 'bodyScroll'}, '#preview')
+                }
+                setTimeout(updatePreview2, 300);
+
+                var delay3;
+                // Initialize CodeMirror editor with a nice html5 canvas demo.
+                var editor3 = CodeMirror.fromTextArea(document.getElementById('code_js'), {
+                    lineNumbers: true,
+                    keyMap: "sublime",
+                    styleActiveLine: true,
+                    matchBrackets: true,
+                    mode: 'javascript',
+                    tabSize: 2,
+                    viewportMargin: Infinity,
+                    theme: 'material'
+                });
+                editor3.on("change", function() {
+                    clearTimeout(delay3);
+                    
+                    delay3 = setTimeout(updatePreview3, 300);
+                });
+
+                function updatePreview3() {
+                  putScriptInIframe(editor3.getValue(), 'code_js')
+                  loadCSS();
+                }
+
+                function putScriptInIframe(script, scriptId) {
+                  var previewFrame3 = document.getElementById('preview');
+                  var preview3 =  previewFrame3.contentDocument ||  previewFrame3.contentWindow.document;
+                  if ( ! preview3.getElementById(scriptId)) {
+                      var scriptObj = preview3.createElement("script");
+                      scriptObj.type = "text/javascript";
+                      scriptObj.id = scriptId;
+                      scriptObj.innerHTML = script;
+                      preview3.body.appendChild(scriptObj);
+                  } else {
+                    preview3.getElementById(scriptId).innerHTML = script;
+                  }
+                }
+
+                function switchModel() {
+                  var model =  document.getElementById('preview').contentDocument ||  document.getElementById('preview').contentWindow.document;
+                  var el = model.getElementById('lc_model');
+                  model.open();
+                  if(el !== null){
+                    el.parentNode.removeChild(el);
+                  } else {
+                    // let div = document.createElement('div');
+                    // div.id = "lc_model";
+                    // div.style = 'position:absolute; top:0px; left:0px'
+                    // div.innerHTML = '<img src="./head_logo.png" style="opacity:1">';
+
+                    // model.appendChild(div);
+                    model.write('<div id="lc_model" style="position:absolute; top:0px; left:0px"><img src="./hero.png" style="opacity:1"></div>');
+                  }
+                  model.close();
+                }
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{abeImport 'common-scripts' manager.config this}}
+  </body>
+</html>

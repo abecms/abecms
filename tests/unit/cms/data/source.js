@@ -15,26 +15,23 @@ var cmsData = require('../../../../src/cli').cmsData;
 var Manager = require('../../../../src/cli').Manager;
 
 describe('Source', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        this.fixture = {
-          articleJsoninline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8'),
-          articleArrayinline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-arrayinline.html'), 'utf8')
-        }
-        done()
-        
-      }.bind(this))
-  });
+  let fixture
+  before(async () => {
+    await Manager.instance.init()
+    fixture = {
+      articleJsoninline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8'),
+      articleArrayinline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-arrayinline.html'), 'utf8')
+    }
+  })
 
   it('cmsData.source.requestList', function(done) {
     var obj = {key:'titles'}
     var json = {abe_source:{}}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
+  
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
       return Promise.resolve(data)
-    }.bind(this));
+    })
     cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
@@ -42,7 +39,7 @@ describe('Source', function() {
 
         chai.expect(jsonPage.titles.length).to.be.equal(2)
         chai.expect(jsonPage.titles[0].a).to.be.equal("1")
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -51,10 +48,9 @@ describe('Source', function() {
     var obj = {key:'titles', "max-length":1}
     var json = {abe_source:{}}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
       return Promise.resolve(data)
-    }.bind(this));
+    })
     cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
@@ -62,7 +58,7 @@ describe('Source', function() {
 
         chai.expect(jsonPage.titles.length).to.be.equal(1)
         chai.expect(jsonPage.titles[0].a).to.be.equal("1")
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -71,10 +67,9 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true, prefill:true, "prefill-quantity":1}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
       return Promise.resolve(data)
-    }.bind(this));
+    })
     cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
@@ -82,7 +77,7 @@ describe('Source', function() {
 
         chai.expect(jsonPage.titles.length).to.be.equal(1)
         chai.expect(jsonPage.titles[0].a).to.be.equal("1")
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -91,17 +86,16 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
       return Promise.resolve(data)
-    }.bind(this));
+    })
     cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
         chai.expect(jsonPage.abe_source.titles[0].a).to.be.equal("1")
 
         chai.expect(jsonPage.titles).to.be.undefined
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -110,10 +104,9 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true, prefill:true, "max-length":1}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
       return Promise.resolve(data)
-    }.bind(this));
+    })
     cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(2)
@@ -121,7 +114,7 @@ describe('Source', function() {
 
         chai.expect(jsonPage.titles.length).to.be.equal(1)
         chai.expect(jsonPage.titles[0].a).to.be.equal("1")
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -130,10 +123,9 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true, prefill:true, "max-length":1, "prefill-quantity":2}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"},{"a":"3", "b":"3"}]
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(cmsData.sql, 'executeQuery', function(tplPath, match, jsonPage) {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
       return Promise.resolve(data)
-    }.bind(this));
+    })
     cmsData.source.requestList(obj, 'match', json)
       .then((jsonPage) => {
         chai.expect(jsonPage.abe_source.titles.length).to.be.equal(3)
@@ -141,7 +133,7 @@ describe('Source', function() {
 
         chai.expect(jsonPage.titles.length).to.be.equal(1)
         chai.expect(jsonPage.titles[0].a).to.be.equal("1")
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -149,14 +141,14 @@ describe('Source', function() {
   it('cmsData.source.valueList', function(done) {
     var obj = {key:'titles'}
     var json = {abe_source:{}}
-    cmsData.source.valueList(obj, this.fixture.articleJsoninline, json)
+    cmsData.source.valueList(obj, fixture.articleJsoninline, json)
       .then(() => {
         chai.expect(json.abe_source.titles.length).to.be.equal(3);
         chai.expect(json.abe_source.titles[0].title).to.be.equal("rouge");
 
         obj = {key:'titles'}
         json = {abe_source:{}}
-        cmsData.source.valueList(obj, this.fixture.articleArrayinline, json)
+        cmsData.source.valueList(obj, fixture.articleArrayinline, json)
           .then(() => {
             chai.expect(json.abe_source.titles.length).to.be.equal(3);
             done()
@@ -177,8 +169,7 @@ describe('Source', function() {
   it('cmsData.source.urlList response string', function(done) {
     var obj = {key:'web', sourceString:'http://www.rest.endpoint/', autocomplete:false}
     var json = {abe_source:{}}
-    this.sinon = sinon.sandbox.create();
-    this.request = this.sinon.stub(http, 'request')
+    this.request = sinon.stub(http, 'request')
     
     var expected = {a: "1"}
     var response = new PassThrough()
@@ -191,7 +182,7 @@ describe('Source', function() {
     cmsData.source.urlList(obj, 'match', json)
       .then(() => {
         chai.expect(json.abe_source.web.length).to.be.equal(1);
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -199,8 +190,7 @@ describe('Source', function() {
   it('cmsData.source.urlList response array string', function(done) {
     var obj = {key:'web', sourceString:'http://www.rest.endpoint/', autocomplete:false}
     var json = {abe_source:{}}
-    this.sinon = sinon.sandbox.create();
-    this.request = this.sinon.stub(http, 'request')
+    this.request = sinon.stub(http, 'request')
     
     var expected = [{a: "1"}]
     var response = new PassThrough()
@@ -213,7 +203,7 @@ describe('Source', function() {
     cmsData.source.urlList(obj, 'match', json)
       .then(() => {
         chai.expect(json.abe_source.web.length).to.be.equal(1);
-        this.sinon.restore()
+        sinon.restore()
         done()
       })
   });
@@ -232,7 +222,7 @@ describe('Source', function() {
   it('cmsData.source.getDataList', function(done) {
     var obj = {key:'titles'}
     var json = {abe_source:{}}
-    cmsData.source.getDataList(this.fixture.articleJsoninline, json)
+    cmsData.source.getDataList(fixture.articleJsoninline, json)
       .then(() => {
         chai.expect(json.abe_source.titles.length).to.be.equal(3);
         chai.expect(json.abe_source.titles[0].title).to.be.equal("rouge");
@@ -243,7 +233,6 @@ describe('Source', function() {
   it('cmsData.source.removeDataList', function(done) {
     var text = "a{{abe type='data' source='fake'}}b"
     var result = cmsData.source.removeDataList(text)
-    console.log(result)
     chai.expect(result).to.be.equal("ab")
     done()
   });

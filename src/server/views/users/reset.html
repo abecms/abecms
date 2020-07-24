@@ -1,37 +1,32 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-    <link rel="stylesheet" href="/abecms/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/abecms/css/styles.css">
-    <link rel="stylesheet" href="/abecms/css/wysiwyg-editor.min.css">
-    <script type="text/javascript" src="/abecms/libs/jquery-2.1.0.min.js"></script>
-    <link rel="stylesheet" href="/abecms/style-login.css">
-</head>
-<body>
-  <div class="panel panel-default panel-login">
-    <div class="panel-body">
-      {{#if info}}
-        <span class="text-danger">{{@root.info}}</span>
-        <br /><br />
-      {{/if}}
-      <form action="/abe/users/reset" method="post">
-
-        <div class="form-group">
-          <label for="password">Reset Password</label>
-          <input type="password" class="form-control" name="password" placeholder="">
+{{#extend "layout-login"}}
+  {{#content "head" mode="append"}}
+  <link rel="stylesheet" href="/abecms/style-login.css">
+  {{/content}}
+  {{#content "body"}}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card-group">
+        <div class="card p-4">
+          {{#if info}}
+            <span class="text-danger">{{@root.info}}</span>
+            <br />
+          {{/if}}
+          <form action="/abe/users/reset" method="post">
+            <div class="form-group">
+              <label for="password">Reset Password</label>
+              <input type="password" class="form-control" name="password" placeholder="">
+            </div>
+            <div class="form-group">
+              <label for="repeat-password">Repeat password</label>
+              <input type="password" class="form-control" name="repeat-password" placeholder="">
+            </div>
+            <input type="hidden" class="form-control" name="token" value="{{@root.token}}">
+            <button type="submit" class="btn btn-primary px-4">Submit</button>
+          </form>
+          {{#> login-more}}{{/login-more}}
         </div>
-        <div class="form-group">
-          <label for="repeat-password">Repeat password</label>
-          <input type="password" class="form-control" name="repeat-password" placeholder="">
-        </div>
-        <input type="hidden" class="form-control" name="token" value="{{@root.token}}">
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-
-      {{abeImport 'login-more' config this}}
+      </div>
     </div>
   </div>
-  
-</body>
-</html>
+  {{/content}}
+{{/extend}}

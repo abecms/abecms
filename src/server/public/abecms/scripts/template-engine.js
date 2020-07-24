@@ -14,6 +14,8 @@ import EditorReferences from './modules/EditorReferences'
 import EditorStructures from './modules/EditorStructures'
 import TaskRepublish from './modules/TaskRepublish'
 import EditorThemes from './modules/EditorThemes'
+import EditorBuildTemplate from './modules/EditorBuildTemplate'
+import Nanoajax from 'nanoajax'
 
 var htmlTag = document.querySelector('html')
 window.CONFIG = JSON.parse(htmlTag.getAttribute('data-config'))
@@ -53,6 +55,7 @@ class Engine {
     this.structure = new EditorStructures()
     this.republish = new TaskRepublish()
     this.themes = new EditorThemes()
+    this.buildTemplate = new EditorBuildTemplate()
 
     this.json = EditorJson.instance
 
@@ -229,10 +232,7 @@ class Engine {
         if (typeof base !== 'undefined' && base !== null) {
           base = base.replace(/\[pageHTML\]/g, '')
           base = base.replace(/<ABE!--/g, '<!--').replace(/--ABE>/g, '-->')
-          base = base.replace(
-            /<\/body>/g,
-            '<script src="/abecms/libs/clickEditor.js"></script></body>'
-          )
+          base = base.replace(/<\/body>/g, '<script src="/abecms/libs/clickEditor.js"></script></body>')
           EditorReload.instance.inject(base)
         }
       }
@@ -296,4 +296,47 @@ document.addEventListener('DOMContentLoaded', function() {
   $('#abeSearch').on('keyup', function() {
     engine.table.search(this.value).draw()
   })
+  $(document).on('click', '.savedSearches', function () {
+    $('#abeSearch').val($(this).data('search'))
+    engine.table.search($('#abeSearch').val()).draw();
+  });
+  $('#save-search').on('submit', function (e) {
+    e.preventDefault()
+    $('#saveSearchValue').val($('#abeSearch').val())
+    Nanoajax.ajax(
+      {
+        url: $(this).attr('action'),
+        body: $(this).serialize(),
+        cors: true,
+        method: $(this).attr('method')
+      },
+      (code, responseText) => {
+        var res = JSON.parse(responseText)
+        if (res && res.success) {
+          var $newEl = $( `<div class="btn-group btn-group-sm" role="group" aria-label="Small button group" style="margin-right: 20px;">
+          <button type="button" data-id="${$('#saveSearchId').val()}" data-search="${$('#saveSearchValue').val()}" data-title="${$('#saveSearchTitle').val()}" class="btn btn-secondary savedSearches">${$('#saveSearchTitle').val()}</button>
+          <button type="button" data-id="${$('#saveSearchId').val()}" data-search="${$('#saveSearchValue').val()}" data-title="${$('#saveSearchTitle').val()}" class="btn btn-danger removeSearches">X</button>
+        </div>` )
+          $('.jsSavedSearches').append($newEl)
+        }
+      }
+    )
+  });
+  $(document).on('click', '.removeSearches', function (e) {
+    e.preventDefault();
+    Nanoajax.ajax(
+      {
+        url: '/abe/users/remove-search',
+        body: `title=${$(this).data('title')}&id=${$(this).data('id')}&search=${$(this).data('search')}`,
+        cors: true,
+        method: 'POST'
+      },
+      (code, responseText) => {
+        var res = JSON.parse(responseText)
+        if (res && res.success) {
+          $(this).parent().remove()
+        }
+      }
+    )
+  });
 })

@@ -14,14 +14,6 @@ var Manager = require('../../src/cli').Manager;
 var abeExtend = require('../../src/cli').abeExtend;
 
 describe('Process', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        this.fixture = {}
-        done()
-        
-      }.bind(this))
-  });
 
   it('abeExtend.plugins.instance.getProcess()', function() {
     var file = abeExtend.plugins.instance.getProcess('test')
@@ -29,14 +21,13 @@ describe('Process', function() {
   });
 
   it('abeExtend.process', function() {
-    this.sinon = sinon.sandbox.create();
     var fakeChild = this.fakeChild = {
       'stdout': new events.EventEmitter(),
       'stderr': new events.EventEmitter(),
       'on': function () {}
     };
 
-    this.sinon.stub(child_process, 'fork', function(){
+    sinon.stub(child_process, 'fork').callsFake( () => {
       return fakeChild;
     });
 
@@ -44,6 +35,6 @@ describe('Process', function() {
     })
     chai.expect(proc).to.be.true;
 
-    this.sinon.restore();
+    sinon.restore();
   });
 });

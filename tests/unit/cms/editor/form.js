@@ -10,17 +10,8 @@ var config = require('../../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
 
 var cmsEditor = require('../../../../src/cli').cmsEditor;
-var Manager = require('../../../../src/cli').Manager;
 
 describe('Form', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        this.fixture = {}
-        done()
-        
-      }.bind(this))
-  });
 
   /**
    * getTemplatesTexts
@@ -28,7 +19,7 @@ describe('Form', function() {
    */
   it('new Form', function() {
     // stub
-    var sinonInstance = sinon.sandbox.create();
+    var sinonInstance = sinon.sandbox;
     // sinonInstance.stub(fse, 'readFileSync');
     
     var form = new cmsEditor.form()

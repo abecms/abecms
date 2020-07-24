@@ -82,6 +82,25 @@ export class Devtool {
         this.body.removeClass('abeform-anim')
       }, 300)
     })
+    $('.toggle-engine').on('click', () => {
+      if(this.body.hasClass('engine-open')) {
+        this.body.addClass('abeform-anim')
+        this.form.width('0%')
+        setTimeout(() => {
+          this.body.removeClass('engine-open')
+          $('.toggle-engine').children(':first').removeClass('fa-expand').addClass('fa-compress');
+        }, 10)
+      } else {
+        this.body.addClass('engine-open')
+        setTimeout(() => {
+          this.form.width(this.form.attr('data-width'))
+          $('.toggle-engine').children(':first').removeClass('fa-compress').addClass('fa-expand');
+        }, 10)
+        setTimeout(() => {
+          this.body.removeClass('abeform-anim')
+        }, 300)
+      }
+    })
   }
 
   updateBrowserSize() {

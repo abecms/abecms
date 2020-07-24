@@ -1,7 +1,7 @@
 import path from 'path'
 import {cmsData, config, Page, cmsTemplates, coreUtils} from '../../cli'
 
-var page = function(req, res) {
+var page = async function(req, res) {
   var html = req.query.html ? true : false
   var json = null
   var editor = false
@@ -14,7 +14,7 @@ var page = function(req, res) {
     }
   }
 
-  var filepath = req.originalUrl.replace('/abe/page', '')
+  var filepath = req.originalUrl.replace('/abe/page/', '')
 
   if (typeof filepath !== 'undefined' && filepath !== null) {
     var jsonPath = null
@@ -26,13 +26,13 @@ var page = function(req, res) {
       linkPath = filePathTest.abe_meta.link
     }
 
-    if (jsonPath === null || !coreUtils.file.exist(jsonPath)) {
+    if (jsonPath === null) {
       res.status(404).send('Not found')
       return
     }
 
     if (typeof json === 'undefined' || json === null) {
-      json = cmsData.file.get(jsonPath)
+      json = await cmsData.revision.getDoc(jsonPath)
     }
 
     let meta = config.meta.name

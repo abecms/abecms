@@ -1,48 +1,74 @@
 {{#if manager.home}}
-<div class="manager-tab manager-files visible">
-{{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
-{{#unless (isTrue (isTrue @root.config.publish.auto-republish.limit '>=' @root.manager.nbPosts) '&&' (isTrue @root.config.publish.auto-republish.active '==' 1))}}
-<a href="#" class="btn-generate-posts pull-right btn btn-info btn-xs" data-generate-posts="true">
-    <span data-not-clicked>Republish site</span>
-    <span class="hidden" data-clicked>publishing...</span>
-</a>
-{{/unless}}
-{{/isAuthorized}}
-<br/><br/>
-  <div class="form-horizontal">
-    <div class="form-group">
-      <div class="col-sm-12">
+  <style>
+    #navigation-list_wrapper {
+      margin: 0 15px 0 25px;
+    }
+  </style>
+  <div class="manager-tab manager-files visible">
+  {{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
+    {{#unless (isTrue (isTrue @root.config.publish.auto-republish.limit '>=' @root.manager.nbPosts) '&&' (isTrue @root.config.publish.auto-republish.active '==' 1))}}
+    <a href="#" class="btn-generate-posts pull-right btn btn-info btn-xs" data-generate-posts="true">
+        <span data-not-clicked>Republish site</span>
+        <span class="hidden" data-clicked>publishing...</span>
+    </a>
+    {{/unless}}
+  {{/isAuthorized}}
+  <br/><br/>
+    <div class="form-horizontal">
+      <div class="form-group">
+          <div class="card-body jsSavedSearches">
+              {{#each @root.user.savedSearches}}
+                <div class="btn-group btn-group-sm" role="group" aria-label="Small button group" style="margin-right: 20px;">
+                  <button type="button" data-id="{{@root.user.id}}" data-search="{{this.search}}" data-title="{{this.title}}" class="btn btn-secondary savedSearches">{{this.title}}</button>
+                  <button type="button" data-id="{{@root.user.id}}" data-search="{{this.search}}" data-title="{{this.title}}" class="btn btn-danger removeSearches">X</button>
+                </div>
+              {{/each}}
+          </div>
         <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-search"></i></span>
-          <input class="form-control" type="search"  id="abeSearch" placeholder="Search your content">
+          <input type="search" id="abeSearch" name="email2" class="form-control" placeholder="Search your content">
+            <span class="input-group-append">
+              <button class="btn btn-block btn-primary dropdown-toggle" type="button" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Bookmark my search
+                </button>
+                <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -352px, 0px);">
+                  <form action="/abe/users/save-search" method="POST" class="px-4 py-3" id="save-search">
+                    <div class="form-group">
+                      <label for="savedSearch">Give it a short title</label>
+                      <input type="text" class="form-control" name="title" id="saveSearchTitle" placeholder="My awesome search">
+                      <input type="hidden" name="id" id="saveSearchId" value="{{@root.user.id}}">
+                      <input type="hidden" name="search" id="saveSearchValue" value="">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </form>
+                </div>
+            </span>
         </div>
       </div>
     </div>
-  </div>
-  <table class="table table-striped table-bordered table-responsive table-hover" id="navigation-list" style="width:100%">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>File path</th>
-        <th align="center">Template</th>
-        <th align="center" class="daterow">date</th>
-        {{#each @root.config.users.workflow}}
-        <th align="center">{{this}}</th>
+    <table class="table table-striped table-bordered table-hover" id="navigation-list" style="width:100%">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>File path</th>
+          <th align="center">Template</th>
+          <th align="center" class="daterow">date</th>
+          {{#each @root.config.users.workflow}}
+          <th align="center">{{this}}</th>
+          {{/each}}
+          <th align="center">actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each manager.home.files}}
+          {{listPage this @index @root.text}}
         {{/each}}
-        <th align="center">actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each manager.home.files}}
-        {{listPage this @index @root.text}}
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-<script>
-  var workflow = []
-  {{#each @root.config.users.workflow}}
-    workflow.push("{{this}}")
-  {{/each}}
-</script>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    var workflow = []
+    {{#each @root.config.users.workflow}}
+      workflow.push("{{this}}")
+    {{/each}}
+  </script>
 {{/if}}

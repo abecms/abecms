@@ -1,31 +1,13 @@
-
-<div>
-  
-  <div class="no-gutter manager-wrapper {{#if form}}{{else}}visible{{/if}}">
-
-    {{#if isHome}}
-      <div class="manager-left form-wrapper">
-      {{abeImport 'main-menu' manager.config this}}
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-2">
+      <div class="manager-left form-wrapper form-create-wrapper">
+        {{#> create}}{{/create}}
       </div>
-    {{/if}}
-    <!-- *************** left admin manager *************** -->
-    <div class="manager-left form-wrapper form-create-wrapper">
-      {{#if isHome}}
-      {{else}}
-      <div class="clearfix">
-        <button type="button" class="close close-manager" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-      {{/if}}
-      {{abeImport 'create' manager.config this}}
-
-    </div><!-- *************** /end left admin manager *************** -->
-
-    <!-- *************** right admin manager *************** -->
-    <div class="manager-right">
-      {{abeImport 'right-file-list' manager.config this}}
-
-      {{abeImport 'right-revisions' manager.config this}}    
     </div>
-  </div><!-- *************** /end right admin manager *************** -->
-
+    <div class="col-md-10">
+      {{#> right-file-list}}{{/right-file-list}}
+      {{#> right-revisions}}{{/right-revisions}}
+    </div>
+  </div>
 </div>

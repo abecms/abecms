@@ -7,7 +7,6 @@ import {spawn} from 'child_process'
 import path from 'path'
 import program from 'commander'
 import pkg from '../package'
-import inquirer from 'inquirer'
 import clc from 'cli-color'
 import Surge from 'surge'
 
@@ -152,7 +151,7 @@ const installPlugins = function() {
 
 program.version(pkg.version).option('-v, --version', 'version')
 
-// Dev: ./node_modules/.bin/babel-node --presets env src/index.js init
+// Dev: ./node_modules/.bin/babel-node --presets @babel/preset-env src/index.js init
 program
   .command('init')
   .alias('i')
@@ -224,7 +223,7 @@ program
       generate = spawn('node', generateArgs, {shell: true, stdio: 'inherit'})
     } else {
       generate = spawn(
-        path.join(__dirname, '..', 'node_modules', '.bin', 'babel-node'),
+        path.join(__dirname, '..', 'node_modules', '.bin', 'babel'),
         generateArgs,
         {shell: true, stdio: 'inherit'}
       )
@@ -318,7 +317,7 @@ program
       command = 'node --harmony ./dist/server/index.js'
     } else {
       command =
-        path.join(__dirname, '..', 'node_modules', '.bin', 'babel-node') +
+        path.join(__dirname, '..', 'node_modules', '.bin', 'babel') +
         ' --harmony ./src/server/index.js'
     }
 

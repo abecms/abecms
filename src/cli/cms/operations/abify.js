@@ -8,22 +8,15 @@ import {cmsData, Page, cmsTemplates, abeExtend} from '../../'
  * @param  {[type]} template [description]
  * @return {[type]}          [description]
  */
-export function abify(json, template = null) {
-  var p = new Promise(resolve => {
+export async function abify(json, template = null) {
     abeExtend.hooks.instance.trigger('beforeAbify', json)
 
     if (template === null) {
       template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
     }
 
-    cmsData.source.getDataList(template, json).then(() => {
-      var page = new Page(template, json)
+    await cmsData.source.getDataList(template, json)
+    const page = new Page(template, json)
 
-      resolve(page.html)
-    })
-  })
-
-  return p
+    return page.html
 }
-
-export default abify

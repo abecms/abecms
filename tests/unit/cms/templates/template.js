@@ -16,31 +16,28 @@ var coreUtils = require('../../../../src/cli').coreUtils;
 var Manager = require('../../../../src/cli').Manager;
 
 describe('cmsTemplates', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        this.fixture = {
-          slug: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'slug.html'), 'utf-8'),
-          article: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf-8'),
-          local: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'local.html'), 'utf-8'),
-          articleSingleAbe: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-single-abe.html'), 'utf-8'),
-          articleOrderAbe: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-order-abe.html'), 'utf-8'),
-          articleRequest: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-request.html'), 'utf-8'),
-          template: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
-          articleEach: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf-8'),
-          articlePrecontrib: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-precontribution.html'), 'utf-8'),
-          templateKeys: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-keys.html'), 'utf-8'),
-          templatePaths: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'templates/article.html'),
-          structurePaths: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'templates/structure/0-1'),
-          import: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
-          pathTemplates: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates'),
-          pathPartials: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'partials'),
-          count: 0
-        }
-        done()
-        
-      }.bind(this))
-  });
+  let fixture
+  before(async () => {
+    await Manager.instance.init()
+    fixture = {
+      slug: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'slug.html'), 'utf-8'),
+      article: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf-8'),
+      local: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'local.html'), 'utf-8'),
+      articleSingleAbe: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-single-abe.html'), 'utf-8'),
+      articleOrderAbe: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-order-abe.html'), 'utf-8'),
+      articleRequest: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-request.html'), 'utf-8'),
+      template: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
+      articleEach: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf-8'),
+      articlePrecontrib: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-precontribution.html'), 'utf-8'),
+      templateKeys: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-keys.html'), 'utf-8'),
+      templatePaths: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'templates/article.html'),
+      structurePaths: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'templates/structure/0-1'),
+      import: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
+      pathTemplates: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates'),
+      pathPartials: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'partials'),
+      count: 0
+    }
+  })
 
   /**
    * cmsTemplates.template.getTemplatesAndPartials
@@ -48,7 +45,7 @@ describe('cmsTemplates', function() {
    */
   it('cmsTemplates.template.getTemplatesAndPartials()', function(done) {
 
-    cmsTemplates.template.getTemplatesAndPartials(this.fixture.pathTemplates, this.fixture.pathPartials)
+    cmsTemplates.template.getTemplatesAndPartials(fixture.pathTemplates, fixture.pathPartials)
     .then((templatesList) => {
       chai.expect(templatesList.length).to.be.equal(30);
       done()
@@ -60,18 +57,15 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.addOrder()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var getAttr = sinonInstance.stub(cmsData.regex, 'getAttr');
+    var getAttr = sinon.stub(cmsData.regex, 'getAttr');
     getAttr.returns(null)
 
     // test
-    var html = cmsTemplates.template.addOrder(this.fixture.articleSingleAbe)
-    chai.expect(html).to.not.be.equal(this.fixture.articleSingleAbe);
+    var html = cmsTemplates.template.addOrder(fixture.articleSingleAbe)
+    chai.expect(html).to.not.be.equal(fixture.articleSingleAbe);
     chai.expect(html.indexOf('order')).to.above(-1);
 
-    // unstub
-    cmsData.regex.getAttr.restore()
+    sinon.restore()
   });
 
   /**
@@ -79,7 +73,7 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.addOrder() more options', function() {
-    var html = cmsTemplates.template.addOrder(this.fixture.articleOrderAbe)
+    var html = cmsTemplates.template.addOrder(fixture.articleOrderAbe)
     chai.expect(html.indexOf("key='key1' desc='key1' order='2'")).to.above(-1);
     chai.expect(html.indexOf("key='key2' desc='key2' group='1' order='5'")).to.above(-1);
     chai.expect(html.indexOf("key='key3' desc='key3' order='3' group='1'")).to.above(-1);
@@ -94,22 +88,17 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getStructureAndTemplates()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGetFoldersSync = sinonInstance.stub(coreUtils.file, 'getFoldersSync');
-    stubGetFoldersSync.returns({path: this.fixture.structurePaths, folders: []})
-    var stubGetFilesSync = sinonInstance.stub(coreUtils.file, 'getFilesSync');
-    stubGetFilesSync.returns([this.fixture.templatePaths])
+    var stubGetFoldersSync = sinon.stub(coreUtils.file, 'getFoldersSync');
+    stubGetFoldersSync.returns({path: fixture.structurePaths, folders: []})
+    var stubGetFilesSync = sinon.stub(coreUtils.file, 'getFilesSync');
+    stubGetFilesSync.returns([fixture.templatePaths])
 
-    // test
     var res = cmsTemplates.template.getStructureAndTemplates()
     chai.expect(res.templates.length).to.be.equal(1);
 
-    // unstub
     sinon.assert.calledOnce(coreUtils.file.getFoldersSync)
-    coreUtils.file.getFoldersSync.restore()
     sinon.assert.calledOnce(coreUtils.file.getFilesSync)
-    coreUtils.file.getFilesSync.restore()
+    sinon.restore()
   });
 
   /**
@@ -117,7 +106,7 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getAbeImport()', function() {
-    var res = cmsTemplates.template.getAbeImport(this.fixture.template)
+    var res = cmsTemplates.template.getAbeImport(fixture.template)
     chai.expect(res).to.have.length(1);
   });
 
@@ -126,27 +115,23 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.translate()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var getAttr = sinonInstance.stub(cmsData.regex, 'getAttr', function (math, type) {
+    var getAttr = sinon.stub(cmsData.regex, 'getAttr').callsFake( (math, type) => {
       if (type === 'locale') {
         return 'gb'
       }
       if (type === 'source') {
         return 'test'
       }
-    });
-    var escapeTextToRegex = sinonInstance.stub(cmsData.regex, 'escapeTextToRegex');
-    escapeTextToRegex.returns(new RegExp(this.fixture.local, 'g'))
+    })
+    var escapeTextToRegex = sinon.stub(cmsData.regex, 'escapeTextToRegex');
+    escapeTextToRegex.returns(new RegExp(fixture.local, 'g'))
 
     // test
-    var res = cmsTemplates.template.translate(this.fixture.local)
+    var res = cmsTemplates.template.translate(fixture.local)
     chai.expect(res.indexOf('i18nAbe')).to.above(-1);
 
-    // unstub
-    cmsData.regex.getAttr.restore()
     sinon.assert.calledOnce(cmsData.regex.escapeTextToRegex)
-    cmsData.regex.escapeTextToRegex.restore()
+    sinon.restore()
   });
 
   /**
@@ -154,13 +139,10 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getVariablesInWhere()', function() {
-    // stub
 
-    // test
     var res = cmsTemplates.template.getVariablesInWhere({left: {column: 'title'}, right: {value: "test"}, operator: 'AND'})
     chai.expect(res.length).to.above(-1);
 
-    // unstub
   });
 
   /**
@@ -168,13 +150,10 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.recurseWhereVariables()', function() {
-    // stub
 
-    // test
     var res = cmsTemplates.template.recurseWhereVariables({left: {column: 'title'}, right: {value: "test"}})
     chai.expect(res.length).to.above(-1);
 
-    // unstub
   });
 
   /**
@@ -182,9 +161,7 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getTemplatesTexts()', function(done) {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var readFileSync = sinonInstance.stub(fse, 'readFileSync');
+    var readFileSync = sinon.stub(fse, 'readFileSync');
     readFileSync.returns("test")
 
     // test
@@ -192,9 +169,8 @@ describe('cmsTemplates', function() {
     .then(function (res) {
       chai.expect(res[0].name).to.be.equal('test');
 
-      // unstub
       sinon.assert.calledOnce(fse.readFileSync)
-      fse.readFileSync.restore()
+      sinon.restore()
       done()
     })
   });
@@ -204,62 +180,53 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.includePartials()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubReadFileSync = sinonInstance.stub(fse, 'readFileSync');
+    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
     stubReadFileSync.returns("test")
-    var stubGetAbeImport = sinonInstance.stub(cmsTemplates.template, 'getAbeImport', function () {
-      if (this.fixture.count === 0) {
-        this.fixture.count++
-        return [this.fixture.import]
+    var stubGetAbeImport = sinon.stub(cmsTemplates.template, 'getAbeImport').callsFake( () => {
+      if (fixture.count === 0) {
+        fixture.count++
+        return [fixture.import]
       }
       return []
-    }.bind(this));
-    var stubGetAll = sinonInstance.stub(cmsData.attributes, 'getAll');
+    })
+    var stubGetAll = sinon.stub(cmsData.attributes, 'getAll');
     stubGetAll.returns({file: 'import.html'})
-    var stubEscapeTextToRegex = sinonInstance.stub(cmsData.regex, 'escapeTextToRegex');
-    stubEscapeTextToRegex.returns(new RegExp(this.fixture.import, 'g'))
-    var stubFile = sinonInstance.stub(coreUtils.file, 'exist', function () {
+    var stubEscapeTextToRegex = sinon.stub(cmsData.regex, 'escapeTextToRegex');
+    stubEscapeTextToRegex.returns(new RegExp(fixture.import, 'g'))
+    var stubFile = sinon.stub(coreUtils.file, 'exist').callsFake( () => {
       return true
-    }.bind(this));
+    })
 
     // test
-    var template = cmsTemplates.template.includePartials(this.fixture.template)
+    var template = cmsTemplates.template.includePartials(fixture.template)
     chai.expect(template).to.be.equal("test");
 
     // unstub
     sinon.assert.calledOnce(fse.readFileSync)
-    fse.readFileSync.restore()
     sinon.assert.calledTwice(cmsTemplates.template.getAbeImport)
-    cmsTemplates.template.getAbeImport.restore()
     sinon.assert.calledOnce(cmsData.attributes.getAll)
-    cmsData.attributes.getAll.restore()
     sinon.assert.calledOnce(coreUtils.file.exist)
-    coreUtils.file.exist.restore()
     sinon.assert.calledOnce(cmsData.regex.escapeTextToRegex)
-    cmsData.regex.escapeTextToRegex.restore()
+    sinon.restore()
   });
 
   it('cmsTemplates.template.includePartials()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubReadFileSync = sinonInstance.stub(fse, 'readFileSync');
+    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
     stubReadFileSync.returns("test")
 
     var template = cmsTemplates.template.includePartials("{{abe type='import' file='{{test}}'}}", {"test" : "test.html"})
     fse.readFileSync.restore()
     chai.expect(template).to.be.equal("test")
+    sinon.restore()
   });
 
   it('cmsTemplates.template.includePartials() with []', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubReadFileSync = sinonInstance.stub(fse, 'readFileSync');
+    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
     stubReadFileSync.withArgs(path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path, 'test.html')).returns('test');
     stubReadFileSync.withArgs(path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path, 'title.html')).returns('title');
 
     var template = cmsTemplates.template.includePartials("{{abe type='import' file='{{test[].value}}'}}", {"test" : [{"value":"test.html"}, {"value":"title.html"}]})
-    fse.readFileSync.restore()
+    sinon.restore()
     chai.expect(template).to.be.equal("testtitle")
   });
 
@@ -268,37 +235,30 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getTemplate()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubReadFileSync = sinonInstance.stub(fse, 'readFileSync');
-    stubReadFileSync.returns(this.fixture.article)
-    var stubTrigger = sinonInstance.stub(abeExtend.hooks.instance, 'trigger', function (p1, p2) {
+    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
+    stubReadFileSync.returns(fixture.article)
+    var stubTrigger = sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake( (p1, p2) => {
       return p2
     })
-    var stubExist = sinonInstance.stub(coreUtils.file, 'exist');
+    var stubExist = sinon.stub(coreUtils.file, 'exist');
     stubExist.returns(true)
-    var stubIncludePartials = sinonInstance.stub(cmsTemplates.template, 'includePartials');
-    stubIncludePartials.returns(this.fixture.article)
-    var stubTranslate = sinonInstance.stub(cmsTemplates.template, 'translate');
-    stubTranslate.returns(this.fixture.article)
-    var stubAddOrder = sinonInstance.stub(cmsTemplates.template, 'addOrder');
-    stubAddOrder.returns(this.fixture.article)
+    var stubIncludePartials = sinon.stub(cmsTemplates.template, 'includePartials');
+    stubIncludePartials.returns(fixture.article)
+    var stubTranslate = sinon.stub(cmsTemplates.template, 'translate');
+    stubTranslate.returns(fixture.article)
+    var stubAddOrder = sinon.stub(cmsTemplates.template, 'addOrder');
+    stubAddOrder.returns(fixture.article)
 
     var template = cmsTemplates.template.getTemplate('article')
-    chai.expect(template).to.be.equal(this.fixture.article);
+    chai.expect(template).to.be.equal(fixture.article);
 
     sinon.assert.calledOnce(fse.readFileSync)
-    fse.readFileSync.restore()
     sinon.assert.calledTwice(abeExtend.hooks.instance.trigger)
-    abeExtend.hooks.instance.trigger.restore()
     sinon.assert.calledOnce(coreUtils.file.exist)
-    coreUtils.file.exist.restore()
     sinon.assert.calledOnce(cmsTemplates.template.includePartials)
-    cmsTemplates.template.includePartials.restore()
     sinon.assert.calledOnce(cmsTemplates.template.translate)
-    cmsTemplates.template.translate.restore()
     sinon.assert.calledOnce(cmsTemplates.template.addOrder)
-    cmsTemplates.template.addOrder.restore()
+    sinon.restore()
   });
 
   /**
@@ -306,18 +266,16 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGetTagAbeWithType = sinonInstance.stub(cmsData.regex, 'getTagAbeWithType');
+    var stubGetTagAbeWithType = sinon.stub(cmsData.regex, 'getTagAbeWithType');
     stubGetTagAbeWithType.returns(null)
 
     // test
-    var text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(this.fixture.slug)
-    chai.expect(text).to.not.be.equal(this.fixture.slug);
+    var text = cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist(fixture.slug)
+    chai.expect(text).to.not.be.equal(fixture.slug);
 
     // unstub
     sinon.assert.calledOnce(cmsData.regex.getTagAbeWithType)
-    cmsData.regex.getTagAbeWithType.restore()
+    sinon.restore()
   });
 
   /**
@@ -325,18 +283,16 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var stubGetTagAbeWithTab = sinonInstance.stub(cmsData.regex, 'getTagAbeWithTab');
+    var stubGetTagAbeWithTab = sinon.stub(cmsData.regex, 'getTagAbeWithTab');
     stubGetTagAbeWithTab.returns(null)
 
     // test
-    var text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(this.fixture.slug)
-    chai.expect(text).to.not.be.equal(this.fixture.slug);
+    var text = cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist(fixture.slug)
+    chai.expect(text).to.not.be.equal(fixture.slug);
 
     // unstub
     sinon.assert.calledOnce(cmsData.regex.getTagAbeWithTab)
-    cmsData.regex.getTagAbeWithTab.restore()
+    sinon.restore()
   });
 
   /**
@@ -344,11 +300,9 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getAbePrecontribFromTemplates()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
 
     // test
-    var precontrib = cmsTemplates.template.getAbePrecontribFromTemplates([{name: 'slug', template: this.fixture.slug}])
+    var precontrib = cmsTemplates.template.getAbePrecontribFromTemplates([{name: 'slug', template: fixture.slug}])
     chai.expect(precontrib[0]).to.not.be.undefined;
   });
 
@@ -357,25 +311,21 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getAbeSlugFromTemplates()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var setAbeSlugDefaultValueIfDoesntExist = sinonInstance.stub(cmsTemplates.template, 'setAbeSlugDefaultValueIfDoesntExist');
-    setAbeSlugDefaultValueIfDoesntExist.returns(this.fixture.slug)
-    var getTagAbeWithType = sinonInstance.stub(cmsData.regex, 'getTagAbeWithType');
+    var setAbeSlugDefaultValueIfDoesntExist = sinon.stub(cmsTemplates.template, 'setAbeSlugDefaultValueIfDoesntExist');
+    setAbeSlugDefaultValueIfDoesntExist.returns(fixture.slug)
+    var getTagAbeWithType = sinon.stub(cmsData.regex, 'getTagAbeWithType');
     getTagAbeWithType.returns(['{{abe type="slug" source="{{name}}"}}'])
-    var getAll = sinonInstance.stub(cmsData.attributes, 'getAll');
+    var getAll = sinon.stub(cmsData.attributes, 'getAll');
     getAll.returns({sourceString: 'test.html', name: 'test'})
 
-    var slug = cmsTemplates.template.getAbeSlugFromTemplates([{name: 'slug', template: this.fixture.slug}])
+    var slug = cmsTemplates.template.getAbeSlugFromTemplates([{name: 'slug', template: fixture.slug}])
     chai.expect(slug.slug).to.not.be.undefined;
 
     // unstub
     sinon.assert.calledOnce(cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist)
-    cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist.restore()
     sinon.assert.calledOnce(cmsData.regex.getTagAbeWithType)
-    cmsData.regex.getTagAbeWithType.restore()
     sinon.assert.calledOnce(cmsData.attributes.getAll)
-    cmsData.attributes.getAll.restore()
+    sinon.restore()
   });
 
   /**
@@ -383,31 +333,26 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.execRequestColumns()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var getTagAbeTypeRequest = sinonInstance.stub(cmsData.regex, 'getTagAbeTypeRequest');
-    getTagAbeTypeRequest.returns([this.fixture.articleRequest])
-    var getSourceType = sinonInstance.stub(cmsData.sql, 'getSourceType');
+    var getTagAbeTypeRequest = sinon.stub(cmsData.regex, 'getTagAbeTypeRequest');
+    getTagAbeTypeRequest.returns([fixture.articleRequest])
+    var getSourceType = sinon.stub(cmsData.sql, 'getSourceType');
     getSourceType.returns('request')
-    var handleSqlRequest = sinonInstance.stub(cmsData.sql, 'handleSqlRequest');
+    var handleSqlRequest = sinon.stub(cmsData.sql, 'handleSqlRequest');
     handleSqlRequest.returns({columns: ['title'], where: {left: 'title'}})
-    var recurseWhereVariables = sinonInstance.stub(cmsTemplates.template, 'recurseWhereVariables');
+    var recurseWhereVariables = sinon.stub(cmsTemplates.template, 'recurseWhereVariables');
     recurseWhereVariables.returns('title2')
 
     // test
     const pathTemplate = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
-    var ar = cmsTemplates.template.execRequestColumns(this.fixture.templateKeys)
+    var ar = cmsTemplates.template.execRequestColumns(fixture.templateKeys)
     chai.expect(ar.indexOf('title')).to.be.above(-1);
 
     // unstub
     sinon.assert.calledOnce(cmsData.regex.getTagAbeTypeRequest)
-    cmsData.regex.getTagAbeTypeRequest.restore()
     sinon.assert.calledOnce(cmsData.sql.getSourceType)
-    cmsData.sql.getSourceType.restore()
     sinon.assert.calledOnce(cmsData.sql.handleSqlRequest)
-    cmsData.sql.handleSqlRequest.restore()
     sinon.assert.calledOnce(cmsTemplates.template.recurseWhereVariables)
-    cmsTemplates.template.recurseWhereVariables.restore()
+    sinon.restore()
   });
 
   /**
@@ -415,20 +360,18 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.getAbeRequestWhereKeysFromTemplates()', function(done) {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var execRequestColumns = sinonInstance.stub(cmsTemplates.template, 'execRequestColumns');
+    var execRequestColumns = sinon.stub(cmsTemplates.template, 'execRequestColumns');
     execRequestColumns.returns(['title'])
 
     // test
     const pathTemplate = path.join(config.root, config.themes.path, config.themes.name, config.themes.templates.path)
-    cmsTemplates.template.getAbeRequestWhereKeysFromTemplates([this.fixture.articleRequest])
+    cmsTemplates.template.getAbeRequestWhereKeysFromTemplates([fixture.articleRequest])
     .then(function (ar) {
       chai.expect(ar.indexOf('title')).to.be.above(-1);
 
       // unstub
       sinon.assert.calledOnce(cmsTemplates.template.execRequestColumns)
-      cmsTemplates.template.execRequestColumns.restore()
+      sinon.restore()
       done()
     })
   });
@@ -438,7 +381,7 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.encodeAbeTagAsComment()', function() {
-    var txt = cmsTemplates.encodeAbeTagAsComment(this.fixture.articleEach);
+    var txt = cmsTemplates.encodeAbeTagAsComment(fixture.articleEach);
     chai.expect(txt.indexOf('{')).to.equal(-1);
   });
 });

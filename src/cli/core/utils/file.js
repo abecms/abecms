@@ -1,7 +1,7 @@
 import Promise from 'bluebird'
 import path from 'path'
 import mkdirp from 'mkdirp'
-var fse = Promise.promisifyAll(require('fs-extra'))
+import fse from 'fs-extra'
 
 import {config, cmsData, coreUtils} from '../../'
 
@@ -23,6 +23,21 @@ export function changePath(pathEnv, change) {
     .split('/')
   pathEnv[0] = change
   return path.join(config.root, pathEnv.join('/'))
+}
+
+export function getJson(pathJson) {
+  let json = {}
+
+  try {
+    var stat = fse.statSync(pathJson)
+    if (stat) {
+      json = fse.readJsonSync(pathJson)
+    }
+  } catch (e) {
+    json = {}
+  }
+
+  return json
 }
 
 /**
@@ -146,44 +161,29 @@ export function getFilesSync(dirname, recursive = true, filterExt = '') {
  * @param  {String}  filterExt extension or ''
  * @return {array}             array of pathfiles
  */
-export function getFilesAsync(dirname, recursive = true, filterExt = '') {
+export async function getFiles(dirname, recursive = true, filterExt = '') {
   let items = []
 
-  return fse
-    .lstatAsync(dirname)
-    .then(stat => {
-      if (stat.isDirectory()) {
-        return fse
-          .readdirAsync(dirname)
-          .map(function(fileName) {
-            let pathFile = path.join(dirname, fileName)
-            return fse.statAsync(pathFile).then(function(stat) {
-              if (stat.isFile()) {
-                let extFile = path.extname(fileName)
-                if (filterExt === '' || extFile === filterExt) {
-                  return items.push(pathFile)
-                }
-                return
-              }
-              if (recursive) {
-                return coreUtils.file
-                  .getFilesAsync(pathFile, recursive, filterExt)
-                  .then(function(filesInDir) {
-                    items = items.concat(filesInDir)
-                  })
-              }
-            })
-          })
-          .then(function() {
-            return items
-          })
-      } else {
-        return items
+  let stat = await fse.lstat(dirname)
+  if (stat.isDirectory()) {
+    let files = await fse.readdir(dirname)
+    await Promise.all(files.map(async fileName => {
+      let pathFile = path.join(dirname, fileName)
+      let statFile = await fse.stat(pathFile)
+      if (statFile.isFile()) {
+        let extFile = path.extname(fileName)
+        if (filterExt === '' || extFile === filterExt) {
+          items.push(pathFile)
+        }
       }
-    })
-    .catch(function(e) {
-      return items
-    })
+      if (recursive) {
+        let filesInDir = await coreUtils.file.getFiles(pathFile, recursive, filterExt)
+        items = items.concat(filesInDir)
+      }
+    }));
+  }
+
+  return items
 }
 
 export function addFolder(folderPath) {

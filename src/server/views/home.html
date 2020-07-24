@@ -1,0 +1,20 @@
+{{#extend "layout"}}
+  {{#content "breadcrumbs"}}
+  <ol class="breadcrumb">
+      <li class="breadcrumb-item">Admin</li>
+      <li class="breadcrumb-item active">Dashboard</li>
+  </ol>
+  {{/content}}
+
+  {{#content "body"}}
+    {{#> home}}{{/home}}
+  {{/content}}
+
+  {{#content "bottom-scripts" mode="append"}}
+    <script type="text/javascript" src="/abecms/libs/standalone.min.js"></script>
+    <script type="text/javascript" src="/abecms/libs/moment-with-locales.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/js/swiper.js"></script>
+    <script type="text/javascript" src="/abecms/libs/moment-with-locales.js"></script>
+    <script type="text/javascript" src="/abecms/libs/stream-home.js"></script>
+  {{/content}}
+{{/extend}}

@@ -1,36 +1,42 @@
 import execPromise from 'child-process-promise'
 import mkdirp from 'mkdirp'
 import fse from 'fs-extra'
-import limax from 'limax'
+import slug from 'slugify'
 import Jimp from 'jimp'
 import path from 'path'
 import {Promise} from 'bluebird'
+import smartcrop from 'smartcrop-jimp'
 
 import {abeExtend, coreUtils, cmsData, config, Manager} from '../../'
 
 export function cropAndSaveFile(imageSize, file, newFile) {
   var p = new Promise(resolve => {
-    Jimp.read(file)
-      .then(function(lenna) {
-        lenna
-          .crop(0, 0, parseInt(imageSize[0]), parseInt(imageSize[1]))
-          .write(newFile)
+    smartcrop.crop(file, { width: parseInt(imageSize[0]), height: parseInt(imageSize[1]) })
+      .then(function(result) {
+        var crop = result.topCrop;
+        Jimp.read(file)
+          .then(function(image) {
+            image
+            .crop(crop.x, crop.y, crop.width, crop.height)
+            .write(newFile)
+          });        
       })
       .catch(function(err) {
         console.error(err)
-      })
+      });
+
     resolve()
   })
   return p
 }
 
-export function smartCropAndSaveFile(imageSize, file, newFile) {
-  var cmd = `node node_modules/smartcrop-cli/smartcrop-cli.js --width ${parseInt(
-    imageSize[0]
-  )} --height ${parseInt(imageSize[1])} ${file} ${newFile}`
-  var p = execPromise.exec(cmd)
-  return p
-}
+// export function smartCropAndSaveFile(imageSize, file, newFile) {
+//   var cmd = `node node_modules/smartcrop-cli/smartcrop-cli.js --width ${parseInt(
+//     imageSize[0]
+//   )} --height ${parseInt(imageSize[1])} ${file} ${newFile}`
+//   var p = execPromise.exec(cmd)
+//   return p
+// }
 
 export function cropAndSaveFiles(images, file, resp) {
   var length = images.length
@@ -84,25 +90,15 @@ export function cropAndSaveFiles(images, file, resp) {
               resolve(resp)
             }
           } else {
-            smartCropAndSaveFile(image.split('x'), file, newFile)
-              .then(function(result) {
-                if (result.stderr) {
-                  cropAndSaveFile(
-                    image.split('x'),
-                    file,
-                    newFile
-                  ).then(function() {
-                    if (++cropedImage === length) {
-                      resolve(resp)
-                    }
-                  })
-                } else if (++cropedImage === length) {
-                  resolve(resp)
-                }
-              })
-              .catch(function(err) {
-                console.log(err)
-              })
+            cropAndSaveFile(image.split('x'), file, newFile)
+            .then(function(result) {
+              if (++cropedImage === length) {
+                resolve(resp)
+              }
+            })
+            .catch(function(err) {
+              console.log(err)
+            })
           }
         })
         .catch(function(err) {
@@ -122,14 +118,9 @@ export function generateThumbnail(file) {
     ''
   )
   var p = new Promise(resolve => {
-    var cropThumb = smartCropAndSaveFile([250, 250], file, thumbFileName)
+    var cropThumb = cropAndSaveFile([250, 250], file, thumbFileName)
     cropThumb.then(function(result) {
-      var stderr = result.stderr
-      if (stderr) {
-        cropAndSaveFile([250, 250], file, thumbFileName).then(function() {
-          resolve({thumb: thumbFileNameRelative})
-        })
-      } else resolve({thumb: thumbFileNameRelative})
+      resolve({thumb: thumbFileNameRelative})
     })
   })
 
@@ -149,7 +140,7 @@ export function saveFile(req) {
       mimetype
     ) {
       var ext = path.extname(filename).toLowerCase()
-      var slug = createMediaSlug(filename, ext)
+      var slug = createMediaSlug(filename.toLowerCase(), ext)
       var mediaType = getMediaType(ext)
 
       var folderFilePath = createMediaFolder(mediaType)
@@ -247,13 +238,8 @@ export function getMediaType(ext) {
 }
 
 export function createMediaSlug(filename, ext) {
-  var filenameNoExt = path.basename(filename, ext)
-  return (
-    limax(filenameNoExt, {separateNumbers: false}) +
-    '-' +
-    coreUtils.random.generateUniqueIdentifier(2) +
-    ext
-  )
+  var filenameNoExt = path.basename(filename, ext).toLowerCase()
+  return (`${slug(filenameNoExt, {remove: /[$*+~.()'"!\:@§^,;]/g})}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`)
 }
 
 export function createMediaFolder(mediaType) {

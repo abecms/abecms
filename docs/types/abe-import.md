@@ -5,6 +5,7 @@
 ### structure
 
 1. Files are imported from 'partials' folder (/path/to/abe/project/**partials**) :
+
 ```
 partials
    |_ head.html

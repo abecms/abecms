@@ -14,33 +14,27 @@ var cmsData = require('../../../../src/cli').cmsData;
 var Manager = require('../../../../src/cli').Manager;
 
 describe('cmsTemplates', function() {
-  before( function(done) {
-    Manager.instance.init()
-      .then(function () {
-        this.fixture = {
-          articleEach: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf-8')
-        }
-        done()
-        
-      }.bind(this))
-  });
+  let fixture
+  before(async () => {
+    await Manager.instance.init()
+    fixture = {
+      articleEach: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf-8')
+    }
+  })
 
   /**
    * cmsTemplates.encodeAbeTagAsComment
    * 
    */
   it('cmsTemplates.encodeAbeTagAsComment()', function() {
-    // stub
-    var sinonInstance = sinon.sandbox.create();
-    var validDataAbe = sinonInstance.stub(cmsData.regex, 'validDataAbe');
+    var validDataAbe = sinon.stub(cmsData.regex, 'validDataAbe');
     validDataAbe.returns('')
 
     // test
-    var txt = cmsTemplates.encodeAbeTagAsComment(this.fixture.articleEach);
+    var txt = cmsTemplates.encodeAbeTagAsComment(fixture.articleEach);
     chai.expect(txt.indexOf('{')).to.equal(-1);
 
-    // unstub
     sinon.assert.calledOnce(cmsData.regex.validDataAbe)
-    cmsData.regex.validDataAbe.restore()
+    sinon.restore()
   });
 });

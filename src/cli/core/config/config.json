@@ -117,6 +117,7 @@
   "sitePort": false,
   "users": {
     "enable": false,
+    "path": "data/users/users.json",
     "secret": "GoNinjaGo",
     "forgotExpire": 60,
     "email": {
@@ -152,6 +153,11 @@
         "/abe.*"
       ]
     },
+    "activity": {
+      "active": true,
+      "path": "data/activity",
+      "history": 200
+    },
     "default": {
       "username": "admin",
       "name": "admin",
@@ -164,9 +170,20 @@
     }
   },
   "smtp": null,
+  "websocket": {
+    "active": false
+  },
   "abeTags":{
     "text": "text",
     "rich": "rich",
     "textarea": "textarea"
+  },
+  "database": {
+    "type": "mongo",
+    "mongo": {
+      "server": "mongodb://localhost",
+      "port": "27017",
+      "database": "abecms_dev"
+    }
   }
 }
