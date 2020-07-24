@@ -8,5 +8,10 @@
   ],
   "ignore": [
     "src/server/public/abecms/libs/*.js"
+  ],
+  "plugins": [
+    ["transform-runtime", {
+      "regenerator": true
+    }]
   ]
 }
