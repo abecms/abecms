@@ -1,11 +1,10 @@
 {
   "presets": [
-    "@babel/preset-env",
-    {
-      targets: {
-        esmodules: true,
-      },
-    },
+    ["env", {
+      "targets": {
+        "esmodules": true
+      }
+    }]
   ],
   "ignore": [
     "src/server/public/abecms/libs/*.js"
