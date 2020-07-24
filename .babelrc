@@ -1,17 +1,9 @@
 {
-  "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        "esmodules": true
-      }
-    }]
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+      ["@babel/transform-runtime"]
   ],
   "ignore": [
     "src/server/public/abecms/libs/*.js"
-  ],
-  "plugins": [
-    ["transform-runtime", {
-      "regenerator": true
-    }]
   ]
 }
