@@ -4,6 +4,7 @@
       ["@babel/transform-runtime"]
   ],
   "ignore": [
-    "src/server/public/abecms/libs/*.js"
+    "src/server/public/abecms/libs/*.js",
+    "src/server/public/abecms/vendors/*.js"
   ]
 }
