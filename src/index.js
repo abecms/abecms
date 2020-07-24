@@ -149,6 +149,7 @@ const installPlugins = function() {
   })
 }
 
+program.storeOptionsAsProperties(true)
 program.version(pkg.version).option('-v, --version', 'version')
 
 // Dev: ./node_modules/.bin/babel-node --presets @babel/preset-env src/index.js init
