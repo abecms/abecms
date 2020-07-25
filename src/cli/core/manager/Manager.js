@@ -112,6 +112,7 @@ class Manager {
     this.pathPublish = this.pathPublish.replace(/\/$/, '')
     this.pathData = this.pathData.replace(/\/$/, '')
     this.pathScripts = path.join(config.root, config.scripts.path)
+
     this.pathStructure = path.join(config.root, config.structure.url)
     this.pathReference = path.join(config.root, config.reference.url)
     this.pathLocales = path.join(config.root, 'locales')
@@ -306,6 +307,7 @@ class Manager {
       console.log('the directory ' + this.pathPartials + ' does not exist')
     }
 
+    // watch structure folder
     try {
       fse.accessSync(this.pathStructure, fse.F_OK)
       this._watchStructure = watch.createMonitor(
@@ -329,6 +331,7 @@ class Manager {
       console.log('the directory ' + this.pathStructure + ' does not exist')
     }
 
+    // watch reference folder
     try {
       fse.accessSync(this.pathReference, fse.F_OK)
       this._watchReferenceFolder = watch.createMonitor(
@@ -361,6 +364,7 @@ class Manager {
       console.log('the directory ' + this.pathReference + ' does not exist')
     }
 
+    // watch locales folder
     try {
       fse.accessSync(this.pathLocales, fse.F_OK)
       this._watchLocalesFolder = watch.createMonitor(
@@ -393,6 +397,7 @@ class Manager {
       console.log('the directory ' + this.pathLocales + ' does not exist')
     }
 
+    // watch scripts folder
     try {
       fse.accessSync(this.pathScripts, fse.F_OK)
       this._watchScripts = watch.createMonitor(this.pathScripts, monitor => {

@@ -154,5 +154,16 @@ See the documentation below for details
 ## Support / Contributing
 coming soon
 
+# Develop
+To launch the Abe server from source :
+```
+ROOT=/you/absolute/path/to/an/abe/website node src/tasks/nodemon.js
+```
+
+To launch the Abe command line from source (ie. launch the init command):
+```
+./node_modules/.bin/babel-node --presets @babel/preset-env src/index.js init
+```
+
 # Roadmap
 See the complete [roadmap](./ROADMAP.md)

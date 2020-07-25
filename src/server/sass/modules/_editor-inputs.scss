@@ -20,7 +20,7 @@
 .file-upload,
 .img-upload{
   input[type="text"]{
-    
+
   }
   .percent{
     display: inline-block;
@@ -60,7 +60,7 @@
     border-left: 0;
     height: 34px;
     width: 40px;
-    overflow: hidden;
+    // overflow: hidden;
   }
 }
 
@@ -77,7 +77,7 @@ select[multiple], select[size] {
         color: #a94442;
       }
     }
-    
+
     &.image {
       border-color: #a94442;
 
@@ -108,7 +108,7 @@ select[multiple], select[size] {
     background-color: $addon-image-bg;
     border-color: $addon-image-border;
   }
-  
+
   &.meta {
     color: $addon-color;
     background-color: $addon-meta-bg;

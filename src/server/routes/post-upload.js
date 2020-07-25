@@ -8,11 +8,10 @@ var route = function(req, res, next) {
 
   image
     .then(function(resp) {
-      // This shoulb be put in the gallery plugin
-      // Manager.instance.addThumbsToList({
-      //   originalFile: resp.filePath,
-      //   thumbFile: resp.thumbnail
-      // })
+      Manager.instance.addThumbsToList({
+        originalFile: resp.filePath,
+        thumbFile: resp.thumbnail
+      })
       res.set('Content-Type', 'application/json')
       res.send(JSON.stringify(resp))
     })

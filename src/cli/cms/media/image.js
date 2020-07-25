@@ -19,7 +19,7 @@ export function cropAndSaveFile(imageSize, file, newFile) {
             image
             .crop(crop.x, crop.y, crop.width, crop.height)
             .write(newFile)
-          });        
+          });
       })
       .catch(function(err) {
         console.error(err)
@@ -110,7 +110,7 @@ export function cropAndSaveFiles(images, file, resp) {
   return p
 }
 
-export function generateThumbnail(file) {
+export const generateThumbnail = async (file) => {
   var ext = path.extname(file).toLowerCase()
   var thumbFileName = file.replace(ext, `_thumb${ext}`)
   var thumbFileNameRelative = thumbFileName.replace(
@@ -169,14 +169,13 @@ export function saveFile(req) {
       }
 
       var fstream = fse.createWriteStream(filePath)
-      fstream.on('finish', function() {
+      fstream.on('finish', async () => {
         if (hasSentHeader) return
         if (mediaType === 'image') {
-          // var thumbPromise = generateThumbnail(filePath)
-          // thumbPromise.then(function(thumbResp) {
-          //   resp.thumbnail = /^win/.test(process.platform)
-          //     ? thumbResp.thumb.replace(/\\/g, '/')
-          //     : thumbResp.thumb
+          const thumbResp = await generateThumbnail(filePath)
+          resp.thumbnail = /^win/.test(process.platform)
+            ? thumbResp.thumb.replace(/\\/g, '/')
+            : thumbResp.thumb
 
           resp = abeExtend.hooks.instance.trigger('afterSaveImage', resp, req)
           if (

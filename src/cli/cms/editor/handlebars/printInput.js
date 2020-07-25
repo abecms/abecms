@@ -344,7 +344,7 @@ export function createInputRich(attributes, inputClass, params) {
       var popup = button.popup != null ? `data-popup="${button.popup}"` : ''
       if (button.popup === 'image') button.action = 'insertImage'
       if (button.action === 'list') button.action = 'insertList'
-      inputRich += `<a  class="wysiwyg-toolbar-icon parent-${button.icon}" 
+      inputRich += `<a  class="wysiwyg-toolbar-icon parent-${button.icon}"
                         data-action="${button.action}"
                         data-param="${button.param}"
                         title="${button.title}"
@@ -373,7 +373,7 @@ export function createInputFile(attributes, inputClass, params) {
               <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
             </div>
             <input type="text" ${attributes} class="${inputClass} file-input" />
-            
+
             <div class="input-group-btn">
               <span class="border">
                 <div class="upload-wrapper">
@@ -414,16 +414,13 @@ export function createInputLink(attributes, inputClass, params) {
 export function createInputImage(attributes, inputClass, params) {
   return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
           <div class="input-group img-upload">
-            <div class="input-group-addon image">
-              <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
-            </div>
             <input type="text" ${attributes} class="${inputClass} file-input" />
-            <div class="input-group-btn">
+            <div class="input-group-append">
               <span class="border">
                 <div class="upload-wrapper">
                   <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload an image"/>
                   <span class="percent">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                    <i class="fa fa-upload"></i>
                   </span>
                 </div>
               </span>
