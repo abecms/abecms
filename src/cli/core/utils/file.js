@@ -164,23 +164,27 @@ export function getFilesSync(dirname, recursive = true, filterExt = '') {
 export async function getFiles(dirname, recursive = true, filterExt = '') {
   let items = []
 
-  let stat = await fse.lstat(dirname)
-  if (stat.isDirectory()) {
-    let files = await fse.readdir(dirname)
-    await Promise.all(files.map(async fileName => {
-      let pathFile = path.join(dirname, fileName)
-      let statFile = await fse.stat(pathFile)
-      if (statFile.isFile()) {
-        let extFile = path.extname(fileName)
-        if (filterExt === '' || extFile === filterExt) {
-          items.push(pathFile)
+  try {
+    let stat = await fse.lstat(dirname)
+    if (stat.isDirectory()) {
+      let files = await fse.readdir(dirname)
+      await Promise.all(files.map(async fileName => {
+        let pathFile = path.join(dirname, fileName)
+        let statFile = await fse.stat(pathFile)
+        if (statFile.isFile()) {
+          let extFile = path.extname(fileName)
+          if (filterExt === '' || extFile === filterExt) {
+            items.push(pathFile)
+          }
         }
-      }
-      if (recursive) {
-        let filesInDir = await coreUtils.file.getFiles(pathFile, recursive, filterExt)
-        items = items.concat(filesInDir)
-      }
-    }));
+        if (recursive) {
+          let filesInDir = await coreUtils.file.getFiles(pathFile, recursive, filterExt)
+          items = items.concat(filesInDir)
+        }
+      }));
+    }
+  } catch (e) {
+    // We don't throw no error. the directory or file doesn't exist
   }
 
   return items
@@ -218,7 +222,7 @@ export function getDate(revisionPath) {
 }
 
 /**
- * 
+ *
  * @param  {String}  revisionPath   url of the post revision
  * @return {Date}    date           Date object
  */

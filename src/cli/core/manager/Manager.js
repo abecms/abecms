@@ -119,7 +119,7 @@ class Manager {
     this.connections = []
 
     this.activities =  User.utils.getActivity()
-   
+
     this._watcherActivity()
 
     this.updateStructureAndTemplates()

@@ -26,6 +26,9 @@ export function getTemplatesAndPartials(templatesPath, partialsPath) {
             return resolve(allFiles)
           })
       })
+      .catch(e => {
+        console.log('Error: template.getTemplatesAndPartials', e.stack)
+      })
   })
 
   return p
@@ -298,7 +301,7 @@ export function getVariablesInWhere(where) {
  * select title, image from ../ where template=""
  *
  * return [title, image, template]
- * 
+ *
  * @param  {Array} templatesList ["article.html", "other.html"]
  * @return {Promise}
  */
