@@ -368,7 +368,7 @@ export function createInputRich(attributes, inputClass, params) {
 
 export function createInputFile(attributes, inputClass, params) {
   return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
-          <div class="input-group file-upload">
+          <div class="input-group file-upload" data-keep-name="${(params.keepName === undefined) ? false : params.keepName}">
             <div class="input-group-addon my-auto image">
               <span class="fa fa-file" aria-hidden="true"></span>
             </div>
@@ -413,7 +413,7 @@ export function createInputLink(attributes, inputClass, params) {
 
 export function createInputImage(attributes, inputClass, params) {
   return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
-          <div class="input-group img-upload">
+          <div class="input-group img-upload" data-keep-name="${(params.keepName === undefined) ? false : params.keepName}">
             <input type="text" ${attributes} class="${inputClass} file-input" />
             <div class="input-group-append">
               <span class="border">

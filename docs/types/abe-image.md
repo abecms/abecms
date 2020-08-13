@@ -10,7 +10,7 @@
 
 ## Config `Abe.json`
 
-You can change the directory where file will be uploaded inside `abe.json` config file.
+You can change the directory where files will be uploaded inside `abe.json` config file.
 
 To do this add `upload` object that contains an `image` property, the value of this property will be the path to your upload folder (relative to the root path of your project).
 
@@ -34,12 +34,16 @@ Optional parameters:
 - display = (String)
 - reload = (Boolean)
 - thumbs = (Array[WIDTHxHEIGHT] separated with ",")
+- keepName = (Boolean)
+
+## keepName
+By default, Abe will create your image with a random string at the end of the file. If you want to keep the exact name of the file you upload, add this parameter `keepName='true'`
 
 ## Thumbs
 
 If `thumbs` is used on your tag you can create thumbnails from the image you upload.
 
-### Exemple
+### Example
 
 Uploading an image named `my_image.jpg` will create a thumb by default named `my_image_thumb.jpg`.
 

@@ -325,10 +325,7 @@ export default class EditorBlock {
       label.innerHTML = label.innerHTML.replace(rex, newNumber)
     })
 
-    if ($(target).parents('.list-group').find('.list-block').size() > 1) {
-      prevListItem.querySelector('.label-count').textContent =
-        parseInt(prevListItem.querySelector('.label-count').textContent) + 1
-    }
+    prevListItem.querySelector('.label-count').textContent = newNumber
 
     this.onNewBlock._fire()
 

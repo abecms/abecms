@@ -37,6 +37,7 @@ export default class EditorFiles {
     }
     EditorUtils.scrollToInputElement(target)
     var parentTarget = target.parentNode.parentNode.parentNode.parentNode
+    var keepName = parentTarget.getAttribute('data-keep-name')
     var percent = parentTarget.querySelector('.percent')
     var percentHtml = percent.innerHTML
     var file = target.files[0]
@@ -49,7 +50,7 @@ export default class EditorFiles {
     var xhr = new XMLHttpRequest()
     xhr.open(
       'post',
-      '/abe/upload/?baseUrl=' + window.CONFIG.FILEPATH + '&input=' + target.outerHTML,
+      '/abe/upload/?baseUrl=' + window.CONFIG.FILEPATH + '&input=' + target.outerHTML + '&keepName=' + keepName,
       true
     )
     xhr.upload.onprogress = e => {

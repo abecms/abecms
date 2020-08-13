@@ -129,6 +129,7 @@ export const generateThumbnail = async (file) => {
 
 export function saveFile(req) {
   var p = new Promise(resolve => {
+    const keepName = (req.query.keepName === 'true')
     var resp = {success: 1}
     var filePath
     req.pipe(req.busboy)
@@ -140,7 +141,7 @@ export function saveFile(req) {
       mimetype
     ) {
       var ext = path.extname(filename).toLowerCase()
-      var slug = createMediaSlug(filename.toLowerCase(), ext)
+      var slug = createMediaSlug(filename, ext, keepName)
       var mediaType = getMediaType(ext)
 
       var folderFilePath = createMediaFolder(mediaType)
@@ -225,7 +226,7 @@ export function isValidMedia(mimetype, ext) {
 export function getMediaType(ext) {
   let type = 'document'
 
-  if (/\.(jpg|jpeg|png|gif|svg)/.test(ext)) {
+  if (/\.(jpg|jpeg|png|gif|svg|webp)/.test(ext)) {
     type = 'image'
   } else if (/\.(mov|avi|mp4)/.test(ext)) {
     type = 'video'
@@ -236,9 +237,13 @@ export function getMediaType(ext) {
   return type
 }
 
-export function createMediaSlug(filename, ext) {
-  var filenameNoExt = path.basename(filename, ext).toLowerCase()
-  return (`${slug(filenameNoExt, {remove: /[$*+~.()'"!\:@§^,;]/g})}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`)
+export function createMediaSlug(filename, ext, keepName = false) {
+  if (!keepName) {
+    const filenameNoExt = path.basename(filename, ext).toLowerCase()
+    return (`${slug(filenameNoExt, { remove: /[$*+~.()'"!\:@§^,;]/g })}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`)
+  }
+
+  return filename
 }
 
 export function createMediaFolder(mediaType) {
