@@ -14,14 +14,15 @@ if (process.env.ROOT) {
 var hintAbeJson = false
 
 var loadLocalConfig = result => {
+  const abeConfigPath = path.join(result.root, 'abe.json')
   if (result.root !== '') {
     try {
       var stat = fse.statSync(result.root)
       if (stat && stat.isDirectory()) {
         try {
-          stat = fse.statSync(path.join(result.root, 'abe.json'))
+          stat = fse.statSync(abeConfigPath)
           if (stat) {
-            var json = fse.readJsonSync(path.join(result.root, 'abe.json'))
+            var json = fse.readJsonSync(abeConfigPath)
             result = extend(true, result, json)
           }
         } catch (e) {

@@ -11,7 +11,7 @@
       cursor: not-allowed;
     }
     ~ .percent{
-      .glyphicon-upload{
+      .fa-upload{
         color: #F7F7F7;
       }
     }
@@ -47,7 +47,7 @@
   &:hover{
     cursor: pointer;
   }
-  .glyphicon-upload:before{
+  .fa-upload:before{
     font-size: 20px;
     line-height: 34px;
   }
@@ -73,7 +73,7 @@ select[multiple], select[size] {
     &.link {
       border-color: #a94442;
 
-      .glyphicon {
+      .fa {
         color: #a94442;
       }
     }
@@ -81,7 +81,7 @@ select[multiple], select[size] {
     &.image {
       border-color: #a94442;
 
-      .glyphicon {
+      .fa {
         color: #a94442;
       }
     }
@@ -89,7 +89,7 @@ select[multiple], select[size] {
   .file-upload,
   .img-upload {
     .upload-wrapper {
-      .glyphicon {
+      .fa {
         color: #a94442;
       }
     }
@@ -123,7 +123,7 @@ select[multiple], select[size] {
       content: "U";
     }
   }
-  .glyphicon-strikethrough {
+  .fa-strikethrough {
     &:after {
       content: "Ꞩ";
     }

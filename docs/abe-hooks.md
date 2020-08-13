@@ -16,7 +16,7 @@ var hooks = {
     },
     afterEditorInput: function afterEditorInput(htmlString, params, abe) {
         if(typeof params.hint !== 'undefined' && params.hint !== null && params.hint !== '') {
-            htmlString = htmlString + '<span class="abe-hint help-block"><span class="glyphicon glyphicon-info-sign"></span>' + params.hint + '</span>'
+            htmlString = htmlString + '<span class="abe-hint help-block"><span class="fa fa-info-sign"></span>' + params.hint + '</span>'
         }
 
         return htmlString;

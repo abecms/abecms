@@ -95,7 +95,7 @@
 }
 
 .user-list {
-  .table .glyphicon {
+  .table .fa {
     cursor: pointer;
   }
 
@@ -111,58 +111,58 @@
     border: 0px;
   }
 
-  .glyphicon-eye-open,
-  .glyphicon-eye-close {
+  .fa-eye-open,
+  .fa-eye-close {
     width: 15px;
     height: 15px;
   }
 
-  .glyphicon-eye-open:hover:before,
-  .glyphicon-eye-close:hover:before {
+  .fa-eye-open:hover:before,
+  .fa-eye-close:hover:before {
     display: none;
   }
 
-  .glyphicon-eye-open:hover .glyphicon-eye-close:before,
-  .glyphicon-eye-close:hover .glyphicon-eye-open:before {
+  .fa-eye-open:hover .fa-eye-close:before,
+  .fa-eye-close:hover .fa-eye-open:before {
     display: inline;
   }
 
-  .glyphicon-eye-open .glyphicon-eye-close,
-  .glyphicon-eye-close .glyphicon-eye-open {
+  .fa-eye-open .fa-eye-close,
+  .fa-eye-close .fa-eye-open {
     position: absolute;
     left: 0px;
   }
 
-  .glyphicon-eye-open .glyphicon-eye-close:before,
-  .glyphicon-eye-close .glyphicon-eye-open:before {
+  .fa-eye-open .fa-eye-close:before,
+  .fa-eye-close .fa-eye-open:before {
     display: none;
   }
 
-  .glyphicon-pencil {
+  .fa-pencil {
     width: 40px;
     height: 15px;
   }
 
-  .editing .glyphicon-pencil:before {
+  .editing .fa-pencil:before {
     display: none;
   }
 
-  .editing .glyphicon-pencil .glyphicon-ok:before,
-  .editing .glyphicon-pencil .glyphicon-remove:before {
+  .editing .fa-pencil .fa-ok:before,
+  .editing .fa-pencil .fa-remove:before {
     display: inline;
   }
 
-  .glyphicon-pencil .glyphicon-ok {
+  .fa-pencil .fa-ok {
     position: absolute;
     left: 0px;
   }
-  .glyphicon-pencil .glyphicon-remove {
+  .fa-pencil .fa-remove {
     position: absolute;
     left: 25px;
   }
 
-  .glyphicon-pencil .glyphicon-ok:before,
-  .glyphicon-pencil .glyphicon-remove:before {
+  .fa-pencil .fa-ok:before,
+  .fa-pencil .fa-remove:before {
     display: none;
   }
 

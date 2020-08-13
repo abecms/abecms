@@ -37,7 +37,7 @@ export function getLabel(params) {
 export function hint(params) {
   if (params.hint) {
     return `<p class="abe-hint help-block">
-        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<em>${params.hint}</em>
+        <span class="fa fa-info-sign"></span>&nbsp;<em>${params.hint}</em>
       </p>`
   }
 
@@ -69,7 +69,7 @@ export function createInputSource(attributes, inputClass, params) {
                             ]}"
                             data-autocomplete-refresh-key="${params.key}"
                             data-autocomplete-data-display="${params.display}" >
-                        <span class="glyphicon glyphicon-refresh"></span>
+                        <span class="fa fa-refresh"></span>
                       </div>`
     }
     Array.prototype.forEach.call(params.value, val => {
@@ -351,7 +351,7 @@ export function createInputRich(attributes, inputClass, params) {
                         ${hotkey}
                         ${popup}
                         href="#">
-                      <span class="glyphicon theme-icon ${button.icon}">${button.key
+                      <span class="fa theme-icon ${button.icon}">${button.key
         ? button.key
         : ''}</span>
                     </a>`
@@ -369,8 +369,8 @@ export function createInputRich(attributes, inputClass, params) {
 export function createInputFile(attributes, inputClass, params) {
   return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
           <div class="input-group file-upload">
-            <div class="input-group-addon image">
-              <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+            <div class="input-group-addon my-auto image">
+              <span class="fa fa-file" aria-hidden="true"></span>
             </div>
             <input type="text" ${attributes} class="${inputClass} file-input" />
 
@@ -379,7 +379,7 @@ export function createInputFile(attributes, inputClass, params) {
                 <div class="upload-wrapper">
                   <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload file"/>
                   <span class="percent">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                    <span class="fa fa-upload" aria-hidden="true"></span>
                   </span>
                 </div>
               </span>
@@ -402,8 +402,8 @@ export function createInputTextarea(attributes, inputClass, params) {
 export function createInputLink(attributes, inputClass, params) {
   return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
           <div class="input-group">
-            <div class="input-group-addon link">
-              <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+            <div class="input-group-addon my-auto link">
+              <span class="fa fa-link" aria-hidden="true"></span>
             </div>
             <input type="text" ${attributes} class="${inputClass}" />
           </div>
@@ -437,8 +437,8 @@ export function createInputText(attributes, inputClass, params) {
   if (params.editable)
     return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
               <div class="input-group">
-                <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+                <div class="input-group-addon my-auto">
+                  <span class="fa fa-font" aria-hidden="true"></span>
                 </div>
                 <input type="text" ${attributes} class="${inputClass}" />
               </div>

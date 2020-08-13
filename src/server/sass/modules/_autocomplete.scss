@@ -12,7 +12,7 @@
     box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.4);
   }
 
-  .glyphicon {
+  .fa {
     cursor: pointer;
     padding: 3px;
     vertical-align: top;
@@ -29,7 +29,7 @@
 
 .status-draft{
   .autocomplete-result {
-    .glyphicon {
+    .fa {
       display: inline-block;
     }
   }

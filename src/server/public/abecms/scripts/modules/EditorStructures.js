@@ -28,13 +28,13 @@ export default class EditorStructures {
     folder.setAttribute('data-daddy', daddy)
 
     var span = document.createElement('span')
-    var html = `<span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
+    var html = `<span class="fa fa-chevron-right arrow" aria-hidden="true"></span>
                 ${folderName} 
                 <div class="structure-tool">
-                  <span class="glyphicon glyphicon-plus folder-action" data-init="0" data-action="add" aria-hidden="true"></span>`
+                  <span class="fa fa-plus folder-action" data-init="0" data-action="add" aria-hidden="true"></span>`
     if (level !== 0)
       html +=
-        '<span class="glyphicon glyphicon-minus folder-action" data-init="0" data-action="remove" aria-hidden="true"></span>'
+        '<span class="fa fa-minus folder-action" data-init="0" data-action="remove" aria-hidden="true"></span>'
     html += '</div>'
     span.innerHTML = html
     folder.appendChild(span)

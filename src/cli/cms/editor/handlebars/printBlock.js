@@ -35,10 +35,10 @@ export default function printBlock(ctx, root) {
     res += `<div class="form-group" data-precontrib-templates="${ctx[0]
       .precontribTemplate}">
               <div class="list-group" data-block="${ctxBlock}" >
-                <label>
+                <label class="d-flex justify-content-between">
                   ${ctxBlock}
                   <button type="button" class="btn btn-success add-block" title="Add new block" >
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    <span class="fa fa-plus" aria-hidden="true"></span>
                   </button>
                 </label>`
 
@@ -63,10 +63,10 @@ export default function printBlock(ctx, root) {
       res += `<div class="list-block" data-block="${key}${i}" ${display}>
                 <button type="button" class="btn btn-info collapsed" data-toggle="collapse" data-target="#${key}${i}" >
                   Section <span class='label-count'>${i}</span> :
-                  <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                  <span class="fa fa-chevron-down" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-danger remove-block" title="Delete block" >
-                  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                  <span class="fa fa-trash" aria-hidden="true"></span>
                 </button>
                 <div id="${key}${i}" class="collapse" >
                 `

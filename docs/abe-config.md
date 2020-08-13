@@ -58,7 +58,7 @@
 }
 ```
 
-> LocalFolder
+> LocaleFolder
 
 To change locale.
 

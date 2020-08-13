@@ -37,7 +37,7 @@ body {
 }
 
 #slug {
-  .autocomplete-result .glyphicon.glyphicon-remove {
+  .autocomplete-result .fa.fa-remove {
     display: inline-block;
   }
 }
@@ -46,7 +46,7 @@ body {
   .form-create {
     /*padding: 0px 20px;*/
 
-    .autocomplete-result .glyphicon.glyphicon-remove {
+    .autocomplete-result .fa.fa-remove {
       display: inline-block;
     }
 
@@ -193,7 +193,7 @@ form.text-i18n{
   line-height: 20px;
 }
 
-.abe-hint.help-block .glyphicon {
+.abe-hint.help-block .fa {
   color: #5bc0de;
   margin-right: 5px;
 }

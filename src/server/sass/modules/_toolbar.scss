@@ -22,7 +22,7 @@
       width: inherit;
       border-radius: 4px;
 
-      .glyphicon {
+      .fa {
         line-height: 0em;
 
         &:before {
@@ -184,7 +184,7 @@ body {
 }
 
 button {
-  span.glyphicon{
+  span.fa{
       font-size: 15px;
   }
 }

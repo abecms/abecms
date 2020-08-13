@@ -75,27 +75,27 @@
                             <td align="center" class="td-active">
                               {{#ifCond this.actif 1}}
                                 <span class="hidden is-active">active</span>
-                                <span class="glyphicon glyphicon-eye-open text-info" data-deactivate data-user-id="{{this.id}}">
-                                  <span class="glyphicon glyphicon-eye-close text-danger"></span>
+                                <span class="fa fa-eye-open text-info" data-deactivate data-user-id="{{this.id}}">
+                                  <span class="fa fa-eye-close text-danger"></span>
                                 </span>
                               {{/ifCond}}
                               {{#ifCond this.actif 0}}
                                 <span class="hidden is-active">inactive</span>
-                                <span class="glyphicon glyphicon-eye-close text-danger" data-activate data-user-id="{{this.id}}">
-                                  <span class="glyphicon glyphicon-eye-open text-info"></span>
+                                <span class="fa fa-eye-close text-danger" data-activate data-user-id="{{this.id}}">
+                                  <span class="fa fa-eye-open text-info"></span>
                                 </span>
                               {{/ifCond}}
                             </td>
                             {{/isAuthorized}}
                             <td align="center" class="td-actions">
                               {{#isAuthorized '/abe/users/update' @root.user.role.workflow}}
-                                <span class="glyphicon glyphicon-pencil text-info" data-edit data-user-id="{{this.id}}">
-                                  <span class="glyphicon glyphicon-ok text-success" data-update data-user-id="{{this.id}}"></span>
-                                  <span class="glyphicon glyphicon-remove text-warning" data-close-update data-user-id="{{this.id}}"></span>
+                                <span class="fa fa-pencil text-info" data-edit data-user-id="{{this.id}}">
+                                  <span class="fa fa-ok text-success" data-update data-user-id="{{this.id}}"></span>
+                                  <span class="fa fa-remove text-warning" data-close-update data-user-id="{{this.id}}"></span>
                                 </span>
                               {{/isAuthorized}}
                               {{#isAuthorized '/abe/users/remove' @root.user.role.workflow}}
-                              <span class="glyphicon glyphicon-trash text-danger" data-remove data-user-id="{{this.id}}" data-text="Are you sure you want to delete this user"></span>
+                              <span class="fa fa-trash text-danger" data-remove data-user-id="{{this.id}}" data-text="Are you sure you want to delete this user"></span>
                               {{/isAuthorized}}
                             </td>
                           </tr>
@@ -137,7 +137,7 @@
                               </div>
                             </td>
                             <td class="no-border">
-                              <span class="glyphicon glyphicon-plus text-info" data-add-user></span>
+                              <span class="fa fa-plus text-info" data-add-user></span>
                             </td>
                           </tr>
                           {{/isAuthorized}}
@@ -179,18 +179,18 @@
                       {{#isAuthorized '/abe/users/activate' @root.user.role.workflow}}
                       <td align="center" class="td-active">
                           <span class="hidden is-active">inactive</span>
-                          <span class="glyphicon glyphicon-eye-close text-danger" data-activate data-user-id="">
-                            <span class="glyphicon glyphicon-eye-open text-info"></span>
+                          <span class="fa fa-eye-close text-danger" data-activate data-user-id="">
+                            <span class="fa fa-eye-open text-info"></span>
                           </span>
                       </td>
                       {{/isAuthorized}}
                       {{#isAuthorized '/abe/users/remove' @root.user.role.workflow}}
                       <td align="center" class="td-actions">
-                        <span class="glyphicon glyphicon-pencil text-info" data-edit data-user-id="">
-                          <span class="glyphicon glyphicon-ok text-success" data-update data-user-id=""></span>
-                          <span class="glyphicon glyphicon-remove text-warning" data-close-update data-user-id=""></span>
+                        <span class="fa fa-pencil text-info" data-edit data-user-id="">
+                          <span class="fa fa-ok text-success" data-update data-user-id=""></span>
+                          <span class="fa fa-remove text-warning" data-close-update data-user-id=""></span>
                         </span>
-                        <span class="glyphicon glyphicon-trash text-danger" data-remove data-user-id="" data-text="Are you sure you want to delete this user"></span>
+                        <span class="fa fa-trash text-danger" data-remove data-user-id="" data-text="Are you sure you want to delete this user"></span>
                       </td>
                       {{/isAuthorized}}
                     </tr>

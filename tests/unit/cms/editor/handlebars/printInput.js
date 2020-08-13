@@ -98,7 +98,7 @@ describe('printInput', function() {
    */
   it('cmsEditor.createInputLink()', function() {
     var result = cmsEditor.createInputLink(data.link.attributes, classAttr, data.link.params)
-    var link = result.indexOf('glyphicon glyphicon-link')
+    var link = result.indexOf('fa fa-link')
     chai.expect(result).to.be.a('string')
     chai.expect(link).to.be.above(-1)
   })
@@ -109,7 +109,7 @@ describe('printInput', function() {
    */
   it('cmsEditor.createInputImage()', function() {
     var result = cmsEditor.createInputImage(data.image.attributes, classAttr, data.image.params)
-    var image = result.indexOf('glyphicon glyphicon-picture')
+    var image = result.indexOf('fa fa-picture')
     chai.expect(result).to.be.a('string')
     chai.expect(image).to.be.above(-1)
   })
@@ -120,7 +120,7 @@ describe('printInput', function() {
    */
   it('cmsEditor.createInputText()', function() {
     var result = cmsEditor.createInputText(data.txt.attributes, classAttr, data.txt.params)
-    var txt = result.indexOf('glyphicon glyphicon-font')
+    var txt = result.indexOf('fa fa-font')
     chai.expect(result).to.be.a('string')
     chai.expect(txt).to.be.above(-1)
   })

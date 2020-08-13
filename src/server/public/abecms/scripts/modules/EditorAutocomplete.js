@@ -219,7 +219,7 @@ export default class EditorAutocomplete {
     div.innerHTML = this._prepareDisplay(json, display)
 
     var remove = document.createElement('span')
-    remove.classList.add('glyphicon', 'glyphicon-remove')
+    remove.classList.add('fa', 'fa-remove')
     remove.setAttribute('data-autocomplete-remove', 'true')
     remove.addEventListener('click', this._handleRemove)
     div.appendChild(remove)

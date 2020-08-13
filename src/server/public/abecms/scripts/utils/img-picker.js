@@ -7,13 +7,13 @@ window.ImagePickerUpload = {
     return `<div class="form-group" >
               <div class="input-group img-upload">
                 <div class="input-group-addon image">
-                  <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                  <span class="fa fa-picture" aria-hidden="true"></span>
                 </div>
                 <input type="text" id="wysiwyg-image-text" name="wysiwyg-image-text" placeholder="image or video (.mp4)" value="" class="form-control form-abe file-input">
                 <div class="upload-wrapper">
                   <input class="form-control" id="wysiwyg-image-upload" name="wysiwyg-image-upload" value="" type="file" title="upload an image">
                   <span class="percent">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                    <span class="fa fa-upload" aria-hidden="true"></span>
                   </span>
                 </div>
                 <div class="btn-add-img-wrapper">

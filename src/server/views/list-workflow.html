@@ -34,10 +34,10 @@
                 {{#ifCond @key 'draft'}}
                 {{else}}
                   {{#isAuthorized (concat '/abe/operations/reject/' @key) ../workflow}}
-                    <span class="glyphicon glyphicon-arrow-left icon-allowed icon-reject"
+                    <span class="fa fa-arrow-left icon-allowed icon-reject"
                     title="{{@key}} - reject" aria-hidden="true"></span>
                   {{else}}
-                    <span class="glyphicon glyphicon-remove icon-not-allowed icon-reject"
+                    <span class="fa fa-remove icon-not-allowed icon-reject"
                     title="{{@key}} - reject" aria-hidden="true"></span>
                   {{/isAuthorized}}
                 {{/ifCond}}
@@ -70,10 +70,10 @@
                 {{else}}
                   
                   {{#isAuthorized (concat '/abe/operations/submit/' @key) ../workflow}}
-                    <span class="glyphicon glyphicon-arrow-right icon-allowed icon-submit"
+                    <span class="fa fa-arrow-right icon-allowed icon-submit"
                       title="{{@key}} - submit" aria-hidden="true"></span>
                   {{else}}
-                    <span class="glyphicon glyphicon-remove icon-not-allowed icon-submit"
+                    <span class="fa fa-remove icon-not-allowed icon-submit"
                     title="{{@key}} - submit" aria-hidden="true"></span>
                   {{/isAuthorized}}
                   

@@ -33,12 +33,12 @@
 	> span:hover{
     cursor: pointer;
 	}
-	.glyphicon-chevron-right{
+	.fa-chevron-right{
 		transition: all 100ms ease-in-out;
 		font-size: 10px;
 	}
 	&.open{
-		> span .glyphicon-chevron-right{
+		> span .fa-chevron-right{
 	    transform: rotate(45deg);
 		}
 		&:before{
@@ -54,8 +54,8 @@
 	.structure-folder{
 		margin-left: 20px;
 	}
-	.glyphicon-minus,
-	.glyphicon-plus{
+	.fa-minus,
+	.fa-plus{
 		transition: all 100ms ease-in-out;
     opacity: 0.5;
     &:hover{
@@ -71,14 +71,14 @@
 			opacity: 1;
     }
 	}
-	.glyphicon-minus{
+	.fa-minus{
     // margin-left: 5px;
     font-size: 15px;
     &:hover{
     	color: #ff1371;
     }
 	}
-	.glyphicon-plus{
+	.fa-plus{
 		font-size: 13px;
     transform: translate3d(0, -1px, 0);
     &:hover{

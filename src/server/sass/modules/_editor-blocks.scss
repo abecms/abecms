@@ -37,24 +37,24 @@
 }
 
 .btn {
-	.glyphicon-chevron-down {
+	.fa-chevron-down {
 	  transform: rotate(-180deg);
 	}
 
 	&.collapsed {
-		.glyphicon-chevron-down {
+		.fa-chevron-down {
 		  transform: rotate(0deg);
 		}
 	}
 }
 
-.glyphicon-upload {
+.fa-upload {
     color: #8E8E8E;
 }
 
 [data-block]{
 	position: relative;
-	.glyphicon-trash{
+	.fa-trash{
     position: absolute;
     right: 0;
     top: 0;

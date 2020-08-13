@@ -122,7 +122,7 @@ export default class EditorBlock {
       endNumber = 0
 
     if (
-      elem.classList.contains('glyphicon-trash') ||
+      elem.classList.contains('fa-trash') ||
       elem.classList.contains('remove-block')
     ) {
       for (; elem && elem !== document; elem = elem.parentNode) {

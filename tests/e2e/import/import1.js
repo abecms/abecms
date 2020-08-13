@@ -63,7 +63,7 @@ describe('Abe', function() {
         .url('http://localhost:3003/abe/editor')
         .waitForElementVisible('//body')
         .pause(1000)
-        .click("//table[@id='navigation-list']//span[@class='glyphicon glyphicon-trash']/parent::*")
+        .click("//table[@id='navigation-list']//span[@class='fa fa-trash']/parent::*")
         .pause(1000)
         .acceptAlert()
         .url('http://localhost:3003/abe/editor')

@@ -132,7 +132,7 @@ class Engine {
                    class="icon" data-unpublish="true" data-text="Are you sure you want to unpublish : ${data
                      .abe_meta.link}"
                    title="unpublish">
-                  <span class="glyphicon glyphicon-eye-close"></span>
+                  <span class="fa fa-eye-close"></span>
                 </a>`
             }
 
@@ -144,7 +144,7 @@ class Engine {
                  data-text="Are you sure you want to delete : ${data.abe_meta
                    .link}"
                  title="remove">
-                <span class="glyphicon glyphicon-trash"></span>
+                <span class="fa fa-trash"></span>
               </a></div>`
 
             var i = 4

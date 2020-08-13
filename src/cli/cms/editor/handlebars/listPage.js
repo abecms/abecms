@@ -70,7 +70,7 @@ export default function listPage(file, index, text) {
                class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file
       .abe_meta.link}"
                title="unpublish">
-              <span class="glyphicon glyphicon-eye-close"></span>
+              <span class="fa fa-eye-close"></span>
             </a>`
   }
 
@@ -81,7 +81,7 @@ export default function listPage(file, index, text) {
              data-delete="true"
              data-text="${text.confirmDelete} ${file.abe_meta.link}"
              title="remove">
-            <span class="glyphicon glyphicon-trash"></span>
+            <span class="fa fa-trash"></span>
           </a>`
 
   res += `

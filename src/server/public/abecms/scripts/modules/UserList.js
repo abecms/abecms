@@ -138,11 +138,11 @@ var usersList = {
         method: 'post'
       },
       () => {
-        var childGlyph = target.querySelector('.glyphicon')
-        childGlyph.classList.remove('glyphicon-eye-open', 'text-info')
-        childGlyph.classList.add('glyphicon-eye-close', 'text-danger')
-        target.classList.remove('glyphicon-eye-close', 'text-danger')
-        target.classList.add('glyphicon-eye-open', 'text-info')
+        var childGlyph = target.querySelector('.fa')
+        childGlyph.classList.remove('fa-eye-open', 'text-info')
+        childGlyph.classList.add('fa-eye-close', 'text-danger')
+        target.classList.remove('fa-eye-close', 'text-danger')
+        target.classList.add('fa-eye-open', 'text-info')
         target.removeEventListener('click', this._handleActivate)
         target.addEventListener('click', this._handleDeactivate)
       }
@@ -163,11 +163,11 @@ var usersList = {
         method: 'post'
       },
       () => {
-        var childGlyph = target.querySelector('.glyphicon')
-        childGlyph.classList.remove('glyphicon-eye-close', 'text-danger')
-        childGlyph.classList.add('glyphicon-eye-open', 'text-info')
-        target.classList.remove('glyphicon-eye-open', 'text-info')
-        target.classList.add('glyphicon-eye-close', 'text-danger')
+        var childGlyph = target.querySelector('.fa')
+        childGlyph.classList.remove('fa-eye-close', 'text-danger')
+        childGlyph.classList.add('fa-eye-open', 'text-info')
+        target.classList.remove('fa-eye-open', 'text-info')
+        target.classList.add('fa-eye-close', 'text-danger')
         target.removeEventListener('click', this._handleDeactivate)
         target.addEventListener('click', this._handleActivate)
       }
@@ -378,24 +378,24 @@ var usersList = {
             })
 
             var tdActive = tr.querySelector('.td-active')
-            var glypEyeClose = tdActive.querySelector('.glyphicon-eye-close')
+            var glypEyeClose = tdActive.querySelector('.fa-eye-close')
             glypEyeClose.addEventListener('click', this._handleActivate, true)
             glypEyeClose.setAttribute('data-user-id', data.user.id)
 
             var tdActions = tr.querySelector('.td-actions')
-            var glypEdit = tdActions.querySelector('.glyphicon-pencil')
+            var glypEdit = tdActions.querySelector('.fa-pencil')
             glypEdit.addEventListener('click', this._handleEdit, true)
             glypEdit.setAttribute('data-user-id', data.user.id)
 
-            var glypOk = tdActions.querySelector('.glyphicon-ok')
+            var glypOk = tdActions.querySelector('.fa-ok')
             glypOk.addEventListener('click', this._handleUpdate, true)
             glypOk.setAttribute('data-user-id', data.user.id)
 
-            var glypCloseUpdate = tdActions.querySelector('.glyphicon-remove')
+            var glypCloseUpdate = tdActions.querySelector('.fa-remove')
             glypCloseUpdate.setAttribute('data-user-id', data.user.id)
             // glypCloseUpdate.addEventListener('click', this._handleCloseUpdate, true)
 
-            var glypRemove = tdActions.querySelector('.glyphicon-trash')
+            var glypRemove = tdActions.querySelector('.fa-trash')
             glypRemove.setAttribute('data-user-id', data.user.id)
             glypRemove.addEventListener('click', this._handleRemove, true)
           }
