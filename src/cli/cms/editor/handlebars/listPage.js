@@ -62,7 +62,7 @@ export default function listPage(file, index, text) {
   res += workflow
 
   res += `<td align="center">
-            <div class="row icons-action">`
+            <div>`
 
   if (file.publish != null) {
     res += `<a href="/abe/operations/unpublish${file.abe_meta.link}"
@@ -70,7 +70,7 @@ export default function listPage(file, index, text) {
                class="icon" data-unpublish="true" data-text="${text.confirmUnpublish} ${file
       .abe_meta.link}"
                title="unpublish">
-              <span class="fa fa-eye-close"></span>
+              <span class="fa fa-eye-slash"></span>
             </a>`
   }
 

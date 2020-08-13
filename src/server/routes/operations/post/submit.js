@@ -20,7 +20,7 @@ var route = async function(req, res, next) {
     res.user
   )
 
-  console.log('resultroute', result)
+  //console.log('resultroute', result)
   // Auto-republish if the config is setup and the posts limit is not reached
   if (
     operation.workflow === 'publish' &&
@@ -57,7 +57,7 @@ var route = async function(req, res, next) {
     user: res.user
   })
   res.set('Content-Type', 'application/json')
-  console.log('resultroute2', result.json)
+  //console.log('resultroute2', result.json)
   res.send(JSON.stringify(result))
 }
 

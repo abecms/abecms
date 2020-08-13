@@ -124,7 +124,7 @@ class Engine {
             return params
           },
           createdRow: function(row, data, index) {
-            var actions = '<div class="row icons-action">'
+            var actions = '<div>'
             if (data.publish != null) {
               actions += `<a href="/abe/operations/unpublish${data.abe_meta
                 .link}"
@@ -132,7 +132,7 @@ class Engine {
                    class="icon" data-unpublish="true" data-text="Are you sure you want to unpublish : ${data
                      .abe_meta.link}"
                    title="unpublish">
-                  <span class="fa fa-eye-close"></span>
+                  <span class="fa fa-eye-slash"></span>
                 </a>`
             }
 

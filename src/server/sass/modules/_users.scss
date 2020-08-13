@@ -112,29 +112,29 @@
   }
 
   .fa-eye-open,
-  .fa-eye-close {
+  .fa-eye-slash {
     width: 15px;
     height: 15px;
   }
 
   .fa-eye-open:hover:before,
-  .fa-eye-close:hover:before {
+  .fa-eye-slash:hover:before {
     display: none;
   }
 
-  .fa-eye-open:hover .fa-eye-close:before,
-  .fa-eye-close:hover .fa-eye-open:before {
+  .fa-eye-open:hover .fa-eye-slash:before,
+  .fa-eye-slash:hover .fa-eye-open:before {
     display: inline;
   }
 
-  .fa-eye-open .fa-eye-close,
-  .fa-eye-close .fa-eye-open {
+  .fa-eye-open .fa-eye-slash,
+  .fa-eye-slash .fa-eye-open {
     position: absolute;
     left: 0px;
   }
 
-  .fa-eye-open .fa-eye-close:before,
-  .fa-eye-close .fa-eye-open:before {
+  .fa-eye-open .fa-eye-slash:before,
+  .fa-eye-slash .fa-eye-open:before {
     display: none;
   }
 
