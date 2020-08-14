@@ -13,7 +13,7 @@ The 4.x releases will focus on the transformation of AbeCMS to a full featured C
 - ~~Add template creation from partials~~
 - templates and partials will be uploadable
 - Video training will be produced
-- Create an Electron version
+- ~~Create an Electron version~~
 - Refactor the REST layer:
   - Usage of oAuth2 for REST routes
 - Add robots.txt + URL redirection features in Abe
