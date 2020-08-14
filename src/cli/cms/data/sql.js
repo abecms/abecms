@@ -10,8 +10,8 @@ import {coreUtils, config, Manager, cmsData} from '../../'
  * Example: escapeAbeValuesFromStringRequest('select title from ./ where `abe_meta.template`=`{{article}}`', {article: "test"})
  *
  * Return string: select title from ___abe_dot______abe_dot______abe___ where  `abe_meta.template`=`test`
- * 
- * 
+ *
+ *
  * @param  {String} str      raw abe request sql string
  * @param  {Object} jsonPage json object of post
  * @return {String}          escaped string
@@ -72,7 +72,7 @@ export function escapeAbeValuesFromStringRequest(str, jsonPage) {
  * analyse and create an object from request sql string
  *
  * Example: handleSqlRequest('select title from ./ where `abe_meta.template`=`{{article}}`', {article: "test"})
- * 
+ *
  * @param  {String} str      Sql string request
  * @param  {Object} jsonPage json of post
  * @return {Object}          {type, columns, from, where, string, limit, orderby}
@@ -94,7 +94,11 @@ export function handleSqlRequest(str, jsonPage) {
       columns.push('*')
     } else {
       Array.prototype.forEach.call(request.columns, item => {
-        columns.push(item.expr.column)
+        if (_.get(item, 'expr.type') === 'binary_expr') {
+          columns.push(`${item.expr.left.column}${item.expr.operator}${item.expr.right.column}`)
+        } else {
+          columns.push(item.expr.column)
+        }
       })
     }
   }
@@ -145,9 +149,9 @@ export function handleSqlRequest(str, jsonPage) {
  *
  * {{abe type='data' key='titles' desc='select titles' source='[{"title": "rouge", "id": 1},{"title": "vert", "id": 2},{"title": "blue", "id": 3}]' display="{{title}}"}}
  *
- * return 
+ * return
  * [{"title": "rouge", "id": 1},{"title": "vert", "id": 2},{"title": "blue", "id": 3}]
- * 
+ *
  * @param  {String} str abe tag
  * @return {String}     json string
  */
@@ -280,7 +284,7 @@ export function executeFromClause(files, statement, pathFromClause) {
 
 /**
  * Execute sql query like to find abe json post that match the query
- * 
+ *
  * @param  {Array} pathQuery of paths
  * @param  {String} match     request sql
  * @param  {Object} jsonPage  json of post
@@ -321,13 +325,13 @@ export function executeQuery(match, jsonPage) {
 
 /**
  * check if a given string an url, string json, file url, abe sql request
- * 
+ *
  * get('http://google.com')
  * get('{"test":"test"}')
  * get('select * from ../')
  * get('test')
- * 
- * @param  {String} str 
+ *
+ * @param  {String} str
  * @return {String} url | request | value | file | other
  */
 export function getSourceType(str) {
@@ -356,9 +360,9 @@ export function getSourceType(str) {
  *
  * Example: handleSqlRequest('select title from ./ where `abe_meta.template`=`article`', {})
  *
- * @param  {Array} files    
+ * @param  {Array} files
  * @param  {Object} wheres   clause
- * @param  {Int} maxLimit 
+ * @param  {Int} maxLimit
  * @param  {Array} columns  sql
  * @param  {Object} jsonPage json post
  * @return {Array}          of files
@@ -400,7 +404,7 @@ export function executeWhereClause(files, wheres, columns, jsonPage) {
  * Example: executeLimitClause({}, 2)
  *
  * @param  {Array} files
- * @param  {Int} maxLimit 
+ * @param  {Int} maxLimit
  * @return {Array} of files
  */
 export function executeLimitClause(files, maxLimit) {
@@ -413,7 +417,7 @@ export function executeLimitClause(files, maxLimit) {
 
 /**
  * Compare where left and where right clause
- * 
+ *
  * @param  {Object} where           clause
  * @param  {Object} jsonDoc         json of current post
  * @param  {Object} jsonOriginalDoc json of post to compare
@@ -543,7 +547,7 @@ export function isInStatementCorrect(values, isCorrect) {
  * if operator AND or OR
  * Recurse on where.left and where.right sql clause
  *
- * 
+ *
  * @param  {Object} where           clause
  * @param  {Object} jsonDoc         json of current post
  * @param  {Object} jsonOriginalDoc json of post to compare
