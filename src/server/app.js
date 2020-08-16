@@ -4,7 +4,6 @@ import fse from 'fs-extra'
 import session from 'express-session'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
-import expressValidator from 'express-validator'
 import exphbs from 'express-handlebars'
 import path from 'path'
 import busboy from 'connect-busboy'
@@ -15,6 +14,7 @@ import cookieParser from 'cookie-parser'
 import csrf from 'csurf'
 import passport from 'passport'
 import layouts from 'handlebars-layouts'
+import { check, validationResult } from 'express-validator'
 
 import {
   config,
@@ -129,7 +129,7 @@ app.use(passport.session())
 app.use(
   bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000})
 )
-app.use(expressValidator())
+//app.use(expressValidator())
 app.use(csrf({cookie: {secure: config.cookie.secure}}))
 app.use(function(req, res, next) {
   if (req.url.indexOf('/abe/') > -1) {

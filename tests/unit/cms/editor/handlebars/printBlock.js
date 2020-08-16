@@ -12,7 +12,7 @@ import {
 describe('printBlock', function() {
   it('printBlock 1', function() {
     var fn = hbs.compile("{{printBlock v1}}");
-    
+
     var arValues = [
       {
         autocomplete: null,
