@@ -11,9 +11,9 @@
   "scripts": {
     "opencv": "github:peterbraden/node-opencv",
     "lint": "eslint --fix --quiet --env node src/",
-    "test": "mocha --recursive --require @babel/register --require babel-polyfill tests/unit",
-    "test-cov": "nyc _mocha -- --recursive --require @babel/register --require babel-polyfill tests/unit",
-    "test-coveralls": "nyc _mocha --report lcovonly -- --recursive --require @babel/register --require babel-polyfill -R spec tests/unit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test": "mocha --recursive --require @babel/register --require babel-polyfill --exit tests/unit",
+    "test-cov": "nyc _mocha -- --recursive --require @babel/register --require babel-polyfill --exit tests/unit",
+    "test-coveralls": "nyc _mocha --report lcovonly -- --recursive --require @babel/register --require babel-polyfill --exit -R spec tests/unit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "install-selenium": "node nightwatch.conf.js",
     "pretest-e2e": "ROOT=$PWD/tests/demo ./dist/index.js serve -p 3003 &",
     "test-e2e": "sleep 6 && node_modules/.bin/nightwatch --config nightwatch.conf.js",
