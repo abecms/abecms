@@ -44,9 +44,9 @@ module.exports = {
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "perfLoggingPrefs": {
-            "traceCategories": "v8,blink.console,disabled-by-default-devtools.timeline"
-          },
+          // "perfLoggingPrefs": {
+          //   "traceCategories": "v8,blink.console,disabled-by-default-devtools.timeline"
+          // },
           "args" : ["--no-sandbox", "start-fullscreen", "disable-web-security", "allow-running-insecure-content"]
         }
       }
@@ -62,9 +62,9 @@ module.exports = {
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "perfLoggingPrefs": {
-            "traceCategories": "v8,blink.console,disabled-by-default-devtools.timeline"
-          },
+          // "perfLoggingPrefs": {
+          //   "traceCategories": "v8,blink.console,disabled-by-default-devtools.timeline"
+          // },
           "args" : ["--no-sandbox", "start-fullscreen", "disable-web-security", "allow-running-insecure-content"]
         }
       }
