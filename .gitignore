@@ -23,6 +23,7 @@ coverage/*
 test/templates/hbs/*
 tests/demo/data/autocomplete*
 .nyc_output
+selenium-server.log
 
 # dist
 dist
