@@ -19,7 +19,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.getLabel
-   * 
+   *
    */
   it('cmsEditor.getLabel()', function() {
     var result = cmsEditor.getLabel(data.label)
@@ -30,7 +30,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.getAttributes
-   * 
+   *
    */
   it('cmsEditor.getAttributes()', function() {
     var result = cmsEditor.getAttributes(data.attributes)
@@ -40,7 +40,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.createInputSource
-   * 
+   *
    */
   it('cmsEditor.createInputSource()', function() {
     var result0 = cmsEditor.createInputSource(data.source[0].attributes, classAttr, data.source[0].params)
@@ -63,7 +63,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.createInputRich
-   * 
+   *
    */
   it('cmsEditor.createInputRich()', function() {
     var result = cmsEditor.createInputRich(data.rich.attributes, classAttr, data.rich.params)
@@ -72,7 +72,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.createInputFile
-   * 
+   *
    */
   it('cmsEditor.createInputFile()', function() {
     var result = cmsEditor.createInputFile(data.file.attributes, classAttr, data.file.params)
@@ -83,7 +83,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.createInputTextarea
-   * 
+   *
    */
   it('cmsEditor.createInputTextarea()', function() {
     var result = cmsEditor.createInputTextarea(data.textarea.attributes, classAttr, data.textarea.params)
@@ -94,7 +94,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.createInputLink
-   * 
+   *
    */
   it('cmsEditor.createInputLink()', function() {
     var result = cmsEditor.createInputLink(data.link.attributes, classAttr, data.link.params)
@@ -105,18 +105,20 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.createInputImage
-   * 
+   *
    */
   it('cmsEditor.createInputImage()', function() {
     var result = cmsEditor.createInputImage(data.image.attributes, classAttr, data.image.params)
-    var image = result.indexOf('fa fa-picture')
+    console.log('result image', result);
+
+    var image = result.indexOf('fa fa-upload')
     chai.expect(result).to.be.a('string')
     chai.expect(image).to.be.above(-1)
   })
 
   /**
    * cmsEditor.createInputText
-   * 
+   *
    */
   it('cmsEditor.createInputText()', function() {
     var result = cmsEditor.createInputText(data.txt.attributes, classAttr, data.txt.params)
@@ -127,7 +129,7 @@ describe('printInput', function() {
 
   /**
    * cmsEditor.printInput
-   * 
+   *
    */
   it('cmsEditor.printInput()', function() {
     var val = data.text;

@@ -13,7 +13,7 @@ The 4.x releases will focus on the transformation of AbeCMS to a full featured C
 - ~~Add template creation from partials~~
 - templates and partials will be uploadable
 - Video training will be produced
-- Create an Electron version
+- ~~Create an Electron version~~
 - Refactor the REST layer:
   - Usage of oAuth2 for REST routes
 - Add robots.txt + URL redirection features in Abe
@@ -114,7 +114,7 @@ See the complete [v3.0.0 release notes](./version3.md)
 
 ### 1.8.x
 This version will be the last in the 1.x series.
-- Performance improvements: The overall performance of Abe has been optimized. The "Order By" statement in select statement in the type="data" has been deeply improved. Furthermore, the front was requesting twice the same content (to populate left and main content). It has been fixed. 
+- Performance improvements: The overall performance of Abe has been optimized. The "Order By" statement in select statement in the type="data" has been deeply improved. Furthermore, the front was requesting twice the same content (to populate left and main content). It has been fixed.
 
 ### 1.7.x
 New features :

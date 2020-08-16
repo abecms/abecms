@@ -167,7 +167,7 @@ program
 program
   .command('create [path]')
   .alias('c')
-  .description('create new abe project')
+  .description('create a new abe project')
   .action(function(dest) {
     dest = dest != null ? dest : ''
     var dir = path.join(process.cwd(), dest)
@@ -176,7 +176,16 @@ program
     }
     var create = new initSite()
     if (typeof dir !== 'undefined' && dir !== null && dest !== '') {
-      create.init(dir)
+      create.init(dir).then(function(){
+        console.log(
+          clc.green(
+            'Yeahhh! Your Abe site ' +
+              dest +
+              ' is ready to launch!  🚀  '
+          ),
+          clc.cyan(`\ncd ${dest} \nabe serve -i`)
+        )
+      })
     } else {
       console.log('error creating the project')
     }
