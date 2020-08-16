@@ -22,7 +22,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then export DISPLAY=:99.0; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then sh -e /etc/init.d/xvfb start; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then sudo apt-get update ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then sudo apt-get install -y libappindicator1 fonts-liberation; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then sudo apt-get install -y libappindicator1 fonts-liberation dpkg; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$MODE" == "e2e" ]]; then sudo dpkg -i google-chrome*.deb; fi
   - if [[ $TRAVIS_OS_NAME == "osx" ]] && [[ "$MODE" == "e2e" ]]; then rm '/usr/local/bin/f2py'; fi
