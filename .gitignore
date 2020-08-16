@@ -22,6 +22,7 @@ abe-logs/*
 coverage/*
 test/templates/hbs/*
 tests/demo/data/autocomplete*
+.nyc_output
 
 # dist
 dist
