@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import mkdirp from 'mkdirp'
 import {Promise} from 'bluebird'
 import slug from 'slugify'
@@ -39,7 +40,7 @@ export default class initSite {
               this.addFolder(config.publish.url)
               this.addFolder(config.structure.url)
               this.addFolder(config.reference.url)
-              this.addFolder(config.data.path)
+              this.addFolder(config.data.path, true)
               this.addFolder(
                 Manager.instance.pathTemplates.replace(
                   config.root + path.sep,
@@ -68,9 +69,13 @@ export default class initSite {
     return p
   }
 
-  addFolder(folder) {
+  addFolder(folder, addEmptyFile = false) {
     var p = new Promise(resolve => {
       mkdirp.sync(folder)
+      if (addEmptyFile) {
+        const filename = '.gitkeep'
+        fs.closeSync(fs.openSync(filename, 'w'))
+      }
       resolve()
     })
 
