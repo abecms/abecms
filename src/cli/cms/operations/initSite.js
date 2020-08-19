@@ -73,7 +73,7 @@ export default class initSite {
     var p = new Promise(resolve => {
       mkdirp.sync(folder)
       if (addEmptyFile) {
-        const filename = '.gitkeep'
+        const filename = path.join(folder, '.gitkeep')
         fs.closeSync(fs.openSync(filename, 'w'))
       }
       resolve()
