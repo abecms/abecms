@@ -1,6 +1,6 @@
 {
   "name": "abecms",
-  "version": "5.1.4",
+  "version": "5.1.5",
   "description": "Abe: The lightning fast CMS",
   "main": "src/server/app.js",
   "bugs": "https://github.com/abecms/abecms/issues",
