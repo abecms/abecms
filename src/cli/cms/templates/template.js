@@ -446,7 +446,7 @@ export function getAbePrecontribFromTemplates(templatesList) {
       file.template
     )
     templateText = templateText.replace(
-      /(?!.*?tab=['|"]slug)(\{\{abe.+.*\}\})/g,
+      /(?!.*?tab=['|"]slug)(\{\{abe.+.*\}\})/gms,
       ''
     )
     templateText = templateText.replace(
