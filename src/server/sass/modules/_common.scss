@@ -3,37 +3,37 @@ html {
 }
 
 html,
-body{
+body {
   /*overflow: auto;*/
   height: 100%;
 }
 
 html,
-.abe-body{
+.abe-body {
   /*overflow: hidden;*/
 }
 
-.container-main{
+.container-main {
   height: 100%;
 }
 
-.engine-open .container-main{
+.engine-open .container-main {
   height: calc(100% - 55px);
 }
 
 .container-main > .row,
 .half-view,
-.half-view > form{
+.half-view > form {
   height: 100%;
 }
 
-.half-view{
+.half-view {
   display: table-cell;
   position: relative;
   vertical-align: top;
 }
 
-.half-view form{
+.half-view form {
   overflow: auto;
 }
 
@@ -41,11 +41,11 @@ html,
   cursor: pointer;
 }
 
-.inline{
+.inline {
   display: inline-block;
 }
 
-.abe-version{
+.abe-version {
   margin-top: 10px;
   margin-bottom: 10px;
   color: #949494;
@@ -61,4 +61,8 @@ html,
 
 .form-control {
   padding: 4px 12px;
+}
+
+.hidden {
+  display: none;
 }

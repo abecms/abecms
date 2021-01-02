@@ -1,81 +1,127 @@
 <style>
-    .status-indicator::before {
-        content: '';
-        -webkit-box-flex: 0;
-        -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-        flex: 0 0 auto;
-        display: block;
-        margin-right: 0.4rem;
-        width: 0.8rem;
-        height: 0.8rem;
-        background-color: #50b83c;
-        border-radius: 50%;
-    }
-    .status-indicator {
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.6rem;
-        -webkit-box-flex: 0;
-        -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-        flex: 0 0 auto;
-        padding: 0;
-        max-width: 40%;
-        color: #637381;
-    }
+  .status-indicator::before {
+    content: "";
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    display: block;
+    margin-right: 0.4rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background-color: #50b83c;
+    border-radius: 50%;
+  }
+  .status-indicator {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6rem;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    padding: 0;
+    max-width: 40%;
+    color: #637381;
+  }
 </style>
-<header class="app-header navbar">
-    <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="/abe">
-        <img class="navbar-brand-full" src="/abecms/img/brand/logo.svg" width="120" alt="AbeCMS logo">
-        <!-- <img class="navbar-brand-minimized" src="/abecms/img/brand/sygnet.svg" width="30"alt="AbeCMS logo"> -->
-    </a>
-    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <ul class="nav navbar-nav mx-auto">
-        <li class="nav-item"><a href="javascript:iframeResize('page-template', 320)"><span class="fa fa-mobile"></span></a></li>
-        <li class="nav-item"><a href="javascript:iframeResize('page-template', 768)"><span class="fa fa-tablet"></span></a></li>
-        <li class="nav-item"><a href="javascript:iframeReset('page-template')"><span class="fa fa-desktop"></span></a></li>
-        <li class="nav-item"><a href="javascript:;" class="navbar-toggler sidebar-toggler toggle-engine" data-toggle="sidebar-lg-show"><span class="fa fa-expand"></span></a></li>
-        {{#ifCond @root.json.abe_meta.status 'publish'}}
-            <li class="nav-item"><a href="{{@root.json.abe_meta.link}}" target="_blank"><span class="fa fa-eye"></span></a></li>
-        {{else}}
-            <li class="nav-item"><a href="/abe/page{{@root.json.abe_meta.link}}"><span class="fa fa-eye"></span></a></li>
-        {{/ifCond}}
-    </ul>
-    <ul class="nav navbar-nav pull-sm-right">
-        <li class="nav-item d-md-down-none">
-                <span class="status-indicator">{{@root.json.abe_meta.status}}</span>
-        </li>
-        <!--li class="nav-item d-md-down-none">
-            <a class="nav-link" href="#">
-                <i class="icon-bell"></i>
-                <span class="badge badge-pill badge-danger">5</span>
-            </a>
-        </li-->
-    </ul>
-    <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" data-toggle="aside-menu-lg-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <button class="navbar-toggler aside-menu-toggler d-lg-none" type="button" data-toggle="aside-menu-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<header class="c-header c-header-light c-header-fixed">
+  <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
+    <span class="c-header-toggler-icon"></span>
+  </button>
+  <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
+    <span class="c-header-toggler-icon"></span>
+  </button>
+  <ul class="c-header-nav mx-auto">
+    <li class="c-header-nav-item px-3">
+      <a href="javascript:iframeResize('page-template', 320)">
+        <span class="fa fa-mobile"></span>
+      </a>
+    </li>
+    <li class="c-header-nav-item px-3">
+      <a href="javascript:iframeResize('page-template', 768)">
+        <span class="fa fa-tablet"></span>
+      </a>
+    </li>
+    <li class="c-header-nav-item px-3">
+      <a href="javascript:iframeReset('page-template')">
+        <span class="fa fa-desktop"></span>
+      </a>
+    </li>
+    <li class="c-header-nav-item px-3"">
+      <a
+        href="javascript:;"
+        class="c-header-toggler c-sidebar-toggler toggle-engine"
+        data-toggle="sidebar-lg-show">
+        <span class="fa fa-expand"></span>
+      </a>
+    </li>
+    {{#ifCond @root.json.abe_meta.status 'publish'}}
+    <li class="c-header-nav-item px-3"">
+      <a href="{{@root.json.abe_meta.link}}" target="_blank">
+        <span class="fa fa-eye"></span>
+      </a>
+    </li>
+    {{else}}
+    <li class="c-header-nav-item px-3"">
+      <a href="/abe/page{{@root.json.abe_meta.link}}">
+        <span class="fa fa-eye"></span>
+      </a>
+    </li>
+    {{/ifCond}}
+  </ul>
+  <ul class="c-header-nav pull-sm-right">
+    <li class="c-header-nav-item d-md-down-none">
+      <span class="status-indicator"></span>
+    </li>
+    <li class="c-header-nav-item d-md-down-none">
+      {{@root.json.abe_meta.status}}
+    </li>
+  </ul>
+  <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#aside" data-class="c-sidebar-show" responsive="true">
+    <span class="c-header-toggler-icon"></span>
+  </button>
 </header>
 <script type="text/javascript">
-    function iframeResize(frameId, width){
-        document.querySelector('#'+frameId).style.width = width + "px";
-    }
+  function iframeResize(frameId, width) {
+    document.querySelector("#" + frameId).style.width = width + "px";
+  }
 
-    function iframeReset(frameId){
-        document.querySelector('#'+frameId).style.width = "100%";
-    }
-    var colors = {a:'#e53935',b:'#b71c1c',c:'#d81b60',d:'#880e4f',e:'#8e24aa',f:'#4a148c',g:'#5e35b1',h:'#311b92',i:'#3949ab',j:'#1a237e',k:'#1e88e5',l:'#0d47a1',m:'#039be5',n:'#01579b',o:'#00acc1',p:'#006064',q:'#00897b',r:'#004d40',s:'#43a047',t:'#1b5e20',u:'#7cb342',v:'#33691e',w:'#c0ca33',x:'#827717',y:'#fdd835',z:'#f57f17','':''};
-    var circleLetters = document.querySelectorAll('.user-circle');
-    Array.prototype.forEach.call(circleLetters, function (circleLetter) {
-      circleLetter.style.background = colors[circleLetter.textContent.trim().toLowerCase()];
-    });
+  function iframeReset(frameId) {
+    document.querySelector("#" + frameId).style.width = "100%";
+  }
+  var colors = {
+    a: "#e53935",
+    b: "#b71c1c",
+    c: "#d81b60",
+    d: "#880e4f",
+    e: "#8e24aa",
+    f: "#4a148c",
+    g: "#5e35b1",
+    h: "#311b92",
+    i: "#3949ab",
+    j: "#1a237e",
+    k: "#1e88e5",
+    l: "#0d47a1",
+    m: "#039be5",
+    n: "#01579b",
+    o: "#00acc1",
+    p: "#006064",
+    q: "#00897b",
+    r: "#004d40",
+    s: "#43a047",
+    t: "#1b5e20",
+    u: "#7cb342",
+    v: "#33691e",
+    w: "#c0ca33",
+    x: "#827717",
+    y: "#fdd835",
+    z: "#f57f17",
+    "": "",
+  };
+  var circleLetters = document.querySelectorAll(".user-circle");
+  Array.prototype.forEach.call(circleLetters, function (circleLetter) {
+    circleLetter.style.background =
+      colors[circleLetter.textContent.trim().toLowerCase()];
+  });
 </script>

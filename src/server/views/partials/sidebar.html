@@ -1,12 +1,25 @@
-<div class="sidebar">
-    <nav class="sidebar-nav">
-        <ul class="nav">
-        {{#> main-menu}}{{/main-menu}}
-        <li class="nav-item mt-auto">
-            <a class="nav-link nav-link-success" href="https://abecms.io" target="_top">
-            <i class="nav-icon icon-cloud-download"></i> Download AbeCMS</a>
-        </li>
-        </ul>
-    </nav>
-    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+<div
+  class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show{{#if isEditor}} c-sidebar-minimized{{/if}}"
+  id="sidebar"
+>
+  <div class="c-sidebar-brand d-md-down-none">
+    <img
+      class="c-sidebar-brand-full"
+      height="40"
+      alt="AbeCMS Logo"
+      src="/abecms/img/brand/white-logo.png"
+    />
+    <img
+      class="c-sidebar-brand-minimized"
+      height="40"
+      alt="AbeCMS logo"
+      src="/abecms/img/brand/white-logo.png"
+    />
+  </div>
+  <ul class="c-sidebar-nav ps ps--active-y">
+    {{#> main-menu}}{{/main-menu}}
+    <li class="c-sidebar-nav-item mt-auto"><a class="c-sidebar-nav-link c-sidebar-nav-link-success" href="https://abecms.io" target="_top">
+      <i class="c-sidebar-nav-icon icon-cloud-download"></i> Download AbeCMS</a></li>
+  </ul>
+  <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>

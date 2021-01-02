@@ -1,7 +1,446 @@
 {{#extend "layout"}}
 
   {{#content "head" mode="append"}}
-    <link rel="stylesheet" href="/abecms/css/site.css">
+    <style>
+      .land-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #000;
+        background-image: url("../img/land-bg.png");
+        background-size: cover;
+        background-position: center center;
+        text-align: left;
+        color: #fff;
+      }
+      .land-container:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0.3;
+        background-color: #16171c;
+      }
+
+      .land-top,
+      .land-middle,
+      .land-bottom {
+        position: absolute;
+        left: 15vw;
+        right: 15vw;
+      }
+
+      /* line 37, ../sass/_land.sass */
+      .land-top {
+        top: 40px;
+      }
+
+      /* line 40, ../sass/_land.sass */
+      .land-middle {
+        top: 50%;
+        -moz-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+      }
+
+      /* line 44, ../sass/_land.sass */
+      .land-bottom {
+        bottom: 60px;
+      }
+
+      /* line 47, ../sass/_land.sass */
+      .land-logo-h1 {
+        margin: 0;
+        text-transform: uppercase;
+        font-size: 22px;
+        line-height: 1em;
+        letter-spacing: 0.14em;
+        font-weight: bold;
+      }
+
+      /* line 55, ../sass/_land.sass */
+      .land-title {
+        font-family: "Montserrat", "Helvetica Neue";
+        font-size: 64px;
+        line-height: 1em;
+        letter-spacing: -0.01em;
+        margin-bottom: 20px;
+      }
+
+      /* line 62, ../sass/_land.sass */
+      .land-slogan {
+        font-size: 22px;
+        line-height: 1.4em;
+        text-transform: none;
+        letter-spacing: 0.04em;
+        margin-bottom: 40px;
+      }
+
+      /* line 69, ../sass/_land.sass */
+      .land-input,
+      .land-btn {
+        font-family: "Montserrat", "Helvetica Neue";
+        border: 2px #fff solid;
+        padding: 0.7em calc(1.14em - .2em) 0.7em 1.14em;
+        font-size: 14px;
+        letter-spacing: 0.2em;
+        outline: none;
+      }
+
+      /* line 78, ../sass/_land.sass */
+      .land-input {
+        width: 25em;
+        background: rgba(0, 0, 0, 0.3);
+      }
+
+      /* line 82, ../sass/_land.sass */
+      .land-btn {
+        background: #fff;
+        color: #222;
+        text-transform: uppercase;
+      }
+
+      /* line 88, ../sass/_land.sass */
+      .land-a, .land-a:visited {
+        color: #fff;
+        opacity: 0.7;
+      }
+      /* line 92, ../sass/_land.sass */
+      .land-a:hover, .land-a:active {
+        color: #fff;
+        opacity: 1;
+      }
+
+      /* line 14, ../sass/site.sass */
+      .special-highlight {
+        border: 1px dashed #e74c3c !important;
+      }
+
+      /* line 17, ../sass/site.sass */
+      ul.app-ui,
+      .app-ui ul {
+        padding: 0;
+        list-style: none;
+      }
+
+      /* line 22, ../sass/site.sass */
+      .app-ui .btn-action {
+        color: #fff;
+        background-color: #e74c3c;
+        border-color: #e74c3c;
+        font-weight: bold;
+      }
+      .app-ui .btn-action:visited {
+        color: #fff;
+      }
+      .app-ui .btn-action:focus {
+        color: #fff;
+      }
+      .app-ui .btn-action:hover {
+        color: #fff;
+      }
+      .app-ui .btn-action:active {
+        color: #fff;
+      }
+      .app-ui .btn-action:hover {
+        background-color: #ea6153;
+        border-color: #ea6153;
+      }
+
+      .page-edit {
+        min-height: 100vh;
+        background-color: #fff;
+      }
+      .page-edit .side,
+      .page-edit .side-2 {
+        background: #fff;
+        position: fixed;
+        box-sizing: border-box;
+        border-right: 1px #eee solid;
+      }
+      /* line 43, ../sass/site.sass */
+      .page-edit .side {
+        z-index: 2;
+        width: 330px;
+      }
+      /* line 46, ../sass/site.sass */
+      .page-edit .logo {
+        position: relative;
+        padding: 0.75rem 15px;
+      }
+      /* line 49, ../sass/site.sass */
+      .page-edit .logo .logo-a {
+        color: #e74c3c;
+      }
+      /* line 51, ../sass/site.sass */
+      .page-edit .logo .logo-a:hover {
+        text-decoration: none;
+        opacity: 0.8;
+      }
+      /* line 54, ../sass/site.sass */
+      .page-edit .logo .btn {
+        font-family: "Helvetica Neue";
+      }
+      /* line 56, ../sass/site.sass */
+      .page-edit .types {
+        height: calc(100vh - 98px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0.75rem 15px 0;
+      }
+      /* line 61, ../sass/site.sass */
+      .page-edit .delete {
+        position: absolute;
+        height: calc(100vh - 98px);
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 3;
+        background-color: #4d4d4d;
+        display: none;
+      }
+      /* line 70, ../sass/site.sass */
+      .page-edit .delete.active {
+        background-color: #e74c3c;
+      }
+      /* line 72, ../sass/site.sass */
+      .page-edit .delete .material-icons {
+        font-size: 48px;
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+      /* line 79, ../sass/site.sass */
+      .page-edit .logo,
+      .page-edit .theme-curr {
+        border-bottom: 1px #eee solid;
+      }
+      /* line 82, ../sass/site.sass */
+      .page-edit .theme-curr {
+        padding: 0.75rem 15px;
+      }
+      /* line 84, ../sass/site.sass */
+      .page-edit .theme-curr:hover {
+        cursor: pointer;
+      }
+      /* line 86, ../sass/site.sass */
+      .page-edit .theme-curr-name {
+        color: #e74c3c;
+      }
+      /* line 88, ../sass/site.sass */
+      .page-edit .side-2 {
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: 1;
+        left: 300px;
+        width: 300px;
+        -moz-transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+        -moz-transition: -moz-transform 0.35s;
+        -o-transition: -o-transform 0.35s;
+        -webkit-transition: -webkit-transform 0.35s;
+        transition: transform 0.35s;
+      }
+      /* line 97, ../sass/site.sass */
+      .page-edit .side-2.show {
+        -moz-transform: translateX(0);
+        -ms-transform: translateX(0);
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+      }
+      /* line 99, ../sass/site.sass */
+      .page-edit .theme {
+        padding: 0 15px;
+        margin: 0.75rem 0;
+      }
+      /* line 100, ../sass/site.sass */
+      .page-edit .theme:hover {
+        opacity: 0.8;
+        cursor: pointer;
+      }
+      /* line 105, ../sass/site.sass */
+      .page-edit .theme-name {
+        font-weight: bold;
+      }
+      /* line 107, ../sass/site.sass */
+      .page-edit .theme-img {
+        margin-top: 0.75rem;
+        width: 100%;
+      }
+      /* line 110, ../sass/site.sass */
+      .page-edit .blocks-temp {
+        display: none;
+      }
+      /* line 112, ../sass/site.sass */
+      .page-edit .block {
+        margin: 0.75rem 0;
+        width: 100%;
+      }
+      /* line 115, ../sass/site.sass */
+      .page-edit .block.ui-draggable-dragging {
+        z-index: 1000;
+      }
+      /* line 117, ../sass/site.sass */
+      .page-edit .block-img {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+      }
+      /* line 121, ../sass/site.sass */
+      .page-edit .main {
+        padding: 0 0 0 300px;
+      }
+      /* line 123, ../sass/site.sass */
+      .page-edit .title {
+        background: #fff;
+        margin-left: -15px;
+        margin-right: -15px;
+        padding: 0.75rem 15px;
+        border-bottom: 1px #eee solid;
+      }
+      /* line 129, ../sass/site.sass */
+      .page-edit .title-info {
+        color: #999;
+      }
+      /* line 131, ../sass/site.sass */
+      .page-edit .btn-actions {
+        text-align: right;
+      }
+      /* line 137, ../sass/site.sass */
+      .page-edit .preview {
+        padding: 80px 0;
+        margin-left: -15px;
+        margin-right: -15px;
+      }
+      /* line 141, ../sass/site.sass */
+      .page-edit .preview .block-img {
+        z-index: 0;
+      }
+      /* line 143, ../sass/site.sass */
+      .page-edit.page-edit-content .preview {
+        padding: 0;
+      }
+      /* line 145, ../sass/site.sass */
+      .page-edit .preview-html,
+      .page-edit .preview-list {
+        margin: 0 auto;
+        position: relative;
+      }
+      /* line 149, ../sass/site.sass */
+      .page-edit .preview-list {
+        background: #fff;
+        max-width: 800px;
+        min-height: 120px;
+        margin-bottom: 0;
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
+        border: 1px #eee solid;
+      }
+      /* line 156, ../sass/site.sass */
+      .page-edit .preview-list .block {
+        margin: 0;
+        width: 100% !important;
+        height: auto !important;
+      }
+      /* line 160, ../sass/site.sass */
+      .page-edit .preview-list .block.ui-draggable-dragging, .page-edit .preview-list .block.ui-sortable-helper {
+        box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.5);
+      }
+      /* line 163, ../sass/site.sass */
+      .page-edit .preview-list .block.ui-draggable-dragging {
+        width: 260px !important;
+      }
+      /* line 165, ../sass/site.sass */
+      .page-edit .preview-empty {
+        display: none;
+        height: 400px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      /* line 170, ../sass/site.sass */
+      .page-edit .preview-empty h3 {
+        line-height: 400px;
+      }
+      /* line 172, ../sass/site.sass */
+      .page-edit .preview-empty:last-child {
+        display: block;
+      }
+      /* line 174, ../sass/site.sass */
+      .page-edit .preview-placeholder {
+        height: 120px;
+        width: 100%;
+        position: relative;
+      }
+      /* line 178, ../sass/site.sass */
+      .page-edit .preview-placeholder:before {
+        content: "";
+        background: #f5f5f5;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        bottom: 10px;
+        left: 10px;
+      }
+      /* line 186, ../sass/site.sass */
+      .page-edit .preview-html {
+        display: none;
+        border: 0;
+        width: 100%;
+        overflow-x: hidden;
+      }
+      /* line 191, ../sass/site.sass */
+      .page-edit.page-edit-content .preview-html {
+        display: block;
+      }
+      /* line 193, ../sass/site.sass */
+      .page-edit .edit {
+        height: calc(100vh - 49px);
+        overflow-y: auto;
+      }
+      /* line 196, ../sass/site.sass */
+      .page-edit .edit-block {
+        padding: 0.75rem 15px;
+        border-bottom: 1px #eee solid;
+      }
+      /* line 199, ../sass/site.sass */
+      .page-edit .edit-block:last-child {
+        border-bottom: 0;
+      }
+      /* line 201, ../sass/site.sass */
+      .page-edit .field-title {
+        margin-top: 0.75rem;
+        font-weight: 500;
+      }
+      /* line 204, ../sass/site.sass */
+      .page-edit .field-title:first-child {
+        margin-top: 0;
+      }
+      /* line 206, ../sass/site.sass */
+      .page-edit .field-helper {
+        color: #999;
+      }
+      /* line 208, ../sass/site.sass */
+      .page-edit .field-input {
+        width: 100%;
+        margin: 3px 0;
+      }
+      /* line 211, ../sass/site.sass */
+      .page-edit input.textarea {
+        height: 4.5rem;
+      }
+    </style>
   {{/content}}
 
   {{#content "breadcrumbs"}}
@@ -11,12 +450,6 @@
   <div id="app">
     <div class="container-fluid page-edit">
       <div class="side app-ui">
-        <h1 class="logo">
-          <a href="http://localhost:3003/" class="logo-a">abecms.io</a>
-          <div class="btn-actions">
-            <a href="https://arainazhang.typeform.com/to/Khc2Zs" target="_blank" class="btn btn-sm btn-default">Leave Feedback</a>
-          </div>
-        </h1>
         <div class="types">
           <ul>
             <li class="type">
@@ -36,22 +469,22 @@
         </div>
       </div>
       <div class="main">
-      <div class="title app-ui">
-        <h2>Build your own Abe template <span class="title-info">- See the documentation for more info</span></h2>
-        <div class="btn-actions save-template">
-            <input type="text" name="name">
-            <div class="error-display"></div>
-            <input type="hidden" name="partials" id="partials">
-            <button class="generate btn btn-action btn-sm">Edit Content</button>
+        <div class="title app-ui">
+          <div class="btn-actions save-template">
+              <div class="error-display"></div>
+              <input type="hidden" name="partials" id="partials">
+              <span><input type="text" name="name" placeholder="name of the template"></span>
+              <span><button class="generate btn btn-action btn-sm">Edit Content</button></span>
+          </div>
         </div>
-      </div>
-      <div class="preview">
-        <ul class="preview-list app-ui ui-droppable ui-sortable">
-          <li class="preview-empty ui-sortable-handle">
-            <h3>Drag Blocks Here</h3>
-          </li>
-        </ul>
-        <div class="preview-html"></div>
+        <div class="preview">
+          <ul class="preview-list app-ui ui-droppable ui-sortable">
+            <li class="preview-empty ui-sortable-handle">
+              <h3>Drag Blocks Here</h3>
+            </li>
+          </ul>
+          <div class="preview-html"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -70,7 +503,7 @@
         appendTo: '.preview-list',
         connectToSortable: '.preview-list'
       });
-      
+
       $( document ).find('.preview-list').droppable({
         accept: '.side .block',
         greedy: false

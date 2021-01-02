@@ -1,9 +1,4 @@
 {{#if manager.home}}
-  <style>
-    #navigation-list_wrapper {
-      margin: 0 15px 0 25px;
-    }
-  </style>
   <div class="manager-tab manager-files visible">
   {{#isAuthorized '/abe/generate-posts' @root.user.role.workflow}}
     {{#unless (isTrue (isTrue @root.config.publish.auto-republish.limit '>=' @root.manager.nbPosts) '&&' (isTrue @root.config.publish.auto-republish.active '==' 1))}}
@@ -26,11 +21,11 @@
           </div>
         <div class="input-group">
           <input type="search" id="abeSearch" name="email2" class="form-control" placeholder="Search your content">
-            <span class="input-group-append">
+            <span class="input-group-append dropdown">
               <button class="btn btn-block btn-primary dropdown-toggle" type="button" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Bookmark my search
                 </button>
-                <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -352px, 0px);">
+                <div class="dropdown-menu dropdown-menu-right" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -352px, 0px);">
                   <form action="/abe/users/save-search" method="POST" class="px-4 py-3" id="save-search">
                     <div class="form-group">
                       <label for="savedSearch">Give it a short title</label>

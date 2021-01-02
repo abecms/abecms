@@ -48,7 +48,8 @@ import {
   middleLiveReload
 } from './middlewares'
 
-import getHome from './routes/get-home'
+//import getHome from './routes/get-home'
+import getHome from './routes/get-main'
 
 require('events').EventEmitter.defaultMaxListeners = 100
 

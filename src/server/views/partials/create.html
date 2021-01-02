@@ -1,11 +1,10 @@
-
 <div class="">
   <div class="text-uppercase">
     New content
   </div>
 
   <form class="form-create" data-form-abe-create="true">
-    
+
     {{&setVariable "precontrib" "true"}}
     {{&folders @root.manager.list.structure 1 null @root.text}}
     {{#> create-form-template}}{{/create-form-template}}
@@ -21,4 +20,3 @@
     <div data-post-path-preview="true" class="breadcrumb"></div>
   </form>
 </div>
-    

@@ -11,7 +11,6 @@ import EditorManager from './modules/EditorManager'
 import EditorAutocomplete from './modules/EditorAutocomplete'
 import EditorReload from './modules/EditorReload'
 import EditorReferences from './modules/EditorReferences'
-import EditorStructures from './modules/EditorStructures'
 import TaskRepublish from './modules/TaskRepublish'
 import EditorThemes from './modules/EditorThemes'
 import EditorBuildTemplate from './modules/EditorBuildTemplate'
@@ -52,7 +51,6 @@ class Engine {
     this._autocomplete = new EditorAutocomplete()
     this._dev = new Devtool()
     this.reference = new EditorReferences()
-    this.structure = new EditorStructures()
     this.republish = new TaskRepublish()
     this.themes = new EditorThemes()
     this.buildTemplate = new EditorBuildTemplate()

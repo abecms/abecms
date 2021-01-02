@@ -4,20 +4,20 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
+        <span class="icon-bar"></span>
       </button>
       <img src="https://ga-beacon.appspot.com/UA-96658558-1/{{abeVersion}}?pixel" style="visibility:hidden"/>
-      <a class="navbar-brand" href="/abe" title="abe@{{abeVersion}}"><img src="/abecms/image/white_logo_transparent_background_small.png" width="40"/></a>
+      <a class="c-header-brand" href="/abe" title="abe@{{abeVersion}}"><img src="/abecms/image/white_logo_transparent_background_small.png" width="40"/></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       {{#if isEditor}}
-      <ul class="nav navbar-nav navbar-center responsive-tool">
+      <ul class="c-header-nav navbar-nav navbar-center responsive-tool">
         <li><a href="javascript:iframeResize('page-template', 320)"><span class="fa fa-mobile"></span></a></li>
         <li><a href="javascript:iframeResize('page-template', 768)"><span class="fa fa-tablet"></span></a></li>
         <li><a href="javascript:iframeReset('page-template')"><span class="fa fa-desktop"></span></a></li>
       </ul>
       {{/if}}
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="c-header-nav navbar-nav navbar-right">
         {{#if @root.config.users.enable}}
         <li class="dropdown">
           <a href="#" class="dropdown-toggle nav-user" data-toggle="dropdown">
