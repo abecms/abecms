@@ -1,41 +1,52 @@
-<header class="app-header navbar">
-    <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="/abe">
-        <img class="navbar-brand-full" src="/abecms/img/brand/logo.svg" width="120" alt="AbeCMS logo">
-        <img class="navbar-brand-minimized" src="/abecms/img/brand/sygnet.svg" width="30" alt="AbeCMS logo">
-    </a>
-    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <ul class="nav navbar-nav ml-auto">
-        <!--li class="nav-item d-md-down-none">
-            <div class="btn-group" role="group" aria-label="Button group">
-                <a class="btn" href="/abe"><i class="icon-graph"></i>  Dashboard</a>
-                <a class="btn" href="/abe/editor"><i class="icon-list"></i> Manager</a>
-            </div>
-        </li-->
-        <!--li class="nav-item d-md-down-none">
-            <a class="nav-link" href="#">
-                <i class="icon-bell"></i>
-                <span class="badge badge-pill badge-danger">5</span>
-            </a>
-        </li-->
-        {{#if @root.config.users.enable}}
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    {{#if @root.user.avatar}}
-                        <img src={{@root.user.avatar}} width="45" alt="{{@root.user.role.name}}" style="border-radius: 50%;"/>
-                    {{else}}
-                        <img class="img-avatar" src="/abecms/img/avatars/6.jpg" alt="{{@root.user.role.name}}">
-                    {{/if}}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <!--div class="dropdown-header text-center">
+<header class="c-header c-header-light c-header-fixed">
+  <button
+    class="c-header-toggler c-class-toggler d-lg-none mfe-auto"
+    type="button"
+    data-target="#sidebar"
+    data-class="c-sidebar-show"
+  >
+    <span class="c-header-toggler-icon"></span>
+  </button>
+  <button
+    class="c-header-toggler c-class-toggler mfs-3 d-md-down-none"
+    type="button"
+    data-target="#sidebar"
+    data-class="c-sidebar-lg-show"
+    responsive="true"
+  >
+    <span class="c-header-toggler-icon"></span>
+  </button>
+  <ul class="c-header-nav navbar-nav ml-auto">
+    {{#if @root.config.users.enable}}
+    <li class="c-header-nav-item dropdown">
+      <a
+        class="c-header-nav-link"
+        data-toggle="dropdown"
+        href="#"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        {{#if @root.user.avatar}}
+        <img
+          src="{{@root.user.avatar}}"
+          width="45"
+          alt="{{@root.user.role.name}}"
+          style="border-radius: 50%;"
+        />
+        {{else}}
+        <img
+          class="img-avatar"
+          src="/abecms/img/avatars/6.jpg"
+          alt="{{@root.user.role.name}}"
+        />
+        {{/if}}
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <!--div class="dropdown-header text-center">
                         <strong>Account</strong>
                     </div-->
-                    <!--a class="dropdown-item" href="#">
+        <!--a class="dropdown-item" href="#">
                     <i class="fa fa-tasks"></i> Tasks
                     <span class="badge badge-danger">42</span>
                     </a>
@@ -43,22 +54,29 @@
                     <i class="fa fa-comments"></i> Comments
                     <span class="badge badge-warning">42</span>
                     </a-->
-                    <div class="dropdown-header text-center">
-                        <strong>Settings</strong>
-                    </div>
-                    <a class="dropdown-item" href="/abe/users/profile"><i class="fa fa-user"></i> Profile</a>
-                    <!--a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a-->
-                    <div class="divider"></div>
-                    <!--a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock Account</a-->
-                    <a class="dropdown-item" href="/abe/users/logout"><i class="fa fa-lock"></i> Logout</a>
-                </div>
-            </li>
-        {{/if}}
-    </ul>
-    <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" data-toggle="aside-menu-lg-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <button class="navbar-toggler aside-menu-toggler d-lg-none" type="button" data-toggle="aside-menu-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+        <div class="dropdown-header text-center">
+          <strong>Settings</strong>
+        </div>
+        <a class="dropdown-item" href="/abe/users/profile"
+          ><i class="fa fa-user"></i> Profile</a
+        >
+        <!--a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a-->
+        <div class="divider"></div>
+        <!--a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock Account</a-->
+        <a class="dropdown-item" href="/abe/users/logout"
+          ><i class="fa fa-lock"></i> Logout</a
+        >
+      </div>
+    </li>
+    {{/if}}
+  </ul>
+  <button
+    class="c-header-toggler c-class-toggler mfs-3 d-md-down-none"
+    type="button"
+    data-target="#aside"
+    data-class="c-sidebar-show"
+    responsive="true"
+  >
+    <span class="c-header-toggler-icon"></span>
+  </button>
 </header>

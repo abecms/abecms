@@ -191,16 +191,20 @@ export async function getFiles(dirname, recursive = true, filterExt = '') {
 }
 
 export function addFolder(folderPath) {
-  mkdirp(path.join(config.root, folderPath), function(err) {
-    if (err) console.error(err)
-  })
+  mkdirp.sync(path.join(config.root, folderPath))
+
+  return folderPath
+}
+
+export function renameFolder(oldFolderPath, folderPath) {
+  fse.renameSync(path.join(config.root, oldFolderPath), path.join(config.root, folderPath))
+
   return folderPath
 }
 
 export function removeFolder(folderPath) {
-  fse.remove(path.join(config.root, folderPath), function(err) {
-    if (err) return console.error(err)
-  })
+  fse.removeSync(path.join(config.root, folderPath))
+
   return folderPath
 }
 

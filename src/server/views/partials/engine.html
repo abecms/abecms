@@ -4,8 +4,8 @@
     <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
       <ul class="nav nav-tabs" role="tablist">
         {{#each form}}
-          <li role="presentation" class="{{#if @first}}active{{/if}}">
-            <a data-target="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
+          <li role="presentation" class="nav-item{{#if @first}} active{{/if}}">
+            <a href="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
               {{@key}}
             </a>
           </li>
@@ -16,12 +16,12 @@
         <div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="{{cleanTab @key}}">
           {{#ifCond @key 'slug'}}
             <div class="form-create" data-form-abe-create="true">
-              
+
               {{&folders @root.manager.list.structure 1 @root.json.abe_meta.link @root.text}}
               {{#> create-form-template}}{{/create-form-template}}
               {{#> create-form-tplname}}{{/create-form-tplname}}
 
-              <input class="form-control" type="hidden" name="oldFilePath" id="oldFilePath" data-id="oldFilePath" value="{{@root.json.abe_meta.link}}" />  
+              <input class="form-control" type="hidden" name="oldFilePath" id="oldFilePath" data-id="oldFilePath" value="{{@root.json.abe_meta.link}}" />
               <div class="">
                 <div class="">
                 <button type="submit" class="btn btn-primary" data-abe-duplicate="true">duplicate</button>

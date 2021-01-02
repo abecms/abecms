@@ -14,6 +14,13 @@
       #ui-view {
         height: 100%;
       }
+      .c-main {
+        padding-top: 0;
+      }
+      .c-main .container-fluid {
+        padding: 0;
+        height: 100%;
+      }
     </style>
   {{/content}}
 
@@ -37,7 +44,6 @@
       <div class="wysiwyg-popup image"></div>
       <div class="wysiwyg-popup smiley"></div>
     </div>
-    {{abeImport 'body' manager.config this}}
   {{/content}}
 
   {{#content "footer"}}
@@ -47,5 +53,6 @@
     <!-- [pageHTML]
       {{{pageHtml}}}
     [pageHTML] -->
+    {{abeImport 'body' manager.config this}}
   {{/content}}
 {{/extend}}

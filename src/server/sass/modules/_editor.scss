@@ -2,10 +2,7 @@ html {
   position: relative;
   min-height: 100%;
 }
-body {
-  /* Margin bottom by footer height */
-  /* margin-bottom: 115px; */
-}
+
 .footer {
   background: #FFF;
   position: absolute;
@@ -93,15 +90,17 @@ body {
   }
 }
 
-.form-wrapper{
-  width: 25%;
+.engine-open {
+  .form-wrapper{
+    width: 25%;
 
-  .btn-default,
-  .btn-info{
-    border-radius: 0;
-    border: 0;
-    transition: background 250ms ease-in;
-    outline: none !important;
+    .btn-default,
+    .btn-info{
+      border-radius: 0;
+      border: 0;
+      transition: background 250ms ease-in;
+      outline: none !important;
+    }
   }
 }
 

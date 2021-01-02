@@ -2,7 +2,6 @@
 
 @import 'modules/_variables';
 @import 'modules/_common';
-@import 'modules/_dataTable';
 @import 'modules/_users';
 @import 'modules/_editor';
 @import 'modules/_editor-inputs';
@@ -10,17 +9,16 @@
 @import 'modules/_editor-ruler';
 @import 'modules/_editor-menu';
 @import 'modules/_editor-tabs';
+@import 'modules/_editor-toolbar';
+
 @import 'modules/_manager-left';
 @import 'modules/_manager-right';
-@import 'modules/_toolbar';
 @import 'modules/_autocomplete';
 @import 'modules/_popup';
 @import 'modules/_iframe';
 @import 'modules/_status';
 @import 'modules/_labels';
 @import 'modules/_loader';
-/*@import 'modules/_bootstrap-extend';*/
-@import 'modules/_structure';
 @import 'modules/_themify-icons';
 @import 'modules/_homepage';
 @import 'modules/_theme';

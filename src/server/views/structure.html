@@ -1,17 +1,123 @@
 {{#extend "layout"}}
+  {{#content "head" mode="append"}}
+  <link
+    href="//cdn.jsdelivr.net/npm/jquery.fancytree@2.37/dist/skin-win8/ui.fancytree.min.css"
+    rel="stylesheet"
+  />
+  {{/content}}
+
+  {{#content "breadcrumbs"}} {{/content}}
+
   {{#content "body"}}
-  <div class="manager-tab structure-folders">
-    <div class="text-uppercase">
-      Structure editor
-    </div>
-    <div class="structure-editor manager-tab-content">
-      <input type="hidden" class="structure-json" value='{{@root.structure}}'>
-      <input type="text" class="form-control folder-name" value="" placeholder="folder name" data-folder="" disabled="disabled">
-      <div class="help-info">
-        hit <span>ENTER</span> to create folder
+    <div class="manager-tab structure-folders">
+      <div class="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Structure editor</h1>
+        <p class="lead">Create a tree structure for your website. For example you can create a tree of languages to use different languages in your website. Or define a tree of different directories to segment your content by category.</p>
       </div>
-      <div class="structure-wrapper"></div>
+      <div class="text-uppercase">
+        Directory tree
+      </div>
+      <div id="tree"></div>
+      <div class="mt-3"></div>
+      <button  type="button" class="btn btn-primary" onclick="addNode()">Add Node</button>
+      <button  type="button" class="btn btn-danger" onclick="removeNode()">Remove Node</button>
     </div>
-  </div>
+  {{/content}}
+
+  {{#content "bottom-scripts" mode="append"}}
+    <script src="//cdn.jsdelivr.net/npm/jquery.fancytree@2.37/dist/jquery.fancytree-all-deps.min.js"></script>
+    <script>
+      var tree = $("#tree");
+      tree.fancytree({
+        extensions: ["edit"],
+        source: JSON.parse('{{{@root.s2}}}'),
+        edit: {
+          triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
+          beforeEdit: function (event, data) {
+            // Return false to prevent edit mode
+          },
+          edit: function (event, data) {
+            // Editor was opened (available as data.input)
+          },
+          beforeClose: function (event, data) {
+            // Return false to prevent cancel/save (data.input is available)
+            //console.log(event.type, event, data);
+          },
+          save: function (event, data) {
+            //console.log("save...", "source", data.options.source, "isNew", data.isNew, "title", data.orgTitle, "save", data.save, "data", data);
+            var node = data.node;
+            var myPath = '';
+            var myPreviousPath = '';
+            var previousTitle = node.title
+
+            setTimeout(function () {
+              $(data.node.span).removeClass("pending");
+              while (node.parent) {
+                myPath = (myPath === '') ? `${node.title}` : `${node.title}/${myPath}`
+                myPreviousPath = (myPreviousPath === '') ? `${previousTitle}` : `${node.title}/${myPreviousPath}`
+                node = node.parent
+              }
+              console.log('myPath', myPath, 'myPreviousPath', myPreviousPath);
+              const jsonData = {"type": "add", "folderPath": myPath}
+              if (!data.isNew) {
+                jsonData["type"] = "rename"
+                jsonData["oldFolderPath"] = myPreviousPath
+              }
+              $.ajax({
+                type: 'POST',
+                url: '/abe/structure/',
+                crossDomain: true,
+                data: jsonData,
+                dataType: 'json'
+              });
+            }, 1000);
+
+            return true;
+          },
+          close: function (event, data) {
+            if (data.save) {
+              $(data.node.span).addClass("pending");
+            }
+          },
+        },
+      });
+
+      function getActiveNode() {
+        var node = tree.fancytree("getActiveNode");
+        if (!node) {
+          node = tree.fancytree("getRootNode");
+        }
+
+        return node;
+      }
+
+      function addNode() {
+        var node = getActiveNode();
+        node.editCreateNode("child", {
+          title: "",
+          folder: true,
+        });
+      }
+
+      function removeNode() {
+        var node = getActiveNode();
+        var myPath = '';
+
+        while (node.parent) {
+          myPath = (myPath === '') ? `${node.title}` : `${node.title}/${myPath}`
+          node = node.parent
+        }
+        const jsonData = {"type": "remove", "folderPath": myPath}
+        $.ajax({
+          type: 'POST',
+          url: '/abe/structure/',
+          crossDomain: true,
+          data: jsonData,
+          dataType: 'json'
+        });
+        node = getActiveNode();
+        node.remove();
+      }
+    </script>
   {{/content}}
 {{/extend}}

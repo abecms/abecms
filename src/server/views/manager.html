@@ -1,7 +1,11 @@
 {{#extend "layout"}}
 
   {{#content "head" mode="append"}}
-    <link rel="stylesheet" href="/abecms/css/dataTables.bootstrap4.min.css">
+    <style>
+      table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_desc_disabled:before {
+        margin-right: 5px;
+      }
+    </style>
   {{/content}}
 
   {{#content "breadcrumbs"}}
@@ -18,9 +22,7 @@
   {{#content "bottom-scripts" mode="append"}}
     <script type="text/javascript" src="/abecms/vendors/jquery-datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/abecms/vendors/jquery-datatables/dataTables.bootstrap4.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/standalone.min.js"></script>
-    <script type="text/javascript" src="/abecms/libs/moment-with-locales.js"></script>
-    <!-- [pageHTML] 
+    <!-- [pageHTML]
       {{{pageHtml}}}
     [pageHTML] -->
   {{/content}}

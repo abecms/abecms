@@ -2,7 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import pkg from '../../../package'
 
-import {Manager, coreUtils, config, Handlebars} from '../../cli'
+import {Manager, cmsStructure, coreUtils, config, Handlebars} from '../../cli'
 
 /**
  * This route returns the structure as HTML
@@ -10,7 +10,7 @@ import {Manager, coreUtils, config, Handlebars} from '../../cli'
  * @param  {[type]} res [description]
  * @return {[type]}     [description]
  */
-var route = function(req, res) {
+var route = async function(req, res) {
   var manager = {}
   manager.home = {files: []}
   manager.list = Manager.instance.getStructureAndTemplates()
@@ -23,6 +23,9 @@ var route = function(req, res) {
   var fileName = null
   var folderPath = null
   var structure = Manager.instance.getStructureAndTemplates().structure
+
+  var s2 = await cmsStructure.structure.list(Manager.instance.pathStructure)
+
   structure = JSON.stringify(structure).replace(
     new RegExp(config.root, 'g'),
     ''
@@ -36,6 +39,7 @@ var route = function(req, res) {
     manager: manager,
     config: config,
     structure: structure,
+    s2: JSON.stringify(s2),
     isStructure: true,
     abeVersion: pkg.version
   }
