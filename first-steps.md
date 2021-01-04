@@ -20,11 +20,11 @@ Default project structure :
 - mysite
  |_ data/posts (contains your json documents)
  |_ site (contains published files, this is your static website)
- |_ structure (add as many folders and subfolders to create your website structure)
+ |_ structure (add folders and subfolders to create your website structure)
  |_ themes/default/templates (put your templates here)
 ```
 
-Launch abe engine 
+Launch abe engine
 
 ```$ cd mysite ```
 
@@ -44,7 +44,7 @@ Usage: abe [command] {OPTIONS}
 Standard Options:
 
    --port, -p <port> 	Use a specific port
-   
+
    --interactive , -i   Open abe inside your browser (use with serve command)
 
 ```
@@ -101,7 +101,7 @@ List of self-descriptive Abe tag
 
 [doc abe meta](docs/abe-data.md)
 
-- loop each (create content bloc) 
+- loop each (create content bloc)
 
 ```
 {{#each key_name}}
@@ -116,7 +116,7 @@ to add a template just paste it inside the /templates directory
 - mysite
  |_ themes
   |_ default
-   |_ templates 
+   |_ templates
   	|_ template.html
   	|_ my.css
     |_ my.js
@@ -162,7 +162,7 @@ install windows sdk
 
 > [https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk](https://developer.microsoft.com/fr-fr/windows/downloads/windows-10-sdk)
 
-Tell node-sass which version of 
+Tell node-sass which version of
 Open git bash then run
 
 ```shell

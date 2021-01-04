@@ -86,7 +86,7 @@ This example will record this abe_meta:
 
 And on publish, 2 pages will be published:
 - /components/example.html (the regular one)
-- /amp/articles/eample.html (the related page)
+- /amp/articles/example.html (the related page)
 
 #### relatedTemplate.template
 The name of the template to use

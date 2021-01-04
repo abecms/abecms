@@ -6,23 +6,16 @@ The 3.x releases have been focused on the REST layer of AbeCMS.
 
 The 4.x releases will focus on the transformation of AbeCMS to a full featured Content marketing Services platform.
 
-## Roadmap of the next 4.x releases
+## Roadmap of the next 5.x releases
 - Abe Engine is 100% compatible with React, Vue.js, Handlebars, Twig
-- ~~It will be possible to create filtered views on the manager frontend~~
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
-- ~~Add template creation from partials~~
 - templates and partials will be uploadable
 - Video training will be produced
-- ~~Create an Electron version~~
 - Refactor the REST layer:
   - Usage of oAuth2 for REST routes
 - Add robots.txt + URL redirection features in Abe
-- ~~A JSON document could be associated with more than 1 template: AMP template, mobile, template, instant article template, desktop template...~~
 - We must be able to chose a theme (composed by templates) from the admin
 - We should be able to sync data, templates, ... from a distant Abe install
-- ~~Let's improve the republish-all so that we boost the performance.~~
-- ~~Add an init option to Abe CLI to ease the creation of a project~~
-- ~~Add a deploy option to the web through surge.sh CLI in Abe CLI~~
 - Add a -d (--dev) option to Abe CLI so that we can have livereload and debug features during template dev
 
 ## Changelog
@@ -35,7 +28,7 @@ See the complete [v3.0.0 release notes](./version3.md)
 
 ### 2.15.*
 - The order by statement in abe type="data" is now fully usable on any property of the json post. usage of order by date ASC is deprecated. Please use order by abe_meta.date ASC instead. And you can now limit a set of record without having to use the 'where' statement
-- abe type="import" are not usable in a {{#each}} statement for technical reasons. But you can reproduce this behavior by using the array notation in an import. ie. {{abe type="import" file="myPartial/{{list[].id}}"}} This is particularly useful when you propose a contributor to select several partials in a list (with the {{#each}} notation + type="data). You can then display these selected partials with this iarray style notation.
+- abe type="import" are not usable in a {{#each}} statement for technical reasons. But you can reproduce this behavior by using the array notation in an import. ie. {{abe type="import" file="myPartial/{{list[].id}}"}} This is particularly useful when you propose a contributor to select several partials in a list (with the {{#each}} notation + type="data). You can then display these selected partials with this array style notation.
 
 ### 2.14.*
 - Abe type="data" are now usable in {{#each x}} statements. This was a long awaited feature.

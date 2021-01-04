@@ -8,7 +8,7 @@ Here comes the version 4
 ## AbeCMS rest
 ## AbeCMS client
 
-## Roadmap of the next 3.x releases
+## Roadmap of the next 4.x releases
 
 # Plan
 - Un gestionnaire de projet "a la Trello" qui permet d'assigner à un membre / une équipe
