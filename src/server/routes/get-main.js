@@ -113,6 +113,9 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
  */
 var route = async function(req, res, next) {
   var filePath = req.originalUrl.replace('/abe/editor/', '')
+  if (filePath === '/abe' || filePath === '/abe/') {
+    filePath = filePath.replace('/abe', '')
+  }
   if (filePath === '' || filePath === '/') {
     filePath = null
   }
