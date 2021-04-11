@@ -1,6 +1,6 @@
 import fse from 'fs-extra'
 import fsCompare from 'fs-compare'
-import dircompare from 'dir-compare'
+import { compareSync } from 'dir-compare'
 import mkdirp from 'mkdirp'
 import path from 'path'
 
@@ -32,7 +32,7 @@ export function copy() {
   if (directory.isSymbolicLink()) dest = fse.readlinkSync(dest)
 
   if (source != null) {
-    var res = dircompare.compareSync(source, dest, {
+    var res = compareSync(source, dest, {
       compareDate: true
     })
 
