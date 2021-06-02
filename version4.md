@@ -132,12 +132,12 @@ version 4 :
 ```
 
 1. Terminer Mongo :
-   1. Draft					                  ======> OK
+   1. Draft					              ======> OK
    2. workflow                        2H
-   3. Publish				                  ======> OK
+   3. Publish				              ======> OK
    4. Unpublish                       2H
-   5. Update				                  ======> OK
-   6. Duplicate				                ======> OK
+   5. Update				              ======> OK
+   6. Duplicate				           ======> OK
    7. Tests unitaires                 12H
    8. Tests fonctionnels              0H
 2. Vérifier File :

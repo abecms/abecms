@@ -26,7 +26,8 @@ export function saveFile(url, json) {
       fse.mkdir(path.join(config.root, config.reference.url), function() {
         fse.writeJson(
           path.join(config.root, config.reference.url, url),
-          JSON.parse(json)
+          JSON.parse(json),
+          { space: 2, encoding: "utf-8" }
         )
       })
     } else {

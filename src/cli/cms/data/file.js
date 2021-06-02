@@ -61,7 +61,6 @@ export async function getAllWithKeys(withKeys) {
 }
 
 export async function get(pathJson) {
-  pathJson = cmsData.utils.getRevisionPath(pathJson)
   let json = {}
   pathJson = abeExtend.hooks.instance.trigger('beforeGetJson', pathJson)
 

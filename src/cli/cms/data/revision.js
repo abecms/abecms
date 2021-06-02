@@ -152,6 +152,7 @@ export function getFilesMerged(files) {
 export async function getDoc(relativePath) {
   let json = {};
   if (config.database.type == "file") {
+    relativePath = cmsData.utils.getRevisionPath(relativePath)
     json = await cmsData.file.get(relativePath);
   } else if (config.database.type == "mongo") {
     json = await mongo.getDoc(relativePath).catch((err) => {
