@@ -160,9 +160,14 @@ export function urlList(obj, match, jsonPage) {
 
 export function fileList(obj, match, jsonPage) {
   var p = new Promise((resolve) => {
-    jsonPage["abe_source"][obj.key] = coreUtils.file.getJson(
-      path.join(config.root, obj.sourceString)
-    );
+    let filePath = obj.sourceString;
+
+    if (filePath.charAt(0) == "/") {
+      filePath = path.join(config.root, filePath);
+    } else {
+      filePath = path.join(config.root, config.reference.url, filePath);
+    }
+    jsonPage["abe_source"][obj.key] = coreUtils.file.getJson(filePath);
     resolve();
   });
 
