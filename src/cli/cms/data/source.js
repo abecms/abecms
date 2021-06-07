@@ -10,7 +10,6 @@ import { config, coreUtils, cmsData } from "../../";
 export function requestList(obj, match, jsonPage) {
   const p = new Promise((resolve) => {
     cmsData.sql.executeQuery(match, jsonPage).then((data) => {
-      jsonPage["abe_source"] = null ?? {};
       jsonPage["abe_source"][obj.key] = data;
 
       // I update the jsonPage[obj.key] when the tag is not editable
@@ -246,7 +245,7 @@ export async function grabDataFromSource(jsonPage, match) {
  */
 export function grabDataFrom(jsonPage, tagStr) {
   const p = new Promise((resolve) => {
-    jsonPage["abe_source"] = null ?? {}
+    jsonPage["abe_source"] = jsonPage["abe_source"] || {}
     let obj = cmsData.attributes.getAll(tagStr, jsonPage);
     let type = cmsData.sql.getSourceType(obj.sourceString);
 
