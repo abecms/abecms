@@ -11,7 +11,6 @@ const route = async function(req, res, next) {
     res.user
   )
 
-  console.log('result du create', jsonDoc)
   var result = {
     success: 1,
     json: jsonDoc

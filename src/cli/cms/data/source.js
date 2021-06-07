@@ -182,7 +182,6 @@ export function fileList(abeTag, jsonPage) {
     } else {
       filePath = path.join(config.root, config.reference.url, filePath);
     }
-    console.log('jsonPage', jsonPage, abeTag.key);
 
     jsonPage["abe_source"][abeTag.key] = coreUtils.file.getJson(filePath);
 
@@ -283,7 +282,7 @@ export function grabDataFrom(jsonPage, tagStr) {
         break;
       case "file":
         obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage);
-        fileList(obj, tagStr, jsonPage)
+        fileList(obj, jsonPage)
           .then(() => {
             resolve();
           })
