@@ -11,7 +11,7 @@ window.ImagePickerUpload = {
                 </div>
                 <input type="text" id="wysiwyg-image-text" name="wysiwyg-image-text" placeholder="image or video (.mp4)" value="" class="form-control form-abe file-input">
                 <div class="upload-wrapper">
-                  <input class="form-control" id="wysiwyg-image-upload" name="wysiwyg-image-upload" value="" type="file" title="upload an image">
+                  <input class="form-control file-picker" id="wysiwyg-image-upload" name="wysiwyg-image-upload" value="" type="file" title="upload an image">
                   <span class="percent">
                     <span class="fa fa-upload" aria-hidden="true"></span>
                   </span>

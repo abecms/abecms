@@ -32,7 +32,7 @@ export default class Form {
    * @param {String} desc        input description
    * @param {Int}    max-length   maximum characteres allowed inside input
    * @param {String} tab         tab name
-   * @param {String} jsonValue   
+   * @param {String} jsonValue
    * @return {Void}
    */
   add(obj) {
@@ -92,9 +92,6 @@ export default class Form {
       }
       if (typeof blockName !== 'undefined' && blockName !== null) {
         formBlockTab[blockName].sort(this.orderByTabindex)
-      }
-      if (typeof formBlock[tab] === 'undefined' || formBlock[tab] === null) {
-        formBlock[tab] = {}
       }
 
       formBlock[tab] = formBlockTab

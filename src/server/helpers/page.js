@@ -47,7 +47,7 @@ var page = async function(req, res) {
 
     if (!editor) {
       cmsData.source
-        .getDataList(text, json)
+        .updateJsonWithExternalData(text, json)
         .then(() => {
           var page = new Page(text, json, html)
           res.set('Content-Type', 'text/html')

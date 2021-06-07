@@ -46,10 +46,10 @@ async function publishNext(files, tt, cb, i = 0) {
       )
     }
 
-    await cmsData.source.getDataList(templatesTexts[jsonObject.abe_meta.template], jsonObject)
+    await cmsData.source.updateJsonWithExternalData(templatesTexts[jsonObject.abe_meta.template], jsonObject)
 
     jsonObject = abeExtend.hooks.instance.trigger(
-      'afterGetDataListOnSave',
+      'afterupdateJsonWithExternalDataOnSave',
       jsonObject
     )
 
@@ -62,10 +62,9 @@ async function publishNext(files, tt, cb, i = 0) {
       ''
     )
 
-    const matches = cmsData.regex.getTagAbeTypeRequest(textTmp)
-
+    const matches = cmsData.regex.getAbeTypeDataList(textTmp)
     Array.prototype.forEach.call(matches, match => {
-      var obj = cmsData.attributes.getAll(match[0], jsonObject)
+      var obj = cmsData.attributes.getAll(match, jsonObject)
 
       if (!obj.editable) {
         jsonObject[obj.key] = obj.source
@@ -124,7 +123,7 @@ async function publishNext(files, tt, cb, i = 0) {
             fileName
           )
 
-          await cmsData.source.getDataList(relTemplate, obj.json.content)
+          await cmsData.source.updateJsonWithExternalData(relTemplate, obj.json.content)
           const page = new Page(relTemplate, obj.json.content, true)
           cmsOperations.save.saveHtml(relPath, page.html)
         }
@@ -147,7 +146,7 @@ async function publishNext(files, tt, cb, i = 0) {
         jsonObject.abe_meta.template +
         ')'
     )
-    
+
     await publishNext(files, tt, cb, i++)
   } else {
     cb(i)

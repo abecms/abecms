@@ -2,13 +2,13 @@ import {abeExtend} from '../../'
 import {cmsData} from '../../'
 import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 /**
-* Get All attributes from a Abe tag
+* Get All attributes from an Abe tag
 * @return {Object} parsed attributes
 */
 export function getAll(str, json) {
   str = abeExtend.hooks.instance.trigger('beforeAbeAttributes', str, json)
 
-  //This regex analyzes all attributes of a Abe tag
+  //This regex analyzes all attributes of an Abe tag
   var re = /\b([a-z][a-z0-9\-]*)\s*=\s*("([^"]+)"|'([^']+)'|(\S+))/gi
 
   var attrs = {

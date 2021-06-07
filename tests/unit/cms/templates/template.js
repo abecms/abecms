@@ -333,8 +333,8 @@ describe('cmsTemplates', function() {
    * 
    */
   it('cmsTemplates.template.execRequestColumns()', function() {
-    var getTagAbeTypeRequest = sinon.stub(cmsData.regex, 'getTagAbeTypeRequest');
-    getTagAbeTypeRequest.returns([fixture.articleRequest])
+    var getAbeTypeDataList = sinon.stub(cmsData.regex, 'getAbeTypeDataList');
+    getAbeTypeDataList.returns([fixture.articleRequest])
     var getSourceType = sinon.stub(cmsData.sql, 'getSourceType');
     getSourceType.returns('request')
     var handleSqlRequest = sinon.stub(cmsData.sql, 'handleSqlRequest');
@@ -348,7 +348,7 @@ describe('cmsTemplates', function() {
     chai.expect(ar.indexOf('title')).to.be.above(-1);
 
     // unstub
-    sinon.assert.calledOnce(cmsData.regex.getTagAbeTypeRequest)
+    sinon.assert.calledOnce(cmsData.regex.getAbeTypeDataList)
     sinon.assert.calledOnce(cmsData.sql.getSourceType)
     sinon.assert.calledOnce(cmsData.sql.handleSqlRequest)
     sinon.assert.calledOnce(cmsTemplates.template.recurseWhereVariables)

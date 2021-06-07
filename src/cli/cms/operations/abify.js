@@ -15,7 +15,7 @@ export async function abify(json, template = null) {
       template = cmsTemplates.template.getTemplate(json.abe_meta.template, json)
     }
 
-    await cmsData.source.getDataList(template, json)
+    await cmsData.source.updateJsonWithExternalData(template, json)
     const page = new Page(template, json)
 
     return page.html

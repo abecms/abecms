@@ -24,7 +24,7 @@ describe('Request', function() {
 
   /**
    * cmsData.sql.executeQuery
-   * 
+   *
    */
   it('cmsData.sql.executeQuery()', function(done) {
     try {
@@ -267,7 +267,7 @@ describe('Request', function() {
   });
 
   it('cmsData.sql.getSourceType()', function() {
-    chai.expect(cmsData.sql.getSourceType('http://google.com')).to.equal('url');
+    chai.expect(cmsData.sql.getSourceType('https://google.com')).to.equal('url');
     chai.expect(cmsData.sql.getSourceType('select * from test')).to.equal('request');
     chai.expect(cmsData.sql.getSourceType('{"test":"test"}')).to.equal('value');
     chai.expect(cmsData.sql.getSourceType('references.json')).to.equal('file');
@@ -275,15 +275,15 @@ describe('Request', function() {
   });
 
   it('cmsData.source.requestList()', function(done) {
-    var matches = cmsData.regex.getTagAbeTypeRequest(fixture.tag)
+    var matches = cmsData.regex.getAbeTypeDataList(fixture.tag)
 
-    chai.expect(matches[0][0]).to.not.be.null
+    chai.expect(matches[0]).to.not.be.null
 
-    var attributes = cmsData.attributes.getAll(matches[0][0], {})
-    chai.expect(matches[0][0]).to.not.be.null
+    var attributes = cmsData.attributes.getAll(matches[0], {})
+    chai.expect(matches[0]).to.not.be.null
 
     var jsonPage = {}
-    cmsData.source.requestList(attributes, matches[0][0], jsonPage)
+    cmsData.source.requestList(attributes, matches[0], jsonPage)
       .then(function () {
         chai.expect(jsonPage.abe_source).to.not.be.undefined
         done()

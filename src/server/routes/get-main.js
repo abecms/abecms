@@ -28,9 +28,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   manager.config = JSON.stringify(config)
 
   var _preview = filePath
-    ? '/abe/page/' +
-      EditorVariables.express.req.params[0] +
-      `?filePath=${EditorVariables.express.req.query.filePath}`
+    ? `/abe/page/${EditorVariables.express.req.params[0]}?filePath=${EditorVariables.express.req.query.filePath}`
     : false
   var _form = obj ? obj.form : false
   var _json = obj ? obj.json : false

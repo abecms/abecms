@@ -377,7 +377,7 @@ export function createInputFile(attributes, inputClass, params) {
             <div class="input-group-btn">
               <span class="border">
                 <div class="upload-wrapper">
-                  <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload file"/>
+                  <input class="form-control file-picker" ${attributes} name="${params.key}" type="file" title="upload file"/>
                   <span class="percent">
                     <span class="fa fa-upload" aria-hidden="true"></span>
                   </span>
@@ -417,8 +417,8 @@ export function createInputImage(attributes, inputClass, params) {
             <input type="text" ${attributes} class="${inputClass} file-input" />
             <div class="input-group-append">
               <span class="border">
-                <div class="upload-wrapper">
-                  <input class="form-control" ${attributes} name="${params.key}" type="file" title="upload an image"/>
+                <div class="upload-wrapper file-picker">
+                  <input class="form-control file-picker" ${attributes} name="${params.key}" type="file" title="upload an image"/>
                   <span class="percent">
                     <i class="fa fa-upload"></i>
                   </span>

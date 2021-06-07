@@ -39,7 +39,7 @@ describe('cmsOperations', function() {
   it('cmsOperations.post.publish()', function(done) {
     sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake((str, obj) => { return str, obj; });
     sinon.stub(cmsTemplates.template, 'getTemplate').callsFake(() => { return fixture.htmlArticle; });
-    sinon.stub(cmsData.source, 'getDataList').callsFake( () => {
+    sinon.stub(cmsData.source, 'updateJsonWithExternalData').callsFake( () => {
       return Promise.resolve(JSON.parse(JSON.stringify(fixture.jsonArticle)))
     });
     sinon.stub(cmsData.utils, 'getPercentOfRequiredTagsFilled').callsFake( () => { return 100; });
@@ -95,7 +95,7 @@ describe('cmsOperations', function() {
       return json;
     });
     sinon.stub(cmsTemplates.template, 'getTemplate').callsFake( () => { return fixture.htmlArticle; });
-    sinon.stub(cmsData.source, 'getDataList').callsFake( () => {
+    sinon.stub(cmsData.source, 'updateJsonWithExternalData').callsFake( () => {
       return Promise.resolve(JSON.parse(JSON.stringify(fixture.jsonArticle)))
     });
     sinon.stub(cmsOperations.save, 'saveJson').callsFake( () => { return true; });

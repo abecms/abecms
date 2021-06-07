@@ -351,9 +351,9 @@ export function getTemplatesTexts(templatesList, json) {
 
 export function execRequestColumns(tpl) {
   var ar = []
-  var matches = cmsData.regex.getTagAbeTypeRequest(tpl)
+  var matches = cmsData.regex.getAbeTypeDataList(tpl)
   Array.prototype.forEach.call(matches, match => {
-    var obj = cmsData.attributes.getAll(match[0], {})
+    var obj = cmsData.attributes.getAll(match, {})
     var type = cmsData.sql.getSourceType(obj.sourceString)
     switch (type) {
       case 'request':

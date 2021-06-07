@@ -8,11 +8,9 @@ import _ from "lodash";
 import { config, coreUtils, cmsData } from "../../";
 
 export function requestList(obj, match, jsonPage) {
-  var p = new Promise((resolve) => {
+  const p = new Promise((resolve) => {
     cmsData.sql.executeQuery(match, jsonPage).then((data) => {
-      if (!jsonPage["abe_source"]) {
-        jsonPage["abe_source"] = {};
-      }
+      jsonPage["abe_source"] = null ?? {};
       jsonPage["abe_source"][obj.key] = data;
 
       // I update the jsonPage[obj.key] when the tag is not editable
@@ -48,7 +46,7 @@ export function requestList(obj, match, jsonPage) {
 }
 
 export function valueList(obj, match, jsonPage) {
-  var p = new Promise((resolve) => {
+  const p = new Promise((resolve) => {
     var value = cmsData.sql.getDataSource(match);
 
     if (value.indexOf("{") > -1 || value.indexOf("[") > -1) {
@@ -67,10 +65,19 @@ export function valueList(obj, match, jsonPage) {
   return p;
 }
 
-export function urlList(obj, match, jsonPage) {
+/**
+ * Sets in jsonPage["abe_source"][obj.key] the data grabbed from a HTTP call
+ * or just the URL if attribute autocomplete == true
+ *
+ * @param {*} obj
+ * @param {*} match
+ * @param {*} jsonPage
+ * @returns
+ */
+export function urlList(abeTag, match, jsonPage) {
   var p = new Promise((resolve) => {
-    if (obj.autocomplete !== true && obj.autocomplete !== "true") {
-      var host = obj.sourceString;
+    if (abeTag.autocomplete !== true && abeTag.autocomplete !== "true") {
+      var host = abeTag.sourceString;
       host = host.split("/");
       var httpUse = http;
       var defaultPort = 80;
@@ -80,7 +87,7 @@ export function urlList(obj, match, jsonPage) {
       }
       host = host[2].split(":");
 
-      var pathSource = obj.sourceString.split("//");
+      var pathSource = abeTag.sourceString.split("//");
       if (pathSource[1] != null) {
         pathSource = pathSource[1].split("/");
         pathSource.shift();
@@ -114,27 +121,27 @@ export function urlList(obj, match, jsonPage) {
                 typeof parsedBody === "object" &&
                 Object.prototype.toString.call(parsedBody) === "[object Array]"
               ) {
-                jsonPage["abe_source"][obj.key] = parsedBody;
+                jsonPage["abe_source"][abeTag.key] = parsedBody;
               } else if (
                 typeof parsedBody === "object" &&
                 Object.prototype.toString.call(parsedBody) === "[object Object]"
               ) {
-                jsonPage["abe_source"][obj.key] = [parsedBody];
+                jsonPage["abe_source"][abeTag.key] = [parsedBody];
               }
             } else if (
               typeof body === "object" &&
               Object.prototype.toString.call(body) === "[object Array]"
             ) {
-              jsonPage["abe_source"][obj.key] = body;
+              jsonPage["abe_source"][abeTag.key] = body;
             } else if (
               typeof body === "object" &&
               Object.prototype.toString.call(body) === "[object Object]"
             ) {
-              jsonPage["abe_source"][obj.key] = body;
+              jsonPage["abe_source"][abeTag.key] = body;
             }
           } catch (e) {
             console.log(
-              `Error ${obj.sourceString} is not a valid JSON`,
+              `Error ${abeTag.sourceString} is not a valid JSON`,
               `\n${e}`
             );
           }
@@ -150,7 +157,7 @@ export function urlList(obj, match, jsonPage) {
       localReq.write("");
       localReq.end();
     } else {
-      jsonPage["abe_source"][obj.key] = obj.sourceString;
+      jsonPage["abe_source"][abeTag.key] = abeTag.sourceString;
       resolve();
     }
   });
@@ -158,23 +165,34 @@ export function urlList(obj, match, jsonPage) {
   return p;
 }
 
-export function fileList(obj, match, jsonPage) {
+/**
+ * Sets in jsonPage["abe_source"][abeTag.key] the content
+ * from a local file
+ *
+ * @param Object abeTag
+ * @param String jsonPage
+ * @returns
+ */
+export function fileList(abeTag, jsonPage) {
   var p = new Promise((resolve) => {
-    let filePath = obj.sourceString;
+    let filePath = abeTag.sourceString;
 
     if (filePath.charAt(0) == "/") {
       filePath = path.join(config.root, filePath);
     } else {
       filePath = path.join(config.root, config.reference.url, filePath);
     }
-    jsonPage["abe_source"][obj.key] = coreUtils.file.getJson(filePath);
+    console.log('jsonPage', jsonPage, abeTag.key);
+
+    jsonPage["abe_source"][abeTag.key] = coreUtils.file.getJson(filePath);
+
     resolve();
   });
 
   return p;
 }
 
-export async function nextSourceData(jsonPage, match) {
+export async function grabDataFromSource(jsonPage, match) {
   let obj = cmsData.attributes.getAll(match, jsonPage);
   const sourceType = cmsData.sql.getSourceType(obj.sourceString);
 
@@ -219,20 +237,24 @@ export async function nextSourceData(jsonPage, match) {
   }
 }
 
-export function nextDataList(jsonPage, match) {
-  var p = new Promise((resolve) => {
-    if (jsonPage["abe_source"] == null) {
-      jsonPage["abe_source"] = {};
-    }
-
-    var obj = cmsData.attributes.getAll(match, jsonPage);
-
-    var type = cmsData.sql.getSourceType(obj.sourceString);
+/**
+ * Parses an abe type 'data' and returns the related data
+ * in the jsonPage's 'abe_source' attribute
+ * depending on the nature of the source.
+ * @param String jsonPage
+ * @param String tagStr represents the abe tag
+ * @returns
+ */
+export function grabDataFrom(jsonPage, tagStr) {
+  const p = new Promise((resolve) => {
+    jsonPage["abe_source"] = null ?? {}
+    let obj = cmsData.attributes.getAll(tagStr, jsonPage);
+    let type = cmsData.sql.getSourceType(obj.sourceString);
 
     switch (type) {
       case "request":
         obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage);
-        requestList(obj, match, jsonPage)
+        requestList(obj, tagStr, jsonPage)
           .then((jsonPage) => {
             resolve(jsonPage);
           })
@@ -242,7 +264,7 @@ export function nextDataList(jsonPage, match) {
         break;
       case "value":
         obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage);
-        valueList(obj, match, jsonPage)
+        valueList(obj, tagStr, jsonPage)
           .then(() => {
             resolve();
           })
@@ -251,7 +273,7 @@ export function nextDataList(jsonPage, match) {
           });
         break;
       case "url":
-        urlList(obj, match, jsonPage)
+        urlList(obj, tagStr, jsonPage)
           .then(() => {
             resolve();
           })
@@ -261,7 +283,7 @@ export function nextDataList(jsonPage, match) {
         break;
       case "file":
         obj = cmsData.attributes.sanitizeSourceAttribute(obj, jsonPage);
-        fileList(obj, match, jsonPage)
+        fileList(obj, tagStr, jsonPage)
           .then(() => {
             resolve();
           })
@@ -278,27 +300,30 @@ export function nextDataList(jsonPage, match) {
   return p;
 }
 
-export async function getSourceData(text, jsonPage) {
-  var matches = cmsData.regex.getTagAbeWithSource(text);
-
-  const result = await Promise.all(
-    matches.map(async (match) => {
-      await nextSourceData(jsonPage, match);
+/**
+ * Parse the Abe tags with type 'data' and fill the
+ * JsonPage['abe_source'] with grabbed data
+ * then updates the JsonPage attributes with data
+ * from external sources (not in abe type 'import' nor 'data')
+ *
+ * @param String text
+ * @param String jsonPage
+ * @returns
+ */
+export async function updateJsonWithExternalData(text, jsonPage) {
+  const dataTypes = cmsData.regex.getAbeTypeDataList(text);
+  await Promise.all(
+    dataTypes.map(async (tagStr) => {
+      await grabDataFrom(jsonPage, tagStr);
     })
   );
 
-  return result;
-}
-
-export async function getDataList(text, jsonPage) {
-  var matches = cmsData.regex.getTagAbeTypeRequest(text);
-  const result = await Promise.all(
-    matches.map(async (match) => {
-      await nextDataList(jsonPage, match[0]);
+  const externalSources = cmsData.regex.getTagAbeWithSource(text);
+  await Promise.all(
+    externalSources.map(async (tagStr) => {
+      await grabDataFromSource(jsonPage, tagStr);
     })
   );
-
-  return cmsData.source.getSourceData(text, jsonPage);
 }
 
 export function removeDataList(text) {

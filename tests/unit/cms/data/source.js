@@ -28,7 +28,7 @@ describe('Source', function() {
     var obj = {key:'titles'}
     var json = {abe_source:{}}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-  
+
     sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
       return Promise.resolve(data)
     })
@@ -170,7 +170,7 @@ describe('Source', function() {
     var obj = {key:'web', sourceString:'http://www.rest.endpoint/', autocomplete:false}
     var json = {abe_source:{}}
     this.request = sinon.stub(http, 'request')
-    
+
     var expected = {a: "1"}
     var response = new PassThrough()
     response.write(JSON.stringify(expected))
@@ -191,7 +191,7 @@ describe('Source', function() {
     var obj = {key:'web', sourceString:'http://www.rest.endpoint/', autocomplete:false}
     var json = {abe_source:{}}
     this.request = sinon.stub(http, 'request')
-    
+
     var expected = [{a: "1"}]
     var response = new PassThrough()
     response.write(JSON.stringify(expected))
@@ -209,9 +209,9 @@ describe('Source', function() {
   });
 
   it('cmsData.source.fileList', function(done) {
-    var obj = {key:'file', sourceString:'data/article-1.json'}
+    var obj = {key:'file', sourceString:'/data/article-1.json'}
     var json = {abe_source:{}}
-    cmsData.source.fileList(obj, 'match', json)
+    cmsData.source.fileList(obj, json)
       .then(() => {
         chai.expect(json.abe_source.file.title).to.be.equal("article")
 
@@ -219,10 +219,10 @@ describe('Source', function() {
       })
   });
 
-  it('cmsData.source.getDataList', function(done) {
+  it('cmsData.source.updateJsonWithExternalData', function(done) {
     var obj = {key:'titles'}
     var json = {abe_source:{}}
-    cmsData.source.getDataList(fixture.articleJsoninline, json)
+    cmsData.source.updateJsonWithExternalData(fixture.articleJsoninline, json)
       .then(() => {
         chai.expect(json.abe_source.titles.length).to.be.equal(3);
         chai.expect(json.abe_source.titles[0].title).to.be.equal("rouge");

@@ -80,12 +80,12 @@ describe('regex', function() {
   });
 
   /**
-   * cmsData.regex.getTagAbeTypeRequest
+   * cmsData.regex.getAbeTypeDataList
    */
-  it('cmsData.regex.getTagAbeTypeRequest()', function() {
-    var arr = cmsData.regex.getTagAbeTypeRequest(fixture.articleSingle)
+  it('cmsData.regex.getAbeTypeDataList()', function() {
+    var arr = cmsData.regex.getAbeTypeDataList(fixture.articleSingle)
     chai.expect(arr[0]).to.be.undefined;
-    var arr = cmsData.regex.getTagAbeTypeRequest(fixture.articleRequest)
+    var arr = cmsData.regex.getAbeTypeDataList(fixture.articleRequest)
     chai.expect(arr[0]).to.not.be.null;
   });
 

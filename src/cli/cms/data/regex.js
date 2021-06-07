@@ -94,7 +94,7 @@ export function escapeTextToRegex(str, params) {
  * nor contains {{#}}
  * nor contains {{/
  * nor contains {{/each
- * 
+ *
  * @param  {String}  str string to test
  * @return {Boolean} true = this is not a block content
  */
@@ -136,17 +136,18 @@ export function isEachStatement(str) {
 }
 
 /**
- * Test if a string contains data type statement
+ * Returns the array of Abe type 'data' tags
  *
- * @param  {String}  str string to test
- * @return {Boolean} true = this is a block content
+ * @param String text (the html template)
+ * @return Array of abe tags found
  */
-export function getTagAbeTypeRequest(text) {
-  var matches = []
-  var match
-  while ((match = dataTypeReg.exec(text))) {
-    matches.push(match)
+export function getAbeTypeDataList(text) {
+  const matches = []
+  let match
+  while (match = dataTypeReg.exec(text)) {
+    matches.push(match[0])
   }
+
   return matches
 }
 

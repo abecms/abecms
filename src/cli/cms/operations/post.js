@@ -28,7 +28,7 @@ export async function draft(postUrl, json, workflow = 'draft', user) {
     json
   )
 
-  await cmsData.source.getDataList(template, json)
+  await cmsData.source.updateJsonWithExternalData(template, json)
   json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(
     template,
     json
@@ -59,7 +59,7 @@ export async function publish(postUrl, json, user) {
     json
   )
 
-  await cmsData.source.getDataList(template, json)
+  await cmsData.source.updateJsonWithExternalData(template, json)
   json['abe_meta'].complete = cmsData.utils.getPercentOfRequiredTagsFilled(
     template,
     json
@@ -111,7 +111,7 @@ export async function publish(postUrl, json, user) {
           fileName
         )
 
-        await cmsData.source.getDataList(relTemplate, json)
+        await cmsData.source.updateJsonWithExternalData(relTemplate, json)
         const page = new Page(relTemplate, json, true)
         cmsOperations.save.saveHtml(relPath, page.html)
       }

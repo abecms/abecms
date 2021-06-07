@@ -23,6 +23,15 @@ export default class EditorFiles {
       file.removeEventListener('change', this._handleChangeFiles)
       file.addEventListener('change', this._handleChangeFiles)
     })
+
+    window.addEventListener('paste', e => {
+      var activeElement = document.activeElement;
+      if (activeElement.classList.contains('file-input')) {
+        var target = activeElement.parentNode.querySelector('input.file-picker')
+        target.files = e.clipboardData.files;
+        this._uploadFile(target)
+      }
+    });
   }
 
   _changeFiles(e) {

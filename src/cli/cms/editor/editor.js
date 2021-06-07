@@ -10,16 +10,25 @@ import {
   abeExtend
 } from '../../'
 
-export function add(obj, json, form) {
-  var value = obj.value
+/**
+ * updates the tag value depending on its structure
+ * then adds it to the form
+ * @param Object tag
+ * @param String json
+ * @param Array form
+ * @returns
+ */
+export function add(tag, json, form) {
+  var value = tag.value
 
-  if (obj.key.indexOf('[') > -1) {
-    var key = obj.key.split('[')[0]
-    var index = obj.key.match(/[^\[]+?(?=\])/)[0]
-    var prop = obj.key.replace(/[^\.]+?\./, '')
+  // If the key represents an array
+  if (tag.key.indexOf('[') > -1) {
+    var key = tag.key.split('[')[0]
+    var index = tag.key.match(/[^\[]+?(?=\])/)[0]
+    var prop = tag.key.replace(/[^\.]+?\./, '')
 
     try {
-      obj.value = eval(`json[key][index].${prop}`)
+      tag.value = eval(`json[key][index].${prop}`)
     } catch (e) {
       try {
         eval(`json[key][index].${prop} = ` + JSON.stringify(value))
@@ -27,23 +36,26 @@ export function add(obj, json, form) {
         // no value found inside json KEY
       }
     }
+  // If the key doesn't represent an array
   } else {
     try {
-      if (obj.key.indexOf('.') > -1)
-        obj.value = eval(`json["${obj.key.split('.').join('"]["')}"]`)
-      else obj.value = eval(`json["${obj.key}"]`)
+      if (tag.key.indexOf('.') > -1) {
+        tag.value = eval(`json["${tag.key.split('.').join('"]["')}"]`)
+      } else {
+        tag.value = eval(`json["${tag.key}"]`)
+      }
     } catch (e) {
       // no value found inside json KEY
     }
   }
 
   if (json != null && json.abe_meta != null) {
-    obj.status = json.abe_meta.status
+    tag.status = json.abe_meta.status
   }
 
-  form.add(obj)
+  form.add(tag)
 
-  return obj.value
+  return tag.value
 }
 
 export function addAbeTagToCollection(
@@ -75,7 +87,7 @@ export function addAbeTagToCollection(
 }
 
 /**
- * parse every abe tags, 
+ * parse every abe tags,
  * create the defaultValue attribute if it finds a value in 'value' attribute
  * If the abe tag object contains a key and is not already put in the form
  * and is not included in a #each statement, I update its value and
@@ -207,17 +219,14 @@ export function addAbeTagCollectionToForm(text, json, form, arrayBlock) {
 export function addDataAbeTagsToForm(text, json, form) {
   // removing each blocks potentially containing abe data type
   text = text.replace(cmsData.regex.eachBlockPattern, '')
-
-  const matches = cmsData.regex.getTagAbeTypeRequest(text)
-
-  Array.prototype.forEach.call(matches, match => {
-    var obj = cmsData.attributes.getAll(match[0], json)
-
-    if (obj.editable) {
-      obj.value = json[obj.key]
-      add(obj, json, form)
+  const dataTags = cmsData.regex.getAbeTypeDataList(text)
+  Array.prototype.forEach.call(dataTags, tagStr => {
+    var tag = cmsData.attributes.getAll(tagStr, json)
+    if (tag.editable) {
+      tag.value = json[tag.key]
+      add(tag, json, form)
     } else {
-      json[obj.key] = obj.source
+      json[tag.key] = tag.source
     }
   })
 }
@@ -228,8 +237,10 @@ export async function create(text, json, precontrib = false) {
 
   // get all data from type='data' (web service, select, ...)
   // and create a key abe_source with all data
+  // get external data from source outside abe types 'data' and 'import'
+  // and update json keys with the values
   // + modify keys when editable = false or prefill = true only in the case of source=select
-  await cmsData.source.getDataList(text, json)
+  await cmsData.source.updateJsonWithExternalData(text, json)
 
   // prepare editor values if editable or put values in json from abe_source
   // (don't do this for type='data' included in {{#each}})
