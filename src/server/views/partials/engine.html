@@ -4,8 +4,8 @@
     <form class="text-i18n status-{{@root.json.abe_meta.status}}" id="abeForm">
       <ul class="nav nav-tabs" role="tablist">
         {{#each form}}
-          <li role="presentation" class="nav-item{{#if @first}} active{{/if}}">
-            <a href="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab">
+          <li role="presentation" class="nav-item">
+            <a href="#{{cleanTab @key}}" aria-controls="{{cleanTab @key}}" role="tab" data-toggle="tab" class="nav-link{{#if @first}} active{{/if}}">
               {{@key}}
             </a>
           </li>
