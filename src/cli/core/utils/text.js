@@ -89,6 +89,7 @@ export function checkXss(newUser) {
       // stripIgnoreTagBody: ['script']
     }
   )
+  testXSS = testXSS.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
   if (testXSS !== newUserStr) {
     return {
       success: 0,
