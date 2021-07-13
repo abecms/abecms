@@ -1,5 +1,5 @@
-import fse from 'fs-extra'
 import path from 'path'
+import fs from 'fs'
 
 import {
   config,
@@ -32,7 +32,7 @@ export async function remove(postUrl) {
 
 export async function removePost(file) {
   if (coreUtils.file.exist(file)) {
-    await fse.remove(file)
+    fs.rmSync(file)
   }
 }
 
@@ -51,6 +51,6 @@ export async function removeRevision(jsonPath) {
 
 export async function removeRevisionFile(file) {
   if (coreUtils.file.exist(file)) {
-    await fse.remove(file)
+    await fs.rmSync(file)
   }
 }

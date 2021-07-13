@@ -1,5 +1,5 @@
 //import Handlebars from 'handlebars'
-import fse from 'fs-extra'
+import fs from 'fs'
 import events from 'events'
 import path from 'path'
 import watch from 'watch'
@@ -209,7 +209,7 @@ class Manager {
 
     // watch template folder
     try {
-      fse.accessSync(this.pathTemplates, fse.F_OK)
+      fs.accessSync(this.pathTemplates, fs.F_OK)
       this._watchTemplateFolder = watch.createMonitor(
         this.pathTemplates,
         monitor => {
@@ -273,7 +273,7 @@ class Manager {
 
     // watch partial folder
     try {
-      fse.accessSync(this.pathPartials, fse.F_OK)
+      fs.accessSync(this.pathPartials, fs.F_OK)
       this._watchPartialsFolder = watch.createMonitor(
         this.pathPartials,
         monitor => {
@@ -309,7 +309,7 @@ class Manager {
 
     // watch structure folder
     try {
-      fse.accessSync(this.pathStructure, fse.F_OK)
+      fs.accessSync(this.pathStructure, fs.F_OK)
       this._watchStructure = watch.createMonitor(
         this.pathStructure,
         monitor => {
@@ -333,7 +333,7 @@ class Manager {
 
     // watch reference folder
     try {
-      fse.accessSync(this.pathReference, fse.F_OK)
+      fs.accessSync(this.pathReference, fs.F_OK)
       this._watchReferenceFolder = watch.createMonitor(
         this.pathReference,
         monitor => {
@@ -366,7 +366,7 @@ class Manager {
 
     // watch locales folder
     try {
-      fse.accessSync(this.pathLocales, fse.F_OK)
+      fs.accessSync(this.pathLocales, fs.F_OK)
       this._watchLocalesFolder = watch.createMonitor(
         this.pathLocales,
         monitor => {
@@ -399,7 +399,7 @@ class Manager {
 
     // watch scripts folder
     try {
-      fse.accessSync(this.pathScripts, fse.F_OK)
+      fs.accessSync(this.pathScripts, fs.F_OK)
       this._watchScripts = watch.createMonitor(this.pathScripts, monitor => {
         monitor.on('created', () => {
           abeExtend.plugins.instance.updateScripts()

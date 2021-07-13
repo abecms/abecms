@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars'
 import moment from 'moment'
-import fse from 'fs-extra'
+import fs from 'fs'
 import mkdirp from 'mkdirp'
 import clc from 'cli-color'
 
@@ -60,7 +60,7 @@ export {
   abeExtend,
   mkdirp,
   moment,
-  fse,
+  fs,
   Handlebars,
   clc,
   printInput,

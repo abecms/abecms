@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import fse from 'fs-extra'
+import fs from 'fs'
 import path from 'path'
 
 import {coreUtils, abeExtend} from '../../../'
@@ -32,12 +32,12 @@ export default function abeImport(file, config, ctx) {
   // Je cherche d'abord dans custom puis partials
   // pour récupérer le template
   try {
-    fse.statSync(pathToPartial)
+    fs.statSync(pathToPartial)
   } catch (e) {
     pathToPartial = `${defaultPartials}/${file}.html`
   }
   if (coreUtils.file.exist(pathToPartial)) {
-    html = fse.readFileSync(pathToPartial, 'utf8')
+    html = fs.readFileSync(pathToPartial, 'utf8')
   }
 
   // je recherche les customs de plugins. Si je trouve le fichier aussi dans l'un de ces paths,
@@ -46,7 +46,7 @@ export default function abeImport(file, config, ctx) {
   Array.prototype.forEach.call(pluginsCustoms, pluginCustom => {
     var checkFile = path.join(pluginCustom, `${file}.html`)
     if (coreUtils.file.exist(checkFile)) {
-      html += fse.readFileSync(checkFile, 'utf8')
+      html += fs.readFileSync(checkFile, 'utf8')
     }
   })
 
@@ -55,7 +55,7 @@ export default function abeImport(file, config, ctx) {
   Array.prototype.forEach.call(pluginsPartials, pluginPartials => {
     var checkFile = path.join(pluginPartials, `${file}.html`)
     if (coreUtils.file.exist(checkFile)) {
-      html += fse.readFileSync(checkFile, 'utf8')
+      html += fs.readFileSync(checkFile, 'utf8')
     }
   })
 

@@ -1,5 +1,5 @@
 import path from 'path'
-import fse from 'fs-extra'
+import fs from 'fs'
 import Handlebars from 'handlebars'
 import hooksDefault from '../../hooks/hooks'
 import {abeExtend, coreUtils} from '../../cli'
@@ -18,7 +18,7 @@ var route = function(req, res, next) {
 
   var page = path.join(__dirname + '/../views/list-hooks.html')
   if (coreUtils.file.exist(page)) {
-    html = fse.readFileSync(page, 'utf8')
+    html = fs.readFileSync(page, 'utf8')
   }
 
   var allHooks = []

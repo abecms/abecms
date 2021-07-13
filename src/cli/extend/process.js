@@ -1,5 +1,5 @@
 import process from 'child_process'
-import fse from 'fs-extra'
+import fs from 'fs'
 
 import {config, abeExtend, Manager} from '../'
 
@@ -22,14 +22,14 @@ var abeProcess = function(name, args = [], callback) {
   var proc
   var file = `${__dirname}/../../cli/process/${name}.js`
   try {
-    var stats = fse.statSync(file)
+    var stats = fs.statSync(file)
     if (stats.isFile()) {
       proc = process.fork(file, args)
     }
   } catch (err) {
     try {
       file = abeExtend.plugins.instance.getProcess(name)
-      stats = fse.statSync(file)
+      stats = fs.statSync(file)
       if (stats.isFile()) {
         proc = process.fork(file, args)
       }

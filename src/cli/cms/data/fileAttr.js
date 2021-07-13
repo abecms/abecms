@@ -1,5 +1,5 @@
 import path from 'path'
-import fse from 'fs-extra'
+import fs from 'fs'
 import attr from './attr'
 
 import {cmsData} from '../../'
@@ -49,20 +49,20 @@ export default class FileAttr {
   }
 
   /**
-   * 
-   * @param {String} pathFile 
+   *
+   * @param {String} pathFile
    */
   static getDate(pathFile) {
     let name = path.basename(pathFile)
     const fileData = cmsData.fileAttr.get(name)
     name = cmsData.fileAttr.delete(name)
- 
+
     let date
     if (fileData.d) {
       date = fileData.d
     } else {
       pathFile = cmsData.utils.getRevisionPath(pathFile)
-      const stat = fse.statSync(pathFile)
+      const stat = fs.statSync(pathFile)
       date = stat.mtime
     }
 

@@ -1,7 +1,4 @@
 import Handlebars from 'handlebars'
-import path from 'path'
-import fse from 'fs-extra'
-
 import {abeEngine, cmsData, cmsTemplates, config, abeExtend, Manager} from '../'
 
 /**
@@ -13,7 +10,7 @@ export default class Page {
    * Create new page object
    * @param  {Object} params req.params from express route
    * @param  {Object} i18n translation
-   * @param  {Function} callback 
+   * @param  {Function} callback
    * @param  {Boolean} onlyHTML default = true, if false HTML content will be prepared for edition (contains abe attributes)
    * @return {String} HTML page as string
    */

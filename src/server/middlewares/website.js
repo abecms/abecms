@@ -1,5 +1,5 @@
 import path from 'path'
-import fse from 'fs-extra'
+import fs from 'fs'
 
 import {coreUtils, config, abeExtend, Manager} from '../../cli'
 
@@ -21,7 +21,7 @@ var middleware = function(req, res, next) {
 
     var page = path.join(Manager.instance.pathPublish, req.originalUrl)
     if (coreUtils.file.exist(page)) {
-      html = fse.readFileSync(page, 'utf8')
+      html = fs.readFileSync(page, 'utf8')
     } else {
       return next()
     }

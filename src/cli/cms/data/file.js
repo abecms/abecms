@@ -1,6 +1,6 @@
 import path from 'path'
 import mkdirp from 'mkdirp'
-import fse from 'fs-extra'
+import fs from 'fs'
 
 import {abeExtend, coreUtils, cmsData, config, Manager} from '../../'
 
@@ -65,9 +65,9 @@ export async function get(pathJson) {
   pathJson = abeExtend.hooks.instance.trigger('beforeGetJson', pathJson)
 
   try {
-    var stat = await fse.statSync(pathJson)
+    var stat = await fs.statSync(pathJson)
     if (stat) {
-      json = fse.readFileSync(pathJson)
+      json = fs.readFileSync(pathJson)
       json = JSON.parse(json)
     }
   } catch (e) {
@@ -84,7 +84,7 @@ export function getFilesByType(pathFile, type = null) {
   let result = []
 
   try {
-    var directory = fse.lstatSync(pathFile)
+    var directory = fs.lstatSync(pathFile)
     if (!directory.isDirectory()) {
       mkdirp.sync(pathFile)
     }

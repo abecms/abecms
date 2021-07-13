@@ -1,6 +1,6 @@
 import execPromise from 'child-process-promise'
 import mkdirp from 'mkdirp'
-import fse from 'fs-extra'
+import fs from 'fs'
 import slug from 'slugify'
 import Jimp from 'jimp'
 import path from 'path'
@@ -169,7 +169,7 @@ export function saveFile(req) {
         return
       }
 
-      var fstream = fse.createWriteStream(filePath)
+      var fstream = fs.createWriteStream(filePath)
       fstream.on('finish', async () => {
         if (hasSentHeader) return
         if (mediaType === 'image') {

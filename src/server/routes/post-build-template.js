@@ -1,6 +1,6 @@
 import path from 'path'
 import mkdirp from 'mkdirp'
-import fse from 'fs-extra'
+import fs from 'fs'
 import {config, coreUtils, cmsData, Manager} from '../../cli'
 
 var route = function(req, res) {
@@ -17,7 +17,7 @@ var route = function(req, res) {
     let file = path.join(Manager.instance.pathTemplates,'/layout.' + config.files.templates.extension)
     let saveFile = path.join(Manager.instance.pathTemplates, '/' + req.body.name + '.' + config.files.templates.extension)
     if (coreUtils.file.exist(file)) {
-      let text = fse.readFileSync(file, 'utf8')
+      let text = fs.readFileSync(file, 'utf8')
       let regions = cmsData.regex.getTagAbeWithType(text, 'region')
       if (regions.length > 0) {
         let obj = cmsData.attributes.getAll(regions[0], {})
@@ -25,7 +25,7 @@ var route = function(req, res) {
         text = text.replace(regions[0], partials)
       }
       mkdirp.sync(path.dirname(saveFile))
-      fse.writeFileSync(saveFile, text)
+      fs.writeFileSync(saveFile, text)
     }
   }
   res.set('Content-Type', 'application/json')
