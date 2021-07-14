@@ -109,7 +109,7 @@ describe('printInput', function() {
    */
   it('cmsEditor.createInputImage()', function() {
     var result = cmsEditor.createInputImage(data.image.attributes, classAttr, data.image.params)
-    console.log('result image', result);
+    //console.log('result image', result);
 
     var image = result.indexOf('fa fa-upload')
     chai.expect(result).to.be.a('string')

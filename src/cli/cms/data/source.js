@@ -8,8 +8,9 @@ import _ from "lodash";
 import { config, coreUtils, cmsData } from "../../";
 
 export function requestList(obj, match, jsonPage) {
-  const p = new Promise((resolve) => {
+  const p = new Promise((resolve, reject) => {
     cmsData.sql.executeQuery(match, jsonPage).then((data) => {
+      jsonPage["abe_source"] = jsonPage["abe_source"] || {}
       jsonPage["abe_source"][obj.key] = data;
 
       // I update the jsonPage[obj.key] when the tag is not editable
@@ -38,6 +39,10 @@ export function requestList(obj, match, jsonPage) {
       }
 
       resolve(jsonPage);
+    }).catch(e => {
+      console.log('e', e);
+
+      reject(e)
     });
   });
 

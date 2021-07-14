@@ -305,6 +305,7 @@ export function execQuery(match, jsonPage) {
   files = executeWhereClause(files, request.where, request.columns, jsonPage)
   files = executeOrderByClause(files, request.orderby)
   files = executeLimitClause(files, request.limit)
+
   return files
 }
 

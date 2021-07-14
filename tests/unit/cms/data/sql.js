@@ -4,7 +4,7 @@ var expect = chai.expect
 chai.use(sinonChai)
 var sinon = require('sinon');
 var path = require('path');
-var fse = require('fs-extra');
+var fs = require('fs');
 
 var config = require('../../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
@@ -18,11 +18,11 @@ describe('Sql', function() {
     Manager.instance.init()
       .then(function () {
         fixture = {
-          articleJsoninline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8'),
-          articleArrayinline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-arrayinline.html'), 'utf8')
+          articleJsoninline: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8'),
+          articleArrayinline: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-arrayinline.html'), 'utf8')
         }
         done()
-        
+
       }.bind(this))
   });
 
@@ -86,5 +86,5 @@ describe('Sql', function() {
     var result = cmsData.sql.executeOrderByClause(files, orderby)
     chai.expect(result[0].title).to.be.equal('title1');
   });
-  
+
 });

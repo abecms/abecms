@@ -285,6 +285,8 @@ describe('Request', function() {
     var jsonPage = {}
     cmsData.source.requestList(attributes, matches[0], jsonPage)
       .then(function () {
+        console.log('RRRRREEEETTTOOOOOUUUUURURR');
+
         chai.expect(jsonPage.abe_source).to.not.be.undefined
         done()
       })

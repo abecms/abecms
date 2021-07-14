@@ -4,7 +4,7 @@ var expect = chai.expect
 chai.use(sinonChai)
 var sinon = require('sinon');
 var path = require('path');
-var fse = require('fs-extra');
+var fs = require('fs');
 var http = require('http')
 var PassThrough = require('stream').PassThrough;
 
@@ -19,8 +19,8 @@ describe('Source', function() {
   before(async () => {
     await Manager.instance.init()
     fixture = {
-      articleJsoninline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8'),
-      articleArrayinline: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-arrayinline.html'), 'utf8')
+      articleJsoninline: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-jsoninline.html'), 'utf8'),
+      articleArrayinline: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-data-arrayinline.html'), 'utf8')
     }
   })
 
@@ -29,7 +29,7 @@ describe('Source', function() {
     var json = {abe_source:{}}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
 
-    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (match, jsonPage) => {
       return Promise.resolve(data)
     })
     cmsData.source.requestList(obj, 'match', json)
@@ -48,7 +48,7 @@ describe('Source', function() {
     var obj = {key:'titles', "max-length":1}
     var json = {abe_source:{}}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (match, jsonPage) => {
       return Promise.resolve(data)
     })
     cmsData.source.requestList(obj, 'match', json)
@@ -67,7 +67,7 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true, prefill:true, "prefill-quantity":1}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (match, jsonPage) => {
       return Promise.resolve(data)
     })
     cmsData.source.requestList(obj, 'match', json)
@@ -86,7 +86,7 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (match, jsonPage) => {
       return Promise.resolve(data)
     })
     cmsData.source.requestList(obj, 'match', json)
@@ -104,7 +104,7 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true, prefill:true, "max-length":1}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"}]
-    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (match, jsonPage) => {
       return Promise.resolve(data)
     })
     cmsData.source.requestList(obj, 'match', json)
@@ -123,7 +123,7 @@ describe('Source', function() {
     var obj = {key:'titles', editable:true, prefill:true, "max-length":1, "prefill-quantity":2}
     var json = {}
     var data = [{"a":"1", "b":"1"},{"a":"2", "b":"2"},{"a":"3", "b":"3"}]
-    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (tplPath, match, jsonPage) => {
+    sinon.stub(cmsData.sql, 'executeQuery').callsFake( (match, jsonPage) => {
       return Promise.resolve(data)
     })
     cmsData.source.requestList(obj, 'match', json)

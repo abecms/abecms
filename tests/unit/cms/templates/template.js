@@ -4,7 +4,7 @@ var expect = chai.expect
 chai.use(sinonChai)
 var sinon = require('sinon');
 var path = require('path');
-var fse = require('fs-extra');
+var fs = require('fs');
 
 var config = require('../../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
@@ -20,19 +20,19 @@ describe('cmsTemplates', function() {
   before(async () => {
     await Manager.instance.init()
     fixture = {
-      slug: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'slug.html'), 'utf-8'),
-      article: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf-8'),
-      local: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'local.html'), 'utf-8'),
-      articleSingleAbe: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-single-abe.html'), 'utf-8'),
-      articleOrderAbe: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-order-abe.html'), 'utf-8'),
-      articleRequest: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-request.html'), 'utf-8'),
-      template: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
-      articleEach: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf-8'),
-      articlePrecontrib: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-precontribution.html'), 'utf-8'),
-      templateKeys: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-keys.html'), 'utf-8'),
+      slug: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'slug.html'), 'utf-8'),
+      article: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article.html'), 'utf-8'),
+      local: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'local.html'), 'utf-8'),
+      articleSingleAbe: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-single-abe.html'), 'utf-8'),
+      articleOrderAbe: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-order-abe.html'), 'utf-8'),
+      articleRequest: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-request.html'), 'utf-8'),
+      template: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
+      articleEach: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-each-abe.html'), 'utf-8'),
+      articlePrecontrib: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-precontribution.html'), 'utf-8'),
+      templateKeys: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'article-keys.html'), 'utf-8'),
       templatePaths: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'templates/article.html'),
       structurePaths: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'templates/structure/0-1'),
-      import: fse.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
+      import: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'import.html'), 'utf-8'),
       pathTemplates: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates'),
       pathPartials: path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'partials'),
       count: 0
@@ -41,7 +41,7 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.template.getTemplatesAndPartials
-   * 
+   *
    */
   it('cmsTemplates.template.getTemplatesAndPartials()', function(done) {
 
@@ -53,8 +53,8 @@ describe('cmsTemplates', function() {
   });
 
   /**
-   * 
-   * 
+   *
+   *
    */
   it('cmsTemplates.template.addOrder()', function() {
     var getAttr = sinon.stub(cmsData.regex, 'getAttr');
@@ -69,8 +69,8 @@ describe('cmsTemplates', function() {
   });
 
   /**
-   * 
-   * 
+   *
+   *
    */
   it('cmsTemplates.template.addOrder() more options', function() {
     var html = cmsTemplates.template.addOrder(fixture.articleOrderAbe)
@@ -85,7 +85,7 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.template.getStructureAndTemplates
-   * 
+   *
    */
   it('cmsTemplates.template.getStructureAndTemplates()', function() {
     var stubGetFoldersSync = sinon.stub(coreUtils.file, 'getFoldersSync');
@@ -103,7 +103,7 @@ describe('cmsTemplates', function() {
 
   /**
    * getAbeImport
-   * 
+   *
    */
   it('cmsTemplates.template.getAbeImport()', function() {
     var res = cmsTemplates.template.getAbeImport(fixture.template)
@@ -112,7 +112,7 @@ describe('cmsTemplates', function() {
 
   /**
    * translate
-   * 
+   *
    */
   it('cmsTemplates.template.translate()', function() {
     var getAttr = sinon.stub(cmsData.regex, 'getAttr').callsFake( (math, type) => {
@@ -136,7 +136,7 @@ describe('cmsTemplates', function() {
 
   /**
    * getVariablesInWhere
-   * 
+   *
    */
   it('cmsTemplates.template.getVariablesInWhere()', function() {
 
@@ -147,7 +147,7 @@ describe('cmsTemplates', function() {
 
   /**
    * recurseWhereVariables
-   * 
+   *
    */
   it('cmsTemplates.template.recurseWhereVariables()', function() {
 
@@ -158,10 +158,10 @@ describe('cmsTemplates', function() {
 
   /**
    * getTemplatesTexts
-   * 
+   *
    */
   it('cmsTemplates.template.getTemplatesTexts()', function(done) {
-    var readFileSync = sinon.stub(fse, 'readFileSync');
+    var readFileSync = sinon.stub(fs, 'readFileSync');
     readFileSync.returns("test")
 
     // test
@@ -169,7 +169,7 @@ describe('cmsTemplates', function() {
     .then(function (res) {
       chai.expect(res[0].name).to.be.equal('test');
 
-      sinon.assert.calledOnce(fse.readFileSync)
+      sinon.assert.calledOnce(fs.readFileSync)
       sinon.restore()
       done()
     })
@@ -177,10 +177,10 @@ describe('cmsTemplates', function() {
 
   /**
    * includePartials
-   * 
+   *
    */
   it('cmsTemplates.template.includePartials()', function() {
-    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
+    var stubReadFileSync = sinon.stub(fs, 'readFileSync');
     stubReadFileSync.returns("test")
     var stubGetAbeImport = sinon.stub(cmsTemplates.template, 'getAbeImport').callsFake( () => {
       if (fixture.count === 0) {
@@ -202,7 +202,7 @@ describe('cmsTemplates', function() {
     chai.expect(template).to.be.equal("test");
 
     // unstub
-    sinon.assert.calledOnce(fse.readFileSync)
+    sinon.assert.calledOnce(fs.readFileSync)
     sinon.assert.calledTwice(cmsTemplates.template.getAbeImport)
     sinon.assert.calledOnce(cmsData.attributes.getAll)
     sinon.assert.calledOnce(coreUtils.file.exist)
@@ -211,17 +211,17 @@ describe('cmsTemplates', function() {
   });
 
   it('cmsTemplates.template.includePartials()', function() {
-    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
+    var stubReadFileSync = sinon.stub(fs, 'readFileSync');
     stubReadFileSync.returns("test")
 
     var template = cmsTemplates.template.includePartials("{{abe type='import' file='{{test}}'}}", {"test" : "test.html"})
-    fse.readFileSync.restore()
+    fs.readFileSync.restore()
     chai.expect(template).to.be.equal("test")
     sinon.restore()
   });
 
   it('cmsTemplates.template.includePartials() with []', function() {
-    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
+    var stubReadFileSync = sinon.stub(fs, 'readFileSync');
     stubReadFileSync.withArgs(path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path, 'test.html')).returns('test');
     stubReadFileSync.withArgs(path.join(config.root, config.themes.path, config.themes.name, config.themes.partials.path, 'title.html')).returns('title');
 
@@ -232,10 +232,10 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.template.getTemplate
-   * 
+   *
    */
   it('cmsTemplates.template.getTemplate()', function() {
-    var stubReadFileSync = sinon.stub(fse, 'readFileSync');
+    var stubReadFileSync = sinon.stub(fs, 'readFileSync');
     stubReadFileSync.returns(fixture.article)
     var stubTrigger = sinon.stub(abeExtend.hooks.instance, 'trigger').callsFake( (p1, p2) => {
       return p2
@@ -252,7 +252,7 @@ describe('cmsTemplates', function() {
     var template = cmsTemplates.template.getTemplate('article')
     chai.expect(template).to.be.equal(fixture.article);
 
-    sinon.assert.calledOnce(fse.readFileSync)
+    sinon.assert.calledOnce(fs.readFileSync)
     sinon.assert.calledTwice(abeExtend.hooks.instance.trigger)
     sinon.assert.calledOnce(coreUtils.file.exist)
     sinon.assert.calledOnce(cmsTemplates.template.includePartials)
@@ -263,7 +263,7 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist
-   * 
+   *
    */
   it('cmsTemplates.template.setAbeSlugDefaultValueIfDoesntExist()', function() {
     var stubGetTagAbeWithType = sinon.stub(cmsData.regex, 'getTagAbeWithType');
@@ -280,7 +280,7 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist
-   * 
+   *
    */
   it('cmsTemplates.template.setAbePrecontribDefaultValueIfDoesntExist()', function() {
     var stubGetTagAbeWithTab = sinon.stub(cmsData.regex, 'getTagAbeWithTab');
@@ -297,7 +297,7 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.template.getAbePrecontribFromTemplates
-   * 
+   *
    */
   it('cmsTemplates.template.getAbePrecontribFromTemplates()', function() {
 
@@ -308,7 +308,7 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.template.getAbeSlugFromTemplates
-   * 
+   *
    */
   it('cmsTemplates.template.getAbeSlugFromTemplates()', function() {
     var setAbeSlugDefaultValueIfDoesntExist = sinon.stub(cmsTemplates.template, 'setAbeSlugDefaultValueIfDoesntExist');
@@ -330,7 +330,7 @@ describe('cmsTemplates', function() {
 
   /**
    * getTemplate
-   * 
+   *
    */
   it('cmsTemplates.template.execRequestColumns()', function() {
     var getAbeTypeDataList = sinon.stub(cmsData.regex, 'getAbeTypeDataList');
@@ -357,7 +357,7 @@ describe('cmsTemplates', function() {
 
   /**
    * getTemplate
-   * 
+   *
    */
   it('cmsTemplates.template.getAbeRequestWhereKeysFromTemplates()', function(done) {
     var execRequestColumns = sinon.stub(cmsTemplates.template, 'execRequestColumns');
@@ -378,7 +378,7 @@ describe('cmsTemplates', function() {
 
   /**
    * cmsTemplates.encodeAbeTagAsComment
-   * 
+   *
    */
   it('cmsTemplates.encodeAbeTagAsComment()', function() {
     var txt = cmsTemplates.encodeAbeTagAsComment(fixture.articleEach);
