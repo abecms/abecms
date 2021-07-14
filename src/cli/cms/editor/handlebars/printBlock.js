@@ -20,10 +20,10 @@ export default function printBlock(ctx, root) {
     if (!hidden)
       res += `<div class="form-group" data-precontrib-templates="${ctx[0]
         .precontribTemplate}">
-                <label class="title">
-                  ${ctx[0].group != null ? ctx[0].group : ctx[0].block}
-                </label>
-                <div class='single-block well well-sm'>`
+          <div class="card">
+            <h5 class="card-header">${ctx[0].group != null ? ctx[0].group : ctx[0].block}</h5>
+            <div class='single-block card-body bg-light'>
+      `
     else
       res += `<div class="form-group" data-precontrib-templates="${ctx[0]
         .precontribTemplate}">
@@ -34,13 +34,13 @@ export default function printBlock(ctx, root) {
     var ctxBlock = ctx[0].key.split('[')[0]
     res += `<div class="form-group" data-precontrib-templates="${ctx[0]
       .precontribTemplate}">
-              <div class="list-group" data-block="${ctxBlock}" >
-                <label class="d-flex justify-content-between">
-                  ${ctxBlock}
-                  <button type="button" class="btn btn-success add-block" title="Add new block" >
-                    <span class="fa fa-plus" aria-hidden="true"></span>
-                  </button>
-                </label>`
+        <div class="card">
+          <h5 class="card-header">${ctxBlock}
+          <button type="button" class="btn btn-success add-block" title="Add new block" style="float: right;">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+          </button></h5>
+          <div class="single-block card-body bg-light" data-block="${ctxBlock}">
+      `
 
     var arrItem = []
     Array.prototype.forEach.call(ctx, item => {
@@ -78,6 +78,7 @@ export default function printBlock(ctx, root) {
     })
 
     res += `
+            </div>
           </div>
         </div>`
   } else {

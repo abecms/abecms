@@ -34,16 +34,15 @@
             {{#each this}}
               {{#if this.0.firstgroup}}
                 {{#if this.0.group}}
-                  <label class="title">
-                    {{this.0.group}}
-                  </label>
+                <div class="card">
+                  <h5 class="card-header">{{this.0.group}}</h5>
                 {{/if}}
-                <div class='single-block well well-sm'>
+                <div class='single-block card-body bg-light'>
               {{/if}}
               <div class="{{cleanTab @key}}">
               {{{printBlock this @root}}}
               </div>
-              {{#if this.0.lastgroup}}</div>{{/if}}
+              {{#if this.0.lastgroup}}</div></div>{{/if}}
             {{/each}}
           {{/ifCond}}
 

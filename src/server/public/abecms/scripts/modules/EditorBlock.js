@@ -34,7 +34,7 @@ export default class EditorBlock {
     }
 
     this._removeblock = [].slice.call(
-      document.querySelectorAll('.list-group[data-block] .remove-block')
+      document.querySelectorAll('.single-block[data-block] .remove-block')
     )
     this._handleClickRemoveBlock = this._clickRemoveBlock.bind(this)
 
@@ -45,7 +45,7 @@ export default class EditorBlock {
     this.onRemoveBlock = on(this)
     this.onMoveBlock = on(this)
 
-    this._dragBlock = document.querySelectorAll('.list-group[data-block]')
+    this._dragBlock = document.querySelectorAll('.single-block[data-block]')
     Array.prototype.forEach.call(this._dragBlock, drag => {
       var drake = dragula([drag], {
         moves: function(el, source, handle, sibling) {
@@ -332,11 +332,11 @@ export default class EditorBlock {
     if (typeof jQuery !== 'undefined' && jQuery !== null) {
       // Bootstrap collapse
       var blocks = $(target)
-        .parents('.list-group')
+        .parents('.single-block')
         .find('.list-block > [data-id]')
 
       $(target)
-        .parents('.list-group')
+        .parents('.single-block')
         .find('.list-block .collapse')
         .collapse('hide')
 
