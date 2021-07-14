@@ -1,4 +1,4 @@
-import fse from 'fs-extra'
+import fs from 'fs'
 import {Promise} from 'bluebird'
 import path from 'path'
 import {
@@ -137,7 +137,7 @@ export function includePartials(text, json) {
       Array.prototype.forEach.call(file, f => {
         if (coreUtils.file.exist(f)) {
           if (duplicateImports[f] != null) {
-            var tmpFile = fse.readFileSync(f, 'utf8')
+            var tmpFile = fs.readFileSync(f, 'utf8')
             var regAbe = /{{abe .*key=[\'|\"](.*?)[\'|\"].*}}/g
             var matches = tmpFile.match(regAbe)
             var match
@@ -161,7 +161,7 @@ export function includePartials(text, json) {
           } else {
             duplicateImports[f] = 1
             partial += cmsTemplates.template.includePartials(
-              fse.readFileSync(f, 'utf8'),
+              fs.readFileSync(f, 'utf8'),
               json
             )
           }
@@ -170,7 +170,7 @@ export function includePartials(text, json) {
     } else {
       if (coreUtils.file.exist(file)) {
         if (duplicateImports[file] != null) {
-          var tmpFile = fse.readFileSync(file, 'utf8')
+          var tmpFile = fs.readFileSync(file, 'utf8')
           var regAbe = /{{abe .*key=[\'|\"](.*?)[\'|\"].*}}/g
           var match
           while ((match = regAbe.exec(tmpFile)) !== null) {
@@ -194,7 +194,7 @@ export function includePartials(text, json) {
         } else {
           duplicateImports[file] = 1
           partial = cmsTemplates.template.includePartials(
-            fse.readFileSync(file, 'utf8'),
+            fs.readFileSync(file, 'utf8'),
             json
           )
         }
@@ -251,7 +251,7 @@ export function getTemplate(file, json = {}) {
     file + '.' + config.files.templates.extension
   )
   if (coreUtils.file.exist(file)) {
-    text = fse.readFileSync(file, 'utf8')
+    text = fs.readFileSync(file, 'utf8')
     text = cmsTemplates.template.includePartials(text, json)
     text = cmsTemplates.template.translate(text)
     text = cmsTemplates.template.addOrder(text)
@@ -332,7 +332,7 @@ export function getTemplatesTexts(templatesList, json) {
   var templates = []
   var p = new Promise(resolve => {
     Array.prototype.forEach.call(templatesList, file => {
-      var template = fse.readFileSync(file, 'utf8')
+      var template = fs.readFileSync(file, 'utf8')
       template = cmsTemplates.template.includePartials(template, json)
       var name = file
         .replace(path.join(Manager.instance.pathTemplates, path.sep), '')

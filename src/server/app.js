@@ -1,6 +1,6 @@
 import express from 'express'
 import https from 'https'
-import fse from 'fs-extra'
+import fs from 'fs'
 import session from 'express-session'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
@@ -100,8 +100,8 @@ handlebars.registerHelper(layouts(handlebars));
 // I load the partials in Handlebars for the layout plugin
 var partials = path.join(__dirname, 'views/partials/');
 partialsDir.forEach(function(pathDir) {
-  fse.readdirSync(partials).forEach(function (file) {
-    var source = fse.readFileSync(partials + file, "utf8")
+  fs.readdirSync(partials).forEach(function (file) {
+    var source = fs.readFileSync(partials + file, "utf8")
     var partial = /(.+)\.html/.exec(file).pop();
 
     handlebars.registerPartial(partial, source);
@@ -111,8 +111,8 @@ partialsDir.forEach(function(pathDir) {
 var opts = {}
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   opts = {
-    key: fse.readFileSync(path.join(config.root, 'key.pem')),
-    cert: fse.readFileSync(path.join(config.root, 'cert.pem'))
+    key: fs.readFileSync(path.join(config.root, 'key.pem')),
+    cert: fs.readFileSync(path.join(config.root, 'cert.pem'))
   }
 }
 
@@ -254,8 +254,8 @@ app.use(
 abeExtend.hooks.instance.trigger('afterExpress', app, express)
 
 // if served through pm2 with sockets
-if (fse.existsSync(port) && fse.lstatSync(port).isSocket()) {
-  fse.unlink(port)
+if (fs.existsSync(port) && fs.lstatSync(port).isSocket()) {
+  fs.unlink(port)
 }
 
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
