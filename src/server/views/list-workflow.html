@@ -1,91 +1,80 @@
 {{#extend "layout"}}
 
-  {{#content "breadcrumbs"}}
-  <ol class="breadcrumb">
-      <li class="breadcrumb-item">Admin</li>
-      <li class="breadcrumb-item active">Workflow</li>
-      <!-- Breadcrumb Menu-->
-      <li class="breadcrumb-menu d-md-down-none">
-          <div class="btn-group" role="group" aria-label="Button group">
-          <a class="btn" href="#">
-              <i class="icon-speech"></i>
-          </a>
-          <a class="btn" href="./">
-              <i class="icon-graph"></i>  Dashboard</a>
-          <a class="btn" href="#">
-              <i class="icon-settings"></i>  Settings</a>
-          </div>
-      </li>
-  </ol>
-  {{/content}}
+  {{#content "breadcrumbs"}}{{/content}}
 
   {{#content "body"}}
-  <div class="manager-tab-content user-list row">
-    <div class="workflow-users">
-      {{#each @root.roles}}
-        <div class="role-wrapper">
-          <div class="role-name">{{this.name}}</div>
-          <div class="workflow-flex">
-          {{&setVariable "previousWorkflow" 'draft'}}
-          {{#each @root.workflowUrl}}
+  <div class="manager-tab">
+    <div class="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4">Workflow</h1>
+      <p class="lead">Display the workflow of validation based on statuses and steps</p>
+    </div>
+    <div class="manager-tab-content user-list row" style="justify-content: center;">
+      <div class="workflow-users">
+        {{#each @root.roles}}
+          <div class="role-wrapper">
+            <div class="role-name">{{this.name}}</div>
+            <div class="workflow-flex">
+            {{&setVariable "previousWorkflow" 'draft'}}
+            {{#each @root.workflowUrl}}
 
-              <div class="workflow-wrapper">
-                <div class="workflow-box">
-                {{#ifCond @key 'draft'}}
-                {{else}}
-                  {{#isAuthorized (concat '/abe/operations/reject/' @key) ../workflow}}
-                    <span class="fa fa-arrow-left icon-allowed icon-reject"
-                    title="{{@key}} - reject" aria-hidden="true"></span>
+                <div class="workflow-wrapper">
+                  <div class="workflow-box">
+                  {{#ifCond @key 'draft'}}
                   {{else}}
-                    <span class="fa fa-remove icon-not-allowed icon-reject"
-                    title="{{@key}} - reject" aria-hidden="true"></span>
-                  {{/isAuthorized}}
-                {{/ifCond}}
+                    {{#isAuthorized (concat '/abe/operations/reject/' @key) ../workflow}}
+                      <span class="fa fa-arrow-left icon-allowed icon-reject"
+                      title="{{@key}} - reject" aria-hidden="true"></span>
+                    {{else}}
+                      <span class="fa fa-remove icon-not-allowed icon-reject"
+                      title="{{@key}} - reject" aria-hidden="true"></span>
+                    {{/isAuthorized}}
+                  {{/ifCond}}
 
-                <div class="workflow-title">{{@key}} :</div>
-                {{#each this}}
-                  {{#isAuthorized this.url ../../workflow}}
-                  <div class="workflow-actif">
-                    {{this.action}}
-                    {{#ifCond this.action "edit"}} in <b>{{this.workflow}}</b>{{/ifCond}}
-                    {{#ifCond this.action "reject"}} to <b>{{this.previous}}</b> status{{/ifCond}}
-                    {{#ifCond this.action "submit"}} to <b>{{next}}</b> status{{/ifCond}}
-                  </div>
-                  {{else}}
-                  <div class="workflow-inactif">
-                    {{this.action}}
-                    {{#ifCond this.action "edit"}} in <b>{{this.workflow}}</b>{{/ifCond}}
-                    {{#ifCond this.action "reject"}} to <b>{{this.previous}}</b> status{{/ifCond}}
-                    {{#ifCond this.action "submit"}} to <b>{{next}}</b> status{{/ifCond}}
-                  </div>
-                  {{/isAuthorized}}
-                {{/each}}
+                  <div class="workflow-title">{{@key}} :</div>
+                  {{#each this}}
+                    {{#isAuthorized this.url ../../workflow}}
+                    <div class="workflow-actif">
+                      {{this.action}}
+                      {{#ifCond this.action "edit"}} in <b>{{this.workflow}}</b>{{/ifCond}}
+                      {{#ifCond this.action "reject"}} to <b>{{this.previous}}</b> status{{/ifCond}}
+                      {{#ifCond this.action "submit"}} to <b>{{next}}</b> status{{/ifCond}}
+                    </div>
+                    {{else}}
+                    <div class="workflow-inactif">
+                      {{this.action}}
+                      {{#ifCond this.action "edit"}} in <b>{{this.workflow}}</b>{{/ifCond}}
+                      {{#ifCond this.action "reject"}} to <b>{{this.previous}}</b> status{{/ifCond}}
+                      {{#ifCond this.action "submit"}} to <b>{{next}}</b> status{{/ifCond}}
+                    </div>
+                    {{/isAuthorized}}
+                  {{/each}}
 
-                {{#ifCond @key 'publish'}}
-                  {{#isAuthorized '/abe/operations/unpublish' ../workflow}}
-                    <div class="workflow-actif">unpublish</div>
+                  {{#ifCond @key 'publish'}}
+                    {{#isAuthorized '/abe/operations/unpublish' ../workflow}}
+                      <div class="workflow-actif">unpublish</div>
+                    {{else}}
+                      <div class="workflow-inactif">unpublish</div>
+                    {{/isAuthorized}}
                   {{else}}
-                    <div class="workflow-inactif">unpublish</div>
-                  {{/isAuthorized}}
-                {{else}}
-                  
-                  {{#isAuthorized (concat '/abe/operations/submit/' @key) ../workflow}}
-                    <span class="fa fa-arrow-right icon-allowed icon-submit"
+
+                    {{#isAuthorized (concat '/abe/operations/submit/' @key) ../workflow}}
+                      <span class="fa fa-arrow-right icon-allowed icon-submit"
+                        title="{{@key}} - submit" aria-hidden="true"></span>
+                    {{else}}
+                      <span class="fa fa-remove icon-not-allowed icon-submit"
                       title="{{@key}} - submit" aria-hidden="true"></span>
-                  {{else}}
-                    <span class="fa fa-remove icon-not-allowed icon-submit"
-                    title="{{@key}} - submit" aria-hidden="true"></span>
-                  {{/isAuthorized}}
-                  
-                {{/ifCond}}
-                </div>
-              </div>
+                    {{/isAuthorized}}
 
-            {{&setVariable "previousWorkflow" @key}}
-          {{/each}}
+                  {{/ifCond}}
+                  </div>
+                </div>
+
+              {{&setVariable "previousWorkflow" @key}}
+            {{/each}}
+            </div>
           </div>
-        </div>
-      {{/each}}
+        {{/each}}
+      </div>
     </div>
   </div>
   {{/content}}
