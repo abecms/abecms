@@ -1,6 +1,6 @@
 import pkg from '../../../package'
 import path from 'path'
-import fse from 'fs-extra'
+import fs from 'fs'
 import Handlebars from 'handlebars'
 import {abeExtend, coreUtils, config} from '../../cli'
 
@@ -34,7 +34,7 @@ var route = function(router, req, res, next) {
 
   var page = path.join(__dirname + '/../views/list-url.html')
   if (coreUtils.file.exist(page)) {
-    html = fse.readFileSync(page, 'utf8')
+    html = fs.readFileSync(page, 'utf8')
   }
 
   var workflowUrl = {}
