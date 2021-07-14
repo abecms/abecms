@@ -5,7 +5,7 @@ cms.editor.create(text, json)
 1. We instantiate a Form object
 2. We update the JSON with external data
     updateJsonWithExternalData(text, jsonPage)
-    - I search all Ab tags with type `data`
+    - I search all Abe tags with type `data`
     - we launch grabDataFrom(jsonPage, match[0]) for each one and update the JSON
     - I search all tags with a source attribute source (exluding those in types `data` and `import`)
     - We launch grabDataFromSource(jsonPage, match) for each one and update the JSON

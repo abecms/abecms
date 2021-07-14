@@ -60,7 +60,7 @@ Everything is made progressive to give you what you need at the right time.
 - {{#each}} - with limit enhancement #118 opened on 19 Jan 2017 by GG31  3.0.x
 - {{#each}} - Title enhancement #36 opened on 21 Nov 2016 by julienlegac  3.0.x
 - Allow select in json file new feature #109 opened on 5 Jan 2017 by catienza
-- Plugin system enhancement #107 opened on 4 Jan 2017 by opompilius   1
+- Plugin system enhancement #107 opened on 4 Jan 2017 by opompilius
 - Browser does not scroll automatically to an editable zone in the preview bug #102 opened on 27 Dec 2016 by Roatha-Chann
 - Republish site has no effect on prefill datas enhancement #86 opened on 15 Dec 2016 by opompilius
 - New feature : migrations new feature #71 opened on 8 Dec 2016 by gregorybesson

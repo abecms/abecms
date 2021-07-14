@@ -7,8 +7,11 @@ The 3.x releases have been focused on the REST layer of AbeCMS.
 The 4.x releases will focus on the transformation of AbeCMS to a full featured Content marketing Services platform.
 
 ## Roadmap of the next 5.x releases
-- Abe Engine is 100% compatible with React, Vue.js, Handlebars, Twig
-- since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
+- Look&feel of the users menu
+
+
+
+
 - templates and partials will be uploadable
 - Video training will be produced
 - Refactor the REST layer:
