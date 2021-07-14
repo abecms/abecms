@@ -1,35 +1,19 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-    {{#> common-styles}}{{/common-styles}}
-</head>
-<body>
-<body class="with-menu engine-open">
-    {{#> header-menu}}{{/header-menu}}
+{{#extend "layout"}}
+{{#content "breadcrumbs"}} {{/content}}
+  {{#content "body"}}
     <div class="container-main user-list">
       <div class="container-table">
         <div>
-          <div class="no-gutter manager-wrapper visible">
-
-            <div class="manager-left form-wrapper">
-              {{#> main-menu}}{{/main-menu}}
-            </div>
-
+          <div class="visible">
             <div class="manager-right tab">
               <div class="manager-tab">
                 <div class="text-uppercase">
                   User list
                 </div>
                 <div class="manager-tab-content">
-
-                  <div class="alert alert-danger hidden" role="alert">
-
-                  </div>
-
+                  <div class="alert alert-danger hidden" role="alert"></div>
                   <div class="">
-
-                      <table class="table table-striped table-bordered table-responsive" id="filtered-list">
+                    <table class="table table-striped table-bordered" id="filtered-list">
                         <thead>
                           <tr>
                             <th>username</th>
@@ -145,7 +129,6 @@
                       </table>
                     </form>
                   </div>
-
                   <table class="hidden">
                     <tr data-user-base>
                       <td class="td-username">
@@ -196,13 +179,17 @@
                     </tr>
                   </table>
                 </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  {{#> common-scripts}}{{/common-scripts}}
-</body>
-</html>
+
+  {{/content}}
+
+  {{#content "bottom-scripts" mode="append"}}
+    <script type="text/javascript" src="/abecms/vendors/jquery-datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/abecms/vendors/jquery-datatables/dataTables.bootstrap4.min.js"></script>
+  {{/content}}
+{{/extend}}
