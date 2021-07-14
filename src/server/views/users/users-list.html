@@ -57,14 +57,14 @@
                       <td align="center" class="td-active">
                         {{#ifCond this.actif 1}}
                           <span class="hidden is-active">active</span>
-                          <span class="fa fa-eye-open text-info" data-deactivate data-user-id="{{this.id}}">
+                          <span class="fa fa-eye text-info" data-deactivate data-user-id="{{this.id}}">
                             <span class="fa fa-eye-slash text-danger"></span>
                           </span>
                         {{/ifCond}}
                         {{#ifCond this.actif 0}}
                           <span class="hidden is-active">inactive</span>
                           <span class="fa fa-eye-slash text-danger" data-activate data-user-id="{{this.id}}">
-                            <span class="fa fa-eye-open text-info"></span>
+                            <span class="fa fa-eye text-info"></span>
                           </span>
                         {{/ifCond}}
                       </td>
@@ -161,7 +161,7 @@
                 <td align="center" class="td-active">
                     <span class="hidden is-active">inactive</span>
                     <span class="fa fa-eye-slash text-danger" data-activate data-user-id="">
-                      <span class="fa fa-eye-open text-info"></span>
+                      <span class="fa fa-eye text-info"></span>
                     </span>
                 </td>
                 {{/isAuthorized}}

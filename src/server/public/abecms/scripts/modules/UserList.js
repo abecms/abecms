@@ -139,10 +139,10 @@ var usersList = {
       },
       () => {
         var childGlyph = target.querySelector('.fa')
-        childGlyph.classList.remove('fa-eye-open', 'text-info')
+        childGlyph.classList.remove('fa-eye', 'text-info')
         childGlyph.classList.add('fa-eye-slash', 'text-danger')
         target.classList.remove('fa-eye-slash', 'text-danger')
-        target.classList.add('fa-eye-open', 'text-info')
+        target.classList.add('fa-eye', 'text-info')
         target.removeEventListener('click', this._handleActivate)
         target.addEventListener('click', this._handleDeactivate)
       }
@@ -165,8 +165,8 @@ var usersList = {
       () => {
         var childGlyph = target.querySelector('.fa')
         childGlyph.classList.remove('fa-eye-slash', 'text-danger')
-        childGlyph.classList.add('fa-eye-open', 'text-info')
-        target.classList.remove('fa-eye-open', 'text-info')
+        childGlyph.classList.add('fa-eye', 'text-info')
+        target.classList.remove('fa-eye', 'text-info')
         target.classList.add('fa-eye-slash', 'text-danger')
         target.removeEventListener('click', this._handleDeactivate)
         target.addEventListener('click', this._handleActivate)
