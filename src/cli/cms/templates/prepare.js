@@ -81,15 +81,17 @@ export function addAbeDataAttrForHtmlTag(template) {
     }
 
     getattr = key.replace(/\./g, '-')
+    const escapedText = cmsData.regex.escapeTextToRegex(match[0], 'g')
+    const replacementText = ' data-abe-' +
+    cmsData.regex.validDataAbe(getattr) +
+    '="' +
+    getattr +
+    '" ' +
+    match[0]
 
     newTemplate = newTemplate.replace(
-      cmsData.regex.escapeTextToRegex(match[0], 'g'),
-      ' data-abe-' +
-        cmsData.regex.validDataAbe(getattr) +
-        '="' +
-        getattr +
-        '" ' +
-        match[0]
+      escapedText,
+      replacementText
     )
   }
 
@@ -118,7 +120,7 @@ export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
 /**
  *
  * IF ABE TAG SINGLE (NOT ABE EACH STATEMENT)
- * 
+ *
  * THIS:
 <img src="{{abe type='image' key='image_key' tab='default'}}" alt="">
 
@@ -284,17 +286,22 @@ export function addAbeHtmlTagBetweenAbeTags(template) {
 
   // {{#each tags may be declared outside of an html Tag}}
   while ((match = cmsData.regex.eachBlockPattern.exec(template))) {
+    const escapedText = cmsData.regex.escapeTextToRegex(match[1], 'g')
     template = template.replace(
-      cmsData.regex.escapeTextToRegex(match[1], 'g'),
+      escapedText,
       '<!--ABE--->' + match[1].trim() + '<!--/ABE--->'
     )
   }
 
   while ((match = pattern.exec(templateNoDom))) {
+    //console.log('match', match[1].trim());
+    const escapedText = cmsData.regex.escapeTextToRegex(match[1], 'g')
+    //console.log('escapedText', escapedText);
     template = template.replace(
-      cmsData.regex.escapeTextToRegex(match[1], 'g'),
+      escapedText,
       '<!--ABE--->' + match[1].trim() + '<!--/ABE--->'
     )
+    //console.log('template', template);
   }
 
   let eachStyles = /<style[\S\s]*?<\/style>/g
@@ -371,7 +378,7 @@ export function removeHandlebarsRawFromHtml(template) {
 
 /**
  * split {{#each}}...{{/each}} into an array
- * 
+ *
  * @param  {[type]} template [description]
  * @return {[type]}          [description]
  */
@@ -449,7 +456,7 @@ export function indexEachBlocks(template, json, onlyHtml) {
  * BECOMES:
   {{abe dictionnary='test' type='text' key='test.title' desc='test title' tab='default'}}
 
- * 
+ *
  * @param  {[type]} template [description]
  * @return {[type]}          [description]
  */

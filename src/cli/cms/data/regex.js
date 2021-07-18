@@ -46,6 +46,7 @@ export let nonEditableDataReg = /({{abe .*(type=[\'|\"]data')?.*editable=[\'|\"]
 // This pattern finds all data types
 //export let dataTypeReg = /({{abe .*?type=[\'|\"]data[\s\S].*?}})/g
 export let dataTypeReg = /({{abe .*type=[\'|\"]data.*}})/g
+export let dataTypeRegWithComment = /({{abe .*type=[\'|\"]data.*}}"\/ABE--->)/g
 
 /**
  * escape a regex

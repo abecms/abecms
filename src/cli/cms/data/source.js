@@ -330,11 +330,16 @@ export async function updateJsonWithExternalData(text, jsonPage) {
 }
 
 export function removeDataList(text) {
-  return text.replace(cmsData.regex.dataTypeReg, "");
+  let newText = text.replace(cmsData.regex.dataTypeRegWithComment, "")
+  newText = newText.replace(cmsData.regex.dataTypeReg, "")
+
+  return newText
 }
 
 export function removeNonEditableDataList(text) {
-  return text.replace(cmsData.regex.nonEditableDataReg, "");
+  let newText = text.replace(cmsData.regex.nonEditableDataReg, "")
+
+  return newText;
 }
 
 /**

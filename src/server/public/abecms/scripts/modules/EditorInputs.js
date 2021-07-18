@@ -85,6 +85,19 @@ export default class EditorInputs {
       })
     }
 
+    var pickers = document.querySelectorAll('.datepicker')
+    if (typeof pickers !== 'undefined' && pickers !== null) {
+      Array.prototype.forEach.call(pickers, picker => {
+        new Pikaday({
+          field: picker,
+          format: picker.getAttribute('data-format'),
+          onSelect: function (date) {
+            picker.value = moment(date).format(picker.getAttribute('data-format'))
+          }
+        });
+      });
+    }
+
     this.rebind()
   }
 

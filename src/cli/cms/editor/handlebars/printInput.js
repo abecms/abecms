@@ -452,6 +452,25 @@ export function createInputText(attributes, inputClass, params) {
             </div>`
 }
 
+export function createInputDate(attributes, inputClass, params) {
+  if (params.editable)
+    return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div class="input-group">
+                <div class="input-group-addon my-auto">
+                  <span class="fa fa-calendar" aria-hidden="true"></span>
+                </div>
+                <input data-format="${((params.format != null) ? params.format : 'DD/MM/YYYY')}" type="text" ${attributes} class="${inputClass} datepicker" />
+              </div>
+              ${hint(params)}
+            </div>`
+  else
+    return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div>
+                <input type="hidden" ${attributes} class="${inputClass}" />
+              </div>
+            </div>`
+}
+
 /**
  * Print form input based on input data type {Textarea | text | meta | link | image | ...}
  * && add appropriate attributs / data-attributs
@@ -508,6 +527,8 @@ export function printInput(params, root) {
     res += createInputLink(attributes, inputClass, params)
   else if (params.type.indexOf('image') >= 0)
     res += createInputImage(attributes, inputClass, params)
+  else if (params.type.indexOf('date') >= 0)
+    res += createInputDate(attributes, inputClass, params)
   else res += createInputText(attributes, inputClass, params)
 
   res += '</div>'

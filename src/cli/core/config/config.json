@@ -176,7 +176,8 @@
   "abeTags":{
     "text": "text",
     "rich": "rich",
-    "textarea": "textarea"
+    "textarea": "textarea",
+    "date": "date"
   },
   "database": {
     "type": "file",

@@ -7,6 +7,9 @@ You'll have to follow these steps to add a new type to Abe:
 - Client side, you'll be able to attach js behaviors to your type. You'll be able to adapt the way it updates the page displayed in the iFrame. On save, you may choose the way you serialize the data.
 
 ## SERVER
+### src/cli/core/config/config.json
+add the type to abeTags
+
 ### src/cli/cms/data/regex.js (recognize the new type)
 abePattern updated
 abeAsTagPattern updated
@@ -35,11 +38,14 @@ It's there.
 adding a "code" type to make it possible to code in Abe:
 
 ## SERVER
+### src/cli/core/config/config.json
+add the type `code` to abeTags
+
 ### src/cli/cms/data/regex.js (recognize the new type)
-We add the type's name : "code" in the regex:
+The following regexes will recognize the new type
 ```
-export let abePattern = /(--->(\*\/)?{{abe.*?type=[\'|\"][text|rich|textarea|code]+[\'|\"][\s\S].*?}})/g
-export let abeAsTagPattern = /({{abe.*?type=[\'|\"][text|rich|textarea|code]+[\'|\"][\s\S].*?}})/g
+export let abePattern = ...
+export let abeAsTagPattern = ...
 ```
 
 ### src/cli/cms/editor/handlebars/printInput.js (create the HTML partial for the editor)
@@ -57,7 +63,6 @@ export function createInputCode(attributes, inputClass, params) {
     codeAttrMode = params.mode
   if(params.theme)
     codeAttrTheme = params.theme
-
 
   return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
             <div class="code">
@@ -89,7 +94,6 @@ Then in _inputElements we instantiate our new class when we encounter the type:
     }
 ```
 
-
 ### src/server/public/abecms/scripts/modules/EditorSave.js (Choose the way you serialize the data on save)
 in serializeForm, I need not to parse the value entered by the user as json:
 ```
@@ -115,7 +119,7 @@ case 'textarea':
       newStr = '<!--' + node.data + '-->' + input.parentNode.querySelector('[contenteditable]').innerHTML + '<!--/ABE--->'
       repl = repl.replace(res[0], newStr)
     } else if((input.classList.contains('form-code'))){
-      // In the case of a {{abe type="code" ...}}, I have to check if the html is well formed 
+      // In the case of a {{abe type="code" ...}}, I have to check if the html is well formed
       // (it will crash if there is an unclosed tag)
       // If there is an unclosed tag, I close it
       var divTemp = document.createElement('div')
