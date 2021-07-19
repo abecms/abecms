@@ -7,7 +7,8 @@ import {
   coreUtils,
   cmsData,
   abeExtend,
-  cmsTemplates
+  cmsTemplates,
+  cmsOperations
 } from '../../'
 import * as sourceAttr from '../../cms/editor/handlebars/sourceAttr'
 
@@ -483,4 +484,72 @@ export function getStructureAndTemplates() {
   })
 
   return result
+}
+
+export function getAutoCreatePostFromTemplatePathAndName(templateTag) {
+  var source = cmsData.regex.getAttr(templateTag, 'source')
+  var name = ''
+  var pathName = ''
+  if(source != null){
+    source = source.split('/')
+    name = source.pop()
+    pathName = source.join('/')
+    pathName = (pathName.trim() == '') ? '/' : pathName
+  }
+
+  return {
+    pathName: pathName,
+    name: name,
+  }
+}
+
+export function autoCreatePostFromTemplate(data, templatePath) {
+  const tplInfos = getAutoCreatePostFromTemplatePathAndName(cmsData.regex.getTagAbeWithType(data, 'slug'))
+  let tplName = templatePath.split('/')
+  tplName = tplName[tplName.length - 1]
+  coreUtils.file.getFiles(Manager.instance.pathData, false).then(function(items) {
+    var found = false
+    for(var key in items){
+      var file = cmsData.fileAttr.delete(items[key])
+      if(file === path.join(Manager.instance.pathData, tplInfos.name + '.json')){
+        found = true
+        break;
+      }
+    }
+    if (!found) {
+      console.log('tplInfos.pathName', tplInfos.pathName, 'tplInfos.name', tplInfos.name, 'path', path.join(tplInfos.pathName, tplInfos.name));
+
+      cmsOperations.create(tplName, path.join(tplInfos.pathName, tplInfos.name), { body: {} })
+    }
+
+  })
+}
+
+export function autoCreatePostFromTemplates(templatePaths) {
+  let autoCreatePostFromTemplates = []
+  var index = 0
+  var p = new Promise((resolve) => {
+    Array.prototype.forEach.call(templatePaths, (templatePath) => {
+      fs.readFile(templatePath.path,'utf8', function read(err, data) {
+        var isEditable = true
+        if(err) console.log("Error getStructureAndTemplates() : ", err)
+        var templateTag = cmsData.regex.getTagAbeWithType(data, 'template')
+        if(templateTag.length > 0) {
+          var templateTagAttrs = cmsData.attributes.getAll(templateTag[0])
+          if(templateTagAttrs['auto-create'] != null && JSON.parse(templateTagAttrs['auto-create'].toLowerCase()) === true) {
+            autoCreatePostFromTemplates.push({data, templatePath: templatePath.path})
+          }
+          if(templateTagAttrs.editable != null && templateTagAttrs.editable === false) isEditable = false
+        }
+        if(++index === templatePaths.length) {
+          Array.prototype.forEach.call(autoCreatePostFromTemplates, (template) => {
+            cmsTemplates.template.autoCreatePostFromTemplate(template.data, template.templatePath)
+          })
+          resolve(autoCreatePostFromTemplates)
+        }
+      })
+    })
+  })
+
+  return p
 }

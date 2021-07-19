@@ -125,6 +125,8 @@ class Manager {
 
     this.updateStructureAndTemplates()
 
+    cmsTemplates.template.autoCreatePostFromTemplates(this._structureAndTemplates.templates)
+
     await this.getKeysFromSelect()
   }
 
@@ -562,6 +564,9 @@ class Manager {
    * @param {String} revisionPath The full path to the post
    */
   async updatePostInList(revisionPath) {
+    if (typeof this._list === 'undefined' || this._list === null) {
+      await this.updateList()
+    }
     const docPath = cmsData.utils.getDocRelativePath(revisionPath)
     const found = coreUtils.array.find(this._list, 'path', docPath)
     const json = await cmsData.revision.getDoc(revisionPath)

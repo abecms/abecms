@@ -385,3 +385,51 @@ describe('cmsTemplates', function() {
     chai.expect(txt.indexOf('{')).to.equal(-1);
   });
 });
+
+/**
+   * getAutoCreatePostFromTemplatePathAndName
+   *
+   */
+ it('cmsTemplates.template.getAutoCreatePostFromTemplatePathAndName()', function() {
+  // stub
+  var getAttr = sinon.stub(cmsData.regex, 'getAttr');
+  getAttr.returns('long/path/to/file')
+
+  // test
+  var result = cmsTemplates.template.getAutoCreatePostFromTemplatePathAndName(['{{abe type="slug" source="long/path/to/file"}}'])
+  chai.expect(result).to.not.be.undefined;
+  chai.expect(result.pathName).to.not.be.undefined;
+  chai.expect(result.name).to.not.be.undefined;
+  chai.expect(result.pathName).to.be.equal('long/path/to');
+  chai.expect(result.name).to.be.equal('file');
+
+  getAttr.restore()
+});
+
+/**
+ * autoCreatePostFromTemplates
+ *
+ */
+it('cmsTemplates.template.autoCreatePostFromTemplates()', function(done) {
+  // stub
+  var getTagAbeWithType = sinon.stub(cmsData.regex, 'getTagAbeWithType');
+  var getAll = sinon.stub(cmsData.attributes, 'getAll');
+  var generateTemplateAuto = sinon.stub(cmsTemplates.template, 'autoCreatePostFromTemplate');
+  getTagAbeWithType.returns([ '{{abe type="template" auto-create="true" editable="false"}}' ])
+  getAll.returns({"type": "template", "auto-create": "true"})
+  generateTemplateAuto.returns({})
+
+  // test
+  cmsTemplates.template.autoCreatePostFromTemplates([{
+    path: path.join(process.cwd(), 'test', 'fixtures', 'templates', 'article-auto.html'), name: 'auto-generate'}
+  ]).then(function (result) {
+    chai.expect(result).to.not.be.undefined;
+    chai.expect(result.length).to.be.equal(1);
+    chai.expect(result[0].templatePath).to.not.be.undefined;
+    chai.expect(result[0].templatePath.indexOf('test/fixtures/templates/article-auto.html')).to.be.above(-1);
+    done()
+    getTagAbeWithType.restore()
+    getAll.restore()
+    generateTemplateAuto.restore()
+  })
+});

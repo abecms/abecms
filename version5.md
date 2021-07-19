@@ -33,7 +33,7 @@ Everything is made progressive to give you what you need at the right time.
 - Essayer de rendre la synchro form / content dans l'éditeur dynamique (à la react) => cf abecms4research
 - components oriented
 - since Abe has become stateful, clustering has been removed. Implement a solution to permit clusters of Abe
-- add the date field
+X- add the date field
 - templates and partials will be uploadable
 - Video training will be produced
 - Refactor the REST layer: cf. https://github.com/Madmous/madClones/tree/develop/server/trello-microservice/src
