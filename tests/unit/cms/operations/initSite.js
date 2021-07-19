@@ -23,6 +23,8 @@ describe('cmsOperations', function() {
 
   it('cmsOperations.initSite()', function(done) {
     const create = new cmsOperations.initSite()
+    const uadd = sinon.stub(User.operations, 'add')
+    uadd.returns({success: 1, user:{id:1}})
     const chdir = sinon.stub(process, 'chdir');
     const stubadd = sinon.stub(create, 'addFolder').callsFake( () => {
       return Promise.resolve()
@@ -30,11 +32,12 @@ describe('cmsOperations', function() {
 
     create.init(process.cwd())
       .then(function(resSave) {
-        
+
         sinon.assert.callCount(stubadd, 7)
         sinon.assert.callCount(chdir, 1)
         stubadd.restore()
         chdir.restore()
+        uadd.restore()
 
         done()
       }.bind(this));
@@ -49,7 +52,7 @@ describe('cmsOperations', function() {
     const stubUpdate = sinon.stub(User.manager.instance, 'update')
     const uadd = sinon.stub(User.operations, 'add')
     const uactivate = sinon.stub(User.operations, 'activate')
-    uadd.returns({user:{id:1}})
+    uadd.returns({success:1,user:{id:1}})
     uactivate.returns(true)
     stubRead.returns({})
     stubUpdate.returns(true)
@@ -64,7 +67,7 @@ describe('cmsOperations', function() {
         'name':'Admin'
       }
     }
-    
+
     create.updateSecurity({security:true, username:'nametest', email:'email', password:'password'})
       .then(function(resSave) {
 

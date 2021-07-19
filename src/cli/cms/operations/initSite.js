@@ -126,8 +126,21 @@ export default class initSite {
           }
         }
         User.manager.instance.update([])
-        var admin = User.operations.add(u)
-        User.operations.activate(admin.user.id)
+        const admin = User.operations.add(u)
+        if (admin.success == 1)
+          User.operations.activate(admin.user.id)
+        else if (admin.xssError) {
+          console.log("XSS detected");
+          process.exit(1);
+        }
+        else if (admin.emailTaken) {
+          console.log("Email already in use");
+          process.exit(1);
+        }
+        else {
+          console.log("Data validation error");
+          process.exit(1);
+        }
       }
 
       resolve()
@@ -420,11 +433,6 @@ export default class initSite {
                 name:
                   'abe-mailer: Create contact Forms on your website and send emails',
                 value: 'wonknu/abe-mailer'
-              },
-              {
-                key: 'i',
-                name: 'abe-datepicker: Add a datepicker to your Abe editor',
-                value: 'wonknu/abe-datepicker'
               },
               {
                 key: 'i',

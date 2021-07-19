@@ -2,16 +2,22 @@ import {coreUtils, User} from '../../cli'
 
 /**
  * TODO MONGO
- * @param {*} newUser 
+ * @param {*} newUser
  */
 export function add(newUser) {
   var xss = coreUtils.text.checkXss(newUser)
   if (xss.success === 0) {
-    return xss
+    return {
+      xssError: 1,
+      success: 0
+    }
   }
   var sameEmail = User.utils.checkSameEmail(newUser)
   if (sameEmail.success === 0) {
-    return sameEmail
+    return {
+      emailTaken: 1,
+      success: 0
+    }
   }
 
   User.utils.getRole(newUser)
@@ -41,7 +47,7 @@ export function add(newUser) {
 
 /**
  * TODO MONGO
- * @param {*} id 
+ * @param {*} id
  */
 export function deactivate(id) {
   var bdd = User.manager.instance.get()
