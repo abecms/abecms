@@ -7,8 +7,11 @@ export function getAttributes(params) {
   if (params.key != null)
     attributes += `id="${params.key}" data-id="${params.key}"`
   if (
-    params.type.indexOf('checkbox') < 0 &&
-    params.type.indexOf('radio') < 0
+    (
+      (params.type && params.type.indexOf('checkbox') < 0 ) &&
+      (params.type && params.type.indexOf('radio') < 0)
+    ) ||
+    !params.type
   ) {
     if (params.value != null) attributes += ` value="${params.value}"`
   }
