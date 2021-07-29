@@ -2,22 +2,27 @@ We have a 1 year roadmap (estimation) with the following versions. You'll notice
 
 The 2.x releases have been focused on quality and stability and covered by Unit tests + functional tests.
 
-The 3.x releases have been focused on the REST layer of AbeCMS.
+The 3.x and 4.x releases have been focused on the REST layer of AbeCMS.
 
-The 4.x releases will focus on the transformation of AbeCMS to a full featured Content marketing Services platform.
+The 5.x releases will focus on the transformation of AbeCMS to a full featured Content marketing Services platform.
 
 ## Roadmap of the next 5.x releases
-- Look&feel of the users menu
-
-
-
+X- Look&feel of the users menu
+- the Themes concept is fully integrated (we must be able to chose a theme (composed by templates) from the admin)
+- the drag&drop of partials is fully integrated and included in the default editor.
+- the documentation is up to date
+- Notifications are fully functional and documented
+- AI images, video and NLP for text and summaries included by default
+- Add netlify as a static deployment stack
+- micro-services (mail, form, search engine ready to use and documented)
+-
 
 - templates and partials will be uploadable
 - Video training will be produced
 - Refactor the REST layer:
   - Usage of oAuth2 for REST routes
 - Add robots.txt + URL redirection features in Abe
-- We must be able to chose a theme (composed by templates) from the admin
+
 - We should be able to sync data, templates, ... from a distant Abe install
 - Add a -d (--dev) option to Abe CLI so that we can have livereload and debug features during template dev
 

@@ -6,18 +6,18 @@ import {cmsData, config, cmsTemplates} from '../../'
 export function addAbeAttrSingleTab(key, elem, htmlAttribute = null) {
   var res = ''
 
-  var valueOfAttritube = key.replace(/\./g, '-')
-  key = cmsData.regex.validDataAbe(valueOfAttritube)
+  var valueOfAttribute = key.replace(/\./g, '-')
+  key = cmsData.regex.validDataAbe(valueOfAttribute)
 
   if (htmlAttribute != null) {
     res =
       ' data-abe-attr-' +
-      valueOfAttritube +
+      valueOfAttribute +
       '="' +
       htmlAttribute +
       '"' +
       ' data-abe-' +
-      valueOfAttritube +
+      valueOfAttribute +
       '="' +
       key +
       '"' +
@@ -32,26 +32,26 @@ export function addAbeAttrSingleTab(key, elem, htmlAttribute = null) {
 export function addAbeAttrForBlock(key, elem, htmlAttribute = null) {
   var res = ''
 
-  var valueOfAttritube = key.split('.')
-  var parentKey = valueOfAttritube.shift()
-  valueOfAttritube = `${parentKey}[index].${valueOfAttritube[0].replace(
+  var valueOfAttribute = key.split('.')
+  var parentKey = valueOfAttribute.shift()
+  valueOfAttribute = `${parentKey}[index].${valueOfAttribute[0].replace(
     /\./g,
     '-'
   )}`
-  var valueOfAttritubeIndexed = valueOfAttritube.replace(
+  var valueOfAttributeIndexed = valueOfAttribute.replace(
     /\[index\]/,
     '{{@index}}'
   )
-  key = cmsData.regex.validDataAbe(valueOfAttritube)
+  key = cmsData.regex.validDataAbe(valueOfAttribute)
 
   if (htmlAttribute) {
     res =
-      ` data-abe-attr-${valueOfAttritube}="${htmlAttribute}"  data-abe-${valueOfAttritube}="${key}"` +
-      ` data-abe-attr-${valueOfAttritubeIndexed}="${htmlAttribute}" data-abe-${valueOfAttritubeIndexed}="${key}"${elem}`
+      ` data-abe-attr-${valueOfAttribute}="${htmlAttribute}"  data-abe-${valueOfAttribute}="${key}"` +
+      ` data-abe-attr-${valueOfAttributeIndexed}="${htmlAttribute}" data-abe-${valueOfAttributeIndexed}="${key}"${elem}`
   } else {
     res =
-      ` data-abe-${valueOfAttritube}="${key}"` +
-      ` data-abe-${valueOfAttritubeIndexed}="${key}" ${elem}`
+      ` data-abe-${valueOfAttribute}="${key}"` +
+      ` data-abe-${valueOfAttributeIndexed}="${key}" ${elem}`
   }
 
   return res
@@ -104,7 +104,6 @@ export function addHasAbeAttr(text) {
 }
 
 export function getAbeAttributeData(match, text, htmlAttribute, abeTag) {
-  var valueOfAttritube
   var key = cmsData.regex.getAttr(match, 'key')
   var res
 

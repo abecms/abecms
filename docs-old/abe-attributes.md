@@ -1,6 +1,6 @@
 # Abe attributes
 
-> abe tags can own many attributes.
+> abe tags can have many attributes.
 
 For example the type text, some are required and other are optional:
 
@@ -103,9 +103,9 @@ Examples:
 ```
 
 > You can use dot json for keys the result will create json value when the data is saved
-> 
+>
 > `mypage.content.title.value` as key will output
-> 
+>
 > `{"mypage": {"content": {"title": {"value": ""}}}}`
 
 ## <a name="type"></a>type (String)
@@ -164,14 +164,14 @@ Default: ""
 desc="some description for the contributor"
 ```
 
-The admin description over the input.
+The admin description above the input field.
 
 Allowed:
 
 - CamelCase
 - Underscore
 - Spaces
-- Special charactères
+- Special characters
 
 ## <a name="display"></a>display (String)
 
@@ -279,7 +279,7 @@ Default: true
 duplicate="true"
 ```
 
-If set to false, when user duplicate a post. The value will not be duplicate into the new post.
+If set to false, when a user duplicates a post. The value will not be duplicated into the new post.
 
 Example:
 
@@ -432,4 +432,4 @@ Default: none
 value="default text value"
 ```
 
-Add a default value inside input, if the input value changes the default value won't be used anymore unless the value of the input become an empty string.
+Add a default value inside the input, if the input value changes the default value won't be used anymore unless the value of the input become an empty string.
