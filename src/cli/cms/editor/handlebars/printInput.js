@@ -484,9 +484,9 @@ export function createCheckbox(attributes, inputClass, params) {
     const values = params.value.split(', ')
     const options = params.options.split(',')
     let str = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
-              <div class="input-group">`
+              <div class="form-group">`
     options.map(option => {
-      str = `${str}\n<label>${option.trim()}</label><input type="checkbox" name=${params.key} ${attributes} value="${option.trim()}" class="${inputClass}"${(values.includes(option.trim())) ? " checked" : ""}/><br/>`
+      str = `${str}\n<label style="margin-right: 10px;">${option.trim()}</label><input type="checkbox" name=${params.key} ${attributes} value="${option.trim()}" class="${inputClass}"${(values.includes(option.trim())) ? " checked" : ""}/><br/>`
     })
     str = `${str}\n</div>
       ${hint(params)}
@@ -507,9 +507,9 @@ export function createRadio(attributes, inputClass, params) {
     const values = params.value.split(', ')
     const options = params.options.split(',')
     let str = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
-              <div class="input-group">`
+              <div class="form-group">`
     options.map(option => {
-      str = `${str}\n<label>${option.trim()}</label><input type="radio" name=${params.key} ${attributes} value="${option.trim()}" class="${inputClass}"${(values.includes(option.trim())) ? " checked" : ""}/><br/>`
+      str = `${str}\n<label style="margin-right: 10px;">${option.trim()}</label><input type="radio" name=${params.key} ${attributes} value="${option.trim()}" class="${inputClass}"${(values.includes(option.trim())) ? " checked" : ""}/><br/>`
     })
     str = `${str}\n</div>
       ${hint(params)}
