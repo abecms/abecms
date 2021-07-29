@@ -186,29 +186,65 @@ export default class EditorUtils {
     var dataAbeAttr
     switch (input.nodeName.toLowerCase()) {
       case 'input':
-        if (node.nodeType !== 8) {
-          dataAbeAttr = node.getAttribute(
-            'data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1')
-          )
-          if (typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
-            node.setAttribute(dataAbeAttr, val)
-          } else if (node.inStyle || node.inScript) {
-            node.setHtml(val)
+        if (
+          (input.type == 'checkbox') ||
+          (input.type == 'radio')
+        ) {
+          const checkedOptions = input.parentNode.querySelectorAll('input:checked')
+          val = ''
+          for(var i = 0; i< checkedOptions.length; i++){
+            val = `${val} ${checkedOptions[i].value}`
+          }
+
+          if (node.nodeType !== 8) {
+            dataAbeAttr = node.getAttribute(
+              'data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1')
+            )
+            if (typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
+              node.setAttribute(dataAbeAttr, val)
+            } else if (node.inStyle || node.inScript) {
+              node.setHtml(node.getHtml() + val)
+            } else {
+              node.innerHTML = node.innerHTML + val
+            }
           } else {
-            node.innerHTML = val
+            var commentPattern = new RegExp(
+              '(<!--' + node.data + '-->)([\\s\\S]+?)(<!--\\/ABE--->)'
+            )
+            var res = commentPattern.exec(node.parentNode.innerHTML)
+            var repl = node.parentNode.innerHTML.replace(
+              res[0],
+              `<!--${node.data}-->${val}<!--/ABE--->`
+            )
+
+            node.parentNode.innerHTML = repl
           }
         } else {
-          var commentPattern = new RegExp(
-            '(<!--' + node.data + '-->[\\s\\S]+?\\/ABE--->)'
-          )
-          var res = commentPattern.exec(node.parentNode.innerHTML)
-          var repl = node.parentNode.innerHTML.replace(
-            res[0],
-            '<!--' + node.data + '-->' + val + '<!--/ABE--->'
-          )
+          if (node.nodeType !== 8) {
+            dataAbeAttr = node.getAttribute(
+              'data-abe-attr-' + id.replace(/\[([0-9]*)\]/g, '$1')
+            )
+            if (typeof dataAbeAttr !== 'undefined' && dataAbeAttr !== null) {
+              node.setAttribute(dataAbeAttr, val)
+            } else if (node.inStyle || node.inScript) {
+              node.setHtml(val)
+            } else {
+              node.innerHTML = val
+            }
+          } else {
+            var commentPattern = new RegExp(
+              '(<!--' + node.data + '-->[\\s\\S]+?\\/ABE--->)'
+            )
+            var res = commentPattern.exec(node.parentNode.innerHTML)
+            var repl = node.parentNode.innerHTML.replace(
+              res[0],
+              '<!--' + node.data + '-->' + val + '<!--/ABE--->'
+            )
 
-          node.parentNode.innerHTML = repl
+            node.parentNode.innerHTML = repl
+          }
         }
+
         break
       case 'textarea':
         if (node.nodeType === 8) {

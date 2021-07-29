@@ -66,9 +66,28 @@ export default class EditorSave {
               'data-precontrib-templates'
             )
       var maxlength = input.getAttribute('data-maxlength')
-      var value
+      let value = input.value
 
       if (input.type === 'file') return
+
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        var elts = input.parentNode.querySelectorAll(
+          '.form-abe'
+        )
+        let found = false
+        value = ''
+        Array.prototype.forEach.call(elts, elt => {
+          if (elt.checked) {
+            value += (value == '') ? `${elt.value}` : `, ${elt.value}`
+            found = true
+          }
+        })
+
+        if (!found) {
+          delete this._json.data[dataId]
+        }
+      }
+
       if (
         typeof dataId !== 'undefined' &&
         dataId !== null &&
@@ -193,9 +212,8 @@ export default class EditorSave {
             } catch (e) {
               value = null
             }
-          } else {
-            value = input.value
           }
+
           setObjByString(this._json.data, dataId, value)
         }
       }
@@ -238,7 +256,7 @@ export default class EditorSave {
   }
 
   /**
-   * Listen form submit and save page template 
+   * Listen form submit and save page template
    * @return {void}
    */
   _formSubmit() {

@@ -177,7 +177,9 @@
     "text": "text",
     "rich": "rich",
     "textarea": "textarea",
-    "date": "date"
+    "date": "date",
+    "checkbox": "checkbox",
+    "radio": "radio"
   },
   "database": {
     "type": "file",

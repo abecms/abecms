@@ -88,6 +88,7 @@ export function getAttrValuefromKey(template, key, attr, json) {
 
   return value
 }
+
 /**
  * This function will take the value of an Abe attribute and analyze its content.
  * If it contains a var {{variable.prop.value}}, it will extract its content with these rules
@@ -97,8 +98,8 @@ export function getAttrValuefromKey(template, key, attr, json) {
  * will all be transformed into element[0].value and evaluated with the json
  * If it contains a [] ie. {{variable[].value}} or {{variable.[].value}}
  * It will return the array of values
- * @param  {String} value 
- * @return {String}       
+ * @param  {String} value
+ * @return {String}
  */
 export function getValueFromAttribute(value, json) {
   var result = value

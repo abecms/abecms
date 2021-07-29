@@ -6,7 +6,12 @@ export function getAttributes(params) {
   var attributes = ''
   if (params.key != null)
     attributes += `id="${params.key}" data-id="${params.key}"`
-  if (params.value != null) attributes += ` value="${params.value}"`
+  if (
+    params.type.indexOf('checkbox') < 0 &&
+    params.type.indexOf('radio') < 0
+  ) {
+    if (params.value != null) attributes += ` value="${params.value}"`
+  }
   if (params['max-length'] != null)
     attributes += ` data-maxlength="${params['max-length']}"`
   if (params.reload != null) attributes += ` reload="${params.reload}"`
@@ -471,6 +476,54 @@ export function createInputDate(attributes, inputClass, params) {
             </div>`
 }
 
+export function createCheckbox(attributes, inputClass, params) {
+  if (params.editable && params.options) {
+    const values = params.value.split(', ')
+    const options = params.options.split(',')
+    let str = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div class="input-group">`
+    options.map(option => {
+      str = `${str}\n<label>${option.trim()}</label><input type="checkbox" name=${params.key} ${attributes} value="${option.trim()}" class="${inputClass}"${(values.includes(option.trim())) ? " checked" : ""}/><br/>`
+    })
+    str = `${str}\n</div>
+      ${hint(params)}
+      </div>`
+
+    return str
+  } else {
+    return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div>
+                <input type="hidden" ${attributes} class="${inputClass}" />
+              </div>
+            </div>`
+  }
+}
+
+export function createRadio(attributes, inputClass, params) {
+  console.log('params', params, attributes, inputClass);
+
+  if (params.editable && params.options) {
+    const values = params.value.split(', ')
+    const options = params.options.split(',')
+    let str = `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div class="input-group">`
+    options.map(option => {
+      str = `${str}\n<label>${option.trim()}</label><input type="radio" name=${params.key} ${attributes} value="${option.trim()}" class="${inputClass}"${(values.includes(option.trim())) ? " checked" : ""}/><br/>`
+    })
+    str = `${str}\n</div>
+      ${hint(params)}
+      </div>`
+
+    return str
+  } else {
+    return `<div class="parent-${params.type} parent-${params.key}" data-parent="${params.key}">
+              <div>
+                <input type="hidden" ${attributes} class="${inputClass}" />
+              </div>
+            </div>`
+  }
+}
+
 /**
  * Print form input based on input data type {Textarea | text | meta | link | image | ...}
  * && add appropriate attributs / data-attributs
@@ -488,8 +541,9 @@ export function printInput(params, root) {
     res = `<div data-precontrib-templates="${params.precontribTemplate}">`
   }
 
-  if (params.value === null && params.defaultValue != null)
+  if (params.value === null && params.defaultValue != null) {
     params.value = params.defaultValue
+  }
   params.placeholder = params.placeholder || ''
   params.value = params.value || ''
 
@@ -529,7 +583,13 @@ export function printInput(params, root) {
     res += createInputImage(attributes, inputClass, params)
   else if (params.type.indexOf('date') >= 0)
     res += createInputDate(attributes, inputClass, params)
-  else res += createInputText(attributes, inputClass, params)
+  else if (params.type.indexOf('checkbox') >= 0) {
+    inputClass = 'form-abe'
+    res += createCheckbox(attributes, inputClass, params)
+  } else if (params.type.indexOf('radio') >= 0) {
+    inputClass = 'form-abe'
+    res += createRadio(attributes, inputClass, params)
+  } else res += createInputText(attributes, inputClass, params)
 
   res += '</div>'
   res = abeExtend.hooks.instance.trigger('afterEditorInput', res, params)
