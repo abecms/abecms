@@ -503,8 +503,6 @@ export function createCheckbox(attributes, inputClass, params) {
 }
 
 export function createRadio(attributes, inputClass, params) {
-  console.log('params', params, attributes, inputClass);
-
   if (params.editable && params.options) {
     const values = params.value.split(', ')
     const options = params.options.split(',')
