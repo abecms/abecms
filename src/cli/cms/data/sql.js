@@ -244,11 +244,13 @@ export function executeOrderByClause(files, orderby) {
  */
 export function keepOnlyPublishedPost(files) {
   var publishedValue = []
-  Array.prototype.forEach.call(files, file => {
-    if (file.publish != null) {
-      publishedValue.push(file.publish)
-    }
-  })
+  if (files && files.length > 0) {
+    Array.prototype.forEach.call(files, file => {
+      if (file.publish != null) {
+        publishedValue.push(file.publish)
+      }
+    })
+  }
 
   return publishedValue
 }
