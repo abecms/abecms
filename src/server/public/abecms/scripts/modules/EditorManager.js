@@ -34,7 +34,7 @@ export default class EditorManager {
       }
     }
 
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    $('a[data-toggle="tab"]').on('click', function (e) {
       return (location.hash = $(e.target).attr('data-target').substr(1))
     })
 
