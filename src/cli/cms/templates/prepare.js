@@ -412,7 +412,7 @@ export function indexEachBlocks(template, json, onlyHtml) {
           )
       )
       var blockHtml = blockCompiled(voidData, {
-        data: {intl: config.intlData}
+        data: {intl: config.intlData, config: config}
       }).replace(/\[\[abe (.*?)\]\]/g, '{{abe $1}}')
 
       // je rajoute un data-abe-block avec index sur tous les tags html du bloc each

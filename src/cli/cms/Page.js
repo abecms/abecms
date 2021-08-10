@@ -71,7 +71,7 @@ export default class Page {
     )
 
     // I create the html page ! yeah !!!
-    this.html = compiledTemplate(json, {data: {intl: config.intlData}})
+    this.html = compiledTemplate(json, { data: { intl: config.intlData, config: config } })
 
     if (this._onlyHTML) {
       this.html = abeExtend.hooks.instance.trigger(

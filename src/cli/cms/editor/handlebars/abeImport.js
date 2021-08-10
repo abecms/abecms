@@ -69,7 +69,7 @@ export default function abeImport(file, config, ctx) {
 
   // Et je finis par compiler le template !!!!
   var template = Handlebars.compile(html)
-  var res = new Handlebars.SafeString(template(ctx, {data: {intl: intlData}}))
+  var res = new Handlebars.SafeString(template(ctx, {data: {intl: intlData, config: config}}))
 
   return res
 }
