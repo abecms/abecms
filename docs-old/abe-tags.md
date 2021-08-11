@@ -40,7 +40,7 @@ This example will be added to `body > class` HTML attributes.
 <html>
     <head>
     </head>
-    <body class="{{abe type='text' key='text_class'}}">	
+    <body class="{{abe type='text' key='text_class'}}">
     </body>
 </html>
 ```
@@ -51,7 +51,7 @@ This example will be added to `body > class` HTML attributes.
 <html>
     <head>
     </head>
-    <body class="class-hello">		
+    <body class="class-hello">
     </body>
 </html>
 ```
@@ -66,7 +66,7 @@ Multiple attributes are allowed on the same HTML DOM object.
 <html>
     <head>
     </head>
-    <body class="{{abe type='text' key='text_class'}}" id="{{abe type='text' key='text_id'}}">		
+    <body class="{{abe type='text' key='text_class'}}" id="{{abe type='text' key='text_id'}}">
     </body>
 </html>
 ```
@@ -77,7 +77,7 @@ Multiple attributes are allowed on the same HTML DOM object.
 <html>
     <head>
     </head>
-    <body class="my-body-class {{abe type='text' key='text_class'}}">		
+    <body class="my-body-class {{abe type='text' key='text_class'}}">
     </body>
 </html>
 ```
@@ -90,7 +90,7 @@ On the next example if variable `text_class` is not empty use `text_class` other
 <html>
     <head>
     </head>
-    <body class="{{#if text_class}}{{abe type='text' key='text_class'}}{{else}}my-default-class{{/if}}">		
+    <body class="{{#if text_class}}{{abe type='text' key='text_class'}}{{else}}my-default-class{{/if}}">
     </body>
 </html>
 ```
@@ -103,7 +103,7 @@ Multiple abe attributes into the same HTML tag.
 <html>
     <head>
     </head>
-    <body class="{{abe type='text' key='text_1'}}{{abe type='text' key='text_2'}}">		
+    <body class="{{abe type='text' key='text_1'}}{{abe type='text' key='text_2'}}">
     </body>
 </html>
 ```
@@ -116,7 +116,7 @@ Tips use visible false Abe attribute.
 <html>
     <head>
     </head>
-    <body class="{{text_1}} {{text_2}}">		
+    <body class="{{text_1}} {{text_2}}">
     </body>
 </html>
 ```
