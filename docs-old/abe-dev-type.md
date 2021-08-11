@@ -15,12 +15,12 @@ abePattern updated
 abeAsTagPattern updated
 
 ### src/cli/cms/editor/handlebars/printInput.js (create the HTML partial for the editor)
-Create a function to handle the new input type if necessary
+Create a function to handle the new input type if necessary. here you will create the html to display your type options on the editor
 (see lines from 375 in printInput() function)
 
 ## CLIENT (create a js function to handle events or do particular actions on your type)
 ### src/server/public/abecms/scripts/modules/EditorInputs.js
-if you need a particular behavior, update _inputElements()
+if you need a particular behavior, update _inputElements(). Here you'll trigger js to handle your HTML type (ie. trigger a calendar popup through JS)
 
 ### src/server/public/abecms/scripts/modules/EditorSave.js (Choose the way you serialize the data on save)
 If you need to handle the value entered by the user in your type, it's in serializeForm()

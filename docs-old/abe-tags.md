@@ -97,7 +97,7 @@ On the next example if variable `text_class` is not empty use `text_class` other
 
 # WARNING: THE FOLLOWING EXAMPLE ARE NOT IMPLEMENTED YET
 
-Multiple abe attribute into the same HTML tag.
+Multiple abe attributes into the same HTML tag.
 
 ```html
 <html>

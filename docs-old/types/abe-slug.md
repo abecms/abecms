@@ -32,7 +32,7 @@ Warning:
 
 If you don't add `tab=slug` attribute the variable will not be available on the slug form.
 
-## Multiples variables
+## Multiple variables
 
 ```json
 {{abe type="slug" source="{{folderCustom}}/{{variableName}}"}}

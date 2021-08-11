@@ -80,9 +80,14 @@ export function createInputSource(attributes, inputClass, params) {
                         <span class="fa fa-refresh"></span>
                       </div>`
     }
-    Array.prototype.forEach.call(params.value, val => {
-      inputSource += sourceAutocomplete(val, params)
-    })
+    if (Array.isArray(params.value)) {
+      Array.prototype.forEach.call(params.value, val => {
+        inputSource += sourceAutocomplete(val, params)
+      })
+    } else if (params.value != '' && params.value === params.value + '') {
+      inputSource += sourceAutocomplete(params.value, params)
+    }
+
     inputSource += '</div>'
   }
 
