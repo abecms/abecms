@@ -125,8 +125,6 @@ app.set('config', config.getConfigByWebsite())
 
 app.use(flash())
 app.use(cookieParser())
-app.use(passport.initialize())
-app.use(passport.session())
 app.use(
   bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000})
 )
@@ -250,6 +248,9 @@ app.use(
     proxy: true
   })
 )
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 abeExtend.hooks.instance.trigger('afterExpress', app, express)
 
