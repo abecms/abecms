@@ -32,11 +32,12 @@
     "distribute": "npm run build:front && npm run compile && npm run mvasset",
     "dev": "node src/tasks/nodemon.js & npm run watch --kill-others"
   },
-  "author": "Gregory Besson",
+  "author": "gregorybesson<bessong@gmail.com>",
   "license": "MIT",
   "contributors": [
     {
-      "name": "Gregory Besson",
+      "name": "gregorybesson",
+      "email" : "bessong@gmail.com",
       "url": "https://github.com/gregorybesson"
     },
     {
@@ -116,7 +117,7 @@
     "redis": "^3.1.2",
     "request": "^2.88.2",
     "slugify": "^1.5.3",
-    "smartcrop-jimp": "^1.0.2",
+    "smartcrop-jimp": "^1.0.3",
     "smtp-server": "^3.9.0",
     "socket.io": "^4.5.1",
     "striptags": "^3.2.0",
