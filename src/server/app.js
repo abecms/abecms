@@ -4,7 +4,7 @@ import fs from 'fs'
 import session from 'express-session'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
-import exphbs from 'express-handlebars'
+import {create as createHandlebars} from 'express-handlebars'
 import path from 'path'
 import busboy from 'connect-busboy'
 import clc from 'cli-color'
@@ -69,7 +69,7 @@ Array.prototype.forEach.call(pluginsPartialsDir, (pluginPartialsDir) => {
   partialsDir.push(pluginPartialsDir)
 })
 
-var html = exphbs.create({
+var html = createHandlebars({
   extname: `.${config.files.templates.extension}`,
   helpers: {
     abe: compileAbe,
