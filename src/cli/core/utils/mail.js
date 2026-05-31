@@ -49,8 +49,15 @@ export function send(from, to, subject, text = '', html = '') {
       transport = require('nodemailer-mailgun-transport')
       transporter = nodemailer.createTransport(transport(options))
     } else if (service === 'sendgrid') {
-      transport = require('nodemailer-sendgrid-transport')
-      transporter = nodemailer.createTransport(transport(options))
+      transporter = nodemailer.createTransport({
+        host: 'smtp.sendgrid.net',
+        port: 587,
+        secure: false,
+        auth: {
+          user: 'apikey',
+          pass: options.auth?.api_key || options.apiKey || options.auth?.pass,
+        },
+      })
     } else {
       transport = require(service)
       transporter = nodemailer.createTransport(transport(options))

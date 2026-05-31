@@ -9,6 +9,7 @@ try {
     style: 'compressed',
     sourceMap: true,
     loadPaths: ['./src/server/sass'],
+    silenceDeprecations: ['import', 'global-builtin', 'color-functions'],
   })
   console.log(clc.green(`write sass ${output}`))
   fs.writeFileSync(output, result.css)

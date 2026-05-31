@@ -11,7 +11,6 @@ import clc from 'cli-color'
 import openurl from 'openurl'
 import flash from 'connect-flash'
 import cookieParser from 'cookie-parser'
-import csrf from 'csurf'
 import passport from 'passport'
 import layouts from 'handlebars-layouts'
 import {check, validationResult} from 'express-validator'
@@ -47,6 +46,10 @@ import {
   middleIsAuthorized,
   middleLiveReload,
 } from './middlewares'
+import {
+  doubleCsrfProtection,
+  attachCsrfToken,
+} from './middlewares/csrf'
 
 //import getHome from './routes/get-home'
 import getHome from './routes/get-main'
@@ -126,18 +129,23 @@ app.set('config', config.getConfigByWebsite())
 app.use(flash())
 app.use(cookieParser())
 app.use(
+  session({
+    name: 'sessionId',
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: config.cookie.secure},
+    proxy: true,
+  }),
+)
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(
   bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000}),
 )
-//app.use(expressValidator())
-app.use(csrf({cookie: {secure: config.cookie.secure}}))
-app.use(function (req, res, next) {
-  if (req.url.indexOf('/abe/') > -1) {
-    res.locals._csrf = req.csrfToken()
-  }
-  next()
-})
-
 app.use(bodyParser.json({limit: '1gb'}))
+app.use(doubleCsrfProtection)
+app.use(attachCsrfToken)
 
 if (config.security === true) {
   app.use(helmet())
@@ -229,24 +237,6 @@ app.use(
     },
   }),
 )
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
-
-// depending on the way you serve this app, cookie.secure will be set
-// in Production, this app has to be reverse-proxified
-app.use(
-  session({
-    name: 'sessionId',
-    secret: config.sessionSecret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {secure: config.cookie.secure},
-    proxy: true,
-  }),
-)
-
-app.use(passport.initialize())
-app.use(passport.session())
 
 abeExtend.hooks.instance.trigger('afterExpress', app, express)
 

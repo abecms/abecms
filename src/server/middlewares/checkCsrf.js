@@ -1,5 +1,7 @@
-var middleware = function(err, req, res, next) {
-  if (err.code !== 'EBADCSRFTOKEN') {
+import {invalidCsrfTokenError} from './csrf'
+
+var middleware = function (err, req, res, next) {
+  if (err !== invalidCsrfTokenError && err.code !== 'EBADCSRFTOKEN') {
     return next(err)
   } else {
     if (

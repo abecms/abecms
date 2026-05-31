@@ -1,42 +1,41 @@
-import execPromise from 'child-process-promise'
 import mkdirp from 'mkdirp'
 import fs from 'fs'
 import slug from 'slugify'
-import Jimp from 'jimp'
+import sharp from 'sharp'
+import smartcrop from 'smartcrop-sharp'
 import path from 'path'
 import {Promise} from 'bluebird'
-import smartcrop from 'smartcrop-jimp'
 
 import {abeExtend, coreUtils, cmsData, config, Manager} from '../../'
 
 export function cropAndSaveFile(imageSize, file, newFile) {
   var p = new Promise(resolve => {
-    smartcrop.crop(file, { width: parseInt(imageSize[0]), height: parseInt(imageSize[1]) })
-      .then(function(result) {
-        var crop = result.topCrop;
-        Jimp.read(file)
-          .then(function(image) {
-            image
-            .crop(crop.x, crop.y, crop.width, crop.height)
-            .write(newFile)
-          });
+    smartcrop
+      .crop(file, {
+        width: parseInt(imageSize[0], 10),
+        height: parseInt(imageSize[1], 10),
       })
-      .catch(function(err) {
+      .then(function (result) {
+        var crop = result.topCrop
+        return sharp(file)
+          .extract({
+            left: crop.x,
+            top: crop.y,
+            width: crop.width,
+            height: crop.height,
+          })
+          .toFile(newFile)
+      })
+      .then(function () {
+        resolve()
+      })
+      .catch(function (err) {
         console.error(err)
-      });
-
-    resolve()
+        resolve()
+      })
   })
   return p
 }
-
-// export function smartCropAndSaveFile(imageSize, file, newFile) {
-//   var cmd = `node node_modules/smartcrop-cli/smartcrop-cli.js --width ${parseInt(
-//     imageSize[0]
-//   )} --height ${parseInt(imageSize[1])} ${file} ${newFile}`
-//   var p = execPromise.exec(cmd)
-//   return p
-// }
 
 export function cropAndSaveFiles(images, file, resp) {
   var length = images.length
@@ -49,7 +48,7 @@ export function cropAndSaveFiles(images, file, resp) {
       let newFile = file.replace(ext, `_${images[i]}${ext}`)
       resp.thumbs.push({
         name: newFile.replace(Manager.instance.pathPublish, ''),
-        size: image
+        size: image,
       })
 
       let splitedImage = image.split('x')
@@ -57,51 +56,41 @@ export function cropAndSaveFiles(images, file, resp) {
       let newHeight = null
 
       if (splitedImage[0] != null && splitedImage[0] != '')
-        newWidth = parseInt(image.split('x')[0])
+        newWidth = parseInt(image.split('x')[0], 10)
       if (splitedImage[1] != null && splitedImage[1] != '')
-        newHeight = parseInt(image.split('x')[1])
+        newHeight = parseInt(image.split('x')[1], 10)
 
-      Jimp.read(file)
-        .then(function(originalImage) {
-          var originalWidth = originalImage.bitmap.width
-          var originalHeight = originalImage.bitmap.height
-          var ratio = originalWidth * newHeight / newWidth
+      sharp(file)
+        .metadata()
+        .then(function (metadata) {
+          var originalWidth = metadata.width
+          var originalHeight = metadata.height
+          var ratio = (originalWidth * newHeight) / newWidth
           if (newWidth === null || newHeight === null) {
-            originalImage
-              .resize(
-                newWidth != null ? newWidth : Jimp.AUTO,
-                newHeight != null ? newHeight : Jimp.AUTO
-              )
-              .write(newFile)
-            if (++cropedImage === length) {
-              resolve(resp)
-            }
+            var resizeOptions = {}
+            if (newWidth != null) resizeOptions.width = newWidth
+            if (newHeight != null) resizeOptions.height = newHeight
+            return sharp(file).resize(resizeOptions).toFile(newFile)
           } else if (
-            parseInt(ratio - 1) <= parseInt(originalHeight) &&
-            parseInt(ratio + 1) >= parseInt(originalHeight)
+            parseInt(ratio - 1, 10) <= parseInt(originalHeight, 10) &&
+            parseInt(ratio + 1, 10) >= parseInt(originalHeight, 10)
           ) {
-            originalImage
-              .resize(
-                parseInt(image.split('x')[0]),
-                parseInt(image.split('x')[1])
-              )
-              .write(newFile)
-            if (++cropedImage === length) {
-              resolve(resp)
-            }
-          } else {
-            cropAndSaveFile(image.split('x'), file, newFile)
-            .then(function(result) {
-              if (++cropedImage === length) {
-                resolve(resp)
-              }
-            })
-            .catch(function(err) {
-              console.log(err)
-            })
+            return sharp(file)
+              .resize({
+                width: parseInt(image.split('x')[0], 10),
+                height: parseInt(image.split('x')[1], 10),
+              })
+              .toFile(newFile)
+          }
+
+          return cropAndSaveFile(image.split('x'), file, newFile)
+        })
+        .then(function () {
+          if (++cropedImage === length) {
+            resolve(resp)
           }
         })
-        .catch(function(err) {
+        .catch(function (err) {
           console.log(err)
         })
     }
@@ -110,7 +99,7 @@ export function cropAndSaveFiles(images, file, resp) {
   return p
 }
 
-export const generateThumbnail = async (file) => {
+export const generateThumbnail = async file => {
   var ext = path.extname(file).toLowerCase()
   var thumbFileName = file.replace(ext, `_thumb${ext}`)
   var thumbFileNameRelative = thumbFileName.replace(
@@ -119,7 +108,7 @@ export const generateThumbnail = async (file) => {
   )
   var p = new Promise(resolve => {
     var cropThumb = cropAndSaveFile([250, 250], file, thumbFileName)
-    cropThumb.then(function(result) {
+    cropThumb.then(function () {
       resolve({thumb: thumbFileNameRelative})
     })
   })
@@ -129,11 +118,11 @@ export const generateThumbnail = async (file) => {
 
 export function saveFile(req) {
   var p = new Promise(resolve => {
-    const keepName = (req.query.keepName === 'true')
+    const keepName = req.query.keepName === 'true'
     var resp = {success: 1}
     var filePath
     req.pipe(req.busboy)
-    req.busboy.on('file', function(
+    req.busboy.on('file', function (
       fieldname,
       file,
       filename,
@@ -154,7 +143,7 @@ export function saveFile(req) {
       filePath = path.posix.join(folderFilePath, slug)
       resp['filePath'] = path.posix.join('/' + folderWebPath, slug)
 
-      file.on('limit', function() {
+      file.on('limit', function () {
         hasSentHeader = true
         file.resume()
         resolve({error: 1, response: 'file is too big'})
@@ -189,7 +178,7 @@ export function saveFile(req) {
               .getAttr(req.query.input, 'data-size')
               .replace(' ', '')
               .split(',')
-            cropAndSaveFiles(thumbsSizes, filePath, resp).then(function(resp) {
+            cropAndSaveFiles(thumbsSizes, filePath, resp).then(function (resp) {
               if (/^win/.test(process.platform)) {
                 for (var i = 0; i < resp.thumbs.length; i++) {
                   resp.thumbs[i].name = resp.thumbs[i].name.replace(/\\/g, '/')
@@ -198,7 +187,6 @@ export function saveFile(req) {
               resolve(resp)
             })
           } else resolve(resp)
-          //})
         } else {
           resolve(resp)
         }
@@ -240,7 +228,7 @@ export function getMediaType(ext) {
 export function createMediaSlug(filename, ext, keepName = false) {
   if (!keepName) {
     const filenameNoExt = path.basename(filename, ext).toLowerCase()
-    return (`${slug(filenameNoExt, { remove: /[$*+~.()'"!\:@§^,;]/g })}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`)
+    return `${slug(filenameNoExt, {remove: /[$*+~.()'"!\:@§^,;]/g})}-${coreUtils.random.generateUniqueIdentifier(2)}${ext}`
   }
 
   return filename
@@ -273,7 +261,7 @@ export function getThumbsList() {
     if (pathFile.indexOf('_thumb.') > -1) {
       thumbsList.push({
         originalFile: pathFile.replace('_thumb.', '.'),
-        thumbFile: pathFile
+        thumbFile: pathFile,
       })
     }
   })
@@ -288,7 +276,7 @@ export function getAssociatedImageFileFromThumb(name) {
   var imageList = {
     thumbFile: name,
     originalFile: originalName,
-    thumbs: []
+    thumbs: [],
   }
   var pathThumb = name.split('/')
   pathThumb.pop()
