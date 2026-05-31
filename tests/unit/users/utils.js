@@ -1,45 +1,81 @@
-var chai = require('chai');
+var chai = require('chai')
 var sinonChai = require('sinon-chai')
 var expect = chai.expect
 chai.use(sinonChai)
-var sinon = require('sinon');
-var fs = require('fs-extra');
-var mkdirp = require('mkdirp');
-var path = require('path');
-var bcrypt = require('bcrypt-nodejs');
-var Cookies = require('cookies');
-var jwt = require('jwt-simple');
-var Handlebars =require('../../../src/cli').Handlebars
+var sinon = require('sinon')
+var fs = require('fs-extra')
+var mkdirp = require('mkdirp')
+var path = require('path')
+var bcrypt = require('bcryptjs')
+var Cookies = require('cookies')
+var jwt = require('jwt-simple')
+var Handlebars = require('../../../src/cli').Handlebars
 
 var coreUtils = require('../../../src/cli').coreUtils
 var config = require('../../../src/cli').config
 config.set({root: path.join(process.cwd(), 'tests', 'unit', 'fixtures')})
 
-var User = require('../../../src/cli').User;
+var User = require('../../../src/cli').User
 
-describe('User.utils', function() {
+describe('User.utils', function () {
   let fixture
-  before( function() {
+  before(function () {
     config.users.enable = true
     fixture = {
-      htmlIsAuthorized: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'isAuthorized.html'), 'utf8'),
-      htmlIsAuthorizedTrue: fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'themes', 'default', 'templates', 'isAuthorizedTrue.html'), 'utf8'),
-      users: JSON.parse(fs.readFileSync(path.join(process.cwd(), 'tests', 'unit', 'fixtures', 'users', 'users.json'), 'utf8'))
+      htmlIsAuthorized: fs.readFileSync(
+        path.join(
+          process.cwd(),
+          'tests',
+          'unit',
+          'fixtures',
+          'themes',
+          'default',
+          'templates',
+          'isAuthorized.html',
+        ),
+        'utf8',
+      ),
+      htmlIsAuthorizedTrue: fs.readFileSync(
+        path.join(
+          process.cwd(),
+          'tests',
+          'unit',
+          'fixtures',
+          'themes',
+          'default',
+          'templates',
+          'isAuthorizedTrue.html',
+        ),
+        'utf8',
+      ),
+      users: JSON.parse(
+        fs.readFileSync(
+          path.join(
+            process.cwd(),
+            'tests',
+            'unit',
+            'fixtures',
+            'users',
+            'users.json',
+          ),
+          'utf8',
+        ),
+      ),
     }
-  });
+  })
 
-  it('User.utils.getUserRoutes', function(){
-    var role = User.utils.getUserRoutes("review")
+  it('User.utils.getUserRoutes', function () {
+    var role = User.utils.getUserRoutes('review')
     chai.expect(role).to.not.be.undefined
     chai.expect(role.length).to.above(0)
   })
 
-  it('User.utils.findByUsername', function(done){
-    var stub = sinon.stub(User.manager.instance, 'get');
+  it('User.utils.findByUsername', function (done) {
+    var stub = sinon.stub(User.manager.instance, 'get')
     stub.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
-    User.utils.findByUsername("test", function (err, user) {
+    User.utils.findByUsername('test', function (err, user) {
       chai.expect(err).to.be.null
       chai.expect(user).to.not.be.undefined
       chai.expect(user.username).to.equal('test')
@@ -86,11 +122,11 @@ describe('User.utils', function() {
   //   })
   // })
 
-  it('User.utils.decodeUser', function(){
+  it('User.utils.decodeUser', function () {
     // sub
-    var stubGetTokenFromCookies = sinon.stub(User.utils, 'getTokenFromCookies');
-    stubGetTokenFromCookies.returns("test")
-    var stubJwt = sinon.stub(jwt, 'decode');
+    var stubGetTokenFromCookies = sinon.stub(User.utils, 'getTokenFromCookies')
+    stubGetTokenFromCookies.returns('test')
+    var stubJwt = sinon.stub(jwt, 'decode')
     stubJwt.returns(JSON.parse(JSON.stringify(fixture.users))[0])
 
     var user = User.utils.decodeUser(1)
@@ -101,8 +137,8 @@ describe('User.utils', function() {
     sinon.restore()
   })
 
-  it('User.utils.getAll', function(){
-    var stubGet = sinon.stub(User.manager.instance, 'get');
+  it('User.utils.getAll', function () {
+    var stubGet = sinon.stub(User.manager.instance, 'get')
     stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     var bdd = User.utils.getAll()
@@ -113,9 +149,9 @@ describe('User.utils', function() {
     sinon.restore()
   })
 
-  it('User.utils.isValid', function(){
-    var stubHashSync = sinon.stub(bcrypt, 'compareSync');
-    stubHashSync.returns(true);
+  it('User.utils.isValid', function () {
+    var stubHashSync = sinon.stub(bcrypt, 'compareSync')
+    stubHashSync.returns(true)
 
     // test
     var res = User.utils.isValid(JSON.parse(JSON.stringify(fixture.users))[0])
@@ -126,8 +162,8 @@ describe('User.utils', function() {
     sinon.restore()
   })
 
-  it('User.utils.findSync', function(){
-    var stubGet = sinon.stub(User.manager.instance, 'get');
+  it('User.utils.findSync', function () {
+    var stubGet = sinon.stub(User.manager.instance, 'get')
     stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
@@ -140,8 +176,8 @@ describe('User.utils', function() {
     sinon.restore()
   })
 
-  it('User.utils.find', function(done){
-    var stubGet = sinon.stub(User.manager.instance, 'get');
+  it('User.utils.find', function (done) {
+    var stubGet = sinon.stub(User.manager.instance, 'get')
     stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
@@ -156,8 +192,8 @@ describe('User.utils', function() {
     })
   })
 
-  it('User.utils.checkSameEmail', function(){
-    var stubGet = sinon.stub(User.manager.instance, 'get');
+  it('User.utils.checkSameEmail', function () {
+    var stubGet = sinon.stub(User.manager.instance, 'get')
     stubGet.returns(JSON.parse(JSON.stringify(fixture.users)))
 
     // test
@@ -171,35 +207,33 @@ describe('User.utils', function() {
     sinon.restore()
   })
 
-  it('User.utils.getRole', function(){
-
+  it('User.utils.getRole', function () {
     // test
     var user = JSON.parse(JSON.stringify(fixture.users))[0]
-    user.role = "admin"
+    user.role = 'admin'
     var res = User.utils.getRole(JSON.parse(JSON.stringify(fixture.users))[0])
-    chai.expect(res.role).to.not.be.equal("admin")
+    chai.expect(res.role).to.not.be.equal('admin')
   })
 
-  it('User.utils.commonPassword', function(){
-
+  it('User.utils.commonPassword', function () {
     // test
     var user = JSON.parse(JSON.stringify(fixture.users))[0]
-    user.password = "password"
+    user.password = 'password'
     var res = User.utils.commonPassword(user)
     chai.expect(res.success).to.be.equal(0)
   })
 
-  it('User.utils.encryptPassword', function(){
-    var stubGenSaltSync = sinon.stub(bcrypt, 'genSaltSync');
+  it('User.utils.encryptPassword', function () {
+    var stubGenSaltSync = sinon.stub(bcrypt, 'genSaltSync')
     stubGenSaltSync.returns(10)
-    var stubHashSync = sinon.stub(bcrypt, 'hashSync');
-    stubHashSync.returns("test2")
+    var stubHashSync = sinon.stub(bcrypt, 'hashSync')
+    stubHashSync.returns('test2')
 
     // test
     var user = JSON.parse(JSON.stringify(fixture.users))[0]
-    user.password = "password"
-    var res = User.utils.encryptPassword(10, "test")
-    chai.expect(res).to.not.be.equal("test")
+    user.password = 'password'
+    var res = User.utils.encryptPassword(10, 'test')
+    chai.expect(res).to.not.be.equal('test')
 
     // unstub
     sinon.assert.calledOnce(bcrypt.genSaltSync)
@@ -207,39 +241,34 @@ describe('User.utils', function() {
     sinon.restore()
   })
 
-  it('User.utils.isUserAllowedOnRoute', function(){
-
+  it('User.utils.isUserAllowedOnRoute', function () {
     // test
     var user = JSON.parse(JSON.stringify(fixture.users))[0]
-    var res = User.utils.isUserAllowedOnRoute("admin", "/abe/test")
+    var res = User.utils.isUserAllowedOnRoute('admin', '/abe/test')
     chai.expect(res).to.be.equal(true)
 
-    var res = User.utils.isUserAllowedOnRoute("review", "/abe/truc")
+    var res = User.utils.isUserAllowedOnRoute('review', '/abe/truc')
     chai.expect(res).to.be.equal(false)
-
   })
 
-  it('User.utils.getUserWorkflow', function(){
-
+  it('User.utils.getUserWorkflow', function () {
     // test
     config.users.enable = false
     var res = User.utils.getUserWorkflow()
     chai.expect(res.length).to.be.equal(2)
 
     config.users.enable = true
-    var res = User.utils.getUserWorkflow("draft", "admin")
+    var res = User.utils.getUserWorkflow('draft', 'admin')
     chai.expect(res.length).to.be.equal(2)
     // unstub
   })
 
-  it('User.utils.loginLimitTry', function(done){
-
+  it('User.utils.loginLimitTry', function (done) {
     // test
-    var res = User.utils.loginLimitTry()
-      .then(function () {
-        done()
-      })
+    var res = User.utils.loginLimitTry().then(function () {
+      done()
+    })
 
     // unstub
   })
-});
+})

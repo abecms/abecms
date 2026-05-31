@@ -14,7 +14,7 @@ import cookieParser from 'cookie-parser'
 import csrf from 'csurf'
 import passport from 'passport'
 import layouts from 'handlebars-layouts'
-import { check, validationResult } from 'express-validator'
+import {check, validationResult} from 'express-validator'
 
 import {
   config,
@@ -37,7 +37,7 @@ import {
   folders,
   printConfig,
   abeExtend,
-  Manager
+  Manager,
 } from '../cli'
 
 import {
@@ -45,7 +45,7 @@ import {
   middleLogin,
   middleCheckCsrf,
   middleIsAuthorized,
-  middleLiveReload
+  middleLiveReload,
 } from './middlewares'
 
 //import getHome from './routes/get-home'
@@ -62,10 +62,10 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 var partialsDir = [
   path.join(__dirname, 'views/partials/'),
-  path.join(config.root, config.custom)
+  path.join(config.root, config.custom),
 ]
 var pluginsPartialsDir = abeExtend.plugins.instance.getPartials()
-Array.prototype.forEach.call(pluginsPartialsDir, pluginPartialsDir => {
+Array.prototype.forEach.call(pluginsPartialsDir, (pluginPartialsDir) => {
   partialsDir.push(pluginPartialsDir)
 })
 
@@ -87,32 +87,32 @@ var html = exphbs.create({
     printConfig: printConfig,
     ifIn: ifIn,
     ifCond: ifCond,
-    isAuthorized: isAuthorized
+    isAuthorized: isAuthorized,
   },
-  partialsDir: partialsDir
+  partialsDir: partialsDir,
 })
 
-var handlebars = html.handlebars;
+var handlebars = html.handlebars
 
 // I register the layout plugin
-handlebars.registerHelper(layouts(handlebars));
+handlebars.registerHelper(layouts(handlebars))
 
 // I load the partials in Handlebars for the layout plugin
-var partials = path.join(__dirname, 'views/partials/');
-partialsDir.forEach(function(pathDir) {
+var partials = path.join(__dirname, 'views/partials/')
+partialsDir.forEach(function (pathDir) {
   fs.readdirSync(partials).forEach(function (file) {
-    var source = fs.readFileSync(partials + file, "utf8")
-    var partial = /(.+)\.html/.exec(file).pop();
+    var source = fs.readFileSync(partials + file, 'utf8')
+    var partial = /(.+)\.html/.exec(file).pop()
 
-    handlebars.registerPartial(partial, source);
-  });
+    handlebars.registerPartial(partial, source)
+  })
 })
 
 var opts = {}
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   opts = {
     key: fs.readFileSync(path.join(config.root, 'key.pem')),
-    cert: fs.readFileSync(path.join(config.root, 'cert.pem'))
+    cert: fs.readFileSync(path.join(config.root, 'cert.pem')),
   }
 }
 
@@ -126,11 +126,11 @@ app.set('config', config.getConfigByWebsite())
 app.use(flash())
 app.use(cookieParser())
 app.use(
-  bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000})
+  bodyParser.urlencoded({limit: '1gb', extended: true, parameterLimit: 50000}),
 )
 //app.use(expressValidator())
 app.use(csrf({cookie: {secure: config.cookie.secure}}))
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   if (req.url.indexOf('/abe/') > -1) {
     res.locals._csrf = req.csrfToken()
   }
@@ -142,13 +142,12 @@ app.use(bodyParser.json({limit: '1gb'}))
 if (config.security === true) {
   app.use(helmet())
   app.use(
-    helmet.csp({
+    helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"].concat(config.csp.scriptSrc),
         styleSrc: ["'self'", "'unsafe-inline'"].concat(config.csp.styleSrc),
         imgSrc: ["'self'", 'data:'].concat(config.csp.imgSrc),
-        // frameSrc: ["'self'"],
         childSrc: ["'self'"].concat(config.csp.childSrc),
         frameAncestors: ["'self'"].concat(config.csp.frameAncestors),
         mediaSrc: ["'self'"].concat(config.csp.mediaSrc),
@@ -159,16 +158,13 @@ if (config.security === true) {
           'allow-scripts',
           'allow-modals',
           'allow-popups',
-          'allow-forms'
+          'allow-forms',
         ],
         reportUri: '/report-violation',
-        objectSrc: [] // An empty array allows nothing through
+        objectSrc: ["'none'"],
       },
-      reportOnly: false, // Set to true if you only want browsers to report errors, not block them
-      setAllHeaders: false, // Set to true if you want to blindly set all headers: Content-Security-Policy, X-WebKit-CSP, and X-Content-Security-Policy.
-      disableAndroid: false, // Set to true if you want to disable CSP on Android where it can be buggy.
-      browserSniff: true // Set to false if you want to completely disable any user-agent sniffing. This may make the headers less compatible but it will be much faster. This defaults to `true`.
-    })
+      reportOnly: false,
+    }),
   )
 }
 
@@ -187,7 +183,7 @@ app.use(middleLogin)
 app.use(middleWebsite)
 if (process.env.NODE_ENV === 'development') {
   Manager.instance.initDev()
-  process.on('uncaughtException', function(err) {
+  process.on('uncaughtException', function (err) {
     // We need to trap this error which is sent on websocket client connection
     if (err.code !== 'ECONNRESET') {
       throw err
@@ -198,11 +194,11 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.static(__dirname + '/public'))
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Access-Token, X-Requested-With, Content-Type, Accept'
+    'Origin, X-Access-Token, X-Requested-With, Content-Type, Accept',
   )
   next()
 })
@@ -221,7 +217,7 @@ if (config.custom !== '') {
 }
 
 var pluginsPartials = abeExtend.plugins.instance.getPartials()
-Array.prototype.forEach.call(pluginsPartials, pluginPartials => {
+Array.prototype.forEach.call(pluginsPartials, (pluginPartials) => {
   app.use(express.static(pluginPartials))
 })
 
@@ -229,9 +225,9 @@ app.use(express.static(__dirname + '/node_modules/handlebars/dist'))
 app.use(
   busboy({
     limits: {
-      fileSize: config.upload.fileSizelimit
-    }
-  })
+      fileSize: config.upload.fileSizelimit,
+    },
+  }),
 )
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -245,8 +241,8 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {secure: config.cookie.secure},
-    proxy: true
-  })
+    proxy: true,
+  }),
 )
 
 app.use(passport.initialize())
@@ -261,23 +257,23 @@ if (fs.existsSync(port) && fs.lstatSync(port).isSocket()) {
 
 if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
   server = https.createServer(opts, app)
-  server.listen(port, function() {
+  server.listen(port, function () {
     console.log(clc.green(`\nserver running at https://localhost:${port}/`))
     if (process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
   })
 } else {
-  server = app.listen(port, function() {
+  server = app.listen(port, function () {
     console.log(clc.green(`\nserver running at http://localhost:${port}/`))
     if (process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
   })
 }
 
 if (config.websocket.active === true) {
-  const io = require('socket.io')(server);
-  app.use(function(request, response, next) {
-    request.io = io;
-    next();
-  });
+  const io = require('socket.io')(server)
+  app.use(function (request, response, next) {
+    request.io = io
+    next()
+  })
 }
 
 server.on('error', onError)
@@ -301,13 +297,13 @@ function onError(error) {
   }
 }
 
-var cleanup = function() {
-  server.close(function() {
+var cleanup = function () {
+  server.close(function () {
     console.log('Closed out remaining connections.')
     process.exit()
   })
 
-  setTimeout(function() {
+  setTimeout(function () {
     console.log('Could not close connections in time, forcing shut down')
     process.exit(1)
   }, 10 * 1000)

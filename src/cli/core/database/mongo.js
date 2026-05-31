@@ -1,12 +1,7 @@
-import { config, mongo, cmsData, abeExtend, coreUtils, Manager } from "../../";
+import { config, cmsData, abeExtend, coreUtils, Manager } from "../../";
 import path from "path";
 import { MongoClient } from "mongodb";
 import _ from "lodash";
-
-const options = {
-  useNewUrlParser: true,
-  poolSize: 10
-};
 
 const url = `${_.get(
   config,
@@ -19,18 +14,22 @@ const url = `${_.get(
 )}`;
 
 let _db;
+let _client;
 
 export function connectToServer(callback) {
   if (!url) {
     return callback("Missing mongo URL");
   }
-  MongoClient.connect(url, options, function(err, client) {
-    if (!client || err) {
-      return callback(err);
-    }
-    _db = client.db(_.get(config, "database.mongo.database", "abe"));
-    return callback(err);
-  });
+
+  MongoClient.connect(url)
+    .then(client => {
+      _client = client;
+      _db = client.db(_.get(config, "database.mongo.database", "abe"));
+      callback(null);
+    })
+    .catch(err => {
+      callback(err);
+    });
 }
 
 export function getDb() {
@@ -39,7 +38,7 @@ export function getDb() {
 
 export async function getDoc(jsonPath) {
   jsonPath = cmsData.utils.getRevisionRelativePath(jsonPath);
-  const db = mongo.getDb();
+  const db = getDb();
   const JSONs = db.collection("jsons");
   let json = {};
 
@@ -59,7 +58,7 @@ export async function getDoc(jsonPath) {
 }
 
 export async function getAllWithKeys(withKeys) {
-  var db = mongo.getDb();
+  var db = getDb();
   var JSONs = db.collection("jsons");
 
   let docs = await JSONs.find().toArray();
@@ -83,7 +82,7 @@ export async function getAllWithKeys(withKeys) {
 export async function exist(jsonPath) {
   jsonPath = cmsData.utils.getRevisionRelativePath(jsonPath);
   let exists = false;
-  const db = mongo.getDb();
+  const db = getDb();
   const JSONs = db.collection("jsons");
 
   try {
@@ -114,7 +113,7 @@ export function getFileObject(json) {
 }
 
 export async function removeRevision(jsonPath) {
-  var db = mongo.getDb();
+  var db = getDb();
   var JSONs = db.collection("jsons");
   try {
     await JSONs.deleteOne({ jsonPath });
@@ -125,7 +124,7 @@ export async function removeRevision(jsonPath) {
 }
 
 export async function saveJson(jsonPath, json) {
-  var db = mongo.getDb();
+  var db = getDb();
   var JSONs = db.collection("jsons");
 
   jsonPath = cmsData.utils.getRevisionRelativePath(jsonPath);

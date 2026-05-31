@@ -11,6 +11,7 @@ draft/
 # admin compiled
 src/server/public/abecms/scripts/*-compiled.js
 src/server/public/abecms/css/styles.css
+src/server/public/abecms/css/styles.css.map
 
 # Local configs
 cli/config/*-local.js

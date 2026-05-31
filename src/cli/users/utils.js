@@ -3,7 +3,7 @@ import path from 'path'
 import fse from 'fs-extra'
 import Limiter from 'ratelimiter'
 import owasp from 'owasp-password-strength-test'
-import bcrypt from 'bcrypt-nodejs'
+import bcrypt from 'bcryptjs'
 import Cookies from 'cookies'
 import jwt from 'jwt-simple'
 
@@ -22,18 +22,18 @@ export function checkSameEmail(data) {
   if (emailAlreadyUsed === true) {
     return {
       success: 0,
-      message: 'Email adress already exist'
+      message: 'Email adress already exist',
     }
   } else {
     return {
-      success: 1
+      success: 1,
     }
   }
 }
 
 export function getRole(data) {
   var roles = config.users.roles
-  Array.prototype.forEach.call(roles, role => {
+  Array.prototype.forEach.call(roles, (role) => {
     if (role.name === data.role) {
       data.role = role
     }
@@ -56,7 +56,7 @@ export function commonPassword(data) {
       ? owaspConfig.mostCommon
       : true
   var mostCommonPassword = config.users.mostCommonPassword
-  owasp.tests.required.push(function(password) {
+  owasp.tests.required.push(function (password) {
     if (
       mostCommon &&
       coreUtils.array.contains(mostCommonPassword, password.toLowerCase())
@@ -66,7 +66,7 @@ export function commonPassword(data) {
   })
 
   var currentUserName = data.username
-  owasp.tests.required.push(function(password) {
+  owasp.tests.required.push(function (password) {
     var username = currentUserName
     var shouldTest = sameAsUser
 
@@ -91,16 +91,16 @@ export function commonPassword(data) {
     res.errors.length > 0
   ) {
     var message = ''
-    Array.prototype.forEach.call(res.errors, error => {
+    Array.prototype.forEach.call(res.errors, (error) => {
       message += error + '<br />'
     })
     return {
       success: 0,
-      message: message
+      message: message,
     }
   } else {
     return {
-      success: 1
+      success: 1,
     }
   }
 }
@@ -113,7 +113,7 @@ export function encryptPassword(numb, password) {
 export function getUserRoutes(workflow) {
   var routes = config.users.routes
   var userRoles = []
-  Array.prototype.forEach.call(Object.keys(routes), role => {
+  Array.prototype.forEach.call(Object.keys(routes), (role) => {
     if (role === workflow) {
       userRoles = routes[role]
     }
@@ -155,24 +155,23 @@ export function findByUsername(username, done) {
   return done(null, null)
 }
 
-
 export function findByEmail(email, done) {
   var user = User.manager.instance.findByEmail(email)
-  
+
   if (user) {
     return done(null, user)
   }
-  
+
   return done(null, null)
 }
 
 export function findByResetPasswordToken(resetPasswordToken, done) {
   var user = User.manager.instance.resetPasswordToken(resetPasswordToken)
-    
+
   if (user) {
     return done(null, user)
   }
-  
+
   return done(null, null)
 }
 
@@ -224,7 +223,7 @@ export function getTokenFromAuthHeader(req, res) {
 
 export function getTokenFromCookies(req, res) {
   var cookies = new Cookies(req, res, {
-    secure: config.cookie.secure
+    secure: config.cookie.secure,
   })
   return cookies.get('x-access-token')
 }
@@ -266,7 +265,7 @@ export function isUserAllowedOnRoute(workflow, currentRoute) {
         typeof routes[workflow] !== 'undefined' &&
         routes[workflow] !== null
       ) {
-        Array.prototype.forEach.call(routes[workflow], route => {
+        Array.prototype.forEach.call(routes[workflow], (route) => {
           var reg = new RegExp(route)
           if (reg.test(currentRoute)) {
             isAllowed = true
@@ -292,13 +291,13 @@ export function getUserWorkflow(status) {
     type = type != null ? type : flow
     return {
       status: flow,
-      url: `/abe/operations/${action}/${type}`
+      url: `/abe/operations/${action}/${type}`,
     }
   }
 
   if (config.users.enable) {
     var found = null
-    Array.prototype.forEach.call(config.users.workflow, flow => {
+    Array.prototype.forEach.call(config.users.workflow, (flow) => {
       if (found != null) {
         flows.push(addFlow(flow, flow, 'submit'))
         found = null
@@ -322,20 +321,20 @@ export function getUserWorkflow(status) {
   } else {
     flows = [
       addFlow('draft', 'draft', 'submit'),
-      addFlow('publish', 'publish', 'submit')
+      addFlow('publish', 'publish', 'submit'),
     ]
   }
   return flows
 }
 
 export function loginLimitTry(username) {
-  var p = new Promise(resolve => {
+  var p = new Promise((resolve) => {
     var isNexted = false
     try {
       var limiterConfig = config.users.limiter
 
-      var client = redis.createClient()
-      client.on('error', function() {
+      var client = redis.createClient({legacyMode: true})
+      client.connect().catch(function () {
         if (!isNexted) {
           isNexted = true
           resolve()
@@ -346,10 +345,10 @@ export function loginLimitTry(username) {
         id: username,
         db: client,
         duration: limiterConfig.duration,
-        max: limiterConfig.max
+        max: limiterConfig.max,
       })
 
-      limit.get(function(err, limit) {
+      limit.get(function (err, limit) {
         if (err) {
           resolve()
         } else {
@@ -387,7 +386,9 @@ export function getActivity() {
 
   if (config.users.enable && config.users.activity.active) {
     if (fse.existsSync(path.join(pathToActivity, 'activity.json'))) {
-      const acArray= coreUtils.file.getJson(path.join(pathToActivity, 'activity.json'))
+      const acArray = coreUtils.file.getJson(
+        path.join(pathToActivity, 'activity.json'),
+      )
       return acArray
     }
   }
@@ -400,29 +401,21 @@ export function addActivity(activity) {
   const pathToActivityFile = path.join(pathToActivity, 'activity.json')
   const acArray = getActivity()
 
-  if (acArray.length >= config.users/activity.history) acArray.shift()
+  if (acArray.length >= config.users / activity.history) acArray.shift()
   acArray.push(activity)
 
   if (config.users.enable && config.users.activity.active) {
-    fse.exists(pathToActivityFile, function(exists) {
+    fse.exists(pathToActivityFile, function (exists) {
       if (!exists) {
-        fse.mkdir(path.join(pathToActivity), function() {
-          fse.writeJson(
-            pathToActivityFile,
-            acArray,
-            function(err) {
-              if (err) console.log('save activity error: ', err)
-            }
-          )
+        fse.mkdir(path.join(pathToActivity), function () {
+          fse.writeJson(pathToActivityFile, acArray, function (err) {
+            if (err) console.log('save activity error: ', err)
+          })
         })
       } else {
-        fse.writeJson(
-          pathToActivityFile,
-          acArray,
-          function(err) {
-            if (err) console.log('save activity error: ', err)
-          }
-        )
+        fse.writeJson(pathToActivityFile, acArray, function (err) {
+          if (err) console.log('save activity error: ', err)
+        })
       }
     })
   }
