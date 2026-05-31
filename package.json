@@ -9,7 +9,7 @@
     "url": "git://github.com/abecms/abecms.git"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "opencv": "github:peterbraden/node-opencv",
@@ -31,7 +31,7 @@
     "js:engine": "browserify -t [ babelify --presets [ @babel/preset-env ] ] src/server/public/abecms/scripts/template-engine.js -o src/server/public/abecms/scripts/template-engine-compiled.js",
     "sass": "node ./src/tasks/sass.js",
     "mvasset": "mkdirp dist/server/public/abecms && cp -r src/server/locale dist/server && cp -r src/server/views dist/server && cp -r src/server/public/abecms/css dist/server/public/abecms && cp -r src/server/public/abecms/libs dist/server/public/abecms && cp -r src/server/public/abecms/vendors dist/server/public/abecms && cp -r src/server/public/abecms/fonts dist/server/public/abecms && cp -r src/server/public/abecms/image dist/server/public/abecms && cp -r src/server/public/abecms/scripts dist/server/public/abecms && cp -r src/cli/core/config/config.json dist/cli/core/config/config.json",
-    "compile": "./node_modules/.bin/babel --presets @babel/preset-env -d dist/ src/",
+    "compile": "./node_modules/.bin/babel -d dist/ src/",
     "distribute": "npm run build:front && npm run compile && npm run mvasset",
     "dev": "node src/tasks/nodemon.js & npm run watch --kill-others"
   },

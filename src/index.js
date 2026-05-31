@@ -211,7 +211,6 @@ program
     }
     process.env.DEBUG = 'generate-posts:*'
     var generateArgs = [
-      '--harmony',
       __dirname + '/cli/process/generate-posts.js',
       'ABE_WEBSITE=' + dir,
     ]
@@ -321,11 +320,11 @@ program
     }
 
     if (__dirname.indexOf('dist') > -1) {
-      command = 'node --harmony ./dist/server/index.js'
+      command = 'node ./dist/server/index.js'
     } else {
       command =
         path.join(__dirname, '..', 'node_modules', '.bin', 'babel') +
-        ' --harmony ./src/server/index.js'
+        ' ./src/server/index.js'
     }
 
     if (options.interactive != null) {

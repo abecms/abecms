@@ -3,7 +3,6 @@
     "name" : "abe",
     "script" : "./dist/server/index.js",
 	  "exec_mode": "fork",
-	  "node_args": "--harmony",
     "env": {
       "DEBUG": ""
     }

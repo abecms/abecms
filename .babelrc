@@ -1,7 +1,16 @@
 {
-  "presets": ["@babel/preset-env"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "22"
+        }
+      }
+    ]
+  ],
   "plugins": [
-      ["@babel/plugin-transform-runtime"]
+    ["@babel/plugin-transform-runtime"]
   ],
   "ignore": [
     "src/server/public/abecms/libs",
