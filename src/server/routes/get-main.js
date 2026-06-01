@@ -22,7 +22,7 @@ function renderAbeAdmin(EditorVariables, obj, filePath) {
   manager.home = {
     files: [] //Manager.instance.getList()
   }
-  manager.nbPosts = Manager.instance.getList().length
+  manager.nbPosts = (Manager.instance.getList() || []).length
   manager.list = Manager.instance.getStructureAndTemplates()
   manager.editConfig = EditorVariables.express.req.app.get('config')
   manager.config = JSON.stringify(config)

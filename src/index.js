@@ -2,13 +2,43 @@
 import {initSite} from './cli/cms/operations'
 import plugins from './cli/extend/plugins'
 import config from './cli/core/config/config'
-import {exec} from 'child_process'
+import {exec, execSync} from 'child_process'
 import {spawn} from 'child_process'
+import fs from 'fs'
 import path from 'path'
-import program from 'commander'
+import {Command} from 'commander'
 import pkg from '../package'
 import clc from 'cli-color'
 import Surge from 'surge'
+
+const program = new Command()
+
+function ensureFrontBundles(projectRoot, fromDist) {
+  const prefix = fromDist ? 'dist/server/public/abecms/scripts' : 'src/server/public/abecms/scripts'
+  const bundles = [
+    `${prefix}/admin-compiled.js`,
+    `${prefix}/template-engine-compiled.js`,
+    `${prefix}/user-login-compiled.js`,
+  ]
+  const missing = bundles.filter(
+    (file) => !fs.existsSync(path.join(projectRoot, file)),
+  )
+
+  if (missing.length === 0) {
+    return
+  }
+
+  console.log(
+    clc.yellow(
+      'Front-end bundles are missing. Running npm run build:front…',
+    ),
+  )
+  execSync('npm run build:front', {cwd: projectRoot, stdio: 'inherit'})
+
+  if (fromDist) {
+    execSync('npm run mvasset', {cwd: projectRoot, stdio: 'inherit'})
+  }
+}
 
 const surge = new Surge()
 const hooks = {}
@@ -149,7 +179,7 @@ const installPlugins = function () {
   })
 }
 
-program.version(pkg.version).option('-v, --version', 'version')
+program.version(pkg.version)
 
 // Dev: ./node_modules/.bin/babel-node --presets @babel/preset-env src/index.js init
 program
@@ -333,18 +363,19 @@ program
 
     process.chdir(__dirname + '/../')
 
+    const projectRoot = process.cwd()
+    const fromDist = __dirname.indexOf('dist') > -1
+    ensureFrontBundles(projectRoot, fromDist)
+
     console.log('website started : ' + dir)
 
     var cp = exec(
       command,
       {env: environment, maxBuffer: 1024 * 500},
-      function (err, out, code) {
-        try {
-          if (err instanceof Error) throw err
-          process.stderr.write(err)
-          process.stdout.write(out)
-        } catch (e) {}
-        process.exit(code)
+      function (err, stdout, stderr) {
+        if (stdout) process.stdout.write(stdout)
+        if (stderr) process.stderr.write(stderr)
+        process.exit(err ? 1 : 0)
       },
     )
     cp.stderr.pipe(process.stderr)

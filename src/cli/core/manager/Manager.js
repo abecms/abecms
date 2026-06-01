@@ -2,7 +2,7 @@
 import fs from 'fs'
 import events from 'events'
 import path from 'path'
-import watch from 'watch'
+import chokidar from 'chokidar'
 import express from 'express'
 import bodyParser from 'body-parser'
 import tinylr from 'tiny-lr'
@@ -202,6 +202,10 @@ class Manager {
     )
   }
 
+  _watchDirectory(dirPath) {
+    return chokidar.watch(dirPath, {ignoreInitial: true})
+  }
+
   _watchersStart() {
     this.events.template = new events.EventEmitter(0)
     this.events.structure = new events.EventEmitter(0)
@@ -209,213 +213,136 @@ class Manager {
     this.events.scripts = new events.EventEmitter(0)
     this.events.locales = new events.EventEmitter(0)
 
+    const templateExtension = `.${config.files.templates.extension}`
+
+    const handleTemplateFile = f => {
+      if (f.indexOf(templateExtension) < 0) {
+        cmsTemplates.assets.copy()
+        if (typeof this.lserver != 'undefined') {
+          tinylr.changed(f)
+        }
+        console.log('Assets have been synchronized: ' + f)
+      } else {
+        this.getKeysFromSelect()
+        this.updateStructureAndTemplates()
+        if (typeof this.lserver != 'undefined') {
+          tinylr.changed(f)
+        }
+        this.events.template.emit('update')
+      }
+    }
+
     // watch template folder
     try {
       fs.accessSync(this.pathTemplates, fs.F_OK)
-      this._watchTemplateFolder = watch.createMonitor(
-        this.pathTemplates,
-        monitor => {
-          monitor.on('created', (f, stat) => {
-            if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
-              cmsTemplates.assets.copy()
-              tinylr.changed(f)
-              console.log(
-                'Assets have been synchronized after this creation: ' + f
-              )
-            } else {
-              this.getKeysFromSelect()
-              this.updateStructureAndTemplates()
-              if (typeof this.lserver != 'undefined') {
-                tinylr.changed(f)
-              }
-              this.events.template.emit('update')
-            }
-          })
-          monitor.on('changed', (f, curr, prev) => {
-            if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
-              cmsTemplates.assets.copy()
-              if (typeof this.lserver != 'undefined') {
-                tinylr.changed(f)
-              }
-              console.log(
-                'Assets have been synchronized after this modification: ' + f
-              )
-            } else {
-              this.getKeysFromSelect()
-              this.updateStructureAndTemplates()
-              if (typeof this.lserver != 'undefined') {
-                tinylr.changed(f)
-              }
-              this.events.template.emit('update')
-            }
-          })
-          monitor.on('removed', (f, stat) => {
-            if (f.indexOf(`.${config.files.templates.extension}`) < 0) {
-              cmsTemplates.assets.copy()
-              if (typeof this.lserver != 'undefined') {
-                tinylr.changed(f)
-              }
-              console.log(
-                'Assets have been synchronized after this deletion: ' + f
-              )
-            } else {
-              this.getKeysFromSelect()
-              this.updateStructureAndTemplates()
-              if (typeof this.lserver != 'undefined') {
-                tinylr.changed(f)
-              }
-              this.events.template.emit('update')
-            }
-          })
-        }
-      )
+      this._watchTemplateFolder = this._watchDirectory(this.pathTemplates)
+      this._watchTemplateFolder
+        .on('add', handleTemplateFile)
+        .on('change', handleTemplateFile)
+        .on('unlink', handleTemplateFile)
     } catch (e) {
       console.log('the directory ' + this.pathTemplates + ' does not exist')
+    }
+
+    const handlePartialFile = f => {
+      this.getKeysFromSelect()
+      this.updateStructureAndTemplates()
+      if (typeof this.lserver != 'undefined') {
+        tinylr.changed(f)
+      }
+      this.events.template.emit('update')
     }
 
     // watch partial folder
     try {
       fs.accessSync(this.pathPartials, fs.F_OK)
-      this._watchPartialsFolder = watch.createMonitor(
-        this.pathPartials,
-        monitor => {
-          monitor.on('created', f => {
-            this.getKeysFromSelect()
-            this.updateStructureAndTemplates()
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.template.emit('update')
-          })
-          monitor.on('changed', f => {
-            this.getKeysFromSelect()
-            this.updateStructureAndTemplates()
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.template.emit('update')
-          })
-          monitor.on('removed', f => {
-            this.getKeysFromSelect()
-            this.updateStructureAndTemplates()
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.template.emit('update')
-          })
-        }
-      )
+      this._watchPartialsFolder = this._watchDirectory(this.pathPartials)
+      this._watchPartialsFolder
+        .on('add', handlePartialFile)
+        .on('change', handlePartialFile)
+        .on('unlink', handlePartialFile)
     } catch (e) {
       console.log('the directory ' + this.pathPartials + ' does not exist')
+    }
+
+    const handleStructureChange = () => {
+      this.updateStructureAndTemplates()
+      this.events.structure.emit('update')
     }
 
     // watch structure folder
     try {
       fs.accessSync(this.pathStructure, fs.F_OK)
-      this._watchStructure = watch.createMonitor(
-        this.pathStructure,
-        monitor => {
-          monitor.on('created', () => {
-            this.updateStructureAndTemplates()
-            this.events.structure.emit('update')
-          })
-          monitor.on('changed', () => {
-            this.updateStructureAndTemplates()
-            this.events.structure.emit('update')
-          })
-          monitor.on('removed', () => {
-            this.updateStructureAndTemplates()
-            this.events.structure.emit('update')
-          })
-        }
-      )
+      this._watchStructure = this._watchDirectory(this.pathStructure)
+      this._watchStructure
+        .on('add', handleStructureChange)
+        .on('change', handleStructureChange)
+        .on('unlink', handleStructureChange)
     } catch (e) {
       console.log('the directory ' + this.pathStructure + ' does not exist')
+    }
+
+    const handleReferenceFile = f => {
+      this.updateReferences(f)
+      if (typeof this.lserver != 'undefined') {
+        tinylr.changed(f)
+      }
+      this.events.reference.emit('update')
+    }
+
+    const handleReferenceRemove = f => {
+      this.updateReferences()
+      if (typeof this.lserver != 'undefined') {
+        tinylr.changed(f)
+      }
+      this.events.reference.emit('update')
     }
 
     // watch reference folder
     try {
       fs.accessSync(this.pathReference, fs.F_OK)
-      this._watchReferenceFolder = watch.createMonitor(
-        this.pathReference,
-        monitor => {
-          monitor.on('created', f => {
-            this.updateReferences(f)
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.reference.emit('update')
-          })
-          monitor.on('changed', f => {
-            this.updateReferences(f)
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.reference.emit('update')
-          })
-          monitor.on('removed', f => {
-            this.updateReferences()
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.reference.emit('update')
-          })
-        }
-      )
+      this._watchReferenceFolder = this._watchDirectory(this.pathReference)
+      this._watchReferenceFolder
+        .on('add', handleReferenceFile)
+        .on('change', handleReferenceFile)
+        .on('unlink', handleReferenceRemove)
     } catch (e) {
       console.log('the directory ' + this.pathReference + ' does not exist')
+    }
+
+    const handleLocaleFile = f => {
+      coreUtils.locales.instance.reloadLocales()
+      if (typeof this.lserver != 'undefined') {
+        tinylr.changed(f)
+      }
+      this.events.locales.emit('update')
     }
 
     // watch locales folder
     try {
       fs.accessSync(this.pathLocales, fs.F_OK)
-      this._watchLocalesFolder = watch.createMonitor(
-        this.pathLocales,
-        monitor => {
-          monitor.on('created', f => {
-            coreUtils.locales.instance.reloadLocales()
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.locales.emit('update')
-          })
-          monitor.on('changed', f => {
-            coreUtils.locales.instance.reloadLocales()
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.locales.emit('update')
-          })
-          monitor.on('removed', f => {
-            coreUtils.locales.instance.reloadLocales()
-            if (typeof this.lserver != 'undefined') {
-              tinylr.changed(f)
-            }
-            this.events.locales.emit('update')
-          })
-        }
-      )
+      this._watchLocalesFolder = this._watchDirectory(this.pathLocales)
+      this._watchLocalesFolder
+        .on('add', handleLocaleFile)
+        .on('change', handleLocaleFile)
+        .on('unlink', handleLocaleFile)
     } catch (e) {
       console.log('the directory ' + this.pathLocales + ' does not exist')
+    }
+
+    const handleScriptsChange = () => {
+      abeExtend.plugins.instance.updateScripts()
+      this.events.scripts.emit('update')
     }
 
     // watch scripts folder
     try {
       fs.accessSync(this.pathScripts, fs.F_OK)
-      this._watchScripts = watch.createMonitor(this.pathScripts, monitor => {
-        monitor.on('created', () => {
-          abeExtend.plugins.instance.updateScripts()
-          this.events.scripts.emit('update')
-        })
-        monitor.on('changed', () => {
-          abeExtend.plugins.instance.updateScripts()
-          this.events.scripts.emit('update')
-        })
-        monitor.on('removed', () => {
-          abeExtend.plugins.instance.updateScripts()
-          this.events.scripts.emit('update')
-        })
-      })
+      this._watchScripts = this._watchDirectory(this.pathScripts)
+      this._watchScripts
+        .on('add', handleScriptsChange)
+        .on('change', handleScriptsChange)
+        .on('unlink', handleScriptsChange)
     } catch (e) {
       console.log('the directory ' + this.pathScripts + ' does not exist')
     }
@@ -676,6 +603,14 @@ class Manager {
     search = '',
     searchFields = ['abe_meta.link', 'abe_meta.template', 'name']
   ) {
+    if (!this._list) {
+      return {
+        recordsTotal: 0,
+        recordsFiltered: 0,
+        data: [],
+      }
+    }
+
     const total = this._list.length
     let totalFiltered = total
     let list = this._list.slice()

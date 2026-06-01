@@ -5,6 +5,9 @@
       data-Locales='{{{printJson Locales}}}' >
   <head>
     <title>Abe</title>
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui@3.4.0/dist/css/coreui.min.css" crossorigin="anonymous">
+    <link href="/abecms/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/abecms/css/styles.css" rel="stylesheet">
     {{abeImport 'common-styles' manager.config this}}
     <link href="/codepen/css" rel="stylesheet">
     <link rel="stylesheet" media="all" href="/codepen/global-NoMQ-f9371f8113efc98c41b6d2a9b56d0912a52e7858f52cc50ff2523fb2e52577af.css">
@@ -248,7 +251,7 @@
                   <div class="output-sizer"> 
 
                     <div id="result_div" class="result">
-                      <iframe id="preview" src="/abe/plugin/editor/editor" name="preview" allowfullscreen="true" sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms" allowtransparency="true" class="result-iframe"></iframe>
+                      <iframe id="preview" src="/abe/plugin/editor/editor?embed=1" name="preview" allowfullscreen="true" sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms" allowtransparency="true" class="result-iframe"></iframe>
                     </div>
                   </div>
                 </div>

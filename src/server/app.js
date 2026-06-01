@@ -123,7 +123,7 @@ var app = express(opts)
 var server
 
 // Instantiate Singleton Manager (which lists all blog files)
-Manager.instance.init()
+const managerReady = Manager.instance.init()
 app.set('config', config.getConfigByWebsite())
 
 app.use(flash())
@@ -240,33 +240,14 @@ app.use(
 
 abeExtend.hooks.instance.trigger('afterExpress', app, express)
 
-// if served through pm2 with sockets
-if (fs.existsSync(port) && fs.lstatSync(port).isSocket()) {
-  fs.unlink(port)
-}
+// important : require here so config.root is defined
+var routes = require('./routes')
+app.use(routes.default)
 
-if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
-  server = https.createServer(opts, app)
-  server.listen(port, function () {
-    console.log(clc.green(`\nserver running at https://localhost:${port}/`))
-    if (process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
-  })
-} else {
-  server = app.listen(port, function () {
-    console.log(clc.green(`\nserver running at http://localhost:${port}/`))
-    if (process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
-  })
-}
-
-if (config.websocket.active === true) {
-  const io = require('socket.io')(server)
-  app.use(function (request, response, next) {
-    request.io = io
-    next()
-  })
-}
-
-server.on('error', onError)
+// This static path is mandatory for relative path to statics in templates
+app.use('/abe/editor', express.static(publish))
+app.use('/abe/page', express.static(publish))
+app.get('/abe*', getHome)
 
 function onError(error) {
   if (error.syscall !== 'listen') throw error
@@ -302,11 +283,38 @@ var cleanup = function () {
 process.on('SIGINT', cleanup)
 process.on('SIGTERM', cleanup)
 
-// important : require here so config.root is defined
-var routes = require('./routes')
-app.use(routes.default)
+function startServer() {
+  // if served through pm2 with sockets
+  if (fs.existsSync(port) && fs.lstatSync(port).isSocket()) {
+    fs.unlink(port)
+  }
 
-// This static path is mandatory for relative path to statics in templates
-app.use('/abe/editor', express.static(publish))
-app.use('/abe/page', express.static(publish))
-app.get('/abe*', getHome)
+  if (coreUtils.file.exist(path.join(config.root, 'cert.pem'))) {
+    server = https.createServer(opts, app)
+    server.listen(port, function () {
+      console.log(clc.green(`\nserver running at https://localhost:${port}/`))
+      if (process.env.OPENURL) openurl.open(`https://localhost:${port}/abe/`)
+    })
+  } else {
+    server = app.listen(port, function () {
+      console.log(clc.green(`\nserver running at http://localhost:${port}/`))
+      if (process.env.OPENURL) openurl.open(`http://localhost:${port}/abe/`)
+    })
+  }
+
+  if (config.websocket.active === true) {
+    const io = require('socket.io')(server)
+    app.use(function (request, response, next) {
+      request.io = io
+      next()
+    })
+  }
+
+  server.on('error', onError)
+}
+
+managerReady.then(startServer).catch((error) => {
+  console.error(clc.red('Manager initialization failed'))
+  console.error(error)
+  process.exit(1)
+})

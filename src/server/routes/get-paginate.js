@@ -15,6 +15,7 @@ var route = function(req, res, next) {
   var search = ''
 
   var values = ['date', 'abe_meta.link', 'abe_meta.template', 'date']
+  var i = 4
   Array.prototype.forEach.call(config.users.workflow, flow => {
     values[i] = 'abe_meta.' + flow
     ++i
@@ -31,7 +32,6 @@ var route = function(req, res, next) {
     length = +req.query.length
   }
 
-  var i = 4
   if (typeof req.query.order !== 'undefined') {
     sortField = values[req.query.order[0]['column']]
     sortOrder = req.query.order[0]['dir'] === 'desc' ? -1 : 1

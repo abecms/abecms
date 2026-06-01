@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars'
-import HandlebarsIntl from 'handlebars-intl'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
 import {marked} from 'marked'
+import {registerIntlHelpers} from './intl-helpers'
 
 /* Handlebar utilities */
 import attrAbe from './handlebars/attrAbe'
@@ -61,7 +61,7 @@ Handlebars.registerHelper('isAuthorized', isAuthorized)
 Handlebars.registerHelper('concat', concat)
 Handlebars.registerHelper('getCurrentuserRole', getCurrentuserRole)
 
-HandlebarsIntl.registerWith(Handlebars)
+registerIntlHelpers(Handlebars)
 
 export {
   Handlebars,
