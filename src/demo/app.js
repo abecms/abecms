@@ -1,6 +1,7 @@
 import express from 'express'
 import helmet from 'helmet'
 
+import {createAuthMiddleware, resolveAuthConfig} from './auth'
 import {createRateLimiter} from './rate-limit'
 import {
   MAX_PAYLOAD_BYTES,
@@ -22,6 +23,9 @@ const ALLOWED_ROUTES = {
   '/render': ['POST'],
 }
 
+/** Probe endpoint: reachable without a credential. */
+const UNAUTHENTICATED_ROUTES = ['/health']
+
 function requestTimeout(timeoutMs) {
   return function (req, res, next) {
     const timer = setTimeout(() => {
@@ -42,9 +46,14 @@ function requestTimeout(timeoutMs) {
  * The gateway exposes three read-only-ish endpoints and nothing else. No ABECMS
  * back-office route, static asset, template browser, plugin, source, operation
  * or filesystem path is mounted here.
+ *
+ * @param {Object} options
+ * @param {Object} [options.auth] result of `resolveAuthConfig`. When omitted it
+ *   is resolved from `process.env`, which fails closed if no token is set.
  */
 export function createApp(options = {}) {
   const settings = Object.assign({}, DEFAULTS, options)
+  const auth = settings.auth || resolveAuthConfig(process.env)
 
   initRenderer()
 
@@ -79,6 +88,11 @@ export function createApp(options = {}) {
 
   app.use(requestTimeout(settings.requestTimeoutMs))
 
+  // Rate limiting deliberately runs *before* authentication, so a failed or
+  // absent credential still consumes the caller's budget. An attacker without a
+  // token therefore gets no free path at all: they are throttled first, then
+  // rejected with 401 long before any body parsing or ABECMS rendering — the
+  // only expensive work in the process — can be reached.
   app.use(
     createRateLimiter({
       windowMs: settings.rateLimitWindowMs,
@@ -87,6 +101,9 @@ export function createApp(options = {}) {
   )
 
   // Method allowlist on the three published paths, 404 for everything else.
+  // This runs before authentication on purpose: unknown and ABECMS back-office
+  // paths answer 404 identically whether or not a valid token is presented, so
+  // a credential never unlocks a wider route surface.
   app.use((req, res, next) => {
     const allowedMethods = ALLOWED_ROUTES[req.path]
     if (!allowedMethods) {
@@ -102,6 +119,14 @@ export function createApp(options = {}) {
     }
     next()
   })
+
+  app.use(
+    createAuthMiddleware({
+      enabled: auth.enabled,
+      tokenDigest: auth.tokenDigest,
+      exempt: UNAUTHENTICATED_ROUTES,
+    }),
+  )
 
   app.get('/health', (req, res) => {
     res.status(200).json({

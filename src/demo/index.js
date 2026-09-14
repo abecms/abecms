@@ -1,4 +1,5 @@
 import {createApp, DEFAULTS} from './app'
+import {resolveAuthConfig} from './auth'
 import {engine} from './renderer'
 
 function intFromEnv(name, fallback) {
@@ -12,7 +13,19 @@ export function startServer() {
   const port = intFromEnv('ABE_DEMO_PORT', 8080)
   const host = process.env.ABE_DEMO_HOST || '0.0.0.0'
 
+  // Throws when no token is configured and the development opt-out is absent.
+  const auth = resolveAuthConfig(process.env)
+
+  if (!auth.enabled) {
+    console.warn(
+      '[abe-demo] WARNING: authentication is DISABLED ' +
+        '(ABE_DEMO_ALLOW_UNAUTHENTICATED=true). Development only — never ' +
+        'expose this process publicly.',
+    )
+  }
+
   const app = createApp({
+    auth,
     rateLimitWindowMs: intFromEnv(
       'ABE_DEMO_RATE_WINDOW_MS',
       DEFAULTS.rateLimitWindowMs,
@@ -26,8 +39,9 @@ export function startServer() {
   })
 
   const server = app.listen(port, host, () => {
+    // The token is never part of this line, in any form.
     console.log(
-      `[abe-demo] listening on ${host}:${port} (engine ${engine.name}@${engine.version} via ${engine.renderer})`,
+      `[abe-demo] listening on ${host}:${port} (engine ${engine.name}@${engine.version} via ${engine.renderer}, auth ${auth.enabled ? 'enabled' : 'DISABLED'})`,
     )
   })
 
@@ -48,5 +62,10 @@ export function startServer() {
 }
 
 if (require.main === module) {
-  startServer()
+  try {
+    startServer()
+  } catch (err) {
+    console.error(`[abe-demo] startup aborted: ${err.message}`)
+    process.exit(1)
+  }
 }
