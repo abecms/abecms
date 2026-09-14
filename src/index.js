@@ -2,13 +2,43 @@
 import {initSite} from './cli/cms/operations'
 import plugins from './cli/extend/plugins'
 import config from './cli/core/config/config'
-import {exec} from 'child_process'
+import {exec, execSync} from 'child_process'
 import {spawn} from 'child_process'
+import fs from 'fs'
 import path from 'path'
-import program from 'commander'
+import {Command} from 'commander'
 import pkg from '../package'
 import clc from 'cli-color'
 import Surge from 'surge'
+
+const program = new Command()
+
+function ensureFrontBundles(projectRoot, fromDist) {
+  const prefix = fromDist ? 'dist/server/public/abecms/scripts' : 'src/server/public/abecms/scripts'
+  const bundles = [
+    `${prefix}/admin-compiled.js`,
+    `${prefix}/template-engine-compiled.js`,
+    `${prefix}/user-login-compiled.js`,
+  ]
+  const missing = bundles.filter(
+    (file) => !fs.existsSync(path.join(projectRoot, file)),
+  )
+
+  if (missing.length === 0) {
+    return
+  }
+
+  console.log(
+    clc.yellow(
+      'Front-end bundles are missing. Running npm run build:front…',
+    ),
+  )
+  execSync('npm run build:front', {cwd: projectRoot, stdio: 'inherit'})
+
+  if (fromDist) {
+    execSync('npm run mvasset', {cwd: projectRoot, stdio: 'inherit'})
+  }
+}
 
 const surge = new Surge()
 const hooks = {}
@@ -16,9 +46,9 @@ let deployPlugins = []
 let websiteName = null
 let dir = null
 
-const deployWebsite = function() {
+const deployWebsite = function () {
   const create = new initSite()
-  create.askDeploymentQuestions().then(function(answers) {
+  create.askDeploymentQuestions().then(function (answers) {
     if (answers.deploy) {
       let json = null
       if (answers.which === "on surge (it's free !)") {
@@ -27,13 +57,13 @@ const deployWebsite = function() {
           deployers: {
             surge: {
               active: true,
-              domain: answers.domain
-            }
-          }
+              domain: answers.domain,
+            },
+          },
         }
         config.save(json)
         surge.login({
-          postAuth: installPlugins
+          postAuth: installPlugins,
         })([])
       } else if (answers.which === 'a github repository') {
         deployPlugins.push('abecms/abe-deployer-git')
@@ -44,9 +74,9 @@ const deployWebsite = function() {
               repository: answers.repository,
               branch: answers.branch,
               username: answers.username,
-              email: answers.email
-            }
-          }
+              email: answers.email,
+            },
+          },
         }
         config.save(json)
         installPlugins()
@@ -60,9 +90,9 @@ const deployWebsite = function() {
               accessKeyId: answers.accessKeyId,
               secretAccessKey: answers.secretAccessKey,
               bucket: answers.bucket,
-              prefix: answers.prefix
-            }
-          }
+              prefix: answers.prefix,
+            },
+          },
         }
         config.save(json)
         installPlugins()
@@ -75,9 +105,9 @@ const deployWebsite = function() {
               host: answers.host,
               username: answers.username,
               remoteDir: answers.remoteDir,
-              protocol: answers.protocol
-            }
-          }
+              protocol: answers.protocol,
+            },
+          },
         }
         if (answers.requiresType === 'It requires a password') {
           json.deployers.sftp.requiresPassword = true
@@ -97,9 +127,9 @@ const deployWebsite = function() {
   })
 }
 
-const installWebsite = function() {
+const installWebsite = function () {
   const create = new initSite()
-  create.askQuestions().then(answers => {
+  create.askQuestions().then((answers) => {
     dir = path.join(process.cwd(), answers.name)
     websiteName = answers.name
     if (process.env.ROOT) {
@@ -116,11 +146,11 @@ const installWebsite = function() {
   })
 }
 
-const installPlugins = function() {
+const installPlugins = function () {
   const create = new initSite()
-  create.askPluginsQuestions().then(function(answers) {
+  create.askPluginsQuestions().then(function (answers) {
     if (answers.plugins && answers.plugins.length > 0) {
-      answers.plugins.forEach(plugin => {
+      answers.plugins.forEach((plugin) => {
         console.log('installing the plugin: ' + plugin)
 
         if (typeof plugin !== 'undefined' && plugin !== null) {
@@ -131,7 +161,7 @@ const installPlugins = function() {
       })
     }
     if (deployPlugins && deployPlugins.length > 0) {
-      deployPlugins.forEach(plugin => {
+      deployPlugins.forEach((plugin) => {
         console.log(`installing the plugin: ${plugin}`)
 
         if (typeof plugin !== 'undefined' && plugin !== null) {
@@ -141,26 +171,25 @@ const installPlugins = function() {
     }
     console.log(
       clc.green(
-        `Yeahhh! Your Abe site ${websiteName} is ready to launch!  🚀  \n`
+        `Yeahhh! Your Abe site ${websiteName} is ready to launch!  🚀  \n`,
       ),
       clc.cyan(`cd ${websiteName}\n`),
-      clc.cyan(`abe serve -i`)
+      clc.cyan(`abe serve -i`),
     )
   })
 }
 
-program.storeOptionsAsProperties(true)
-program.version(pkg.version).option('-v, --version', 'version')
+program.version(pkg.version)
 
 // Dev: ./node_modules/.bin/babel-node --presets @babel/preset-env src/index.js init
 program
   .command('init')
   .alias('i')
   .description('init a new abe website')
-  .action(function(options) {
+  .action(function (options) {
     installWebsite()
   })
-  .on('--help', function() {
+  .on('--help', function () {
     console.log('  Examples:\n', '\n', '   $ abe init\n', '')
   })
 
@@ -168,7 +197,7 @@ program
   .command('create [path]')
   .alias('c')
   .description('create a new abe project')
-  .action(function(dest) {
+  .action(function (dest) {
     dest = dest != null ? dest : ''
     var dir = path.join(process.cwd(), dest)
     if (process.env.ROOT) {
@@ -176,27 +205,25 @@ program
     }
     var create = new initSite()
     if (typeof dir !== 'undefined' && dir !== null && dest !== '') {
-      create.init(dir).then(function(){
+      create.init(dir).then(function () {
         console.log(
           clc.green(
-            'Yeahhh! Your Abe site ' +
-              dest +
-              ' is ready to launch!  🚀  '
+            'Yeahhh! Your Abe site ' + dest + ' is ready to launch!  🚀  ',
           ),
-          clc.cyan(`\ncd ${dest} \nabe serve -i`)
+          clc.cyan(`\ncd ${dest} \nabe serve -i`),
         )
       })
     } else {
       console.log('error creating the project')
     }
   })
-  .on('--help', function() {
+  .on('--help', function () {
     console.log(
       '  Examples:\n',
       '\n',
       '    $ abe create\n',
       '    $ abe create [destination]\n',
-      ''
+      '',
     )
   })
 
@@ -207,16 +234,15 @@ program
   .option('-t, --type [type]', 'posts status draft|other')
   .option('-p, --path [path]', 'path /relative/path')
   .option('-d, --destination [destination]', 'folder to save result')
-  .action(function(options) {
+  .action(function (options) {
     var dir = process.cwd()
     if (process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
     }
     process.env.DEBUG = 'generate-posts:*'
     var generateArgs = [
-      '--harmony',
       __dirname + '/cli/process/generate-posts.js',
-      'ABE_WEBSITE=' + dir
+      'ABE_WEBSITE=' + dir,
     ]
     if (options.destination != null) {
       generateArgs.push('ABE_DESTINATION=' + options.destination)
@@ -235,21 +261,21 @@ program
       generate = spawn(
         path.join(__dirname, '..', 'node_modules', '.bin', 'babel'),
         generateArgs,
-        {shell: true, stdio: 'inherit'}
+        {shell: true, stdio: 'inherit'},
       )
     }
 
-    generate.on('close', code => {
+    generate.on('close', (code) => {
       console.log('child process exited with code ' + code)
       process.exit(0)
     })
   })
-  .on('--help', function() {
+  .on('--help', function () {
     console.log(
       '  Examples:\n',
       '\n',
       '    $ abe generate-posts --path /test --destination result --status publish\n',
-      ''
+      '',
     )
   })
 
@@ -257,31 +283,31 @@ program
   .command('serve')
   .alias('s')
   .description(
-    'create a http server for abe in development mode (debugger + livereload). If you want to deactivate development mode, use -e option'
+    'create a http server for abe in development mode (debugger + livereload). If you want to deactivate development mode, use -e option',
   )
   .option('-p, --port [number]', 'change port of the web server')
   .option('-i, --interactive', 'open browser on web server startup')
   .option(
     '-t, --templates [path]',
-    'give an absolute or relative path to your templates'
+    'give an absolute or relative path to your templates',
   )
   .option(
     '-a, --assets [path]',
-    'give an absolute or relative path to your assets'
+    'give an absolute or relative path to your assets',
   )
   .option(
     '-d, --destination [path]',
-    'give an absolute or relative path to your destination directory'
+    'give an absolute or relative path to your destination directory',
   )
   .option(
     '-j, --json [path]',
-    'give an absolute or relative path to your data directory'
+    'give an absolute or relative path to your data directory',
   )
   .option(
     '-e, --env [development|production|...]',
-    'Abe is launched in development mode by default. Use another value to deactivate development mode. You may also use a global env variable NODE_ENV.'
+    'Abe is launched in development mode by default. Use another value to deactivate development mode. You may also use a global env variable NODE_ENV.',
   )
-  .action(function(options) {
+  .action(function (options) {
     var environment = process.env
     var dir = process.cwd()
     var command
@@ -324,11 +350,11 @@ program
     }
 
     if (__dirname.indexOf('dist') > -1) {
-      command = 'node --harmony ./dist/server/index.js'
+      command = 'node ./dist/server/index.js'
     } else {
       command =
         path.join(__dirname, '..', 'node_modules', '.bin', 'babel') +
-        ' --harmony ./src/server/index.js'
+        ' ./src/server/index.js'
     }
 
     if (options.interactive != null) {
@@ -337,31 +363,32 @@ program
 
     process.chdir(__dirname + '/../')
 
+    const projectRoot = process.cwd()
+    const fromDist = __dirname.indexOf('dist') > -1
+    ensureFrontBundles(projectRoot, fromDist)
+
     console.log('website started : ' + dir)
 
-    var cp = exec(command, {env: environment, maxBuffer: 1024 * 500}, function(
-      err,
-      out,
-      code
-    ) {
-      try {
-        if (err instanceof Error) throw err
-        process.stderr.write(err)
-        process.stdout.write(out)
-      } catch (e) {}
-      process.exit(code)
-    })
+    var cp = exec(
+      command,
+      {env: environment, maxBuffer: 1024 * 500},
+      function (err, stdout, stderr) {
+        if (stdout) process.stdout.write(stdout)
+        if (stderr) process.stderr.write(stderr)
+        process.exit(err ? 1 : 0)
+      },
+    )
     cp.stderr.pipe(process.stderr)
     cp.stdout.pipe(process.stdout)
   })
-  .on('--help', function() {
+  .on('--help', function () {
     console.log('  Examples:\n', '\n', '    $ abe serve\n', '')
   })
 
 program
   .command('install [plugin]')
   .description('install abe plugin(s)')
-  .action(function(plugin) {
+  .action(function (plugin) {
     var dir = process.cwd()
     if (process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
@@ -373,13 +400,13 @@ program
       plugins.instance.install(dir)
     }
   })
-  .on('--help', function() {
+  .on('--help', function () {
     console.log(
       '  Examples:\n',
       '\n',
       '    $ abe install\n',
       '    $ abe install [plugin]',
-      ''
+      '',
     )
   })
 
@@ -387,7 +414,7 @@ program
   .command('uninstall <plugin>')
   .alias('un')
   .description('uninstall abe plugin(s)')
-  .action(function(plugin) {
+  .action(function (plugin) {
     var dir = process.env.ROOT.replace(/\/$/, '')
     if (process.env.ROOT) {
       dir = process.env.ROOT.replace(/\/$/, '')
@@ -397,13 +424,13 @@ program
       plugins.instance.uninstall(dir, plugin)
     }
   })
-  .on('--help', function() {
+  .on('--help', function () {
     console.log([
       '  Examples:',
       '',
       '    $ abe uninstall',
       '    $ abe uninstall [plugin]',
-      ''
+      '',
     ])
   })
 
@@ -413,7 +440,7 @@ program
   .action(surge.login(hooks))
   .description('Login on Surge to publish projects to the web.')
 
-hooks.preAuth = function(req, next) {
+hooks.preAuth = function (req, next) {
   console.log('')
   if (req.authed) {
     console.log(`       Hello ${req.creds.email} !`)

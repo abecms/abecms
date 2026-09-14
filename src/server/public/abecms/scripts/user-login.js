@@ -99,12 +99,12 @@ export default class UserLogin {
     })(XMLHttpRequest.prototype.open)
     ;(function(send) {
       XMLHttpRequest.prototype.send = function(data) {
-        // if query domain == abe domain => CSRF token
         if (
           window.location.hostname == this._domain &&
           window.location.port == this._port
-        )
+        ) {
           this.setRequestHeader('X-CSRF-Token', csrfToken)
+        }
         send.call(this, data)
       }
     })(XMLHttpRequest.prototype.send)

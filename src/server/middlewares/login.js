@@ -6,9 +6,7 @@ var middleware = function(req, res, next) {
         var body = string instanceof Buffer ? string.toString() : string
         body = body.replace(/<\/body>/g, function(w) {
           return (
-            "<input type='hidden' id='globalCsrfToken' value='" +
-            res.locals._csrf +
-            "' /><script src='/abecms/scripts/user-login-compiled.js'></script>" +
+            "<script src='/abecms/scripts/user-login-compiled.js'></script>" +
             w
           )
         })

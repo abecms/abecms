@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import HandlebarsIntl from 'handlebars-intl'
+import {registerIntlHelpers} from '../templates/intl-helpers'
 import form from './form'
 import * as editor from './editor'
 
@@ -40,7 +40,7 @@ Handlebars.registerHelper('printConfig', printConfig)
 Handlebars.registerHelper('printInput', printInput)
 Handlebars.registerHelper('raw', raw)
 
-HandlebarsIntl.registerWith(Handlebars)
+registerIntlHelpers(Handlebars)
 
 export {
   editor,

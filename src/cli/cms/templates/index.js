@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars'
-import HandlebarsIntl from 'handlebars-intl'
 import handlebarsHelperSlugify from 'handlebars-helper-slugify'
-import markdown from 'helper-markdown'
+import {marked} from 'marked'
+import {registerIntlHelpers} from './intl-helpers'
 
 /* Handlebar utilities */
 import attrAbe from './handlebars/attrAbe'
@@ -34,7 +34,9 @@ import insertDebugtoolUtilities from './insertDebugtoolUtilities'
 require('handlebars-helpers')({
   handlebars: Handlebars
 });
-Handlebars.registerHelper('markdown', markdown())
+Handlebars.registerHelper('markdown', function (text) {
+  return new Handlebars.SafeString(marked.parse(text || ''))
+})
 Handlebars.registerHelper('attrAbe', attrAbe)
 Handlebars.registerHelper('className', className)
 Handlebars.registerHelper('cleanTab', cleanTab)
@@ -59,7 +61,7 @@ Handlebars.registerHelper('isAuthorized', isAuthorized)
 Handlebars.registerHelper('concat', concat)
 Handlebars.registerHelper('getCurrentuserRole', getCurrentuserRole)
 
-HandlebarsIntl.registerWith(Handlebars)
+registerIntlHelpers(Handlebars)
 
 export {
   Handlebars,
