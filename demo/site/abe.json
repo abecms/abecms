@@ -1,0 +1,16 @@
+{
+  "xss": true,
+  "security": false,
+  "websocket": {
+    "active": false
+  },
+  "users": {
+    "enable": false
+  },
+  "database": {
+    "type": "file"
+  },
+  "intlData": {
+    "locales": "en-US"
+  }
+}
