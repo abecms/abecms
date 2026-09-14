@@ -1,7 +1,19 @@
 # Local run of the ABECMS demo renderer.
 #
-# No host volume is mounted and no secret is required: the gateway is
+# No host volume is mounted and no secret is committed: the gateway is
 # stateless and reads only the fixed demo site baked into the image.
+#
+# !!! DEVELOPMENT ONLY !!!
+# This file disables bearer authentication via ABE_DEMO_ALLOW_UNAUTHENTICATED so
+# that `docker compose up` works out of the box on a loopback-bound port. NEVER
+# deploy with this setting. For a production-like run, drop that variable and
+# export a real token instead:
+#
+#   export ABE_DEMO_API_TOKEN="$(openssl rand -hex 32)"
+#
+# then replace the two auth variables below with:
+#
+#   ABE_DEMO_API_TOKEN: ${ABE_DEMO_API_TOKEN:?set a token}
 services:
   abecms-demo:
     build:
@@ -15,6 +27,9 @@ services:
     ports:
       - '127.0.0.1:8080:8080'
     environment:
+      # DEVELOPMENT ONLY — see the header of this file. Disables the bearer
+      # token requirement on GET /schema and POST /render.
+      ABE_DEMO_ALLOW_UNAUTHENTICATED: 'true'
       ABE_DEMO_PORT: '8080'
       ABE_DEMO_HOST: '0.0.0.0'
       ABE_DEMO_RATE_MAX: '60'

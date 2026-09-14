@@ -100,15 +100,48 @@ jobs:
       - name: Smoke test the image
         if: github.event_name != 'push'
         run: |
+          set -euo pipefail
           IMAGE=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
-          docker run -d --name abecms-demo-ci -p 8080:8080 "$IMAGE"
+
+          # Ephemeral token, generated per run and never printed.
+          TOKEN="$(openssl rand -hex 32)"
+          echo "::add-mask::$TOKEN"
+
+          docker run -d --name abecms-demo-ci \
+            -e ABE_DEMO_API_TOKEN="$TOKEN" \
+            -p 8080:8080 "$IMAGE"
+
           for i in $(seq 1 30); do
             if curl -sf http://127.0.0.1:8080/health > /dev/null; then break; fi
             sleep 2
           done
-          curl -sf http://127.0.0.1:8080/health
-          curl -sf http://127.0.0.1:8080/schema > /dev/null
-          curl -sf -X POST -H 'content-type: application/json' \
-            -d '{"title":"ci","status":"draft"}' http://127.0.0.1:8080/render > /dev/null
+
+          # /health is unauthenticated for probes.
+          curl -sf http://127.0.0.1:8080/health > /dev/null
+
+          # Authenticated calls succeed.
+          curl -sf -H "authorization: Bearer $TOKEN" \
+            http://127.0.0.1:8080/schema > /dev/null
+          curl -sf -X POST -H "authorization: Bearer $TOKEN" \
+            -H 'content-type: application/json' \
+            -d '{"title":"ci","status":"draft"}' \
+            http://127.0.0.1:8080/render > /dev/null
+
+          # Unauthenticated calls are rejected.
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/schema)" = "401"
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST \
+            -H 'content-type: application/json' -d '{"title":"ci"}' \
+            http://127.0.0.1:8080/render)" = "401"
+
+          # The back office stays hidden, with or without a credential.
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/abe/users)" = "404"
+          test "$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "authorization: Bearer $TOKEN" http://127.0.0.1:8080/abe/users)" = "404"
+
+          # The container must refuse to start with no credential configured.
+          if docker run --rm --name abecms-demo-ci-noauth "$IMAGE"; then
+            echo "gateway started without ABE_DEMO_API_TOKEN" >&2
+            exit 1
+          fi
+
           docker rm -f abecms-demo-ci
