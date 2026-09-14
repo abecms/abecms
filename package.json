@@ -168,6 +168,7 @@
     "core-js": "^3.39.0",
     "esbuild": "^0.25.0",
     "eslint": "^9.17.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.14.0",
     "mocha": "^11.0.1",
